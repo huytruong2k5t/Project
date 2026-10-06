@@ -1,0 +1,40 @@
+Date: 2026-10-04 Asia/Saigon
+Scope: source-informed reconstruction profile; not proven published bit-exact core.
+Production: appended PaperOps::PredictN2Pattern; PaperConfig.anchor_first=false/accumulator_guard=0 defaults preserved; paper_source_config selects pattern/anchor-first/guard12. No normative cfg_ops mapping change.
+Compiler: Linux G++15.2.0 Ubuntu15.2.0-16ubuntu1; MinGW GCC13-win32; versions in paper_source_compiler.log. O3 std=c++17 Wall Wextra; UBSan O1 g fsanitize=undefined fno-sanitize-recover=undefined.
+SoftPosit: reused L0, metadata0.4.2/vendor17d5628185b31828b10c1f910c9bf65737e83640 with preexisting modifications; not rebuilt. New research/acceptance binaries are header-only and do not link L0.
+Build/test commands:
+make test-paper-source
+make test_paper_source_profile_ubsan test_paper_source_audit_ubsan test_paper_babic_ubsan test_paper_anchor_ubsan
+./test_paper_source_profile_ubsan
+./test_paper_anchor_ubsan --self-test
+./test_paper_source_audit_ubsan 100000 314159
+./test_paper_babic_ubsan 100000 314159
+make test
+bash -n ../scripts/rebuild_l0_l1.sh
+Windows: test_paper_source_profile.exe; test_paper_anchor.exe --self-test; test_paper_source_audit.exe 1000000 314159; test_paper_babic.exe 100000 314159; test_paper_table1.exe --samples 100000 --seed 314159 --profile source.
+Research commands:
+./test_paper_anchor --self-test
+./test_paper_anchor --samples 1000000 --seed 314159 (baseline + old profiles + anchor0/1/2/12 in initial run)
+./test_paper_anchor --samples 10000000 --seed 314159 --profile anchor12
+./test_paper_anchor --samples 10000000 --seed 20261004 --profile anchor12
+./test_paper_anchor --samples 1000000 --seed 314159 --profile prefix12
+./test_paper_anchor --samples 1000000 --seed 314159 --profile prefix12_anchor
+./test_paper_anchor --samples 1000000 --seed 314159 --profile post_cut_input
+./test_paper_anchor --samples 1000000 --seed 314159 --profile post_cut_anchor
+Pilot source: --samples10000000 --profile prefix12_anchor, seeds314159/20261004/42/2026/314160. Max0.970200..1.006150pp; two exceed1pp.
+Confirmation commands:
+./test_paper_anchor --samples 200000000 --seed 271828 --profile prefix12_anchor
+./test_paper_table1 --samples 200000000 --seed 271828 --profile source --require-match (exit0)
+./test_paper_source_audit 200000000 271828 source
+./test_paper_babic 200000000 271828 (exit0)
+Corpus: uniform-value grid k/2^24 in[0,1), mt19937_64; FP32_RNE ideal beforecut11; strict integer thresholds; exclude input0/regime>15/ideal0/nonfinite. Accepted200000000 attempted200000021 zero21 draws400000042 fingerprint04478e811a897da7 shared by all confirmation runs.
+Seed271828 was used in earlier project studies, separate from this five-seed pilot, not a never-observed corpus.
+Source TableI maxProposed0.984213pp numericPASS; maxKim FP32 comparator0.801969pp; Babic FP32 comparator0.009091pp numericPASS.
+Source profile tests29878945 checks on each Linux/Windows/UBSan; source audit2097282 pattern checks; final anchor/postcut selftests3300128 each platform; Babic8bit identity260100 checks.
+Research/source integration12 cells agree at6 decimals; legacy baseline/relative24 cells unchanged; Windows source smoke rows/counters/fingerprint agree; audit/Babic smoke rows agree.
+Paired FP32/Posit conversion/input cut differences0; output differences138369/3020854/21320955 n2/3/4,12 threshold percentages agree at logged precision.
+Source assumptions: zero-extension7-bit prefix beforecomplement; tieA; Q24 accumulator/guard12 and pertermFLOOR; packTRUNC; original LUT,width/generator not verified. No PPA/RTL claims.
+Source retrieval: author ResearchGate2011 PDF HTTP403 HTML, not used asPDF. Author publications https://sites.google.com/view/sunwoong/publications lists related2024journal DOI10.1109/TVLSI.2024.3354726, fulltext not read/used to change2021baseline.
+Rebuild script updated/syntax checked; no full L0/L1 rebuild script execution. Week4 original-source provenance processing; numerical TableI reconstruction achieved. Week5 unchanged.
+Final freeze: rebuilt source-profile Linux/Windows/UBSan after research header finalized; all29878945 checks PASS again. Anchor/postcut3300128 checks PASS each Linux/Windows/UBSan.

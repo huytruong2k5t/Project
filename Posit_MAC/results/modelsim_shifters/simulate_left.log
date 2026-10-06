@@ -1,0 +1,22 @@
+# vsim +SEED=20261004 -do run.do -l simulate_left.log -c work.tb_dyn_left_shifter 
+# Loading sv_std.std
+# Loading work.tb_dyn_left_shifter
+# Loading work.dyn_left_shifter
+# do run.do 
+# PRNG seed=20261004
+# ==================================================================
+#    STARTING UNIT TESTBENCH: tb_dyn_left_shifter
+# ==================================================================
+# [Suite 1] Running exhaustive test on N=8, SHIFT_W=4...
+# [Suite 1] Finished 4096 vectors.
+# [Suite 2] Running boundary and corner patterns on N=32, SHIFT_W=6...
+# [Suite 2] Finished corner tests. Cumulative vectors: 8832
+# [Suite 3] Running non-power-of-two verification on N=27...
+# [Suite 3] Finished N=27 tests. Cumulative vectors: 24832
+# [Suite 4] Running 10,000 randomized stress vectors on N=32...
+# [Suite 4] Finished randomized stress tests.
+# ==================================================================
+#    TEST RESULT: ALL 34832 VECTORS PASSED 100% (0 MISMATCHES)!
+# ==================================================================
+# ** Note: $finish    : ../../tb/tb_dyn_left_shifter.sv(255)
+#    Time: 34832 ns  Iteration: 0  Instance: /tb_dyn_left_shifter

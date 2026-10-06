@@ -1,0 +1,35 @@
+FP32 oracle ties/subnormal/zero/sign: 8 PASS; conversion identity: 100000 PASS seed=20261004
+NB=32 ES=3 FRAC_W=12 n=2..4 complement=ones per-term=FLOOR pack=TRUNC
+samples/row=200000000 seed=314159 distribution=uniform-value oracle=FP32_RNE ops=PredictN2_7bit_vs_MinPopcount_12bit
+ASSUMPTIONS: generator/seed/tie-A/predictor reconstruction/accumulator are local; not published source RTL.
+Reject input zero, converted regime m>15 and FP32 Ideal=0; N counts accepted pairs.
+CHECKPOINT accepted=10000000
+CHECKPOINT accepted=20000000
+CHECKPOINT accepted=30000000
+CHECKPOINT accepted=40000000
+CHECKPOINT accepted=50000000
+CHECKPOINT accepted=60000000
+CHECKPOINT accepted=70000000
+CHECKPOINT accepted=80000000
+CHECKPOINT accepted=90000000
+CHECKPOINT accepted=100000000
+CHECKPOINT accepted=110000000
+CHECKPOINT accepted=120000000
+CHECKPOINT accepted=130000000
+CHECKPOINT accepted=140000000
+CHECKPOINT accepted=150000000
+CHECKPOINT accepted=160000000
+CHECKPOINT accepted=170000000
+CHECKPOINT accepted=180000000
+CHECKPOINT accepted=190000000
+CHECKPOINT accepted=200000000
+profile,n,Err<0.1%,Err<0.5%,Err<1%,Err<5%,avg_steps,max_delta_Proposed_pp,max_delta_Kim_pp
+baseline,2,8.714937,31.177290,49.285731,95.463330,1.999128,1.155063,0.942710
+baseline,3,43.337090,82.859994,94.981795,100.000000,2.988699,1.352910,0.602910
+baseline,4,86.286286,99.797782,100.000000,100.000000,3.941820,0.803714,0.403714
+minpop,2,4.076841,16.169171,27.776557,78.862271,1.999511,22.253443,22.233443
+minpop,3,26.717347,64.894407,84.324390,100.000000,2.993647,18.275593,18.115594
+minpop,4,72.468581,99.273909,100.000000,100.000000,3.965809,14.621420,14.221419
+accepted=200000000 attempted=200000023 excluded_zero=23 excluded_m=0 excluded_zero_ideal=0 baseline_swaps=91900656 minpop_swaps=83884428
+Table_I_numeric_acceptance=NOT_REPRODUCED max_delta_pp=1.352910 elapsed_seconds=111.121082
+acceptance_exit=1

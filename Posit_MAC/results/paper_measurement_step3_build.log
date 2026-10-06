@@ -1,0 +1,8 @@
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_paper_measurement.cpp -o test_paper_measurement
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_paper_measurement.cpp -o test_paper_measurement.exe
+g++ -O1 -g -std=c++17 -Wall -Wextra -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude test/test_paper_measurement.cpp -o test_paper_measurement_ubsan
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_paper_table1.cpp -o test_paper_table1
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_paper_table1.cpp -o test_paper_table1.exe
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_paper_measurement.cpp -o test_paper_measurement
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_paper_measurement.cpp -o test_paper_measurement.exe
+g++ -O1 -g -std=c++17 -Wall -Wextra -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude test/test_paper_measurement.cpp -o test_paper_measurement_ubsan

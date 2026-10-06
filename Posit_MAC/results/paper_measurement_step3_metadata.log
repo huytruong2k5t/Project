@@ -1,0 +1,19 @@
+g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+x86_64-w64-mingw32-g++ (GCC) 13-win32
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Date: 2026-10-04 Asia/Saigon
+SoftPosit: 0.4.2; reused vendor/L0 unchanged in step3; existing modified vendor source, not pristine upstream.
+Build: make test_paper_measurement test_paper_measurement.exe test_paper_measurement_ubsan test_paper_table1 test_paper_table1.exe
+Tests: ./test_paper_measurement; ./test_paper_measurement_ubsan; Windows test_paper_measurement.exe; ./test_paper_baseline
+Measurement: ./test_paper_table1 --samples 100000 --seed 314159 [--distribution uniform-bits]; repeated default run; same CLI on Windows
+Independent oracle test seed: 20261004; generator replay seed: 314159
+Replay/Linux/Windows: identical rows/counters/fingerprints, elapsed_seconds ignored; UBSan PASS
+No full 200m rerun or L0 rebuild in step3.
+17d5628185b31828b10c1f910c9bf65737e83640

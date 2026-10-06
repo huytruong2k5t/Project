@@ -1,0 +1,14 @@
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_identity.cpp -o test_identity
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_mul_exact.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -lm -o test_mul_exact
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_round_unpacked.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -lm -o test_round_unpacked
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_tv_paper.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -o test_tv_paper
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_table1_reproduce.cpp -o test_table1_reproduce
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_identity.cpp -o test_identity.exe
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static-libgcc -static-libstdc++ test/test_mul_exact.cpp -L../l0 -l:softposit.dll -o test_mul_exact.exe
+cp -f ../l0/softposit.dll ./
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static-libgcc -static-libstdc++ test/test_round_unpacked.cpp -L../l0 -l:softposit.dll -o test_round_unpacked.exe
+cp -f ../l0/softposit.dll ./
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static-libgcc -static-libstdc++ test/test_tv_paper.cpp -L../l0 -l:softposit.dll -o test_tv_paper.exe
+cp -f ../l0/softposit.dll ./
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_table1_reproduce.cpp -o test_table1_reproduce.exe
+g++ -O1 -g -std=c++17 -Wall -Wextra -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude -I../l0 test/test_tv_paper.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -o test_tv_paper_ubsan

@@ -1,0 +1,12 @@
+NB=32 ES=3 FRAC_W=12 N_MAX=8 seed=314159 samples/row=10000000 OPS=1 scheme=FLOOR rounding=TRUNC ideal=unrounded decoded posit product distribution=stratified
+ASSUMPTION: positive posit inputs; 900 balanced cells of regime run mA,mB=1..15 and both regime polarities; uniform exponent/fraction bits.
+No filter on product exponent. Paper does not fully specify sampling distribution.
+n,Err<0.1%,Err<0.5%,Err<1%,Err<5%,max_delta_pp_n2_to_n4
+1,1.688620,7.627700,13.457300,43.009300,0.000000
+2,8.327360,28.282070,42.166850,82.524580,13.045420
+3,24.314330,58.599290,73.527600,95.140890,24.570710
+4,47.323540,80.875220,88.902740,95.888990,39.766460
+5,67.546740,88.788510,91.941250,95.931850,0.000000
+6,78.344740,90.019500,92.161480,95.939900,0.000000
+Table I acceptance=NOT_REPRODUCED max_delta_pp=39.766460 elapsed_seconds=7.116307
+coverage_cells=900 min_pairs=11111 max_pairs=11112

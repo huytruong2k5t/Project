@@ -1,0 +1,14 @@
+Date: 2026-10-04 Asia/Saigon
+Command: ./test_paper_table1 --samples 200000000 --seed 314159 --distribution uniform-value --require-match
+Platform: Linux via WSL; G++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0; flags -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0
+Binary/source provenance: paper_measurement_step3_binaries.sha256 / paper_measurement_step3_sources.sha256; binary integrity checked before run.
+SoftPosit: 0.4.2, vendor commit 17d5628185b31828b10c1f910c9bf65737e83640 with pre-existing vendor modifications; not rebuilt; this header-only measurement does not link L0.
+PRNG: std::mt19937_64 seed=314159; grid24 [0,1); local assumption, not published generator.
+Ideal: original FP32 inputs, RNE; strict error threshold uses integer significands.
+Accepted: 200000000; attempted: 200000023; zero excluded: 23; all other exclusion counts: 0.
+Generator draws: 400000046; pair fingerprint FNV1a64: b4c229e09c0ec0ba.
+Elapsed: 91.602213 seconds; acceptance exit: 1, numeric criterion not met; experiment completed.
+All six printed result rows identical to historical paper_table1_200m.log at logged precision; no causal attribution of remaining gap.
+Max baseline delta Proposed: 1.352910 pp; max baseline delta Kim: 0.942710 pp.
+No new full Windows/UBSan/RTL/PPA run in step4; step3 already verified suite and 100k cross-platform corpus.
+Comparison CSV deltas use six-decimal printed percentages; positive delta means measured higher.

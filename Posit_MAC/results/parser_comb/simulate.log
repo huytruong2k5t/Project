@@ -1,0 +1,39 @@
+# vsim -do run.do -l simulate.log -c work.tb_posit_parser_comb 
+# Loading sv_std.std
+# Loading work.tb_posit_parser_comb
+# Loading work.parser_vector_checker
+# Loading work.posit_parser_comb
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# do run.do 
+# PARSER PASS NB=8 ES=0 checks=256
+# PARSER PASS NB=16 ES=1 checks=65536
+# CHECKPOINT NB=32 ES=2 checks=100000
+# CHECKPOINT NB=32 ES=3 checks=100000
+# CHECKPOINT NB=32 ES=2 checks=200000
+# CHECKPOINT NB=32 ES=3 checks=200000
+# CHECKPOINT NB=32 ES=2 checks=300000
+# CHECKPOINT NB=32 ES=3 checks=300000
+# CHECKPOINT NB=32 ES=2 checks=400000
+# CHECKPOINT NB=32 ES=3 checks=400000
+# CHECKPOINT NB=32 ES=2 checks=500000
+# CHECKPOINT NB=32 ES=3 checks=500000
+# CHECKPOINT NB=32 ES=2 checks=600000
+# CHECKPOINT NB=32 ES=3 checks=600000
+# CHECKPOINT NB=32 ES=2 checks=700000
+# CHECKPOINT NB=32 ES=3 checks=700000
+# CHECKPOINT NB=32 ES=2 checks=800000
+# CHECKPOINT NB=32 ES=3 checks=800000
+# CHECKPOINT NB=32 ES=2 checks=900000
+# CHECKPOINT NB=32 ES=3 checks=900000
+# CHECKPOINT NB=32 ES=2 checks=1000000
+# CHECKPOINT NB=32 ES=3 checks=1000000
+# CHECKPOINT NB=32 ES=2 checks=1100000
+# CHECKPOINT NB=32 ES=3 checks=1100000
+# CHECKPOINT NB=32 ES=2 checks=1200000
+# CHECKPOINT NB=32 ES=3 checks=1200000
+# PARSER PASS NB=32 ES=2 checks=1200010
+# PARSER PASS NB=32 ES=3 checks=1200010
+# PARSER_COMB ALL PASS
+# ** Note: $finish    : ../../tb/tb_posit_parser_comb.sv(40)
+#    Time: 1200010 ns  Iteration: 1  Instance: /tb_posit_parser_comb

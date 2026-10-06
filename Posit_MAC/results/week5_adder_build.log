@@ -1,0 +1,26 @@
+test/test_adder.cpp: In function ‘void sampled32(uint64_t, uint64_t, bool)’:
+test/test_adder.cpp:116:13: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+  116 |             for(;f;f&=f-1) ++pop;++density[pop<=2?pop:pop<=4?3:pop<=8?4:5];
+      |             ^~~
+test/test_adder.cpp:116:34: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+  116 |             for(;f;f&=f-1) ++pop;++density[pop<=2?pop:pop<=4?3:pop<=8?4:5];
+      |                                  ^~
+test/test_adder.cpp:132:5: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+  132 |     for(auto n:signs) covered&=n!=0;for(auto n:density) covered&=n!=0;for(auto n:delta) covered&=n!=0;
+      |     ^~~
+test/test_adder.cpp:132:37: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+  132 |     for(auto n:signs) covered&=n!=0;for(auto n:density) covered&=n!=0;for(auto n:delta) covered&=n!=0;
+      |                                     ^~~
+test/test_adder.cpp: In function ‘int main(int, char**)’:
+test/test_adder.cpp:168:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  168 |         if(i+1==argc) throw std::invalid_argument("missing value");auto v=number(argv[++i]);
+      |         ^~
+test/test_adder.cpp:168:68: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  168 |         if(i+1==argc) throw std::invalid_argument("missing value");auto v=number(argv[++i]);
+      |                                                                    ^~~~
+test/test_adder.cpp:171:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  171 |             if(v>65536) throw std::invalid_argument("p16 bound");range=true;
+      |             ^~
+test/test_adder.cpp:171:66: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  171 |             if(v>65536) throw std::invalid_argument("p16 bound");range=true;
+      |                                                                  ^~~~~

@@ -1,0 +1,24 @@
+FP32 oracle ties/subnormal/zero/sign: 8 PASS; conversion identity/cut11: 100000 PASS seed=20261004
+NB=32 ES=3 FRAC_W=12 n=2..4 complement=ones per-term=FLOOR pack=TRUNC
+samples/row=100000 seed=314159 distribution=uniform-value oracle=FP32_RNE ops=PredictN2_7bit_vs_MinPopcount_12bit
+ASSUMPTIONS: generator/seed/tie-A/predictor reconstruction/accumulator are local; not published source RTL.
+Reject input zero, converted regime m>15 and FP32 Ideal=0; N counts accepted pairs.
+acceptance_profile=source
+profile,n,Err<0.1%,Err<0.5%,Err<1%,Err<5%,avg_steps,max_delta_Proposed_pp,max_delta_Kim_pp
+baseline,2,8.759000,31.069000,49.217000,95.366000,1.999370,1.121000,1.051000
+baseline,3,43.299000,82.739000,94.822000,100.000000,2.989320,1.391000,0.641000
+baseline,4,86.274000,99.814000,100.000000,100.000000,3.942580,0.816000,0.416000
+minpop,2,4.079000,16.195000,27.959000,78.810000,1.999620,22.071000,22.051000
+minpop,3,26.756000,64.871000,84.350000,100.000000,2.994000,18.299000,18.139000
+minpop,4,72.334000,99.283000,100.000000,100.000000,3.967060,14.756000,14.356000
+relative,2,8.963000,31.429000,49.622000,95.552000,1.999310,0.907000,0.691000
+relative,3,43.723000,83.227000,95.232000,100.000000,2.988860,0.967000,0.217000
+relative,4,86.688000,99.862000,100.000000,100.000000,3.940810,0.402000,0.052000
+source,2,9.017000,31.199000,49.258000,95.374000,1.999300,0.991000,0.921000
+source,3,43.700000,82.801000,94.829000,100.000000,2.988850,0.990000,0.240000
+source,4,86.674000,99.818000,100.000000,100.000000,3.941370,0.416000,0.016000
+accepted=100000 attempted=100000 excluded_zero=0 excluded_m=0 excluded_zero_ideal=0 excluded_invalid=0 excluded_nonfinite=0 generator_draws=200000 baseline_swaps=45972 minpop_swaps=42122
+pair_fingerprint_fnv1a64=36a18bd492e6b0cf
+relative_swaps=49183
+source_swaps=46067 source_ops=absolute_prefix_Q12 anchor=first guard=12 source_width_unconfirmed=1
+Table_I_numeric_acceptance=NOT_REPRODUCED max_delta_pp=0.991000 elapsed_seconds=0.087437

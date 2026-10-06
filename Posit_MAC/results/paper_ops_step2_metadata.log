@@ -1,0 +1,24 @@
+Date: 2026-10-04 Asia/Saigon
+Compiler: G++15.2.0 / MinGW GCC13-win32 (full versions in paper_ops_step2_build.log).
+Flags: -O3 -std=c++17 -Wall -Wextra; UBSan -O1 -g -fsanitize=undefined -fno-sanitize-recover=undefined.
+OPS LUT reconstruction remains unchanged: n=2, seven-bit complement, 128 entries, tie=A.
+FP32 normal: 23 fraction bits -> truncate low11 -> fraction12 -> high7 predictor.
+Special classification bypasses and preserves original payload; not full IEEE multiplication.
+Commands from Posit_MAC/l1 under WSL:
+make test_paper_ops test_paper_ops.exe test_paper_ops_ubsan test_paper_baseline
+./test_paper_ops
+./test_paper_ops_ubsan
+./test_paper_baseline
+make test test_paper_table1.exe
+./test_paper_table1 --samples 100000 --seed 314159
+bash -n ../scripts/rebuild_l0_l1.sh
+Windows PowerShell from workspace:
+& ./Posit_MAC/l1/test_paper_ops.exe
+
+OPS suite deterministic, 33587337 checks per Linux/Windows/UBSan, all PASS.
+Baseline suite 531039 checks, seed314159, PASS.
+100000 conversion/cut11 checks seed20261004; FP32 oracle8 directed checks PASS.
+OPS LUT independently exported to CSV and verified against all128 existing RTL ROM entries.
+No RTL change, no new PPA fit or 200million run in this step.
+Earlier 200million/PPA logs remain historical; numeric algorithm unchanged by extraction.
+L0 untouched and reused; existing SoftPosit0.4.2 vendor source previously modified.

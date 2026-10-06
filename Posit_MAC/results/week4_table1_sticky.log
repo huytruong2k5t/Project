@@ -1,0 +1,11 @@
+NB=32 ES=3 FRAC_W=12 N_MAX=8 seed=314159 samples/row=10000000 OPS=1 scheme=STICKY_ACC rounding=TRUNC ideal=unrounded original FP32 product distribution=fp32
+ASSUMPTION: independent positive normal FP32, uniform sf [-120,119], uniform 23-bit fraction; convert RNE to posit32 ES3 and reject regime run m>15.
+No filter on product exponent. Paper does not fully specify sampling distribution.
+n,Err<0.1%,Err<0.5%,Err<1%,Err<5%,max_delta_pp_n2_to_n4
+1,1.778490,7.674030,13.505300,43.042620,0.000000
+2,9.172870,28.665560,42.385960,82.575340,12.994660
+3,27.230660,59.282180,73.876010,95.158450,23.887820
+4,52.507500,81.446260,89.049710,95.899490,34.582500
+5,72.788800,89.034130,92.010750,95.944780,0.000000
+6,81.817090,90.157620,92.221690,95.954100,0.000000
+Table I acceptance=NOT_REPRODUCED max_delta_pp=34.582500 elapsed_seconds=7.166390

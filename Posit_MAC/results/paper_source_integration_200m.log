@@ -1,0 +1,44 @@
+FP32 oracle ties/subnormal/zero/sign: 8 PASS; conversion identity/cut11: 100000 PASS seed=20261004
+NB=32 ES=3 FRAC_W=12 n=2..4 complement=ones per-term=FLOOR pack=TRUNC
+samples/row=200000000 seed=271828 distribution=uniform-value oracle=FP32_RNE ops=PredictN2_7bit_vs_MinPopcount_12bit
+ASSUMPTIONS: generator/seed/tie-A/predictor reconstruction/accumulator are local; not published source RTL.
+Reject input zero, converted regime m>15 and FP32 Ideal=0; N counts accepted pairs.
+acceptance_profile=source
+CHECKPOINT accepted=10000000
+CHECKPOINT accepted=20000000
+CHECKPOINT accepted=30000000
+CHECKPOINT accepted=40000000
+CHECKPOINT accepted=50000000
+CHECKPOINT accepted=60000000
+CHECKPOINT accepted=70000000
+CHECKPOINT accepted=80000000
+CHECKPOINT accepted=90000000
+CHECKPOINT accepted=100000000
+CHECKPOINT accepted=110000000
+CHECKPOINT accepted=120000000
+CHECKPOINT accepted=130000000
+CHECKPOINT accepted=140000000
+CHECKPOINT accepted=150000000
+CHECKPOINT accepted=160000000
+CHECKPOINT accepted=170000000
+CHECKPOINT accepted=180000000
+CHECKPOINT accepted=190000000
+CHECKPOINT accepted=200000000
+profile,n,Err<0.1%,Err<0.5%,Err<1%,Err<5%,avg_steps,max_delta_Proposed_pp,max_delta_Kim_pp
+baseline,2,8.715786,31.181039,49.288651,95.465583,1.999131,1.154214,0.938961
+baseline,3,43.342348,82.857654,94.981739,100.000000,2.988689,1.347652,0.597652
+baseline,4,86.283213,99.797875,100.000000,100.000000,3.941783,0.806787,0.406787
+minpop,2,4.078587,16.168132,27.772354,78.862785,1.999511,22.257646,22.237646
+minpop,3,26.716570,64.894030,84.323609,100.000000,2.993640,18.275970,18.115970
+minpop,4,72.462615,99.272333,100.000000,100.000000,3.965785,14.627385,14.227385
+relative,2,8.900510,31.492919,49.668108,95.655612,1.999094,0.969489,0.627080
+relative,3,43.713304,83.372756,95.383063,100.000000,2.988321,0.976696,0.362756
+relative,4,86.681111,99.849503,100.000000,100.000000,3.940327,0.408889,0.039503
+source,2,8.959513,31.318030,49.327373,95.467513,1.999077,0.910487,0.801969
+source,3,43.705787,82.908723,95.001601,100.000000,2.988300,0.984213,0.234213
+source,4,86.679951,99.807305,100.000000,100.000000,3.940737,0.410049,0.010049
+accepted=200000000 attempted=200000021 excluded_zero=21 excluded_m=0 excluded_zero_ideal=0 excluded_invalid=0 excluded_nonfinite=0 generator_draws=400000042 baseline_swaps=91906083 minpop_swaps=83886026
+pair_fingerprint_fnv1a64=4478e811a897da7
+relative_swaps=98227363
+source_swaps=92053643 source_ops=absolute_prefix_Q12 anchor=first guard=12 source_width_unconfirmed=1
+Table_I_numeric_acceptance=PASS max_delta_pp=0.984213 elapsed_seconds=176.297389

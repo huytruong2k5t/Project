@@ -1,0 +1,440 @@
+Date (Vietnam): 2026-10-03T22:22:08+07:00
+Project: /mnt/c/HCMUT/HK261/Do an 2/Posit_MAC
+
+COMMAND: uname -a
+Linux MSI 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 GNU/Linux
+
+COMMAND: command -v gcc
+/usr/bin/gcc
+
+COMMAND: gcc --version
+gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+COMMAND: command -v g++
+/usr/bin/g++
+
+COMMAND: g++ --version
+g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+COMMAND: command -v make
+/usr/bin/make
+
+COMMAND: make --version
+GNU Make 4.4.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2023 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+COMMAND: command -v x86_64-w64-mingw32-gcc
+/usr/bin/x86_64-w64-mingw32-gcc
+
+COMMAND: x86_64-w64-mingw32-gcc --version
+x86_64-w64-mingw32-gcc (GCC) 13-win32
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+COMMAND: command -v x86_64-w64-mingw32-g++
+/usr/bin/x86_64-w64-mingw32-g++
+
+COMMAND: x86_64-w64-mingw32-g++ --version
+x86_64-w64-mingw32-g++ (GCC) 13-win32
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+COMMAND: command -v python3
+/usr/bin/python3
+
+COMMAND: python3 --version
+Python 3.14.4
+
+SoftPosit version metadata (vendored copy):
+
+COMMAND: cat l0/SoftPosit_src/CITATION.cff
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Leong
+    given-names: Siew Hoon
+    orcid: 0000-0001-8241-6277
+title: "SoftPosit"
+version: 0.4.2
+doi: 10.5281/zenodo.3709035
+date-released: 2020-03-13
+
+COMMAND: git -C l0/SoftPosit_src rev-parse HEAD
+17d5628185b31828b10c1f910c9bf65737e83640
+
+Seeds: identity posit32=1337; mul posit16=2026; mul posit32=314159.
+L0 corner and posit8/16 identity / posit8 exhaustive mul are deterministic (no random seed).
+Current tests: 1e6 sampled pairs each for posit16/32; these do not satisfy full SPEC Gate 1.
+
+COMMAND: make -B -C l0 linux windows
+make: Entering directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/l0'
+gcc -shared -fPIC -O3 -DSOFTPOSIT_FAST_INT64 -DINLINE_LEVEL=5 -I. -ISoftPosit_src/source/include -ISoftPosit_src/source/8086-SSE -ISoftPosit_src/build/Linux-x86_64-GCC -o libsoftposit.so SoftPosit_src/source/s_addMagsP8.c SoftPosit_src/source/s_subMagsP8.c SoftPosit_src/source/s_mulAddP8.c SoftPosit_src/source/p8_add.c SoftPosit_src/source/p8_sub.c SoftPosit_src/source/p8_mul.c SoftPosit_src/source/p8_div.c SoftPosit_src/source/p8_mulAdd.c SoftPosit_src/source/p8_to_i32.c SoftPosit_src/source/p8_to_i64.c SoftPosit_src/source/p8_to_p16.c SoftPosit_src/source/p8_to_p32.c SoftPosit_src/source/i32_to_p8.c SoftPosit_src/source/i64_to_p8.c SoftPosit_src/source/ui32_to_p8.c SoftPosit_src/source/ui64_to_p8.c SoftPosit_src/source/c_convertDecToPosit8.c SoftPosit_src/source/c_convertPosit8ToDec.c SoftPosit_src/source/s_addMagsP16.c SoftPosit_src/source/s_subMagsP16.c SoftPosit_src/source/s_mulAddP16.c SoftPosit_src/source/p16_add.c SoftPosit_src/source/p16_sub.c SoftPosit_src/source/p16_mul.c SoftPosit_src/source/p16_div.c SoftPosit_src/source/p16_mulAdd.c SoftPosit_src/source/p16_to_i32.c SoftPosit_src/source/p16_to_i64.c SoftPosit_src/source/p16_to_p8.c SoftPosit_src/source/p16_to_p32.c SoftPosit_src/source/i32_to_p16.c SoftPosit_src/source/i64_to_p16.c SoftPosit_src/source/ui32_to_p16.c SoftPosit_src/source/ui64_to_p16.c SoftPosit_src/source/c_convertDecToPosit16.c SoftPosit_src/source/c_convertPosit16ToDec.c SoftPosit_src/source/s_addMagsP32.c SoftPosit_src/source/s_subMagsP32.c SoftPosit_src/source/s_mulAddP32.c SoftPosit_src/source/p32_add.c SoftPosit_src/source/p32_sub.c SoftPosit_src/source/p32_mul.c SoftPosit_src/source/p32_div.c SoftPosit_src/source/p32_mulAdd.c SoftPosit_src/source/p32_to_i32.c SoftPosit_src/source/p32_to_i64.c SoftPosit_src/source/p32_to_p8.c SoftPosit_src/source/p32_to_p16.c SoftPosit_src/source/i32_to_p32.c SoftPosit_src/source/i64_to_p32.c SoftPosit_src/source/ui32_to_p32.c SoftPosit_src/source/ui64_to_p32.c SoftPosit_src/source/c_convertDecToPosit32.c SoftPosit_src/source/c_convertPosit32ToDec.c SoftPosit_src/source/c_int.c SoftPosit_src/source/quire_helper.c softposit_api.c -lm
+SoftPosit_src/source/p32_to_i64.c: In function ‘p32_to_i64’:
+SoftPosit_src/source/p32_to_i64.c:70:51: warning: integer constant is so large that it is unsigned
+   70 |         else if(uiA>0x7FFFAFFF) return (sign) ? (-9223372036854775808) : (0x7FFFFFFFFFFFFFFF);
+      |                                                   ^~~~~~~~~~~~~~~~~~~
+SoftPosit_src/source/p32_to_p16.c: In function ‘p32_to_p16’:
+SoftPosit_src/source/p32_to_p16.c:91:14: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘int_fast16_t’ {aka ‘long int’} [-Wformat=]
+   91 | printf("kA: %d\n", kA);
+      |             ~^     ~~
+      |              |     |
+      |              int   int_fast16_t {aka long int}
+      |             %ld
+SoftPosit_src/source/quire_helper.c: In function ‘printBinary’:
+SoftPosit_src/source/quire_helper.c:47:28: warning: format ‘%llu’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+   47 |                 printf("%llu", (number >> (bitSize-i))&1);
+      |                         ~~~^   ~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                            |                          |
+      |                            long long unsigned int     uint64_t {aka long unsigned int}
+      |                         %lu
+SoftPosit_src/source/quire_helper.c: In function ‘printBinaryQuire32’:
+SoftPosit_src/source/quire_helper.c:69:28: warning: format ‘%llu’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+   69 |                 printf("%llu", (number >> (bitSize-i))&1);
+      |                         ~~~^   ~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                            |                          |
+      |                            long long unsigned int     uint64_t {aka long unsigned int}
+      |                         %lu
+SoftPosit_src/source/quire_helper.c: In function ‘printBinaryQuire16’:
+SoftPosit_src/source/quire_helper.c:91:28: warning: format ‘%llu’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+   91 |                 printf("%llu", (number >> (bitSize-i))&1);
+      |                         ~~~^   ~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                            |                          |
+      |                            long long unsigned int     uint64_t {aka long unsigned int}
+      |                         %lu
+SoftPosit_src/source/quire_helper.c: In function ‘printHex64’:
+SoftPosit_src/source/quire_helper.c:126:23: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  126 |         printf("%016llx\n", s);
+      |                 ~~~~~~^     ~
+      |                       |     |
+      |                       |     uint64_t {aka long unsigned int}
+      |                       long long unsigned int
+      |                 %016lx
+SoftPosit_src/source/quire_helper.c: In function ‘printHex’:
+SoftPosit_src/source/quire_helper.c:130:22: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  130 |         printf("0x%llx\n", s);
+      |                   ~~~^     ~
+      |                      |     |
+      |                      |     uint64_t {aka long unsigned int}
+      |                      long long unsigned int
+      |                   %lx
+gcc -O3 -DSOFTPOSIT_FAST_INT64 -DINLINE_LEVEL=5 -I. -ISoftPosit_src/source/include -ISoftPosit_src/source/8086-SSE -ISoftPosit_src/build/Linux-x86_64-GCC softposit_cli.c -L. -lsoftposit -Wl,-rpath,. -lm -o softposit_cli
+x86_64-w64-mingw32-gcc -shared -DSOFTPOSIT_BUILD_DLL -O3 -DSOFTPOSIT_FAST_INT64 -DINLINE_LEVEL=5 -I. -ISoftPosit_src/source/include -ISoftPosit_src/source/8086-SSE -ISoftPosit_src/build/Linux-x86_64-GCC -o softposit.dll SoftPosit_src/source/s_addMagsP8.c SoftPosit_src/source/s_subMagsP8.c SoftPosit_src/source/s_mulAddP8.c SoftPosit_src/source/p8_add.c SoftPosit_src/source/p8_sub.c SoftPosit_src/source/p8_mul.c SoftPosit_src/source/p8_div.c SoftPosit_src/source/p8_mulAdd.c SoftPosit_src/source/p8_to_i32.c SoftPosit_src/source/p8_to_i64.c SoftPosit_src/source/p8_to_p16.c SoftPosit_src/source/p8_to_p32.c SoftPosit_src/source/i32_to_p8.c SoftPosit_src/source/i64_to_p8.c SoftPosit_src/source/ui32_to_p8.c SoftPosit_src/source/ui64_to_p8.c SoftPosit_src/source/c_convertDecToPosit8.c SoftPosit_src/source/c_convertPosit8ToDec.c SoftPosit_src/source/s_addMagsP16.c SoftPosit_src/source/s_subMagsP16.c SoftPosit_src/source/s_mulAddP16.c SoftPosit_src/source/p16_add.c SoftPosit_src/source/p16_sub.c SoftPosit_src/source/p16_mul.c SoftPosit_src/source/p16_div.c SoftPosit_src/source/p16_mulAdd.c SoftPosit_src/source/p16_to_i32.c SoftPosit_src/source/p16_to_i64.c SoftPosit_src/source/p16_to_p8.c SoftPosit_src/source/p16_to_p32.c SoftPosit_src/source/i32_to_p16.c SoftPosit_src/source/i64_to_p16.c SoftPosit_src/source/ui32_to_p16.c SoftPosit_src/source/ui64_to_p16.c SoftPosit_src/source/c_convertDecToPosit16.c SoftPosit_src/source/c_convertPosit16ToDec.c SoftPosit_src/source/s_addMagsP32.c SoftPosit_src/source/s_subMagsP32.c SoftPosit_src/source/s_mulAddP32.c SoftPosit_src/source/p32_add.c SoftPosit_src/source/p32_sub.c SoftPosit_src/source/p32_mul.c SoftPosit_src/source/p32_div.c SoftPosit_src/source/p32_mulAdd.c SoftPosit_src/source/p32_to_i32.c SoftPosit_src/source/p32_to_i64.c SoftPosit_src/source/p32_to_p8.c SoftPosit_src/source/p32_to_p16.c SoftPosit_src/source/i32_to_p32.c SoftPosit_src/source/i64_to_p32.c SoftPosit_src/source/ui32_to_p32.c SoftPosit_src/source/ui64_to_p32.c SoftPosit_src/source/c_convertDecToPosit32.c SoftPosit_src/source/c_convertPosit32ToDec.c SoftPosit_src/source/c_int.c SoftPosit_src/source/quire_helper.c softposit_api.c
+SoftPosit_src/source/p32_to_i64.c: In function ‘p32_to_i64’:
+SoftPosit_src/source/p32_to_i64.c:70:51: warning: integer constant is so large that it is unsigned
+   70 |         else if(uiA>0x7FFFAFFF) return (sign) ? (-9223372036854775808) : (0x7FFFFFFFFFFFFFFF);
+      |                                                   ^~~~~~~~~~~~~~~~~~~
+SoftPosit_src/source/p32_to_p16.c: In function ‘p32_to_p16’:
+SoftPosit_src/source/p32_to_p16.c:90:13: warning: passing argument 1 of ‘printBinary’ from incompatible pointer type [-Wincompatible-pointer-types]
+   90 | printBinary(&exp_frac32A, 32);
+      |             ^~~~~~~~~~~~
+      |             |
+      |             uint_fast32_t * {aka unsigned int *}
+In file included from SoftPosit_src/source/include/internals.h:50,
+                 from SoftPosit_src/source/p32_to_p16.c:40:
+SoftPosit_src/source/include/softposit.h:229:18: note: expected ‘uint64_t *’ {aka ‘long long unsigned int *’} but argument is of type ‘uint_fast32_t *’ {aka ‘unsigned int *’}
+  229 | void printBinary(uint64_t*, int);
+      |                  ^~~~~~~~~
+x86_64-w64-mingw32-gcc -O3 -DSOFTPOSIT_FAST_INT64 -DINLINE_LEVEL=5 -I. -ISoftPosit_src/source/include -ISoftPosit_src/source/8086-SSE -ISoftPosit_src/build/Linux-x86_64-GCC softposit_cli.c -L. -l:softposit.dll -o softposit_cli.exe
+make: Leaving directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/l0'
+
+COMMAND: make -B -C l1 linux windows
+make: Entering directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/l1'
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_identity.cpp -o test_identity
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_mul_exact.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -lm -o test_mul_exact
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_identity.cpp -o test_identity.exe
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static-libgcc -static-libstdc++ test/test_mul_exact.cpp -L../l0 -l:softposit.dll -o test_mul_exact.exe
+cp -f ../l0/softposit.dll ./
+make: Leaving directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/l1'
+
+COMMAND: python3 l0/test_softposit_corners.py
+================================================================================
+   SOFTPOSIT GOLDEN REFERENCE (L0) - WEEK 2 CORNER & TV-RND VERIFICATION
+   Standard Configs: Posit8(ES=0), Posit16(ES=1), Posit32(ES=2)
+================================================================================
+
+[Suite 1] Posit32 Corner List (§6.4)
+--------------------------------------------------------------------------------
+[PASS] P32: zero value check                      : 0x00000000 == 0x00000000 
+[PASS] P32: NaR value check                       : 0x80000000 == 0x80000000 
+[PASS] P32: +1.0 value check                      : 0x40000000 == 0x40000000 
+[PASS] P32: -1.0 value check                      : 0xC0000000 == 0xC0000000 
+[PASS] P32: NaR * 0 -> NaR                        : 0x80000000 == 0x80000000 (NaR dominant)
+[PASS] P32: 0 * NaR -> NaR                        : 0x80000000 == 0x80000000 (NaR dominant)
+[PASS] P32: maxpos * maxpos -> maxpos             : 0x7FFFFFFF == 0x7FFFFFFF (Saturation overflow)
+[PASS] P32: minpos * minpos -> minpos             : 0x00000001 == 0x00000001 (Saturation underflow)
+[PASS] P32: (-maxpos) * (-maxpos) -> maxpos       : 0x7FFFFFFF == 0x7FFFFFFF (Positive overflow)
+[PASS] P32: maxpos * minpos -> 1.0                : 0x40000000 == 0x40000000 (Exact 1.0 for ES=2)
+[PASS] P32: maxpos + maxpos -> maxpos             : 0x7FFFFFFF == 0x7FFFFFFF (Add overflow)
+[PASS] P32: (+1) + (-1) -> 0.0                    : 0x00000000 == 0x00000000 (Exact cancellation)
+[PASS] P32: maxpos + (-maxpos) -> 0.0             : 0x00000000 == 0x00000000 (Exact cancellation)
+[PASS] P32: 1 + minpos -> 1.0                     : 0x40000000 == 0x40000000 (Precision loss underflow)
+[PASS] P32: mulAdd(NaR, 1, 0) -> NaR              : 0x80000000 == 0x80000000 (MAC NaR operand A)
+[PASS] P32: mulAdd(1, NaR, 0) -> NaR              : 0x80000000 == 0x80000000 (MAC NaR operand B)
+[PASS] P32: mulAdd(1, 1, NaR) -> NaR              : 0x80000000 == 0x80000000 (MAC NaR operand C)
+[PASS] P32: mulAdd(1, 1, 1) -> 2.0                : 0x48000000 == 0x48000000 (1*1 + 1 = 2)
+[PASS] P32: mulAdd(1, -1, 1) -> 0.0               : 0x00000000 == 0x00000000 (1*(-1) + 1 = 0)
+
+[Suite 2] TV-RND Posit8 Test Vectors (§3.4)
+--------------------------------------------------------------------------------
+[PASS] TV-RND-00: double(0.1)                     : 0x06 == 0x06 (= 0.09375)
+[PASS] TV-RND-01: double(1 + 2^-6)                : 0x40 == 0x40 (1.0, RNE tie round-to-even)
+[PASS] TV-RND-02: double(1 + 3*2^-6)              : 0x42 == 0x42 (1.0625, RNE tie round-up)
+[PASS] TV-RND-03: double(100.0)                   : 0x7F == 0x7F (maxpos = 64 saturation)
+[PASS] TV-RND-04: double(0.001)                   : 0x01 == 0x01 (minpos = 2^-6 saturation)
+[PASS] P8: NaR * 0 -> NaR                         : 0x80 == 0x80 
+[PASS] P8: maxpos * minpos -> 1.0                 : 0x40 == 0x40 (2^6 * 2^-6 = 1)
+[PASS] P8: mulAdd(1, 1, 1) -> 2.0                 : 0x60 == 0x60 (2.0 in P8)
+
+[Suite 3] Posit16 Corner Cases (ES=1)
+--------------------------------------------------------------------------------
+[PASS] P16: NaR * 0 -> NaR                        : 0x8000 == 0x8000 
+[PASS] P16: 0 * NaR -> NaR                        : 0x8000 == 0x8000 
+[PASS] P16: maxpos * minpos -> 1.0                : 0x4000 == 0x4000 (2^28 * 2^-28 = 1)
+[PASS] P16: maxpos * maxpos -> maxpos             : 0x7FFF == 0x7FFF (Overflow)
+[PASS] P16: minpos * minpos -> minpos             : 0x0001 == 0x0001 (Underflow)
+[PASS] P16: (+1) + (-1) -> 0.0                    : 0x0000 == 0x0000 
+[PASS] P16: mulAdd(1, 1, 1) -> 2.0                : 0x5000 == 0x5000 
+
+[Suite 4] Maximum Regime Verification (m = NB - 1)
+--------------------------------------------------------------------------------
+[PASS] P8  Max Regime (m=7):  0x7F * 0x01         : 0x40 == 0x40 (1.0)
+[PASS] P16 Max Regime (m=15): 0x7FFF * 0x0001     : 0x4000 == 0x4000 (1.0)
+[PASS] P32 Max Regime (m=31): 0x7FFFFFFF * 0x00000001 : 0x40000000 == 0x40000000 (1.0)
+
+[Suite 5] Object-Oriented Interface (Posit8, Posit16, Posit32)
+--------------------------------------------------------------------------------
+[PASS] OO: Posit8 1.0 * 1.0                       : 0x40 == 0x40 
+[PASS] OO: Posit16 1.0 + 1.0                      : 0x5000 == 0x5000 
+[PASS] OO: Posit32 1.0 * 1.0 + 1.0                : 0x48000000 == 0x48000000 
+
+================================================================================
+   SUMMARY: 40 PASSED, 0 FAILED out of 40 total test cases.
+================================================================================
+
+[INFO] Detailed log written to: results/corner.log
+
+COMMAND: bash -c cd\ l1\ \&\&\ ./test_identity\ \&\&\ ./test_mul_exact
+============================================================
+  L1 Roundtrip Identity Verification: pack(parse(p)) == p
+============================================================
+[TEST] Exhaustive Identity for Posit8 (ES=0) (NB=8, ES=0): 256 patterns...
+  [PASS] Posit8 (ES=0): 256/256 (100% Bit-Exact Match)
+[TEST] Exhaustive Identity for Posit16 (ES=1) (NB=16, ES=1): 65536 patterns...
+  [PASS] Posit16 (ES=1): 65536/65536 (100% Bit-Exact Match)
+[TEST] Posit32 Identity Verification (1000000 stratified/random samples + corners)...
+  [PASS] Posit32: 1000012/1000012 (100% Bit-Exact Match)
+============================================================
+  ALL ROUNDTRIP IDENTITY TESTS PASSED (0 Mismatch)!
+============================================================
+================================================================================
+  L1 EXACT MULTIPLIER vs SOFTPOSIT L0 - GATE 1 BIT-EXACT VERIFICATION
+================================================================================
+
+[TEST 1] Posit8 (ES=0) Exhaustive Multiplication: 65,536 pairs...
+  [PASS] Posit8 Exact Mul: 65536/65536 (100% Bit-Exact with SoftPosit)
+
+[TEST 2] Posit32 (ES=2) Mandatory Corner List (§6.4)...
+  [PASS] NaR * 0 : 0x80000000 == 0x80000000
+  [PASS] 0 * NaR : 0x80000000 == 0x80000000
+  [PASS] maxpos * maxpos : 0x7fffffff == 0x7fffffff
+  [PASS] minpos * minpos : 0x1 == 0x1
+  [PASS] (-maxpos) * (-maxpos) : 0x7fffffff == 0x7fffffff
+  [PASS] maxpos * minpos : 0x40000000 == 0x40000000
+  [PASS] +1 * -1 : 0xc0000000 == 0xc0000000
+  [PASS] -1 * -1 : 0x40000000 == 0x40000000
+  [PASS] NaR * maxpos : 0x80000000 == 0x80000000
+  [PASS] 0 * minpos : 0x0 == 0x0
+  [PASS] maxpos * 0 : 0x0 == 0x0
+  [PASS] minpos * maxpos : 0x40000000 == 0x40000000
+  [PASS] minpos * (-minpos) : 0xffffffff == 0xffffffff
+
+[TEST 3] Posit16 (ES=1) Sampled Multiplication: 1000000 pairs...
+  [PASS] Posit16 Sampled Mul: 1000000/1000000 (100% Bit-Exact with SoftPosit)
+
+[TEST 4] Posit32 (ES=2) Stratified & Random Multiplication: 1000000 pairs...
+  [PASS] Posit32 Sampled Mul: 1000000/1000000 (100% Bit-Exact with SoftPosit in 0.06s)
+
+================================================================================
+  GATE 1 PASSED: 100% BIT-EXACT MATCH WITH SOFTPOSIT (0 MISMATCH)!
+================================================================================
+
+COMMAND: sha256sum -c /mnt/c/HCMUT/HK261/Do\ an\ 2/Posit_MAC/results/rebuild_l0_l1/20261003_222208/sources.sha256
+l0/SoftPosit_src/build/Linux-x86_64-GCC/Makefile: OK
+l0/SoftPosit_src/build/Linux-x86_64-GCC/platform.h: OK
+l0/SoftPosit_src/source/8086-SSE/specialize.h: OK
+l0/SoftPosit_src/source/c_convertDecToPosit16.c: OK
+l0/SoftPosit_src/source/c_convertDecToPosit32.c: OK
+l0/SoftPosit_src/source/c_convertDecToPosit8.c: OK
+l0/SoftPosit_src/source/c_convertDecToPositX1.c: OK
+l0/SoftPosit_src/source/c_convertPosit16ToDec.c: OK
+l0/SoftPosit_src/source/c_convertPosit32ToDec.c: OK
+l0/SoftPosit_src/source/c_convertPosit8ToDec.c: OK
+l0/SoftPosit_src/source/c_convertPositX1ToDec.c: OK
+l0/SoftPosit_src/source/c_convertQuire16ToPosit16.c: OK
+l0/SoftPosit_src/source/c_convertQuire32ToPosit32.c: OK
+l0/SoftPosit_src/source/c_convertQuire8ToPosit8.c: OK
+l0/SoftPosit_src/source/c_convertQuireX2ToPositX2.c: OK
+l0/SoftPosit_src/source/c_int.c: OK
+l0/SoftPosit_src/source/i32_to_p16.c: OK
+l0/SoftPosit_src/source/i32_to_p32.c: OK
+l0/SoftPosit_src/source/i32_to_p8.c: OK
+l0/SoftPosit_src/source/i32_to_pX1.c: OK
+l0/SoftPosit_src/source/i32_to_pX2.c: OK
+l0/SoftPosit_src/source/i64_to_p16.c: OK
+l0/SoftPosit_src/source/i64_to_p32.c: OK
+l0/SoftPosit_src/source/i64_to_p8.c: OK
+l0/SoftPosit_src/source/i64_to_pX2.c: OK
+l0/SoftPosit_src/source/include/internals.h: OK
+l0/SoftPosit_src/source/include/primitives.h: OK
+l0/SoftPosit_src/source/include/softposit.h: OK
+l0/SoftPosit_src/source/include/softposit_cpp.h: OK
+l0/SoftPosit_src/source/include/softposit_types.h: OK
+l0/SoftPosit_src/source/p16_add.c: OK
+l0/SoftPosit_src/source/p16_div.c: OK
+l0/SoftPosit_src/source/p16_eq.c: OK
+l0/SoftPosit_src/source/p16_le.c: OK
+l0/SoftPosit_src/source/p16_lt.c: OK
+l0/SoftPosit_src/source/p16_mul.c: OK
+l0/SoftPosit_src/source/p16_mulAdd.c: OK
+l0/SoftPosit_src/source/p16_roundToInt.c: OK
+l0/SoftPosit_src/source/p16_sqrt.c: OK
+l0/SoftPosit_src/source/p16_sub.c: OK
+l0/SoftPosit_src/source/p16_to_i32.c: OK
+l0/SoftPosit_src/source/p16_to_i64.c: OK
+l0/SoftPosit_src/source/p16_to_p32.c: OK
+l0/SoftPosit_src/source/p16_to_p8.c: OK
+l0/SoftPosit_src/source/p16_to_pX1.c: OK
+l0/SoftPosit_src/source/p16_to_pX2.c: OK
+l0/SoftPosit_src/source/p16_to_ui32.c: OK
+l0/SoftPosit_src/source/p16_to_ui64.c: OK
+l0/SoftPosit_src/source/p32_add.c: OK
+l0/SoftPosit_src/source/p32_div.c: OK
+l0/SoftPosit_src/source/p32_eq.c: OK
+l0/SoftPosit_src/source/p32_le.c: OK
+l0/SoftPosit_src/source/p32_lt.c: OK
+l0/SoftPosit_src/source/p32_mul.c: OK
+l0/SoftPosit_src/source/p32_mulAdd.c: OK
+l0/SoftPosit_src/source/p32_roundToInt.c: OK
+l0/SoftPosit_src/source/p32_sqrt.c: OK
+l0/SoftPosit_src/source/p32_sub.c: OK
+l0/SoftPosit_src/source/p32_to_i32.c: OK
+l0/SoftPosit_src/source/p32_to_i64.c: OK
+l0/SoftPosit_src/source/p32_to_p16.c: OK
+l0/SoftPosit_src/source/p32_to_p8.c: OK
+l0/SoftPosit_src/source/p32_to_pX1.c: OK
+l0/SoftPosit_src/source/p32_to_pX2.c: OK
+l0/SoftPosit_src/source/p32_to_ui32.c: OK
+l0/SoftPosit_src/source/p32_to_ui64.c: OK
+l0/SoftPosit_src/source/p8_add.c: OK
+l0/SoftPosit_src/source/p8_div.c: OK
+l0/SoftPosit_src/source/p8_eq.c: OK
+l0/SoftPosit_src/source/p8_le.c: OK
+l0/SoftPosit_src/source/p8_lt.c: OK
+l0/SoftPosit_src/source/p8_mul.c: OK
+l0/SoftPosit_src/source/p8_mulAdd.c: OK
+l0/SoftPosit_src/source/p8_roundToInt.c: OK
+l0/SoftPosit_src/source/p8_sqrt.c: OK
+l0/SoftPosit_src/source/p8_sub.c: OK
+l0/SoftPosit_src/source/p8_to_i32.c: OK
+l0/SoftPosit_src/source/p8_to_i64.c: OK
+l0/SoftPosit_src/source/p8_to_p16.c: OK
+l0/SoftPosit_src/source/p8_to_p32.c: OK
+l0/SoftPosit_src/source/p8_to_pX1.c: OK
+l0/SoftPosit_src/source/p8_to_pX2.c: OK
+l0/SoftPosit_src/source/p8_to_ui32.c: OK
+l0/SoftPosit_src/source/p8_to_ui64.c: OK
+l0/SoftPosit_src/source/pX1_add.c: OK
+l0/SoftPosit_src/source/pX1_div.c: OK
+l0/SoftPosit_src/source/pX1_eq.c: OK
+l0/SoftPosit_src/source/pX1_le.c: OK
+l0/SoftPosit_src/source/pX1_lt.c: OK
+l0/SoftPosit_src/source/pX1_mul.c: OK
+l0/SoftPosit_src/source/pX1_mulAdd.c: OK
+l0/SoftPosit_src/source/pX1_roundToInt.c: OK
+l0/SoftPosit_src/source/pX1_sub.c: OK
+l0/SoftPosit_src/source/pX1_to_i32.c: OK
+l0/SoftPosit_src/source/pX1_to_i64.c: OK
+l0/SoftPosit_src/source/pX1_to_p16.c: OK
+l0/SoftPosit_src/source/pX1_to_p32.c: OK
+l0/SoftPosit_src/source/pX1_to_p8.c: OK
+l0/SoftPosit_src/source/pX1_to_pX1.c: OK
+l0/SoftPosit_src/source/pX1_to_pX2.c: OK
+l0/SoftPosit_src/source/pX1_to_ui32.c: OK
+l0/SoftPosit_src/source/pX1_to_ui64.c: OK
+l0/SoftPosit_src/source/pX2_add.c: OK
+l0/SoftPosit_src/source/pX2_div.c: OK
+l0/SoftPosit_src/source/pX2_eq.c: OK
+l0/SoftPosit_src/source/pX2_le.c: OK
+l0/SoftPosit_src/source/pX2_lt.c: OK
+l0/SoftPosit_src/source/pX2_mul.c: OK
+l0/SoftPosit_src/source/pX2_mulAdd.c: OK
+l0/SoftPosit_src/source/pX2_roundToInt.c: OK
+l0/SoftPosit_src/source/pX2_sqrt.c: OK
+l0/SoftPosit_src/source/pX2_sub.c: OK
+l0/SoftPosit_src/source/pX2_to_pX1.c: OK
+l0/SoftPosit_src/source/quire16_fdp_add.c: OK
+l0/SoftPosit_src/source/quire16_fdp_sub.c: OK
+l0/SoftPosit_src/source/quire32_fdp_add.c: OK
+l0/SoftPosit_src/source/quire32_fdp_sub.c: OK
+l0/SoftPosit_src/source/quire8_fdp_add.c: OK
+l0/SoftPosit_src/source/quire8_fdp_sub.c: OK
+l0/SoftPosit_src/source/quire_helper.c: OK
+l0/SoftPosit_src/source/s_addMagsP16.c: OK
+l0/SoftPosit_src/source/s_addMagsP32.c: OK
+l0/SoftPosit_src/source/s_addMagsP8.c: OK
+l0/SoftPosit_src/source/s_addMagsPX1.c: OK
+l0/SoftPosit_src/source/s_addMagsPX2.c: OK
+l0/SoftPosit_src/source/s_approxRecipSqrt_1Ks.c: OK
+l0/SoftPosit_src/source/s_mulAddP16.c: OK
+l0/SoftPosit_src/source/s_mulAddP32.c: OK
+l0/SoftPosit_src/source/s_mulAddP8.c: OK
+l0/SoftPosit_src/source/s_mulAddPX1.c: OK
+l0/SoftPosit_src/source/s_mulAddPX2.c: OK
+l0/SoftPosit_src/source/s_subMagsP16.c: OK
+l0/SoftPosit_src/source/s_subMagsP32.c: OK
+l0/SoftPosit_src/source/s_subMagsP8.c: OK
+l0/SoftPosit_src/source/s_subMagsPX1.c: OK
+l0/SoftPosit_src/source/s_subMagsPX2.c: OK
+l0/SoftPosit_src/source/ui32_to_p16.c: OK
+l0/SoftPosit_src/source/ui32_to_p32.c: OK
+l0/SoftPosit_src/source/ui32_to_p8.c: OK
+l0/SoftPosit_src/source/ui32_to_pX2.c: OK
+l0/SoftPosit_src/source/ui64_to_p16.c: OK
+l0/SoftPosit_src/source/ui64_to_p32.c: OK
+l0/SoftPosit_src/source/ui64_to_p8.c: OK
+l0/SoftPosit_src/source/ui64_to_pX1.c: OK
+l0/SoftPosit_src/source/ui64_to_pX2.c: OK
+l1/include/l1_multiplier_exact.hpp: OK
+l1/include/posit_packer.hpp: OK
+l1/include/posit_parser.hpp: OK
+l1/include/posit_types.hpp: OK
+l1/include/round_unpacked.hpp: OK
+l1/test/test_identity.cpp: OK
+l1/test/test_mul_exact.cpp: OK
+l0/softposit_api.c: OK
+l0/softposit_api.h: OK
+l0/softposit_cli.c: OK
+l0/softposit.py: OK
+l0/test_softposit_corners.py: OK
+l0/Makefile: OK
+l1/Makefile: OK
+scripts/rebuild_l0_l1.sh: OK
+
+REBUILD AND LINUX TESTS PASSED
+Logs: /mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/rebuild_l0_l1/20261003_222208

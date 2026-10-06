@@ -1,0 +1,388 @@
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_identity.cpp -o test_identity
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_mul_exact.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -lm -o test_mul_exact
+./test_identity
+============================================================
+  L1 Roundtrip Identity Verification: pack(parse(p)) == p
+============================================================
+[TEST] Exhaustive Identity for Posit8 (ES=0) (NB=8, ES=0): 256 patterns...
+  [PASS] Posit8 (ES=0): 256/256 (100% Bit-Exact Match)
+[TEST] Exhaustive Identity for Posit16 (ES=1) (NB=16, ES=1): 65536 patterns...
+  [PASS] Posit16 (ES=1): 65536/65536 (100% Bit-Exact Match)
+[TEST] Posit32 Identity Verification (1000000 stratified/random samples + corners)...
+  [PASS] Posit32: 1000012/1000012 (100% Bit-Exact Match)
+============================================================
+  ALL ROUNDTRIP IDENTITY TESTS PASSED (0 Mismatch)!
+============================================================
+./test_mul_exact --gate1 --seed 314159
+================================================================================
+  L1 EXACT MULTIPLIER vs SOFTPOSIT L0 - GATE 1 BIT-EXACT VERIFICATION
+================================================================================
+
+[TEST 1] Posit8 (ES=0) Exhaustive Multiplication: 65,536 pairs...
+  [PASS] Posit8 Exact Mul: 65536/65536 (100% Bit-Exact with SoftPosit)
+
+[TEST 2] Posit32 (ES=2) Mandatory Corner List (§6.4)...
+  [PASS] NaR * 0 : 0x80000000 == 0x80000000
+  [PASS] 0 * NaR : 0x80000000 == 0x80000000
+  [PASS] maxpos * maxpos : 0x7fffffff == 0x7fffffff
+  [PASS] minpos * minpos : 0x1 == 0x1
+  [PASS] (-maxpos) * (-maxpos) : 0x7fffffff == 0x7fffffff
+  [PASS] maxpos * minpos : 0x40000000 == 0x40000000
+  [PASS] +1 * -1 : 0xc0000000 == 0xc0000000
+  [PASS] -1 * -1 : 0x40000000 == 0x40000000
+  [PASS] NaR * maxpos : 0x80000000 == 0x80000000
+  [PASS] 0 * minpos : 0x0 == 0x0
+  [PASS] maxpos * 0 : 0x0 == 0x0
+  [PASS] minpos * maxpos : 0x40000000 == 0x40000000
+  [PASS] minpos * (-minpos) : 0xffffffff == 0xffffffff
+P16_EXHAUSTIVE range_A=[0,65536) B=[0,65536) pairs=4294967296
+CHECKPOINT next_A=256 tested_pairs=16777216 failures=0 seconds=0.499649
+CHECKPOINT next_A=512 tested_pairs=33554432 failures=0 seconds=0.951443
+CHECKPOINT next_A=768 tested_pairs=50331648 failures=0 seconds=1.39254
+CHECKPOINT next_A=1024 tested_pairs=67108864 failures=0 seconds=1.85578
+CHECKPOINT next_A=1280 tested_pairs=83886080 failures=0 seconds=2.28389
+CHECKPOINT next_A=1536 tested_pairs=100663296 failures=0 seconds=2.74502
+CHECKPOINT next_A=1792 tested_pairs=117440512 failures=0 seconds=3.17978
+CHECKPOINT next_A=2048 tested_pairs=134217728 failures=0 seconds=3.61196
+CHECKPOINT next_A=2304 tested_pairs=150994944 failures=0 seconds=4.03087
+CHECKPOINT next_A=2560 tested_pairs=167772160 failures=0 seconds=4.44667
+CHECKPOINT next_A=2816 tested_pairs=184549376 failures=0 seconds=4.87801
+CHECKPOINT next_A=3072 tested_pairs=201326592 failures=0 seconds=5.32084
+CHECKPOINT next_A=3328 tested_pairs=218103808 failures=0 seconds=5.76321
+CHECKPOINT next_A=3584 tested_pairs=234881024 failures=0 seconds=6.20771
+CHECKPOINT next_A=3840 tested_pairs=251658240 failures=0 seconds=6.62161
+CHECKPOINT next_A=4096 tested_pairs=268435456 failures=0 seconds=7.02612
+CHECKPOINT next_A=4352 tested_pairs=285212672 failures=0 seconds=7.44432
+CHECKPOINT next_A=4608 tested_pairs=301989888 failures=0 seconds=7.84335
+CHECKPOINT next_A=4864 tested_pairs=318767104 failures=0 seconds=8.24719
+CHECKPOINT next_A=5120 tested_pairs=335544320 failures=0 seconds=8.71115
+CHECKPOINT next_A=5376 tested_pairs=352321536 failures=0 seconds=9.35274
+CHECKPOINT next_A=5632 tested_pairs=369098752 failures=0 seconds=9.96319
+CHECKPOINT next_A=5888 tested_pairs=385875968 failures=0 seconds=10.4367
+CHECKPOINT next_A=6144 tested_pairs=402653184 failures=0 seconds=10.9591
+CHECKPOINT next_A=6400 tested_pairs=419430400 failures=0 seconds=11.4853
+CHECKPOINT next_A=6656 tested_pairs=436207616 failures=0 seconds=11.921
+CHECKPOINT next_A=6912 tested_pairs=452984832 failures=0 seconds=12.3837
+CHECKPOINT next_A=7168 tested_pairs=469762048 failures=0 seconds=12.8304
+CHECKPOINT next_A=7424 tested_pairs=486539264 failures=0 seconds=13.2908
+CHECKPOINT next_A=7680 tested_pairs=503316480 failures=0 seconds=13.7797
+CHECKPOINT next_A=7936 tested_pairs=520093696 failures=0 seconds=14.2781
+CHECKPOINT next_A=8192 tested_pairs=536870912 failures=0 seconds=14.7737
+CHECKPOINT next_A=8448 tested_pairs=553648128 failures=0 seconds=15.2638
+CHECKPOINT next_A=8704 tested_pairs=570425344 failures=0 seconds=15.6886
+CHECKPOINT next_A=8960 tested_pairs=587202560 failures=0 seconds=16.0387
+CHECKPOINT next_A=9216 tested_pairs=603979776 failures=0 seconds=16.4516
+CHECKPOINT next_A=9472 tested_pairs=620756992 failures=0 seconds=16.9204
+CHECKPOINT next_A=9728 tested_pairs=637534208 failures=0 seconds=17.3852
+CHECKPOINT next_A=9984 tested_pairs=654311424 failures=0 seconds=17.927
+CHECKPOINT next_A=10240 tested_pairs=671088640 failures=0 seconds=18.4559
+CHECKPOINT next_A=10496 tested_pairs=687865856 failures=0 seconds=19.1638
+CHECKPOINT next_A=10752 tested_pairs=704643072 failures=0 seconds=19.8116
+CHECKPOINT next_A=11008 tested_pairs=721420288 failures=0 seconds=20.4729
+CHECKPOINT next_A=11264 tested_pairs=738197504 failures=0 seconds=21.09
+CHECKPOINT next_A=11520 tested_pairs=754974720 failures=0 seconds=21.764
+CHECKPOINT next_A=11776 tested_pairs=771751936 failures=0 seconds=22.4894
+CHECKPOINT next_A=12032 tested_pairs=788529152 failures=0 seconds=23.119
+CHECKPOINT next_A=12288 tested_pairs=805306368 failures=0 seconds=23.6586
+CHECKPOINT next_A=12544 tested_pairs=822083584 failures=0 seconds=24.2938
+CHECKPOINT next_A=12800 tested_pairs=838860800 failures=0 seconds=24.8595
+CHECKPOINT next_A=13056 tested_pairs=855638016 failures=0 seconds=25.4131
+CHECKPOINT next_A=13312 tested_pairs=872415232 failures=0 seconds=25.9545
+CHECKPOINT next_A=13568 tested_pairs=889192448 failures=0 seconds=26.5529
+CHECKPOINT next_A=13824 tested_pairs=905969664 failures=0 seconds=27.1417
+CHECKPOINT next_A=14080 tested_pairs=922746880 failures=0 seconds=27.7297
+CHECKPOINT next_A=14336 tested_pairs=939524096 failures=0 seconds=28.2852
+CHECKPOINT next_A=14592 tested_pairs=956301312 failures=0 seconds=28.9181
+CHECKPOINT next_A=14848 tested_pairs=973078528 failures=0 seconds=29.4697
+CHECKPOINT next_A=15104 tested_pairs=989855744 failures=0 seconds=29.9969
+CHECKPOINT next_A=15360 tested_pairs=1006632960 failures=0 seconds=30.5843
+CHECKPOINT next_A=15616 tested_pairs=1023410176 failures=0 seconds=31.2405
+CHECKPOINT next_A=15872 tested_pairs=1040187392 failures=0 seconds=31.8883
+CHECKPOINT next_A=16128 tested_pairs=1056964608 failures=0 seconds=32.4533
+CHECKPOINT next_A=16384 tested_pairs=1073741824 failures=0 seconds=33.0155
+CHECKPOINT next_A=16640 tested_pairs=1090519040 failures=0 seconds=33.5785
+CHECKPOINT next_A=16896 tested_pairs=1107296256 failures=0 seconds=34.1344
+CHECKPOINT next_A=17152 tested_pairs=1124073472 failures=0 seconds=34.6745
+CHECKPOINT next_A=17408 tested_pairs=1140850688 failures=0 seconds=35.1529
+CHECKPOINT next_A=17664 tested_pairs=1157627904 failures=0 seconds=35.6697
+CHECKPOINT next_A=17920 tested_pairs=1174405120 failures=0 seconds=36.1173
+CHECKPOINT next_A=18176 tested_pairs=1191182336 failures=0 seconds=36.6851
+CHECKPOINT next_A=18432 tested_pairs=1207959552 failures=0 seconds=37.1494
+CHECKPOINT next_A=18688 tested_pairs=1224736768 failures=0 seconds=37.6159
+CHECKPOINT next_A=18944 tested_pairs=1241513984 failures=0 seconds=38.0863
+CHECKPOINT next_A=19200 tested_pairs=1258291200 failures=0 seconds=38.5795
+CHECKPOINT next_A=19456 tested_pairs=1275068416 failures=0 seconds=39.0944
+CHECKPOINT next_A=19712 tested_pairs=1291845632 failures=0 seconds=39.5913
+CHECKPOINT next_A=19968 tested_pairs=1308622848 failures=0 seconds=40.1347
+CHECKPOINT next_A=20224 tested_pairs=1325400064 failures=0 seconds=40.6442
+CHECKPOINT next_A=20480 tested_pairs=1342177280 failures=0 seconds=41.0925
+CHECKPOINT next_A=20736 tested_pairs=1358954496 failures=0 seconds=41.6022
+CHECKPOINT next_A=20992 tested_pairs=1375731712 failures=0 seconds=42.0858
+CHECKPOINT next_A=21248 tested_pairs=1392508928 failures=0 seconds=42.57
+CHECKPOINT next_A=21504 tested_pairs=1409286144 failures=0 seconds=43.0671
+CHECKPOINT next_A=21760 tested_pairs=1426063360 failures=0 seconds=43.596
+CHECKPOINT next_A=22016 tested_pairs=1442840576 failures=0 seconds=44.0665
+CHECKPOINT next_A=22272 tested_pairs=1459617792 failures=0 seconds=44.5633
+CHECKPOINT next_A=22528 tested_pairs=1476395008 failures=0 seconds=45.0519
+CHECKPOINT next_A=22784 tested_pairs=1493172224 failures=0 seconds=45.5398
+CHECKPOINT next_A=23040 tested_pairs=1509949440 failures=0 seconds=46.0256
+CHECKPOINT next_A=23296 tested_pairs=1526726656 failures=0 seconds=46.52
+CHECKPOINT next_A=23552 tested_pairs=1543503872 failures=0 seconds=46.9951
+CHECKPOINT next_A=23808 tested_pairs=1560281088 failures=0 seconds=47.495
+CHECKPOINT next_A=24064 tested_pairs=1577058304 failures=0 seconds=47.9693
+CHECKPOINT next_A=24320 tested_pairs=1593835520 failures=0 seconds=48.478
+CHECKPOINT next_A=24576 tested_pairs=1610612736 failures=0 seconds=48.9714
+CHECKPOINT next_A=24832 tested_pairs=1627389952 failures=0 seconds=49.5605
+CHECKPOINT next_A=25088 tested_pairs=1644167168 failures=0 seconds=50.1388
+CHECKPOINT next_A=25344 tested_pairs=1660944384 failures=0 seconds=50.6461
+CHECKPOINT next_A=25600 tested_pairs=1677721600 failures=0 seconds=51.1374
+CHECKPOINT next_A=25856 tested_pairs=1694498816 failures=0 seconds=51.669
+CHECKPOINT next_A=26112 tested_pairs=1711276032 failures=0 seconds=52.219
+CHECKPOINT next_A=26368 tested_pairs=1728053248 failures=0 seconds=52.769
+CHECKPOINT next_A=26624 tested_pairs=1744830464 failures=0 seconds=53.3119
+CHECKPOINT next_A=26880 tested_pairs=1761607680 failures=0 seconds=53.8762
+CHECKPOINT next_A=27136 tested_pairs=1778384896 failures=0 seconds=54.4542
+CHECKPOINT next_A=27392 tested_pairs=1795162112 failures=0 seconds=55.1389
+CHECKPOINT next_A=27648 tested_pairs=1811939328 failures=0 seconds=55.7113
+CHECKPOINT next_A=27904 tested_pairs=1828716544 failures=0 seconds=56.2381
+CHECKPOINT next_A=28160 tested_pairs=1845493760 failures=0 seconds=56.8012
+CHECKPOINT next_A=28416 tested_pairs=1862270976 failures=0 seconds=57.3872
+CHECKPOINT next_A=28672 tested_pairs=1879048192 failures=0 seconds=58.0056
+CHECKPOINT next_A=28928 tested_pairs=1895825408 failures=0 seconds=58.6271
+CHECKPOINT next_A=29184 tested_pairs=1912602624 failures=0 seconds=59.3555
+CHECKPOINT next_A=29440 tested_pairs=1929379840 failures=0 seconds=60.0603
+CHECKPOINT next_A=29696 tested_pairs=1946157056 failures=0 seconds=60.6826
+CHECKPOINT next_A=29952 tested_pairs=1962934272 failures=0 seconds=61.2873
+CHECKPOINT next_A=30208 tested_pairs=1979711488 failures=0 seconds=61.8712
+CHECKPOINT next_A=30464 tested_pairs=1996488704 failures=0 seconds=62.535
+CHECKPOINT next_A=30720 tested_pairs=2013265920 failures=0 seconds=63.0963
+CHECKPOINT next_A=30976 tested_pairs=2030043136 failures=0 seconds=63.6632
+CHECKPOINT next_A=31232 tested_pairs=2046820352 failures=0 seconds=64.2449
+CHECKPOINT next_A=31488 tested_pairs=2063597568 failures=0 seconds=64.8332
+CHECKPOINT next_A=31744 tested_pairs=2080374784 failures=0 seconds=65.4202
+CHECKPOINT next_A=32000 tested_pairs=2097152000 failures=0 seconds=65.9809
+CHECKPOINT next_A=32256 tested_pairs=2113929216 failures=0 seconds=66.5417
+CHECKPOINT next_A=32512 tested_pairs=2130706432 failures=0 seconds=67.1281
+CHECKPOINT next_A=32768 tested_pairs=2147483648 failures=0 seconds=67.7135
+CHECKPOINT next_A=33024 tested_pairs=2164260864 failures=0 seconds=68.3374
+CHECKPOINT next_A=33280 tested_pairs=2181038080 failures=0 seconds=68.9086
+CHECKPOINT next_A=33536 tested_pairs=2197815296 failures=0 seconds=69.4941
+CHECKPOINT next_A=33792 tested_pairs=2214592512 failures=0 seconds=70.0733
+CHECKPOINT next_A=34048 tested_pairs=2231369728 failures=0 seconds=70.6976
+CHECKPOINT next_A=34304 tested_pairs=2248146944 failures=0 seconds=71.2804
+CHECKPOINT next_A=34560 tested_pairs=2264924160 failures=0 seconds=71.8822
+CHECKPOINT next_A=34816 tested_pairs=2281701376 failures=0 seconds=72.47
+CHECKPOINT next_A=35072 tested_pairs=2298478592 failures=0 seconds=73.0362
+CHECKPOINT next_A=35328 tested_pairs=2315255808 failures=0 seconds=73.5751
+CHECKPOINT next_A=35584 tested_pairs=2332033024 failures=0 seconds=74.0996
+CHECKPOINT next_A=35840 tested_pairs=2348810240 failures=0 seconds=74.623
+CHECKPOINT next_A=36096 tested_pairs=2365587456 failures=0 seconds=75.1956
+CHECKPOINT next_A=36352 tested_pairs=2382364672 failures=0 seconds=75.8102
+CHECKPOINT next_A=36608 tested_pairs=2399141888 failures=0 seconds=76.323
+CHECKPOINT next_A=36864 tested_pairs=2415919104 failures=0 seconds=76.8269
+CHECKPOINT next_A=37120 tested_pairs=2432696320 failures=0 seconds=77.3083
+CHECKPOINT next_A=37376 tested_pairs=2449473536 failures=0 seconds=77.8158
+CHECKPOINT next_A=37632 tested_pairs=2466250752 failures=0 seconds=78.3191
+CHECKPOINT next_A=37888 tested_pairs=2483027968 failures=0 seconds=78.8337
+CHECKPOINT next_A=38144 tested_pairs=2499805184 failures=0 seconds=79.3214
+CHECKPOINT next_A=38400 tested_pairs=2516582400 failures=0 seconds=79.7853
+CHECKPOINT next_A=38656 tested_pairs=2533359616 failures=0 seconds=80.2631
+CHECKPOINT next_A=38912 tested_pairs=2550136832 failures=0 seconds=80.7469
+CHECKPOINT next_A=39168 tested_pairs=2566914048 failures=0 seconds=81.2381
+CHECKPOINT next_A=39424 tested_pairs=2583691264 failures=0 seconds=81.7268
+CHECKPOINT next_A=39680 tested_pairs=2600468480 failures=0 seconds=82.2203
+CHECKPOINT next_A=39936 tested_pairs=2617245696 failures=0 seconds=82.7143
+CHECKPOINT next_A=40192 tested_pairs=2634022912 failures=0 seconds=83.1838
+CHECKPOINT next_A=40448 tested_pairs=2650800128 failures=0 seconds=83.672
+CHECKPOINT next_A=40704 tested_pairs=2667577344 failures=0 seconds=84.1354
+CHECKPOINT next_A=40960 tested_pairs=2684354560 failures=0 seconds=84.6281
+CHECKPOINT next_A=41216 tested_pairs=2701131776 failures=0 seconds=85.0964
+CHECKPOINT next_A=41472 tested_pairs=2717908992 failures=0 seconds=85.5599
+CHECKPOINT next_A=41728 tested_pairs=2734686208 failures=0 seconds=86.0596
+CHECKPOINT next_A=41984 tested_pairs=2751463424 failures=0 seconds=86.5305
+CHECKPOINT next_A=42240 tested_pairs=2768240640 failures=0 seconds=86.9879
+CHECKPOINT next_A=42496 tested_pairs=2785017856 failures=0 seconds=87.4534
+CHECKPOINT next_A=42752 tested_pairs=2801795072 failures=0 seconds=87.9156
+CHECKPOINT next_A=43008 tested_pairs=2818572288 failures=0 seconds=88.394
+CHECKPOINT next_A=43264 tested_pairs=2835349504 failures=0 seconds=88.8553
+CHECKPOINT next_A=43520 tested_pairs=2852126720 failures=0 seconds=89.3301
+CHECKPOINT next_A=43776 tested_pairs=2868903936 failures=0 seconds=89.8043
+CHECKPOINT next_A=44032 tested_pairs=2885681152 failures=0 seconds=90.2843
+CHECKPOINT next_A=44288 tested_pairs=2902458368 failures=0 seconds=90.7646
+CHECKPOINT next_A=44544 tested_pairs=2919235584 failures=0 seconds=91.2196
+CHECKPOINT next_A=44800 tested_pairs=2936012800 failures=0 seconds=91.6921
+CHECKPOINT next_A=45056 tested_pairs=2952790016 failures=0 seconds=92.1372
+CHECKPOINT next_A=45312 tested_pairs=2969567232 failures=0 seconds=92.5782
+CHECKPOINT next_A=45568 tested_pairs=2986344448 failures=0 seconds=93.0408
+CHECKPOINT next_A=45824 tested_pairs=3003121664 failures=0 seconds=93.4979
+CHECKPOINT next_A=46080 tested_pairs=3019898880 failures=0 seconds=93.9803
+CHECKPOINT next_A=46336 tested_pairs=3036676096 failures=0 seconds=94.4428
+CHECKPOINT next_A=46592 tested_pairs=3053453312 failures=0 seconds=94.8812
+CHECKPOINT next_A=46848 tested_pairs=3070230528 failures=0 seconds=95.3504
+CHECKPOINT next_A=47104 tested_pairs=3087007744 failures=0 seconds=95.7843
+CHECKPOINT next_A=47360 tested_pairs=3103784960 failures=0 seconds=96.2177
+CHECKPOINT next_A=47616 tested_pairs=3120562176 failures=0 seconds=96.7386
+CHECKPOINT next_A=47872 tested_pairs=3137339392 failures=0 seconds=97.3818
+CHECKPOINT next_A=48128 tested_pairs=3154116608 failures=0 seconds=98.0188
+CHECKPOINT next_A=48384 tested_pairs=3170893824 failures=0 seconds=98.6088
+CHECKPOINT next_A=48640 tested_pairs=3187671040 failures=0 seconds=99.0829
+CHECKPOINT next_A=48896 tested_pairs=3204448256 failures=0 seconds=99.709
+CHECKPOINT next_A=49152 tested_pairs=3221225472 failures=0 seconds=100.24
+CHECKPOINT next_A=49408 tested_pairs=3238002688 failures=0 seconds=100.721
+CHECKPOINT next_A=49664 tested_pairs=3254779904 failures=0 seconds=101.204
+CHECKPOINT next_A=49920 tested_pairs=3271557120 failures=0 seconds=101.717
+CHECKPOINT next_A=50176 tested_pairs=3288334336 failures=0 seconds=102.217
+CHECKPOINT next_A=50432 tested_pairs=3305111552 failures=0 seconds=102.714
+CHECKPOINT next_A=50688 tested_pairs=3321888768 failures=0 seconds=103.194
+CHECKPOINT next_A=50944 tested_pairs=3338665984 failures=0 seconds=103.755
+CHECKPOINT next_A=51200 tested_pairs=3355443200 failures=0 seconds=104.241
+CHECKPOINT next_A=51456 tested_pairs=3372220416 failures=0 seconds=104.745
+CHECKPOINT next_A=51712 tested_pairs=3388997632 failures=0 seconds=105.202
+CHECKPOINT next_A=51968 tested_pairs=3405774848 failures=0 seconds=105.654
+CHECKPOINT next_A=52224 tested_pairs=3422552064 failures=0 seconds=106.101
+CHECKPOINT next_A=52480 tested_pairs=3439329280 failures=0 seconds=106.558
+CHECKPOINT next_A=52736 tested_pairs=3456106496 failures=0 seconds=107.058
+CHECKPOINT next_A=52992 tested_pairs=3472883712 failures=0 seconds=107.516
+CHECKPOINT next_A=53248 tested_pairs=3489660928 failures=0 seconds=107.952
+CHECKPOINT next_A=53504 tested_pairs=3506438144 failures=0 seconds=108.376
+CHECKPOINT next_A=53760 tested_pairs=3523215360 failures=0 seconds=108.843
+CHECKPOINT next_A=54016 tested_pairs=3539992576 failures=0 seconds=109.322
+CHECKPOINT next_A=54272 tested_pairs=3556769792 failures=0 seconds=109.841
+CHECKPOINT next_A=54528 tested_pairs=3573547008 failures=0 seconds=110.31
+CHECKPOINT next_A=54784 tested_pairs=3590324224 failures=0 seconds=110.75
+CHECKPOINT next_A=55040 tested_pairs=3607101440 failures=0 seconds=111.195
+CHECKPOINT next_A=55296 tested_pairs=3623878656 failures=0 seconds=111.664
+CHECKPOINT next_A=55552 tested_pairs=3640655872 failures=0 seconds=112.143
+CHECKPOINT next_A=55808 tested_pairs=3657433088 failures=0 seconds=112.647
+CHECKPOINT next_A=56064 tested_pairs=3674210304 failures=0 seconds=113.084
+CHECKPOINT next_A=56320 tested_pairs=3690987520 failures=0 seconds=113.534
+CHECKPOINT next_A=56576 tested_pairs=3707764736 failures=0 seconds=114.009
+CHECKPOINT next_A=56832 tested_pairs=3724541952 failures=0 seconds=114.444
+CHECKPOINT next_A=57088 tested_pairs=3741319168 failures=0 seconds=114.896
+CHECKPOINT next_A=57344 tested_pairs=3758096384 failures=0 seconds=115.337
+CHECKPOINT next_A=57600 tested_pairs=3774873600 failures=0 seconds=115.785
+CHECKPOINT next_A=57856 tested_pairs=3791650816 failures=0 seconds=116.236
+CHECKPOINT next_A=58112 tested_pairs=3808428032 failures=0 seconds=116.716
+CHECKPOINT next_A=58368 tested_pairs=3825205248 failures=0 seconds=117.207
+CHECKPOINT next_A=58624 tested_pairs=3841982464 failures=0 seconds=117.709
+CHECKPOINT next_A=58880 tested_pairs=3858759680 failures=0 seconds=118.171
+CHECKPOINT next_A=59136 tested_pairs=3875536896 failures=0 seconds=118.649
+CHECKPOINT next_A=59392 tested_pairs=3892314112 failures=0 seconds=119.095
+CHECKPOINT next_A=59648 tested_pairs=3909091328 failures=0 seconds=119.541
+CHECKPOINT next_A=59904 tested_pairs=3925868544 failures=0 seconds=119.989
+CHECKPOINT next_A=60160 tested_pairs=3942645760 failures=0 seconds=120.444
+CHECKPOINT next_A=60416 tested_pairs=3959422976 failures=0 seconds=120.902
+CHECKPOINT next_A=60672 tested_pairs=3976200192 failures=0 seconds=121.389
+CHECKPOINT next_A=60928 tested_pairs=3992977408 failures=0 seconds=121.887
+CHECKPOINT next_A=61184 tested_pairs=4009754624 failures=0 seconds=122.401
+CHECKPOINT next_A=61440 tested_pairs=4026531840 failures=0 seconds=122.854
+CHECKPOINT next_A=61696 tested_pairs=4043309056 failures=0 seconds=123.318
+CHECKPOINT next_A=61952 tested_pairs=4060086272 failures=0 seconds=123.802
+CHECKPOINT next_A=62208 tested_pairs=4076863488 failures=0 seconds=124.253
+CHECKPOINT next_A=62464 tested_pairs=4093640704 failures=0 seconds=124.727
+CHECKPOINT next_A=62720 tested_pairs=4110417920 failures=0 seconds=125.18
+CHECKPOINT next_A=62976 tested_pairs=4127195136 failures=0 seconds=125.672
+CHECKPOINT next_A=63232 tested_pairs=4143972352 failures=0 seconds=126.148
+CHECKPOINT next_A=63488 tested_pairs=4160749568 failures=0 seconds=126.619
+CHECKPOINT next_A=63744 tested_pairs=4177526784 failures=0 seconds=127.103
+CHECKPOINT next_A=64000 tested_pairs=4194304000 failures=0 seconds=127.598
+CHECKPOINT next_A=64256 tested_pairs=4211081216 failures=0 seconds=128.097
+CHECKPOINT next_A=64512 tested_pairs=4227858432 failures=0 seconds=128.562
+CHECKPOINT next_A=64768 tested_pairs=4244635648 failures=0 seconds=129.049
+CHECKPOINT next_A=65024 tested_pairs=4261412864 failures=0 seconds=129.534
+CHECKPOINT next_A=65280 tested_pairs=4278190080 failures=0 seconds=130.051
+CHECKPOINT next_A=65536 tested_pairs=4294967296 failures=0 seconds=130.594
+P16_RANGE PASSED start_A=0 end_A=65536
+
+[TEST 4] Posit32 STRATIFIED: 10000000 pairs; seed=314159
+COVERAGE cells=256 min_cell=39062
+CELL_COUNTS G1 [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063]
+CELL_COUNTS G2 [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063]
+CELL_COUNTS G3 [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063]
+CELL_COUNTS G4 [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063] [39063,39063,39063,39063]
+CELL_COUNTS G5 [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062]
+CELL_COUNTS G6 [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062]
+CELL_COUNTS G7 [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062]
+CELL_COUNTS G8 [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062] [39062,39062,39062,39062]
+FRACTION_DENSITY bucket=0 operands=4433831
+FRACTION_DENSITY bucket=1 operands=2532264
+FRACTION_DENSITY bucket=2 operands=2019688
+FRACTION_DENSITY bucket=3 operands=2768733
+FRACTION_DENSITY bucket=4 operands=4041673
+FRACTION_DENSITY bucket=5 operands=4203811
+REGIME_POLARITY_PAIR pair=0 vectors=2501504
+REGIME_POLARITY_PAIR pair=1 vectors=2498560
+REGIME_POLARITY_PAIR pair=2 vectors=2498560
+REGIME_POLARITY_PAIR pair=3 vectors=2501376
+STRATIFIED_IDENTITY operands=20000000 failures=0
+REGIME rc=0 m=1 operands=416672
+REGIME rc=0 m=2 operands=416672
+REGIME rc=0 m=3 operands=416688
+REGIME rc=0 m=4 operands=312496
+REGIME rc=0 m=5 operands=312512
+REGIME rc=0 m=6 operands=312512
+REGIME rc=0 m=7 operands=312512
+REGIME rc=0 m=8 operands=312496
+REGIME rc=0 m=9 operands=312512
+REGIME rc=0 m=10 operands=312512
+REGIME rc=0 m=11 operands=312512
+REGIME rc=0 m=12 operands=312496
+REGIME rc=0 m=13 operands=312512
+REGIME rc=0 m=14 operands=312512
+REGIME rc=0 m=15 operands=312512
+REGIME rc=0 m=16 operands=625008
+REGIME rc=0 m=17 operands=624992
+REGIME rc=0 m=18 operands=249984
+REGIME rc=0 m=19 operands=250048
+REGIME rc=0 m=20 operands=249968
+REGIME rc=0 m=21 operands=249984
+REGIME rc=0 m=22 operands=250016
+REGIME rc=0 m=23 operands=249984
+REGIME rc=0 m=24 operands=250048
+REGIME rc=0 m=25 operands=249968
+REGIME rc=0 m=26 operands=249984
+REGIME rc=0 m=27 operands=250016
+REGIME rc=0 m=28 operands=416672
+REGIME rc=0 m=29 operands=416640
+REGIME rc=0 m=30 operands=416688
+REGIME rc=1 m=1 operands=416672
+REGIME rc=1 m=2 operands=416672
+REGIME rc=1 m=3 operands=416640
+REGIME rc=1 m=4 operands=312480
+REGIME rc=1 m=5 operands=312512
+REGIME rc=1 m=6 operands=312512
+REGIME rc=1 m=7 operands=312480
+REGIME rc=1 m=8 operands=312480
+REGIME rc=1 m=9 operands=312512
+REGIME rc=1 m=10 operands=312512
+REGIME rc=1 m=11 operands=312480
+REGIME rc=1 m=12 operands=312480
+REGIME rc=1 m=13 operands=312512
+REGIME rc=1 m=14 operands=312512
+REGIME rc=1 m=15 operands=312480
+REGIME rc=1 m=16 operands=624992
+REGIME rc=1 m=17 operands=624992
+REGIME rc=1 m=18 operands=250016
+REGIME rc=1 m=19 operands=250048
+REGIME rc=1 m=20 operands=249952
+REGIME rc=1 m=21 operands=250016
+REGIME rc=1 m=22 operands=249952
+REGIME rc=1 m=23 operands=250016
+REGIME rc=1 m=24 operands=250048
+REGIME rc=1 m=25 operands=249952
+REGIME rc=1 m=26 operands=250016
+REGIME rc=1 m=27 operands=249952
+REGIME rc=1 m=28 operands=312480
+REGIME rc=1 m=29 operands=312512
+REGIME rc=1 m=30 operands=312512
+REGIME rc=1 m=31 operands=312480
+NOTE: rc=0,m=31 is zero, not a finite nonzero posit; checked separately by corner suite.
+  [PASS] Posit32 Sampled Mul: 10000000/10000000 (100% Bit-Exact with SoftPosit in 3.71s)
+
+================================================================================
+  GATE 1 MULTIPLIER SUITE PASSED (identity must pass separately)
+================================================================================
+./test_round_unpacked
+ROUND_UNPACKED contract: all six fields + idempotence; RNE/TRUNC; seed=20261003
+checks=4954184 scale_changes=1366264 failures=0
+ROUND_UNPACKED PASSED

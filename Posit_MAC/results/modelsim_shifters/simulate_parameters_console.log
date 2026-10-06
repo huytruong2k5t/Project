@@ -1,0 +1,41 @@
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim +SEED=20261004 -do run.do -l simulate_parameters.log -c work.tb_dyn_shifter_parameters 
+# Loading sv_std.std
+# Loading work.tb_dyn_shifter_parameters
+# Loading work.dyn_shifter_parameter_check
+# Loading work.dyn_left_shifter
+# Loading work.dyn_right_shifter
+# do run.do 
+# PARAM PASS N=1 SHIFT_W=1 comparisons=32
+# PARAM PASS N=1 SHIFT_W=1 comparisons=32
+# PARAM PASS N=1 SHIFT_W=2 comparisons=64
+# PARAM PASS N=2 SHIFT_W=1 comparisons=64
+# PARAM PASS N=2 SHIFT_W=1 comparisons=64
+# PARAM PASS N=2 SHIFT_W=2 comparisons=128
+# PARAM PASS N=3 SHIFT_W=1 comparisons=128
+# PARAM PASS N=3 SHIFT_W=2 comparisons=256
+# PARAM PASS N=3 SHIFT_W=3 comparisons=512
+# PARAM PASS N=8 SHIFT_W=2 comparisons=8192
+# PARAM PASS N=8 SHIFT_W=3 comparisons=16384
+# PARAM PASS N=8 SHIFT_W=4 comparisons=32768
+# PARAM PASS N=27 SHIFT_W=4 comparisons=64000
+# PARAM PASS N=31 SHIFT_W=4 comparisons=64000
+# PARAM PASS N=32 SHIFT_W=4 comparisons=64000
+# PARAM PASS N=27 SHIFT_W=5 comparisons=128000
+# PARAM PASS N=31 SHIFT_W=5 comparisons=128000
+# PARAM PASS N=32 SHIFT_W=5 comparisons=128000
+# PARAM PASS N=33 SHIFT_W=5 comparisons=128000
+# PARAM PASS N=64 SHIFT_W=5 comparisons=128000
+# PARAM PASS N=27 SHIFT_W=6 comparisons=256000
+# PARAM PASS N=31 SHIFT_W=6 comparisons=256000
+# PARAM PASS N=32 SHIFT_W=6 comparisons=256000
+# PARAM PASS N=33 SHIFT_W=6 comparisons=256000
+# PARAM PASS N=64 SHIFT_W=6 comparisons=256000
+# PARAM PASS N=33 SHIFT_W=7 comparisons=512000
+# PARAM PASS N=64 SHIFT_W=7 comparisons=512000
+# PARAMETER_MATRIX PASS configurations=27
+# ** Note: $finish    : ../../tb/tb_dyn_shifter_parameters.sv(68)
+#    Time: 128 us  Iteration: 1  Instance: /tb_dyn_shifter_parameters

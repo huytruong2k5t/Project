@@ -1,0 +1,162 @@
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_identity.cpp -o test_identity
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_mul_exact.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -lm -o test_mul_exact
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_identity.cpp -o test_identity.exe
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static-libgcc -static-libstdc++ test/test_mul_exact.cpp -L../l0 -l:softposit.dll -o test_mul_exact.exe
+cp -f ../l0/softposit.dll ./
+
+REPRODUCIBILITY
+Commands: cd l1; make -B linux windows; make gate1
+Seed: p32=314159; identity=1337; p16 exhaustive has no random seed
+g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+x86_64-w64-mingw32-g++ (GCC) 13-win32
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+GNU Make 4.4.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2023 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+f1275afd5019c398acd03c782cddafdcc82372b613c8ac5a01743a07b57928b8  l1/test/test_mul_exact.cpp
+c516e48af19918a9cca0bab163897a4eba9e6d3622cf992ffe1caf484b9d2adc  l1/test/test_identity.cpp
+cbbdf62a6b0150a40e313d66122e423ea07c6d2438c01652a9c2a52c9011462f  l1/Makefile
+22b74fea86a300f18e64f4f77053006932c6c06aa4b6fe4e67ac1a62503ac1bd  l1/include/l1_multiplier_exact.hpp
+532e3e3af4416d925de83e38e1a4554129953ee5521d1d8114a4e30c539b57bb  l1/include/posit_packer.hpp
+e8c5de1d3510bb27c5a60dcce8362a619215d1cc3c52f4bac5b8203887988aa3  l1/include/posit_parser.hpp
+74da57e0d0835c693d311bde68776909b89a867dc286326bae1942e222d9dd99  l1/include/posit_types.hpp
+84ffaf06879f816370f187782dedcaba9b8665d24421a385fb42ad92e400f50f  l1/include/round_unpacked.hpp
+35c68669a94b2a3ef485d255cd52a9f843535c0c5ea25279e20ba3c0838404f1  l1/test_mul_exact
+4afc65969b66f20a19a880e01ed37d99ba2774bd63e082ef3dd457c1b7a98b7b  l1/test_mul_exact.exe
+8d6e33b23d924f3e76914569da7ebf06866aae61c5801ada77a182442a3eb761  l0/libsoftposit.so
+4b8dd39572b319b0b2ac81362050f3bf4eb50068add30e7d29d1db4480c682ea  l0/softposit.dll
+
+Windows commands: test_identity.exe; test_mul_exact.exe --p32-only --samples 10000000 --seed 314159; test_mul_exact.exe --p16-start 32760 --p16-end 32776; test_mul_exact.exe --p16-start 65520 --p16-end 65536. Windows full p16 was not run.
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Leong
+    given-names: Siew Hoon
+    orcid: 0000-0001-8241-6277
+title: "SoftPosit"
+version: 0.4.2
+doi: 10.5281/zenodo.3709035
+date-released: 2020-03-13
+17d5628185b31828b10c1f910c9bf65737e83640
+ M source/include/softposit_types.h
+ M source/quire32_fdp_add.c
+ M source/quire32_fdp_sub.c
+?? build/Linux-x86_64-GCC/c_convertDecToPosit16.o
+?? build/Linux-x86_64-GCC/c_convertDecToPosit32.o
+?? build/Linux-x86_64-GCC/c_convertDecToPosit8.o
+?? build/Linux-x86_64-GCC/c_convertPosit16ToDec.o
+?? build/Linux-x86_64-GCC/c_convertPosit32ToDec.o
+?? build/Linux-x86_64-GCC/c_convertPosit8ToDec.o
+?? build/Linux-x86_64-GCC/c_convertQuire16ToPosit16.o
+?? build/Linux-x86_64-GCC/c_convertQuire32ToPosit32.o
+?? build/Linux-x86_64-GCC/c_convertQuire8ToPosit8.o
+?? build/Linux-x86_64-GCC/c_convertQuireX2ToPositX2.o
+?? build/Linux-x86_64-GCC/c_int.o
+?? build/Linux-x86_64-GCC/i32_to_p16.o
+?? build/Linux-x86_64-GCC/i32_to_p32.o
+?? build/Linux-x86_64-GCC/i32_to_p8.o
+?? build/Linux-x86_64-GCC/i32_to_pX2.o
+?? build/Linux-x86_64-GCC/i64_to_p16.o
+?? build/Linux-x86_64-GCC/i64_to_p32.o
+?? build/Linux-x86_64-GCC/i64_to_p8.o
+?? build/Linux-x86_64-GCC/i64_to_pX2.o
+?? build/Linux-x86_64-GCC/p16_add.o
+?? build/Linux-x86_64-GCC/p16_div.o
+?? build/Linux-x86_64-GCC/p16_eq.o
+?? build/Linux-x86_64-GCC/p16_le.o
+?? build/Linux-x86_64-GCC/p16_lt.o
+?? build/Linux-x86_64-GCC/p16_mul.o
+?? build/Linux-x86_64-GCC/p16_mulAdd.o
+?? build/Linux-x86_64-GCC/p16_roundToInt.o
+?? build/Linux-x86_64-GCC/p16_sqrt.o
+?? build/Linux-x86_64-GCC/p16_sub.o
+?? build/Linux-x86_64-GCC/p16_to_i32.o
+?? build/Linux-x86_64-GCC/p16_to_i64.o
+?? build/Linux-x86_64-GCC/p16_to_p32.o
+?? build/Linux-x86_64-GCC/p16_to_p8.o
+?? build/Linux-x86_64-GCC/p16_to_pX2.o
+?? build/Linux-x86_64-GCC/p16_to_ui32.o
+?? build/Linux-x86_64-GCC/p16_to_ui64.o
+?? build/Linux-x86_64-GCC/p32_add.o
+?? build/Linux-x86_64-GCC/p32_div.o
+?? build/Linux-x86_64-GCC/p32_eq.o
+?? build/Linux-x86_64-GCC/p32_le.o
+?? build/Linux-x86_64-GCC/p32_lt.o
+?? build/Linux-x86_64-GCC/p32_mul.o
+?? build/Linux-x86_64-GCC/p32_mulAdd.o
+?? build/Linux-x86_64-GCC/p32_roundToInt.o
+?? build/Linux-x86_64-GCC/p32_sqrt.o
+?? build/Linux-x86_64-GCC/p32_sub.o
+?? build/Linux-x86_64-GCC/p32_to_i32.o
+?? build/Linux-x86_64-GCC/p32_to_i64.o
+?? build/Linux-x86_64-GCC/p32_to_p16.o
+?? build/Linux-x86_64-GCC/p32_to_p8.o
+?? build/Linux-x86_64-GCC/p32_to_pX2.o
+?? build/Linux-x86_64-GCC/p32_to_ui32.o
+?? build/Linux-x86_64-GCC/p32_to_ui64.o
+?? build/Linux-x86_64-GCC/p8_add.o
+?? build/Linux-x86_64-GCC/p8_div.o
+?? build/Linux-x86_64-GCC/p8_eq.o
+?? build/Linux-x86_64-GCC/p8_le.o
+?? build/Linux-x86_64-GCC/p8_lt.o
+?? build/Linux-x86_64-GCC/p8_mul.o
+?? build/Linux-x86_64-GCC/p8_mulAdd.o
+?? build/Linux-x86_64-GCC/p8_roundToInt.o
+?? build/Linux-x86_64-GCC/p8_sqrt.o
+?? build/Linux-x86_64-GCC/p8_sub.o
+?? build/Linux-x86_64-GCC/p8_to_i32.o
+?? build/Linux-x86_64-GCC/p8_to_i64.o
+?? build/Linux-x86_64-GCC/p8_to_p16.o
+?? build/Linux-x86_64-GCC/p8_to_p32.o
+?? build/Linux-x86_64-GCC/p8_to_pX2.o
+?? build/Linux-x86_64-GCC/p8_to_ui32.o
+?? build/Linux-x86_64-GCC/p8_to_ui64.o
+?? build/Linux-x86_64-GCC/pX2_add.o
+?? build/Linux-x86_64-GCC/pX2_div.o
+?? build/Linux-x86_64-GCC/pX2_eq.o
+?? build/Linux-x86_64-GCC/pX2_le.o
+?? build/Linux-x86_64-GCC/pX2_lt.o
+?? build/Linux-x86_64-GCC/pX2_mul.o
+?? build/Linux-x86_64-GCC/pX2_mulAdd.o
+?? build/Linux-x86_64-GCC/pX2_roundToInt.o
+?? build/Linux-x86_64-GCC/pX2_sqrt.o
+?? build/Linux-x86_64-GCC/pX2_sub.o
+?? build/Linux-x86_64-GCC/quire16_fdp_add.o
+?? build/Linux-x86_64-GCC/quire16_fdp_sub.o
+?? build/Linux-x86_64-GCC/quire32_fdp_add.o
+?? build/Linux-x86_64-GCC/quire32_fdp_sub.o
+?? build/Linux-x86_64-GCC/quire8_fdp_add.o
+?? build/Linux-x86_64-GCC/quire8_fdp_sub.o
+?? build/Linux-x86_64-GCC/quire_helper.o
+?? build/Linux-x86_64-GCC/s_addMagsP16.o
+?? build/Linux-x86_64-GCC/s_addMagsP32.o
+?? build/Linux-x86_64-GCC/s_addMagsP8.o
+?? build/Linux-x86_64-GCC/s_addMagsPX2.o
+?? build/Linux-x86_64-GCC/s_approxRecipSqrt_1Ks.o
+?? build/Linux-x86_64-GCC/s_mulAddP16.o
+?? build/Linux-x86_64-GCC/s_mulAddP32.o
+?? build/Linux-x86_64-GCC/s_mulAddP8.o
+?? build/Linux-x86_64-GCC/s_mulAddPX2.o
+?? build/Linux-x86_64-GCC/s_subMagsP16.o
+?? build/Linux-x86_64-GCC/s_subMagsP32.o
+?? build/Linux-x86_64-GCC/s_subMagsP8.o
+?? build/Linux-x86_64-GCC/s_subMagsPX2.o
+?? build/Linux-x86_64-GCC/softposit.a
+?? build/Linux-x86_64-GCC/ui32_to_p16.o
+?? build/Linux-x86_64-GCC/ui32_to_p32.o
+?? build/Linux-x86_64-GCC/ui32_to_p8.o
+?? build/Linux-x86_64-GCC/ui32_to_pX2.o
+?? build/Linux-x86_64-GCC/ui64_to_p16.o
+?? build/Linux-x86_64-GCC/ui64_to_p32.o
+?? build/Linux-x86_64-GCC/ui64_to_p8.o
+?? build/Linux-x86_64-GCC/ui64_to_pX2.o

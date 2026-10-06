@@ -1,0 +1,20 @@
+CORNERS NB=8 ES=0 PASS exact/approx RNE/TRUNC
+CORNERS NB=16 ES=1 PASS exact/approx RNE/TRUNC
+CORNERS NB=32 ES=2 PASS exact/approx RNE/TRUNC
+CORNERS NB=32 ES=3 PASS exact/approx RNE/TRUNC
+ACCUMULATOR 10000 transactions + directed state checks PASS
+P32 ES=2 samples=100000 seed=314159 min_regime_per_operand=0 near_opposite=41926 min_AB_grid=384 PASS
+DENSITY ES=2 bucket=0 operands=41984
+DENSITY ES=2 bucket=1 operands=2048
+DENSITY ES=2 bucket=2 operands=2048
+DENSITY ES=2 bucket=3 operands=5120
+DENSITY ES=2 bucket=4 operands=13472
+DENSITY ES=2 bucket=5 operands=35328
+P32 ES=3 samples=100000 seed=314159 min_regime_per_operand=0 near_opposite=41468 min_AB_grid=384 PASS
+DENSITY ES=3 bucket=0 operands=44032
+DENSITY ES=3 bucket=1 operands=1024
+DENSITY ES=3 bucket=2 operands=3072
+DENSITY ES=3 bucket=3 operands=5120
+DENSITY ES=3 bucket=4 operands=13472
+DENSITY ES=3 bucket=5 operands=33280
+MAC_GATE1B SMOKE PASS checks=264000 mismatches=0

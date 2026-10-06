@@ -1,0 +1,45 @@
+Date: 2026-10-04 Asia/Ho_Chi_Minh
+Scope: L1 week6 non-fused MAC; Gate1B; C ABI. No RTL cycle/DPI harness acceptance.
+Linux compiler: g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+Windows compiler: x86_64-w64-mingw32-g++ (GCC) 13-win32
+Windows ABI: x86_64 DLL; static libgcc/libstdc++.
+SoftPosit: version 0.4.2, vendored commit 17d5628185b31828b10c1f910c9bf65737e83640.
+L0 libraries reused from previously rebuilt/accepted source; vendor local modifications retained.
+Numeric reference ES0/ES1/ES2: SoftPosit add(mul(a,b),c), NOT fused mulAdd.
+Numeric reference ES3: independent integer significand product and full-width signed-integer sum; uses validated parser/packer.
+Approximate oracle: accepted L1 iterative multiplier + independent wide-integer sum; no claim of new independent approximate multiplier oracle.
+Config: exact RNE default, v0/v1; approx Q12 n0..8 ops0/1 FLOOR/STICKY_ACC RNE/TRUNC.
+PRNG: C++ mt19937_64 seed314159; Python random.Random seed314159 exact/state, seed20261004 approximate ABI checks.
+Acceptance final Linux: PASS checks=36841216, mismatches=0.
+Acceptance final Windows: PASS checks=36841216, mismatches=0; complete log identical to Linux after line-ending normalization.
+Breakdown: exhaustive p8 triples16777216; p32 ES2 10000000; p32 ES3 10000000; corners54000; state10000.
+ES2 near_opposite4124235 min_regime_per_operand22070 min_AB_grid39056; six fraction-density buckets nonempty.
+ES3 near_opposite4065558 min_regime_per_operand22160 min_AB_grid39056; six fraction-density buckets nonempty.
+UBSan numeric smoke: PASS checks264000; not exhaustive sanitizer acceptance.
+C API ctypes Linux/Windows/UBSan: PASS checks130008 per platform; configurations/errors/state and directed ties.
+C11 header/linkage clients Linux/Windows: PASS; -Wall -Wextra -Werror.
+Regression: make test exit0, week6_regression.log (before addition of eight final ABI tie cases; final API logs include them).
+Initial coverage attempts failed because B serial+serial/7 skipped four positive regime lengths; no numeric mismatches.
+Final generator fixes B/C offsets to serial+43/serial+71 and asserts coverage. Only final acceptance logs are authoritative.
+
+Commands from Posit_MAC/l1, Linux/MinGW build:
+make test_mac_gate1b libposit_l1.so test_mac_gate1b.exe posit_l1.dll test_mac_gate1b_ubsan
+make libposit_l1_ubsan.so
+gcc -std=c11 -Wall -Wextra -Werror -Iinclude test/test_l1_api_c.c -L. -lposit_l1 -Wl,-rpath,. -o test_l1_api_c
+x86_64-w64-mingw32-gcc -std=c11 -Wall -Wextra -Werror -Iinclude test/test_l1_api_c.c -L. -l:posit_l1.dll -o test_l1_api_c.exe
+./test_mac_gate1b --acceptance --samples 10000000 --seed 314159 > ../results/week6_mac_gate1b_linux.log 2>&1
+./test_mac_gate1b_ubsan > ../results/week6_mac_ubsan.log 2>&1
+make test-week6 > ../results/week6_linux_smoke.log 2>&1
+python3 test/test_l1_api.py > ../results/week6_api_linux.log 2>&1
+python3 test/test_l1_api.py libposit_l1_ubsan.so > ../results/week6_api_ubsan.log 2>&1
+./test_l1_api_c > ../results/week6_api_c_linux.log
+make test > ../results/week6_regression.log 2>&1
+bash -n ../scripts/rebuild_l0_l1.sh
+
+Native Windows PowerShell commands from Posit_MAC/l1:
+.\test_mac_gate1b.exe --acceptance --samples 10000000 --seed 314159 *> ../results/week6_mac_gate1b_windows.log
+python test/test_l1_api.py *> ../results/week6_api_windows.log
+.\test_l1_api_c.exe *> ../results/week6_api_c_windows.log
+
+Reproducible Make targets: make gate1b P32_SEED=314159; make test-week6; make linux windows.
+SHA256 manifests relative to Posit_MAC: results/week6_mac_sources.sha256, results/week6_mac_binaries.sha256.

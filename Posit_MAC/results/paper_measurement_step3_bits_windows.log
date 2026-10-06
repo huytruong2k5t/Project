@@ -1,0 +1,15 @@
+FP32 oracle ties/subnormal/zero/sign: 8 PASS; conversion identity/cut11: 100000 PASS seed=20261004
+NB=32 ES=3 FRAC_W=12 n=2..4 complement=ones per-term=FLOOR pack=TRUNC
+samples/row=100000 seed=314159 distribution=uniform-bits oracle=FP32_RNE ops=PredictN2_7bit_vs_MinPopcount_12bit
+ASSUMPTIONS: generator/seed/tie-A/predictor reconstruction/accumulator are local; not published source RTL.
+Reject input zero, converted regime m>15 and FP32 Ideal=0; N counts accepted pairs.
+profile,n,Err<0.1%,Err<0.5%,Err<1%,Err<5%,avg_steps,max_delta_Proposed_pp,max_delta_Kim_pp
+baseline,2,7.999000,29.506000,47.200000,92.897000,1.999200,2.830000,2.810000
+baseline,3,39.279000,78.103000,90.563000,97.379000,2.988860,5.411000,4.907000
+baseline,4,77.856000,94.146000,95.303000,97.370000,3.942480,9.234000,8.834000
+minpop,2,3.662000,15.221000,26.487000,76.811000,1.999490,23.543000,23.523000
+minpop,3,24.100000,61.051000,80.412000,97.345000,2.993610,22.119000,21.959000
+minpop,4,65.247000,93.644000,95.308000,97.368000,3.966270,21.843000,21.443000
+accepted=100000 attempted=155595 excluded_zero=0 excluded_m=16550 excluded_zero_ideal=39045 excluded_invalid=0 excluded_nonfinite=0 generator_draws=313678 baseline_swaps=46026 minpop_swaps=42115
+pair_fingerprint_fnv1a64=4c87d984a4529545
+Table_I_numeric_acceptance=NOT_REPRODUCED max_delta_pp=9.234000 elapsed_seconds=0.070784

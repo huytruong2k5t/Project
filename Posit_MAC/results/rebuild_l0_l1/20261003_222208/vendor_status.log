@@ -1,0 +1,69 @@
+COMMAND: git -C Posit_MAC/l0/SoftPosit_src status --short --untracked-files=no
+ M source/include/softposit_types.h
+ M source/quire32_fdp_add.c
+ M source/quire32_fdp_sub.c
+COMMAND: git -C Posit_MAC/l0/SoftPosit_src describe --tags --always
+0.4.2-11-g17d5628
+COMMAND: git -C Posit_MAC/l0/SoftPosit_src diff
+diff --git a/source/include/softposit_types.h b/source/include/softposit_types.h
+index 1c16d5a..9249bc8 100755
+--- a/source/include/softposit_types.h
++++ b/source/include/softposit_types.h
+@@ -110,26 +110,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 	union ui64_double   { uint64_t ui; double d; };
+ 
+ 	union ui32_q8 {
+-		uint32_t ui=0;
++		uint32_t ui;
+ 		quire8_t q;
+ 	};
+ 	union ui128_q16 {
+-		uint64_t ui[2]={0,0};
++		uint64_t ui[2];
+ 		quire16_t q;
+ 	};
+ 
+ 	union ui512_q32 {
+-		uint64_t ui[8]={0,0,0,0, 0,0,0,0};
++		uint64_t ui[8];
+ 		quire32_t q;
+ 	};
+ 
+ 	union ui512_qX2 {
+-		uint64_t ui[8]={0,0,0,0, 0,0,0,0};
++		uint64_t ui[8];
+ 		quire_2_t q;
+ 	};
+ 
+ 	union ui512_qX1 {
+-		uint64_t ui[8]={0,0,0,0, 0,0,0,0};
++		uint64_t ui[8];
+ 		quire_1_t q;
+ 	};
+ #endif
+diff --git a/source/quire32_fdp_add.c b/source/quire32_fdp_add.c
+index 8adac09..d500713 100644
+--- a/source/quire32_fdp_add.c
++++ b/source/quire32_fdp_add.c
+@@ -69,7 +69,7 @@ quire32_t q32_fdp_add( quire32_t q, posit32_t pA, posit32_t pB ){
+ 	uB.p = pB;
+ 	uiB = uB.ui;
+ 
+-	uZ2.q = q32Clr(uZ2.q); //set it to zero
++	uZ2.q = q32Clr(); //set it to zero
+ 	//NaR
+ 	if (isNaRQ32(q) || isNaRP32UI(uA.ui) || isNaRP32UI(uB.ui)){
+ 		//set to all zeros
+diff --git a/source/quire32_fdp_sub.c b/source/quire32_fdp_sub.c
+index 1a132ee..dbc4406 100644
+--- a/source/quire32_fdp_sub.c
++++ b/source/quire32_fdp_sub.c
+@@ -71,7 +71,7 @@ quire32_t q32_fdp_sub( quire32_t q, posit32_t pA, posit32_t pB ){
+ 	uB.p = pB;
+ 	uiB = uB.ui;
+ 
+-	uZ2.q = q32Clr(uZ2.q); //set it to zero
++	uZ2.q = q32Clr(); //set it to zero
+ 	//NaR
+ 	if (isNaRQ32(q) || isNaRP32UI(uA.ui) || isNaRP32UI(uB.ui)){
+ 		//set to all zeros

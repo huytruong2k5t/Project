@@ -1,0 +1,61 @@
+g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+x86_64-w64-mingw32-g++ (GCC) 13-win32
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+17d5628185b31828b10c1f910c9bf65737e83640
+ M source/include/softposit_types.h
+ M source/quire32_fdp_add.c
+ M source/quire32_fdp_sub.c
+
+Date: 2026-10-04 Asia/Saigon
+SoftPosit: 0.4.2; existing L0 reused, no L0/vendor edits this turn.
+C++ flags: -O3 -std=c++17 -Wall -Wextra; no fast-math.
+UBSan: -O1 -g -fsanitize=undefined -fno-sanitize-recover=undefined
+Baseline & statistical RNG: mt19937_64 seed 314159.
+Oracle conversion test seed: 20261004.
+ModelSim: 10.1d Altera Starter Edition; RTL test xorshift32 seed 314159.
+Quartus: 13.0.1 Build 232 SP1 Web Edition.
+Device: EP4CE22F17C6 Cyclone IV E; SDC clock=10ns; seeds 1,2,3.
+PPA reports: Slow 1200mV 85C, internal registered OPS only. IO timing not board-constrained.
+Baseline reconstructed predictor n=2/7bit, tie A; complement fraction12;
+per-term FLOOR accumulator Q12, pack TRUNC; n counts all terms.
+Variant only replaces predictor by twelve-bit min-popcount; balanced RTL adder tree.
+
+Commands under WSL, working directory Posit_MAC/l1:
+make test_paper_baseline test_paper_baseline.exe test_paper_baseline_ubsan
+./test_paper_baseline
+./test_paper_baseline_ubsan
+make test_paper_table1 test_paper_table1.exe
+./test_paper_table1 --samples 1000000 --seed 314159 --distribution uniform-bits
+./test_paper_table1 --samples 200000000 --seed 314159 --require-match
+  Last exit=1, recorded acceptance_exit=1: Proposed Table I numeric threshold not met.
+make test
+bash -n ../scripts/rebuild_l0_l1.sh
+
+PowerShell working directory workspace:
+& ./Posit_MAC/l1/test_paper_baseline.exe
+& ./Posit_MAC/l1/test_paper_table1.exe --samples 100000 --seed 314159
+Replay command: & ./Posit_MAC/scripts/run_ops_compare.ps1
+Actually executed: individual quartus_sh --flow compile ops_compare in all six project folders;
+ModelSim vlib/vlog/vsim batch in results/ops_ppa/sim.
+Collector actually executed: & ./Posit_MAC/scripts/run_ops_compare.ps1 -SkipSimulation -SkipSynthesis
+  Six Quartus fits successful, three seeds per policy.
+  ModelSim PASS marker required; 116384 comparisons.
+  Final PPA 73 LUT4/15 FF vs 63 LUT4/25 FF.
+  Predictor Fmax=198.18/206.06/204.67MHz;
+  Minpop Fmax=220.90/200.72/200.40MHz.
+  Initial serial popcount implementation was replaced by balanced tree and all six fits rerun.
+
+Result scope:
+531039 algorithm comparisons on Linux, Windows, UBSan; no mismatch.
+FP32 oracle 8 directed checks, 100000 conversion identities.
+200000000 accepted pairs per row, attempted200000023, excluded input-zero23.
+Max baseline delta to Kim=0.942710pp, Proposed=1.352910pp.
+No full MAC PPA, board programming, Gate2 or full-domain IEEE claim.
+Rebuild script integrated but full L0 rebuild not repeated.

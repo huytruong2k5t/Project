@@ -1,0 +1,7 @@
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_paper_source_profile.cpp -o test_paper_source_profile
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_paper_source_profile.cpp -o test_paper_source_profile.exe
+g++ -O1 -g -std=c++17 -Wall -Wextra -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude test/test_paper_source_profile.cpp -o test_paper_source_profile_ubsan
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_paper_source_audit.cpp -o test_paper_source_audit
+make: 'test_paper_source_audit.exe' is up to date.
+make: 'test_paper_babic' is up to date.
+make: 'test_paper_babic.exe' is up to date.

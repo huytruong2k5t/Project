@@ -1,0 +1,8 @@
+CORNERS NB=8 ES=0 PASS exact/approx RNE/TRUNC
+CORNERS NB=16 ES=1 PASS exact/approx RNE/TRUNC
+CORNERS NB=32 ES=2 PASS exact/approx RNE/TRUNC
+CORNERS NB=32 ES=3 PASS exact/approx RNE/TRUNC
+ACCUMULATOR 10000 transactions + directed state checks PASS
+P32 ES=2 samples=100000 seed=314159 min_regime_per_operand=0 directed_near_cancellation=20480 PASS
+P32 ES=3 samples=100000 seed=314159 min_regime_per_operand=0 directed_near_cancellation=20480 PASS
+MAC_GATE1B SMOKE PASS checks=264000 mismatches=0

@@ -1,0 +1,11 @@
+NB=32 ES=3 FRAC_W=12 N_MAX=8 seed=314159 samples/row=10000000 OPS=0 scheme=FLOOR rounding=TRUNC ideal=unrounded original FP32 product distribution=fp32
+ASSUMPTION: independent positive normal FP32, uniform sf [-120,119], uniform 23-bit fraction; convert RNE to posit32 ES3 and reject regime run m>15.
+No filter on product exponent. Paper does not fully specify sampling distribution.
+n,Err<0.1%,Err<0.5%,Err<1%,Err<5%,max_delta_pp_n2_to_n4
+1,0.853510,4.101060,7.650210,30.240940,0.000000
+2,4.378780,16.932080,27.632670,70.854690,24.715310
+3,13.777950,41.004880,57.619280,92.813510,42.165120
+4,30.264220,67.192770,81.300260,95.797400,56.825780
+5,50.205550,83.664720,90.610620,95.907330,0.000000
+6,67.123470,89.209780,92.082720,95.936730,0.000000
+Table I acceptance=NOT_REPRODUCED max_delta_pp=56.825780 elapsed_seconds=6.817505

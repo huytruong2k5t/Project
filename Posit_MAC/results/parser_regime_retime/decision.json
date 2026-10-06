@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-06",
+  "decision": "use Fig.5(a): register count and FRB, reconstruct signed regime in P2",
+  "NB": 32,
+  "beforeRTLRegimeBits": 11,
+  "afterRTLRegimeBits": 6,
+  "savedRTLBits": 5,
+  "modelSim": "PASS",
+  "checks": 2465812,
+  "mismatches": 0,
+  "vivadoCompile": "PASS",
+  "vivadoElaborate": "PASS",
+  "synthesis": "BLOCKED_LICENSE",
+  "synthesisMessage": "Vivado Design Suite cannot be launched because a valid license was not found",
+  "physicalFFDelta": null,
+  "LUTDelta": null,
+  "fmaxDelta": null,
+  "trialPart": "xc7a100tcsg324-1",
+  "scope": "No post-route PPA claim",
+  "verification": "results/parser_pipeline/summary.json"
+}

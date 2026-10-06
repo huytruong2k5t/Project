@@ -1,0 +1,8 @@
+# vsim -do {run -all; quit -code 0} -c -onfinish exit work.tb_ops_compare 
+# Loading sv_std.std
+# Loading work.tb_ops_compare
+# Loading work.ops_compare_top
+# run -all 
+# OPS_COMPARE PASS checks=116384 seed=314159 generator=xorshift32
+# ** Note: $finish    : ../../../tb/tb_ops_compare.sv(64)
+#    Time: 2327696 ns  Iteration: 0  Instance: /tb_ops_compare

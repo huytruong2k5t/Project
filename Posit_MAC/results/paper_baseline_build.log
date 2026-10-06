@@ -1,0 +1,15 @@
+g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+x86_64-w64-mingw32-g++ (GCC) 13-win32
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+make: 'test_paper_baseline' is up to date.
+make: 'test_paper_table1' is up to date.
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_paper_baseline.cpp -o test_paper_baseline.exe
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_paper_table1.cpp -o test_paper_table1.exe
+g++ -O1 -g -std=c++17 -Wall -Wextra -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude test/test_paper_baseline.cpp -o test_paper_baseline_ubsan

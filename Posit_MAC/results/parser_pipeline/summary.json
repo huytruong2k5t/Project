@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-06T00:18:34.3331283+07:00",
+  "status": "PASS",
+  "checks": 2465812.0,
+  "mismatches": 0,
+  "fixtureSeed": 20261005,
+  "handshakeSeed": "20261005 + NB*17 + ES; xorshift32",
+  "stages": 2,
+  "capacity": 2,
+  "unstalledII": 1,
+  "timing": "accept E0; output valid after E1; earliest output handshake E2",
+  "reset": "reset_n: async assert, two-FF synchronous release; startup excluded from datapath latency",
+  "oracle": "accepted parser_comb L1/independent field fixtures",
+  "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "suites": [
+    {
+      "NB": 8,
+      "ES": 0,
+      "checks": 256,
+      "resets": 3,
+      "discardedByReset": 3,
+      "stalledOutputChecks": 40,
+      "fullPipelineChecks": 42,
+      "simultaneousHandshakes": 254,
+      "inputBubbles": 46,
+      "noStallLatencyChecks": 256
+    },
+    {
+      "NB": 16,
+      "ES": 1,
+      "checks": 65536,
+      "resets": 3,
+      "discardedByReset": 3,
+      "stalledOutputChecks": 25336,
+      "fullPipelineChecks": 26357,
+      "simultaneousHandshakes": 51867,
+      "inputBubbles": 21830,
+      "noStallLatencyChecks": 510
+    },
+    {
+      "NB": 32,
+      "ES": 3,
+      "checks": 1200010,
+      "resets": 3,
+      "discardedByReset": 3,
+      "stalledOutputChecks": 459823,
+      "fullPipelineChecks": 480452,
+      "simultaneousHandshakes": 949815,
+      "inputBubbles": 400633,
+      "noStallLatencyChecks": 510
+    },
+    {
+      "NB": 32,
+      "ES": 2,
+      "checks": 1200010,
+      "resets": 3,
+      "discardedByReset": 3,
+      "stalledOutputChecks": 460816,
+      "fullPipelineChecks": 481535,
+      "simultaneousHandshakes": 950259,
+      "inputBubbles": 400049,
+      "noStallLatencyChecks": 510
+    }
+  ],
+  "compileCommand": "vlog -sv -timescale 1ns/1ps +incdir+../../rtl -work work ../../rtl/lod_lzd_core.sv ../../rtl/dyn_left_shifter.sv ../../rtl/posit_parser.sv ../../tb/parser_pipeline_checker.sv ../../tb/tb_posit_parser.sv -l compile.log",
+  "simulationCommand": "vsim -c work.tb_posit_parser -l simulate.log -do run.do"
+}

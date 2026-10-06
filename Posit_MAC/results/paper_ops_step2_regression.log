@@ -1,0 +1,157 @@
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_identity.cpp -o test_identity
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_mul_exact.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -lm -o test_mul_exact
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_round_unpacked.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -lm -o test_round_unpacked
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_tv_paper.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -o test_tv_paper
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_table1_reproduce.cpp -o test_table1_reproduce
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_paper_table1.cpp -o test_paper_table1
+--- Running Roundtrip Identity Test ---
+./test_identity
+============================================================
+  L1 Roundtrip Identity Verification: pack(parse(p)) == p
+============================================================
+[TEST] Exhaustive Identity for Posit8 (ES=0) (NB=8, ES=0): 256 patterns...
+  [PASS] Posit8 (ES=0): 256/256 (100% Bit-Exact Match)
+[TEST] Exhaustive Identity for Posit16 (ES=1) (NB=16, ES=1): 65536 patterns...
+  [PASS] Posit16 (ES=1): 65536/65536 (100% Bit-Exact Match)
+[TEST] Posit32 Identity Verification (1000000 stratified/random samples + corners)...
+  [PASS] Posit32: 1000012/1000012 (100% Bit-Exact Match)
+============================================================
+  ALL ROUNDTRIP IDENTITY TESTS PASSED (0 Mismatch)!
+============================================================
+--- Running Exact Multiplier Smoke Test vs SoftPosit ---
+./test_mul_exact
+================================================================================
+  L1 EXACT MULTIPLIER vs SOFTPOSIT L0 - GATE 1 BIT-EXACT VERIFICATION
+================================================================================
+
+[TEST 1] Posit8 (ES=0) Exhaustive Multiplication: 65,536 pairs...
+  [PASS] Posit8 Exact Mul: 65536/65536 (100% Bit-Exact with SoftPosit)
+
+[TEST 2] Posit32 (ES=2) Mandatory Corner List (§6.4)...
+  [PASS] NaR * 0 : 0x80000000 == 0x80000000
+  [PASS] 0 * NaR : 0x80000000 == 0x80000000
+  [PASS] maxpos * maxpos : 0x7fffffff == 0x7fffffff
+  [PASS] minpos * minpos : 0x1 == 0x1
+  [PASS] (-maxpos) * (-maxpos) : 0x7fffffff == 0x7fffffff
+  [PASS] maxpos * minpos : 0x40000000 == 0x40000000
+  [PASS] +1 * -1 : 0xc0000000 == 0xc0000000
+  [PASS] -1 * -1 : 0x40000000 == 0x40000000
+  [PASS] NaR * maxpos : 0x80000000 == 0x80000000
+  [PASS] 0 * minpos : 0x0 == 0x0
+  [PASS] maxpos * 0 : 0x0 == 0x0
+  [PASS] minpos * maxpos : 0x40000000 == 0x40000000
+  [PASS] minpos * (-minpos) : 0xffffffff == 0xffffffff
+
+[TEST 3] Posit16 (ES=1) Sampled Multiplication: 1000000 pairs...
+  [PASS] Posit16 Sampled Mul: 1000000/1000000 (100% Bit-Exact with SoftPosit)
+
+[TEST 4] Posit32 STRATIFIED: 1000000 pairs; seed=314159
+COVERAGE cells=256 min_cell=3906
+CELL_COUNTS G1 [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907]
+CELL_COUNTS G2 [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907] [3907,3907,3907,3907]
+CELL_COUNTS G3 [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906]
+CELL_COUNTS G4 [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906]
+CELL_COUNTS G5 [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906]
+CELL_COUNTS G6 [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906]
+CELL_COUNTS G7 [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906]
+CELL_COUNTS G8 [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906] [3906,3906,3906,3906]
+FRACTION_DENSITY bucket=0 operands=443720
+FRACTION_DENSITY bucket=1 operands=253914
+FRACTION_DENSITY bucket=2 operands=202110
+FRACTION_DENSITY bucket=3 operands=277150
+FRACTION_DENSITY bucket=4 operands=403854
+FRACTION_DENSITY bucket=5 operands=419252
+REGIME_POLARITY_PAIR pair=0 vectors=253952
+REGIME_POLARITY_PAIR pair=1 vectors=246080
+REGIME_POLARITY_PAIR pair=2 vectors=246016
+REGIME_POLARITY_PAIR pair=3 vectors=253952
+STRATIFIED_IDENTITY operands=2000000 failures=0
+REGIME rc=0 m=1 operands=41728
+REGIME rc=0 m=2 operands=41664
+REGIME rc=0 m=3 operands=41632
+REGIME rc=0 m=4 operands=31264
+REGIME rc=0 m=5 operands=31296
+REGIME rc=0 m=6 operands=31232
+REGIME rc=0 m=7 operands=31232
+REGIME rc=0 m=8 operands=31264
+REGIME rc=0 m=9 operands=31264
+REGIME rc=0 m=10 operands=31232
+REGIME rc=0 m=11 operands=31232
+REGIME rc=0 m=12 operands=31264
+REGIME rc=0 m=13 operands=31264
+REGIME rc=0 m=14 operands=31232
+REGIME rc=0 m=15 operands=31232
+REGIME rc=0 m=16 operands=62496
+REGIME rc=0 m=17 operands=62496
+REGIME rc=0 m=18 operands=25024
+REGIME rc=0 m=19 operands=25024
+REGIME rc=0 m=20 operands=24992
+REGIME rc=0 m=21 operands=24992
+REGIME rc=0 m=22 operands=24960
+REGIME rc=0 m=23 operands=25024
+REGIME rc=0 m=24 operands=25024
+REGIME rc=0 m=25 operands=24992
+REGIME rc=0 m=26 operands=24992
+REGIME rc=0 m=27 operands=24960
+REGIME rc=0 m=28 operands=41696
+REGIME rc=0 m=29 operands=41664
+REGIME rc=0 m=30 operands=41632
+REGIME rc=1 m=1 operands=41672
+REGIME rc=1 m=2 operands=41664
+REGIME rc=1 m=3 operands=41664
+REGIME rc=1 m=4 operands=31296
+REGIME rc=1 m=5 operands=31240
+REGIME rc=1 m=6 operands=31232
+REGIME rc=1 m=7 operands=31232
+REGIME rc=1 m=8 operands=31296
+REGIME rc=1 m=9 operands=31240
+REGIME rc=1 m=10 operands=31232
+REGIME rc=1 m=11 operands=31232
+REGIME rc=1 m=12 operands=31296
+REGIME rc=1 m=13 operands=31240
+REGIME rc=1 m=14 operands=31232
+REGIME rc=1 m=15 operands=31232
+REGIME rc=1 m=16 operands=62528
+REGIME rc=1 m=17 operands=62472
+REGIME rc=1 m=18 operands=25024
+REGIME rc=1 m=19 operands=25024
+REGIME rc=1 m=20 operands=25024
+REGIME rc=1 m=21 operands=24968
+REGIME rc=1 m=22 operands=24960
+REGIME rc=1 m=23 operands=25024
+REGIME rc=1 m=24 operands=25024
+REGIME rc=1 m=25 operands=25024
+REGIME rc=1 m=26 operands=24968
+REGIME rc=1 m=27 operands=24960
+REGIME rc=1 m=28 operands=31296
+REGIME rc=1 m=29 operands=31240
+REGIME rc=1 m=30 operands=31232
+REGIME rc=1 m=31 operands=31232
+NOTE: rc=0,m=31 is zero, not a finite nonzero posit; checked separately by corner suite.
+  [PASS] Posit32 Sampled Mul: 1000000/1000000 (100% Bit-Exact with SoftPosit in 0.27s)
+
+================================================================================
+  SELECTED TESTS PASSED (not a full Gate 1 acceptance)
+================================================================================
+./test_round_unpacked
+ROUND_UNPACKED contract: all six fields + idempotence; RNE/TRUNC; seed=20261003
+checks=4954184 scale_changes=1366264 failures=0
+ROUND_UNPACKED PASSED
+./test_tv_paper
+TV-ITER-01 / TV-PAPER-01 PASS
+approximate NB=8 ES=0 W=5 pairs=200000 PASS
+approximate NB=16 ES=1 W=12 pairs=200000 PASS
+approximate NB=32 ES=2 W=12 pairs=200000 PASS
+approximate NB=32 ES=3 W=12 pairs=200000 PASS
+exact NB=8 ES=0 pairs=65536 PASS
+exact NB=16 ES=1 pairs=1000000 PASS
+exact NB=32 ES=2 pairs=1000000 PASS
+exact NB=32 ES=3 pairs=1000000 PASS
+checks=5940303 seed=314159 PASS
+./test_paper_baseline
+Table 1 example, all 4096 fractions n=1..8, 128 OPS entries, 100000 pairs PASS
+checks=531039 seed=314159 PASS
+./test_paper_ops
+OPS n2/7bit; FP32 cut11; exhaustive fraction23 and 4096x4096 pairs PASS
+checks=33587337 deterministic PASS
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_paper_table1.cpp -o test_paper_table1.exe

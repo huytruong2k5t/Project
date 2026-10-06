@@ -1,0 +1,26 @@
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim +SEED=20261004 -do run.do -l simulate_right.log -c work.tb_dyn_right_shifter 
+# Loading sv_std.std
+# Loading work.tb_dyn_right_shifter
+# Loading work.dyn_right_shifter
+# do run.do 
+# PRNG seed=20261004
+# ==================================================================
+#    STARTING UNIT TESTBENCH: tb_dyn_right_shifter
+# ==================================================================
+# [Suite 1] Running exhaustive test on N=8 (Logical, Arith, Custom)...
+# [Suite 1] Finished 12288 vectors.
+# [Suite 2] Running boundary and corner patterns on N=32, SHIFT_W=6...
+# [Suite 2] Finished corner tests. Cumulative vectors: 18304
+# [Suite 3] Running non-power-of-two verification on N=27...
+# [Suite 3] Finished N=27 tests. Cumulative vectors: 50304
+# [Suite 4] Running 20,000 randomized stress vectors on N=32...
+# [Suite 4] Finished randomized stress tests.
+# ==================================================================
+#    TEST RESULT: ALL 110304 VECTORS PASSED 100% (0 MISMATCHES)!
+# ==================================================================
+# ** Note: $finish    : ../../tb/tb_dyn_right_shifter.sv(392)
+#    Time: 60832 ns  Iteration: 0  Instance: /tb_dyn_right_shifter

@@ -1,0 +1,43 @@
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim -do run.do -l simulate.log -c work.tb_posit_parser 
+# Loading sv_std.std
+# Loading work.tb_posit_parser
+# Loading work.parser_pipeline_checker
+# Loading work.posit_parser
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# do run.do 
+# PIPE PASS NB=8 ES=0 checks=256 reset=3 discarded=3 stalls=40 full=42 simultaneous=254 bubbles=46 latency=256
+# PIPE PASS NB=16 ES=1 checks=65536 reset=3 discarded=3 stalls=25336 full=26357 simultaneous=51867 bubbles=21830 latency=510
+# PIPE CHECKPOINT NB=32 ES=3 received=100000
+# PIPE CHECKPOINT NB=32 ES=2 received=100000
+# PIPE CHECKPOINT NB=32 ES=3 received=200000
+# PIPE CHECKPOINT NB=32 ES=2 received=200000
+# PIPE CHECKPOINT NB=32 ES=3 received=300000
+# PIPE CHECKPOINT NB=32 ES=2 received=300000
+# PIPE CHECKPOINT NB=32 ES=3 received=400000
+# PIPE CHECKPOINT NB=32 ES=2 received=400000
+# PIPE CHECKPOINT NB=32 ES=3 received=500000
+# PIPE CHECKPOINT NB=32 ES=2 received=500000
+# PIPE CHECKPOINT NB=32 ES=2 received=600000
+# PIPE CHECKPOINT NB=32 ES=3 received=600000
+# PIPE CHECKPOINT NB=32 ES=3 received=700000
+# PIPE CHECKPOINT NB=32 ES=2 received=700000
+# PIPE CHECKPOINT NB=32 ES=3 received=800000
+# PIPE CHECKPOINT NB=32 ES=2 received=800000
+# PIPE CHECKPOINT NB=32 ES=3 received=900000
+# PIPE CHECKPOINT NB=32 ES=2 received=900000
+# PIPE CHECKPOINT NB=32 ES=3 received=1000000
+# PIPE CHECKPOINT NB=32 ES=2 received=1000000
+# PIPE CHECKPOINT NB=32 ES=3 received=1100000
+# PIPE CHECKPOINT NB=32 ES=2 received=1100000
+# PIPE CHECKPOINT NB=32 ES=3 received=1200000
+# PIPE PASS NB=32 ES=3 checks=1200010 reset=3 discarded=3 stalls=459823 full=480452 simultaneous=949815 bubbles=400633 latency=510
+# PIPE CHECKPOINT NB=32 ES=2 received=1200000
+# PIPE PASS NB=32 ES=2 checks=1200010 reset=3 discarded=3 stalls=460816 full=481535 simultaneous=950259 bubbles=400049 latency=510
+# PARSER_PIPELINE ALL PASS
+# ** Note: $finish    : ../../tb/tb_posit_parser.sv(43)
+#    Time: 19268137 ns  Iteration: 1  Instance: /tb_posit_parser

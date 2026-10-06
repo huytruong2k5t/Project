@@ -1,0 +1,18 @@
+Date: 2026-10-04 Asia/Saigon
+Research-only tool; production PaperMultiplier/PaperConfig/PaperOps and RTL unchanged.
+Build: make test_paper_sensitivity test_paper_sensitivity.exe test_paper_sensitivity_ubsan
+Linux G++ 15.2.0 (Ubuntu 15.2.0-16ubuntu1); MinGW GCC 13-win32; -O3 -std=c++17 -Wall -Wextra; UBSan -O1 -g -fsanitize=undefined -fno-sanitize-recover=undefined.
+L0/SoftPosit: 0.4.2 reused, vendor commit 17d5628185b31828b10c1f910c9bf65737e83640 with existing modifications; no L0 rebuild/link required here.
+Tests: ./test_paper_sensitivity --self-test (Linux/Windows/UBSan), 1500128 checks seed 20261004.
+Cross-platform measurement smoke: --samples 100000 --seed 314159; all rows/counters/fingerprint match, elapsed ignored.
+Pilot commands: ./test_paper_sensitivity --samples 10000000 --seed SEED; SEED in 314159,314160,2026,20261004,42.
+Pilot: 7 profiles, n=2..4, same corpus within each seed; one changed factor per profile; total 50m accepted per profile/row.
+Holdout command: ./test_paper_sensitivity --samples 200000000 --seed 271828 --profile relative_prediction; baseline included.
+Generator: uniform-value 24-bit grid in [0,1), std::mt19937_64; local distribution/PRNG assumption.
+Predictor relative score EA/(128+indexA) vs EB/(128+indexB), exact cross multiplication; predictor itself remains n=2 and 7-bit.
+Other profiles: tieB only; exact residual predictor only; accumulator Q24 with 12 guard bits only (SAC/input Q12 unchanged); exact SAC residual only; packRNE only.
+Stats: integer strict Err thresholds; exact counts in logs/CSV; paired differences and discordant-based standard errors against same-corpus baseline.
+Summary CI: approximate binomial 95% normal halfwidth, pooling 5 pilot seeds; sampling uncertainty conditional on local generator, excludes model/source uncertainty.
+No parameter combos, RTL/PPA fits or claimed original LUT reconstruction in this study.
+Holdout completed: 200000000 accepted, 200000021 attempted, input zero excluded 21, m/Ideal-zero 0, draws 400000042, fingerprint 04478e811a897da7, elapsed 104.360097 seconds.
+Holdout baseline max Proposed delta=1.347652 pp; relative_prediction max=0.976696 pp PASS criterion across 12 cells, research-only.

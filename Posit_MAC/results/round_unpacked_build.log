@@ -1,0 +1,55 @@
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_identity.cpp -o test_identity
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_mul_exact.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -lm -o test_mul_exact
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_round_unpacked.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -lm -o test_round_unpacked
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static -static-libgcc -static-libstdc++ test/test_identity.cpp -o test_identity.exe
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static-libgcc -static-libstdc++ test/test_mul_exact.cpp -L../l0 -l:softposit.dll -o test_mul_exact.exe
+cp -f ../l0/softposit.dll ./
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static-libgcc -static-libstdc++ test/test_round_unpacked.cpp -L../l0 -l:softposit.dll -o test_round_unpacked.exe
+cp -f ../l0/softposit.dll ./
+
+REPRODUCIBILITY
+Commands: cd l1; make linux windows; ./test_round_unpacked; make test-round-ubsan; make gate1
+Windows: test_round_unpacked.exe; test_identity.exe; test_mul_exact.exe --p32-only --samples 10000000 --seed 314159
+Round seeds: base=20261003; unpacked=base+NB*16+ES; products=base+NB
+Identity seed=1337; p32 acceptance seed=314159; exhaustive p16 deterministic
+g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+x86_64-w64-mingw32-g++ (GCC) 13-win32
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Leong
+    given-names: Siew Hoon
+    orcid: 0000-0001-8241-6277
+title: "SoftPosit"
+version: 0.4.2
+doi: 10.5281/zenodo.3709035
+date-released: 2020-03-13
+17d5628185b31828b10c1f910c9bf65737e83640
+ M source/include/softposit_types.h
+ M source/quire32_fdp_add.c
+ M source/quire32_fdp_sub.c
+22b74fea86a300f18e64f4f77053006932c6c06aa4b6fe4e67ac1a62503ac1bd  l1/include/l1_multiplier_exact.hpp
+532e3e3af4416d925de83e38e1a4554129953ee5521d1d8114a4e30c539b57bb  l1/include/posit_packer.hpp
+c6aaefa8d9dbf7afb5bc61a2f9615d28fd3372c6663d34edf12b13ebd97059ec  l1/include/posit_parser.hpp
+74da57e0d0835c693d311bde68776909b89a867dc286326bae1942e222d9dd99  l1/include/posit_types.hpp
+473a820638be6f80da99cebf0c35be80e68a18c08f18b31dfd07755e5332a62c  l1/include/round_unpacked.hpp
+3ea2229a998658d4fc39b3f1428af4514d1d37c6833450275641e93daf48888b  l1/test/test_round_unpacked.cpp
+76e465bf5b0c54adb5d18730758c8471b03ba2677a2787162bdd9d9cd602d756  l1/Makefile
+3395c713faa3141f8eb95281b5ece7f2c268df3d43fd4b00e613d2e5a1252534  scripts/rebuild_l0_l1.sh
+d20b29ea660b0a56a2b531871121f6f514e9190b575d8f3cfcb9d5d1e9829518  l1/test_round_unpacked
+813684bd29e22e365449f12bf50ccfe25b1c21c2f687d3971dfaf09cfd7d823f  l1/test_round_unpacked.exe
+e1c45429027b2723cf8161b52deb77a2f73e21fc6778b20ed0f0e2a5402fb6b9  l1/test_round_unpacked_ubsan
+bfc5b692d7fc900de932c6d343f2a74a5159783f9c8b0fb9d13e44486992d0a6  l1/test_identity
+42c9f2e0ce2151aa5a087a31ef7f97e5d31ab1428e5cceca9213f7271f9909ad  l1/test_identity.exe
+a14c7d55e38177ded4ec325cd019b8a8fb8af1eda298a68145ff50f90a66f7bc  l1/test_mul_exact
+13c2b16ea9078965708fad2e9d3e9cb89314104805c460fe91b936ed15595277  l1/test_mul_exact.exe
+8d6e33b23d924f3e76914569da7ebf06866aae61c5801ada77a182442a3eb761  l0/libsoftposit.so
+4b8dd39572b319b0b2ac81362050f3bf4eb50068add30e7d29d1db4480c682ea  l0/softposit.dll

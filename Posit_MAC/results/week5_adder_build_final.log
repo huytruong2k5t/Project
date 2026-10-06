@@ -1,0 +1,4 @@
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_adder.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -o test_adder
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -static-libgcc -static-libstdc++ test/test_adder.cpp -L../l0 -l:softposit.dll -o test_adder.exe
+cp -f ../l0/softposit.dll ./
+g++ -O1 -g -std=c++17 -Wall -Wextra -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude -I../l0 test/test_adder.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -o test_adder_ubsan

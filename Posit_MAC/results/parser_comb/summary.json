@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-05T20:35:33.1036040+07:00",
+  "status": "PASS",
+  "seed": 20261005,
+  "checks": 2465812.0,
+  "mismatches": 0,
+  "oracle": "accepted L1 plus independent sequential field decoder",
+  "softposit": "not linked: pure parser field comparison",
+  "suites": [
+    {
+      "NB": 8,
+      "ES": 0,
+      "checks": 256
+    },
+    {
+      "NB": 16,
+      "ES": 1,
+      "checks": 65536
+    },
+    {
+      "NB": 32,
+      "ES": 2,
+      "checks": 1200010
+    },
+    {
+      "NB": 32,
+      "ES": 3,
+      "checks": 1200010
+    }
+  ],
+  "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "generatorCommand": "l1/gen_parser_vectors.exe results/parser_comb",
+  "compileCommand": "vlog -sv -work work ../../rtl/lod_lzd_core.sv ../../rtl/dyn_left_shifter.sv ../../rtl/posit_parser_comb.sv ../../tb/tb_posit_parser_comb.sv -l compile.log",
+  "simulationCommand": "vsim -c work.tb_posit_parser_comb -l simulate.log -do run.do"
+}

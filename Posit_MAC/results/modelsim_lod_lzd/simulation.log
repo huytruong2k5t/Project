@@ -1,0 +1,14 @@
+# vsim -do {onerror {quit -code 1}; run -all; quit -code 1} -l Posit_MAC/results/modelsim_lod_lzd/simulation.log -lib Posit_MAC/results/modelsim_lod_lzd/work -c -onfinish exit tb_lod_lzd_core 
+# Loading sv_std.std
+# Loading Posit_MAC/results/modelsim_lod_lzd/work.tb_lod_lzd_core
+# Loading Posit_MAC/results/modelsim_lod_lzd/work.lod_lzd_test_case
+# Loading Posit_MAC/results/modelsim_lod_lzd/work.lod_lzd_core
+# onerror {quit -code 1} 
+#  Warning: onerror command for use within macro
+#  run -all 
+# N=8 seed=00000001: 256 vectors, 0 mismatches; index coverage LOD=11111111 LZD=11111111
+# N=31 seed=31c0ffee: 10126 vectors, 0 mismatches; index coverage LOD=1111111111111111111111111111111 LZD=1111111111111111111111111111111
+# N=32 seed=32c0ffee: 10130 vectors, 0 mismatches; index coverage LOD=11111111111111111111111111111111 LZD=11111111111111111111111111111111
+# LOD/LZD PASSED: 20512 vectors, 41024 checks, 0 mismatches
+# ** Note: $finish    : Posit_MAC/tb/tb_lod_lzd_core.sv(34)
+#    Time: 10130 ns  Iteration: 1  Instance: /tb_lod_lzd_core

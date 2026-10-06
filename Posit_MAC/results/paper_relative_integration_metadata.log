@@ -1,0 +1,18 @@
+Date: 2026-10-04 Asia/Saigon
+Feature: PaperOps::PredictN2Relative appended; default PredictN2 / original enum values / normative cfg_ops unchanged.
+API: paper_ops_select_relative<W> uses reconstructed LUT errors E and mantissa proxy 128+index7; compare EB*MA < EA*MB, ties retain A.
+Build: make test_paper_relative_ops test_paper_relative_ops.exe test_paper_relative_ops_ubsan test_paper_table1 test_paper_table1.exe
+Linux G++ 15.2.0 Ubuntu 15.2.0-16ubuntu1; MinGW GCC 13-win32; -O3 -std=c++17 -Wall -Wextra; UBSan -O1 -g -fsanitize=undefined -fno-sanitize-recover=undefined.
+Linux/Windows/UBSan relative tests: 35503586 checks, seed=20261004, corpus_seed=314159; exhaustive 4096^2 fractions; independent Q24 predictor oracle/rational ties; 100k raw posit pairs x n1..8 x metadata; research differential 100k x n2..4.
+Regression: make test, Linux L1 suites PASS (includes SoftPosit smoke, round_unpacked, TV-PAPER, baseline, OPS, measurement and sensitivity).
+CLI smoke: --samples 100000 --seed 314159 --profile relative Linux/Windows rows,counters,fingerprint match; default baseline/minpop rows match historical step3.
+CLI guard tests: unknown profile / --require-match with insufficient samples return 2.
+Full command: ./test_paper_table1 --samples 200000000 --seed 271828 --profile relative --require-match
+Acceptance criterion selects relative profile explicitly; default selects baseline. All 3 profiles share input pairs in full relative run.
+SoftPosit 0.4.2; vendor commit 17d5628185b31828b10c1f910c9bf65737e83640 with existing vendor modifications; L0 reused, not rebuilt. Paper relative tests/measurement themselves are header-only, no L0 link.
+Generator uniform-value 24-bit grid [0,1), std::mt19937_64; RNE oracle original FP32 before cut11; strict integer error thresholds. These remain local reconstruction assumptions.
+No RTL/PPA work, no claim published predictor bit-exact, no week4 auto-completion.
+Full integrated measurement PASS: max_delta_Proposed_pp=0.976696, exit=0, elapsed_seconds=190.051713.
+Accepted=200000000 attempted=200000021 excluded_zero=21 all other exclusion counts=0; draws=400000042; fingerprint=04478e811a897da7.
+All 24 printed baseline/relative cells match research holdout tool for seed271828; default baseline/minpop smoke rows match pre-integration logs.
+Script rebuild updated, not executed as full L0/L1 rebuild in this run.

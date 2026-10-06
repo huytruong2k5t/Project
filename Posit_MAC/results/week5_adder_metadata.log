@@ -1,0 +1,20 @@
+Date: 2026-10-04 Asia/Saigon
+Feature: PositAdder<NB,ES>, l1_add and l1_add_unpacked, AdderTrace.
+Core: magnitude ordering; alignment clamp F+2, bypass far mantissa into sticky; Q=F+3 bounded arithmetic; same-sign add/opposite-sign subtract; carry/LZC normalize; pack RNE(default)/TRUNC.
+Unpacked input contract: exact normalized operands <=F fractional bits, sf within posit range; for MAC v1 use round_unpacked(product), do not pass raw inexact multiplier output.
+Build: make test_adder test_adder.exe test_adder_ubsan
+Linux G++15.2.0 Ubuntu15.2.0-16ubuntu1; MinGW GCC13-win32; -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0.
+UBSan: -O1 -g -fsanitize=undefined -fno-sanitize-recover=undefined.
+Smoke: ./test_adder (Linux/Windows/UBSan), 3468043 checks each; seed314159. Linux/Windows records identical.
+Full acceptance: ./test_adder --acceptance --samples 10000000 --seed 314159; 4316435339 checks, PASS.
+Posit8 ES0: all65536 pairs vs l0_p8_add.
+Posit16 ES1: all4294967296 pairs vs l0_p16_add; cache65536 parsed operands, exact same add_unpacked+pack core; separate public l1_add random1000000 pairs/corners. Full range one log, no gaps, 81.4565seconds for exhaustive p16.
+Posit32 ES2: 10m stratified vectors vs l0_p32_add, seed314159; near opposite4157566 (41.57566%), min per finite regime polarity/run149936 >=10000.
+Posit32 ES3: 10m stratified vectors vs independent full-width integer sum oracle (not SoftPosit), seed314160; near opposite4093783 (40.93783%), min regime149936.
+Oracle: fixed limb grid at2^(-SF_MAX-F), full exact add/sub before independent normalization/extraction; uses verified parser/packer, does not use adder clamp/jam.
+Additional100k raw posit32 pairs per ES2/ES3, both RNE/TRUNC, vs wide oracle; all four formats corner cross225 pairs, directed even/odd ties and clamp boundaries.
+Windows additional: ./test_adder.exe --samples 10000000 --seed 314159 (same10m dataset/coverage as Linux, no full p16); --p16-start 16384 --p16-end 16385 range PASS.
+CLI insufficient acceptance samples exits2.
+Regression: make test PASS; bash -n scripts/rebuild_l0_l1.sh PASS. Script updated, not a full L0 rebuild this run.
+SoftPosit0.4.2, vendor commit17d5628185b31828b10c1f910c9bf65737e83640 with existing modifications; unchanged/reused libsoftposit.so/softposit.dll.
+Scope: week5 adder accepted; MAC/non-fused/fused/acc_mode/Gate1B/RTL not implemented by this task. Week4 status unaffected.

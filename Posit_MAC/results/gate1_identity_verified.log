@@ -1,0 +1,12 @@
+============================================================
+  L1 Roundtrip Identity Verification: pack(parse(p)) == p
+============================================================
+[TEST] Exhaustive Identity for Posit8 (ES=0) (NB=8, ES=0): 256 patterns...
+  [PASS] Posit8 (ES=0): 256/256 (100% Bit-Exact Match)
+[TEST] Exhaustive Identity for Posit16 (ES=1) (NB=16, ES=1): 65536 patterns...
+  [PASS] Posit16 (ES=1): 65536/65536 (100% Bit-Exact Match)
+[TEST] Posit32 Identity Verification (1000000 stratified/random samples + corners)...
+  [PASS] Posit32: 1000012/1000012 (100% Bit-Exact Match)
+============================================================
+  ALL ROUNDTRIP IDENTITY TESTS PASSED (0 Mismatch)!
+============================================================

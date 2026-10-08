@@ -83,3 +83,29 @@ Parser pipeline dùng [`tb_posit_parser.sv`](tb_posit_parser.sv) và [`parser_pi
 
 - **[Đường A (Verilator + C++ Harness)](verilator/README.md)**: Chạy hàng triệu đến hàng trăm triệu vector phân tầng để nghiệm thu tiêu chí **AC-01** (RTL = L1) và **AC-02** (Exact = SoftPosit).
 - **[Đường B (UVM-Lite / SystemVerilog Classes)](uvm_lite/README.md)**: Chạy kích thích ngẫu nhiên có ràng buộc (constrained random), thu thập Functional Coverage các bin regime, và kiểm tra các khẳng định SVA (`A-01` đến `A-09`).
+
+## 4. Packer và chuỗi parser→packer tuần8
+
+[`tb_posit_pack.sv`](tb_posit_pack.sv) dùng [`packer_checker.sv`](packer_checker.sv) để đối chiếu packer tổ hợp và pipeline với fixture độc lập cho posit8/ES0, posit16/ES1, posit32/ES2 và posit32/ES3, cả RNE/TRUNC. Kiểm biên regime, tie/carry, G/R/S, số âm, Zero/NaR, cờ trạng thái, latency, II=1, reset/flush và stall.
+
+[`tb_parser_packer.sv`](tb_parser_packer.sv) dùng [`parser_packer_checker.sv`](parser_packer_checker.sv) kiểm chuỗi RTL thật với scoreboard theo handshake, backpressure và reset. Nghiệm thu 07/10/2026: 5.947.048 lượt packer và 4.931.624 lượt chuỗi, 0 mismatch. Lệnh chạy và hash lưu trong `scripts/verify_packer_modelsim.ps1` và `results/packer/`; phạm vi này chưa bao gồm RTL MAC tích hợp.
+
+[`tb_packer_ppa.sv`](tb_packer_ppa.sv) kiểm riêng biên thanh ghi của benchmark PPA so với packer tổ hợp đã nghiệm thu; 3.994 lượt đạt. Test này không thay thế oracle số học độc lập của hai suite trên.
+
+Tối ưu P2 một bộ cộng có test riêng [`tb_packer_finish_equivalence.sv`](tb_packer_finish_equivalence.sv) và [`packer_finish_equivalence_checker.sv`](packer_finish_equivalence_checker.sv): NB8 vét cạn cả selector không hợp lệ và flags, NB16/32 ngẫu nhiên, so trực tiếp bản trước cho cả RNE/TRUNC. Tổng 1.448.576 lượt đạt; chạy `scripts/verify_packer_p2_equivalence.ps1`.
+
+## 5. OPS/SAC tổ hợp tuần9
+
+[`tb_week9_frontend.sv`](tb_week9_frontend.sv) ghép năm [`ops_frontend_checker.sv`](ops_frontend_checker.sv) và năm [`sac_frontend_checker.sv`](sac_frontend_checker.sv), width1/5/12/26/27. OPS kiểm instance EXACT_EN/OPS_EN bật và tắt, cấu hình reserved, tie, input cut, dấu và sf. SAC kiểm fx rỗng, sa cuối width, exhausted và state_error khi scale vượt width.
+
+ModelSim159.820 vector OPS +167.620 SAC,0 mismatch. Fixture do L1 và oracle đếm/quét bit độc lập tạo, seed20261008; cross-platform/UBSan đã kiểm. Chạy `scripts/verify_week9_frontend_modelsim.ps1`, sau đó `scripts/summarize_week9_frontend.py`. Scope chỉ là tổ hợp; chưa kiểm FF/reset/drain/handshake của multiplier. Kế hoạch ở PLAN L1 mục7, hợp đồng SPEC §5.5-A.
+
+## 6. Kiểm chứng multiplier tuần9 — 09/10/2026
+
+Các suite mới: `tb_week9_arithmetic` (term/acc/norm/adapter), `tb_week9_paper` (score/commit/pack paper), `tb_week9_core` (latency/reset/context/drain) và `tb_week9_multiplier` (baseline top,16 profile, cả d và flags).
+
+ModelSim chạy fixture trong thư mục kết quả riêng; scripts fail khi thiếu vector/marker hoặc gặp Fatal/Error. Vector bị reset hủy được đếm riêng, không tính vào ngưỡng10⁷ so RTL=L1. Lượt pilot bản cuối31.840 so sánh và160 reset,0 mismatch. Competing input được giữ trong lúc busy; output bị stall; reset quay qua parser/core/drain/output. Nguồn phải đặt config hợp lệ trước chờ in_ready vì wrapper từ chối reserved/n>N_MAX.
+
+Harness `week9_multiplier_harness.cpp` và script Verilator đã chuẩn bị, chưa có bằng chứng build/chạy do công cụ thiếu. Verilator --no-timing bỏ CK2Q cho kiểm chức năng theo cạnh; ModelSim là bằng chứng có CK2Q. Cần đối chuẩn pilot hai engine trước nhận lượt lớn Verilator. Bằng chứng hiện tại ở `results/week9_implementation/summary.json`.
+
+Kiểm 10⁷ RTL đang chạy; chưa có kết quả nghiệm thu lượt lớn.

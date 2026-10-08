@@ -1,0 +1,13 @@
+# vsim -do {onerror {quit -code 1}; onbreak {quit -code 1}; run -all; quit -code 0} -l simulate.log -c work.tb_shifter_export 
+# Loading sv_std.std
+# Loading work.tb_shifter_export
+# Loading work.dyn_right_shifter_reference
+# Loading work.dyn_right_shifter
+# onerror {quit -code 1} 
+#  Warning: onerror command for use within macro
+#  onbreak {quit -code 1} 
+#  Warning: onbreak command for use within macro
+#  run -all 
+# SHIFTER EXPORT PASS basis_checks=9120
+# ** Note: $finish    : tb_shifter_export.sv(107)
+#    Time: 7936 ns  Iteration: 1  Instance: /tb_shifter_export

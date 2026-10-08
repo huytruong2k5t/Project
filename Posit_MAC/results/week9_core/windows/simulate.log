@@ -1,0 +1,26 @@
+# vsim -do run.do -l simulate.log -c work.tb_week9_core 
+# Loading sv_std.std
+# Loading work.tb_week9_core
+# Loading work.core_checker
+# Loading work.mul_iter_core
+# Loading work.iter_ctrl
+# Loading work.sac_step_comb
+# Loading work.dyn_left_shifter
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum
+# Loading work.sbm_accum_comb
+# Loading work.lod_lzd_core
+# do run.do 
+# CORE PASS F=1 scheme=0 transactions=4000 resets=42
+# CORE PASS F=1 scheme=1 transactions=4000 resets=42
+# CORE PASS F=5 scheme=0 transactions=4000 resets=42
+# CORE PASS F=5 scheme=1 transactions=4000 resets=42
+# CORE PASS F=12 scheme=1 transactions=4000 resets=42
+# CORE PASS F=12 scheme=0 transactions=4000 resets=42
+# CORE PASS F=26 scheme=1 transactions=4000 resets=42
+# CORE PASS F=26 scheme=0 transactions=4000 resets=42
+# CORE PASS F=27 scheme=1 transactions=4000 resets=42
+# CORE PASS F=27 scheme=0 transactions=4000 resets=42
+# WEEK9 CORE ALL PASS
+# ** Note: $finish    : ../../../tb/tb_week9_core.sv(13)
+#    Time: 666910 ns  Iteration: 2  Instance: /tb_week9_core

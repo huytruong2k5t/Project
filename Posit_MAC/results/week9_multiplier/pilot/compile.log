@@ -1,0 +1,24 @@
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+C:\altera\13.0sp1\modelsim_ase\win32aloem\vlog.exe -sv -timescale 1ns/1ps +incdir+../../../rtl -work work ../../../rtl/lod_lzd_core.sv ../../../rtl/dyn_left_shifter.sv ../../../rtl/dyn_right_shifter.sv ../../../rtl/posit_parser.sv ../../../rtl/ops_sel_comb.sv ../../../rtl/sac_step_comb.sv ../../../rtl/sbm_shift_comb.sv ../../../rtl/sbm_accum_comb.sv ../../../rtl/iter_ctrl.sv ../../../rtl/sbm_accum.sv ../../../rtl/mul_iter_core.sv ../../../rtl/mul_norm_comb.sv ../../../rtl/posit_pack_prepare.sv ../../../rtl/posit_pack_finish.sv ../../../rtl/posit_pack.sv ../../../rtl/mul_iter_wrapper.sv ../../../rtl/posit_mul_iter.sv ../../../tb/multiplier_checker.sv ../../../tb/tb_week9_multiplier.sv -l compile.log 
+-- Compiling module lod_lzd_core
+-- Compiling module dyn_left_shifter
+-- Compiling module dyn_right_shifter
+-- Compiling module posit_parser
+-- Compiling module ops_sel_comb
+-- Compiling module sac_step_comb
+-- Compiling module sbm_shift_comb
+-- Compiling module sbm_accum_comb
+-- Compiling module iter_ctrl
+-- Compiling module sbm_accum
+-- Compiling module mul_iter_core
+-- Compiling module mul_norm_comb
+-- Compiling module posit_pack_prepare
+-- Compiling module posit_pack_finish
+-- Compiling module posit_pack
+-- Compiling module mul_iter_wrapper
+-- Compiling module posit_mul_iter
+-- Compiling module multiplier_checker
+-- Compiling module tb_week9_multiplier
+
+Top level modules:
+	tb_week9_multiplier

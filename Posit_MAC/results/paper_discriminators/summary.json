@@ -1,0 +1,216 @@
+{
+  "date": "2026-10-08",
+  "steps_completed": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "original_baseline_status": "processing",
+  "selected_records": 292,
+  "unique_cases": 206,
+  "categories": {
+    "equal_score": 32,
+    "output_width": 32,
+    "signed_cut": 32,
+    "term_cut": 32,
+    "guard_depth": 32,
+    "post_sum_cut": 32,
+    "rnd_boundary": 32,
+    "anchor_cut": 32,
+    "prefix126_127": 32,
+    "published_fig4": 1,
+    "carry_required": 1,
+    "negative_term_floor": 1,
+    "shift_cut_edge": 1
+  },
+  "candidates": [
+    "fig3",
+    "tie_b",
+    "legacy7",
+    "input_anchor",
+    "exact_residual",
+    "guard1_pack12",
+    "guard12_pack12",
+    "source_uncut",
+    "post_sum_pack12",
+    "signed_floor"
+  ],
+  "searched_pairs_n": 199800,
+  "verification": {
+    "checks_per_platform": 205882,
+    "platforms": [
+      "Windows",
+      "Linux",
+      "Linux UBSan"
+    ],
+    "cross_platform_csv": "MATCH",
+    "raw_pairs": 10000,
+    "raw_seed": 20261008,
+    "n": "1..8",
+    "oracle": "Independent signed residual Q96 and integer division; shared accepted parser/packer and frozen OPS",
+    "scope": "Local hypotheses, not author RTL; projected published trace does not establish internal precision"
+  },
+  "source_fixture": {
+    "input_X": "0x1c900000",
+    "input_Y": "0x3c820000",
+    "force_X": true,
+    "significands_Q12": [
+      5248,
+      4616
+    ],
+    "scale_factors": [
+      -10,
+      -1
+    ],
+    "n_terms": 3,
+    "powers": [
+      0,
+      -2,
+      -5
+    ],
+    "coefficients": [
+      1,
+      1,
+      1
+    ],
+    "accumulators_Q12": [
+      4616,
+      5770,
+      5914
+    ],
+    "final_fraction": "0x71a",
+    "expected_output": "0x1ae34000",
+    "uncut_output": "0x1ae34800",
+    "OPS_tie_policy_test": false
+  },
+  "measurement": {
+    "samples": 200000000,
+    "seed": 271828,
+    "distribution": "uniform-value grid24 [0,1)",
+    "generator": "std::mt19937_64",
+    "oracle": "Original FP32_RNE product before cut11",
+    "format": "posit32 ES3",
+    "input_fraction_bits": 12,
+    "rounding": "TRUNC",
+    "thresholds": "Strict <, exact integer comparison",
+    "attempted": 200000021,
+    "excluded_zero": 21,
+    "draws": 400000042,
+    "fingerprint": "04478e811a897da7",
+    "exit_status_scope": "Measurement exits0 on successful execution; numeric gate stored separately",
+    "profiles": {
+      "fig3": {
+        "max_delta_pp": "1.292319500",
+        "numeric_threshold_pass": false,
+        "original_baseline_accepted": false
+      },
+      "guard12_pack12": {
+        "max_delta_pp": "1.338773000",
+        "numeric_threshold_pass": false,
+        "original_baseline_accepted": false
+      },
+      "source_uncut": {
+        "max_delta_pp": "0.984213000",
+        "numeric_threshold_pass": true,
+        "original_baseline_accepted": false
+      }
+    }
+  },
+  "pilot": {
+    "samples": 1000000,
+    "seed": 271828,
+    "platforms": [
+      "Windows",
+      "Linux"
+    ],
+    "exact_counts_match": true
+  },
+  "compilers": {
+    "linux": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "windows": "x86_64-w64-mingw32-g++ (GCC) 13-win32"
+  },
+  "SoftPosit": "Not used by this research measurement: shared verified FP32_RNE oracle, thresholds compared by exact integers; L0 not changed",
+  "commands": [
+    "make -C l1 test_paper_discriminators test_paper_discriminators.exe test_paper_discriminators_ubsan",
+    "./l1/test_paper_discriminators results/paper_discriminators/linux",
+    "./l1/test_paper_discriminators_ubsan results/paper_discriminators/ubsan",
+    ".\\l1\\test_paper_discriminators.exe results/paper_discriminators/windows",
+    ".\\l1\\test_paper_discriminators.exe --measure results/paper_discriminators/pilot 1000000 271828",
+    "./l1/test_paper_discriminators --measure results/paper_discriminators/linux 1000000 271828",
+    "./l1/test_paper_discriminators --measure results/paper_discriminators/acceptance 200000000 271828",
+    "python scripts/summarize_paper_discriminators.py"
+  ],
+  "remaining": [
+    "Original OPS tie and prefix padding/LUT",
+    "Internal carry/normalize/cut implementation",
+    "Author generator/seed/filter"
+  ],
+  "production_changes": "No normative L1/RTL change; research-only test harness and build targets",
+  "sources": {
+    "paper2021": "An Approximate and Iterative Posit Multiplier Architecture for FPGAs.pdf",
+    "visual_page": "results/paper_discriminators/paper2021_page3.png",
+    "journal2024_doi": "10.1109/TVLSI.2024.3354726",
+    "journal2024_url": "https://www.scribd.com/document/818436812/Area-Efficient-Iterative-Logarithmic-Approximate-Multipliers-for-IEEE-754-and-Posit-Numbers"
+  },
+  "sha256": {
+    "An Approximate and Iterative Posit Multiplier Architecture for FPGAs.pdf": "5016d5eac4395c40ad513ee9a0294d5070041d8120a8328b55e5277b7e11548d",
+    "l1/include/l1_multiplier_exact.hpp": "22b74fea86a300f18e64f4f77053006932c6c06aa4b6fe4e67ac1a62503ac1bd",
+    "l1/include/l1_multiplier_iter.hpp": "9b516a8d7bbd0f29c1c28645499b081db95ce756fdd30930ffe5a9889ddf0736",
+    "l1/include/mul_norm.hpp": "5fd2e1aac6b0cecb0627f24429b2bee04d41531e280b2615fdaf7c4bedfee41a",
+    "l1/include/ops_sel.hpp": "558c0b319bd32da1e6ebcf1c5dc8539b26e1861104dfb94aa75f5c03d0b1a4bf",
+    "l1/include/paper_babic.hpp": "33b89ecd7d6e7b746daec2c2d90900e1cb57b8f9c0331228278acdbe68edbda4",
+    "l1/include/paper_fig3_accumulator.hpp": "872182bf83dd28503c74fe0a97d881fd5513eee4c5e8313765bdc29c90bd2742",
+    "l1/include/paper_measurement.hpp": "c4cdf0ce9895781f00717693fa50693e34f46a963235041329eb89258c16635f",
+    "l1/include/paper_multiplier.hpp": "39d2dc4e49bbc67fa0f7491a33184589cfc332fc4ba38151a9fa3aa8bc6ca1bc",
+    "l1/include/paper_ops.hpp": "fb42bd0cd52fdc60cabeda11cdead840ad9d0e7d55f4d58a855a4f915ec1eda7",
+    "l1/include/posit_adder.hpp": "08d20c9ccc3aad3cb314c4ca42649f8a039364756633099dea3bebec60a80ba4",
+    "l1/include/posit_mac.hpp": "136aa7adc8038384785c249c12c2c779534f448f6e4b6b54fc26cbe26ab2c66a",
+    "l1/include/posit_packer.hpp": "532e3e3af4416d925de83e38e1a4554129953ee5521d1d8114a4e30c539b57bb",
+    "l1/include/posit_parser.hpp": "c6aaefa8d9dbf7afb5bc61a2f9615d28fd3372c6663d34edf12b13ebd97059ec",
+    "l1/include/posit_types.hpp": "4e3d61f091bc86917d8a983dcf6228af6ee14a12b49e491ba3b99be70b05771b",
+    "l1/include/round_unpacked.hpp": "473a820638be6f80da99cebf0c35be80e68a18c08f18b31dfd07755e5332a62c",
+    "l1/include/sac.hpp": "aca2fdffd0df9060e167d5ad6d22e219c3e70a2258999da093388c565fe89625",
+    "l1/include/sbm.hpp": "88ab3e30b3b2c078bef18f335b39991029678338adae295c12d1cdddd1ff61c3",
+    "l1/Makefile": "cc28ac6bd88fcd13ec050c8734d772d940f7db3a84a83592091915255d5dcea2",
+    "l1/test/paper_discriminator_study.hpp": "a26722815573870e3dcb541890b71384032d5db22ad2bdd82fc71c3c233c0fb6",
+    "l1/test/test_paper_discriminators.cpp": "e940fd1a5d4915b3a61ca4879b93b4f4aaa36c472715211f0cd917e13fa7f14c",
+    "l1/test_paper_discriminators": "3803103035da4106202b9bfbeeb16728595edafc1ca78c79e27dc86b79a2b774",
+    "l1/test_paper_discriminators.exe": "8575268a30973764b05b75cab69eebe6d2a90a5ca767b0c6061f057cca1b7711",
+    "l1/test_paper_discriminators_ubsan": "53608fced43f94f7e56cfe7c27df306b1214bc68311931a4e64bd65ec912a8fa",
+    "results/paper_discriminators/acceptance/measurement.csv": "66f0e7fecdf177df2230232ff75a9416f576f7140818449e6fedc598b23f2a81",
+    "results/paper_discriminators/build.log": "b64998f74578ba923c8cde5efbbc7016921aa25f75ac1272b05266200fe59091",
+    "results/paper_discriminators/compiler_linux.log": "ac55452791ddd9d6e55f5e1f3dbcd5ee40f34b0b55ae18baade542748b008022",
+    "results/paper_discriminators/compiler_windows.log": "80b90a63bba944003b66a9c5d93f594ff2f4881e27b41440d3eaa45ffdd8eca4",
+    "results/paper_discriminators/hypotheses.csv": "42c6bb44ebcda4f994daab3e9ab6df5316586c966829192a9778540fb12cc8c1",
+    "results/paper_discriminators/linux/coverage.csv": "732f47b4012a68b2dc2a515f6ce439d42950f661fab8146230e5646596cde844",
+    "results/paper_discriminators/linux/first_differences.csv": "5ec6bc9c26ddf5721f9a6a9e99aee5f3a68b1ee0befa0e1efa5bef0b53798b11",
+    "results/paper_discriminators/linux/measurement.csv": "09be25a75635f76f6431b1aa2171e8878ed8e221478770d07f71e6bf2a5cc80d",
+    "results/paper_discriminators/linux/outputs.csv": "ca806c2a71c2f28ee7909a8ad710260765e43183c074caa97211ecec0ed4604f",
+    "results/paper_discriminators/linux/source_fixture.csv": "9375993144f313197f85c9618e074261af440d1d3890bb9228575e54bf301ce7",
+    "results/paper_discriminators/linux/traces.csv": "77e42e6c619744d5c9a8dfbee9b9f05711da283747242ca050947d56aa146bef",
+    "results/paper_discriminators/linux/vectors.csv": "a7294e9fcf40b2faa22164f4dbfaad399e53c6e3e2446ef80100e656200fd0a6",
+    "results/paper_discriminators/paper2021_page3.png": "7fcc847d3bd2580ac1c8fdad25ccb064c565048d83ca5abeb8dcec3a3d40a005",
+    "results/paper_discriminators/pilot/measurement.csv": "d9f8c670b8ca5b074e3d061469b027ca4425924cd94f687f05b80978b91de9e5",
+    "results/paper_discriminators/pilot.log": "94202801477e91e47b5b5a8340fca9796fc11612f886eded58d02abfa99ddae1",
+    "results/paper_discriminators/pilot_linux.log": "b5ced7be5bb0b020da470ec9bc100dfa270089ceaf5d81a11af2abce9fcfaf8a",
+    "results/paper_discriminators/representative_vectors.csv": "213919b1e57dc858074aadc80e35e9537c57522b13f400fd8c780e33eaf5ff91",
+    "results/paper_discriminators/table1_200m.log": "e3188486971ea563adec07a2ee3b58d37dfd84f5fa1626f81f558b474075b91b",
+    "results/paper_discriminators/test_linux.log": "da408a1a5348c856a7fbedb3ce4c65f5699cf1de4a54c33e1c751de60023ed16",
+    "results/paper_discriminators/test_ubsan.log": "da408a1a5348c856a7fbedb3ce4c65f5699cf1de4a54c33e1c751de60023ed16",
+    "results/paper_discriminators/test_windows.log": "cdca45d5dfcf9222d87b6a5652865d81113d5087261196a13da8566538a3a42e",
+    "results/paper_discriminators/ubsan/coverage.csv": "732f47b4012a68b2dc2a515f6ce439d42950f661fab8146230e5646596cde844",
+    "results/paper_discriminators/ubsan/first_differences.csv": "5ec6bc9c26ddf5721f9a6a9e99aee5f3a68b1ee0befa0e1efa5bef0b53798b11",
+    "results/paper_discriminators/ubsan/outputs.csv": "ca806c2a71c2f28ee7909a8ad710260765e43183c074caa97211ecec0ed4604f",
+    "results/paper_discriminators/ubsan/source_fixture.csv": "9375993144f313197f85c9618e074261af440d1d3890bb9228575e54bf301ce7",
+    "results/paper_discriminators/ubsan/traces.csv": "77e42e6c619744d5c9a8dfbee9b9f05711da283747242ca050947d56aa146bef",
+    "results/paper_discriminators/ubsan/vectors.csv": "a7294e9fcf40b2faa22164f4dbfaad399e53c6e3e2446ef80100e656200fd0a6",
+    "results/paper_discriminators/windows/coverage.csv": "07eab4b339e5edde1c6728ac72aa81d2b1fb9dc9c8bfc9f34e4b74ea1a79498b",
+    "results/paper_discriminators/windows/first_differences.csv": "02fcb04c06ced9f8ed92f0e37de0260e67fb5328fbbcf304298e807377a81cff",
+    "results/paper_discriminators/windows/outputs.csv": "8537d4a40862123449ec996c6bae5ad115c1a1e4100e0d45c56167e208a2fd7a",
+    "results/paper_discriminators/windows/source_fixture.csv": "1bfd64da471efba3b80bddcc59eae06675e7cd16c4da4ad433c31c44efe0ea0c",
+    "results/paper_discriminators/windows/traces.csv": "92a251ed64d1fa3d227d45189f8c007d0fe3722f5642cf38c7ce31392ce71baa",
+    "results/paper_discriminators/windows/vectors.csv": "9a310da286784efff5c4041ceca5b91911b6ceb77867e9faae51bb174aeb6b0a",
+    "scripts/summarize_paper_discriminators.py": "add6fc92ebd29de2472c7231c483febafd822f4f1bf035daf29c68a9cf6c1ad2"
+  }
+}

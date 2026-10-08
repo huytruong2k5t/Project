@@ -1,0 +1,105 @@
+Info: *******************************************************************
+Info: Running Quartus II 64-Bit Analysis & Synthesis
+    Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+    Info: Copyright (C) 1991-2013 Altera Corporation. All rights reserved.
+    Info: Your use of Altera Corporation's design tools, logic functions 
+    Info: and other software and tools, and its AMPP partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Altera Program License 
+    Info: Subscription Agreement, Altera MegaCore Function License 
+    Info: Agreement, or other applicable license agreement, including, 
+    Info: without limitation, that your use is for the sole purpose of 
+    Info: programming logic devices manufactured by Altera and sold by 
+    Info: Altera or its authorized distributors.  Please refer to the 
+    Info: applicable agreement for further details.
+    Info: Processing started: Fri Oct 09 06:19:27 2026
+Info: Command: quartus_map multiplier
+Warning (20028): Parallel compilation is not licensed and has been disabled
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/lod_lzd_core.sv
+    Info (12023): Found entity 1: lod_lzd_core
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/dyn_left_shifter.sv
+    Info (12023): Found entity 1: dyn_left_shifter
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/dyn_right_shifter.sv
+    Info (12023): Found entity 1: dyn_right_shifter
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/posit_parser.sv(43)
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/posit_parser.sv(44)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/posit_parser.sv
+    Info (12023): Found entity 1: posit_parser
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/ops_sel_comb.sv
+    Info (12023): Found entity 1: ops_sel_comb
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/sac_step_comb.sv
+    Info (12023): Found entity 1: sac_step_comb
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/sbm_shift_comb.sv
+    Info (12023): Found entity 1: sbm_shift_comb
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/sbm_accum_comb.sv
+    Info (12023): Found entity 1: sbm_accum_comb
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/iter_ctrl.sv(34)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/iter_ctrl.sv
+    Info (12023): Found entity 1: iter_ctrl
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/sbm_accum.sv(36)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/sbm_accum.sv
+    Info (12023): Found entity 1: sbm_accum
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/mul_iter_core.sv(48)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/mul_iter_core.sv
+    Info (12023): Found entity 1: mul_iter_core
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/mul_norm_comb.sv
+    Info (12023): Found entity 1: mul_norm_comb
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/posit_pack_prepare.sv
+    Info (12023): Found entity 1: posit_pack_prepare
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/posit_pack_finish.sv
+    Info (12023): Found entity 1: posit_pack_finish
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/posit_pack.sv(47)
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/posit_pack.sv(48)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/posit_pack.sv
+    Info (12023): Found entity 1: posit_pack
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/mul_iter_wrapper.sv(42)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/mul_iter_wrapper.sv
+    Info (12023): Found entity 1: mul_iter_wrapper
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/posit_mul_iter.sv
+    Info (12023): Found entity 1: posit_mul_iter
+Info (12127): Elaborating entity "posit_mul_iter" for the top level hierarchy
+Info (12128): Elaborating entity "mul_iter_wrapper" for hierarchy "mul_iter_wrapper:u_wrapper"
+Info (12128): Elaborating entity "posit_parser" for hierarchy "mul_iter_wrapper:u_wrapper|posit_parser:u_a"
+Warning (10230): Verilog HDL assignment warning at posit_parser.sv(40): truncated value with size 32 to match size of target (5)
+Info (12128): Elaborating entity "lod_lzd_core" for hierarchy "mul_iter_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lod"
+Info (10008): Verilog HDL or VHDL information: EDA Netlist Writer cannot regroup multidimensional array "tree_pos" into its bus
+Info (12128): Elaborating entity "lod_lzd_core" for hierarchy "mul_iter_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lzd"
+Info (10008): Verilog HDL or VHDL information: EDA Netlist Writer cannot regroup multidimensional array "tree_pos" into its bus
+Info (12128): Elaborating entity "dyn_left_shifter" for hierarchy "mul_iter_wrapper:u_wrapper|posit_parser:u_a|dyn_left_shifter:u_align_payload"
+Info (12128): Elaborating entity "ops_sel_comb" for hierarchy "mul_iter_wrapper:u_wrapper|ops_sel_comb:u_ops"
+Info (12128): Elaborating entity "mul_iter_core" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core"
+Info (12128): Elaborating entity "iter_ctrl" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl"
+Warning (10230): Verilog HDL assignment warning at iter_ctrl.sv(48): truncated value with size 32 to match size of target (5)
+Info (12128): Elaborating entity "sac_step_comb" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact"
+Warning (10230): Verilog HDL assignment warning at sac_step_comb.sv(29): truncated value with size 32 to match size of target (6)
+Info (12128): Elaborating entity "lod_lzd_core" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|lod_lzd_core:g_detector.u_lod"
+Info (10008): Verilog HDL or VHDL information: EDA Netlist Writer cannot regroup multidimensional array "tree_pos" into its bus
+Info (12128): Elaborating entity "dyn_left_shifter" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|dyn_left_shifter:u_shift"
+Info (12128): Elaborating entity "sac_step_comb" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx"
+Warning (10230): Verilog HDL assignment warning at sac_step_comb.sv(29): truncated value with size 32 to match size of target (6)
+Info (12128): Elaborating entity "lod_lzd_core" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|lod_lzd_core:g_detector.u_lod"
+Info (10008): Verilog HDL or VHDL information: EDA Netlist Writer cannot regroup multidimensional array "tree_pos" into its bus
+Info (12128): Elaborating entity "dyn_left_shifter" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|dyn_left_shifter:u_shift"
+Info (12128): Elaborating entity "sbm_shift_comb" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_shift_comb:u_shift"
+Info (12128): Elaborating entity "sbm_accum" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc"
+Info (12128): Elaborating entity "sbm_accum_comb" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|sbm_accum_comb:u_add"
+Info (12128): Elaborating entity "mul_norm_comb" for hierarchy "mul_iter_wrapper:u_wrapper|mul_norm_comb:u_norm"
+Info (12128): Elaborating entity "posit_pack" for hierarchy "mul_iter_wrapper:u_wrapper|posit_pack:u_pack"
+Info (12128): Elaborating entity "posit_pack_prepare" for hierarchy "mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare"
+Warning (10230): Verilog HDL assignment warning at posit_pack_prepare.sv(34): truncated value with size 64 to match size of target (32)
+Info (12128): Elaborating entity "dyn_right_shifter" for hierarchy "mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift"
+Info (12128): Elaborating entity "posit_pack_finish" for hierarchy "mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_finish:g_rne.u_finish"
+Info (286030): Timing-Driven Synthesis is running
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Info (21057): Implemented 2456 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 75 input pins
+    Info (21059): Implemented 39 output pins
+    Info (21061): Implemented 2342 logic cells
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 14 warnings
+    Info: Peak virtual memory: 4600 megabytes
+    Info: Processing ended: Fri Oct 09 06:19:35 2026
+    Info: Elapsed time: 00:00:08
+    Info: Total CPU time (on all processors): 00:00:07

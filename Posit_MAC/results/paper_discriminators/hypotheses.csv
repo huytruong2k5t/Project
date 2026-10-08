@@ -1,0 +1,11 @@
+candidate,evidence_status,source,limitation
+fig3,compatible_fixture_not_confirmed_original,2021 Fig.4/5; 2024 Fig.3,Internal hidden/carry layout and cut flags remain reconstructed.
+tie_b,unresolved,Fig.4 forces X; no published equal-score OPS trace,A/B tie candidates differ in local vectors; neither is selected by the source fixture.
+legacy7,conditional_disagreement_PT2_padding,2024 Table IV; prefix126/127,Q12 zero extension differs from 7-bit complement; original padding/LUT not fully available.
+input_anchor,incompatible_literal_anchor_contract,2024 III-C/Fig.3,Source shift=l1-lk and exponent uses l1. Fig.4 has l1=0 and cannot discriminate anchors.
+exact_residual,algorithm_control_incompatible_bitflip_contract,2024 III-A eq.10-12,Exact residual adds one after complement; paper describes bit inversion without add-one.
+guard1_pack12,unresolved_internal_precision,2021 Fig.4/5,Matches output and projected Q12 trace; internal guard not proved.
+guard12_pack12,compatible_output_not_confirmed_internal_width,2021 Fig.4/5,12-bit final fraction is supported; retaining 12 internal guard bits is a local hypothesis.
+source_uncut,rejected_as_2021_bit_exact_baseline,2021 Fig.4 output and Fig.5 zero padding,Returns 0x1ae34800 instead of 0x1ae34000. Retained only as historical statistical control.
+post_sum_pack12,unresolved_hidden_precision_alternative,2024 Fig.3 logical shifter/adder; 2021 fixture,Same published output; retaining exact fractional sums changes the finite-cut architecture.
+signed_floor,incompatible_logical_magnitude_shift_contract,2024 Fig.3 logical right shift then add/subtract,Negative term -ceil(Y/2^d) differs from applying coefficient to floor(Y/2^d). No published negative-tail trace.

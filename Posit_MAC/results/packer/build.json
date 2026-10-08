@@ -1,0 +1,9 @@
+{
+  "date": "2026-10-07",
+  "compiler": "x86_64-w64-mingw32-g++ GCC13-win32",
+  "command": "x86_64-w64-mingw32-g++ -O2 -std=c++17 -Wall -Wextra -Werror -static-libgcc -static-libstdc++ -Il1/include l1/test/gen_packer_vectors.cpp -o l1/gen_packer_vectors.exe",
+  "seed": 20261006,
+  "generator_command": "l1/gen_packer_vectors.exe results/packer",
+  "softposit": "Not linked for these RTL fixture suites; accepted L1 plus serial encoder, ES3 independently encoded",
+  "vivado": "2026.1 compile/elaborate only; ModelSim runtime; Quartus PPA benchmark separate"
+}

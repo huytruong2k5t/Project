@@ -1,0 +1,51 @@
+OPS F=1 FW=1 rows=32
+SAC W=1 rows=4
+OPS F=5 FW=5 rows=8192
+SAC W=5 rows=256
+OPS F=12 FW=12 rows=50300
+SAC W=12 rows=65536
+OPS F=26 FW=12 rows=50636
+SAC W=26 rows=50896
+OPS F=27 FW=12 rows=50660
+SAC W=27 rows=50928
+WEEK9 GENERATOR PASS ops=159820 sac=167620 seed=20261008
+Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module lod_lzd_core
+-- Compiling module dyn_left_shifter
+-- Compiling module ops_sel_comb
+-- Compiling module sac_step_comb
+-- Compiling module ops_frontend_checker
+-- Compiling module sac_frontend_checker
+-- Compiling module tb_week9_frontend
+
+Top level modules:
+	tb_week9_frontend
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim -do run.do -l simulate.log -c work.tb_week9_frontend 
+# Loading sv_std.std
+# Loading work.tb_week9_frontend
+# Loading work.ops_frontend_checker
+# Loading work.ops_sel_comb
+# Loading work.sac_frontend_checker
+# Loading work.sac_step_comb
+# Loading work.dyn_left_shifter
+# Loading work.lod_lzd_core
+# do run.do 
+# WEEK9 SAC PASS W=1 checks=4
+# WEEK9 OPS PASS F=1 FW=1 checks=32
+# WEEK9 SAC PASS W=5 checks=256
+# WEEK9 OPS PASS F=5 FW=5 checks=8192
+# WEEK9 OPS PASS F=12 FW=12 checks=50300
+# WEEK9 OPS PASS F=26 FW=12 checks=50636
+# WEEK9 OPS PASS F=27 FW=12 checks=50660
+# WEEK9 SAC PASS W=26 checks=50896
+# WEEK9 SAC PASS W=27 checks=50928
+# WEEK9 SAC PASS W=12 checks=65536
+# WEEK9 FRONTEND ALL PASS
+# ** Note: $finish    : ../../../tb/tb_week9_frontend.sv(19)
+#    Time: 65536 ns  Iteration: 1  Instance: /tb_week9_frontend
+WEEK9 MODELSIM PASS ops=159820 sac=167620 mismatches=0

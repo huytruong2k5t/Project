@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-07",
+  "scope": "standalone packer benchmark, not full MAC",
+  "device": "EP4CE22F17C6",
+  "change": "one sign/round adder; parallel endpoint clamp; unchanged P1/P2 and handshake",
+  "all_seeds_meet_10ns_after": true,
+  "variants": [
+    {
+      "mode": "RNE",
+      "seed": 1,
+      "lut_before": 591,
+      "lut_after": 537,
+      "ff_before": 196,
+      "ff_after": 196,
+      "fmax_before_MHz": 104.55,
+      "fmax_after_MHz": 123.2,
+      "fmax_change_percent": 17.84,
+      "wns_before_ns": 0.435,
+      "wns_after_ns": 1.883
+    },
+    {
+      "mode": "RNE",
+      "seed": 2,
+      "lut_before": 591,
+      "lut_after": 537,
+      "ff_before": 196,
+      "ff_after": 196,
+      "fmax_before_MHz": 102.69,
+      "fmax_after_MHz": 124.42,
+      "fmax_change_percent": 21.16,
+      "wns_before_ns": 0.262,
+      "wns_after_ns": 1.963
+    },
+    {
+      "mode": "RNE",
+      "seed": 3,
+      "lut_before": 591,
+      "lut_after": 537,
+      "ff_before": 196,
+      "ff_after": 196,
+      "fmax_before_MHz": 98.08,
+      "fmax_after_MHz": 122.5,
+      "fmax_change_percent": 24.9,
+      "wns_before_ns": -0.196,
+      "wns_after_ns": 1.837
+    },
+    {
+      "mode": "TRUNC",
+      "seed": 1,
+      "lut_before": 562,
+      "lut_after": 522,
+      "ff_before": 152,
+      "ff_after": 152,
+      "fmax_before_MHz": 98.73,
+      "fmax_after_MHz": 100.67,
+      "fmax_change_percent": 1.96,
+      "wns_before_ns": -0.129,
+      "wns_after_ns": 0.067
+    },
+    {
+      "mode": "TRUNC",
+      "seed": 2,
+      "lut_before": 562,
+      "lut_after": 522,
+      "ff_before": 152,
+      "ff_after": 152,
+      "fmax_before_MHz": 103.22,
+      "fmax_after_MHz": 101.01,
+      "fmax_change_percent": -2.14,
+      "wns_before_ns": 0.312,
+      "wns_after_ns": 0.1
+    },
+    {
+      "mode": "TRUNC",
+      "seed": 3,
+      "lut_before": 562,
+      "lut_after": 522,
+      "ff_before": 152,
+      "ff_after": 152,
+      "fmax_before_MHz": 99.16,
+      "fmax_after_MHz": 100.94,
+      "fmax_change_percent": 1.8,
+      "wns_before_ns": -0.085,
+      "wns_after_ns": 0.093
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+C:\altera\13.0sp1\modelsim_ase\win32aloem\vlog.exe -sv -timescale 1ns/1ps +incdir+../../../rtl -work work ../../../rtl/lod_lzd_core.sv ../../../rtl/dyn_left_shifter.sv ../../../rtl/sac_step_comb.sv ../../../rtl/sbm_shift_comb.sv ../../../rtl/sbm_accum_comb.sv ../../../rtl/iter_ctrl.sv ../../../rtl/sbm_accum.sv ../../../rtl/mul_iter_core.sv ../../../tb/core_checker.sv ../../../tb/tb_week9_core.sv -l compile.log 
+-- Compiling module lod_lzd_core
+-- Compiling module dyn_left_shifter
+-- Compiling module sac_step_comb
+-- Compiling module sbm_shift_comb
+-- Compiling module sbm_accum_comb
+-- Compiling module iter_ctrl
+-- Compiling module sbm_accum
+-- Compiling module mul_iter_core
+-- Compiling module core_checker
+-- Compiling module tb_week9_core
+
+Top level modules:
+	tb_week9_core

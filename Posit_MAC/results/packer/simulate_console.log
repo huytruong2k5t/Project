@@ -1,0 +1,25 @@
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim -do run.do -l simulate.log -c work.tb_posit_pack 
+# Loading sv_std.std
+# Loading work.tb_posit_pack
+# Loading work.packer_checker
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter
+# Loading work.posit_pack_comb
+# Loading work.posit_pack_finish
+# do run.do 
+# PACK PASS NB=8 ES=0 MODE=RNE rows=102320 comb=102323 received=102320 resets=3 discarded=3 stall=64010 full=40233 simultaneous=56161 latency=128
+# PACK PASS NB=8 ES=0 MODE=TRUNC rows=102320 comb=102322 received=102320 resets=3 discarded=2 stall=64858 full=49665 simultaneous=58752 latency=128
+# PACK PASS NB=16 ES=1 MODE=RNE rows=173648 comb=173651 received=173648 resets=3 discarded=3 stall=108258 full=68126 simultaneous=94812 latency=128
+# PACK PASS NB=16 ES=1 MODE=TRUNC rows=173648 comb=173650 received=173648 resets=3 discarded=2 stall=109822 full=84051 simultaneous=99673 latency=128
+# PACK PASS NB=32 ES=2 MODE=RNE rows=1332746 comb=1332749 received=1332746 resets=3 discarded=3 stall=833423 full=524828 simultaneous=729427 latency=128
+# PACK PASS NB=32 ES=3 MODE=RNE rows=1364810 comb=1364813 received=1364810 resets=3 discarded=3 stall=851772 full=535208 simultaneous=747944 latency=128
+# PACK PASS NB=32 ES=2 MODE=TRUNC rows=1332746 comb=1332748 received=1332746 resets=3 discarded=2 stall=845980 full=645713 simultaneous=765902 latency=128
+# PACK PASS NB=32 ES=3 MODE=TRUNC rows=1364810 comb=1364812 received=1364810 resets=3 discarded=2 stall=865096 full=660498 simultaneous=786179 latency=128
+# PACKER ALL PASS
+# ** Note: $finish    : ../../tb/tb_posit_pack.sv(16)
+#    Time: 33862390 ns  Iteration: 2  Instance: /tb_posit_pack

@@ -1,0 +1,76 @@
+PACKER FIXTURE NB=8 ES=0 rows=102320 seed=20261006 L1_SERIAL_PASS
+PACKER FIXTURE NB=16 ES=1 rows=173648 seed=20261006 L1_SERIAL_PASS
+PACKER FIXTURE NB=32 ES=2 rows=1332746 seed=20261006 L1_SERIAL_PASS
+PACKER FIXTURE NB=32 ES=3 rows=1364810 seed=20261006 L1_SERIAL_PASS
+PACKER GENERATOR PASS rows=2973524
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module dyn_right_shifter
+-- Compiling module posit_pack_prepare
+-- Compiling module posit_pack_finish
+-- Compiling module posit_pack_comb
+-- Compiling module posit_pack
+-- Compiling module lod_lzd_core
+-- Compiling module dyn_left_shifter
+-- Compiling module posit_parser
+-- Compiling module packer_checker
+-- Compiling module tb_posit_pack
+-- Compiling module parser_packer_checker
+-- Compiling module tb_parser_packer
+
+Top level modules:
+	tb_posit_pack
+	tb_parser_packer
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim -do run.do -l simulate.log -c work.tb_posit_pack 
+# Loading sv_std.std
+# Loading work.tb_posit_pack
+# Loading work.packer_checker
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter
+# Loading work.posit_pack_comb
+# Loading work.posit_pack_finish
+# do run.do 
+# PACK PASS NB=8 ES=0 MODE=RNE rows=102320 comb=102323 received=102320 resets=3 discarded=3 stall=64010 full=40233 simultaneous=56161 latency=128
+# PACK PASS NB=8 ES=0 MODE=TRUNC rows=102320 comb=102322 received=102320 resets=3 discarded=2 stall=64858 full=49665 simultaneous=58752 latency=128
+# PACK PASS NB=16 ES=1 MODE=RNE rows=173648 comb=173651 received=173648 resets=3 discarded=3 stall=108258 full=68126 simultaneous=94812 latency=128
+# PACK PASS NB=16 ES=1 MODE=TRUNC rows=173648 comb=173650 received=173648 resets=3 discarded=2 stall=109822 full=84051 simultaneous=99673 latency=128
+# PACK PASS NB=32 ES=2 MODE=RNE rows=1332746 comb=1332749 received=1332746 resets=3 discarded=3 stall=833423 full=524828 simultaneous=729427 latency=128
+# PACK PASS NB=32 ES=3 MODE=RNE rows=1364810 comb=1364813 received=1364810 resets=3 discarded=3 stall=851772 full=535208 simultaneous=747944 latency=128
+# PACK PASS NB=32 ES=2 MODE=TRUNC rows=1332746 comb=1332748 received=1332746 resets=3 discarded=2 stall=845980 full=645713 simultaneous=765902 latency=128
+# PACK PASS NB=32 ES=3 MODE=TRUNC rows=1364810 comb=1364812 received=1364810 resets=3 discarded=2 stall=865096 full=660498 simultaneous=786179 latency=128
+# PACKER ALL PASS
+# ** Note: $finish    : ../../tb/tb_posit_pack.sv(16)
+#    Time: 33862390 ns  Iteration: 2  Instance: /tb_posit_pack
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim -do run.do -l chain.log -c work.tb_parser_packer 
+# Loading sv_std.std
+# Loading work.tb_parser_packer
+# Loading work.parser_packer_checker
+# Loading work.posit_parser
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter
+# Loading work.posit_pack_finish
+# do run.do 
+# CHAIN PASS NB=8 ES=0 MODE=TRUNC rows=256 discarded=4 resets=3 stall=111 latency=128
+# CHAIN PASS NB=8 ES=0 MODE=RNE rows=256 discarded=5 resets=3 stall=112 latency=128
+# CHAIN PASS NB=16 ES=1 MODE=RNE rows=65536 discarded=5 resets=3 stall=40445 latency=128
+# CHAIN PASS NB=16 ES=1 MODE=TRUNC rows=65536 discarded=4 resets=3 stall=40645 latency=128
+# CHAIN PASS NB=32 ES=3 MODE=RNE rows=1200010 discarded=5 resets=3 stall=737503 latency=128
+# CHAIN PASS NB=32 ES=2 MODE=RNE rows=1200010 discarded=5 resets=3 stall=736069 latency=128
+# CHAIN PASS NB=32 ES=3 MODE=TRUNC rows=1200010 discarded=4 resets=3 stall=742102 latency=128
+# CHAIN PASS NB=32 ES=2 MODE=TRUNC rows=1200010 discarded=4 resets=3 stall=740505 latency=128
+# PARSER PACKER ALL PASS
+# ** Note: $finish    : ../../tb/tb_parser_packer.sv(16)
+#    Time: 28038040 ns  Iteration: 2  Instance: /tb_parser_packer
+Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012
+PACKER ACCEPTANCE PASS pack=5947048 chain=4931624 mismatches=0

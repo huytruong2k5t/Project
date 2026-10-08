@@ -1,6 +1,6 @@
 # Điểm mơ hồ và quyết định thiết kế Posit MAC
 
-Cập nhật 06/10/2026, đồng bộ SPEC v1.4. [SPEC §11](../SPEC_Posit_MAC_IP.md#11-quyết-định-rủi-ro-và-điều-kiện-triển-khai) giữ bảng trạng thái đầy đủ; tài liệu này tóm tắt quyết định và giới hạn, không sao chép thuật toán packer để tránh hai nguồn hợp đồng khác nhau.
+Cập nhật 08/10/2026, đồng bộ SPEC v1.5. [SPEC §11](../SPEC_Posit_MAC_IP.md#11-quyết-định-rủi-ro-và-điều-kiện-triển-khai) giữ bảng trạng thái đầy đủ; tài liệu này tóm tắt quyết định và giới hạn, không sao chép thuật toán packer để tránh hai nguồn hợp đồng khác nhau.
 
 ## 1. Quyết định dùng cho baseline RTL
 
@@ -14,7 +14,7 @@ Cập nhật 06/10/2026, đồng bộ SPEC v1.4. [SPEC §11](../SPEC_Posit_MAC_I
 | n=0 / drain | Token init_only đi SAC L1→shift L2→acc L3, nạp Y một lần. n>=1, last chỉ hoàn tất ở accumulator; core launch→done=q+2, q=max(1,n) | SPEC §5.5 |
 | Reset | Top rst_n đồng bộ→bridge thanh ghi→leaf reset_n; mỗi leaf đồng bộ nhả reset. Startup barrier chặn giao dịch đến khi tất cả leaf sẵn sàng, A/B/C nhận nguyên tử | SPEC §4.2 |
 | Baseline capacity | Một giao dịch, một slot output dự trữ; giữ d/flags khi stalled. Không chồng lấn trước nghiệm thu baseline | SPEC §4.2/§5.11 |
-| Pipeline mục tiêu | Parser cố định hai hạng đã kiểm; packer TRUNC1/RNE2 là ngân sách cần xác nhận STA. Số tầng khác cần RTL và kiểm riêng | SPEC §4.1/§5.1 |
+| Pipeline mục tiêu | Parser hai hạng đã kiểm; packer TRUNC1/RNE2 đã chốt ranh giới: P1 mã hóa/dịch/G-R-S, P2 RNE/carry/dấu (§5.9-D). RNE hai slot/TRUNC một slot đã có RTL; F_IN=2*FRAC_MAX+1 và adapter theo §5.9-D, nghiệm thu theo results/packer/summary.json. STA khảo sát riêng, không tự bảo đảm100MHz | SPEC §4.1/§5.1 |
 
 ## 2. Tối ưu và giới hạn kết luận
 
@@ -31,9 +31,26 @@ Cập nhật 06/10/2026, đồng bộ SPEC v1.4. [SPEC §11](../SPEC_Posit_MAC_I
 | --- | --- | --- |
 | L1 Gate1/Gate1B và round_unpacked | Đã nghiệm thu | README L1 mục15, results/week6_*; số học, chưa mô phỏng thời gian toàn MAC |
 | Parser RTL comb/pipeline | Đã nghiệm thu đơn vị | 2.465.812 fixture,0 mismatch; reset/stall/ordering/II; results/parser_comb/ và parser_pipeline/ |
-| Table I tái dựng source | Đạt corpus đã chốt | 200 triệu accepted seed271828, max0,984213 điểm %; hai pilot seed hơi vượt1. LUT/width/generator gốc chưa xác minh |
+| Table I tái dựng source | Thống kê lịch sử đạt; bị loại khỏi baseline bit-exact2021 | 200 triệu accepted seed271828, max0,984213 điểm %; nhưng Fig.4 output sai:0x1ae34800 thay0x1ae34000. README L1 mục20; giữ làm control |
+| Width/cut research fig3 | Chức năng đã nghiệm thu; TableI chưa đạt | Fraction12/payload13+carry/guard0, cut term trước áp dấu, normalize cuối; Windows/Linux/UBSan PASS. 200M max1,292319 điểm %, năm pilot đều vượt1. Layout cờ là tái dựng địa phương |
+| Vector phân biệt/phương án3 | Bốn bước kiểm chứng hoàn thành; baseline còn processing |292 bản ghi/206 trường hợp,10 ứng viên;205.882 kiểm/nền tảng PASS. Guard12/cut12 khớp Fig.4 nhưng200M max1,338773 điểm %, chưa đạt; tie/guard/cờ/generator nguồn còn mở |
+| RTL nhân tuần9 | processing; standalone đã kiểm pilot, Gate2 còn thiếu | Context/token/drain chốt SPEC §5.5-A, FLOOR normalize đúng lưới L1 ở §5.7.327.440 vector ModelSim0 mismatch; SBM/core/top standalone và paper trace đã kiểm; lượt lớn/lint theo PLAN mục7 |
 | Table II | Chưa hoàn tất | Chốt corpus FP64→posit32 ES3, nhóm mA/mB và oracle exact ES3; giả định cả hai nằm trong nhóm phải công bố |
-| Packer/core/MAC RTL | Chưa nghiệm thu | Tuần8 packer trước; reset bridge, token/drain, scoreboard và Gate2/3 sau |
-| PPA toàn MAC | Chưa đo | Vivado synthesis/STA bị chặn license. OPS Quartus riêng không thay Gate4; so cùng part/ES/ràng buộc hoặc báo bậc thiết bị §7.6 |
+| Packer RTL tuần8 | Đã nghiệm thu đơn vị |5.947.048 packer và4.931.624 chain,0 mismatch; results/packer/summary.json |
+| Core/MAC RTL | Core và standalone đã kiểm pilot; MAC chưa triển khai | Reset/token/drain/slot đạt phạm vi pilot; Gate2/lint và Gate3 còn mở |
+| PPA packer riêng | Đã khảo sát | Sau tối ưu P2, Quartus3seed: RNE537 LUT4/196FF,122,50–124,42MHz; TRUNC522 LUT4/152FF,100,67–101,01MHz; cả sáu run đạt setup100MHz. Có boundary, không phải full MAC |
+| PPA toàn MAC | Chưa đo | Vivado synthesis/STA bị chặn license. OPS/packer Quartus riêng không thay Gate4; so cùng part/ES/ràng buộc hoặc báo bậc thiết bị §7.6 |
 
 Uniform-value/grid24 cho Table I là giả định tái dựng có seed/filter rõ ràng; uniform-bits và stratified có mục đích kiểm độ nhạy/coverage. Không đổi phân bố chỉ để ép khớp bảng, không coi coverage là corpus gốc. n_terms=n_fraction+1 chỉ đổi cách đếm cùng chuỗi khai triển; RND/complement và profile normative không tự trở thành bit-exact nhờ phép đổi đó.
+
+Đối chiếu journal2024 ngày08/10: README L1 mục18 ghi nguồn, phạm vi và kiểm PT2 PASS128 entry dưới giả định đệm Q12. Phương án tìm nguồn này hoàn thành; provenance baseline vẫn processing ở tie policy, width/cut/guard và generator. Kết quả source200M ở bảng trên giữ nguyên từ lượt04/10, không phải phép đo journal mới. Không đổi hợp đồng RTL.
+
+Sau đó đã chốt/kiểm hợp đồng width/cut hữu hạn ở README mục19, và đo lại200M cùng corpus cho cả source/fig3. Source giữ kết quả cũ; fig3 chưa đạt AC-03. Guard12 không được xác nhận bởi Fig.3; carry riêng bảo toàn tràn không phải12 fractional guard. Không thay width normative bằng profile nghiên cứu hoặc đóng tuần4 nhờ kiểm chức năng đơn vị.
+
+Đính chính sau phương án3 (README mục20): Fig.4/5 bản2021 yêu cầu output0x1ae34000; source Q24 không cut trả0x1ae34800 nên không phù hợp baseline bit-exact. Chỉ phép chiếu accumulator xuốngQ12 khớp là chưa đủ. Giữ12 bit fraction đầu ra có căn cứ nguồn, còn guard nội bộ/tie là giả thuyết. Đo200M không chọn được profile vừa khớp ví dụ vừa đạt TableI; không coi PASS số học của control source là nghiệm thu baseline gốc.
+
+## 4. Trạng thái sau RTL paper và core — 09/10/2026
+
+Paper843 commit/Fig.4 đạt cùng giả định fig3; chưa có bằng chứng mới cho tie/prefix/internal guard hoặc generator gốc, nên không chạy lại TableI. W9-03..05 đã có code/test; Gate2/tuần9 processing. Verilator/lint thiếu và Git checkout không có là hai trở ngại vận hành, không đổi mô hình để né tiêu chí.
+
+Kiểm 10⁷ RTL đang chạy; chưa có kết quả nghiệm thu lượt lớn.

@@ -19,7 +19,7 @@ uint64_t number(const std::string& s) {
 int main(int argc,char**argv) try {
     uint64_t samples=200000000,seed=314159;
     bool bits_distribution=false,require_match=false;
-    bool relative_profile=false,source_profile=false;
+    bool relative_profile=false,source_profile=false,fig3_profile=false;
     for(int i=1;i<argc;++i) {
         std::string arg=argv[i];
         if(arg=="--require-match") {require_match=true;continue;}
@@ -27,7 +27,11 @@ int main(int argc,char**argv) try {
         std::string val=argv[++i];
         if(arg=="--samples") samples=number(val);
         else if(arg=="--seed") seed=number(val);
-        else if(arg=="--profile" && (val=="baseline" || val=="relative" || val=="source")) {relative_profile=val=="relative";source_profile=val=="source";}
+        else if(arg=="--profile" && (val=="baseline" || val=="relative" || val=="source" || val=="fig3")) {
+            relative_profile=val=="relative";
+            source_profile=val=="source";
+            fig3_profile=val=="fig3";
+        }
         else if(arg=="--distribution" && (val=="uniform-value" || val=="uniform-bits"))
             bits_distribution=val=="uniform-bits";
         else throw std::invalid_argument("unknown argument/value");
@@ -65,9 +69,9 @@ int main(int argc,char**argv) try {
     const unsigned denominators[4]={1000,200,100,20};
     const double proposed[3][4]={{9.87,32.19,50.03,95.57},{44.69,83.17,95.05,99.99},{87.09,99.79,99.99,99.99}};
     const double kim[3][4]={{9.30,32.12,50.01,95.58},{43.94,83.01,95.03,100},{86.69,99.81,100,100}};
-    uint64_t count[4][3][4]={},steps[4][3]={},swaps[4]={};
-    const char* profiles[]={"baseline","minpop","relative","source"};
-    const unsigned variants=source_profile?4:relative_profile?3:2;
+    uint64_t count[5][3][4]={},steps[5][3]={},swaps[5]={};
+    const char* profiles[]={"baseline","minpop","relative","source","fig3"};
+    const unsigned variants=fig3_profile?5:source_profile?4:relative_profile?3:2;
     PaperCounters counters;
     PaperFingerprint fingerprint;
     PaperGenerator generator(seed,bits_distribution?PaperDistribution::UniformBits:PaperDistribution::UniformValue);
@@ -77,7 +81,7 @@ int main(int argc,char**argv) try {
              <<" oracle=FP32_RNE ops=PredictN2_7bit_vs_MinPopcount_12bit\n"
              <<"ASSUMPTIONS: generator/seed/tie-A/predictor reconstruction/accumulator are local; not published source RTL.\n"
              <<"Reject input zero, converted regime m>15 and FP32 Ideal=0; N counts accepted pairs.\n";
-    std::cout<<"acceptance_profile="<<(source_profile?"source":relative_profile?"relative":"baseline")<<'\n';
+    std::cout<<"acceptance_profile="<<(fig3_profile?"fig3":source_profile?"source":relative_profile?"relative":"baseline")<<'\n';
     auto start=std::chrono::steady_clock::now();
     uint64_t accepted=0;
     while(accepted<samples) {
@@ -91,6 +95,7 @@ int main(int argc,char**argv) try {
         for(unsigned variant=0;variant<variants;++variant) {
             PaperConfig cfg;cfg.ops=variant==2?PaperOps::PredictN2Relative:(variant?PaperOps::MinPopcount:PaperOps::PredictN2);
             if(variant==3) cfg=paper_source_config();
+            if(variant==4) cfg=paper_fig3_config();
             for(unsigned row=0;row<3;++row) {
                 cfg.n=row+2;
                 auto result=PaperMultiplier<>::mul(a,b,cfg);
@@ -116,7 +121,7 @@ int main(int argc,char**argv) try {
             delta=std::max(delta,std::fabs(pct-proposed[row][j]));
             delta_kim=std::max(delta_kim,std::fabs(pct-kim[row][j]));
         }
-        if(variant==(source_profile?3u:relative_profile?2u:0u)) maximum=std::max(maximum,delta);
+        if(variant==(fig3_profile?4u:source_profile?3u:relative_profile?2u:0u)) maximum=std::max(maximum,delta);
         std::cout<<','<<double(steps[variant][row])/samples<<','<<delta<<','<<delta_kim<<'\n';
     }
     if(!counters.consistent() || counters.accepted!=samples) throw std::runtime_error("counter invariant");
@@ -126,8 +131,13 @@ int main(int argc,char**argv) try {
              <<" generator_draws="<<generator.draws
              <<" baseline_swaps="<<swaps[0]<<" minpop_swaps="<<swaps[1]<<'\n';
     std::cout<<"pair_fingerprint_fnv1a64="<<std::hex<<fingerprint.hash<<std::dec<<'\n';
-    if(relative_profile || source_profile) std::cout<<"relative_swaps="<<swaps[2]<<'\n';
-    if(source_profile) std::cout<<"source_swaps="<<swaps[3]<<" source_ops=absolute_prefix_Q12 anchor=first guard=12 source_width_unconfirmed=1\n";
+    if(relative_profile || source_profile || fig3_profile) std::cout<<"relative_swaps="<<swaps[2]<<'\n';
+    if(source_profile || fig3_profile) std::cout<<"source_swaps="<<swaps[3]<<" source_ops=absolute_prefix_Q12 anchor=first guard=12 source_width_unconfirmed=1\n";
+    if(fig3_profile) {
+        std::cout<<"fig3_swaps="<<swaps[4]
+                 <<" fig3_fraction=12 payload=13 carry=1 guard=0 cut=before_signed_accumulation"
+                 <<" hidden_carry_layout=local_reconstruction\n";
+    }
     bool matched=maximum<=1. && samples>=200000000;
     std::cout<<"Table_I_numeric_acceptance="<<(matched?"PASS":"NOT_REPRODUCED")
              <<" max_delta_pp="<<maximum<<" elapsed_seconds="

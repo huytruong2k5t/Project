@@ -1,0 +1,29 @@
+FP32 oracle ties/subnormal/zero/sign: 8 PASS; conversion identity/cut11: 100000 PASS seed=20261004
+NB=32 ES=3 FRAC_W=12 n=2..4 complement=ones per-term=FLOOR pack=TRUNC
+samples/row=10000000 seed=20261004 distribution=uniform-value oracle=FP32_RNE ops=PredictN2_7bit_vs_MinPopcount_12bit
+ASSUMPTIONS: generator/seed/tie-A/predictor reconstruction/accumulator are local; not published source RTL.
+Reject input zero, converted regime m>15 and FP32 Ideal=0; N counts accepted pairs.
+acceptance_profile=fig3
+CHECKPOINT accepted=10000000
+profile,n,Err<0.1%,Err<0.5%,Err<1%,Err<5%,avg_steps,max_delta_Proposed_pp,max_delta_Kim_pp
+baseline,2,8.733660,31.175340,49.276970,95.458250,1.999130,1.136340,0.944660
+baseline,3,43.317550,82.843770,94.980460,100.000000,2.988681,1.372450,0.622450
+baseline,4,86.265790,99.798830,100.000000,100.000000,3.941788,0.824210,0.424210
+minpop,2,4.081950,16.161630,27.759920,78.832220,1.999517,22.270080,22.250080
+minpop,3,26.694860,64.877900,84.302810,100.000000,2.993665,18.292100,18.132100
+minpop,4,72.431710,99.276210,100.000000,100.000000,3.965870,14.658290,14.258290
+relative,2,8.921470,31.486290,49.651460,95.649050,1.999095,0.948530,0.633710
+relative,3,43.690830,83.360220,95.379480,100.000000,2.988309,0.999170,0.350220
+relative,4,86.664490,99.849000,100.000000,100.000000,3.940303,0.425510,0.039000
+source,2,8.977480,31.313240,49.314320,95.460260,1.999079,0.892520,0.806760
+source,3,43.683850,82.895100,95.000140,100.000000,2.988294,1.006150,0.256150
+source,4,86.668850,99.807340,100.000000,100.000000,3.940732,0.421150,0.021150
+fig3,2,8.977920,31.317070,49.316080,95.458890,1.999079,0.892080,0.802930
+fig3,3,43.373700,82.838750,94.981070,100.000000,2.988294,1.316300,0.566300
+fig3,4,86.164910,99.798210,100.000000,100.000000,3.940732,0.925090,0.525090
+accepted=10000000 attempted=10000006 excluded_zero=6 excluded_m=0 excluded_zero_ideal=0 excluded_invalid=0 excluded_nonfinite=0 generator_draws=20000012 baseline_swaps=4595114 minpop_swaps=4194274
+pair_fingerprint_fnv1a64=604528ec0e280c1b
+relative_swaps=4911533
+source_swaps=4602573 source_ops=absolute_prefix_Q12 anchor=first guard=12 source_width_unconfirmed=1
+fig3_swaps=4602573 fig3_fraction=12 payload=13 carry=1 guard=0 cut=before_signed_accumulation hidden_carry_layout=local_reconstruction
+Table_I_numeric_acceptance=NOT_REPRODUCED max_delta_pp=1.316300 elapsed_seconds=12.163145

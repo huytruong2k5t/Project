@@ -25,7 +25,7 @@
 ```text
 Posit_MAC/
 ├── README.md               # Giới thiệu tổng quan toàn bộ dự án
-├── SPEC_Posit_MAC_IP.md    # Tài liệu đặc tả kỹ thuật chi tiết nhất (v1.4)
+├── SPEC_Posit_MAC_IP.md    # Tài liệu đặc tả kỹ thuật chi tiết nhất (v1.5)
 ├── Digital_Design_Guidelines.md # Quy chuẩn thiết kế RTL số chuẩn công nghiệp
 ├── Makefile                # Kịch bản điều khiển luồng (lint, sim, syn, regress)
 ├── docs/                   # Tài liệu chi tiết, nhật ký quyết định (ambiguity.md)

@@ -40,6 +40,7 @@ module dyn_left_shifter #(
     //-------------------------------------------------------------------------
     // Implementation
     //-------------------------------------------------------------------------
+    generate
     if (N == 1) begin : g_single_bit
         assign out = (|b) ? 1'b0 : in;
     end else begin : g_multi_bit
@@ -86,4 +87,5 @@ module dyn_left_shifter #(
         assign out = is_overflow ? {N{1'b0}} : stage[S];
     end
 
+    endgenerate
 endmodule

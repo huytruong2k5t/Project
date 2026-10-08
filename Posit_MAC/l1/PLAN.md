@@ -1,6 +1,6 @@
 # Kế hoạch Triển khai Mô hình Thuật toán L1 (C++ Golden Model)
 
-**Hợp đồng tích hợp cập nhật 06/10/2026 — SPEC v1.4:** RTL baseline v0/v1 giữ profile L1 normative: cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; paper_source_config/predictor7-bit là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n), last chỉ hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Đây là hợp đồng triển khai, chưa nghiệm thu core/bridge/MAC RTL. Chi tiết và trạng thái tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md). Bước tiếp theo: packer tuần8, rồi core và tích hợp; chồng lấn sau baseline.
+**Hợp đồng tích hợp cập nhật 08/10/2026 — SPEC v1.5:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; tuần9 bắt đầu với giao diện và OPS/SAC tổ hợp. Core/bridge/MAC RTL chưa nghiệm thu. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
 
 > **Mục tiêu**: Xây dựng mô hình thuật toán C++ L1 (`l1/`) mô phỏng trung thực 100% từng bước biến đổi dữ liệu của vi kiến trúc phần cứng Posit MAC, tham số hóa theo `template <int NB, int ES, int FRAC_W>`, đóng vai trò làm thước đo chân lý bit-exact (AC-01) cho RTL SystemVerilog, vượt qua các cổng kiểm chuẩn nghiêm ngặt **Gate 1 (Tuần 3)** và **Gate 1B (Tuần 6)** theo [SPEC_Posit_MAC_IP.md](../SPEC_Posit_MAC_IP.md).
 
@@ -113,7 +113,7 @@ struct posit_unpacked {
 ### 4.3 Module Packer (`l1/include/posit_packer.hpp`)
 * **Chế độ RNE (FloPoCo 10 bước có pre-clamping, §5.9-A)**:
   1. Xử lý NaR $\rightarrow 0x80..0$, Zero $\rightarrow 0x00..0$.
-  2. **Tiền kẹp (Pre-clamping)**: $SF\_MAX = (NB - 2) \ll ES$. Nếu $sf \ge SF\_MAX \implies$ bão hòa về `maxpos`; nếu $sf \le -SF\_MAX \implies$ bão hòa về `minpos`.
+  2. **Tiền kẹp (Pre-clamping)**: $SF\_MAX = (NB - 2) \ll ES$. Nếu $sf \ge SF\_MAX \implies$ kẹp về `maxpos`; chỉ kẹp sớm `minpos` khi $sf < -SF\_MAX$. Tại sf=-SF_MAX vẫn mã hóa/RNE, tránh sai tie posit8 ES0.
   3. Tách $expF = sf \ \& \ ((1 \ll ES) - 1)$, $regF = sf \gg ES$, $rc = (sf < 0)$. Nếu $rc \implies regF = -regF$.
   4. Ghép vector `inshift` và xác định `offset = rc ? (regF - 1) : regF`.
   5. Dịch phải số học: `ansshf = inshift >> offset`.
@@ -121,7 +121,11 @@ struct posit_unpacked {
   7. Làm tròn: $round = G \ \& \ (LSB \mid R \mid S)$, $mag\_rounded = anstmp + round$.
   8. Áp dụng dấu: $R = sign \text{ ? } (-mag\_rounded) : mag\_rounded$.
 * **Chế độ TRUNC (Fig. 5b của [P], §5.9-B)**:
-  * Cắt cụt trực tiếp không làm tròn, phục vụ tái hiện chính xác số liệu PPA và độ chính xác của bài báo gốc.
+  * Cắt cụt trực tiếp không làm tròn, phục vụ đối chiếu profile paper; không tự bảo đảm tái hiện số liệu PPA/accuracy gốc.
+
+**Phân tầng RTL packer chốt06/10/2026 (SPEC §5.9-D):** P1 thực hiện ngoại lệ/pre-clamping, mã hóa regime/exponent, dịch và gom G/R/S; chốt magnitude NB-1 bit, G/R/S, dấu, special_sel và flags. P2 tính round_up, cộng mở rộng/xử lý carry, kẹp, bù hai dấu và chốt d/flags. Hai bank elastic dùng enable chung cho toàn bundle, reset flush hai slot. E0 nhận→valid sau E1→handshake E2, II=1 không stall; TRUNC một bank riêng. Kiểm tổ hợp trước pipeline, rồi round/corner và parser→packer; Tại thời điểm chốt06/10 chưa nghiệm thu RTL; kết quả triển khai và STA ngày07/10 ghi ngay dưới. Giao diện07/10 đã chốt F_IN=2*FRAC_MAX+1 (11/25/55/53 cho bốn format), frac không hidden, sticky gom bit thấp. Parser đệm0; nhân/cộng chuẩn hóa trước, lấy fraction cao và gom đuôi, không làm tròn ở adapter. Xem SPEC v1.5 §5.9-D và rtl/README.md mục6.
+
+**Nghiệm thu RTL tuần8 —07/10/2026, ✅ đơn vị:** packer tổ hợp/pipeline RNE2/TRUNC1 bốn format đạt5.947.048 lượt fixture, chain parser→packer4.931.624 lượt,0 mismatch trên ModelSim. Vét cạn identity8/16,32 phân tầng; ties/sticky/carry/clamp, flags, reset/full slot/stall/order/II/latency đạt. L1/bit-list generator2.973.524 dòng, seed20261006, hash và lệnh tại results/packer/. Vivado compile/elaborate đạt; Quartus3seed/cấu hình sau tối ưu P2: RNE537 LUT4/196FF,122,50–124,42MHz; TRUNC522 LUT4/152FF,100,67–101,01MHz; cả sáu run đạt setup100MHz ở benchmark riêng. Bộ cộng gộp làm tròn/dấu giảm LUT, không thêm tầng. Không suy Gate2/3 toàn MAC. Tiếp theo core tuần9; tối ưu timing theo đường tới hạn đã đo, chưa tự thêm tầng hoặc đổi spec.
 
 ### 4.4 Module `round_unpacked.hpp` (§5.9-C)
 * **Ý nghĩa sống còn cho MAC v1 Non-fused**:
@@ -293,3 +297,80 @@ Mục4:200 triệu paired FP32/Posit, conversion/cut input không khác,12 tỷ 
 Mục6:PDF Babic2011 từ tác giả trảHTTP403; chưa tìm code/LUT/generator gốc. Tìm thấy publication2024 trên trang tác giả, chưa đọc full và chưa dùng thay baseline2021. Mục7:comparator Babic FP32 riêng200 triệu cùngcorpus PASS max0,009091 điểm %.
 
 TableI baseline tái dựng đã đạt tiêu chí số học; xác minh baseline gốc vẫn processing ở LUT/width/provenance. Giữ default cũ và cfg_ops normative; source là profile có tên/lệnh rõ ràng để review. README mục14 và results/paper_source_* chứa bằng chứng. Không tự coi tuần4 hoàn thành về nguồn gốc, không thay tiến độ tuần5/6.
+
+### Phương án1 — đọc và đối chiếu journal2024 — 08/10/2026
+
+Đã đọc toàn văn và đối chiếu hình/bảng; kết quả ở README mục18 và `results/paper_journal2024/summary.json`. Kiểm PT2 theo pattern độc lập PASS128 entry dưới giả định prefix7 đệm0 đến Q12; củng cố predictor `source` và anchor-first. Chưa xác minh tie policy, guard12 hoặc generator gốc. Phép đo journal khác format/oracle2021, không dùng thay TableI2021.
+
+Hoàn thành phạm vi tìm/đọc/kiểm của phương án1; mục3 và6 trong danh sách ưu tiên, cùng tuần4, vẫn **processing**. Không sửa profile normative hoặc công bố lượt200M mới. Ưu tiên còn lại: lập hợp đồng width/cut có căn cứ từ sơ đồ, kiểm riêng với oracle và control `source`; chỉ đo lại khi có thay đổi đã kiểm chứng. Lưu rõ phần suy luận nếu vẫn thiếu RTL/LUT/generator tác giả.
+
+### Chốt và kiểm accumulator theo Fig.3 — 08/10/2026
+
+Mốc width/cut L1 **✅**: `paper_fig3_config()` giữ Q12, guard thấp0, term logical-shift/cut trước khi áp dấu, normalize cuối vòng; payload13 + carry riêng biểu diễn tổng độ lớn14 bit. Mã hóa hidden/carry là hợp đồng tái dựng vì Fig.3 lược bỏ mạch cờ; không tuyên bố layout tác giả đã xác minh. Profile normative §5.6 và source guard12 giữ nguyên.
+
+Vét cạn16.777.216 cặp mantissa và raw/corner/n1..8 PASS trên Windows/Linux/UBSan, regression liên quan đạt. Đo200 triệu cùng seed271828: fig3 **NOT_REPRODUCED**, max1,292319 điểm %, source control vẫn0,984213; năm pilot10M đều vượt1. README mục19 và results/paper_fig3 chứa hợp đồng,12 ô, log/CSV/metadata/hash.
+
+Mục2 trong danh sách ưu tiên đã hoàn tất phần triển khai/kiểm/đo của hợp đồng tái dựng; provenance layout/cut gốc vẫn mở. **Tuần4 giữ processing**: không dùng nghiệm thu chức năng thay tiêu chí TableI, không sửa seed/guard để ép khớp. Cần xác minh generator, tie/PT2 padding và normalize/cờ nguyên bản trước khi kết luận nguyên nhân gap; chưa đủ căn cứ đưa profile paper vào RTL normative.
+
+### Phương án3 — vector phân biệt, bốn bước hoàn thành — 08/10/2026
+
+1. Tìm199.800 cặp `(A,B,n)`, chọn292 bản ghi/206 trường hợp khác nhau cho10 ứng viên; đủ32 vector mỗi nhóm9 loại và4 fixture trực tiếp.
+2. Xuất trace từng vòng/output/first-difference;205.882 đối chiếu/nền tảng Windows/Linux/UBSan PASS. CSV ba nền tảng và pilot1M exact counts khớp.
+3. Đọc lại Fig.4/5 bản2021: ép X theo hình, accumulator Q12=4616→5770→5914, output0x1ae34000. Source-uncut trả0x1ae34800 nên **loại khỏi baseline bit-exact2021**; các profile cut12 khớp ví dụ. Fig.4 không quyết định OPS tie, p1=1 hay precision nội bộ.
+4. Đo200M cùng seed271828/corpus cũ cho fig3, guard12/cut12 và source-uncut. Maxgap lần lượt1,2923195 /1,3387730 /0,9842130 điểm %; hai profile khớp output chưa đạt thống kê, source chỉ đạt thống kê và giữ làm control.
+
+README mục20 và `results/paper_discriminators/summary.json` chứa36 ô/counts, ma trận bằng chứng, compiler/seed/lệnh/hash. Mốc kiểm chứng phương án3 **✅**, baseline gốc/tuần4 **processing**. Kết luận source TableI đạt ở các mục lịch sử04/10 chỉ áp cho phép đo thời điểm đó, không xác nhận thuật toán gốc. Không đổi default/normative/RTL. Ưu tiên tiếp theo là nguồn trace/LUT cho tie/prefix126–127/đuôi âm, normalize/cờ và generator; không tăng guard/đổi seed để ép khớp.
+
+## 7. Kế hoạch thực thi tuần9 — lõi nhân RTL và đối chiếu paper
+
+**Mục tiêu chính:** hiện thực `posit_mul_iter` theo SPEC/L1 normative, đạt Gate2. **Mục tiêu nghiên cứu:** dựng RTL tối thiểu theo paper để kiểm giả thuyết width/cut bằng trace. Hai mục tiêu có oracle và tiêu chí riêng; nghiên cứu TableI không thay nghiệm thu Gate2. Tuần9 hiện **processing**, tách trạng thái với tuần4.
+
+### 7.1. Công việc mở đầu đã thực hiện — 08/10/2026
+
+Đã chốt bundle context/token/accumulator, độ rộng và lịch drain trong SPEC §5.5-A. M0 chính là bank chốt context tại L0, không chốt OPS rồi thêm một bank context ngầm. cfg_n đếm fraction; exact không bị N_MAX giới hạn. init_only chỉ nạp Y; last commit tại accumulator mới phát done. SPEC §5.7 làm rõ FLOOR normalize trên Q(FRAC_W), không giữ bit rơi thành guard mới do thanh ghi có padding G/R.
+
+Đã triển khai `rtl/ops_sel_comb.sv` và `rtl/sac_step_comb.sv`: OPS cắt trước cây popcount cân bằng, tie-A và kiểm cấu hình; SAC dùng LOD/shifter đã kiểm, hỗ trợ W_X=1, dịch bằng chiều rộng và kiểm S không wrap. Hai khối chỉ có logic tổ hợp; chưa phải M0/SAC pipeline hoặc multiplier hoàn chỉnh.
+
+ModelSim kiểm159.820 vector OPS (feature bật/tắt) và167.620 trạng thái SAC ở độ rộng1/5/12/26/27,0 mismatch. W_X<=12 vét cạn fx và toàn miền scale biểu diễn; OPS width1/5 vét cạn cặp/mode/policy, width12/26/27 có directed +50.000 random mỗi width. Generator đối chiếu L1 với oracle đếm/quét bit độc lập, Linux/Windows/UBSan PASS và fixture khớp. Seed20261008; compile/mô phỏng cuối không warning. Log/compiler/seed/lệnh/hash ở `results/week9_frontend/summary.json`. Chưa có Verilator lint, STA/PPA hoặc handshake core từ mốc này.
+
+### 7.2. Thứ tự triển khai và điều kiện chuyển bước
+
+| Mốc | Công việc / sản phẩm | Kiểm chứng bắt buộc | Trạng thái |
+| --- | --- | --- | --- |
+| W9-01 | Giao diện, width, token và lịch core; phân biệt normative/paper | Đồng nhất SPEC §5.5-A/§5.7, PLAN và README RTL; không thêm bank ngầm | ✅ |
+| W9-02 | OPS/SAC tổ hợp, generator và testbench | Cắt trước popcount, tie/disable, S tới W_X, fx=0, overflow; ModelSim0 mismatch, fixture cross-platform/UBSan | ✅ |
+| W9-03 | `sbm_shift_comb`, `sbm_accum`, `mul_norm_comb` và adapter packer | So term/cut/tail, carry, first/init_only, normalize với L1; FLOOR/STICKY_ACC/exact, không dùng input_cut làm sticky RNE | ✅ |
+| W9-R1 | Giao diện riêng cho paper: score/PT2, power/coefficient, anchor và outputcut12 | Prefix padding/tie-A/hidden-carry ghi nhãn giả định; fig3 là ứng viên tái dựng, source-uncut chỉ là control | ✅ |
+| W9-R2 | RTL paper tối thiểu, Fig.4 và206 trường hợp phân biệt | So từng commit với harness; ép X ở fixture, output0x1ae34000; giải thích mismatch đầu tiên, không coi khớp harness là khớp RTL tác giả | ✅ |
+| W9-04 | `iter_ctrl` + SAC/Shifter/Accumulator có FF thành `mul_iter_core` | L0→done=t+2 nếu t>=1, hoặc3 nếu t=0; n=0/early-stop/max n/exact vượt N_MAX, drain, context cố định, reset/startup | ✅ |
+| W9-05 | Parser A/B + context M0 + core + norm + packer thành `posit_mul_iter` | A/B nhận nguyên tử, config/flags đi cùng, NaR ưu tiên zero, slot result dự trữ, stall/order/không mất hoặc nhân đôi giao dịch | ✅ |
+| W9-06 | Gate2, coverage và tái chạy | RTL=L1 bit-exact trên10^7 vector, coverage mọi n/policy/mode; exact/RNE so L0 ở format hỗ trợ, ES3 so oracle riêng; reset/stall/ordering và lint | processing |
+| W9-R3 | TableI khi có thay đổi RTL được xác minh | Giữ corpus/oracle/seed; pilot trước,200M sau đối chuẩn. Chỉ chạy khi có căn cứ mới, không quét tham số để ép bảng | không |
+
+**Thứ tự:** W9-01→02→03; sau đó W9-R1→R2 để kiểm nghi vấn baseline phần cứng, rồi W9-04→05→06. R3 phụ thuộc R2 và bằng chứng nguồn, không phải điều kiện đóng Gate2. Khối dùng chung được reuse, nhưng OPS/SAC paper có thuật toán khác nên không trộn cfg_ops reserved vào profile chính. Nếu RND/coefficient âm cần lịch khác, ghi ngân sách research riêng.
+
+**Mốc W9-03 đã được thực hiện 09/10/2026; hợp đồng vẫn giữ:** kiểm shifter/normalize tổ hợp và vector số học trước khi thêm bank accumulator. Exact giữ Q(2*FRAC_MAX), approx giữ payload theo §5.6; mux/zero-extension phải giữ đúng đơn vị. Chưa tăng pipeline hoặc chọn chia sẻ tài nguyên khi chưa đo timing.
+
+### 7.3. Phạm vi paper và điều kiện đóng tuần9
+
+Lõi paper đầu tiên cố định posit32ES3/fraction12: OPS PT2 prefix7 đệmQ12/tie-A là giả định; SAC RND/complement, anchor số hạng đầu, guard0, outputcut12/TRUNC theo profile fig3 đã kiểm. Trace power/coefficient có dấu ghi riêng. n_terms không thay trực tiếp cfg_n normative vì recurrence khác. Width hidden/carry và generator gốc giữ nhãn tái dựng; trace/code tác giả, nếu có, ưu tiên làm oracle cho tie/prefix126–127/đuôi âm.
+
+W9-R2 kiểm RTL chức năng tối thiểu trước pipeline/ghép MAC. ModelSim dùng tập nhỏ; mô hình phần mềm chỉ đo lớn sau đối chuẩn commit RTL. Paper phải khớp Fig.4 và hợp đồng packer trước khi dùng TableI làm căn cứ. Nếu vẫn lệch bảng thì công bố giới hạn tái dựng, không chọn precision thiếu nguồn xác nhận.
+
+**Đóng tuần9 khi W9-01..06 đạt Gate2.** Provenance paper còn mở không chặn nghiệm thu profile normative, nhưng không được gọi RTL tái dựng là baseline gốc hoặc dùng PPA khối riêng thay toàn multiplier. Tuần4 giữ processing nếu TableI/provenance chưa đạt. Digital Design Guidelines áp cho mã mới: một module/file, named ports, assign/always_comb không latch, always_ff+enable+CK2Q, FSM localparam/default và reset theo §4.2.
+
+### 7.4. Triển khai và kiểm chứng — 09/10/2026
+
+W9-03 đã kiểm shifter, cộng tổ hợp, normalize/adapter:252.455 commit trên width1/5/12/26/27, hai scheme,0 mismatch. Bank `sbm_accum` được kiểm trong core; FLOOR bỏ padding trước normalize, không đưa input_cut vào numerical sticky.
+
+W9-R1 chốt interface `paper_ops_comb`/`paper_step_comb`: Q12/prefix7 đệm0, tie-A, anchor số hạng đầu và payload13+carry1 là giả định tái dựng; RND/complement, coefficient âm và cut trước cộng/trừ ghi riêng. W9-R2 đạt843 commit,293 bản ghi (292 bản ghi corpus/206 trường hợp phân biệt + một fixture Fig.4),0 mismatch. Output force-X=0x1ae34000. Không có bằng chứng mới để chạy R3 hoặc xác nhận RTL tác giả.
+
+W9-04 đạt39.580 giao dịch hoàn tất và420 lượt reset hủy; width1/5/12/26/27, exact vượt N_MAX, n=0/early-stop, done=t+2 hoặc3, drain và context cố định đều được kiểm. W9-05 tích hợp parser A/B → M0/core → norm → packer với một slot dự trữ; pilot bản cuối31.840 giao dịch +160 reset hủy,0 mismatch. Reset bridge lấy mẫu rst_n; out_valid bị chặn tại cạnh reset, mỗi leaf nhả qua hai FF. RNE: L_valid=max(1,t)+7, TRUNC:max(1,t)+6; handshake khi không stall sau đó một cạnh. Thử config reserved/n>N_MAX, NaR/zero, stall dài, cạnh reset và giữ thứ tự.
+
+Kiểm 10⁷ RTL đang chạy; chưa có kết quả nghiệm thu lượt lớn.
+
+Corpus lớn10.080.000 dòng,16 profile,36 ô mode/ops/n mỗi profile; generator exact/RNE so SoftPosit1.890.000 lượt và oracle ES3 độc lập630.000 lượt. Generator/fixture không thay nghiệm thu RTL. Verilator chưa có; `make lint` hiện trả lỗi khi thiếu công cụ thay vì skip rồi báo thành công. Harness C++ và `scripts/verify_week9_verilator.sh` đã chuẩn bị nhưng chưa build/chạy, cần đối chuẩn pilot khi có công cụ. Không tự cài công cụ ngoài quyền đã cấp.
+
+Quartus13 phân tích/tổng hợp NB32/ES2/FLOOR/RNE đạt0 lỗi,14 warning đã phân loại (license parallel, attribute ASYNC_REG của Xilinx và constant resize có giới hạn); không có cảnh báo latch. Đây không thay strict lint, STA, CDC, PPA hay Gate4. Chỉ đổi generate/genvar để hỗ trợ compiler cũ trong hai shifter/OPS, không đổi phương trình; đã chạy lại327.440 frontend vector và843 paper commit đạt.
+
+Bằng chứng, compiler, seed20261009, SoftPosit library hash, lệnh và SHA256: `results/week9_implementation/summary.json`; các log ở `results/week9_arithmetic`, `week9_paper`, `week9_core`, `week9_multiplier`. Gate2/tuần9 vẫn processing do lint chính thức còn thiếu; tuần4/provenance paper giữ processing. Git push bị chặn vì thư mục không phải Git checkout; không tự init/force/reset hoặc sửa thư mục khác.

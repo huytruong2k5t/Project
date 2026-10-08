@@ -1,0 +1,25 @@
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim -do run.do -l simulate.log -c work.tb_week9_arithmetic 
+# Loading sv_std.std
+# Loading work.tb_week9_arithmetic
+# Loading work.arithmetic_checker
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum_comb
+# Loading work.mul_norm_comb
+# do run.do 
+# ARITHMETIC PASS F=1 scheme=0 rows=6000
+# ARITHMETIC PASS F=1 scheme=1 rows=6000
+# ARITHMETIC PASS F=5 scheme=1 rows=11095
+# ARITHMETIC PASS F=5 scheme=0 rows=11258
+# ARITHMETIC PASS F=12 scheme=1 rows=25877
+# ARITHMETIC PASS F=12 scheme=0 rows=26037
+# ARITHMETIC PASS F=26 scheme=1 rows=41244
+# ARITHMETIC PASS F=26 scheme=0 rows=41299
+# ARITHMETIC PASS F=27 scheme=0 rows=41813
+# ARITHMETIC PASS F=27 scheme=1 rows=41832
+# WEEK9 ARITHMETIC ALL PASS
+# ** Note: $finish    : ../../../tb/tb_week9_arithmetic.sv(13)
+#    Time: 83664 ns  Iteration: 1  Instance: /tb_week9_arithmetic

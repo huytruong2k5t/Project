@@ -1,0 +1,23 @@
+# vsim -do run.do -l chain.log -c work.tb_parser_packer 
+# Loading sv_std.std
+# Loading work.tb_parser_packer
+# Loading work.parser_packer_checker
+# Loading work.posit_parser
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter
+# Loading work.posit_pack_finish
+# do run.do 
+# CHAIN PASS NB=8 ES=0 MODE=TRUNC rows=256 discarded=4 resets=3 stall=111 latency=128
+# CHAIN PASS NB=8 ES=0 MODE=RNE rows=256 discarded=5 resets=3 stall=112 latency=128
+# CHAIN PASS NB=16 ES=1 MODE=RNE rows=65536 discarded=5 resets=3 stall=40445 latency=128
+# CHAIN PASS NB=16 ES=1 MODE=TRUNC rows=65536 discarded=4 resets=3 stall=40645 latency=128
+# CHAIN PASS NB=32 ES=3 MODE=RNE rows=1200010 discarded=5 resets=3 stall=737503 latency=128
+# CHAIN PASS NB=32 ES=2 MODE=RNE rows=1200010 discarded=5 resets=3 stall=736069 latency=128
+# CHAIN PASS NB=32 ES=3 MODE=TRUNC rows=1200010 discarded=4 resets=3 stall=742102 latency=128
+# CHAIN PASS NB=32 ES=2 MODE=TRUNC rows=1200010 discarded=4 resets=3 stall=740505 latency=128
+# PARSER PACKER ALL PASS
+# ** Note: $finish    : ../../tb/tb_parser_packer.sv(16)
+#    Time: 28038040 ns  Iteration: 2  Instance: /tb_parser_packer

@@ -1,0 +1,29 @@
+FP32 oracle ties/subnormal/zero/sign: 8 PASS; conversion identity/cut11: 100000 PASS seed=20261004
+NB=32 ES=3 FRAC_W=12 n=2..4 complement=ones per-term=FLOOR pack=TRUNC
+samples/row=10000000 seed=42 distribution=uniform-value oracle=FP32_RNE ops=PredictN2_7bit_vs_MinPopcount_12bit
+ASSUMPTIONS: generator/seed/tie-A/predictor reconstruction/accumulator are local; not published source RTL.
+Reject input zero, converted regime m>15 and FP32 Ideal=0; N counts accepted pairs.
+acceptance_profile=fig3
+CHECKPOINT accepted=10000000
+profile,n,Err<0.1%,Err<0.5%,Err<1%,Err<5%,avg_steps,max_delta_Proposed_pp,max_delta_Kim_pp
+baseline,2,8.706990,31.193360,49.300720,95.467120,1.999142,1.163010,0.926640
+baseline,3,43.351400,82.856310,94.989100,100.000000,2.988740,1.338600,0.588600
+baseline,4,86.278680,99.796470,100.000000,100.000000,3.941857,0.811320,0.411320
+minpop,2,4.073730,16.173360,27.775850,78.849510,1.999511,22.254150,22.234150
+minpop,3,26.716790,64.890360,84.314870,100.000000,2.993642,18.279640,18.119640
+minpop,4,72.464330,99.272470,100.000000,100.000000,3.965749,14.625670,14.225670
+relative,2,8.892030,31.502320,49.677100,95.654090,1.999104,0.977970,0.617680
+relative,3,43.719690,83.369920,95.386740,100.000000,2.988376,0.970310,0.359920
+relative,4,86.671000,99.847870,100.000000,100.000000,3.940404,0.419000,0.037870
+source,2,8.948350,31.325360,49.341540,95.469900,1.999088,0.921650,0.794640
+source,3,43.708900,82.905810,95.010540,100.000000,2.988356,0.981100,0.231100
+source,4,86.669290,99.805500,100.000000,100.000000,3.940817,0.420710,0.020710
+fig3,2,8.945670,31.332640,49.340600,95.468110,1.999088,0.924330,0.787360
+fig3,3,43.408760,82.850050,94.989640,100.000000,2.988356,1.281240,0.531240
+fig3,4,86.179960,99.796160,100.000000,100.000000,3.940817,0.910040,0.510040
+accepted=10000000 attempted=10000002 excluded_zero=2 excluded_m=0 excluded_zero_ideal=0 excluded_invalid=0 excluded_nonfinite=0 generator_draws=20000004 baseline_swaps=4596942 minpop_swaps=4195070
+pair_fingerprint_fnv1a64=8a394d98ef04f84e
+relative_swaps=4912753
+source_swaps=4604284 source_ops=absolute_prefix_Q12 anchor=first guard=12 source_width_unconfirmed=1
+fig3_swaps=4604284 fig3_fraction=12 payload=13 carry=1 guard=0 cut=before_signed_accumulation hidden_carry_layout=local_reconstruction
+Table_I_numeric_acceptance=NOT_REPRODUCED max_delta_pp=1.281240 elapsed_seconds=12.193192

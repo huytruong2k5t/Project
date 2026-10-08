@@ -1,0 +1,10 @@
+case_id,category,a_hex,b_hex,n,force_a,reference,alternative,reference_bits,alternative_bits
+202,prefix126_127,0x41ffc000,0x43f74000,2,0,fig3,legacy7,0x45fa0000,0x45f94000
+0,equal_score,0x40004000,0x4007c000,2,0,fig3,tie_b,0x40080000,0x40084000
+76,rnd_boundary,0x41ffc000,0x40174000,4,0,fig3,exact_residual,0x4222c000,0x42220000
+193,anchor_cut,0x41ffc000,0x42074000,2,0,fig3,input_anchor,0x44800000,0x447fc000
+66,term_cut,0x41ffc000,0x400f8000,3,0,fig3,guard12_pack12,0x42170000,0x4216c000
+67,guard_depth,0x41ffc000,0x400f8000,3,0,guard1_pack12,guard12_pack12,0x42170000,0x4216c000
+1,output_width,0x40004000,0x4007c000,2,0,guard12_pack12,source_uncut,0x40080000,0x4008007c
+68,post_sum_cut,0x41ffc000,0x400f8000,3,0,fig3,post_sum_pack12,0x42170000,0x4216c000
+64,signed_cut,0x41ffc000,0x4007c000,3,0,fig3,signed_floor,0x420b4000,0x420b0000

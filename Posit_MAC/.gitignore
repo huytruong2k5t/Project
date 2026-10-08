@@ -241,3 +241,24 @@ incremental_db/
 /results/vivado_shifters/xsim.dir/left_snapshot/xsimk.exe
 /results/vivado_shifters/xsim.dir/parameters_snapshot/xsimk.exe
 /results/vivado_shifters/xsim.dir/right_snapshot/xsimk.exe
+
+# Week9 reproducible fixtures/build products: keep source and small summaries.
+l1/gen_week9_arithmetic
+l1/gen_week9_arithmetic_ubsan
+l1/gen_week9_core
+l1/gen_week9_paper
+l1/gen_week9_paper_ubsan
+l1/gen_week9_multiplier
+l1/gen_week9_multiplier_ubsan
+results/week9_*/**/work/
+results/week9_*/**/db/
+results/week9_*/**/incremental_db/
+results/week9_*/**/output_files/
+results/week9_*/**/obj_dir/
+results/week9_*/**/tmp/
+results/week9_*/**/*.txt
+results/week9_*/**/*.wlf
+results/week9_*/**/transcript
+results/week9_*/**/modelsim.ini
+results/week9_source_backup_*.zip
+/scratch/github_week9_backup/

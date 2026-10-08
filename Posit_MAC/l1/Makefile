@@ -2,6 +2,41 @@ CXX ?= g++
 CXXFLAGS = -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0
 WIN_CXX = x86_64-w64-mingw32-g++
 
+WEEK9_GENERATORS = gen_week9_arithmetic gen_week9_core gen_week9_paper
+$(WEEK9_GENERATORS): %: test/%.cpp include/*.hpp
+	$(CXX) $(CXXFLAGS) -Werror $< -o $@
+
+$(addsuffix .exe,$(WEEK9_GENERATORS)): %.exe: test/%.cpp include/*.hpp
+	$(WIN_CXX) $(CXXFLAGS) -Werror -static-libgcc -static-libstdc++ $< -o $@
+
+$(addsuffix _ubsan,$(WEEK9_GENERATORS)): %_ubsan: test/%.cpp include/*.hpp
+	$(CXX) -O1 -g -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude $< -o $@
+
+gen_week9_multiplier: test/gen_week9_multiplier.cpp include/*.hpp ../l0/libsoftposit.so
+	$(CXX) $(CXXFLAGS) -Werror $< -L../l0 -lsoftposit -Wl,-rpath,'$$ORIGIN/../l0' -o $@
+
+gen_week9_multiplier.exe: test/gen_week9_multiplier.cpp include/*.hpp ../l0/softposit.dll
+	$(WIN_CXX) $(CXXFLAGS) -Werror -static-libgcc -static-libstdc++ $< -L../l0 -l:softposit.dll -o $@
+
+gen_week9_multiplier_ubsan: test/gen_week9_multiplier.cpp include/*.hpp ../l0/libsoftposit.so
+	$(CXX) -O1 -g -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude $< -L../l0 -lsoftposit -Wl,-rpath,'$$ORIGIN/../l0' -o $@
+
+gen_week9_frontend: test/gen_week9_frontend.cpp include/ops_sel.hpp include/sac.hpp
+	$(CXX) $(CXXFLAGS) -Werror $< -o $@
+
+gen_week9_frontend.exe: test/gen_week9_frontend.cpp include/ops_sel.hpp include/sac.hpp
+	$(WIN_CXX) $(CXXFLAGS) -Werror -static-libgcc -static-libstdc++ $< -o $@
+
+gen_week9_frontend_ubsan: test/gen_week9_frontend.cpp include/ops_sel.hpp include/sac.hpp
+	$(CXX) -O1 -g -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude $< -o $@
+
+# Week8 RTL fixtures: accepted L1 plus independent serial bit-list encoder.
+gen_packer_vectors: test/gen_packer_vectors.cpp include/posit_packer.hpp include/posit_parser.hpp include/posit_types.hpp
+	$(CXX) $(CXXFLAGS) $< -o $@
+
+gen_packer_vectors.exe: test/gen_packer_vectors.cpp include/posit_packer.hpp include/posit_parser.hpp include/posit_types.hpp
+	$(WIN_CXX) $(CXXFLAGS) -static-libgcc -static-libstdc++ $< -o $@
+
 L0_DIR = ../l0
 
 .PHONY: all linux windows test test-round test-round-ubsan test-week4 test-paper test-paper-ops paper-table1 test_table1 gate1 gate1-p32 gate1-p16-range test_identity test_mul_exact clean
@@ -280,14 +315,40 @@ test_paper_babic_ubsan: test/test_paper_babic.cpp include/*.hpp
 	$(CXX) -O1 -g -std=c++17 -Wall -Wextra -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude $< -o $@
 
 .PHONY: test-paper-source paper-table1-source paper-table1-babic
-test-paper-source: test_paper_source_profile test_paper_source_audit test_paper_anchor test_paper_babic
+test-paper-source: test_paper_source_profile test_paper_source_audit test_paper_anchor test_paper_babic test_paper_fig3
 	./test_paper_source_profile
 	./test_paper_source_audit 100000 314159
 	./test_paper_anchor --self-test
 	./test_paper_babic 100000 314159
+	./test_paper_fig3
 
 paper-table1-source: test_paper_table1
 	./test_paper_table1 --samples 200000000 --seed 271828 --profile source --require-match
 
 paper-table1-babic: test_paper_babic
 	./test_paper_babic 200000000 271828
+
+test_paper_fig3: test/test_paper_fig3.cpp include/*.hpp
+	$(CXX) $(CXXFLAGS) -Werror $< -o $@
+
+test_paper_fig3.exe: test/test_paper_fig3.cpp include/*.hpp
+	$(WIN_CXX) $(CXXFLAGS) -Werror -static-libgcc -static-libstdc++ $< -o $@
+
+test_paper_fig3_ubsan: test/test_paper_fig3.cpp include/*.hpp
+	$(CXX) -O1 -g -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude $< -o $@
+
+.PHONY: test-paper-fig3 paper-table1-fig3
+test-paper-fig3: test_paper_fig3
+	./test_paper_fig3
+
+paper-table1-fig3: test_paper_table1
+	./test_paper_table1 --samples 200000000 --seed 271828 --profile fig3 --require-match
+
+test_paper_discriminators: test/test_paper_discriminators.cpp test/paper_discriminator_study.hpp include/*.hpp
+	$(CXX) $(CXXFLAGS) -Werror $< -o $@
+
+test_paper_discriminators.exe: test/test_paper_discriminators.cpp test/paper_discriminator_study.hpp include/*.hpp
+	$(WIN_CXX) $(CXXFLAGS) -Werror -static-libgcc -static-libstdc++ $< -o $@
+
+test_paper_discriminators_ubsan: test/test_paper_discriminators.cpp test/paper_discriminator_study.hpp include/*.hpp
+	$(CXX) -O1 -g -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude $< -o $@

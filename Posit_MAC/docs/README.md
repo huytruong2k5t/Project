@@ -8,7 +8,7 @@ Thư mục này chứa toàn bộ tài liệu kiến trúc, đặc tả chi ti�
 
 | Tên Tài liệu | Mô tả chi tiết nội dung | Vị trí liên kết |
 | :--- | :--- | :---: |
-| **Đặc tả Lõi IP Posit MAC** | Tài liệu đặc tả kỹ thuật chi tiết nhất (v1.4) bao gồm: cơ sở toán học Posit, yêu cầu chức năng (FR-01..16), phi chức năng (NFR-01..06), vi kiến trúc từng khối (§5.1..12), đối chiếu Fig. 3 của [P], Golden model 3 tầng (§6), chính sách bậc thang PPA (§7.6), và kế hoạch 16 tuần. | [`SPEC_Posit_MAC_IP.md`](../SPEC_Posit_MAC_IP.md) |
+| **Đặc tả Lõi IP Posit MAC** | Tài liệu đặc tả kỹ thuật chi tiết nhất (v1.5) bao gồm: cơ sở toán học Posit, yêu cầu chức năng (FR-01..16), phi chức năng (NFR-01..06), vi kiến trúc từng khối (§5.1..12), đối chiếu Fig. 3 của [P], Golden model 3 tầng (§6), chính sách bậc thang PPA (§7.6), và kế hoạch 16 tuần. | [`SPEC_Posit_MAC_IP.md`](../SPEC_Posit_MAC_IP.md) |
 | **Nhật ký Điểm mơ hồ & Quyết định** | Tóm tắt hợp đồng profile/n, latency, reset bridge và lịch core; dẫn SPEC §11 cho trạng thái, provenance và rủi ro, tránh sao chép thuật toán packer. | [`ambiguity.md`](ambiguity.md) |
 | **Digital Design Guidelines** | Quy chuẩn thiết kế RTL số chuẩn công nghiệp: quy ước đặt tên file/module, clocking, reset leaf tích cực thấp assert bất đồng bộ/deassert đồng bộ, Little-Endian, coding style không latch, xử lý CDC/RDC, và tiêu chuẩn hóa linting. | [`Digital_Design_Guidelines.md`](../Digital_Design_Guidelines.md) |
 

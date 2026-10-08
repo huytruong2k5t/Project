@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-08",
+  "timezone": "Asia/Saigon",
+  "purpose": "Option 1: source audit of 2024 journal against reconstructed 2021 baseline",
+  "baseline_status": "processing",
+  "option_result": "partial: more evidence, original baseline not uniquely identified",
+  "source": {
+    "title": "Area-Efficient Iterative Logarithmic Approximate Multipliers for IEEE 754 and Posit Numbers",
+    "doi": "10.1109/TVLSI.2024.3354726",
+    "author_publications": "https://sites.google.com/view/sunwoong/publications",
+    "read_full_text_at": "https://www.scribd.com/document/818436812/Area-Efficient-Iterative-Logarithmic-Approximate-Multipliers-for-IEEE-754-and-Posit-Numbers",
+    "method": "Full paper text plus visual inspection of algorithms, architecture figures and accuracy figures in public reader",
+    "ieee_pdf_http_status": 418,
+    "local_journal_pdf": null,
+    "source_limit": "Public reproduction; no original RTL, complete stored LUT or measurement generator obtained"
+  },
+  "test": {
+    "status": "PASS",
+    "entries": 128,
+    "mismatches": 0,
+    "legacy_different_entries": [
+      126,
+      127
+    ],
+    "domain": "prefix7 << 5, Q12; zero bypass",
+    "reference": "Independent bit-run pattern interpretation of Table IV, not SAC/complement recurrence",
+    "measured_value": "absolute prediction error in Q12 units",
+    "assumptions": [
+      "Zero-extend seven-bit predictor prefix to Q12",
+      "Zero bypass"
+    ],
+    "not_verified": [
+      "Original hardware LUT provenance",
+      "OPS tie policy",
+      "Full low-five-bit handling",
+      "Guard12 or complete accumulator width/cut",
+      "Original PRNG/seed/distribution/special filters"
+    ],
+    "seed": null,
+    "softposit": "not used",
+    "compiler": "x86_64-w64-mingw32-g++ (GCC) 13-win32",
+    "compile_exit_code": 0,
+    "compile_command": "wsl.exe bash -lc \"cd '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC' && x86_64-w64-mingw32-g++ -O2 -std=c++17 -Wall -Wextra -Werror -static-libgcc -static-libstdc++ -Il1/include l1/test/test_journal2024_pt2.cpp -o l1/test_journal2024_pt2.exe\"",
+    "run_working_directory": "C:/HCMUT/HK261/Do an 2",
+    "run_command": "./Posit_MAC/l1/test_journal2024_pt2.exe ./Posit_MAC/results/paper_journal2024/pt2_comparison.csv",
+    "run_exit_code": 0
+  },
+  "measurement": {
+    "new_table1_run": false,
+    "prior_source_max_gap_percentage_points": 0.984213,
+    "prior_source_accepted_pairs": 200000000,
+    "prior_source_seed": 271828,
+    "prior_source_log": "results/paper_source_integration_200m.log",
+    "note": "Historical 2021 Table I reconstruction, not a new journal 2024 measurement"
+  },
+  "production_l1_changed": false,
+  "rtl_changed": false,
+  "sha256": {
+    "results/paper_journal2024/pt2_check.log": "bdc5695344b5e667a82d47ab48b9e507a13991a78523918d39e3e71137176f01",
+    "An Approximate and Iterative Posit Multiplier Architecture for FPGAs.pdf": "5016d5eac4395c40ad513ee9a0294d5070041d8120a8328b55e5277b7e11548d",
+    "l1/include/paper_ops.hpp": "fb42bd0cd52fdc60cabeda11cdead840ad9d0e7d55f4d58a855a4f915ec1eda7",
+    "results/paper_journal2024/pt2_comparison.csv": "c5ad90d1174ccbbaa6dfff4d21a177db82d844f68b217b8e354fc1b5268f4e39",
+    "l1/test_journal2024_pt2.exe": "b66f68e53d9db549184883735c60c4d8cf62f3647909635ddc68ee0361605ee9",
+    "l1/test/test_journal2024_pt2.cpp": "ee05b3688bbe192f695bf812a660d1c7274da8b4e33e1938e124604f16567709"
+  }
+}

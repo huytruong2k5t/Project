@@ -1,0 +1,5 @@
+make: Entering directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/l1'
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -Werror test/test_paper_discriminators.cpp -o test_paper_discriminators
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -Werror -static-libgcc -static-libstdc++ test/test_paper_discriminators.cpp -o test_paper_discriminators.exe
+g++ -O1 -g -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude test/test_paper_discriminators.cpp -o test_paper_discriminators_ubsan
+make: Leaving directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/l1'

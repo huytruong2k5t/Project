@@ -1,0 +1,41 @@
+# vsim -do run.do -l simulate.log -c work.tb_week9_multiplier 
+# Loading sv_std.std
+# Loading work.tb_week9_multiplier
+# Loading work.multiplier_checker
+# Loading work.posit_mul_iter
+# Loading work.mul_iter_wrapper
+# Loading work.posit_parser
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.mul_iter_core
+# Loading work.iter_ctrl
+# Loading work.sac_step_comb
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum
+# Loading work.sbm_accum_comb
+# Loading work.mul_norm_comb
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter
+# Loading work.posit_pack_finish
+# do run.do 
+# MULTIPLIER PASS NB=8 ES=0 scheme=1 rounding=1 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=8 ES=0 scheme=0 rounding=1 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=8 ES=0 scheme=1 rounding=0 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=8 ES=0 scheme=0 rounding=0 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=16 ES=1 scheme=0 rounding=1 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=16 ES=1 scheme=1 rounding=1 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=16 ES=1 scheme=0 rounding=0 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=16 ES=1 scheme=1 rounding=0 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=32 ES=3 scheme=0 rounding=1 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=32 ES=3 scheme=1 rounding=1 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=32 ES=2 scheme=1 rounding=1 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=32 ES=2 scheme=0 rounding=1 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=32 ES=3 scheme=0 rounding=0 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=32 ES=3 scheme=1 rounding=0 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=32 ES=2 scheme=0 rounding=0 rows=2000 completed=1990 reset_aborts=10
+# MULTIPLIER PASS NB=32 ES=2 scheme=1 rounding=0 rows=2000 completed=1990 reset_aborts=10
+# WEEK9 MULTIPLIER ALL PASS
+# ** Note: $finish    : ../../../tb/tb_week9_multiplier.sv(18)
+#    Time: 376997 ns  Iteration: 1  Instance: /tb_week9_multiplier

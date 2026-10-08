@@ -1,0 +1,18 @@
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+C:\altera\13.0sp1\modelsim_ase\win32aloem\vlog.exe -sv -timescale 1ns/1ps +incdir+../../rtl ../../rtl/dyn_right_shifter.sv ../../rtl/posit_pack_prepare.sv ../../rtl/posit_pack_finish.sv ../../rtl/posit_pack_comb.sv ../../rtl/posit_pack.sv ../../rtl/lod_lzd_core.sv ../../rtl/dyn_left_shifter.sv ../../rtl/posit_parser.sv ../../tb/packer_checker.sv ../../tb/tb_posit_pack.sv ../../tb/parser_packer_checker.sv ../../tb/tb_parser_packer.sv -l compile.log 
+-- Compiling module dyn_right_shifter
+-- Compiling module posit_pack_prepare
+-- Compiling module posit_pack_finish
+-- Compiling module posit_pack_comb
+-- Compiling module posit_pack
+-- Compiling module lod_lzd_core
+-- Compiling module dyn_left_shifter
+-- Compiling module posit_parser
+-- Compiling module packer_checker
+-- Compiling module tb_posit_pack
+-- Compiling module parser_packer_checker
+-- Compiling module tb_parser_packer
+
+Top level modules:
+	tb_posit_pack
+	tb_parser_packer

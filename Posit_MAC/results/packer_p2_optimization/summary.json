@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "date": "2026-10-07",
+  "change": "single-adder P2 with parallel endpoint detection",
+  "latency_changed": false,
+  "P1_bundle_changed": false,
+  "pack_mode_checks": 5947048,
+  "chain_checks": 4931624,
+  "equivalence_checks": 1448576,
+  "boundary_checks": 3994,
+  "mismatches": 0,
+  "rtl_sha256": "8df33b0eef98c0b32d7e5aee31d66155a908fc41594c5fb8574f0292faed75fc",
+  "timing_scope": "standalone packer benchmark, not full MAC",
+  "device": "EP4CE22F17C6",
+  "all_seeds_meet_10ns": true,
+  "reproduction_commands": [
+    "./scripts/verify_packer_p2_equivalence.ps1",
+    "./scripts/verify_packer_modelsim.ps1",
+    "./scripts/run_packer_ppa.ps1"
+  ],
+  "seed_packer": 20261006,
+  "seed_equivalence": 20261007,
+  "seed_ppa": [
+    1,
+    2,
+    3
+  ],
+  "vivado": "2026.1 compile and elaborate only; no XSim runtime"
+}

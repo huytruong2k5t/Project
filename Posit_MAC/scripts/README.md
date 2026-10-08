@@ -33,3 +33,23 @@ Các kịch bản phục vụ trích xuất dữ liệu tự động từ các l
 - **`plot_pareto.py`**:
   - Dành cho mục mở rộng DSE (EXT-B).
   - Vẽ không gian thiết kế Pareto tối ưu giữa Diện tích (LUT) $\times$ Trễ (chu kỳ) $\times$ Độ chính xác (NMSE) để khuyến nghị cấu hình phần cứng tối ưu.
+
+## 3. Kiểm chứng và khảo sát packer tuần8
+
+- [`verify_packer_modelsim.ps1`](verify_packer_modelsim.ps1): sinh fixture bằng L1 và encoder bit-list độc lập, kiểm packer tổ hợp/pipeline và chuỗi parser→packer trên ModelSim. Chạy từ thư mục `Posit_MAC`: `./scripts/verify_packer_modelsim.ps1`; dùng `-CollectExisting` để kiểm lại hash và tổng kết log đã có. Kết quả ở `results/packer/summary.json`.
+- [`run_packer_ppa.ps1`](run_packer_ppa.ps1): đo RNE/TRUNC trên Quartus, Cyclone IV EP4CE22F17C6, cùng biên thanh ghi vào/ra, seed 1/2/3 và clock 10ns. Kết quả ở `results/packer_ppa/summary.json`; đây là benchmark packer riêng, chưa nghiệm thu timing/PPA toàn MAC. Hướng dẫn và giới hạn ở `rtl/README.md` mục6.
+
+- [`verify_packer_p2_equivalence.ps1`](verify_packer_p2_equivalence.ps1): đối chiếu P2 mới với bản trước tối ưu, 1.448.576 lượt, cả RNE/TRUNC. NB8 vét cạn toàn bundle nhị phân, NB16/32 dùng seed20261007+NB. Tham chiếu nằm trong `results/packer_p2_optimization/`; `comparison.json` so tài nguyên/timing trước–sau, baseline được giữ riêng. Đây là kiểm tương đương, không thay thế oracle L1/bit-list của suite packer.
+
+## 4. Khởi động tuần9
+
+- [`verify_week9_frontend_modelsim.ps1`](verify_week9_frontend_modelsim.ps1): build trước `make -C l1 gen_week9_frontend.exe`, rồi chạy từ Posit_MAC. Sinh fixture Windows, compile/mô phỏng OPS/SAC tổ hợp, kiểm10 marker/count và ghi log/hash tại `results/week9_frontend/windows`.
+- [`summarize_week9_frontend.py`](summarize_week9_frontend.py): chạy generator Linux và UBSan trước; so fixture với Windows, xác nhận327.440 dòng kiểm và log không warning/error, ghi `results/week9_frontend/summary.json`. Không dùng summary này nghiệm thu Gate2 hoặc baseline gốc của paper.
+
+## 5. Kiểm chứng tuần9 và giới hạn quyền
+
+Chạy từ Posit_MAC: `verify_week9_arithmetic_modelsim.ps1`, `verify_week9_paper_modelsim.ps1`, `verify_week9_core_modelsim.ps1`; integrated pilot: `verify_week9_multiplier_modelsim.ps1 -PerProfile 2000 -RunName final_pilot`. Lượt lớn: `-PerProfile 630000 -RunName acceptance`; script chỉ đóng ngưỡng số học khi số giao dịch hoàn tất đạt10⁷, không tính reset-abort.
+
+`summarize_week9_implementation.py` kiểm fixture Linux/Windows/UBSan, coverage và hash. `update_week9_status.py` chỉ sửa Markdown hiện có, không tạo Markdown mới. `verify_week9_verilator.sh` chỉ dùng tool đã cài, trả BLOCKED khi thiếu, không sudo/download/install. Mọi file build/log/work/temp đặt dưới Posit_MAC. Quyền cập nhật ngoài dự án chỉ dành đúng doc/TIEN_DO_DO_AN.md.
+
+Git không có checkout: push chưa thực hiện; không tự init, thay remote, force hoặc sửa thư mục khác. Nguồn + hash được lưu local, không gọi đó là GitHub backup.

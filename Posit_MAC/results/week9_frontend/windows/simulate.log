@@ -1,0 +1,23 @@
+# vsim -do run.do -l simulate.log -c work.tb_week9_frontend 
+# Loading sv_std.std
+# Loading work.tb_week9_frontend
+# Loading work.ops_frontend_checker
+# Loading work.ops_sel_comb
+# Loading work.sac_frontend_checker
+# Loading work.sac_step_comb
+# Loading work.dyn_left_shifter
+# Loading work.lod_lzd_core
+# do run.do 
+# WEEK9 SAC PASS W=1 checks=4
+# WEEK9 OPS PASS F=1 FW=1 checks=32
+# WEEK9 SAC PASS W=5 checks=256
+# WEEK9 OPS PASS F=5 FW=5 checks=8192
+# WEEK9 OPS PASS F=12 FW=12 checks=50300
+# WEEK9 OPS PASS F=26 FW=12 checks=50636
+# WEEK9 OPS PASS F=27 FW=12 checks=50660
+# WEEK9 SAC PASS W=26 checks=50896
+# WEEK9 SAC PASS W=27 checks=50928
+# WEEK9 SAC PASS W=12 checks=65536
+# WEEK9 FRONTEND ALL PASS
+# ** Note: $finish    : ../../../tb/tb_week9_frontend.sv(19)
+#    Time: 65536 ns  Iteration: 1  Instance: /tb_week9_frontend

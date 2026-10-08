@@ -35,7 +35,7 @@ lint: ## Run RTL lint checks (Verilator / Verible)
 	@if command -v $(VERILATOR) >/dev/null 2>&1; then \
 		$(VERILATOR) --lint-only -Wall -I$(RTL_DIR) $(RTL_DIR)/*.sv; \
 	else \
-		echo "Warning: Verilator not found. Skipping lint or install Verilator."; \
+		echo "BLOCKED: Verilator not found; lint has NOT passed."; exit 2; \
 	fi
 
 smoke: ## Run quick smoke tests on small configurations (posit8, posit16)

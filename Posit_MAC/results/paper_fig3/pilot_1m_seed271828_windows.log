@@ -1,0 +1,28 @@
+FP32 oracle ties/subnormal/zero/sign: 8 PASS; conversion identity/cut11: 100000 PASS seed=20261004
+NB=32 ES=3 FRAC_W=12 n=2..4 complement=ones per-term=FLOOR pack=TRUNC
+samples/row=1000000 seed=271828 distribution=uniform-value oracle=FP32_RNE ops=PredictN2_7bit_vs_MinPopcount_12bit
+ASSUMPTIONS: generator/seed/tie-A/predictor reconstruction/accumulator are local; not published source RTL.
+Reject input zero, converted regime m>15 and FP32 Ideal=0; N counts accepted pairs.
+acceptance_profile=fig3
+profile,n,Err<0.1%,Err<0.5%,Err<1%,Err<5%,avg_steps,max_delta_Proposed_pp,max_delta_Kim_pp
+baseline,2,8.718700,31.239600,49.330700,95.436300,1.999138,1.151300,0.880400
+baseline,3,43.398600,82.888200,94.974500,100.000000,2.988480,1.291400,0.541400
+baseline,4,86.290500,99.799300,100.000000,100.000000,3.941354,0.799500,0.399500
+minpop,2,4.072200,16.227200,27.806100,78.850500,1.999495,22.223900,22.203900
+minpop,3,26.787700,64.944800,84.307000,100.000000,2.993559,18.225200,18.065200
+minpop,4,72.500600,99.283300,100.000000,100.000000,3.965572,14.589400,14.189400
+relative,2,8.902700,31.550800,49.707000,95.622600,1.999105,0.967300,0.569200
+relative,3,43.768200,83.386600,95.376100,100.000000,2.988101,0.921800,0.376600
+relative,4,86.675300,99.849200,100.000000,100.000000,3.939914,0.414700,0.039200
+source,2,8.962500,31.366400,49.377800,95.438200,1.999085,0.907500,0.753600
+source,3,43.753500,82.937200,94.999300,100.000000,2.988087,0.936500,0.186500
+source,4,86.661400,99.809900,100.000000,100.000000,3.940288,0.428600,0.028600
+fig3,2,8.951200,31.376200,49.373800,95.439100,1.999085,0.918800,0.743800
+fig3,3,43.449000,82.881900,94.976500,100.000000,2.988087,1.241000,0.491000
+fig3,4,86.184600,99.799400,100.000000,100.000000,3.940288,0.905400,0.505400
+accepted=1000000 attempted=1000000 excluded_zero=0 excluded_m=0 excluded_zero_ideal=0 excluded_invalid=0 excluded_nonfinite=0 generator_draws=2000000 baseline_swaps=459142 minpop_swaps=419131
+pair_fingerprint_fnv1a64=5ddfb069937d19bd
+relative_swaps=490776
+source_swaps=459786 source_ops=absolute_prefix_Q12 anchor=first guard=12 source_width_unconfirmed=1
+fig3_swaps=459786 fig3_fraction=12 payload=13 carry=1 guard=0 cut=before_signed_accumulation hidden_carry_layout=local_reconstruction
+Table_I_numeric_acceptance=NOT_REPRODUCED max_delta_pp=1.241000 elapsed_seconds=1.209087

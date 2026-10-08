@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-09T06:17:47.4550397+07:00",
+  "status": "PASS",
+  "seed": 20261008,
+  "opsChecks": 159820,
+  "sacChecks": 167620,
+  "mismatches": 0,
+  "oracle": "accepted L1 ops_swap/SacState plus independent bit-count and first-set-bit scan",
+  "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "scope": "combinational OPS/SAC only; no pipeline, Gate2 or original-paper-baseline acceptance",
+  "command": "scripts/verify_week9_frontend_modelsim.ps1"
+}

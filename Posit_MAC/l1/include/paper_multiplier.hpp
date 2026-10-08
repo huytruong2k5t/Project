@@ -6,6 +6,7 @@
 #include "posit_packer.hpp"
 #include "ops_sel.hpp"
 #include "paper_ops.hpp"
+#include "paper_fig3_accumulator.hpp"
 namespace l1 {
 // Separate research profile: n includes the first power-of-two term.
 enum class PaperOps { PredictN2, MinPopcount, FixedA, PredictN2Relative, PredictN2Pattern };
@@ -56,6 +57,13 @@ inline PaperConfig paper_source_config() {
     cfg.anchor_first=true;cfg.accumulator_guard=12;
     return cfg;
 }
+// Fig.3-informed finite-width reconstruction, distinct from guard12 source.
+// PT2 padding and tie-A remain local reconstruction assumptions.
+inline PaperConfig paper_fig3_config() {
+    PaperConfig cfg = paper_source_config();
+    cfg.accumulator_guard = 0;
+    return cfg;
+}
 template<int NB, int ES> struct PaperResult {
     posit_storage_t<NB> bits{};
     posit_unpacked<NB, ES> unpacked{};
@@ -100,6 +108,8 @@ public:
         const int anchor=cfg.anchor_first?int(x>=hidden+(hidden>>1)):0;
         const uint64_t acc_hidden=hidden<<cfg.accumulator_guard;
         int64_t acc = 0;
+        PaperFig3Accumulator finite_acc(W);
+        const bool finite_profile = cfg.anchor_first && cfg.accumulator_guard == 0;
         while (sac.mantissa && out.iterations < cfg.n) {
             uint64_t before = sac.mantissa;
             int exponent = sac.exponent, coefficient = sac.coefficient;
@@ -114,7 +124,18 @@ public:
                 term = shift >= 64 ? 0 : y >> shift;
                 tail = shift >= 64 ? y != 0 : (y & ((uint64_t(1) << shift) - 1)) != 0;
             }
-            acc += coefficient * int64_t(term);
+            if (finite_profile) {
+                if (aligned > 0) {
+                    throw std::logic_error("Fig3 shift must be nonnegative");
+                }
+                const uint64_t finite_term = finite_acc.update(y, unsigned(-aligned), coefficient);
+                if (finite_term != term) {
+                    throw std::logic_error("Fig3 term alignment");
+                }
+                acc = int64_t(finite_acc.value());
+            } else {
+                acc += coefficient * int64_t(term);
+            }
             out.shift_tail |= tail;
             ++out.iterations;
             sac.advance(up);

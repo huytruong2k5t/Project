@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-08T22:22:03.0351014+07:00",
+  "status": "PASS",
+  "seed": 20261008,
+  "opsChecks": 159820,
+  "sacChecks": 167620,
+  "mismatches": 0,
+  "oracle": "accepted L1 ops_swap/SacState plus independent bit-count and first-set-bit scan",
+  "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "scope": "combinational OPS/SAC only; no pipeline, Gate2 or original-paper-baseline acceptance",
+  "command": "scripts/verify_week9_frontend_modelsim.ps1",
+  "milestone": "W9-01 interface and W9-02 combinational OPS/SAC PASS",
+  "week9_status": "processing",
+  "Gate2": "not yet accepted",
+  "paper_original_baseline": "not accepted by this test",
+  "fixture_rows": {
+    "ops": 159820,
+    "sac": 167620
+  },
+  "generator_platforms": [
+    "Windows",
+    "Linux",
+    "Linux UBSan"
+  ],
+  "cross_platform": "MATCH all ten fixture files after newline normalization",
+  "canonical_fixture_sha256": {
+    "ops_1.txt": "ca64c2774a0a634d68d5eba613b8997663362a8f515beebc5d594e5117ca9718",
+    "ops_5.txt": "81912178b7d6c2a5be1bc6a3f49a67bab46891f086b8ced8278d182075edcdad",
+    "ops_12.txt": "f50b1e9cccbba626283a083755aaa3a3b112fe3b31993cf60c724e098653a34c",
+    "ops_26.txt": "2689d34a6d30eb1d00301016e08737285a0465d64d10fb1c589a8bc16a3bde0e",
+    "ops_27.txt": "e35904f03be5f32fd8905e0d94925e006b2aa63be0fd96e4e491d55dfd2ca11a",
+    "sac_1.txt": "87c95635be06e5a7bb0262176cbd76183b4313670cadc651cc76a7571030dde0",
+    "sac_5.txt": "06a8acc14a5a8d57b96dca57853c08956312b53120dcc2047cfa0f68af8ebdfb",
+    "sac_12.txt": "deb275975af23b1be605e05f8d055ce12a25c6901366e807e70794ce895c8f9e",
+    "sac_26.txt": "2de7bbffc4e0f95998c87fd548c787d839abedc76d162d6904103f3e8273a40f",
+    "sac_27.txt": "752999705bb8734797af805ff09bf9c879a5def208fac3bde6c2367e7d289bdc"
+  },
+  "fraction_widths": [
+    1,
+    5,
+    12,
+    26,
+    27
+  ],
+  "cfg_ops": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "cfg_mode": [
+    0,
+    1
+  ],
+  "coverage": "OPS widths1/5 exhaustive pairs; SAC widths1/5/12 exhaustive fx and scale; larger widths directed plus50k random",
+  "compilers": {
+    "linux": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "windows": "x86_64-w64-mingw32-g++ (GCC) 13-win32"
+  },
+  "softposit": "Not linked for combinational OPS/SAC; accepted L1 plus independent scalar references",
+  "commands": [
+    "make -C l1 gen_week9_frontend gen_week9_frontend.exe gen_week9_frontend_ubsan",
+    "./l1/gen_week9_frontend results/week9_frontend/linux",
+    "./l1/gen_week9_frontend_ubsan results/week9_frontend/ubsan",
+    "./scripts/verify_week9_frontend_modelsim.ps1",
+    "python scripts/summarize_week9_frontend.py"
+  ],
+  "unverified": [
+    "SBM/normalize RTL",
+    "Sequential core/reset/drain",
+    "Integrated multiplier/handshake/Gate2",
+    "Verilator lint/STA/PPA",
+    "Original paper RTL"
+  ],
+  "sha256": {
+    "rtl/ops_sel_comb.sv": "cebcb232da54681ce2e9a0c6818691743ba572aaa02ec788a6e573c0afe552f9",
+    "rtl/sac_step_comb.sv": "9e72ab98ae73ed3dea34785e1f6131d8dbafbce0bda56a70e22ac6a8db379e56",
+    "rtl/lod_lzd_core.sv": "d7d60404567c6179241532a389de98a3ef661325aafd457bba554169b1fc5349",
+    "rtl/dyn_left_shifter.sv": "e1d19b375ce55264923b55bf0f7a9acdae470ca6d2aedd33a817ac4c356939ec",
+    "tb/ops_frontend_checker.sv": "332ece2135fd4a290b23fe2bc5306de5283d14d901a5d67127fe358ba6207706",
+    "tb/sac_frontend_checker.sv": "f67bff8148eb8ccfd4f648bbd956a4d32f2b41bf5ef3471a73572493079eb27e",
+    "tb/tb_week9_frontend.sv": "07a110915ec45eb9f6269e04fcd060e91974cd17efcfddb4a4151d3df1c6e05f",
+    "l1/test/gen_week9_frontend.cpp": "6d5895971fd0c790c314d19c601eb080371188b5bedadc6e165a72813268391f",
+    "l1/include/ops_sel.hpp": "558c0b319bd32da1e6ebcf1c5dc8539b26e1861104dfb94aa75f5c03d0b1a4bf",
+    "l1/include/sac.hpp": "aca2fdffd0df9060e167d5ad6d22e219c3e70a2258999da093388c565fe89625",
+    "l1/Makefile": "30ac88e108b34ecfe71a83d94473e2ef8f4e733e6d08a82a7b59a1c2fa6f6222",
+    "l1/gen_week9_frontend": "7b5aaa3c97c9fdc72fd085dca5f37c0c94210eca3deed9b25645fff425394212",
+    "l1/gen_week9_frontend.exe": "7f284527c1e0df92603069f48f972d623dae04d2964d7bc183398396b5db163b",
+    "l1/gen_week9_frontend_ubsan": "ba4aab0941bbc1cba594474cf2de81da4bf4368a76b6c407a6d290d8af1f5d7f",
+    "scripts/verify_week9_frontend_modelsim.ps1": "8083978ee60210105da3f2baddf80fe8c277774e61224f41b12dc998ba47bb0c",
+    "scripts/summarize_week9_frontend.py": "5d4cd9918b5824eea9c9b8ba1e85fee1386ca45ec6a852482ff52156f1129ef2",
+    "results/week9_frontend/build.log": "2771b96ad777f04c1ebd1f423bc0b274c8612fb5aa2f87cfe9a56e0c4722f3fe",
+    "results/week9_frontend/compiler_linux.log": "ac55452791ddd9d6e55f5e1f3dbcd5ee40f34b0b55ae18baade542748b008022",
+    "results/week9_frontend/compiler_windows.log": "80b90a63bba944003b66a9c5d93f594ff2f4881e27b41440d3eaa45ffdd8eca4",
+    "results/week9_frontend/generator_linux.log": "4d968d3c856d3d83a6bc08c0d4964400739b284f97b62f16dc6bc95b534b00a6",
+    "results/week9_frontend/generator_ubsan.log": "4d968d3c856d3d83a6bc08c0d4964400739b284f97b62f16dc6bc95b534b00a6",
+    "results/week9_frontend/modelsim_run.log": "8620bfa781087a3029a32405ecefa7b5f536d08d3836197b1ce2e298c0c37a91",
+    "results/week9_frontend/verilator_path.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/week9_frontend/windows/compile.log": "fe08d8a00748858a9a3390d4b4f61270b05c75639ce012d817f0bd91cbc4750a",
+    "results/week9_frontend/windows/compile_console.log": "5df60c5a53feb37d2256071d65208a835bf8bf586f7467e13db9fa878292b0c6",
+    "results/week9_frontend/windows/generator.log": "2090f89887cd33d6f5550cc33bf64419d75e2ee331b64175c17da1b866fbe995",
+    "results/week9_frontend/windows/simulate.log": "9f394cec9508ff520aac5cea502d3bfd8c9f935c9589576198fb56a11d6ec4bb",
+    "results/week9_frontend/windows/simulate_console.log": "218a24cc40b097500ca5b73f45b6d2ec7a1646095786ad073c9ac217ebb3c381",
+    "results/week9_frontend/windows/version.log": "5c04042df63bf8cdab7f8222d65cebf5d6638d01e08982fe4ca5edbea466161e"
+  }
+}

@@ -557,6 +557,8 @@ Hiện `paper_multiplier.hpp` dùng sum(sign_j*floor(MY_Q12*2^p_j)), sf_A+sf_B, 
 
 ## 14. Baseline tái dựng theo nguồn: đạt ngưỡng Table I — 04/10/2026
 
+**Đính chính từ kiểm chứng ngày08/10 (§20):** nghiệm thu dưới đây chỉ là kết quả thống kê lịch sử. Profile `source` giữ Q24 đến pack trả `0x1ae34800` cho ví dụ Fig.4, khác output `0x1ae34000` của bài báo2021; vì vậy không còn là ứng viên baseline bit-exact gốc. Giữ API/log để đối chứng, không tự chuyển default hoặc RTL sang profile này.
+
 Đã thực hiện tuần tự ưu tiên PLAN: khảo sát anchor-first; guard/cut; predictor theo pattern; đường FP32/Posit; pilot và holdout; truy tìm nguồn; comparator Babic riêng. Kết quả **nghiệm thu số học đạt**, nhưng chưa khẳng định bit-exact với mã nguồn paper vì LUT n2/tie, độ rộng accumulator và generator gốc chưa đầy đủ.
 
 ### Khảo sát và căn cứ lựa chọn
@@ -706,3 +708,184 @@ Sửa tương thích bổ sung: parameter guard dùng `initial $fatal` thay elab
 ```
 
 Runner vlib/vlog/vsim có macro run.do xử lý lỗi, kiểm marker PASS và Error/Fatal trong transcript, ghi summary.json và SHA256. Logs tại `results/modelsim_shifters/{compile,simulate_left,simulate_right,simulate_parameters}.log`, `version.log`, `sources.sha256`; lệnh và đường dẫn tool trong script. Hai shifter đã hoàn thành mốc mô phỏng RTL; tuần7 giữ processing vì parser RTL chưa hoàn thành. Gate2/3/PPA chưa nghiệm thu.
+
+## 16. Fixture packer RTL tuần8 — 07/10/2026
+
+l1/test/gen_packer_vectors.cpp sinh đầu vào normalized với fraction không hidden, F_IN=2*FRAC_MAX+1, sf signed, sticky và flags trước đó. Oracle kết quả là pack(u,RNE/TRUNC) của L1 đã nghiệm thu; một encoder bit-list độc lập kiểm chéo mọi dòng. Flags đối chiếu giá trị decode sau pack với đầu vào, kiểm range/inexact và OR flags; NaR ưu tiên. Không gọi bộ fixture này là đối chuẩn SoftPosit mới hoặc mô hình timing L1.
+
+Build từ Posit_MAC: make -C l1 gen_packer_vectors.exe (MinGW/WSL) hoặc make -C l1 gen_packer_vectors (Linux). Sau đó gen_packer_vectors.exe results/packer; compiler/command/seed tại results/packer/build.json. Corpus gồm identity p8/p16 vét cạn, p32 lấy1.200.010 mẫu/format từ parser đã nghiệm thu, toàn miền sf, fraction patterns/sticky, ties quanh mọi độ chính xác fraction khả dụng, NaR/Zero/flags và100.000 vector phụ/format. Seed20261006, tổng2.973.524 dòng; mỗi dòng có cả expected RNE/TRUNC. Script scripts/verify_packer_modelsim.ps1 kiểm hash nguồn/fixture và chạy wrapper tổ hợp, pipeline, chuỗi parser→packer.
+
+Giao diện rộng mặc định giữ đủ tích exact sau chuẩn hóa: p32 ES2 fraction55, ES3 fraction53. L1 hidden ở bit63; fraction RTL lấy các bit kế, sticky là !u.exact OR bit thấp bị bỏ. Packer không tự normalize hoặc xử lý residual có dấu của fused. Pre-clamping minpos phải dùng sf<-SF_MAX theo L1, không dùng <=; ties tại đúng biên được kiểm riêng. Kết quả nghiệm thu cuối cùng theo summary.json PASS; PPA packer benchmark nằm riêng results/packer_ppa/, chưa phải full MAC/Gate4.
+
+Nghiệm thu07/10: summary.json PASS,5.947.048 packer và4.931.624 chain checks,0 mismatch trên ModelSim; đối chuẩn từng field/flags, hai mode/bốn format. Phạm vi đơn vị tuần8, không phải MAC handshake/Gate2/3. PPA packer riêng RNE thêm29 LUT4/44FF so TRUNC trên EP4CE22; fmax ranges chồng lấn và100MHz chưa đạt mọi seed.
+
+## 18. Đối chiếu journal 2024 để xác minh baseline — 08/10/2026
+
+Đã đọc toàn văn *Area-Efficient Iterative Logarithmic Approximate Multipliers for IEEE 754 and Posit Numbers*, TVLSI32(3):455–467, DOI [10.1109/TVLSI.2024.3354726](https://doi.org/10.1109/TVLSI.2024.3354726). [Trang tác giả](https://sites.google.com/view/sunwoong/publications) xác nhận publication; toàn văn đọc từ [bản công khai trên Scribd](https://www.scribd.com/document/818436812/Area-Efficient-Iterative-Logarithmic-Approximate-Multipliers-for-IEEE-754-and-Posit-Numbers). IEEE PDF trả HTTP418; chưa lưu PDF2024 cục bộ. Đã kiểm hình/bảng trực quan, không dùng mô tả AI của trang đăng lại.
+
+| Đối chiếu nguồn | Kết luận cho ứng viên `source` |
+| --- | --- |
+| §III-A, tr.458: RND ngưỡng1,5, complement không cộng1 | Củng cố recurrence nghiên cứu; không đổi profile normative |
+| Algorithm2/TableIV, tr.459; §VI-B, tr.462: PT2, cut11 và cut5 bổ sung | Đủ căn cứ kiểm predictor n2/7-bit theo pattern; cách đệm Q12 vẫn là giả định |
+| Fig.3/§III-C, tr.460: shift=l1−lk, exponent dùng l1 | Củng cố `anchor_first` |
+| Fig.3 và §V: mb=12, nhãn adder13 bit khi tb1=11 | Chưa xác nhận guard12 của ứng viên; cần hợp đồng hidden/sign/carry/cut đầy đủ |
+| §V/VI-A: posit32 ES2, oracle posit exact; 200M random, bốn ngưỡng nghiêm ngặt | Khác phép đo ES3/FP32 của TableI2021; chưa tìm được seed/PRNG/phân bố/filter đủ để tái lập |
+
+TableI2024 là ví dụ −7,89; kết quả độ chính xác nằm ở Fig.7–9. Không dùng bảng này thay TableI2021.
+
+### Kiểm PT2 độc lập
+
+`test/test_journal2024_pt2.cpp` diễn giải các run bit của TableIV trực tiếp, không gọi SAC hoặc recurrence complement trong reference. Miền kiểm là **toàn bộ128 prefix7, đệm5 bit0 thành Q12**, zero bypass; so lỗi tuyệt đối với `paper_pattern_prediction_error`. Đây là kiểm diễn giải của dự án, chưa phải đối chiếu LUT nguyên bản tác giả.
+
+**PASS:128 entry,0 mismatch.** Hai entry126/127 khác LUT legacy: source/table error=0, legacy error=32 đơn vị Q12. Kiểm này không xác nhận tie-A, score E/M, low5 thực tế hoặc accumulator_guard=12.
+
+```powershell
+# Từ thư mục Posit_MAC; MinGW GCC13-win32 trong WSL:
+wsl.exe bash -lc "cd '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC' && x86_64-w64-mingw32-g++ -O2 -std=c++17 -Wall -Wextra -Werror -static-libgcc -static-libstdc++ -Il1/include l1/test/test_journal2024_pt2.cpp -o l1/test_journal2024_pt2.exe"
+.\l1\test_journal2024_pt2.exe results/paper_journal2024/pt2_comparison.csv
+```
+
+Kiểm deterministic, không dùng seed/SoftPosit. CSV, log, compiler/lệnh, hash và giới hạn ở `results/paper_journal2024/{pt2_comparison.csv,pt2_check.log,summary.json}`.
+
+**Phương án1 đạt một phần:** đã tăng căn cứ cho predictor và anchor; chưa xác minh baseline gốc hoàn chỉnh. Tie policy, guard/cut và generator gốc còn mở. Tuần4/provenance giữ **processing**; không đổi L1 production/RTL, không chạy lại200M hoặc PPA trong đợt này. Max lệch0,984213 điểm % là nghiệm thu corpus trước đây (§14), không phải kết quả đo mới từ journal2024. Bước tiếp theo là đối chiếu width/cut của Fig.3 bằng profile riêng trước khi cân nhắc đo lại TableI.
+
+## 19. Chốt và kiểm width/cut theo Fig.3 — 08/10/2026
+
+Đã kiểm lại Fig.3 tr.460/§III-C của journal2024 (§18). Nhãn đường fraction là `22−tb1+1=12`; đường cộng/thanh ghi kết quả là `22−tb1+2=13` khi tb1=11. Paper lược bỏ logic cờ và chưa công bố mã hóa hidden/carry đầy đủ. Hợp đồng dưới đây là **baseline L1 tái dựng hữu hạn có kiểm chứng**, chưa chứng minh bố trí thanh ghi nguyên bản của tác giả. Không thay width của RTL normative §5.6.
+
+### Hợp đồng profile `fig3`
+
+| Thành phần | Hợp đồng đã chốt |
+| --- | --- |
+| Đầu vào | W=12 fraction sau cut11; significand nguyên Y=4096+fraction, đủ13 bit kể cả hidden |
+| Predictor/recurrence | Giữ PT2 prefix7 đệmQ12, tie-A, complement; n đếm tổng số hạng. Hai giả định PT2 padding/tie vẫn được công bố |
+| Mốc căn | p1 là power đầu tiên, tương đối0/1; dk=p1−pk>=0, sf ban đầu=sfX+sfY+p1 |
+| Cắt số hạng | Tk=floor(Y/2^dk), dịch logical; dk>=13 trả0. Cắt độ lớn dương trước khi áp coefficient ±1 |
+| Accumulator | A0=0; Ak=Ak−1+ck*Tk. Payload13 bit và cờ carry riêng; A=payload+(carry<<13), tổng độ lớn Q2.12 đủ14 bit, **guard thấp=0** |
+| Tràn/borrow | Carry phải đi cùng feedback, có thể được xóa bởi phép trừ sau đó. Reject borrow/tràn ngoài14 bit; không wrap hoặc saturate nội bộ |
+| Chuẩn hóa/cuối vòng | Giữ mốc Q12 cố định trong feedback; normalize khi kết thúc: A>=8192 thì dịch phải và tăng sf, A<4096 thì dịch trái và giảm sf. Fraction đầu ra12 bit |
+| Output/ngoại lệ | TableI dùng packTRUNC; suite kiểm cả RNE. Zero/NaR/dấu/saturation giữ hợp đồng PaperMultiplier. Đuôi từng term/phần dư bỏ không được phục hồi thành sticky tổng |
+
+13 bit payload + carry là cách biểu diễn địa phương cho phần cờ bị lược khỏi hình. Không gọi toàn bộ accumulator là13 bit, không gọi carry là fractional guard, không suy rằng Fig.3 xác nhận guard12. `source` cũ giữ Q24 đến pack; `fig3` giữ Q12. Cả width nội bộ và độ chính xác đầu ra vì thế được ghi rõ theo profile.
+
+Ví dụ X=6143,Y=8191: hai term đầu cho A=8191+4095=12286; payload13=4094,carry=1. Bỏ carry sẽ mất kết quả. Với X=6144,Y=4097: term âm thứ hai là−floor(4097/4)=−1024, A=3073; cần normalize trái. Arithmetic-shift trực tiếp số âm sẽ cho−1025, sai vị trí cắt. Trace đủ vòng ở `results/paper_fig3/trace_{windows,linux}.csv`.
+
+### Kiểm chức năng
+
+`include/paper_fig3_accumulator.hpp` thực thi payload/carry có giới hạn; `paper_fig3_config()` chọn guard0/anchor-first và OPS source. Nhánh anchor-first/guard0 của PaperMultiplier dùng accumulator này. `paper_source_config()` guard12 và mặc định legacy giữ nguyên. CLI bộ đo thêm `--profile fig3`.
+
+`test/test_paper_fig3.cpp` dùng signed residual Q96 độc lập, phép chia nguyên kiểm cut và kiểm từng trạng thái. **Windows/Linux/UBSan đều PASS509.407.337 đối chiếu/lượt**: vét cạn16.777.216 cặp mantissa Q12, các prefix đến n8;100.100 cặp raw/corner x n1..8, hai mode xen kẽ, fixture Fig.4 năm2021 và ma trận width/dịch. Max A=12286<16384;21.294.248 trạng thái carry,224.735 lần carry được xóa,45.400.064 term dịch>=13. Đếm đối chiếu gồm nhiều điều kiện trên cùng một vector, không phải509 triệu đầu vào độc lập.
+
+Trace Windows/Linux và smoke1M seed271828 khớp rows/counters/fingerprint. Regression liên quan PASS: source29.878.945, anchor self-test3.300.128, legacy531.039. Không chạy lại SoftPosit/RTL/PPA vì thuật toán normative và RTL không đổi.
+
+### TableI: width/cut đúng chức năng, chưa đạt tiêu chí số học
+
+N=200.000.000 accepted, seed271828, grid24/std::mt19937_64, oracle FP32_RNE trước cut11, packTRUNC, ngưỡng `<` bằng số nguyên. Attempted200.000.021, loại zero21, draws400.000.042; fingerprint `04478e811a897da7`. Cùng lượt chạy giữ baseline/minpop/relative/source làm control;12 ô source và các control baseline/relative khớp log trước ở độ chính xác hiển thị.
+
+| n | Err<0,1% | Err<0,5% | Err<1% | Err<5% | Max lệch Proposed (điểm %) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 2 | 8,955743% | 31,320320% | 49,328132% | 95,467135% | 0,914257 |
+| 3 | 43,397680% | 82,852613% | 94,982466% | 100,000000% | 1,292319 |
+| 4 | 86,183853% | 99,797454% | 100,000000% | 100,000000% | 0,906148 |
+
+**NOT_REPRODUCED/exit1**, max khoảng1,2923 điểm %, vượt yêu cầu<=1. Đây là lệch tỷ lệ đạt ngưỡng của bảng, không phải sai số của từng tích. Source guard12 cùng lượt giữ max0,984213. Tỷ lệ/gap in6 chữ số có thể chênh1 đơn vị cuối do làm tròn. Năm pilot10M seed314159/314160/42/2026/20261004 đều vượt1: max1,281240–1,316300 điểm %. Không chọn lại seed hoặc tăng guard để ép đạt.
+
+```powershell
+# Từ thư mục Posit_MAC:
+wsl.exe bash -lc "cd '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC' && make -C l1 test_paper_fig3 test_paper_fig3.exe test_paper_fig3_ubsan test_paper_table1.exe"
+.\l1\test_paper_fig3.exe results/paper_fig3/trace_windows.csv
+.\l1\test_paper_table1.exe --samples 200000000 --seed 271828 --profile fig3 --require-match
+# Linux: make -C l1 test-paper-fig3; make -C l1 paper-table1-fig3
+```
+
+Compiler Linux g++15.2.0, Windows MinGW GCC13-win32; SoftPosit không dùng trong bộ kiểm/đo này. Build/regression/pilot/200M/CSV/hash và lệnh ở `results/paper_fig3/summary.json` cùng các log. `make test-paper-source` bổ sung suite Fig3.
+
+**Mốc width/cut L1 hoàn thành; baseline TableI chưa nghiệm thu, tuần4 giữ processing.** Đã có baseline hữu hạn tái dựng để review/đối chuẩn sau này. Còn cần xác minh tie/PT2 padding, nguồn generator và logic normalize/cờ tác giả trước khi khẳng định nguyên nhân gap hay bit-exact gốc. Chưa lấy profile fig3 thay RTL normative hoặc dùng guard12 đạt bảng làm bằng chứng width paper.
+
+## 20. Phương án3 — kiểm các ứng viên bằng vector phân biệt — 08/10/2026
+
+### Bước1: tìm vector cho kết quả khác nhau
+
+`test/paper_discriminator_study.hpp` và `test/test_paper_discriminators.cpp` là harness nghiên cứu riêng. Có10 ứng viên: fig3, tie-B, legacy7, input-anchor, exact-residual, guard1/cut12, guard12/cut12, source-uncut, post-sum/cut12 và signed-floor. Mỗi ứng viên thay một yếu tố so fig3; riêng so guard12/cut12 với source-uncut tách điểm cắt đầu ra. Không thay API/mặc định L1 hoặc RTL normative.
+
+Tìm kiếm có thứ tự trên199.800 cặp `(A,B,n)` chọn292 bản ghi:32 mỗi nhóm prefix126/127, tie, ngưỡng1,5, anchor, cut từng term, guard, width đầu ra, cut sau tổng và đuôi âm; thêm4 fixture trực tiếp. Gộp trùng theo `(A,B,n,force_A)` còn206 trường hợp. Xem [vector tiêu biểu](../results/paper_discriminators/representative_vectors.csv) và `windows/vectors.csv` để tái chạy.
+
+### Bước2: xuất và kiểm trace từng vòng
+
+Các file `traces.csv`, `outputs.csv`, `first_differences.csv` trong từng thư mục Windows/Linux/UBSan ghi operand chọn, prefix/score/tie, mantissa/exponent trước và sau SAC, power/coefficient, anchor/shift, term/tail, accumulator/precision và output. `acc_fraction_bits` xác định đơn vị của số nguyên accumulator; cột Q12 chỉ là phép chiếu xuống, không chứng minh các guard thấp bằng0. Với post-sum, `exact_sum_Q96_hex` giữ tổng chính xác, còn term-magnitude là phép chiếu trên lưới báo cáo. Shift âm của input-anchor biểu thị dịch trái.
+
+**PASS205.882 đối chiếu/nền tảng** trên Windows, Linux và Linux UBSan. Oracle signed-residual Q96 và chia số nguyên kiểm powers/coefficient, các accumulator và output; thêm10.000 cặp raw seed20261008, n1..8, cả10 ứng viên. Parser/packer và predictor đã kiểm trước được dùng chung; đây là kiểm tính nhất quán của các giả thuyết địa phương, không phải oracle RTL tác giả. Toàn bộ CSV ở ba nền tảng khớp về nội dung; pilot1M Windows/Linux khớp exact counts/counters/fingerprint.
+
+### Bước3: đối chiếu nguồn và loại giả thuyết có bằng chứng
+
+Đọc lại hình gốc2021, Fig.4/5 trên trang PDF4; bản render ở `results/paper_discriminators/paper2021_page3.png`. InputX=`0x1c900000` (Q12=5248,sf=-10), inputY=`0x3c820000` (Q12=4616,sf=-1). Hình chọn X để xấp xỉ và không thể hiện OPS, nên fixture ép X; **không dùng nó để quyết định tie-A/tie-B**. Ba số hạng gồm hidden và hai vòng fraction: powers0,-2,-5, coefficients+,+,+; accumulator Q12 lần lượt4616,5770,5914. Term cuối4616/32=144,25, phần hiển thị12 bit giữ144; fraction cuối`0x71a`.
+
+| Đối chiếu | Kết quả | Kết luận |
+| --- | --- | --- |
+| Output Fig.4 và Fig.5 concat exponent3+fraction12+zero14 | `0x1ae34000` | Căn cứ trực tiếp cho fraction đầu ra12 bit của cấu hình hình vẽ |
+| source-uncut giữ Q24 đến pack | `0x1ae34800` | **Loại khỏi baseline bit-exact2021**; chỉ giữ làm control thống kê lịch sử |
+| guard12/cut12 và8 ứng viên còn lại | `0x1ae34000`, trace chiếu Q12 khớp | Chưa xác định được precision nội bộ, tie hay nhánh p1=1 từ fixture này |
+
+`hypotheses.csv` tách bằng chứng trực tiếp, bất đồng với hợp đồng đọc từ2024 và phần chưa xác minh. Fig.3/§III-C hỗ trợ anchor=l1 và logical-shift magnitude trước add/sub; §III-A mô tả complement không+1. Input-anchor, exact-residual và signed-floor là control khác hợp đồng đó; không gọi việc loại theo hợp đồng là đối chiếu với trace tác giả chưa được công bố. Prefix126/127 còn phụ thuộc giả định đệm prefix7 lênQ12. Chưa có trace nguồn riêng cho tie, guard hoặc đuôi âm để chọn duy nhất một ứng viên.
+
+### Bước4: đo xác nhận cùng corpus sau khi đối chiếu nguồn
+
+Chỉ đưa thay đổi có căn cứ mới là **cắt fraction đầu ra về12 bit** vào phép đo; giữ fig3 và source-uncut làm paired controls. Guard12 bên trong vẫn là giả thuyết, không trở thành width tác giả vì output khớp. Pilot1M seed271828 cho max gap fig3=1,241000, guard12/cut12=1,292000, source-uncut=0,936500 điểm %; pilot không đủ mẫu nghiệm thu.
+
+Lệnh tái chạy từ thư mục dự án (build bằng WSL):
+
+```sh
+make -C l1 test_paper_discriminators test_paper_discriminators.exe test_paper_discriminators_ubsan
+./l1/test_paper_discriminators results/paper_discriminators/linux
+./l1/test_paper_discriminators_ubsan results/paper_discriminators/ubsan
+./l1/test_paper_discriminators --measure results/paper_discriminators/acceptance 200000000 271828
+python scripts/summarize_paper_discriminators.py
+```
+
+Các thư mục output phải tồn tại. Trên PowerShell dùng `./l1/test_paper_discriminators.exe results/paper_discriminators/windows`. Linux g++15.2.0/Windows MinGW GCC13, cờO3/C++17/Wall/Wextra/Werror; UBSanO1/no-recover. Không dùng SoftPosit trực tiếp cho phép đo nghiên cứu này; oracle FP32_RNE đã được kiểm trước bằng số nguyên. Compiler, seed, lệnh, hash source/binary/log/corpus và matrix bằng chứng ở `results/paper_discriminators/summary.json`.
+
+`--measure` trả0 khi đo/xuất dữ liệu thành công, **không phải exit nghiệm thu TableI**. Điều kiện số học được ghi riêng:200M accepted và maxgap<=1 điểm %; baseline gốc còn yêu cầu khớp nguồn/provenance. Không đổi seed/OPS/guard để ép bảng, không lấy kết quả phép đo làm bằng chứng PPA.
+
+**Kết quả200M accepted, seed271828:** cả ba profile dùng chung attempted200.000.021, loại zero21, draws400.000.042, fingerprint`04478e811a897da7`. Các nhóm loại khác0. Oracle là tích FP32_RNE của input gốc trước cut11, posit32ES3, grid24/std::mt19937_64, ngưỡng nghiêm ngặt bằng số nguyên; không thay các giả định để chọn ứng viên thắng. Đã kiểm đủ36 ô từ exact counts; fig3/source khớp kết quả200M trước ở độ chính xác log.
+
+| Profile | Max lệch TableI (điểm %) | Khớp output Fig.4 | Kết luận |
+| --- | --- | --- | --- |
+| fig3 | 1,2923195 | Có | Chưa đạt ngưỡng thống kê |
+| guard12_pack12 | 1,3387730 | Có | Chưa đạt ngưỡng thống kê; guard nội bộ chưa xác minh |
+| source_uncut | 0,9842130 | Không | Đạt ngưỡng thống kê riêng, bị loại khỏi baseline bit-exact2021 |
+
+Tỷ lệ guard12/cut12 theo thứ tự Err<0,1 / <0,5 / <1 / <5%:
+
+| n | Tỷ lệ đo (%) | Max gap hàng (điểm %) |
+| --- | --- | --- |
+| 2 | 8,8971365 / 31,3000725 / 49,3159020 / 95,4660355 | 0,9728635 |
+| 3 | 43,3512270 / 82,8938590 / 94,9924150 / 100 | 1,3387730 |
+| 4 | 86,3007185 / 99,7994460 / 100 / 100 | 0,7892815 |
+
+Chi tiết36 ô/counts/gap: [measurement.csv](../results/paper_discriminators/acceptance/measurement.csv); kiểm tổng hợp và hash: [summary.json](../results/paper_discriminators/summary.json). Suite/harness và cả bốn bước **hoàn thành**, nhưng **chưa có ứng viên được nghiệm thu baseline gốc**. Tuần4 giữ processing. Bước có căn cứ tiếp theo là tìm trace/LUT tác giả cho equal-score/prefix126–127/đuôi âm và normalize/cờ, đồng thời làm rõ generator; không quét thêm tham số chỉ để ép TableI.
+
+## 21. Khởi động tuần9 và kế hoạch thực thi — 08/10/2026
+
+Đã chốt giao diện/context/token và lịch drain tại SPEC §5.5-A; làm rõ normalization FLOOR trên Q(FRAC_W) tại §5.7 để giữ tương đương `mul_norm.hpp`. Không đổi mô hình L1 đã nghiệm thu, n normative hoặc cfg_ops. Kế hoạch tuần9 với mốc/điều kiện chuyển bước nằm trong [PLAN mục7](PLAN.md#7-kế-hoạch-thực-thi-tuần9--lõi-nhân-rtl-và-đối-chiếu-paper).
+
+Đã hiện thực OPS/SAC tổ hợp normative và generator `test/gen_week9_frontend.cpp` dùng ops_swap/SacState + oracle scalar độc lập. ModelSim159.820 OPS +167.620 SAC,0 mismatch; generator Linux/Windows/UBSan và fixture cross-platform khớp, seed20261008. Build GCC15.2.0/MinGW GCC13 với Werror; UBSan không lỗi. Chi tiết cổng/lệnh/scope ở README RTL mục7 và `results/week9_frontend/summary.json`.
+
+Tuần9 **processing**: mới hoàn thành W9-01/02; SBM/normalize, core tuần tự, multiplier top và Gate2 còn triển khai. Lõi paper tối thiểu là mốc nghiên cứu riêng; chức năng OPS/SAC normative không chứng minh baseline gốc hoặc khớp TableI.
+
+## 22. RTL multiplier tuần9 — 09/10/2026
+
+W9-03 đã kiểm shifter, cộng tổ hợp, normalize/adapter:252.455 commit trên width1/5/12/26/27, hai scheme,0 mismatch. Bank `sbm_accum` được kiểm trong core; FLOOR bỏ padding trước normalize, không đưa input_cut vào numerical sticky.
+
+W9-R1 chốt interface `paper_ops_comb`/`paper_step_comb`: Q12/prefix7 đệm0, tie-A, anchor số hạng đầu và payload13+carry1 là giả định tái dựng; RND/complement, coefficient âm và cut trước cộng/trừ ghi riêng. W9-R2 đạt843 commit,293 bản ghi (292 bản ghi corpus/206 trường hợp phân biệt + một fixture Fig.4),0 mismatch. Output force-X=0x1ae34000. Không có bằng chứng mới để chạy R3 hoặc xác nhận RTL tác giả.
+
+W9-04 đạt39.580 giao dịch hoàn tất và420 lượt reset hủy; width1/5/12/26/27, exact vượt N_MAX, n=0/early-stop, done=t+2 hoặc3, drain và context cố định đều được kiểm. W9-05 tích hợp parser A/B → M0/core → norm → packer với một slot dự trữ; pilot bản cuối31.840 giao dịch +160 reset hủy,0 mismatch. Reset bridge lấy mẫu rst_n; out_valid bị chặn tại cạnh reset, mỗi leaf nhả qua hai FF. RNE: L_valid=max(1,t)+7, TRUNC:max(1,t)+6; handshake khi không stall sau đó một cạnh. Thử config reserved/n>N_MAX, NaR/zero, stall dài, cạnh reset và giữ thứ tự.
+
+Kiểm 10⁷ RTL đang chạy; chưa có kết quả nghiệm thu lượt lớn.
+
+Corpus lớn10.080.000 dòng,16 profile,36 ô mode/ops/n mỗi profile; generator exact/RNE so SoftPosit1.890.000 lượt và oracle ES3 độc lập630.000 lượt. Generator/fixture không thay nghiệm thu RTL. Verilator chưa có; `make lint` hiện trả lỗi khi thiếu công cụ thay vì skip rồi báo thành công. Harness C++ và `scripts/verify_week9_verilator.sh` đã chuẩn bị nhưng chưa build/chạy, cần đối chuẩn pilot khi có công cụ. Không tự cài công cụ ngoài quyền đã cấp.
+
+Quartus13 phân tích/tổng hợp NB32/ES2/FLOOR/RNE đạt0 lỗi,14 warning đã phân loại (license parallel, attribute ASYNC_REG của Xilinx và constant resize có giới hạn); không có cảnh báo latch. Đây không thay strict lint, STA, CDC, PPA hay Gate4. Chỉ đổi generate/genvar để hỗ trợ compiler cũ trong hai shifter/OPS, không đổi phương trình; đã chạy lại327.440 frontend vector và843 paper commit đạt.
+
+Bằng chứng, compiler, seed20261009, SoftPosit library hash, lệnh và SHA256: `results/week9_implementation/summary.json`; các log ở `results/week9_arithmetic`, `week9_paper`, `week9_core`, `week9_multiplier`. Gate2/tuần9 vẫn processing do lint chính thức còn thiếu; tuần4/provenance paper giữ processing. Git push bị chặn vì thư mục không phải Git checkout; không tự init/force/reset hoặc sửa thư mục khác.
+
+Build generator bằng các target `gen_week9_arithmetic`, `gen_week9_core`, `gen_week9_paper`, `gen_week9_multiplier` trong Makefile L1, cùng hậu tố `.exe` và `_ubsan`. `gen_week9_paper` dùng corpus có sẵn, không đổi vector/seed. ES3 exact/RNE dùng decode + product nguyên + encoder bit-list độc lập, không gọi parser/packer L1. SoftPosit chỉ dùng ở ES0/1/2.

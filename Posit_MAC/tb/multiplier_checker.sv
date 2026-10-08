@@ -4,7 +4,8 @@ module multiplier_checker #(
     parameter int ES=2,
     parameter int SCHEME=0,
     parameter int ROUNDING=0,
-    parameter int CLOCK_PERIOD=10
+    parameter int CLOCK_PERIOD=10,
+    parameter VECTOR_DIR="."
 )(
     output bit done=1'b0
 );
@@ -43,6 +44,7 @@ module multiplier_checker #(
         longint unsigned v[7:0];
         logic [NB-1:0] held_d;
         logic [4:0] held_flags;
+        string fixture_directory;
         rows=0; aborts=0; completed=0;
         reset_top();
         // Invalid/reserved configs must not enter either parser.
@@ -51,7 +53,9 @@ module multiplier_checker #(
         @(negedge clk); ops=0; mode=1; n=9;
         repeat(3) begin @(posedge clk); if(in_ready) $fatal(1,"invalid n accepted"); end
         @(negedge clk); mode=0; n=0; in_valid=0;
-        fd=$fopen($sformatf("mul_%0d_%0d_%0d_%0d.txt",NB,ES,SCHEME,ROUNDING),"r");
+        fixture_directory=VECTOR_DIR;
+        rc=$value$plusargs("VECTOR_DIR=%s",fixture_directory);
+        fd=$fopen($sformatf("%s/mul_%0d_%0d_%0d_%0d.txt",fixture_directory,NB,ES,SCHEME,ROUNDING),"r");
         if(!fd) $fatal(1,"missing multiplier fixture");
         while(!$feof(fd)) begin
             rc=$fscanf(fd,"%h %h %h %h %h %h %h %h\n",v[0],v[1],v[2],v[3],v[4],v[5],v[6],v[7]);

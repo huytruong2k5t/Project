@@ -52,4 +52,4 @@ Chạy từ Posit_MAC: `verify_week9_arithmetic_modelsim.ps1`, `verify_week9_pap
 
 `summarize_week9_implementation.py` kiểm fixture Linux/Windows/UBSan, coverage và hash. `update_week9_status.py` chỉ sửa Markdown hiện có, không tạo Markdown mới. `verify_week9_verilator.sh` chỉ dùng tool đã cài, trả BLOCKED khi thiếu, không sudo/download/install. Mọi file build/log/work/temp đặt dưới Posit_MAC. Quyền cập nhật ngoài dự án chỉ dành đúng doc/TIEN_DO_DO_AN.md.
 
-Git không có checkout: push chưa thực hiện; không tự init, thay remote, force hoặc sửa thư mục khác. Nguồn + hash được lưu local, không gọi đó là GitHub backup.
+GitHub đã push checkpoint 0ae39c4 lên main bằng checkout riêng trong Posit_MAC; kết quả lượt lớn được bổ sung cuối phiên.

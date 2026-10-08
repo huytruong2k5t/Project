@@ -53,7 +53,42 @@ template<int NB,int ES> uint32_t exact_reference(uint32_t a,uint32_t b) {
     return (((a^b)&nar)?0u-mag:mag)&mask;
 }
 uint64_t total=0,l0_checks=0,es3_checks=0;
-template<int NB,int ES> void generate(const std::filesystem::path& dir,uint64_t count) {
+// Build a finite operand at a chosen regime run/polarity without using L1.
+// Groups are clipped for small NB. The all-zero payload is excluded here;
+// Zero and NaR remain explicit corners below.
+template<int NB> uint32_t stratified_operand(unsigned group,unsigned sign,
+                                             uint64_t cycle,std::mt19937_64& rng) {
+    constexpr unsigned lows[]={1,4,8,12,16,18,23,28};
+    constexpr unsigned highs[]={3,7,11,15,17,22,27,31};
+    unsigned lo=lows[group],hi=std::min(highs[group],unsigned(NB-1));
+    unsigned run=lo+unsigned(cycle%(hi-lo+1));
+    unsigned polarity=unsigned((cycle/(hi-lo+1))%2);
+    if(run==NB-1) polarity=1;
+    uint32_t magnitude=0;
+    int bit=NB-2;
+    for(unsigned i=0;i<run;++i,--bit) magnitude|=polarity<<bit;
+    if(bit>=0) magnitude|=(1u-polarity)<<bit--;
+    if(bit>=0) {
+        uint32_t tail_mask=uint32_t((uint64_t(1)<<(bit+1))-1);
+        uint32_t tail=uint32_t(rng())&tail_mask;
+        // Rotate structural patterns independently of the 36 config cells.
+        // Tail includes exponent bits; decoding/coverage checks the real fraction.
+        switch((cycle/36)%8) {
+        case 0: tail=0; break;
+        case 1: tail=tail_mask; break;
+        case 2: tail=0xaaaaaaaau&tail_mask; break;
+        case 3: tail=0x55555555u&tail_mask; break;
+        case 4: tail=1u<<unsigned(rng()%unsigned(bit+1)); break;
+        case 5: tail=(1u<<unsigned(rng()%unsigned(bit+1)))|
+                    (1u<<unsigned(rng()%unsigned(bit+1))); break;
+        default: break;
+        }
+        magnitude|=tail;
+    }
+    uint32_t mask=uint32_t((uint64_t(1)<<NB)-1);
+    return sign?(0u-magnitude)&mask:magnitude;
+}
+template<int NB,int ES> void generate(const std::filesystem::path& dir,uint64_t count,bool stratified) {
     constexpr unsigned F=NB-3-ES,FW=std::min(F,12u);
     const uint32_t mask=uint32_t((uint64_t(1)<<NB)-1),nar=uint32_t(1)<<(NB-1);
     std::mt19937_64 rng(20261009+NB+ES);
@@ -64,13 +99,24 @@ template<int NB,int ES> void generate(const std::filesystem::path& dir,uint64_t 
             uint64_t cells[2][2][9]{};
             for(uint64_t row=0;row<count;++row) {
                 uint32_t a=uint32_t(rng())&mask,b=uint32_t(rng())&mask;
+                constexpr unsigned groups=NB==8?2:(NB==16?4:8);
+                constexpr unsigned grid=4*groups*groups;
+                if(stratified) {
+                    unsigned cell=unsigned(row%grid);
+                    unsigned ga=(cell/4)%groups,gb=cell/(4*groups);
+                    unsigned signs=cell%4;
+                    uint64_t cycle=row/grid;
+                    a=stratified_operand<NB>(ga,signs/2,cycle,rng);
+                    b=stratified_operand<NB>(gb,signs%2,cycle,rng);
+                }
                 const uint32_t corners[]={0,1,2,nar-1,nar,nar+1,mask,nar/2,nar/2+1};
                 if(row<81) {a=corners[row/9];b=corners[row%9];}
-                if(row%127==81) {a=nar/2+((nar/2-1)>>1);b=mask-1;}
+                if(!stratified && row%127==81) {a=nar/2+((nar/2-1)>>1);b=mask-1;}
                 l1::IterConfig cfg;
-                cfg.exact=(row%2)==0;
-                cfg.ops=(row/2)%2;
-                cfg.n=(row/4)%9;
+                const uint64_t config_row=stratified?row/grid:row;
+                cfg.exact=(config_row%2)==0;
+                cfg.ops=(config_row/2)%2;
+                cfg.n=(config_row/4)%9;
                 cfg.scheme=scheme?l1::ShiftRound::STICKY_ACC:l1::ShiftRound::FLOOR;
                 cfg.rounding=rounding?l1::RoundMode::TRUNC:l1::RoundMode::RNE;
                 const auto r=l1::L1MultiplierIter<NB,ES,FW>::mul(a,b,cfg);
@@ -106,11 +152,14 @@ template<int NB,int ES> void generate(const std::filesystem::path& dir,uint64_t 
     }
 }
 int main(int argc,char** argv) {
-    if(argc!=3) return 2;
+    if(argc!=3 && argc!=4) return 2;
+    bool stratified=argc==4 && std::string(argv[3])=="stratified";
+    if(argc==4 && !stratified) return 2;
     std::filesystem::create_directories(argv[1]);
     uint64_t per_profile=std::stoull(argv[2]);
-    generate<8,0>(argv[1],per_profile); generate<16,1>(argv[1],per_profile);
-    generate<32,2>(argv[1],per_profile); generate<32,3>(argv[1],per_profile);
+    generate<8,0>(argv[1],per_profile,stratified); generate<16,1>(argv[1],per_profile,stratified);
+    generate<32,2>(argv[1],per_profile,stratified); generate<32,3>(argv[1],per_profile,stratified);
     std::cout<<"MULTIPLIER GENERATOR PASS rows="<<total<<" L0_RNE="<<l0_checks
-             <<" ES3_independent_RNE="<<es3_checks<<" seed=20261009\n";
+             <<" ES3_independent_RNE="<<es3_checks<<" seed=20261009 sampling="
+             <<(stratified?"stratified":"uniform_bits")<<'\n';
 }

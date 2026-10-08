@@ -67,9 +67,26 @@ module tb_week9_paper;
         end
     end
     initial begin
-        int fd,rc,e_i,p_e,e_e;
+        int fd,rc,e_i,p_e,e_e,lut_fd,prefix,score_e,lut_rows;
         longint unsigned v[21:0];
         int rows, outputs,fig4;
+        lut_fd=$fopen("paper_lut.txt","r");
+        if(!lut_fd) $fatal(1,"missing PT2 table");
+        lut_rows=0;
+        force_a=0;
+        while(!$feof(lut_fd)) begin
+            rc=$fscanf(lut_fd,"%d %d\n",prefix,score_e);
+            if(rc!=2) $fatal(1,"malformed PT2 table");
+            a=32'h40000000 | (prefix<<19);
+            b=a;
+            #2;
+            if(score_a!==score_e[11:0] || score_b!==score_e[11:0] || swapped!==0)
+                $fatal(1,"PT2/tie mismatch prefix=%0d",prefix);
+            lut_rows++;
+        end
+        $fclose(lut_fd);
+        if(lut_rows!=128) $fatal(1,"incomplete PT2 table");
+        $display("PAPER PT2 LUT PASS entries=%0d",lut_rows);
         fd=$fopen("paper.txt","r");
         if (!fd) $fatal(1,"missing paper fixture");
         rows=0; outputs=0; fig4=0;

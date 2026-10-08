@@ -1178,7 +1178,7 @@ SBM/normalize/adapter đã kiểm252.455 lượt; core đạt39.580 giao dịch 
 
 Kiểm 10⁷ RTL đang chạy; chưa có kết quả nghiệm thu lượt lớn.
 
-Gate2/tuần9 processing: thiếu lint Verilator chính thức. Quartus13 Analysis & Synthesis NB32/ES2 đạt0 lỗi,14 warning đã phân loại, không có cảnh báo latch; không thay STA/CDC/PPA. TableI không chạy lại vì chưa có thay đổi có căn cứ. Kế hoạch/bằng chứng chi tiết: PLAN L1 §7.4 và results/week9_implementation/summary.json. GitHub backup đang vướng do thư mục không có Git checkout.
+Gate2/tuần9 processing: cần lint/harness Verilator chính thức và review coverage phân tầng §6.3; random bit đủ số lượng không thay coverage. Quartus13 Analysis & Synthesis NB32/ES2 đạt0 lỗi,14 warning đã phân loại, không có cảnh báo latch; không thay STA/CDC/PPA. TableI không chạy lại vì chưa có thay đổi có căn cứ. Kế hoạch/bằng chứng chi tiết: PLAN L1 §7.4 và results/week9_implementation/summary.json. GitHub đã push checkpoint 0ae39c4 lên main bằng checkout riêng trong Posit_MAC; kết quả lượt lớn được bổ sung cuối phiên.
 
 ## 12. Báo cáo và bảo vệ
 

@@ -19,7 +19,17 @@ for name, path in {
     components[name] = json.loads((root / "results" / path / "summary.json").read_text(encoding="utf-8-sig"))
     if components[name]["status"] != "PASS":
         raise RuntimeError(f"unfinished component: {name}")
-acceptance = root / "results/week9_multiplier/acceptance/summary.json"
+for name, run in (("multiplier_uniform", "acceptance_parallel"),
+                  ("multiplier_stratified_pilot", "stratified_final_pilot_rtl"),
+                  ("multiplier_stratified", "stratified_acceptance")):
+    extra = root / "results/week9_multiplier" / run / "summary.json"
+    if extra.exists():
+        components[name] = json.loads(extra.read_text(encoding="utf-8-sig"))
+        if components[name]["status"] != "PASS":
+            raise RuntimeError(f"unfinished component: {name}")
+acceptance = root / "results/week9_multiplier/stratified_acceptance/summary.json"
+if not acceptance.exists():
+    acceptance = root / "results/week9_multiplier/acceptance_parallel/summary.json"
 if acceptance.exists():
     components["multiplier_acceptance"] = json.loads(acceptance.read_text(encoding="utf-8-sig"))
     if components["multiplier_acceptance"]["status"] != "PASS":
@@ -68,6 +78,16 @@ git_status_path = result / "git_backup_status.json"
 git_status = json.loads(git_status_path.read_text(encoding="utf-8")) if git_status_path.exists() else {
     "status": "BLOCKED", "repository": "https://github.com/huytruong2k5t/Project",
     "reason": "source tree has no Git checkout", "commit": None, "branch": None}
+coverage_reports = {}
+for run in ("final_pilot", "stratified_final_pilot_rtl", "acceptance_parallel", "stratified_acceptance"):
+    path = root / "results/week9_multiplier" / run / "functional_coverage.json"
+    if path.exists():
+        data = json.loads(path.read_text(encoding="utf-8"))
+        coverage_reports[run] = {"status": data["status"], "report": path.relative_to(root).as_posix(),
+            "scope": data["scope"], "profiles": [{key: p[key] for key in (
+                "profile", "surviving_rows", "valid_regime_cross_bins", "hit_regime_cross_bins",
+                "minimum_regime_cross_count", "finite_run_minimum_operands")}
+                for p in data["profiles"]]}
 summary = {
     "date": datetime.now(timezone(timedelta(hours=7))).isoformat(),
     "milestones": {"W9-03": "PASS", "W9-R1": "frozen reconstruction assumptions",
@@ -79,7 +99,10 @@ summary = {
     "seed": 20261009,
     "generated_acceptance_rows": sum(row["rows"] for row in coverage),
     "generated_coverage": coverage,
-    "acceptance_RTL_run": components.get("multiplier_acceptance", "RUNNING on ModelSim: corpus generation is not RTL verification"),
+    "acceptance_RTL_run": components.get("multiplier_acceptance", "RUNNING in separate ModelSim profile processes: fixture generation is not RTL verification"),
+    "functional_coverage": coverage_reports,
+    "coverage_limit": "Only PASS summaries make fixture bins observed comparisons. Uniform-bit coverage alone is insufficient under SPEC6.3. Line/branch/toggle coverage not measured by these runs.",
+    "superseded_run": "acceptance sixteen-DUT process stopped deliberately; partial run has zero accepted comparison credit; see run_status.json",
     "Verilator": "command -v returned no installed executable; no tool installed by this task",
     "static_analysis": "Quartus13 Analysis & Synthesis NB32/ES2 RNE/FLOOR, 0 errors/14 reviewed warnings; not strict Verilator lint, STA, CDC or PPA",
     "static_warning_review": "parallel license unavailable; ASYNC_REG is a Xilinx attribute not recognized by Quartus13; bounded parameter constants resized to declared vector widths. No latch warning.",

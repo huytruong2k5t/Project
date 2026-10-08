@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "rows": 160000,
+  "Linux_Windows_UBSan": "MATCH after newline normalization",
+  "seed": 20261009,
+  "full_linux_generation": {
+    "rows": 16896000,
+    "L0_RNE": 3168256,
+    "ES3_independent_RNE": 1056256,
+    "command": "./l1/gen_week9_multiplier results/week9_multiplier/stratified_corpus 1056000 stratified"
+  },
+  "generator_source_sha256": "6c274ad3e0fadd47939f4023d3128c1b45d74c3a48e59c1fb7a8d804328dc6cb"
+}

@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "date": "2026-10-09T06:47:42.6761595+07:00",
+  "seed": 20261009,
+  "fixtureRows": 160000,
+  "comparedTransactions": 159248,
+  "resetAborts": 752,
+  "mismatches": 0,
+  "sampling": "stratified",
+  "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "Gate2": "not accepted: less than 10^7 compared transactions",
+  "scope": "integrated standalone multiplier, four formats, two schemes, RNE/TRUNC, reset/stall/order/latency",
+  "command": "scripts/verify_week9_multiplier_modelsim.ps1 -PerProfile 10000 -RunName stratified_pilot -Sampling stratified"
+}

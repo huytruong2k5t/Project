@@ -21,12 +21,12 @@ try {
     @('onerror {quit -code 1}','onbreak {quit -code 1}','run -all','quit -code 0') | Set-Content -Encoding ascii run.do
     Run-Tool (Join-Path $ModelSimBin 'vsim.exe') @('-c','work.tb_week9_paper','-l','simulate.log','-do','run.do') 'simulate_console.log'
     $log=Get-Content -Raw simulate.log
-    if($log -notmatch 'WEEK9 PAPER PASS' -or $log -match '\*\*\s+(Error|Fatal):') {throw 'Paper verification failed'}
+    if($log -notmatch 'WEEK9 PAPER PASS' -or $log -notmatch 'PAPER PT2 LUT PASS entries=128' -or $log -match '\*\*\s+(Error|Fatal):') {throw 'Paper verification failed'}
     $actual=[regex]::Match($log,'commits=(\d+) outputs=(\d+) Fig4=(\d+)')
     $expected=[regex]::Match((Get-Content -Raw generator.log),'records=(\d+) unique=(\d+) commits=(\d+)')
     if($actual.Groups[1].Value -ne $expected.Groups[3].Value -or $actual.Groups[2].Value -ne $expected.Groups[1].Value) {throw 'Incomplete coverage'}
     [pscustomobject]@{status='PASS';date=(Get-Date -Format o);seed='frozen discriminator corpus';commits=[int]$actual.Groups[1].Value;
-        records=[int]$actual.Groups[2].Value;uniqueCases=[int]$expected.Groups[2].Value;Fig4='0x1ae34000';
+        records=[int]$actual.Groups[2].Value;uniqueCases=[int]$expected.Groups[2].Value;Fig4='0x1ae34000';pt2Entries=128;
         mismatches=0;simulator=(Get-Content -Raw version.log).Trim();
         scope='W9-R1/R2 functional reconstruction only, not original author RTL or Table I acceptance';
         command='scripts/verify_week9_paper_modelsim.ps1'} |

@@ -117,7 +117,7 @@ Tuần theo lộ trình SPEC, chưa gắn với lịch học. Một phần công
 | --- | --- | --- | --- |
 | 1 | Lõi nhân RTL và tích hợp standalone — tuần9 | Hoàn thiện số học, controller và multiplier; kiểm core, reset/stall/latency và pilot đạt. Còn ngưỡng nghiệm thu/lint Gate2 | processing |
 | 2 | Đối chiếu paper bằng RTL tối thiểu | Trace phân biệt và Fig.4 khớp profile tái dựng; chưa có bằng chứng mới để chốt baseline gốc hoặc đổi kết quả TableI | ✅ |
-| 3 | Hồ sơ kiểm chứng và bảo toàn dữ liệu | Đồng bộ tài liệu, lưu corpus/log/hash; GitHub backup còn vướng do chưa có Git checkout | processing |
+| 3 | Hồ sơ kiểm chứng và bảo toàn dữ liệu | Đồng bộ tài liệu, lưu corpus/log/hash; Đã push checkpoint code/log lên GitHub; kết quả Gate2 sẽ bổ sung cuối phiên | processing |
 
 ### 4.9. Mẫu cập nhật tiếp theo
 

@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-09T06:33:36.035839+07:00",
+  "date": "2026-10-09T06:59:01.507159+07:00",
   "milestones": {
     "W9-03": "PASS",
     "W9-R1": "frozen reconstruction assumptions",
@@ -35,12 +35,13 @@
     },
     "paper": {
       "status": "PASS",
-      "date": "2026-10-09T06:20:50.6884503+07:00",
+      "date": "2026-10-09T06:41:36.5108566+07:00",
       "seed": "frozen discriminator corpus",
       "commits": 843,
       "records": 293,
       "uniqueCases": 206,
       "Fig4": "0x1ae34000",
+      "pt2Entries": 128,
       "mismatches": 0,
       "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
       "scope": "W9-R1/R2 functional reconstruction only, not original author RTL or Table I acceptance",
@@ -70,6 +71,134 @@
       "Gate2": "not accepted: less than 10^7 compared transactions",
       "scope": "integrated standalone multiplier, four formats, two schemes, RNE/TRUNC, reset/stall/order/latency",
       "command": "scripts/verify_week9_multiplier_modelsim.ps1 -PerProfile 2000 -RunName final_pilot"
+    },
+    "multiplier_stratified_pilot": {
+      "status": "PASS",
+      "date": "2026-10-09T06:51:36.7614222+07:00",
+      "seed": 20261009,
+      "fixtureRows": 160000,
+      "comparedTransactions": 159248,
+      "resetAborts": 752,
+      "mismatches": 0,
+      "profiles": [
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "1b033407aebbaf01816d6fe71650480c5597a0653216d7262f89312ed3d54f2e",
+          "profile": "mul_16_1_0_0"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "3797ae186c40506ea2a43361addd84eef805c05f72150a3b02158d358f1890a3",
+          "profile": "mul_16_1_0_1"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "20bf76a7fa992efe8d4f5c24d1444bb8710a682640676cc910d7faf109206a00",
+          "profile": "mul_16_1_1_0"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "4520576dc748ee7cddcd83bdca85dd16ef72359fcb32d60f846723d72c25ff60",
+          "profile": "mul_16_1_1_1"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "e9e24467cb421165eb2c89f76a374a58349809fdf55914244c141cd5ed118691",
+          "profile": "mul_32_2_0_0"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "38ccd002ca4fad085e06f72875aa3f813aa8640570c3d2d2f1089925dd45bda4",
+          "profile": "mul_32_2_0_1"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "e9e24467cb421165eb2c89f76a374a58349809fdf55914244c141cd5ed118691",
+          "profile": "mul_32_2_1_0"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "38ccd002ca4fad085e06f72875aa3f813aa8640570c3d2d2f1089925dd45bda4",
+          "profile": "mul_32_2_1_1"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "5672be50378019165711b7e88b17fd132f6639e7fc87709860b0ed91541658b3",
+          "profile": "mul_32_3_0_0"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "6e7c72ddb1a64648f7c1efc188038c4a6dc19af531fde9205cab10ca388c3efa",
+          "profile": "mul_32_3_0_1"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "5672be50378019165711b7e88b17fd132f6639e7fc87709860b0ed91541658b3",
+          "profile": "mul_32_3_1_0"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "6e7c72ddb1a64648f7c1efc188038c4a6dc19af531fde9205cab10ca388c3efa",
+          "profile": "mul_32_3_1_1"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "8e24daf7a60dc437e0a053c9f95539286ea99e3fc57862f3f5a23de174115d17",
+          "profile": "mul_8_0_0_0"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "b7f67f7c9dbe2d2e49305b080f611eb11966fb34876a6028669248cf73d5e43b",
+          "profile": "mul_8_0_0_1"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "3ef8dee89e525cb798a962970a32cde9c4b25a56d5fe087969dba94708187a50",
+          "profile": "mul_8_0_1_0"
+        },
+        {
+          "completed": 9953,
+          "resetAborts": 47,
+          "rows": 10000,
+          "fixtureSHA256": "b628efdf942ac6d26acc6f02004d1c45348b3d1cbdeead8be573502d509d20d0",
+          "profile": "mul_8_0_1_1"
+        }
+      ],
+      "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+      "fixtureRun": "stratified_final_pilot",
+      "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+      "Gate2": "numerical results only; lint and structural coverage still required",
+      "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun stratified_final_pilot -RunName stratified_final_pilot_rtl -Jobs 8"
     }
   },
   "cross_platform": {
@@ -166,20 +295,295 @@
       "rows": 630000
     }
   ],
-  "acceptance_RTL_run": "RUNNING on ModelSim: corpus generation is not RTL verification",
+  "acceptance_RTL_run": "RUNNING in separate ModelSim profile processes: fixture generation is not RTL verification",
+  "functional_coverage": {
+    "final_pilot": {
+      "status": "OBSERVED RTL PASS",
+      "report": "results/week9_multiplier/final_pilot/functional_coverage.json",
+      "scope": "functional input/iteration coverage; no line/branch/toggle measurement",
+      "profiles": [
+        {
+          "profile": "mul_16_1_0_0",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 32,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_16_1_0_1",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 39,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_16_1_1_0",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 36,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_16_1_1_1",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 37,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_2_0_0",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 37,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_2_0_1",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 36,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_2_1_0",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 32,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_2_1_1",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 36,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_3_0_0",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 37,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_3_0_1",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 38,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_3_1_0",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 37,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_3_1_1",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 38,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_8_0_0_0",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 12,
+          "finite_run_minimum_operands": 17
+        },
+        {
+          "profile": "mul_8_0_0_1",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 10,
+          "finite_run_minimum_operands": 34
+        },
+        {
+          "profile": "mul_8_0_1_0",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 9,
+          "finite_run_minimum_operands": 27
+        },
+        {
+          "profile": "mul_8_0_1_1",
+          "surviving_rows": 1990,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 12,
+          "finite_run_minimum_operands": 25
+        }
+      ]
+    },
+    "stratified_final_pilot_rtl": {
+      "status": "OBSERVED RTL PASS",
+      "report": "results/week9_multiplier/stratified_final_pilot_rtl/functional_coverage.json",
+      "scope": "functional input/iteration coverage; no line/branch/toggle measurement",
+      "profiles": [
+        {
+          "profile": "mul_16_1_0_0",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 64,
+          "minimum_regime_cross_count": 153,
+          "finite_run_minimum_operands": 603
+        },
+        {
+          "profile": "mul_16_1_0_1",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 64,
+          "minimum_regime_cross_count": 153,
+          "finite_run_minimum_operands": 603
+        },
+        {
+          "profile": "mul_16_1_1_0",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 64,
+          "minimum_regime_cross_count": 153,
+          "finite_run_minimum_operands": 603
+        },
+        {
+          "profile": "mul_16_1_1_1",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 64,
+          "minimum_regime_cross_count": 153,
+          "finite_run_minimum_operands": 603
+        },
+        {
+          "profile": "mul_32_2_0_0",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 37,
+          "finite_run_minimum_operands": 191
+        },
+        {
+          "profile": "mul_32_2_0_1",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 37,
+          "finite_run_minimum_operands": 191
+        },
+        {
+          "profile": "mul_32_2_1_0",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 37,
+          "finite_run_minimum_operands": 191
+        },
+        {
+          "profile": "mul_32_2_1_1",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 37,
+          "finite_run_minimum_operands": 191
+        },
+        {
+          "profile": "mul_32_3_0_0",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 37,
+          "finite_run_minimum_operands": 191
+        },
+        {
+          "profile": "mul_32_3_0_1",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 37,
+          "finite_run_minimum_operands": 191
+        },
+        {
+          "profile": "mul_32_3_1_0",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 37,
+          "finite_run_minimum_operands": 191
+        },
+        {
+          "profile": "mul_32_3_1_1",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 37,
+          "finite_run_minimum_operands": 191
+        },
+        {
+          "profile": "mul_8_0_0_0",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 617,
+          "finite_run_minimum_operands": 1225
+        },
+        {
+          "profile": "mul_8_0_0_1",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 617,
+          "finite_run_minimum_operands": 1225
+        },
+        {
+          "profile": "mul_8_0_1_0",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 617,
+          "finite_run_minimum_operands": 1225
+        },
+        {
+          "profile": "mul_8_0_1_1",
+          "surviving_rows": 9953,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 617,
+          "finite_run_minimum_operands": 1225
+        }
+      ]
+    }
+  },
+  "coverage_limit": "Only PASS summaries make fixture bins observed comparisons. Uniform-bit coverage alone is insufficient under SPEC6.3. Line/branch/toggle coverage not measured by these runs.",
+  "superseded_run": "acceptance sixteen-DUT process stopped deliberately; partial run has zero accepted comparison credit; see run_status.json",
   "Verilator": "command -v returned no installed executable; no tool installed by this task",
   "static_analysis": "Quartus13 Analysis & Synthesis NB32/ES2 RNE/FLOOR, 0 errors/14 reviewed warnings; not strict Verilator lint, STA, CDC or PPA",
   "static_warning_review": "parallel license unavailable; ASYNC_REG is a Xilinx attribute not recognized by Quartus13; bounded parameter constants resized to declared vector widths. No latch warning.",
   "paper_original_baseline": "not confirmed; Table I not rerun because RTL matches existing reconstruction without new source evidence",
   "git_push": {
-    "status": "CHECKOUT_READY",
+    "status": "PUSHED",
     "repository": "https://github.com/huytruong2k5t/Project",
     "branch": "main",
     "source_tree_git": "none",
     "isolated_checkout": "scratch/github_week9_backup",
     "remote_base": "9a36ba2d94d1e5cdf37bcde1a94e22a36867e8ca",
-    "commit": null,
-    "reason": "isolated checkout created inside allowed project; push pending"
+    "commit": "0ae39c4f5af08747eb6382c42fdff40e75c5142d",
+    "reason": "pilot checkpoint backed up; large ModelSim run is ongoing",
+    "remote_verified": "0ae39c4f5af08747eb6382c42fdff40e75c5142d"
   },
   "source_sha256": {
     "rtl/dyn_left_shifter.sv": "a1cab055bd3357d76c60425fcc65311a7ea7ca15259325351330c406db10a87c",
@@ -209,7 +613,7 @@
     "rtl/sbm_shift_comb.sv": "b4fe400b7286dc29131d242ad0e4c06d7b9fa1f7a53a5735bcd40f13a579f5f1",
     "tb/arithmetic_checker.sv": "e532a15341de634a24c9e4dd111c15e5ea2e147a37ca1841e7f20803fa6522d8",
     "tb/core_checker.sv": "52cde1b6d9d9fc4863bab70fb689aca7d6d1ab255aaf0d2527eea58401960f56",
-    "tb/multiplier_checker.sv": "7c48c7f0372a4c89f6e311cd14a3d0760bb8286453ccfb28aaf757121f0cdc88",
+    "tb/multiplier_checker.sv": "3017f3cfbcd3eed899f6f23311cc4272198691dd22afa4d35d5c8ad23cfb3582",
     "tb/ops_frontend_checker.sv": "332ece2135fd4a290b23fe2bc5306de5283d14d901a5d67127fe358ba6207706",
     "tb/packer_checker.sv": "75e519bb190655e0662f73de52af489a19bd512fa5da702dc26460b68ac7ddf4",
     "tb/packer_finish_equivalence_checker.sv": "20de51ada6f351e20a848542b9da68f7ef8b2f1183b874d288b526c75804c11f",
@@ -231,8 +635,10 @@
     "tb/tb_week9_core.sv": "db1baaee30b69369d9c2c931fec8ad30a2b764ee559c6b98c92dcf669c297d1a",
     "tb/tb_week9_frontend.sv": "07a110915ec45eb9f6269e04fcd060e91974cd17efcfddb4a4151d3df1c6e05f",
     "tb/tb_week9_multiplier.sv": "76fd6e0c08655a0cc18a58c1ee926d4e3230b9986cfc967aa5391a94c782aba5",
-    "tb/tb_week9_paper.sv": "c7c18421e7558819a2e3d1600b9d825c7fde26cf12406317e431c2c7c3f10b3a",
+    "tb/tb_week9_multiplier_single.sv": "058d09fbe6a546c04ae5d14101ce92196998ff7a3d6887c70ea343e84d18dbb0",
+    "tb/tb_week9_paper.sv": "b61b774a34eda965d4b56e670f6eb54f98dca73c05ee219af51be5125a46f16d",
     "tb/week9_multiplier_harness.cpp": "2ce054ca4c2379266a5caf973e9c5645e3751dce7a7c5f98e79780da5e15b975",
+    "scripts/audit_week9_coverage.py": "38f2ea9955cf68c4efd880ff045f4c9111a76aad6b297978910479d1821d26f3",
     "scripts/collect_ppa.py": "fc8c0ac52af12ddf47050f258bb457f407debc15928aea2f8b422e430893c4d6",
     "scripts/prepare_week9_git_backup.py": "28befbab22d00f493cd93dec273a6d5d9300727e1db35736c5c74712c6e4f472",
     "scripts/rebuild_l0_l1.sh": "82459d89db96e26f87956e2c855f6f6214148f89c9ce4d7bba97188d7824894d",
@@ -241,8 +647,8 @@
     "scripts/summarize_paper_discriminators.py": "add6fc92ebd29de2472c7231c483febafd822f4f1bf035daf29c68a9cf6c1ad2",
     "scripts/summarize_paper_fig3.py": "1183a4bbd7ed4f9ab81a29eadf577b1a4470cb740a1947de843625c28d5a279d",
     "scripts/summarize_week9_frontend.py": "5d4cd9918b5824eea9c9b8ba1e85fee1386ca45ec6a852482ff52156f1129ef2",
-    "scripts/summarize_week9_implementation.py": "ad73a0f316a8ef5a92d58ceae969577feca62e0355733e080819536f4b594938",
-    "scripts/update_week9_status.py": "c013f0bc6c8eae4ff06db635556216237aa6d02a30eed82261bc6c6208ef10e3",
+    "scripts/summarize_week9_implementation.py": "e11c90aa9c236aefe888528f1bd59bf43e61ca1a071f74a028e70159b5320bdf",
+    "scripts/update_week9_status.py": "92496d6fa53acc1c0e517321b75941856fbe7fa298faf6a6f6afc3bdf17e5df0",
     "scripts/verify_dyn_left_shifter.py": "f79b7517e63ae724af5dfe66bd3b580e3687f5ec8a3dbbbe766bb2afa4ddd90a",
     "scripts/verify_dyn_right_shifter.py": "2dcc147a9e50bc859f686ffbc81b8a5159b19bead26301c309262eb51292113f",
     "scripts/verify_packer_modelsim.ps1": "1df4605e281c645be2c76e784390e4aa06436f66b8feccf739d4f9787302d0c4",
@@ -254,16 +660,17 @@
     "scripts/verify_week9_arithmetic_modelsim.ps1": "5cc8bd9314c679769e2583d09741430c580a1cafa70af1aaa8fb4cb4b51ee879",
     "scripts/verify_week9_core_modelsim.ps1": "8908f3358c1d32f646cec96364fa59b7d630b409c3f8ea4bd4e860a53db837c7",
     "scripts/verify_week9_frontend_modelsim.ps1": "8083978ee60210105da3f2baddf80fe8c277774e61224f41b12dc998ba47bb0c",
-    "scripts/verify_week9_multiplier_modelsim.ps1": "9f4dbf45b00ae711b45de1d8783c3bfa4b7357d6fbc13c982313bc92334191a5",
-    "scripts/verify_week9_paper_modelsim.ps1": "ea7861854dedebd4dec51b141babdc08efd53cd2d055e09184e5044801f19ade",
+    "scripts/verify_week9_multiplier_modelsim.ps1": "6fd4e0a1895c9f2b812d2668f1f6659d4685f2a1b5bd292f2e94803ddb6f7cf6",
+    "scripts/verify_week9_multiplier_parallel.ps1": "774c74ead8034f8071782431eeda792315ceacd0ceda4e9703bcb984c4165c0a",
+    "scripts/verify_week9_paper_modelsim.ps1": "19eef00b109f72244cd5206da1c5471d299e43c87aea735b9ebf230367afd0ed",
     "scripts/verify_week9_verilator.sh": "d4e2a9238ba67cf20877aca2e8aa8fdf906413cee2f22f4fe6e98059beb49099",
     "l1/test/gen_packer_vectors.cpp": "3cb6bbe830c58b62851b098cdf8dd2b99e59c2286cba621b41a573c16a667624",
     "l1/test/gen_parser_vectors.cpp": "272d56a623c52ca9a8c0e128249140640b9ebd6eef7c2364942b65d177046eff",
     "l1/test/gen_week9_arithmetic.cpp": "f1b6f257bf6487b8f62a2e881dde974240dcdd9667a6cfbe4342190e16d1cf66",
     "l1/test/gen_week9_core.cpp": "24b510799e18cecd0343ee57539692fc74b8b8274b1642ab749e4e165cbe39a0",
     "l1/test/gen_week9_frontend.cpp": "6d5895971fd0c790c314d19c601eb080371188b5bedadc6e165a72813268391f",
-    "l1/test/gen_week9_multiplier.cpp": "ced1b3f6ace321e97dab1bd2890a39bca28503b0ccf1246e8044a4b19915c961",
-    "l1/test/gen_week9_paper.cpp": "bccce5302fbed5720264885b44a424a069c6efb36c0e4d5f67ade26fc6742088",
+    "l1/test/gen_week9_multiplier.cpp": "6c274ad3e0fadd47939f4023d3128c1b45d74c3a48e59c1fb7a8d804328dc6cb",
+    "l1/test/gen_week9_paper.cpp": "965f4d0cb6df227d20993231a256e722ca95ef4884f739dad2e0bd7351b57139",
     "l1/test/test_adder.cpp": "28f6c93abee9f55741521b9c59459f966c36642a4d0b0caacd4d72f7755624c3",
     "l1/test/test_identity.cpp": "c516e48af19918a9cca0bab163897a4eba9e6d3622cf992ffe1caf484b9d2adc",
     "l1/test/test_journal2024_pt2.cpp": "ee05b3688bbe192f695bf812a660d1c7274da8b4e33e1938e124604f16567709",
@@ -285,8 +692,8 @@
     "l1/test/test_round_unpacked.cpp": "3ea2229a998658d4fc39b3f1428af4514d1d37c6833450275641e93daf48888b",
     "l1/test/test_table1_reproduce.cpp": "cf13960d83b6c9a9315f65b5e877f227372d89171a9ce2b85d91f5ba3c25550c",
     "l1/test/test_tv_paper.cpp": "5d815e546f9dded97375b8c807314cb2ba2b59eb2a5bf4416025e92bb9cb4d3a",
-    "SPEC_Posit_MAC_IP.md": "8d9b43cfb42214f047d59e500fe89e8c8ad2bbc129ef8625344650ad0f1463f7",
-    "l1/PLAN.md": "b55f373556d34b39e51bbcd9a0a762be2322c16cd2663478b19a864ea12c02b9",
+    "SPEC_Posit_MAC_IP.md": "bc221c86645819e0c3dbe64b7cd124a498847ceb9d6cccbfad978f69bc42cb4b",
+    "l1/PLAN.md": "3c51db97c0090b7f855429c74d08ebb482156b6c3327d0ffb5f6e61841bfc555",
     "l1/Makefile": "a364184d22207343b6871d6ec3dc02c565c80e8de86e85e06af1743ce85a0253",
     "Makefile": "6a819bb307a6970327e706b2e06a18f8c66c908e21868858542fbda079c81b30"
   },

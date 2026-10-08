@@ -9,7 +9,9 @@ accepted = summary["components"].get("multiplier_acceptance")
 numerical = (f"ModelSim đối chiếu {accepted['comparedTransactions']:,} giao dịch, "
              f"hủy {accepted['resetAborts']:,} giao dịch bằng reset,0 mismatch."
              if accepted else "Kiểm 10⁷ RTL đang chạy; chưa có kết quả nghiệm thu lượt lớn.")
-numerical = numerical.replace(",", ".") if accepted else numerical
+if accepted:
+    numerical=numerical.replace(f"{accepted['comparedTransactions']:,}",f"{accepted['comparedTransactions']:,}".replace(",","."))
+    numerical=numerical.replace(f"{accepted['resetAborts']:,}",f"{accepted['resetAborts']:,}".replace(",","."))
 
 def read(path):
     if not path.exists():
@@ -17,6 +19,21 @@ def read(path):
     return path.read_text(encoding="utf-8-sig")
 
 def write(path, text):
+    if accepted:
+        text=re.sub(r"ModelSim đối chiếu [\d.,]+ giao dịch[,.] hủy [\d.,]+ giao dịch bằng reset[,.]\s*0 mismatch\.",numerical,text)
+    text=text.replace("Corpus lớn10.080.000 dòng,16 profile,36 ô mode/ops/n mỗi profile; generator exact/RNE so SoftPosit1.890.000 lượt và oracle ES3 độc lập630.000 lượt.",
+        "Corpus random-bit10.080.000 dòng chỉ kiểm số học, không đủ coverage regime dài. Đã bổ sung corpus phân tầng16.896.000 dòng/16 profile, có36 ô mode/ops/n, nhóm regime–dấu và fraction đặc thù theo §6.3. Generator phân tầng kiểm3.168.256 exact/RNE với L0 và1.056.256 với oracle ES3 độc lập; chỉ số này chưa thay kiểm RTL. Chạy riêng từng profile bằng verify_week9_multiplier_parallel.ps1; pilot đối chuẩn cùng checker đạt31.840 giao dịch/0 mismatch. Lượt16-DUT cũ đã dừng và không được tính nghiệm thu.")
+    text=text.replace("Output force-X=0x1ae34000. Không có bằng chứng mới", "Output force-X=0x1ae34000; kiểm thêm đủ128 entry PT2 và tie-A đạt. Không có bằng chứng mới")
+    text=text.replace("Gate2/tuần9 processing: thiếu lint Verilator chính thức.","Gate2/tuần9 processing: cần lint/harness Verilator chính thức và review coverage phân tầng §6.3; random bit đủ số lượng không thay coverage.")
+    text=text.replace("Gate2/tuần9 vẫn processing do lint chính thức còn thiếu;", "Gate2/tuần9 vẫn processing do lint/harness chính thức còn thiếu và cần review coverage phân tầng;")
+    backup=summary.get("git_push", {})
+    if backup.get("status") == "PUSHED":
+        message=f"GitHub đã push checkpoint {backup['commit'][:7]} lên {backup['branch']} bằng checkout riêng trong Posit_MAC; kết quả lượt lớn được bổ sung cuối phiên."
+        text=text.replace("Git push bị chặn vì thư mục không phải Git checkout; không tự init/force/reset hoặc sửa thư mục khác.",message)
+        text=text.replace("GitHub backup đang vướng do thư mục không có Git checkout.",message)
+        text=text.replace("Git không có checkout: push chưa thực hiện; không tự init, thay remote, force hoặc sửa thư mục khác. Nguồn + hash được lưu local, không gọi đó là GitHub backup.",message)
+        text=text.replace("Verilator/lint thiếu và Git checkout không có là hai trở ngại vận hành, không đổi mô hình để né tiêu chí.","Verilator/lint còn thiếu; GitHub backup đã có checkout riêng trong dự án. Không đổi mô hình để né tiêu chí.")
+        text=text.replace("GitHub backup còn vướng do chưa có Git checkout","Đã push checkpoint code/log lên GitHub; kết quả Gate2 sẽ bổ sung cuối phiên")
     path.write_text(text, encoding="utf-8")
 
 def append_once(path, marker, body, before=None):

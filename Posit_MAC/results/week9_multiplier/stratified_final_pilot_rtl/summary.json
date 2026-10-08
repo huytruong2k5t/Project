@@ -1,0 +1,128 @@
+{
+  "status": "PASS",
+  "date": "2026-10-09T06:51:36.7614222+07:00",
+  "seed": 20261009,
+  "fixtureRows": 160000,
+  "comparedTransactions": 159248,
+  "resetAborts": 752,
+  "mismatches": 0,
+  "profiles": [
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "1b033407aebbaf01816d6fe71650480c5597a0653216d7262f89312ed3d54f2e",
+      "profile": "mul_16_1_0_0"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "3797ae186c40506ea2a43361addd84eef805c05f72150a3b02158d358f1890a3",
+      "profile": "mul_16_1_0_1"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "20bf76a7fa992efe8d4f5c24d1444bb8710a682640676cc910d7faf109206a00",
+      "profile": "mul_16_1_1_0"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "4520576dc748ee7cddcd83bdca85dd16ef72359fcb32d60f846723d72c25ff60",
+      "profile": "mul_16_1_1_1"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "e9e24467cb421165eb2c89f76a374a58349809fdf55914244c141cd5ed118691",
+      "profile": "mul_32_2_0_0"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "38ccd002ca4fad085e06f72875aa3f813aa8640570c3d2d2f1089925dd45bda4",
+      "profile": "mul_32_2_0_1"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "e9e24467cb421165eb2c89f76a374a58349809fdf55914244c141cd5ed118691",
+      "profile": "mul_32_2_1_0"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "38ccd002ca4fad085e06f72875aa3f813aa8640570c3d2d2f1089925dd45bda4",
+      "profile": "mul_32_2_1_1"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "5672be50378019165711b7e88b17fd132f6639e7fc87709860b0ed91541658b3",
+      "profile": "mul_32_3_0_0"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "6e7c72ddb1a64648f7c1efc188038c4a6dc19af531fde9205cab10ca388c3efa",
+      "profile": "mul_32_3_0_1"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "5672be50378019165711b7e88b17fd132f6639e7fc87709860b0ed91541658b3",
+      "profile": "mul_32_3_1_0"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "6e7c72ddb1a64648f7c1efc188038c4a6dc19af531fde9205cab10ca388c3efa",
+      "profile": "mul_32_3_1_1"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "8e24daf7a60dc437e0a053c9f95539286ea99e3fc57862f3f5a23de174115d17",
+      "profile": "mul_8_0_0_0"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "b7f67f7c9dbe2d2e49305b080f611eb11966fb34876a6028669248cf73d5e43b",
+      "profile": "mul_8_0_0_1"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "3ef8dee89e525cb798a962970a32cde9c4b25a56d5fe087969dba94708187a50",
+      "profile": "mul_8_0_1_0"
+    },
+    {
+      "completed": 9953,
+      "resetAborts": 47,
+      "rows": 10000,
+      "fixtureSHA256": "b628efdf942ac6d26acc6f02004d1c45348b3d1cbdeead8be573502d509d20d0",
+      "profile": "mul_8_0_1_1"
+    }
+  ],
+  "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "fixtureRun": "stratified_final_pilot",
+  "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+  "Gate2": "numerical results only; lint and structural coverage still required",
+  "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun stratified_final_pilot -RunName stratified_final_pilot_rtl -Jobs 8"
+}

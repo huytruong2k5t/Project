@@ -51,6 +51,6 @@ Sau đó đã chốt/kiểm hợp đồng width/cut hữu hạn ở README mục
 
 ## 4. Trạng thái sau RTL paper và core — 09/10/2026
 
-Paper843 commit/Fig.4 đạt cùng giả định fig3; chưa có bằng chứng mới cho tie/prefix/internal guard hoặc generator gốc, nên không chạy lại TableI. W9-03..05 đã có code/test; Gate2/tuần9 processing. Verilator/lint thiếu và Git checkout không có là hai trở ngại vận hành, không đổi mô hình để né tiêu chí.
+Paper843 commit/Fig.4 đạt cùng giả định fig3; chưa có bằng chứng mới cho tie/prefix/internal guard hoặc generator gốc, nên không chạy lại TableI. W9-03..05 đã có code/test; Gate2/tuần9 processing. Verilator/lint còn thiếu; GitHub backup đã có checkout riêng trong dự án. Không đổi mô hình để né tiêu chí.
 
 Kiểm 10⁷ RTL đang chạy; chưa có kết quả nghiệm thu lượt lớn.

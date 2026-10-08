@@ -1,5 +1,6 @@
 param([string]$ModelSimBin='C:\altera\13.0sp1\modelsim_ase\win32aloem',
-      [long]$PerProfile=2000,[string]$RunName='pilot')
+      [long]$PerProfile=2000,[string]$RunName='pilot',
+      [ValidateSet('uniform_bits','stratified')][string]$Sampling='uniform_bits')
 $ErrorActionPreference='Stop'
 if($RunName -notmatch '^[a-z0-9_-]+$' -or $PerProfile -lt 100) {throw 'Invalid run arguments'}
 $projectPath=Split-Path $PSScriptRoot -Parent
@@ -11,7 +12,9 @@ function Run-Tool([string]$Path,[string[]]$ToolArguments,[string]$LogName) {
 }
 Push-Location $resultPath
 try {
-    Run-Tool (Join-Path $projectPath 'l1/gen_week9_multiplier.exe') @('.',[string]$PerProfile) 'generator.log'
+    $generatorArguments=@('.',[string]$PerProfile)
+    if($Sampling -eq 'stratified') {$generatorArguments+='stratified'}
+    Run-Tool (Join-Path $projectPath 'l1/gen_week9_multiplier.exe') $generatorArguments 'generator.log'
     Run-Tool (Join-Path $ModelSimBin 'vsim.exe') @('-version') 'version.log'
     if(!(Test-Path work)) {Run-Tool (Join-Path $ModelSimBin 'vlib.exe') @('work') 'library.log'}
     $sources=@('lod_lzd_core','dyn_left_shifter','dyn_right_shifter','posit_parser',
@@ -34,9 +37,9 @@ try {
     if($matches.Count -ne 16 -or $rows -ne 16*$PerProfile -or $rows -ne $completed+$aborts) {throw 'Incomplete coverage'}
     [pscustomobject]@{status='PASS';date=(Get-Date -Format o);seed=20261009;
         fixtureRows=$rows;comparedTransactions=$completed;resetAborts=$aborts;
-        mismatches=0;simulator=(Get-Content -Raw version.log).Trim();
+        mismatches=0;sampling=$Sampling;simulator=(Get-Content -Raw version.log).Trim();
         Gate2=if($completed -ge 10000000){'numerical threshold reached; lint and coverage review still required'}else{'not accepted: less than 10^7 compared transactions'};
         scope='integrated standalone multiplier, four formats, two schemes, RNE/TRUNC, reset/stall/order/latency';
-        command="scripts/verify_week9_multiplier_modelsim.ps1 -PerProfile $PerProfile -RunName $RunName"} |
+        command="scripts/verify_week9_multiplier_modelsim.ps1 -PerProfile $PerProfile -RunName $RunName -Sampling $Sampling"} |
         ConvertTo-Json | Set-Content summary.json
 } finally {Pop-Location}

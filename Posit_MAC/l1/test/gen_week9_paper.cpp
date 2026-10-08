@@ -10,6 +10,9 @@ int main(int argc, char** argv) {
     std::ifstream corpus(argv[1]);
     if (!corpus) throw std::runtime_error("missing frozen corpus");
     std::ofstream out(std::filesystem::path(argv[2]) / "paper.txt");
+    std::ofstream lut(std::filesystem::path(argv[2]) / "paper_lut.txt");
+    for (unsigned prefix=0;prefix<128;++prefix)
+        lut << prefix << ' ' << l1::paper_pattern_prediction_error(prefix) << '\n';
     std::string line;
     std::getline(corpus,line);
     unsigned records=0, steps=0;

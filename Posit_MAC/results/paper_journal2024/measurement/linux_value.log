@@ -1,0 +1,16 @@
+SELF_TEST PASS checks=600127 mismatches=0
+NB=32 ES=2 Q12 PT2=prefix7+zero5 tie=A n=total_terms2..5
+samples=1000000 seed=271828 distribution=value01 oracle=SoftPosit_p32_mul pack=TRUNC complement=ones per_term=FLOOR
+NOT_AUTHOR_GENERATOR: distributions/seed/filter/tie/padding are local assumptions
+CHECKPOINT accepted=1000000
+n=2,8.951100,31.376000,49.373800,95.439200
+ideal_ops_bound_n=2,9.658600,32.345700,50.291100,95.697500
+n=3,43.449100,82.881900,94.976400,100.000000
+ideal_ops_bound_n=3,49.214300,88.362200,97.657000,100.000000
+n=4,86.184700,99.799400,100.000000,100.000000
+ideal_ops_bound_n=4,92.977700,99.994200,100.000000,100.000000
+n=5,99.533900,100.000000,100.000000,100.000000
+ideal_ops_bound_n=5,99.975200,100.000000,100.000000,100.000000
+attempted=1000000 accepted=1000000 excluded_zero=0 excluded_nar=0 swaps=459786 avg_output_regime_run=1.264163 fingerprint=ab67637560d07bbb
+elapsed_seconds=1.041816
+JOURNAL2024_ACCEPTANCE=UNCONFIRMED_GRAPH_ONLY_AND_UNKNOWN_GENERATOR

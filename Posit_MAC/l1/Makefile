@@ -12,6 +12,15 @@ $(addsuffix .exe,$(WEEK9_GENERATORS)): %.exe: test/%.cpp include/*.hpp
 $(addsuffix _ubsan,$(WEEK9_GENERATORS)): %_ubsan: test/%.cpp include/*.hpp
 	$(CXX) -O1 -g -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude $< -o $@
 
+test_journal2024_measurement: test/test_journal2024_measurement.cpp include/*.hpp ../l0/libsoftposit.so
+	$(CXX) $(CXXFLAGS) -Werror $< -L../l0 -lsoftposit -Wl,-rpath,'$$ORIGIN/../l0' -o $@
+
+test_journal2024_measurement.exe: test/test_journal2024_measurement.cpp include/*.hpp ../l0/softposit.dll
+	$(WIN_CXX) $(CXXFLAGS) -Werror -static-libgcc -static-libstdc++ $< -L../l0 -l:softposit.dll -o $@
+
+test_journal2024_measurement_ubsan: test/test_journal2024_measurement.cpp include/*.hpp ../l0/libsoftposit.so
+	$(CXX) -O1 -g -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude $< -L../l0 -lsoftposit -Wl,-rpath,'$$ORIGIN/../l0' -o $@
+
 gen_week9_multiplier: test/gen_week9_multiplier.cpp include/*.hpp ../l0/libsoftposit.so
 	$(CXX) $(CXXFLAGS) -Werror $< -L../l0 -lsoftposit -Wl,-rpath,'$$ORIGIN/../l0' -o $@
 

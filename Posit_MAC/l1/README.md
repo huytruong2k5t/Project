@@ -913,3 +913,43 @@ Reference packer C++ độc lập diễn giải đúng cổng Fig5(b): m=Rgm[4:0
 Có thể loại khác biệt mã hóa packer trên miền Q12/scale đã kiểm; chưa loại normalize/cut nội bộ, OPS, generator hoặc khác biệt recurrence/n. Không sửa normative hay top RND đã đóng băng; không chạy pilotTableI vì chưa chọn được thay đổi số học có xác nhận nguồn duy nhất. Audit đã hoàn thành, baseline gốc/tuần4 và Gate2 vẫn processing. Bước tiếp theo cần trace/code hoặc xác nhận tác giả cho SAC/n2021 ở vector round-up, tie/prefix và internal cut; không dò seed/tham số.
 
 Bằng chứng: results/paper_contract_audit/{summary.json,windows/summary.json,windows/source2019_trace.csv,windows/source2021_count.csv,windows/divergent.csv,windows/sac_counts.csv}; PDF/RTL/fixture SHA256, compiler và lệnh trong summary. Build `make -C l1 test_paper_contract_audit test_paper_contract_audit.exe test_paper_contract_audit_ubsan`; chạy `scripts/verify_paper_contract_modelsim.ps1` rồi `scripts/summarize_paper_contract_audit.py`.
+
+## 25. Pilot tái hiện Posit của journal2024 — 09/10/2026
+
+Đối chiếu §III-A/C, §V, §VI-A/D, TableVI tr.462 và Fig9 tr.463 của DOI10.1109/TVLSI.2024.3354726 qua [toàn văn công khai](https://www.scribd.com/document/818436812/Area-Efficient-Iterative-Logarithmic-Approximate-Multipliers-for-IEEE-754-and-Posit-Numbers). Đây là kiểm **nhánh Proposed Posit của Fig9**, không phải triển khai đủ các comparator FP32/FP64 hoặc riêng đường B trong Fig7. B/C/S/T của journal lần lượt là baseline biểu diễn lũy thừa, hội tụ sai số, chọn toán hạng và truncation; không đồng nhất chữ B với tên profile `baseline` lịch sử của dự án.
+
+`test/test_journal2024_measurement.cpp` dùng `PaperMultiplier<32,2>`: Q12, RND/complement không+1, PT2 sai số tuyệt đối prefix7 đệm0, tie-A, anchor số hạng đầu, cut từng term FLOOR trước áp dấu, outputcut12/TRUNC. **n đếm tổng số hạng**, không đổi n+1 để khớp biểu đồ. Oracle là **SoftPosit0.4.1 `l0_p32_mul` ES2**, khác FP32_RNE/ES3 của TableI2021. Không sửa arithmetic/header/RTL normative hoặc top paper ES3 đã đóng băng.
+
+### Kiểm chức năng và ví dụ nguồn
+
+Linux/Windows/UBSan mỗi lượt self-test PASS **600.127 đối chiếu,0 mismatch**: L1 exact/L0 trên100 corner và100.000 random; comparator ngưỡng bằng số nguyên đối chiếu decode SoftPosit, kiểm tie nghiêm ngặt và dấu;100.000 phép conversion; trace TableVI. CSV/trace/counters/fingerprint của hai smoke1M Linux/Windows MATCH; UBSan10.000 cặp PASS.
+
+TableVI ép X theo nguồn: X=`0x1d200000`,Y=`0x31040000`; mantissaQ12 là5248/4616. Với n_total2, accumulator4616→5770 và output**`0x15a28000`**, khớp fraction `(1).011010001010` được in. Nhưng SAC còn mantissa chuẩn hóa4096/phần dư khác0; chính bảng in `t2=(0).001...`, trong khi đoạn văn nói `t2=0` và dừng. Với n_total3, accumulator thêm5914, output`0x15c68000`, phần dư mới hết. **Đây là bất nhất bảng–đoạn văn có thể xác minh, chưa chứng minh số liệu Fig9 sai.** Output n2 được giải thích bằng hết ngân sách hai số hạng, không phải early-stop do dư0.
+
+### Pilot thống kê
+
+Chốt trước seed271828, `std::mt19937_64`, hai phân bố địa phương: uint32 rawPosit toàn miền dấu và uniform-value grid24[0,1) chuyển Posit bằng L0. Loại inputZero/NaR với counters, giữ finite saturation trong corpus; oracle dùng input trước cut. Đo strict `100*|O-I|/|I| < threshold` bằng số nguyên, denominator dùng độ lớn để hỗ trợ số âm. Paper chưa công bố generator/seed/filter đủ để gọi hai phân bố này là corpus tác giả.
+
+| n_total | RawPosit10M: Err<0,1 /0,5 /1 /5% | Value[0,1)10M: cùng ngưỡng | Fig9 Err<0,1% đọc trực quan |
+| --- | --- | --- | --- |
+| 2 | 8,954950 /31,354780 /49,354220 /95,469770 | 8,963250 /31,342550 /49,349190 /95,470840 | Khoảng53–57% |
+| 3 | 43,435180 /82,879220 /94,984660 /99,999980 | 43,430780 /82,884860 /94,996880 /100 | Khoảng70–74% |
+| 4 | 86,202990 /99,797000 /99,999840 /99,999980 | 86,197840 /99,795980 /100 /100 | Khoảng91–95% |
+| 5 | 99,530540 /99,999680 /99,999840 /99,999980 | 99,531590 /100 /100 /100 | Khoảng99–100% |
+
+Các khoảng Fig9 là **ước lượng thô từ biểu đồ**, không phải bảng số liệu gốc hoặc phép số hóa đủ chính xác để nghiệm thu≤1điểm%. Ngay với khoảng rộng này, rawPosit n2 cách ít nhất44,04505điểm%. Sai số lấy mẫu95% xấp xỉ tối đa±0,031điểm% trên10M với giả định mẫu độc lập; tăng lên200M không giải quyết được gap hiện tại. Không chạy full200M trong phiên.
+
+Đối chứng OPS lý tưởng kiểm cả hướng ép A/ép B, lấy hướng đạt từng ngưỡng: cận trên Err<0,1% của n2 là**9,667460%**, n3=49,179190%, n4=92,982680%, n5=99,972790%. Cận này **chỉ áp trong cùng corpus/recurrence/width/cut/output**, không áp cho mọi kiến trúc khả dĩ của tác giả. Nó cho thấy chỉ đổi selector trong hợp đồng hiện tại không đủ giải thích gap n2; không dùng selector oracle làm cải tiến có thể triển khai.
+
+**Kết quả:** kiểm chức năng/trace/pilot hoàn thành; baseline gốc2024 **NOT_REPRODUCED/processing**. Chưa có căn cứ kết luận TableI2021 hoặc Fig9 sai thống kê. Cần numeric data Fig9, quy ước n khi đo, generator/phân bố/filter và sourceRTL/LUT/cut/cờ tác giả. Không dò seed, n, guard hoặc dùng E/M để ép khớp. Chưa chạy RTL ES2/ModelSim trong audit này; Gate2 và tuần4 giữ trạng thái hiện hành.
+
+Lệnh từ thư mục Posit_MAC, WSL `bash --noprofile --norc`, TMPDIR trong `results/paper_journal2024/measurement/tmp`:
+
+```text
+make -C l1 test_journal2024_measurement test_journal2024_measurement.exe test_journal2024_measurement_ubsan
+./l1/test_journal2024_measurement 10000000 271828 raw-posit results/paper_journal2024/measurement/pilot_raw
+./l1/test_journal2024_measurement 10000000 271828 value01 results/paper_journal2024/measurement/pilot_value
+python scripts/audit_journal2024_measurement.py
+```
+
+GCC Linux15.2.0, MinGW13-win32, SoftPosit0.4.1; binary/source/hash/counters/fingerprint, compiler và lệnh tại `results/paper_journal2024/measurement/summary.json`. Hai CSV pilot giữ đủ16ô mỗi phân bố và cận OPS lý tưởng; trace nguồn tại `pilot_raw/table_vi_trace.csv`. Không coi exit0 của bộ đo là nghiệm thu Fig9.

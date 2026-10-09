@@ -286,3 +286,19 @@ results/paper_contract_audit/**/transcript
 l1/test_journal2024_measurement
 l1/test_journal2024_measurement_ubsan
 results/paper_journal2024/measurement/tmp/
+
+# Results retention: evidence stays; rebuildable databases/large fixtures stay local.
+results/**/work/
+results/**/db/
+results/**/incremental_db/
+results/**/xsim.dir/
+results/**/obj_dir/
+results/**/tmp/
+results/parser_comb/parser_*.txt
+results/packer/packer_*.txt
+results/baseline_report_review/test_bitscan
+results/baseline_report_review/test_kim_investigation
+results/baseline_report_review/test_paper_table1
+results/baseline_report_review/check_scope
+l1/test_kim_investigation
+l1/test_bitscan

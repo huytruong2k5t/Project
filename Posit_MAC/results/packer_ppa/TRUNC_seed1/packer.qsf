@@ -1,0 +1,17 @@
+set_global_assignment -name FAMILY "Cyclone IV E"
+set_global_assignment -name DEVICE EP4CE22F17C6
+set_global_assignment -name TOP_LEVEL_ENTITY packer_ppa_top
+set_global_assignment -name SDC_FILE packer.sdc
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name SEED 1
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 2
+set_parameter -name ROUND_MODE "\"TRUNC\""
+set_global_assignment -name SEARCH_PATH "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/results/packer_ppa/compat/dyn_right_shifter.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_pack_prepare.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_pack_finish.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_pack.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/packer_ppa_boundary.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/packer_ppa_top.sv"
+
+set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"

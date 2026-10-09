@@ -1,0 +1,128 @@
+{
+  "status": "PASS",
+  "date": "2026-10-09T07:50:47.3612580+07:00",
+  "seed": 20261009,
+  "fixtureRows": 10080000,
+  "comparedTransactions": 10032224,
+  "resetAborts": 47776,
+  "mismatches": 0,
+  "profiles": [
+    {
+      "profile": "mul_16_1_0_0",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "56b496978ce43f5781c59651cf0e1326759b12aceb5a9ae457b81ee968c9cd60"
+    },
+    {
+      "profile": "mul_16_1_0_1",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "d77812769491ab39c6c7ffe34af19a4a7b9f0232e9e84e294ecc84f8b462f1fa"
+    },
+    {
+      "profile": "mul_16_1_1_0",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "92d43227bbe4622f86eff6de2443c21db22c344e334f8b15e64cf4d3cf1b6755"
+    },
+    {
+      "profile": "mul_16_1_1_1",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "3baa501ca9472cce153245fadf2dc0fd67adff5a93b5403bbc7d1c79b145f868"
+    },
+    {
+      "profile": "mul_32_2_0_0",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "3ba47a65188179f0e15276a0679ad29cba68c0efbdf102a4e45b3dad03ef1e06"
+    },
+    {
+      "profile": "mul_32_2_0_1",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "71688d249831f2f4da6cb5d44aada73839209bc2b531b3c8cb4d2805cf3c7954"
+    },
+    {
+      "profile": "mul_32_2_1_0",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "01e97002a83cdb9fb8707911e4214839414567728e43b09a44ba0602f3a3bd9c"
+    },
+    {
+      "profile": "mul_32_2_1_1",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "6ee2ed21b1190bc421302991fced87c6ec49363c1cfcc61f1fb4c2a00505ebab"
+    },
+    {
+      "profile": "mul_32_3_0_0",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "5f57fcf84618174a4fe800027d9bfece0ca36361a41c66a456e6a73285d2fec1"
+    },
+    {
+      "profile": "mul_32_3_0_1",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "c8693f0757e47ddaf513361a5f9d18e2d695b6d398686d2bae5125625cf6bc70"
+    },
+    {
+      "profile": "mul_32_3_1_0",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "f39018021bb0f8039155a20dbcc15d0424598ac86ab13918dc65cf47e08b8d36"
+    },
+    {
+      "profile": "mul_32_3_1_1",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "03e6950d701503c2021cfd81b9ff655faf560d946cdd66da757ef743b871a965"
+    },
+    {
+      "profile": "mul_8_0_0_0",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "db418c4fc6b8aa3e930dd5e9f2d486452bd7a39b66e683827c142cdc9e1d156a"
+    },
+    {
+      "profile": "mul_8_0_0_1",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "fc57f4a156e90dac5276522072b2f7799cc992ef5444e9123e92857e3fa6d1ef"
+    },
+    {
+      "profile": "mul_8_0_1_0",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "bcf36e98f721b3496c2c0a161a46b9657efefdcb3b01731f5db3d126659d2a74"
+    },
+    {
+      "profile": "mul_8_0_1_1",
+      "rows": 630000,
+      "completed": 627014,
+      "resetAborts": 2986,
+      "fixtureSHA256": "fdabce94e02af502a2a2077608034c9df01a24964e57388831bfbb3b1b40c6fe"
+    }
+  ],
+  "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "fixtureRun": "acceptance",
+  "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+  "Gate2": "numerical results only; lint and structural coverage still required",
+  "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun acceptance -RunName acceptance_parallel -Jobs 8"
+}

@@ -40,12 +40,12 @@ module multiplier_checker #(
         wait(in_ready);
     endtask
     initial begin
-        int fd,rc,rows,aborts,completed,cycles,expected_latency;
+        int fd,rc,rows,aborts,completed,cycles,expected_latency,stall_cycles,long_stalls;
         longint unsigned v[7:0];
         logic [NB-1:0] held_d;
         logic [4:0] held_flags;
         string fixture_directory;
-        rows=0; aborts=0; completed=0;
+        rows=0; aborts=0; completed=0; long_stalls=0;
         reset_top();
         // Invalid/reserved configs must not enter either parser.
         @(negedge clk); ops=2; in_valid=1;
@@ -88,7 +88,9 @@ module multiplier_checker #(
                     $fatal(1,"MULTIPLIER FAIL NB=%0d ES=%0d scheme=%0d rounding=%0d row=%0d a=%h b=%h cycles=%0d/%0d d=%h/%h flags=%h/%h",
                         NB,ES,SCHEME,ROUNDING,rows,v[0],v[1],cycles,expected_latency,d,v[5],flags,v[6]);
                 held_d=d; held_flags=flags;
-                repeat(rows%5) begin
+                stall_cycles=(rows%97==7)?96:rows%5;
+                if(stall_cycles==96) long_stalls++;
+                repeat(stall_cycles) begin
                     @(posedge clk); #2;
                     if(!out_valid || d!==held_d || flags!==held_flags || in_ready) $fatal(1,"output stall instability");
                 end
@@ -101,7 +103,7 @@ module multiplier_checker #(
             if(rows%100000==0) $display("MUL PROGRESS NB=%0d ES=%0d scheme=%0d rounding=%0d rows=%0d",NB,ES,SCHEME,ROUNDING,rows);
         end
         $fclose(fd);
-        $display("MULTIPLIER PASS NB=%0d ES=%0d scheme=%0d rounding=%0d rows=%0d completed=%0d reset_aborts=%0d",NB,ES,SCHEME,ROUNDING,rows,completed,aborts);
+        $display("MULTIPLIER PASS NB=%0d ES=%0d scheme=%0d rounding=%0d rows=%0d completed=%0d reset_aborts=%0d long_stalls=%0d",NB,ES,SCHEME,ROUNDING,rows,completed,aborts,long_stalls);
         done=1;
     end
 endmodule

@@ -1,0 +1,128 @@
+{
+  "status": "PASS",
+  "date": "2026-10-09T07:50:16.7687151+07:00",
+  "seed": 20261009,
+  "fixtureRows": 16896000,
+  "comparedTransactions": 16815920,
+  "resetAborts": 80080,
+  "mismatches": 0,
+  "profiles": [
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_16_1_0_0",
+      "completed": 1050995,
+      "fixtureSHA256": "ee0726ebdd36c2c0488647068100ed65c621b5e47bc35e0da4609fb69651ba7d"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_16_1_0_1",
+      "completed": 1050995,
+      "fixtureSHA256": "628a2047607ec8a7ed45a6cf62ba00b0f920db85eeb6032893ced20942c4534f"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_16_1_1_0",
+      "completed": 1050995,
+      "fixtureSHA256": "ac508f118b94c6c728cdefbc8b993fd05605810af2b1fafb8d3823e135eb88c0"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_16_1_1_1",
+      "completed": 1050995,
+      "fixtureSHA256": "47fd28615f59f3ae428d2c01c8dcf9fad654441a428dd6cf7519ddc8b5bca7a7"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_32_2_0_0",
+      "completed": 1050995,
+      "fixtureSHA256": "b2c317502643c09d1ef4b43e33bd9625fa8d284311b033a039b1d9eb206b1524"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_32_2_0_1",
+      "completed": 1050995,
+      "fixtureSHA256": "0e70a80e000818fe0f71e2ee34a1da6e921734b3e5e8bfc7d26de0a48fb7bc21"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_32_2_1_0",
+      "completed": 1050995,
+      "fixtureSHA256": "1cd3e89ae74b108b1ce3cd90e892b9d250a997b49547f45db25c7943af63e739"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_32_2_1_1",
+      "completed": 1050995,
+      "fixtureSHA256": "92dd51e8c992405fb0ed1c0ab3d3ad563ead9d28ea249e19b4219af387f485bc"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_32_3_0_0",
+      "completed": 1050995,
+      "fixtureSHA256": "b6d8f1b7e6047a88b10ef32a2257928bcef3526866c2ffe634593f3e28cd3a83"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_32_3_0_1",
+      "completed": 1050995,
+      "fixtureSHA256": "cfe1e69289162310827bf9ffb720b7a2c93ecb577ec91986864f4887953b5a81"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_32_3_1_0",
+      "completed": 1050995,
+      "fixtureSHA256": "f6aa8db56516d1570a71dc8ca04546691a6fdb4143a0429ab4cbf039cc57aa17"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_32_3_1_1",
+      "completed": 1050995,
+      "fixtureSHA256": "d7a2f8f45e47a4a24c08b3394c0bf33e49128eb66e57af92993f828350086c7e"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_8_0_0_0",
+      "completed": 1050995,
+      "fixtureSHA256": "368085c30f96180914acf3b602f302dfe87ae051372b6f01263171249499813a"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_8_0_0_1",
+      "completed": 1050995,
+      "fixtureSHA256": "d6d08c842e35ea413ce889b8c5f1d0dfce6baa66675392082d1f02d3b27da182"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_8_0_1_0",
+      "completed": 1050995,
+      "fixtureSHA256": "8d0db48dc4be7b69508bb083e07164452755c1165baa6b068b41fdc35c660a6a"
+    },
+    {
+      "resetAborts": 5005,
+      "rows": 1056000,
+      "profile": "mul_8_0_1_1",
+      "completed": 1050995,
+      "fixtureSHA256": "c97d0742edc1915ef636247f4b07e0d6fbe668757d70e8abf62459179a9ec723"
+    }
+  ],
+  "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "fixtureRun": "stratified_corpus",
+  "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+  "Gate2": "numerical results only; lint and structural coverage still required",
+  "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun stratified_corpus -RunName stratified_acceptance -Jobs 8"
+}

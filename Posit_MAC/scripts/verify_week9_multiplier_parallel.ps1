@@ -64,9 +64,11 @@ try {
         $match=[regex]::Match($log,'MULTIPLIER PASS NB=(\d+) ES=(\d+) scheme=(\d+) rounding=(\d+) rows=(\d+) completed=(\d+) reset_aborts=(\d+)')
         if(!$match.Success) {throw 'Missing profile counts'}
         $r=[long]$match.Groups[5].Value;$c=[long]$match.Groups[6].Value;$a=[long]$match.Groups[7].Value
+        $stallMatch=[regex]::Match($log,'reset_aborts=\d+ long_stalls=(\d+)')
         if($r -ne $c+$a) {throw 'Count inconsistency'}
         $rows+=$r;$completed+=$c;$aborts+=$a
         $profileResults+=@{profile=$fixture.BaseName;rows=$r;completed=$c;resetAborts=$a;
+            longStalls=if($stallMatch.Success){[long]$stallMatch.Groups[1].Value}else{'not instrumented'};
             fixtureSHA256=(Get-FileHash -LiteralPath $fixture.FullName -Algorithm SHA256).Hash.ToLower()}
     }
     [pscustomobject]@{status='PASS';date=(Get-Date -Format o);seed=20261009;fixtureRows=$rows;

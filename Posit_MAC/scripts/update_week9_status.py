@@ -26,6 +26,15 @@ def write(path, text):
     text=text.replace("Output force-X=0x1ae34000. Không có bằng chứng mới", "Output force-X=0x1ae34000; kiểm thêm đủ128 entry PT2 và tie-A đạt. Không có bằng chứng mới")
     text=text.replace("Gate2/tuần9 processing: thiếu lint Verilator chính thức.","Gate2/tuần9 processing: cần lint/harness Verilator chính thức và review coverage phân tầng §6.3; random bit đủ số lượng không thay coverage.")
     text=text.replace("Gate2/tuần9 vẫn processing do lint chính thức còn thiếu;", "Gate2/tuần9 vẫn processing do lint/harness chính thức còn thiếu và cần review coverage phân tầng;")
+    if summary.get("structural_coverage_review", "").startswith("PASS"):
+        text=text.replace("còn nghiệm thu lớn/lint Gate2", "đã đạt lượt lớn/coverage chức năng; còn lint/harness chính thức Gate2")
+        text=text.replace("Còn nghiệm thu lớn/lint Gate2", "Đạt lượt lớn/coverage chức năng; còn lint/harness chính thức Gate2")
+        text=text.replace("và cần review coverage phân tầng", "(coverage chức năng phân tầng đã đạt)")
+        text=text.replace("và review coverage phân tầng §6.3; random bit đủ số lượng không thay coverage", "; coverage chức năng §6.3 đã kiểm đạt, line/branch/toggle chưa đo")
+        text=text.replace("Gate2 còn kiểm lớn/lint theo PLAN L1 mục7", "Gate2 đã đạt lượt lớn/coverage chức năng, còn lint/harness chính thức theo PLAN L1 mục7")
+        text=text.replace("core/bridge và multiplier standalone đã triển khai, kiểm pilot và đang nghiệm thu lớn theo mục7", "core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7")
+        text=text.replace("Core/bridge và multiplier standalone đã triển khai, kiểm pilot và đang nghiệm thu lớn09/10", "Core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng09/10")
+        text=text.replace("lượt lớn/lint theo PLAN mục7", "lint/harness chính thức theo PLAN mục7; lượt lớn/coverage chức năng đã đạt")
     backup=summary.get("git_push", {})
     if backup.get("status") == "PUSHED":
         message=f"GitHub đã push checkpoint {backup['commit'][:7]} lên {backup['branch']} bằng checkout riêng trong Posit_MAC; kết quả lượt lớn được bổ sung cuối phiên."
@@ -56,6 +65,8 @@ for milestone in ("W9-03", "W9-R1", "W9-R2", "W9-04", "W9-05"):
     plan = re.sub(rf"(?m)^(\| {milestone} \|.*\| )(?:không|processing)( \|)$", r"\1✅\2", plan)
 plan = re.sub(r"(?m)^(\| W9-06 \|.*\| )(?:không|processing)( \|)$", r"\1processing\2", plan)
 plan = plan.replace("**Bước thực thi tiếp theo là W9-03:**", "**Mốc W9-03 đã được thực hiện 09/10/2026; hợp đồng vẫn giữ:**")
+plan = plan.replace("Parser/packer đã nghiệm thu đơn vị; tuần9 bắt đầu với giao diện và OPS/SAC tổ hợp. Core/bridge/MAC RTL chưa nghiệm thu.",
+    "Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã triển khai, kiểm pilot và đang nghiệm thu lớn theo mục7 (trạng thái09/10/2026). Gate2 còn processing; MAC RTL chưa nghiệm thu.")
 write(plan_path, plan)
 detail = f"""W9-03 đã kiểm shifter, cộng tổ hợp, normalize/adapter:252.455 commit trên width1/5/12/26/27, hai scheme,0 mismatch. Bank `sbm_accum` được kiểm trong core; FLOOR bỏ padding trước normalize, không đưa input_cut vào numerical sticky.
 
@@ -72,6 +83,17 @@ Quartus13 phân tích/tổng hợp NB32/ES2/FLOOR/RNE đạt0 lỗi,14 warning �
 Bằng chứng, compiler, seed20261009, SoftPosit library hash, lệnh và SHA256: `results/week9_implementation/summary.json`; các log ở `results/week9_arithmetic`, `week9_paper`, `week9_core`, `week9_multiplier`. Gate2/tuần9 vẫn processing do lint chính thức còn thiếu; tuần4/provenance paper giữ processing. Git push bị chặn vì thư mục không phải Git checkout; không tự init/force/reset hoặc sửa thư mục khác.
 """
 append_once(plan_path, "### 7.4. Triển khai và kiểm chứng — 09/10/2026", detail)
+if summary.get("structural_coverage_review", "").startswith("PASS"):
+    acceptance_note="""Lượt phân tầng cuối đạt16.815.920 giao dịch hoàn tất,80.080 reset hủy; control random-bit đạt10.032.224 giao dịch,47.776 reset hủy; cả hai0 mismatch. Audit đối chiếu SHA fixture với log PASS và loại reset-abort trước coverage:16 profile đầy đủ, posit32 đạt256/256 bin regime–dấu, tối thiểu4.104 mẫu/bin và26.241 operands mỗi run/polarity hữu hạn;36 ô mode/OPS/n mỗi profile. Code coverage line/branch/toggle chưa đo.
+
+Corner riêng đạt114.656 so sánh/544 reset hủy,3600 trường hợp khác nhau mỗi profile (100 cặp ×36 config), gồm ±1, ±minpos/maxpos và NaR×0/0×NaR; Linux/Windows/UBSan và replay32.000 dòng uniform cũ khớp. Pilot stall96 chu kỳ đạt31.840 so sánh/160 reset,336 lượt giữ dài;0 mismatch. Chỉ chỉnh khoảng trắng RTL để tách port/parameter, có proof và pilot biên dịch lại; SHA nguồn trước/sau lưu riêng. Logic không đổi, TableI không chạy lại.
+
+Gate2/W9-06 vẫn processing: Verilator chưa có, harness C++ và lint chính thức chưa build/chạy. Không tự cài công cụ hoặc thay tiêu chí. Bằng chứng: results/week9_multiplier/{stratified_acceptance,acceptance_parallel,corners_final_rtl,long_stall_pilot}; snapshot/version/seed/lệnh tại results/week9_implementation/summary.json."""
+    for target in (plan_path, root / "tb/README.md", root / "scripts/README.md"):
+        body=read(target)
+        marker="Lượt phân tầng cuối đạt16.815.920 giao dịch"
+        if marker not in body:
+            write(target,body.rstrip()+"\n\n"+acceptance_note+"\n")
 
 spec_path = root / "SPEC_Posit_MAC_IP.md"
 spec = read(spec_path)
@@ -83,6 +105,8 @@ spec = spec.replace("Đây là yêu cầu triển khai, chưa có nghiệm thu h
 spec = spec.replace("RTL tích hợp (hợp đồng, chưa triển khai)", "RTL tích hợp (standalone multiplier đã triển khai; MAC còn theo kế hoạch)")
 spec = spec.replace("SBM/core/top/Gate2 còn triển khai theo PLAN L1 mục7.",
                     "SBM/core/top standalone đã triển khai và kiểm pilot 09/10; Gate2 còn kiểm lớn/lint theo PLAN L1 mục7. Paper RTL843 commit/Fig.4 đạt trong profile tái dựng, không xác nhận baseline gốc.")
+spec = spec.replace("**Lịch core baseline không chồng lấn, chưa triển khai RTL:**",
+                    "**Lịch core baseline không chồng lấn — đã triển khai và kiểm đơn vị 09/10/2026:**")
 write(spec_path, spec)
 append_once(spec_path, "### 11.4 Bằng chứng RTL tuần9 — 09/10/2026", f"""SBM/normalize/adapter đã kiểm252.455 lượt; core đạt39.580 giao dịch và420 reset hủy; standalone multiplier pilot31.840 giao dịch và160 reset hủy. Cả ba suite0 mismatch. Nghiên cứu paper riêng đạt843 commit/293 bản ghi, Fig.4 force-X=0x1ae34000; không xác nhận tie/padding/guard hoặc RTL gốc. Hợp đồng normative giữ §5.5-A/§5.7/§5.9-D.
 
@@ -92,7 +116,15 @@ Gate2/tuần9 processing: thiếu lint Verilator chính thức. Quartus13 Analys
 """, before="## 12. Báo cáo và bảo vệ")
 
 append_once(root / "l1/README.md", "## 22. RTL multiplier tuần9 — 09/10/2026", detail+"\nBuild generator bằng các target `gen_week9_arithmetic`, `gen_week9_core`, `gen_week9_paper`, `gen_week9_multiplier` trong Makefile L1, cùng hậu tố `.exe` và `_ubsan`. `gen_week9_paper` dùng corpus có sẵn, không đổi vector/seed. ES3 exact/RNE dùng decode + product nguyên + encoder bit-list độc lập, không gọi parser/packer L1. SoftPosit chỉ dùng ở ES0/1/2.")
-append_once(root / "rtl/README.md", "## 8. Multiplier standalone và research paper — 09/10/2026", detail+"\n`posit_mul_iter` là top chỉ ghép instance. `mul_iter_wrapper` chốt cfg ở handshake E0, nhận cặp parser nguyên tử, giữ slot đến retire. `mul_iter_core` chốt context ở launch L0, `iter_ctrl` phát L1, bank term L2, `sbm_accum` commit L3. `mul_norm_comb` đồng thời thực hiện adapter không làm tròn; wrapper có một bank norm trước packer. Ports top:clk/rst_n/in_valid/in_ready/a/b/cfg_mode/cfg_n/cfg_ops/out_valid/out_ready/d/flags. ROUND_SCHEME và ROUND_MODE là tham số compile; cfg_mode/cfg_n/cfg_ops được chốt mỗi giao dịch. Baseline test EXACT_EN=OPS_EN=1; disable policy đã kiểm ở OPS đơn vị, không tuyên bố coverage full top mọi tham số tùy biến.")
+rtl_readme=root / "rtl/README.md"
+rtl_text=read(rtl_readme).replace("Hợp đồng tích hợp cập nhật 06/10/2026 — SPEC v1.4", "Hợp đồng tích hợp cập nhật 08/10/2026 — SPEC v1.5")
+rtl_text=rtl_text.replace("Đây là hợp đồng triển khai, chưa nghiệm thu core/bridge/MAC RTL.","Core/bridge và multiplier standalone đã triển khai, kiểm pilot và đang nghiệm thu lớn09/10; Gate2 processing, MAC RTL chưa nghiệm thu.")
+rtl_text=rtl_text.replace("Bước tiếp theo: packer tuần8, rồi core và tích hợp; chồng lấn sau baseline.","Bước tiếp theo: đóng Gate2 tuần9 theo PLAN L1 mục7; chồng lấn sau baseline.")
+rtl_text=rtl_text.replace("Context M0 trong `mul_iter_core` (kế hoạch)","Context M0 trong `mul_iter_core`")
+rtl_text=rtl_text.replace("| Tuần9, chưa triển khai |","| Đã triển khai/kiểm core09/10; chưa đóng Gate2 |")
+rtl_text=rtl_text.replace("Controller tương lai sở hữu count/token", "`iter_ctrl` sở hữu count/token")
+write(rtl_readme,rtl_text)
+append_once(rtl_readme, "## 8. Multiplier standalone và research paper — 09/10/2026", detail+"\n`posit_mul_iter` là top chỉ ghép instance. `mul_iter_wrapper` chốt cfg ở handshake E0, nhận cặp parser nguyên tử, giữ slot đến retire. `mul_iter_core` chốt context ở launch L0, `iter_ctrl` phát L1, bank term L2, `sbm_accum` commit L3. `mul_norm_comb` đồng thời thực hiện adapter không làm tròn; wrapper có một bank norm trước packer. Ports top:clk/rst_n/in_valid/in_ready/a/b/cfg_mode/cfg_n/cfg_ops/out_valid/out_ready/d/flags. ROUND_SCHEME và ROUND_MODE là tham số compile; cfg_mode/cfg_n/cfg_ops được chốt mỗi giao dịch. Baseline test EXACT_EN=OPS_EN=1; disable policy đã kiểm ở OPS đơn vị, không tuyên bố coverage full top mọi tham số tùy biến.")
 append_once(root / "tb/README.md", "## 6. Kiểm chứng multiplier tuần9 — 09/10/2026", """Các suite mới: `tb_week9_arithmetic` (term/acc/norm/adapter), `tb_week9_paper` (score/commit/pack paper), `tb_week9_core` (latency/reset/context/drain) và `tb_week9_multiplier` (baseline top,16 profile, cả d và flags).
 
 ModelSim chạy fixture trong thư mục kết quả riêng; scripts fail khi thiếu vector/marker hoặc gặp Fatal/Error. Vector bị reset hủy được đếm riêng, không tính vào ngưỡng10⁷ so RTL=L1. Lượt pilot bản cuối31.840 so sánh và160 reset,0 mismatch. Competing input được giữ trong lúc busy; output bị stall; reset quay qua parser/core/drain/output. Nguồn phải đặt config hợp lệ trước chờ in_ready vì wrapper từ chối reserved/n>N_MAX.

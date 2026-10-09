@@ -80,6 +80,12 @@ def audit(directory, summary_path=None, output=None):
         valid_grid = [f"{ga}/{gb}/{sign}" for ga in groups for gb in groups for sign in range(4)]
         valid_runs = [f"{pol}/{run}" for pol in range(2) for run in range(1, nb)
                       if not (pol == 0 and run == nb - 1)]
+        excluded = [f"polarity=0/run={nb-1} is Zero, not finite",
+                    "empty regime groups: "+str([i for i in range(8) if i not in groups]),
+                    "approx iteration >8 is impossible with N_MAX=8"]
+        if nb - 3 - es <= 8:
+            excluded.extend(["exact iteration >8 exceeds FRAC_MAX",
+                             "selected fraction popcount >8 exceeds active width in both modes"])
         profiles.append({
             "profile": fixture.stem, "fixture_sha256": digest,
             "rows": rows, "reset_aborts": aborts,
@@ -95,9 +101,7 @@ def audit(directory, summary_path=None, output=None):
             "config_cells": dict(sorted(config.items())),
             "selected_fraction_popcount": dict(sorted(population.items())),
             "actual_iteration_bins": dict(sorted(iterations.items())),
-            "excluded_bins": ["zero-run NB-1 is Zero, not finite",
-                              "groups whose lower bound exceeds NB-1", 
-                              "approx iteration >8 is impossible with N_MAX=8"],
+            "excluded_bins": excluded,
         })
     if len(profiles) != 16:
         raise RuntimeError("expected all sixteen frozen profile fixtures")

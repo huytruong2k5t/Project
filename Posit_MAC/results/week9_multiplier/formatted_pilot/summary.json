@@ -1,0 +1,128 @@
+{
+  "status": "PASS",
+  "date": "2026-10-09T07:02:33.9767132+07:00",
+  "seed": 20261009,
+  "fixtureRows": 32000,
+  "comparedTransactions": 31840,
+  "resetAborts": 160,
+  "mismatches": 0,
+  "profiles": [
+    {
+      "fixtureSHA256": "d7c42c9fa3dc3fb62567eb6ba4b574cbffb523b38c305a5eaf19ae08a6aeb494",
+      "profile": "mul_16_1_0_0",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "2a7346a5cd668f3d95613590b36459751be99ca0b4684532d5ab185c1c2e5134",
+      "profile": "mul_16_1_0_1",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "139a05e7bb50b9cfbb7db2b70280252362595cc90e167b5074f20428e8aed453",
+      "profile": "mul_16_1_1_0",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "8ca277eff8b228bbfec84c42113b08aa384f21c59ead141f68fded01327d6b90",
+      "profile": "mul_16_1_1_1",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "d84de8347975d9e0e10b207e5701a942f579dabde1e106dc4dcc626eded4f9d7",
+      "profile": "mul_32_2_0_0",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "c2047b1b667511641643bae2fcf62cd47b486d980415fcde9fc6b79a137104e9",
+      "profile": "mul_32_2_0_1",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "75e96e05c4f29eddde4d19905e84e929898bbec4af3fa7201c9a95bd262985e9",
+      "profile": "mul_32_2_1_0",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "799ed26419c6473449d4e15fe1c969cf60e2854f9a88c5dab8b03d2206aadd0e",
+      "profile": "mul_32_2_1_1",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "160de28773963b252ded6c390d653884d7a2d29b3557ed628ed323d2922cb798",
+      "profile": "mul_32_3_0_0",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "b6ef68870a7f350df92513709d44f968231677c88d6b2df9c22a7b1cf77af64a",
+      "profile": "mul_32_3_0_1",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "536c0337d62c6afaa817889cad058552a5baa2a19b4202f7e46e9bd7703d1919",
+      "profile": "mul_32_3_1_0",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "6378f0c2aadb32c76a38ca7d6bf9f53bd5f0fa9c1c19bb0930f052d4e60ba296",
+      "profile": "mul_32_3_1_1",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "b4e5de3f058120a00b8eb94870ce6296ff4d90b65138d206424ee013360d5e86",
+      "profile": "mul_8_0_0_0",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "7d08c8e3b16c601616c0e6ce557bf427efcb28d289c87c852f955057e0270c40",
+      "profile": "mul_8_0_0_1",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "b9eb741fc1fe0be040d887a4c6053301b7cb81e6e4e72bb56dd6717e13f406d6",
+      "profile": "mul_8_0_1_0",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    },
+    {
+      "fixtureSHA256": "a101bcaa0194e3bb2a21ac40ae3a72fdcf72a5135e5e898b2b765983dba8b0d2",
+      "profile": "mul_8_0_1_1",
+      "rows": 2000,
+      "completed": 1990,
+      "resetAborts": 10
+    }
+  ],
+  "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "fixtureRun": "final_pilot",
+  "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+  "Gate2": "numerical results only; lint and structural coverage still required",
+  "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun final_pilot -RunName formatted_pilot -Jobs 4"
+}

@@ -39,37 +39,48 @@ module sbm_accum #(
     wire carry_raw;
     assign run_ready=meta_sync2;
     assign carry_error=commit_valid && carry_raw;
-    sbm_accum_comb #(.ACC_W(ACC_W),.ROUND_SCHEME(ROUND_SCHEME)) u_add (
-        .cfg_mode(cfg_mode),.first(first),.init_only(init_only),.y_base(y_base),
-        .term(term),.term_tail(term_tail),.acc(acc),.sticky_acc(sticky_acc),
-        .numerical_tail(numerical_tail),.acc_next(acc_next),.sticky_next(sticky_next),
-        .numerical_next(numerical_next),.carry_error(carry_raw)
+    sbm_accum_comb #(
+        .ACC_W(ACC_W),
+        .ROUND_SCHEME(ROUND_SCHEME)) u_add (
+        .cfg_mode(cfg_mode),
+        .first(first),
+        .init_only(init_only),
+        .y_base(y_base),
+        .term(term),
+        .term_tail(term_tail),
+        .acc(acc),
+        .sticky_acc(sticky_acc),
+        .numerical_tail(numerical_tail),
+        .acc_next(acc_next),
+        .sticky_next(sticky_next),
+        .numerical_next(numerical_next),
+        .carry_error(carry_raw)
     );
     always_ff @(posedge clk or negedge reset_n) begin
-        if(!reset_n) begin
-            meta_sync1<=1'b0;
-            meta_sync2<=1'b0;
+        if (!reset_n) begin
+            meta_sync1 <= 1'b0;
+            meta_sync2 <= 1'b0;
         end else begin
-            meta_sync1<=`CK2Q 1'b1;
-            meta_sync2<=`CK2Q meta_sync1;
+            meta_sync1 <= `CK2Q 1'b1;
+            meta_sync2 <= `CK2Q meta_sync1;
         end
     end
     always_ff @(posedge clk or negedge meta_sync2) begin
-        if(!meta_sync2) begin
-            acc<='0;
-            sticky_acc<=1'b0;
-            numerical_tail<=1'b0;
-            iterations_done<='0;
-            approx_cut_o<=1'b0;
-            done<=1'b0;
+        if (!meta_sync2) begin
+            acc <= '0;
+            sticky_acc <= 1'b0;
+            numerical_tail <= 1'b0;
+            iterations_done <= '0;
+            approx_cut_o <= 1'b0;
+            done <= 1'b0;
         end else begin
-            done<=`CK2Q (commit_valid && last);
-            if(commit_valid) begin
-                acc<=`CK2Q acc_next;
-                sticky_acc<=`CK2Q sticky_next;
-                numerical_tail<=`CK2Q numerical_next;
-                iterations_done<=`CK2Q iteration;
-                approx_cut_o<=`CK2Q approx_cut;
+            done <= `CK2Q (commit_valid && last);
+            if (commit_valid) begin
+                acc <= `CK2Q acc_next;
+                sticky_acc <= `CK2Q sticky_next;
+                numerical_tail <= `CK2Q numerical_next;
+                iterations_done <= `CK2Q iteration;
+                approx_cut_o <= `CK2Q approx_cut;
             end
         end
     end

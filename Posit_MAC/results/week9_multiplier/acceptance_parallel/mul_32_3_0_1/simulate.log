@@ -1,0 +1,32 @@
+# vsim +VECTOR_DIR=../acceptance -do run.do -l mul_32_3_0_1/simulate.log -c -wlf mul_32_3_0_1/simulate.wlf -gES=3 -gNB=32 -gSCHEME=0 -gROUNDING=1 work.tb_week9_multiplier_single 
+# Loading sv_std.std
+# Loading work.tb_week9_multiplier_single
+# Loading work.multiplier_checker
+# Loading work.posit_mul_iter
+# Loading work.mul_iter_wrapper
+# Loading work.posit_parser
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.mul_iter_core
+# Loading work.iter_ctrl
+# Loading work.sac_step_comb
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum
+# Loading work.sbm_accum_comb
+# Loading work.mul_norm_comb
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter
+# Loading work.posit_pack_finish
+# do run.do 
+# MUL PROGRESS NB=32 ES=3 scheme=0 rounding=1 rows=100000
+# MUL PROGRESS NB=32 ES=3 scheme=0 rounding=1 rows=200000
+# MUL PROGRESS NB=32 ES=3 scheme=0 rounding=1 rows=300000
+# MUL PROGRESS NB=32 ES=3 scheme=0 rounding=1 rows=400000
+# MUL PROGRESS NB=32 ES=3 scheme=0 rounding=1 rows=500000
+# MUL PROGRESS NB=32 ES=3 scheme=0 rounding=1 rows=600000
+# MULTIPLIER PASS NB=32 ES=3 scheme=0 rounding=1 rows=630000 completed=627014 reset_aborts=2986
+# WEEK9 SINGLE PROFILE PASS
+# ** Note: $finish    : ../../../tb/tb_week9_multiplier_single.sv(23)
+#    Time: 112373287 ns  Iteration: 1  Instance: /tb_week9_multiplier_single

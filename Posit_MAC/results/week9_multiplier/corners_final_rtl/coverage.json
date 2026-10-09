@@ -1,0 +1,104 @@
+{
+  "status": "PASS",
+  "profiles": [
+    {
+      "profile": "mul_16_1_0_0",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_16_1_0_1",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_16_1_1_0",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_16_1_1_1",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_32_2_0_0",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_32_2_0_1",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_32_2_1_0",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_32_2_1_1",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_32_3_0_0",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_32_3_0_1",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_32_3_1_0",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_32_3_1_1",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_8_0_0_0",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_8_0_0_1",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_8_0_1_0",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    },
+    {
+      "profile": "mul_8_0_1_1",
+      "distinct_observed_cases": 3600,
+      "mode_ops_n_cells": 36,
+      "operand_pairs": 100
+    }
+  ],
+  "Linux_Windows_UBSan": "MATCH after newline normalization",
+  "legacy_uniform_replay": "32000 rows unchanged",
+  "scope": "3600 distinct corner/config cases per profile; aborted repetitions excluded; \u00b11, \u00b1minpos, \u00b1maxpos, NaR\u00d70 and 0\u00d7NaR included"
+}

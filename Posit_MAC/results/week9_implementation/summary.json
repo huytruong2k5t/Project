@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-09T06:59:01.507159+07:00",
+  "date": "2026-10-09T08:04:25.706904+07:00",
   "milestones": {
     "W9-03": "PASS",
     "W9-R1": "frozen reconstruction assumptions",
@@ -71,6 +71,134 @@
       "Gate2": "not accepted: less than 10^7 compared transactions",
       "scope": "integrated standalone multiplier, four formats, two schemes, RNE/TRUNC, reset/stall/order/latency",
       "command": "scripts/verify_week9_multiplier_modelsim.ps1 -PerProfile 2000 -RunName final_pilot"
+    },
+    "multiplier_uniform": {
+      "status": "PASS",
+      "date": "2026-10-09T07:50:47.3612580+07:00",
+      "seed": 20261009,
+      "fixtureRows": 10080000,
+      "comparedTransactions": 10032224,
+      "resetAborts": 47776,
+      "mismatches": 0,
+      "profiles": [
+        {
+          "profile": "mul_16_1_0_0",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "56b496978ce43f5781c59651cf0e1326759b12aceb5a9ae457b81ee968c9cd60"
+        },
+        {
+          "profile": "mul_16_1_0_1",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "d77812769491ab39c6c7ffe34af19a4a7b9f0232e9e84e294ecc84f8b462f1fa"
+        },
+        {
+          "profile": "mul_16_1_1_0",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "92d43227bbe4622f86eff6de2443c21db22c344e334f8b15e64cf4d3cf1b6755"
+        },
+        {
+          "profile": "mul_16_1_1_1",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "3baa501ca9472cce153245fadf2dc0fd67adff5a93b5403bbc7d1c79b145f868"
+        },
+        {
+          "profile": "mul_32_2_0_0",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "3ba47a65188179f0e15276a0679ad29cba68c0efbdf102a4e45b3dad03ef1e06"
+        },
+        {
+          "profile": "mul_32_2_0_1",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "71688d249831f2f4da6cb5d44aada73839209bc2b531b3c8cb4d2805cf3c7954"
+        },
+        {
+          "profile": "mul_32_2_1_0",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "01e97002a83cdb9fb8707911e4214839414567728e43b09a44ba0602f3a3bd9c"
+        },
+        {
+          "profile": "mul_32_2_1_1",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "6ee2ed21b1190bc421302991fced87c6ec49363c1cfcc61f1fb4c2a00505ebab"
+        },
+        {
+          "profile": "mul_32_3_0_0",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "5f57fcf84618174a4fe800027d9bfece0ca36361a41c66a456e6a73285d2fec1"
+        },
+        {
+          "profile": "mul_32_3_0_1",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "c8693f0757e47ddaf513361a5f9d18e2d695b6d398686d2bae5125625cf6bc70"
+        },
+        {
+          "profile": "mul_32_3_1_0",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "f39018021bb0f8039155a20dbcc15d0424598ac86ab13918dc65cf47e08b8d36"
+        },
+        {
+          "profile": "mul_32_3_1_1",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "03e6950d701503c2021cfd81b9ff655faf560d946cdd66da757ef743b871a965"
+        },
+        {
+          "profile": "mul_8_0_0_0",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "db418c4fc6b8aa3e930dd5e9f2d486452bd7a39b66e683827c142cdc9e1d156a"
+        },
+        {
+          "profile": "mul_8_0_0_1",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "fc57f4a156e90dac5276522072b2f7799cc992ef5444e9123e92857e3fa6d1ef"
+        },
+        {
+          "profile": "mul_8_0_1_0",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "bcf36e98f721b3496c2c0a161a46b9657efefdcb3b01731f5db3d126659d2a74"
+        },
+        {
+          "profile": "mul_8_0_1_1",
+          "rows": 630000,
+          "completed": 627014,
+          "resetAborts": 2986,
+          "fixtureSHA256": "fdabce94e02af502a2a2077608034c9df01a24964e57388831bfbb3b1b40c6fe"
+        }
+      ],
+      "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+      "fixtureRun": "acceptance",
+      "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+      "Gate2": "numerical results only; lint and structural coverage still required",
+      "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun acceptance -RunName acceptance_parallel -Jobs 8"
     },
     "multiplier_stratified_pilot": {
       "status": "PASS",
@@ -199,6 +327,822 @@
       "scope": "same multiplier checker, isolated profile processes; no waveform recording",
       "Gate2": "numerical results only; lint and structural coverage still required",
       "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun stratified_final_pilot -RunName stratified_final_pilot_rtl -Jobs 8"
+    },
+    "multiplier_formatted_pilot": {
+      "status": "PASS",
+      "date": "2026-10-09T07:02:33.9767132+07:00",
+      "seed": 20261009,
+      "fixtureRows": 32000,
+      "comparedTransactions": 31840,
+      "resetAborts": 160,
+      "mismatches": 0,
+      "profiles": [
+        {
+          "fixtureSHA256": "d7c42c9fa3dc3fb62567eb6ba4b574cbffb523b38c305a5eaf19ae08a6aeb494",
+          "profile": "mul_16_1_0_0",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "2a7346a5cd668f3d95613590b36459751be99ca0b4684532d5ab185c1c2e5134",
+          "profile": "mul_16_1_0_1",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "139a05e7bb50b9cfbb7db2b70280252362595cc90e167b5074f20428e8aed453",
+          "profile": "mul_16_1_1_0",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "8ca277eff8b228bbfec84c42113b08aa384f21c59ead141f68fded01327d6b90",
+          "profile": "mul_16_1_1_1",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "d84de8347975d9e0e10b207e5701a942f579dabde1e106dc4dcc626eded4f9d7",
+          "profile": "mul_32_2_0_0",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "c2047b1b667511641643bae2fcf62cd47b486d980415fcde9fc6b79a137104e9",
+          "profile": "mul_32_2_0_1",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "75e96e05c4f29eddde4d19905e84e929898bbec4af3fa7201c9a95bd262985e9",
+          "profile": "mul_32_2_1_0",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "799ed26419c6473449d4e15fe1c969cf60e2854f9a88c5dab8b03d2206aadd0e",
+          "profile": "mul_32_2_1_1",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "160de28773963b252ded6c390d653884d7a2d29b3557ed628ed323d2922cb798",
+          "profile": "mul_32_3_0_0",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "b6ef68870a7f350df92513709d44f968231677c88d6b2df9c22a7b1cf77af64a",
+          "profile": "mul_32_3_0_1",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "536c0337d62c6afaa817889cad058552a5baa2a19b4202f7e46e9bd7703d1919",
+          "profile": "mul_32_3_1_0",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "6378f0c2aadb32c76a38ca7d6bf9f53bd5f0fa9c1c19bb0930f052d4e60ba296",
+          "profile": "mul_32_3_1_1",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "b4e5de3f058120a00b8eb94870ce6296ff4d90b65138d206424ee013360d5e86",
+          "profile": "mul_8_0_0_0",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "7d08c8e3b16c601616c0e6ce557bf427efcb28d289c87c852f955057e0270c40",
+          "profile": "mul_8_0_0_1",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "b9eb741fc1fe0be040d887a4c6053301b7cb81e6e4e72bb56dd6717e13f406d6",
+          "profile": "mul_8_0_1_0",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        },
+        {
+          "fixtureSHA256": "a101bcaa0194e3bb2a21ac40ae3a72fdcf72a5135e5e898b2b765983dba8b0d2",
+          "profile": "mul_8_0_1_1",
+          "rows": 2000,
+          "completed": 1990,
+          "resetAborts": 10
+        }
+      ],
+      "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+      "fixtureRun": "final_pilot",
+      "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+      "Gate2": "numerical results only; lint and structural coverage still required",
+      "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun final_pilot -RunName formatted_pilot -Jobs 4"
+    },
+    "multiplier_long_stall": {
+      "status": "PASS",
+      "date": "2026-10-09T07:31:36.6198815+07:00",
+      "seed": 20261009,
+      "fixtureRows": 32000,
+      "comparedTransactions": 31840,
+      "resetAborts": 160,
+      "mismatches": 0,
+      "profiles": [
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_16_1_0_0",
+          "fixtureSHA256": "d7c42c9fa3dc3fb62567eb6ba4b574cbffb523b38c305a5eaf19ae08a6aeb494"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_16_1_0_1",
+          "fixtureSHA256": "2a7346a5cd668f3d95613590b36459751be99ca0b4684532d5ab185c1c2e5134"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_16_1_1_0",
+          "fixtureSHA256": "139a05e7bb50b9cfbb7db2b70280252362595cc90e167b5074f20428e8aed453"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_16_1_1_1",
+          "fixtureSHA256": "8ca277eff8b228bbfec84c42113b08aa384f21c59ead141f68fded01327d6b90"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_32_2_0_0",
+          "fixtureSHA256": "d84de8347975d9e0e10b207e5701a942f579dabde1e106dc4dcc626eded4f9d7"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_32_2_0_1",
+          "fixtureSHA256": "c2047b1b667511641643bae2fcf62cd47b486d980415fcde9fc6b79a137104e9"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_32_2_1_0",
+          "fixtureSHA256": "75e96e05c4f29eddde4d19905e84e929898bbec4af3fa7201c9a95bd262985e9"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_32_2_1_1",
+          "fixtureSHA256": "799ed26419c6473449d4e15fe1c969cf60e2854f9a88c5dab8b03d2206aadd0e"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_32_3_0_0",
+          "fixtureSHA256": "160de28773963b252ded6c390d653884d7a2d29b3557ed628ed323d2922cb798"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_32_3_0_1",
+          "fixtureSHA256": "b6ef68870a7f350df92513709d44f968231677c88d6b2df9c22a7b1cf77af64a"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_32_3_1_0",
+          "fixtureSHA256": "536c0337d62c6afaa817889cad058552a5baa2a19b4202f7e46e9bd7703d1919"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_32_3_1_1",
+          "fixtureSHA256": "6378f0c2aadb32c76a38ca7d6bf9f53bd5f0fa9c1c19bb0930f052d4e60ba296"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_8_0_0_0",
+          "fixtureSHA256": "b4e5de3f058120a00b8eb94870ce6296ff4d90b65138d206424ee013360d5e86"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_8_0_0_1",
+          "fixtureSHA256": "7d08c8e3b16c601616c0e6ce557bf427efcb28d289c87c852f955057e0270c40"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_8_0_1_0",
+          "fixtureSHA256": "b9eb741fc1fe0be040d887a4c6053301b7cb81e6e4e72bb56dd6717e13f406d6"
+        },
+        {
+          "longStalls": 21,
+          "rows": 2000,
+          "resetAborts": 10,
+          "completed": 1990,
+          "profile": "mul_8_0_1_1",
+          "fixtureSHA256": "a101bcaa0194e3bb2a21ac40ae3a72fdcf72a5135e5e898b2b765983dba8b0d2"
+        }
+      ],
+      "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+      "fixtureRun": "final_pilot",
+      "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+      "Gate2": "numerical results only; lint and structural coverage still required",
+      "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun final_pilot -RunName long_stall_pilot -Jobs 4"
+    },
+    "multiplier_corners_smoke": {
+      "status": "PASS",
+      "date": "2026-10-09T07:38:29.3929318+07:00",
+      "seed": 20261009,
+      "fixtureRows": 93312,
+      "comparedTransactions": 92864,
+      "resetAborts": 448,
+      "mismatches": 0,
+      "profiles": [
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6ec96a3375eb1446b18ee530a74ce2c8f619cd323874eb1c5ea1e38235fc4dd4",
+          "profile": "mul_16_1_0_0",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6ec96a3375eb1446b18ee530a74ce2c8f619cd323874eb1c5ea1e38235fc4dd4",
+          "profile": "mul_16_1_0_1",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6ec96a3375eb1446b18ee530a74ce2c8f619cd323874eb1c5ea1e38235fc4dd4",
+          "profile": "mul_16_1_1_0",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6ec96a3375eb1446b18ee530a74ce2c8f619cd323874eb1c5ea1e38235fc4dd4",
+          "profile": "mul_16_1_1_1",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+          "profile": "mul_32_2_0_0",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+          "profile": "mul_32_2_0_1",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+          "profile": "mul_32_2_1_0",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+          "profile": "mul_32_2_1_1",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+          "profile": "mul_32_3_0_0",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+          "profile": "mul_32_3_0_1",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+          "profile": "mul_32_3_1_0",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+          "profile": "mul_32_3_1_1",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "399143a672990860da7bf04c44f6f8113563d04e3f6e608ed647677508c552e5",
+          "profile": "mul_8_0_0_0",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "399143a672990860da7bf04c44f6f8113563d04e3f6e608ed647677508c552e5",
+          "profile": "mul_8_0_0_1",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "399143a672990860da7bf04c44f6f8113563d04e3f6e608ed647677508c552e5",
+          "profile": "mul_8_0_1_0",
+          "rows": 5832
+        },
+        {
+          "completed": 5804,
+          "resetAborts": 28,
+          "longStalls": 61,
+          "fixtureSHA256": "399143a672990860da7bf04c44f6f8113563d04e3f6e608ed647677508c552e5",
+          "profile": "mul_8_0_1_1",
+          "rows": 5832
+        }
+      ],
+      "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+      "fixtureRun": "corners_windows",
+      "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+      "Gate2": "numerical results only; lint and structural coverage still required",
+      "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun corners_windows -RunName corners_rtl -Jobs 4"
+    },
+    "multiplier_corners": {
+      "status": "PASS",
+      "date": "2026-10-09T07:50:49.6323336+07:00",
+      "seed": 20261009,
+      "fixtureRows": 115200,
+      "comparedTransactions": 114656,
+      "resetAborts": 544,
+      "mismatches": 0,
+      "profiles": [
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "d74d1eabafc9877fdd616924508e065175fb37e49d3dc7c8b893a22f76ac6060",
+          "longStalls": 75,
+          "profile": "mul_16_1_0_0",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "d74d1eabafc9877fdd616924508e065175fb37e49d3dc7c8b893a22f76ac6060",
+          "longStalls": 75,
+          "profile": "mul_16_1_0_1",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "d74d1eabafc9877fdd616924508e065175fb37e49d3dc7c8b893a22f76ac6060",
+          "longStalls": 75,
+          "profile": "mul_16_1_1_0",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "d74d1eabafc9877fdd616924508e065175fb37e49d3dc7c8b893a22f76ac6060",
+          "longStalls": 75,
+          "profile": "mul_16_1_1_1",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "0c27e9f362c3582c2b78b4ce96649d74918b758f6b1c2a9ffe4741c039aeaab4",
+          "longStalls": 75,
+          "profile": "mul_32_2_0_0",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "0c27e9f362c3582c2b78b4ce96649d74918b758f6b1c2a9ffe4741c039aeaab4",
+          "longStalls": 75,
+          "profile": "mul_32_2_0_1",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "0c27e9f362c3582c2b78b4ce96649d74918b758f6b1c2a9ffe4741c039aeaab4",
+          "longStalls": 75,
+          "profile": "mul_32_2_1_0",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "0c27e9f362c3582c2b78b4ce96649d74918b758f6b1c2a9ffe4741c039aeaab4",
+          "longStalls": 75,
+          "profile": "mul_32_2_1_1",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "0c27e9f362c3582c2b78b4ce96649d74918b758f6b1c2a9ffe4741c039aeaab4",
+          "longStalls": 75,
+          "profile": "mul_32_3_0_0",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "0c27e9f362c3582c2b78b4ce96649d74918b758f6b1c2a9ffe4741c039aeaab4",
+          "longStalls": 75,
+          "profile": "mul_32_3_0_1",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "0c27e9f362c3582c2b78b4ce96649d74918b758f6b1c2a9ffe4741c039aeaab4",
+          "longStalls": 75,
+          "profile": "mul_32_3_1_0",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "0c27e9f362c3582c2b78b4ce96649d74918b758f6b1c2a9ffe4741c039aeaab4",
+          "longStalls": 75,
+          "profile": "mul_32_3_1_1",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "ef4da6e8f791d838512fe919040b8746b9a02242b07390fa29eeb804b33da984",
+          "longStalls": 75,
+          "profile": "mul_8_0_0_0",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "ef4da6e8f791d838512fe919040b8746b9a02242b07390fa29eeb804b33da984",
+          "longStalls": 75,
+          "profile": "mul_8_0_0_1",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "ef4da6e8f791d838512fe919040b8746b9a02242b07390fa29eeb804b33da984",
+          "longStalls": 75,
+          "profile": "mul_8_0_1_0",
+          "completed": 7166
+        },
+        {
+          "resetAborts": 34,
+          "rows": 7200,
+          "fixtureSHA256": "ef4da6e8f791d838512fe919040b8746b9a02242b07390fa29eeb804b33da984",
+          "longStalls": 75,
+          "profile": "mul_8_0_1_1",
+          "completed": 7166
+        }
+      ],
+      "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+      "fixtureRun": "corners_final_windows",
+      "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+      "Gate2": "numerical results only; lint and structural coverage still required",
+      "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun corners_final_windows -RunName corners_final_rtl -Jobs 4"
+    },
+    "multiplier_stratified": {
+      "status": "PASS",
+      "date": "2026-10-09T07:50:16.7687151+07:00",
+      "seed": 20261009,
+      "fixtureRows": 16896000,
+      "comparedTransactions": 16815920,
+      "resetAborts": 80080,
+      "mismatches": 0,
+      "profiles": [
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_16_1_0_0",
+          "completed": 1050995,
+          "fixtureSHA256": "ee0726ebdd36c2c0488647068100ed65c621b5e47bc35e0da4609fb69651ba7d"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_16_1_0_1",
+          "completed": 1050995,
+          "fixtureSHA256": "628a2047607ec8a7ed45a6cf62ba00b0f920db85eeb6032893ced20942c4534f"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_16_1_1_0",
+          "completed": 1050995,
+          "fixtureSHA256": "ac508f118b94c6c728cdefbc8b993fd05605810af2b1fafb8d3823e135eb88c0"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_16_1_1_1",
+          "completed": 1050995,
+          "fixtureSHA256": "47fd28615f59f3ae428d2c01c8dcf9fad654441a428dd6cf7519ddc8b5bca7a7"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_2_0_0",
+          "completed": 1050995,
+          "fixtureSHA256": "b2c317502643c09d1ef4b43e33bd9625fa8d284311b033a039b1d9eb206b1524"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_2_0_1",
+          "completed": 1050995,
+          "fixtureSHA256": "0e70a80e000818fe0f71e2ee34a1da6e921734b3e5e8bfc7d26de0a48fb7bc21"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_2_1_0",
+          "completed": 1050995,
+          "fixtureSHA256": "1cd3e89ae74b108b1ce3cd90e892b9d250a997b49547f45db25c7943af63e739"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_2_1_1",
+          "completed": 1050995,
+          "fixtureSHA256": "92dd51e8c992405fb0ed1c0ab3d3ad563ead9d28ea249e19b4219af387f485bc"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_3_0_0",
+          "completed": 1050995,
+          "fixtureSHA256": "b6d8f1b7e6047a88b10ef32a2257928bcef3526866c2ffe634593f3e28cd3a83"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_3_0_1",
+          "completed": 1050995,
+          "fixtureSHA256": "cfe1e69289162310827bf9ffb720b7a2c93ecb577ec91986864f4887953b5a81"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_3_1_0",
+          "completed": 1050995,
+          "fixtureSHA256": "f6aa8db56516d1570a71dc8ca04546691a6fdb4143a0429ab4cbf039cc57aa17"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_3_1_1",
+          "completed": 1050995,
+          "fixtureSHA256": "d7a2f8f45e47a4a24c08b3394c0bf33e49128eb66e57af92993f828350086c7e"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_8_0_0_0",
+          "completed": 1050995,
+          "fixtureSHA256": "368085c30f96180914acf3b602f302dfe87ae051372b6f01263171249499813a"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_8_0_0_1",
+          "completed": 1050995,
+          "fixtureSHA256": "d6d08c842e35ea413ce889b8c5f1d0dfce6baa66675392082d1f02d3b27da182"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_8_0_1_0",
+          "completed": 1050995,
+          "fixtureSHA256": "8d0db48dc4be7b69508bb083e07164452755c1165baa6b068b41fdc35c660a6a"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_8_0_1_1",
+          "completed": 1050995,
+          "fixtureSHA256": "c97d0742edc1915ef636247f4b07e0d6fbe668757d70e8abf62459179a9ec723"
+        }
+      ],
+      "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+      "fixtureRun": "stratified_corpus",
+      "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+      "Gate2": "numerical results only; lint and structural coverage still required",
+      "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun stratified_corpus -RunName stratified_acceptance -Jobs 8"
+    },
+    "multiplier_acceptance": {
+      "status": "PASS",
+      "date": "2026-10-09T07:50:16.7687151+07:00",
+      "seed": 20261009,
+      "fixtureRows": 16896000,
+      "comparedTransactions": 16815920,
+      "resetAborts": 80080,
+      "mismatches": 0,
+      "profiles": [
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_16_1_0_0",
+          "completed": 1050995,
+          "fixtureSHA256": "ee0726ebdd36c2c0488647068100ed65c621b5e47bc35e0da4609fb69651ba7d"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_16_1_0_1",
+          "completed": 1050995,
+          "fixtureSHA256": "628a2047607ec8a7ed45a6cf62ba00b0f920db85eeb6032893ced20942c4534f"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_16_1_1_0",
+          "completed": 1050995,
+          "fixtureSHA256": "ac508f118b94c6c728cdefbc8b993fd05605810af2b1fafb8d3823e135eb88c0"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_16_1_1_1",
+          "completed": 1050995,
+          "fixtureSHA256": "47fd28615f59f3ae428d2c01c8dcf9fad654441a428dd6cf7519ddc8b5bca7a7"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_2_0_0",
+          "completed": 1050995,
+          "fixtureSHA256": "b2c317502643c09d1ef4b43e33bd9625fa8d284311b033a039b1d9eb206b1524"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_2_0_1",
+          "completed": 1050995,
+          "fixtureSHA256": "0e70a80e000818fe0f71e2ee34a1da6e921734b3e5e8bfc7d26de0a48fb7bc21"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_2_1_0",
+          "completed": 1050995,
+          "fixtureSHA256": "1cd3e89ae74b108b1ce3cd90e892b9d250a997b49547f45db25c7943af63e739"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_2_1_1",
+          "completed": 1050995,
+          "fixtureSHA256": "92dd51e8c992405fb0ed1c0ab3d3ad563ead9d28ea249e19b4219af387f485bc"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_3_0_0",
+          "completed": 1050995,
+          "fixtureSHA256": "b6d8f1b7e6047a88b10ef32a2257928bcef3526866c2ffe634593f3e28cd3a83"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_3_0_1",
+          "completed": 1050995,
+          "fixtureSHA256": "cfe1e69289162310827bf9ffb720b7a2c93ecb577ec91986864f4887953b5a81"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_3_1_0",
+          "completed": 1050995,
+          "fixtureSHA256": "f6aa8db56516d1570a71dc8ca04546691a6fdb4143a0429ab4cbf039cc57aa17"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_32_3_1_1",
+          "completed": 1050995,
+          "fixtureSHA256": "d7a2f8f45e47a4a24c08b3394c0bf33e49128eb66e57af92993f828350086c7e"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_8_0_0_0",
+          "completed": 1050995,
+          "fixtureSHA256": "368085c30f96180914acf3b602f302dfe87ae051372b6f01263171249499813a"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_8_0_0_1",
+          "completed": 1050995,
+          "fixtureSHA256": "d6d08c842e35ea413ce889b8c5f1d0dfce6baa66675392082d1f02d3b27da182"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_8_0_1_0",
+          "completed": 1050995,
+          "fixtureSHA256": "8d0db48dc4be7b69508bb083e07164452755c1165baa6b068b41fdc35c660a6a"
+        },
+        {
+          "resetAborts": 5005,
+          "rows": 1056000,
+          "profile": "mul_8_0_1_1",
+          "completed": 1050995,
+          "fixtureSHA256": "c97d0742edc1915ef636247f4b07e0d6fbe668757d70e8abf62459179a9ec723"
+        }
+      ],
+      "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+      "fixtureRun": "stratified_corpus",
+      "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+      "Gate2": "numerical results only; lint and structural coverage still required",
+      "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun stratified_corpus -RunName stratified_acceptance -Jobs 8"
     }
   },
   "cross_platform": {
@@ -212,6 +1156,7 @@
     "multiplier/ubsan": "MATCH after newline normalization"
   },
   "seed": 20261009,
+  "seed_derivation": "mt19937_64(20261009 + NB + ES); one engine continues across scheme/rounding profiles; directed corner/pattern overrides are explicit in generator",
   "generated_acceptance_rows": 10080000,
   "generated_coverage": [
     {
@@ -295,7 +1240,134 @@
       "rows": 630000
     }
   ],
-  "acceptance_RTL_run": "RUNNING in separate ModelSim profile processes: fixture generation is not RTL verification",
+  "acceptance_RTL_run": {
+    "status": "PASS",
+    "date": "2026-10-09T07:50:16.7687151+07:00",
+    "seed": 20261009,
+    "fixtureRows": 16896000,
+    "comparedTransactions": 16815920,
+    "resetAborts": 80080,
+    "mismatches": 0,
+    "profiles": [
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_16_1_0_0",
+        "completed": 1050995,
+        "fixtureSHA256": "ee0726ebdd36c2c0488647068100ed65c621b5e47bc35e0da4609fb69651ba7d"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_16_1_0_1",
+        "completed": 1050995,
+        "fixtureSHA256": "628a2047607ec8a7ed45a6cf62ba00b0f920db85eeb6032893ced20942c4534f"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_16_1_1_0",
+        "completed": 1050995,
+        "fixtureSHA256": "ac508f118b94c6c728cdefbc8b993fd05605810af2b1fafb8d3823e135eb88c0"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_16_1_1_1",
+        "completed": 1050995,
+        "fixtureSHA256": "47fd28615f59f3ae428d2c01c8dcf9fad654441a428dd6cf7519ddc8b5bca7a7"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_32_2_0_0",
+        "completed": 1050995,
+        "fixtureSHA256": "b2c317502643c09d1ef4b43e33bd9625fa8d284311b033a039b1d9eb206b1524"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_32_2_0_1",
+        "completed": 1050995,
+        "fixtureSHA256": "0e70a80e000818fe0f71e2ee34a1da6e921734b3e5e8bfc7d26de0a48fb7bc21"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_32_2_1_0",
+        "completed": 1050995,
+        "fixtureSHA256": "1cd3e89ae74b108b1ce3cd90e892b9d250a997b49547f45db25c7943af63e739"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_32_2_1_1",
+        "completed": 1050995,
+        "fixtureSHA256": "92dd51e8c992405fb0ed1c0ab3d3ad563ead9d28ea249e19b4219af387f485bc"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_32_3_0_0",
+        "completed": 1050995,
+        "fixtureSHA256": "b6d8f1b7e6047a88b10ef32a2257928bcef3526866c2ffe634593f3e28cd3a83"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_32_3_0_1",
+        "completed": 1050995,
+        "fixtureSHA256": "cfe1e69289162310827bf9ffb720b7a2c93ecb577ec91986864f4887953b5a81"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_32_3_1_0",
+        "completed": 1050995,
+        "fixtureSHA256": "f6aa8db56516d1570a71dc8ca04546691a6fdb4143a0429ab4cbf039cc57aa17"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_32_3_1_1",
+        "completed": 1050995,
+        "fixtureSHA256": "d7a2f8f45e47a4a24c08b3394c0bf33e49128eb66e57af92993f828350086c7e"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_8_0_0_0",
+        "completed": 1050995,
+        "fixtureSHA256": "368085c30f96180914acf3b602f302dfe87ae051372b6f01263171249499813a"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_8_0_0_1",
+        "completed": 1050995,
+        "fixtureSHA256": "d6d08c842e35ea413ce889b8c5f1d0dfce6baa66675392082d1f02d3b27da182"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_8_0_1_0",
+        "completed": 1050995,
+        "fixtureSHA256": "8d0db48dc4be7b69508bb083e07164452755c1165baa6b068b41fdc35c660a6a"
+      },
+      {
+        "resetAborts": 5005,
+        "rows": 1056000,
+        "profile": "mul_8_0_1_1",
+        "completed": 1050995,
+        "fixtureSHA256": "c97d0742edc1915ef636247f4b07e0d6fbe668757d70e8abf62459179a9ec723"
+      }
+    ],
+    "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+    "fixtureRun": "stratified_corpus",
+    "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+    "Gate2": "numerical results only; lint and structural coverage still required",
+    "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun stratified_corpus -RunName stratified_acceptance -Jobs 8"
+  },
   "functional_coverage": {
     "final_pilot": {
       "status": "OBSERVED RTL PASS",
@@ -566,7 +1638,383 @@
           "finite_run_minimum_operands": 1225
         }
       ]
+    },
+    "acceptance_parallel": {
+      "status": "OBSERVED RTL PASS",
+      "report": "results/week9_multiplier/acceptance_parallel/functional_coverage.json",
+      "scope": "functional input/iteration coverage; no line/branch/toggle measurement",
+      "profiles": [
+        {
+          "profile": "mul_16_1_0_0",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 60,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 38
+        },
+        {
+          "profile": "mul_16_1_0_1",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 62,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 32
+        },
+        {
+          "profile": "mul_16_1_1_0",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 59,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 46
+        },
+        {
+          "profile": "mul_16_1_1_1",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 60,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 31
+        },
+        {
+          "profile": "mul_32_2_0_0",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 77,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_2_0_1",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 81,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_2_1_0",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 82,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_2_1_1",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 80,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_3_0_0",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 80,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_3_0_1",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 87,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_3_1_0",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 80,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_32_3_1_1",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 77,
+          "minimum_regime_cross_count": 0,
+          "finite_run_minimum_operands": 0
+        },
+        {
+          "profile": "mul_8_0_0_0",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 2084,
+          "finite_run_minimum_operands": 9626
+        },
+        {
+          "profile": "mul_8_0_0_1",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 2136,
+          "finite_run_minimum_operands": 9785
+        },
+        {
+          "profile": "mul_8_0_1_0",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 2098,
+          "finite_run_minimum_operands": 9779
+        },
+        {
+          "profile": "mul_8_0_1_1",
+          "surviving_rows": 627014,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 2091,
+          "finite_run_minimum_operands": 9603
+        }
+      ]
+    },
+    "stratified_acceptance": {
+      "status": "OBSERVED RTL PASS",
+      "report": "results/week9_multiplier/stratified_acceptance/functional_coverage.json",
+      "scope": "functional input/iteration coverage; no line/branch/toggle measurement",
+      "profiles": [
+        {
+          "profile": "mul_16_1_0_0",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 64,
+          "minimum_regime_cross_count": 16419,
+          "finite_run_minimum_operands": 65669
+        },
+        {
+          "profile": "mul_16_1_0_1",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 64,
+          "minimum_regime_cross_count": 16419,
+          "finite_run_minimum_operands": 65669
+        },
+        {
+          "profile": "mul_16_1_1_0",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 64,
+          "minimum_regime_cross_count": 16419,
+          "finite_run_minimum_operands": 65669
+        },
+        {
+          "profile": "mul_16_1_1_1",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 64,
+          "hit_regime_cross_bins": 64,
+          "minimum_regime_cross_count": 16419,
+          "finite_run_minimum_operands": 65669
+        },
+        {
+          "profile": "mul_32_2_0_0",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 4104,
+          "finite_run_minimum_operands": 26241
+        },
+        {
+          "profile": "mul_32_2_0_1",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 4104,
+          "finite_run_minimum_operands": 26241
+        },
+        {
+          "profile": "mul_32_2_1_0",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 4104,
+          "finite_run_minimum_operands": 26241
+        },
+        {
+          "profile": "mul_32_2_1_1",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 4104,
+          "finite_run_minimum_operands": 26241
+        },
+        {
+          "profile": "mul_32_3_0_0",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 4104,
+          "finite_run_minimum_operands": 26241
+        },
+        {
+          "profile": "mul_32_3_0_1",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 4104,
+          "finite_run_minimum_operands": 26241
+        },
+        {
+          "profile": "mul_32_3_1_0",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 4104,
+          "finite_run_minimum_operands": 26241
+        },
+        {
+          "profile": "mul_32_3_1_1",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 256,
+          "hit_regime_cross_bins": 256,
+          "minimum_regime_cross_count": 4104,
+          "finite_run_minimum_operands": 26241
+        },
+        {
+          "profile": "mul_8_0_0_0",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 65682,
+          "finite_run_minimum_operands": 131357
+        },
+        {
+          "profile": "mul_8_0_0_1",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 65682,
+          "finite_run_minimum_operands": 131357
+        },
+        {
+          "profile": "mul_8_0_1_0",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 65682,
+          "finite_run_minimum_operands": 131357
+        },
+        {
+          "profile": "mul_8_0_1_1",
+          "surviving_rows": 1050995,
+          "valid_regime_cross_bins": 16,
+          "hit_regime_cross_bins": 16,
+          "minimum_regime_cross_count": 65682,
+          "finite_run_minimum_operands": 131357
+        }
+      ]
     }
+  },
+  "structural_coverage_review": "PASS: observed profile/config/regime bins; posit32 minimum 4104/cross cell and 26241/finite run polarity",
+  "code_coverage": "NOT RUN: no line/branch/toggle percentages claimed",
+  "corner_coverage": {
+    "status": "PASS",
+    "profiles": [
+      {
+        "profile": "mul_16_1_0_0",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_16_1_0_1",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_16_1_1_0",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_16_1_1_1",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_32_2_0_0",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_32_2_0_1",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_32_2_1_0",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_32_2_1_1",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_32_3_0_0",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_32_3_0_1",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_32_3_1_0",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_32_3_1_1",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_8_0_0_0",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_8_0_0_1",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_8_0_1_0",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      },
+      {
+        "profile": "mul_8_0_1_1",
+        "distinct_observed_cases": 3600,
+        "mode_ops_n_cells": 36,
+        "operand_pairs": 100
+      }
+    ],
+    "Linux_Windows_UBSan": "MATCH after newline normalization",
+    "legacy_uniform_replay": "32000 rows unchanged",
+    "scope": "3600 distinct corner/config cases per profile; aborted repetitions excluded; ±1, ±minpos, ±maxpos, NaR×0 and 0×NaR included"
   },
   "coverage_limit": "Only PASS summaries make fixture bins observed comparisons. Uniform-bit coverage alone is insufficient under SPEC6.3. Line/branch/toggle coverage not measured by these runs.",
   "superseded_run": "acceptance sixteen-DUT process stopped deliberately; partial run has zero accepted comparison credit; see run_status.json",
@@ -581,17 +2029,17 @@
     "source_tree_git": "none",
     "isolated_checkout": "scratch/github_week9_backup",
     "remote_base": "9a36ba2d94d1e5cdf37bcde1a94e22a36867e8ca",
-    "commit": "0ae39c4f5af08747eb6382c42fdff40e75c5142d",
-    "reason": "pilot checkpoint backed up; large ModelSim run is ongoing",
-    "remote_verified": "0ae39c4f5af08747eb6382c42fdff40e75c5142d"
+    "commit": "daf3428a99f57841ee32412a746dad1792ebe9c5",
+    "reason": "PT2/coverage runner checkpoint pushed; large RTL tests are still running",
+    "remote_verified": "daf3428a99f57841ee32412a746dad1792ebe9c5"
   },
   "source_sha256": {
     "rtl/dyn_left_shifter.sv": "a1cab055bd3357d76c60425fcc65311a7ea7ca15259325351330c406db10a87c",
     "rtl/dyn_right_shifter.sv": "f63bf24d1a36de57b00089055d7d611acb384fd0e0a6d78b0c6fe14ca29197fb",
-    "rtl/iter_ctrl.sv": "460d504ffff8bafd1e7b133b906d75305de2bd65bd54227b38874eb1c7a75e24",
+    "rtl/iter_ctrl.sv": "b08a2bceba94a6f55ed9108d0cf364e8efd4021a4385c44e5c4fbcb5e5cf7779",
     "rtl/lod_lzd_core.sv": "d7d60404567c6179241532a389de98a3ef661325aafd457bba554169b1fc5349",
-    "rtl/mul_iter_core.sv": "13f98e7e6bfaa20cbb10e83854c67bc5c80891ddf0a0a183ac989b870d75f3cd",
-    "rtl/mul_iter_wrapper.sv": "f9d8f56102f87a848994b0e68b933aefa6921d2168ed6cd716185e8b427bc52d",
+    "rtl/mul_iter_core.sv": "a15a44a6659e002a4491eae1e7fe1eed5886f2477482e2ec4042e976c269f5a8",
+    "rtl/mul_iter_wrapper.sv": "2c856fb1429450361a96debb415388376cc90f9516a397631c16b885f5bf0779",
     "rtl/mul_norm_comb.sv": "d69618b016fc512f45f8cad93eb79d419996f375ae93db3cf87e9c47998c87a1",
     "rtl/ops_compare_top.sv": "55d5d026f563317316a941fc9d7632fb65ce9d05b0f78aa276ba948db669b4dd",
     "rtl/ops_sel_comb.sv": "78bf7fec1f73e80aaf817e83163a0fba965c2a3a2ce477f7fdc849cd490dc0c6",
@@ -600,7 +2048,7 @@
     "rtl/paper_ops_comb.sv": "6eff1ab77a4d95b578f4f18a29d42e244664d5e45640fc0e0d975010a83b9a0e",
     "rtl/paper_step_comb.sv": "2d6542329784fd9422676e5a20d3cb42a74bb2af89f63e08f03631d8e5e826ff",
     "rtl/posit_mac.vh": "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88",
-    "rtl/posit_mul_iter.sv": "d6b3131436faec04f423af7bdeb4dbadb62b21602be4d5385cc157c0ed75934a",
+    "rtl/posit_mul_iter.sv": "7791183b102f9597c2713d58773be25c67b15ca7ce44d4289d3fd863568f79c7",
     "rtl/posit_pack.sv": "e7e7e4b33fdde6dee1ce2d48313c2f9243002fb1c9056de22b51aea7ce870ae7",
     "rtl/posit_pack_comb.sv": "dc46a33e05290e6a46b7557d672090162e20b43360cee3fbc034d50238254f24",
     "rtl/posit_pack_finish.sv": "8df33b0eef98c0b32d7e5aee31d66155a908fc41594c5fb8574f0292faed75fc",
@@ -608,12 +2056,12 @@
     "rtl/posit_parser.sv": "443536f3b8180ca5bb5dc8aed16311c0ba57e443d44f707630978f128ca031e5",
     "rtl/posit_parser_comb.sv": "c1b0ea05ea80690be9310c090f2635c6d3eaf1dbb03b5053ce35b042510f3d03",
     "rtl/sac_step_comb.sv": "9e72ab98ae73ed3dea34785e1f6131d8dbafbce0bda56a70e22ac6a8db379e56",
-    "rtl/sbm_accum.sv": "f59b20ef6fd24fea3373df3e91151b87fd59c8bab98a62347a50a829f15dbbd8",
+    "rtl/sbm_accum.sv": "a8f9e4017513e5aa4d43cea1ebd16bd0e1d4fb61869cfb4dea20ac4b8e12940c",
     "rtl/sbm_accum_comb.sv": "1c23cc558198e6eaa8274483c3ff35c97df35c2639b15e4fb9b6054d1314d7ef",
     "rtl/sbm_shift_comb.sv": "b4fe400b7286dc29131d242ad0e4c06d7b9fa1f7a53a5735bcd40f13a579f5f1",
     "tb/arithmetic_checker.sv": "e532a15341de634a24c9e4dd111c15e5ea2e147a37ca1841e7f20803fa6522d8",
     "tb/core_checker.sv": "52cde1b6d9d9fc4863bab70fb689aca7d6d1ab255aaf0d2527eea58401960f56",
-    "tb/multiplier_checker.sv": "3017f3cfbcd3eed899f6f23311cc4272198691dd22afa4d35d5c8ad23cfb3582",
+    "tb/multiplier_checker.sv": "30aa9d3fbb986088240c4b0d1b573fb91495367dd88703f6ccd2c37c763a9789",
     "tb/ops_frontend_checker.sv": "332ece2135fd4a290b23fe2bc5306de5283d14d901a5d67127fe358ba6207706",
     "tb/packer_checker.sv": "75e519bb190655e0662f73de52af489a19bd512fa5da702dc26460b68ac7ddf4",
     "tb/packer_finish_equivalence_checker.sv": "20de51ada6f351e20a848542b9da68f7ef8b2f1183b874d288b526c75804c11f",
@@ -638,17 +2086,19 @@
     "tb/tb_week9_multiplier_single.sv": "058d09fbe6a546c04ae5d14101ce92196998ff7a3d6887c70ea343e84d18dbb0",
     "tb/tb_week9_paper.sv": "b61b774a34eda965d4b56e670f6eb54f98dca73c05ee219af51be5125a46f16d",
     "tb/week9_multiplier_harness.cpp": "2ce054ca4c2379266a5caf973e9c5645e3751dce7a7c5f98e79780da5e15b975",
-    "scripts/audit_week9_coverage.py": "38f2ea9955cf68c4efd880ff045f4c9111a76aad6b297978910479d1821d26f3",
+    "scripts/audit_week9_corners.py": "1cde5c356e647c945d1fd4f33b02bb7ddbb9e77e3dfe69c70fa16096afeca054",
+    "scripts/audit_week9_coverage.py": "b97d06a16ac0cede5dc3ad8bfee8789175d6ab372543d34fad04637dc1337ffc",
     "scripts/collect_ppa.py": "fc8c0ac52af12ddf47050f258bb457f407debc15928aea2f8b422e430893c4d6",
-    "scripts/prepare_week9_git_backup.py": "28befbab22d00f493cd93dec273a6d5d9300727e1db35736c5c74712c6e4f472",
+    "scripts/format_week9_rtl.py": "d5dd729f17db9cee1093a5f4e666bc87e56d37af88adb719b4b3cd9b5d5611a3",
+    "scripts/prepare_week9_git_backup.py": "8b3ba1a0b6a78cb0649405411bdb592a305110b87bed8cc93af11c0aad8e1e0e",
     "scripts/rebuild_l0_l1.sh": "82459d89db96e26f87956e2c855f6f6214148f89c9ce4d7bba97188d7824894d",
     "scripts/run_ops_compare.ps1": "d8b1d2814ce3fcf247ed40fd25c9905c5ebbe9cf00ea5d5b042ece49712aebe3",
     "scripts/run_packer_ppa.ps1": "f14062859e8593d9583e12d2fa14e766bf31ede29726175469a5964d7f24801b",
     "scripts/summarize_paper_discriminators.py": "add6fc92ebd29de2472c7231c483febafd822f4f1bf035daf29c68a9cf6c1ad2",
     "scripts/summarize_paper_fig3.py": "1183a4bbd7ed4f9ab81a29eadf577b1a4470cb740a1947de843625c28d5a279d",
     "scripts/summarize_week9_frontend.py": "5d4cd9918b5824eea9c9b8ba1e85fee1386ca45ec6a852482ff52156f1129ef2",
-    "scripts/summarize_week9_implementation.py": "e11c90aa9c236aefe888528f1bd59bf43e61ca1a071f74a028e70159b5320bdf",
-    "scripts/update_week9_status.py": "92496d6fa53acc1c0e517321b75941856fbe7fa298faf6a6f6afc3bdf17e5df0",
+    "scripts/summarize_week9_implementation.py": "825699ef69f0ec186d019b468b278e7778ac9c2974acadb61666bbfcab0d9269",
+    "scripts/update_week9_status.py": "29ec8577c62a8176f0ebfccf33924467fd5ccbf9c9270b23c2680f35a422b3bb",
     "scripts/verify_dyn_left_shifter.py": "f79b7517e63ae724af5dfe66bd3b580e3687f5ec8a3dbbbe766bb2afa4ddd90a",
     "scripts/verify_dyn_right_shifter.py": "2dcc147a9e50bc859f686ffbc81b8a5159b19bead26301c309262eb51292113f",
     "scripts/verify_packer_modelsim.ps1": "1df4605e281c645be2c76e784390e4aa06436f66b8feccf739d4f9787302d0c4",
@@ -661,15 +2111,16 @@
     "scripts/verify_week9_core_modelsim.ps1": "8908f3358c1d32f646cec96364fa59b7d630b409c3f8ea4bd4e860a53db837c7",
     "scripts/verify_week9_frontend_modelsim.ps1": "8083978ee60210105da3f2baddf80fe8c277774e61224f41b12dc998ba47bb0c",
     "scripts/verify_week9_multiplier_modelsim.ps1": "6fd4e0a1895c9f2b812d2668f1f6659d4685f2a1b5bd292f2e94803ddb6f7cf6",
-    "scripts/verify_week9_multiplier_parallel.ps1": "774c74ead8034f8071782431eeda792315ceacd0ceda4e9703bcb984c4165c0a",
+    "scripts/verify_week9_multiplier_parallel.ps1": "3474930d00a057575f04dfd97c033dce577d32be70b79420fe877acf5eb8994c",
     "scripts/verify_week9_paper_modelsim.ps1": "19eef00b109f72244cd5206da1c5471d299e43c87aea735b9ebf230367afd0ed",
-    "scripts/verify_week9_verilator.sh": "d4e2a9238ba67cf20877aca2e8aa8fdf906413cee2f22f4fe6e98059beb49099",
+    "scripts/verify_week9_verilator.sh": "d3f9e5130cc8bba2e0ef6c0c208141e462cc0aabe26c93ccb6c0a082d0dcd7b2",
+    "scripts/week9_simulation_progress.py": "8731294e817d8d424a1ca2ab768dfcb4c2749cf2f00b7478357d3b6c80cbe73c",
     "l1/test/gen_packer_vectors.cpp": "3cb6bbe830c58b62851b098cdf8dd2b99e59c2286cba621b41a573c16a667624",
     "l1/test/gen_parser_vectors.cpp": "272d56a623c52ca9a8c0e128249140640b9ebd6eef7c2364942b65d177046eff",
     "l1/test/gen_week9_arithmetic.cpp": "f1b6f257bf6487b8f62a2e881dde974240dcdd9667a6cfbe4342190e16d1cf66",
     "l1/test/gen_week9_core.cpp": "24b510799e18cecd0343ee57539692fc74b8b8274b1642ab749e4e165cbe39a0",
     "l1/test/gen_week9_frontend.cpp": "6d5895971fd0c790c314d19c601eb080371188b5bedadc6e165a72813268391f",
-    "l1/test/gen_week9_multiplier.cpp": "6c274ad3e0fadd47939f4023d3128c1b45d74c3a48e59c1fb7a8d804328dc6cb",
+    "l1/test/gen_week9_multiplier.cpp": "2dd318660c9920f0580ca9755df1f24037cae72cd7c157ed5d7164de16bb221b",
     "l1/test/gen_week9_paper.cpp": "965f4d0cb6df227d20993231a256e722ca95ef4884f739dad2e0bd7351b57139",
     "l1/test/test_adder.cpp": "28f6c93abee9f55741521b9c59459f966c36642a4d0b0caacd4d72f7755624c3",
     "l1/test/test_identity.cpp": "c516e48af19918a9cca0bab163897a4eba9e6d3622cf992ffe1caf484b9d2adc",
@@ -692,8 +2143,8 @@
     "l1/test/test_round_unpacked.cpp": "3ea2229a998658d4fc39b3f1428af4514d1d37c6833450275641e93daf48888b",
     "l1/test/test_table1_reproduce.cpp": "cf13960d83b6c9a9315f65b5e877f227372d89171a9ce2b85d91f5ba3c25550c",
     "l1/test/test_tv_paper.cpp": "5d815e546f9dded97375b8c807314cb2ba2b59eb2a5bf4416025e92bb9cb4d3a",
-    "SPEC_Posit_MAC_IP.md": "bc221c86645819e0c3dbe64b7cd124a498847ceb9d6cccbfad978f69bc42cb4b",
-    "l1/PLAN.md": "3c51db97c0090b7f855429c74d08ebb482156b6c3327d0ffb5f6e61841bfc555",
+    "SPEC_Posit_MAC_IP.md": "514d706518576a51a4e5c707ee9cc9a358ae431464d642be64fd16dfb72d6dcd",
+    "l1/PLAN.md": "ba72bde86a8116281cd722336c9242f1bd379d25b973f6a167dd4d65d762e0b0",
     "l1/Makefile": "a364184d22207343b6871d6ec3dc02c565c80e8de86e85e06af1743ce85a0253",
     "Makefile": "6a819bb307a6970327e706b2e06a18f8c66c908e21868858542fbda079c81b30"
   },
@@ -721,6 +2172,8 @@
   },
   "SoftPosit": {
     "version": "vendored source snapshot; exact/RNE ES0/1/2; ES3 uses independent integer/bit-list reference",
+    "source_snapshot_sha256": "5a389a2ce889df63694864244221125f8fca5aef2f228a7abe39beef284b930a",
+    "source_file_count": 143,
     "linux_library_sha256": "8d6e33b23d924f3e76914569da7ebf06866aae61c5801ada77a182442a3eb761",
     "windows_library_sha256": "4b8dd39572b319b0b2ac81362050f3bf4eb50068add30e7d29d1db4480c682ea"
   },
@@ -733,6 +2186,12 @@
     "scripts/verify_week9_core_modelsim.ps1",
     "scripts/verify_week9_frontend_modelsim.ps1",
     "scripts/verify_week9_multiplier_modelsim.ps1 -PerProfile 2000 -RunName final_pilot",
+    "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun final_pilot -RunName parallel_pilot -Jobs 8",
+    "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun acceptance -RunName acceptance_parallel -Jobs 8",
+    "./l1/gen_week9_multiplier results/week9_multiplier/stratified_corpus 1056000 stratified",
+    "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun stratified_corpus -RunName stratified_acceptance -Jobs 8",
+    "scripts/audit_week9_coverage.py (PASS summary plus frozen fixture hashes required for observed coverage)",
+    "scripts/format_week9_rtl.py (whitespace-only); formatted_pilot compared=31840 reset_aborts=160 PASS",
     "./l1/gen_week9_multiplier results/week9_multiplier/acceptance_corpus 630000",
     "quartus_map multiplier --analysis_and_elaboration",
     "quartus_map multiplier",

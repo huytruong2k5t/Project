@@ -54,60 +54,74 @@ module iter_ctrl #(
     assign is_init=(fx_q=='0) || (limit_q=='0);
     assign next_count=count_q+1'b1;
     assign is_last=is_init || (fx_next=='0) || (next_count>=limit_q);
-    sac_step_comb #(.W_X(FRAC_MAX),.S_W(S_W)) u_exact (
-        .fx(fx_q),.scale(scale_q),.term_valid(valid_exact),.sa(sa_exact),
-        .scale_next(scale_exact),.fx_next(fx_next_exact),
-        .exhausted(exhausted_exact),.state_error(error_exact)
+    sac_step_comb #(
+        .W_X(FRAC_MAX),
+        .S_W(S_W)) u_exact (
+        .fx(fx_q),
+        .scale(scale_q),
+        .term_valid(valid_exact),
+        .sa(sa_exact),
+        .scale_next(scale_exact),
+        .fx_next(fx_next_exact),
+        .exhausted(exhausted_exact),
+        .state_error(error_exact)
     );
-    sac_step_comb #(.W_X(FRAC_W),.S_W(S_W)) u_approx (
-        .fx(fx_approx),.scale(scale_q),.term_valid(valid_approx),.sa(sa_approx),
-        .scale_next(scale_approx),.fx_next(fx_next_approx),
-        .exhausted(exhausted_approx),.state_error(error_approx)
+    sac_step_comb #(
+        .W_X(FRAC_W),
+        .S_W(S_W)) u_approx (
+        .fx(fx_approx),
+        .scale(scale_q),
+        .term_valid(valid_approx),
+        .sa(sa_approx),
+        .scale_next(scale_approx),
+        .fx_next(fx_next_approx),
+        .exhausted(exhausted_approx),
+        .state_error(error_approx)
     );
     always_ff @(posedge clk or negedge reset_n) begin
-        if(!reset_n) begin
-            meta_sync1<=1'b0;
-            meta_sync2<=1'b0;
+        if (!reset_n) begin
+            meta_sync1 <= 1'b0;
+            meta_sync2 <= 1'b0;
         end else begin
-            meta_sync1<=`CK2Q 1'b1;
-            meta_sync2<=`CK2Q meta_sync1;
+            meta_sync1 <= `CK2Q 1'b1;
+            meta_sync2 <= `CK2Q meta_sync1;
         end
     end
     always_ff @(posedge clk or negedge meta_sync2) begin
-        if(!meta_sync2) begin
-            emitting_q<=1'b0;
-            mode_q<=1'b0;
-            fx_q<='0;
-            scale_q<='0;
-            count_q<='0;
-            limit_q<='0;
-            token_valid<=1'b0;
-            first<=1'b0;
-            last<=1'b0;
-            init_only<=1'b0;
-            scale<='0;
-            iteration<='0;
-            approx_cut<=1'b0;
+        if (!meta_sync2) begin
+            emitting_q <= 1'b0;
+            mode_q <= 1'b0;
+            fx_q <= '0;
+            scale_q <= '0;
+            count_q <= '0;
+            limit_q <= '0;
+            token_valid <= 1'b0;
+            first <= 1'b0;
+            last <= 1'b0;
+            init_only <= 1'b0;
+            scale <= '0;
+            iteration <= '0;
+            approx_cut <= 1'b0;
         end else begin
-            token_valid<=`CK2Q emitting_q;
-            if(launch) begin
-                emitting_q<=`CK2Q 1'b1;
-                mode_q<=`CK2Q cfg_mode;
-                fx_q<=`CK2Q x_frac;
-                scale_q<=`CK2Q '0;
-                count_q<=`CK2Q '0;
-                limit_q<=`CK2Q (cfg_mode ? cfg_n : EXACT_LIMIT);
-            end else if(emitting_q) begin
-                first<=`CK2Q (count_q=='0);
-                last<=`CK2Q is_last;
-                init_only<=`CK2Q is_init;
-                scale<=`CK2Q (is_init ? {S_W{1'b0}} : next_scale);
-                iteration<=`CK2Q (is_init ? {I_W{1'b0}} : next_count);
-                approx_cut<=`CK2Q (is_init ? (fx_q!='0) : (is_last && fx_next!='0));
-                fx_q<=`CK2Q fx_next;
-                scale_q<=`CK2Q next_scale;
-                count_q<=`CK2Q next_count;
-                if(is_last) emitting_q<=`CK2Q 1'b0;
+            token_valid <= `CK2Q emitting_q;
+            if (launch) begin
+                emitting_q <= `CK2Q 1'b1;
+                mode_q <= `CK2Q cfg_mode;
+                fx_q <= `CK2Q x_frac;
+                scale_q <= `CK2Q '0;
+                count_q <= `CK2Q '0;
+                limit_q <= `CK2Q (cfg_mode ? cfg_n : EXACT_LIMIT);
+            end else if (emitting_q) begin
+                first <= `CK2Q (count_q=='0);
+                last <= `CK2Q is_last;
+                init_only <= `CK2Q is_init;
+                scale <= `CK2Q (is_init ? {S_W{1'b0}} : next_scale);
+                iteration <= `CK2Q (is_init ? {I_W{1'b0}} : next_count);
+                approx_cut <= `CK2Q (is_init ? (fx_q!='0) : (is_last && fx_next!='0));
+                fx_q <= `CK2Q fx_next;
+                scale_q <= `CK2Q next_scale;
+                count_q <= `CK2Q next_count;
+                if (is_last) emitting_q <= `CK2Q 1'b0;
             end
         end
     end

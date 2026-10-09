@@ -1,0 +1,144 @@
+{
+  "status": "PASS",
+  "date": "2026-10-09T07:38:29.3929318+07:00",
+  "seed": 20261009,
+  "fixtureRows": 93312,
+  "comparedTransactions": 92864,
+  "resetAborts": 448,
+  "mismatches": 0,
+  "profiles": [
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6ec96a3375eb1446b18ee530a74ce2c8f619cd323874eb1c5ea1e38235fc4dd4",
+      "profile": "mul_16_1_0_0",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6ec96a3375eb1446b18ee530a74ce2c8f619cd323874eb1c5ea1e38235fc4dd4",
+      "profile": "mul_16_1_0_1",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6ec96a3375eb1446b18ee530a74ce2c8f619cd323874eb1c5ea1e38235fc4dd4",
+      "profile": "mul_16_1_1_0",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6ec96a3375eb1446b18ee530a74ce2c8f619cd323874eb1c5ea1e38235fc4dd4",
+      "profile": "mul_16_1_1_1",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+      "profile": "mul_32_2_0_0",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+      "profile": "mul_32_2_0_1",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+      "profile": "mul_32_2_1_0",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+      "profile": "mul_32_2_1_1",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+      "profile": "mul_32_3_0_0",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+      "profile": "mul_32_3_0_1",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+      "profile": "mul_32_3_1_0",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "6bde9fc50d46a6549e71bff83d2f3ac695cc8679cefbd9b18765cb5860246644",
+      "profile": "mul_32_3_1_1",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "399143a672990860da7bf04c44f6f8113563d04e3f6e608ed647677508c552e5",
+      "profile": "mul_8_0_0_0",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "399143a672990860da7bf04c44f6f8113563d04e3f6e608ed647677508c552e5",
+      "profile": "mul_8_0_0_1",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "399143a672990860da7bf04c44f6f8113563d04e3f6e608ed647677508c552e5",
+      "profile": "mul_8_0_1_0",
+      "rows": 5832
+    },
+    {
+      "completed": 5804,
+      "resetAborts": 28,
+      "longStalls": 61,
+      "fixtureSHA256": "399143a672990860da7bf04c44f6f8113563d04e3f6e608ed647677508c552e5",
+      "profile": "mul_8_0_1_1",
+      "rows": 5832
+    }
+  ],
+  "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "fixtureRun": "corners_windows",
+  "scope": "same multiplier checker, isolated profile processes; no waveform recording",
+  "Gate2": "numerical results only; lint and structural coverage still required",
+  "command": "scripts/verify_week9_multiplier_parallel.ps1 -FixtureRun corners_windows -RunName corners_rtl -Jobs 4"
+}

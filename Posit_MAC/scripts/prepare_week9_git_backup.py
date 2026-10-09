@@ -13,7 +13,7 @@ checkout = root / "scratch/github_week9_backup"
 if not (checkout / ".git").is_dir() or not (checkout / "Posit_MAC").is_dir():
     raise RuntimeError("expected an existing Project checkout with Posit_MAC layout")
 suffixes = {".sv", ".vh", ".v", ".cpp", ".c", ".h", ".hpp", ".py", ".ps1", ".sh",
-            ".md", ".tcl", ".sdc", ".json", ".csv", ".sha256", ".log", ".rpt", ".pdf", ".pptx"}
+            ".md", ".tcl", ".sdc", ".xdc", ".qsf", ".qpf", ".json", ".csv", ".sha256", ".log", ".rpt", ".pdf", ".pptx"}
 excluded = {"work", "db", "incremental_db", "output_files", "obj_dir", "tmp", "__pycache__",
             ".git", "xsim.dir", ".Xil", "node_modules"}
 copied = []

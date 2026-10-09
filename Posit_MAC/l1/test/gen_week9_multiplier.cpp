@@ -88,7 +88,7 @@ template<int NB> uint32_t stratified_operand(unsigned group,unsigned sign,
     uint32_t mask=uint32_t((uint64_t(1)<<NB)-1);
     return sign?(0u-magnitude)&mask:magnitude;
 }
-template<int NB,int ES> void generate(const std::filesystem::path& dir,uint64_t count,bool stratified) {
+template<int NB,int ES> void generate(const std::filesystem::path& dir,uint64_t count,bool stratified,bool corner_sweep) {
     constexpr unsigned F=NB-3-ES,FW=std::min(F,12u);
     const uint32_t mask=uint32_t((uint64_t(1)<<NB)-1),nar=uint32_t(1)<<(NB-1);
     std::mt19937_64 rng(20261009+NB+ES);
@@ -111,9 +111,15 @@ template<int NB,int ES> void generate(const std::filesystem::path& dir,uint64_t 
                 }
                 const uint32_t corners[]={0,1,2,nar-1,nar,nar+1,mask,nar/2,nar/2+1};
                 if(row<81) {a=corners[row/9];b=corners[row%9];}
-                if(!stratified && row%127==81) {a=nar/2+((nar/2-1)>>1);b=mask-1;}
+                if(corner_sweep) {
+                    const uint32_t sweep[]={0,1,2,nar-1,nar,nar+1,mask,
+                                            nar/2,nar/2+1,nar+nar/2};
+                    const uint64_t pair=(row/2)%100;
+                    a=sweep[pair/10]; b=sweep[pair%10];
+                }
+                if(!stratified && !corner_sweep && row%127==81) {a=nar/2+((nar/2-1)>>1);b=mask-1;}
                 l1::IterConfig cfg;
-                const uint64_t config_row=stratified?row/grid:row;
+                const uint64_t config_row=corner_sweep?row/(2*100):(stratified?row/grid:row);
                 cfg.exact=(config_row%2)==0;
                 cfg.ops=(config_row/2)%2;
                 cfg.n=(config_row/4)%9;
@@ -154,12 +160,13 @@ template<int NB,int ES> void generate(const std::filesystem::path& dir,uint64_t 
 int main(int argc,char** argv) {
     if(argc!=3 && argc!=4) return 2;
     bool stratified=argc==4 && std::string(argv[3])=="stratified";
-    if(argc==4 && !stratified) return 2;
+    bool corner_sweep=argc==4 && std::string(argv[3])=="corners";
+    if(argc==4 && !stratified && !corner_sweep) return 2;
     std::filesystem::create_directories(argv[1]);
     uint64_t per_profile=std::stoull(argv[2]);
-    generate<8,0>(argv[1],per_profile,stratified); generate<16,1>(argv[1],per_profile,stratified);
-    generate<32,2>(argv[1],per_profile,stratified); generate<32,3>(argv[1],per_profile,stratified);
+    generate<8,0>(argv[1],per_profile,stratified,corner_sweep); generate<16,1>(argv[1],per_profile,stratified,corner_sweep);
+    generate<32,2>(argv[1],per_profile,stratified,corner_sweep); generate<32,3>(argv[1],per_profile,stratified,corner_sweep);
     std::cout<<"MULTIPLIER GENERATOR PASS rows="<<total<<" L0_RNE="<<l0_checks
              <<" ES3_independent_RNE="<<es3_checks<<" seed=20261009 sampling="
-             <<(stratified?"stratified":"uniform_bits")<<'\n';
+             <<(corner_sweep?"corners":(stratified?"stratified":"uniform_bits"))<<'\n';
 }

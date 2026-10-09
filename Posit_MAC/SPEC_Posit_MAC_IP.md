@@ -370,7 +370,7 @@ Số vòng lặp thực tế = `min(popcount(fx_ban_dau), n_lim)`, tức số bi
 
 **Profile RTL baseline đã chốt:** v0/v1 dùng hợp đồng L1 normative tại §5.4–§5.6: cfg_ops=0/1, hidden bit khởi tạo riêng, cfg_n chỉ đếm số hạng fraction, width/cut theo §5.6. `paper_source_config` và predictor n=2/7-bit là profile nghiên cứu riêng; chưa thay mặc định RTL. Với cùng chuỗi khai triển, `n_terms=n_fraction+1` chỉ là ánh xạ bộ đếm; không bảo đảm cùng kết quả giữa thuật toán RND/complement và thuật toán normative. Test Table I phải ghi đúng tên profile, không dùng source Table I để nghiệm thu cfg_ops normative.
 
-**Lịch core baseline không chồng lấn, chưa triển khai RTL:** L0 là cạnh OPS chốt X/Y/config và phát launch. Core không stall sau launch; top dự trữ một slot kết quả và chưa nhận giao dịch khác đến khi giao dịch hiện tại đã trả đầu ra. Token có valid/first/last/init_only; metadata giữ trong thanh ghi giao dịch.
+**Lịch core baseline không chồng lấn — đã triển khai và kiểm đơn vị 09/10/2026:** L0 là cạnh OPS chốt X/Y/config và phát launch. Core không stall sau launch; top dự trữ một slot kết quả và chưa nhận giao dịch khác đến khi giao dịch hiện tại đã trả đầu ra. Token có valid/first/last/init_only; metadata giữ trong thanh ghi giao dịch.
 
 | n thực tế | SAC | Shifter | Accumulator / core_done |
 | --- | --- | --- | --- |
@@ -1165,7 +1165,7 @@ Cập nhật 08/10/2026. SPEC là hợp đồng; kết quả nghiệm thu phải
 
 1. **Đã nghiệm thu mô hình số học:** Gate1, round_unpacked tương đương parse(pack(u)), Adder và MAC L1 v0/v1 Gate1B. Bằng chứng tại README L1 mục15 và results/week6_*; ES3 dùng oracle riêng, không gọi là L0 SoftPosit ES3.
 2. **Đã nghiệm thu parser RTL đơn vị:** comb và pipeline bốn format, 2.465.812 fixture, 0 mismatch; reset/stall/ordering/II được kiểm ở parser. Bằng chứng results/parser_comb/, results/parser_pipeline/ và rtl/README.md mục5. Không suy thành Gate2/3 toàn MAC.
-3. **Đã nghiệm thu packer RTL tuần8:** tổ hợp/pipeline RNE2/TRUNC1 và parser→packer đạt0 mismatch trên bốn format; F_IN/adapter theo §5.9-D. Tuần9 đã chốt giao diện §5.5-A và kiểm OPS/SAC tổ hợp327.440 vector ModelSim,0 mismatch; SBM/core/top standalone đã triển khai và kiểm pilot 09/10; Gate2 còn kiểm lớn/lint theo PLAN L1 mục7. Paper RTL843 commit/Fig.4 đạt trong profile tái dựng, không xác nhận baseline gốc. Sau tối ưu P2, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode; tiếp tục STA khi tích hợp, không gọi là Gate4 hoặc fmax toàn MAC.
+3. **Đã nghiệm thu packer RTL tuần8:** tổ hợp/pipeline RNE2/TRUNC1 và parser→packer đạt0 mismatch trên bốn format; F_IN/adapter theo §5.9-D. Tuần9 đã chốt giao diện §5.5-A và kiểm OPS/SAC tổ hợp327.440 vector ModelSim,0 mismatch; SBM/core/top standalone đã triển khai và kiểm pilot 09/10; Gate2 đã đạt lượt lớn/coverage chức năng, còn lint/harness chính thức theo PLAN L1 mục7. Paper RTL843 commit/Fig.4 đạt trong profile tái dựng, không xác nhận baseline gốc. Sau tối ưu P2, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode; tiếp tục STA khi tích hợp, không gọi là Gate4 hoặc fmax toàn MAC.
 4. **Trước nghiệm thu tích hợp:** thực hiện reset bridge, startup barrier và lịch core §4.2/§5.5; TB đối chiếu cạnh, config, flags, metadata và slot output. Multiplier standalone đã có reset bridge, startup barrier và kiểm pilot; RTL MAC và nghiệm thu lớn/lint còn theo Gate2/3.
 5. **Chồng lấn sau baseline:** thêm FIFO/credit và chứng minh lịch first/last, n=0/drain, acc feedback trước khi kết luận II/throughput. Sức chứa phải suy ra, không dùng skid2 để bảo đảm mọi giao dịch đang bay.
 6. **Tái hiện/PPA và v2:** provenance Table I, corpus Table II và PPA toàn khối còn mở; ghi đúng giới hạn. Fused v2 là mở rộng, không chặn tuần8 hoặc baseline MAC v1.
@@ -1176,9 +1176,9 @@ Cập nhật 08/10/2026. SPEC là hợp đồng; kết quả nghiệm thu phải
 
 SBM/normalize/adapter đã kiểm252.455 lượt; core đạt39.580 giao dịch và420 reset hủy; standalone multiplier pilot31.840 giao dịch và160 reset hủy. Cả ba suite0 mismatch. Nghiên cứu paper riêng đạt843 commit/293 bản ghi, Fig.4 force-X=0x1ae34000; không xác nhận tie/padding/guard hoặc RTL gốc. Hợp đồng normative giữ §5.5-A/§5.7/§5.9-D.
 
-Kiểm 10⁷ RTL đang chạy; chưa có kết quả nghiệm thu lượt lớn.
+ModelSim đối chiếu 16.815.920 giao dịch, hủy 80.080 giao dịch bằng reset,0 mismatch.
 
-Gate2/tuần9 processing: cần lint/harness Verilator chính thức và review coverage phân tầng §6.3; random bit đủ số lượng không thay coverage. Quartus13 Analysis & Synthesis NB32/ES2 đạt0 lỗi,14 warning đã phân loại, không có cảnh báo latch; không thay STA/CDC/PPA. TableI không chạy lại vì chưa có thay đổi có căn cứ. Kế hoạch/bằng chứng chi tiết: PLAN L1 §7.4 và results/week9_implementation/summary.json. GitHub đã push checkpoint 0ae39c4 lên main bằng checkout riêng trong Posit_MAC; kết quả lượt lớn được bổ sung cuối phiên.
+Gate2/tuần9 processing: cần lint/harness Verilator chính thức ; coverage chức năng §6.3 đã kiểm đạt, line/branch/toggle chưa đo. Quartus13 Analysis & Synthesis NB32/ES2 đạt0 lỗi,14 warning đã phân loại, không có cảnh báo latch; không thay STA/CDC/PPA. TableI không chạy lại vì chưa có thay đổi có căn cứ. Kế hoạch/bằng chứng chi tiết: PLAN L1 §7.4 và results/week9_implementation/summary.json. GitHub đã push checkpoint 0ae39c4 lên main bằng checkout riêng trong Posit_MAC; kết quả lượt lớn được bổ sung cuối phiên.
 
 ## 12. Báo cáo và bảo vệ
 

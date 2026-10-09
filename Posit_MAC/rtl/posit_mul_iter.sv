@@ -31,11 +31,28 @@ module posit_mul_iter #(
     output wire [NB-1:0] d,
     output wire [4:0] flags
 );
-    mul_iter_wrapper #(.NB(NB),.ES(ES),.FRAC_W(FRAC_W),.N_MAX(N_MAX),
-        .ROUND_SCHEME(ROUND_SCHEME),.ROUND_MODE(ROUND_MODE),.EXACT_EN(EXACT_EN),.OPS_EN(OPS_EN)) u_wrapper (
-        .clk(clk),.rst_n(rst_n),.in_valid(in_valid),.in_ready(in_ready),.a(a),.b(b),
-        .cfg_mode(cfg_mode),.cfg_n(cfg_n),.cfg_ops(cfg_ops),.out_valid(out_valid),
-        .out_ready(out_ready),.d(d),.flags(flags)
+    mul_iter_wrapper #(
+        .NB(NB),
+        .ES(ES),
+        .FRAC_W(FRAC_W),
+        .N_MAX(N_MAX),
+        .ROUND_SCHEME(ROUND_SCHEME),
+        .ROUND_MODE(ROUND_MODE),
+        .EXACT_EN(EXACT_EN),
+        .OPS_EN(OPS_EN)) u_wrapper (
+        .clk(clk),
+        .rst_n(rst_n),
+        .in_valid(in_valid),
+        .in_ready(in_ready),
+        .a(a),
+        .b(b),
+        .cfg_mode(cfg_mode),
+        .cfg_n(cfg_n),
+        .cfg_ops(cfg_ops),
+        .out_valid(out_valid),
+        .out_ready(out_ready),
+        .d(d),
+        .flags(flags)
     );
 endmodule
 // End of posit_mul_iter.sv

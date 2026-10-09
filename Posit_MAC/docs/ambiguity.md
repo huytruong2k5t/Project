@@ -34,7 +34,7 @@ Cập nhật 08/10/2026, đồng bộ SPEC v1.5. [SPEC §11](../SPEC_Posit_MAC_I
 | Table I tái dựng source | Thống kê lịch sử đạt; bị loại khỏi baseline bit-exact2021 | 200 triệu accepted seed271828, max0,984213 điểm %; nhưng Fig.4 output sai:0x1ae34800 thay0x1ae34000. README L1 mục20; giữ làm control |
 | Width/cut research fig3 | Chức năng đã nghiệm thu; TableI chưa đạt | Fraction12/payload13+carry/guard0, cut term trước áp dấu, normalize cuối; Windows/Linux/UBSan PASS. 200M max1,292319 điểm %, năm pilot đều vượt1. Layout cờ là tái dựng địa phương |
 | Vector phân biệt/phương án3 | Bốn bước kiểm chứng hoàn thành; baseline còn processing |292 bản ghi/206 trường hợp,10 ứng viên;205.882 kiểm/nền tảng PASS. Guard12/cut12 khớp Fig.4 nhưng200M max1,338773 điểm %, chưa đạt; tie/guard/cờ/generator nguồn còn mở |
-| RTL nhân tuần9 | processing; standalone đã kiểm pilot, Gate2 còn thiếu | Context/token/drain chốt SPEC §5.5-A, FLOOR normalize đúng lưới L1 ở §5.7.327.440 vector ModelSim0 mismatch; SBM/core/top standalone và paper trace đã kiểm; lượt lớn/lint theo PLAN mục7 |
+| RTL nhân tuần9 | processing; standalone đã kiểm pilot, Gate2 còn thiếu | Context/token/drain chốt SPEC §5.5-A, FLOOR normalize đúng lưới L1 ở §5.7.327.440 vector ModelSim0 mismatch; SBM/core/top standalone và paper trace đã kiểm; lint/harness chính thức theo PLAN mục7; lượt lớn/coverage chức năng đã đạt |
 | Table II | Chưa hoàn tất | Chốt corpus FP64→posit32 ES3, nhóm mA/mB và oracle exact ES3; giả định cả hai nằm trong nhóm phải công bố |
 | Packer RTL tuần8 | Đã nghiệm thu đơn vị |5.947.048 packer và4.931.624 chain,0 mismatch; results/packer/summary.json |
 | Core/MAC RTL | Core và standalone đã kiểm pilot; MAC chưa triển khai | Reset/token/drain/slot đạt phạm vi pilot; Gate2/lint và Gate3 còn mở |
@@ -53,4 +53,4 @@ Sau đó đã chốt/kiểm hợp đồng width/cut hữu hạn ở README mục
 
 Paper843 commit/Fig.4 đạt cùng giả định fig3; chưa có bằng chứng mới cho tie/prefix/internal guard hoặc generator gốc, nên không chạy lại TableI. W9-03..05 đã có code/test; Gate2/tuần9 processing. Verilator/lint còn thiếu; GitHub backup đã có checkout riêng trong dự án. Không đổi mô hình để né tiêu chí.
 
-Kiểm 10⁷ RTL đang chạy; chưa có kết quả nghiệm thu lượt lớn.
+ModelSim đối chiếu 16.815.920 giao dịch, hủy 80.080 giao dịch bằng reset,0 mismatch.

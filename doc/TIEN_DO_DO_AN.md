@@ -21,7 +21,7 @@ MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8
 | --- | --- | --- |
 | Chốt baseline gốc | processing | Đã kiểm predictor, width/cut và vector phân biệt; loại profile không khớp ví dụ gốc. Còn hoàn thiện TableI, tie/cờ và cách sinh dữ liệu gốc |
 | MAC L1 — Gate1B | ✅ | MAC v0/v1, tích lũy và API đã triển khai, kiểm chứng đạt |
-| RTL và kiểm chứng tích hợp — Gate2/3 | processing | Đã triển khai và kiểm core/multiplier standalone; còn nghiệm thu lớn/lint Gate2 và RTL MAC/Gate3 |
+| RTL và kiểm chứng tích hợp — Gate2/3 | processing | Đã triển khai và kiểm core/multiplier standalone; đã đạt lượt lớn/coverage chức năng; còn lint/harness chính thức Gate2 và RTL MAC/Gate3 |
 | PPA, mở rộng và hồ sơ — Gate4 | không | Đo toàn hệ thống, đối chiếu baseline; thực hiện mở rộng đã chọn, báo cáo và demo |
 
 **Thứ tự tiếp theo:** Hoàn tất kiểm lớn/lint multiplier tuần9 — Gate2 → RTL MAC/Gate3 → coverage/PPA/Gate4 → báo cáo và bảo vệ. Kế hoạch chi tiết tại PLAN L1 mục7.
@@ -40,7 +40,7 @@ Tuần theo lộ trình SPEC, chưa gắn với lịch học. Một phần công
 | 6 | L1 MAC — Gate1B | ✅ | MAC v0/v1, tích lũy và API đạt kiểm chứng Linux/Windows |
 | 7 | RTL giải mã và khối cơ sở | ✅ | LOD/LZD, hai shifter và parser tổ hợp/pipeline kiểm chứng đơn vị đạt |
 | 8 | RTL mã hóa và làm tròn | ✅ | Packer tổ hợp/pipeline và parser→packer đạt; PPA đơn vị đã khảo sát, sau tối ưu P2, benchmark đạt setup100MHz ở ba seed mỗi mode |
-| 9 | RTL bộ nhân lặp — Gate2 | processing | Đã triển khai SBM/core/multiplier và kiểm pilot; paper trace đạt phạm vi tái dựng. Còn nghiệm thu lớn/lint Gate2; chưa chốt baseline gốc |
+| 9 | RTL bộ nhân lặp — Gate2 | processing | Đã triển khai SBM/core/multiplier và kiểm pilot; paper trace đạt phạm vi tái dựng. Đạt lượt lớn/coverage chức năng; còn lint/harness chính thức Gate2; chưa chốt baseline gốc |
 | 10 | RTL bộ cộng | không | Chưa triển khai |
 | 11 | RTL MAC — Gate3 | không | Chưa triển khai |
 | 12 | Harness, regression và coverage | không | Chưa có môi trường kiểm chứng tích hợp |
@@ -115,7 +115,7 @@ Tuần theo lộ trình SPEC, chưa gắn với lịch học. Một phần công
 
 | STT | Mốc / nhóm công việc | Kết quả chính | Trạng thái |
 | --- | --- | --- | --- |
-| 1 | Lõi nhân RTL và tích hợp standalone — tuần9 | Hoàn thiện số học, controller và multiplier; kiểm core, reset/stall/latency và pilot đạt. Còn ngưỡng nghiệm thu/lint Gate2 | processing |
+| 1 | Lõi nhân RTL và tích hợp standalone — tuần9 | Hoàn thiện số học, controller và multiplier; kiểm core, reset/stall/latency và pilot đạt. Đạt ngưỡng số học10⁷; còn lint chính thức để đóng Gate2 | processing |
 | 2 | Đối chiếu paper bằng RTL tối thiểu | Trace phân biệt và Fig.4 khớp profile tái dựng; chưa có bằng chứng mới để chốt baseline gốc hoặc đổi kết quả TableI | ✅ |
 | 3 | Hồ sơ kiểm chứng và bảo toàn dữ liệu | Đồng bộ tài liệu, lưu corpus/log/hash; Đã push checkpoint code/log lên GitHub; kết quả Gate2 sẽ bổ sung cuối phiên | processing |
 

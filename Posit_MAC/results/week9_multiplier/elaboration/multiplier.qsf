@@ -1,0 +1,22 @@
+set_global_assignment -name FAMILY "Cyclone IV E"
+set_global_assignment -name DEVICE EP4CE22F17C6
+set_global_assignment -name TOP_LEVEL_ENTITY posit_mul_iter
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name SEARCH_PATH "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/lod_lzd_core.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/dyn_left_shifter.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/dyn_right_shifter.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_parser.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/ops_sel_comb.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/sac_step_comb.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/sbm_shift_comb.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/sbm_accum_comb.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/iter_ctrl.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/sbm_accum.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/mul_iter_core.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/mul_norm_comb.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_pack_prepare.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_pack_finish.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_pack.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/mul_iter_wrapper.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_mul_iter.sv"

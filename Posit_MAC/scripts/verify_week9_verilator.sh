@@ -4,7 +4,13 @@ set -euo pipefail
 project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd -- "$project_dir"
 command -v verilator >/dev/null || { echo 'BLOCKED: Verilator not installed; Gate2 cannot be accepted'; exit 2; }
-result_dir="$project_dir/results/week9_multiplier/verilator"
+fixture_run="${1:-stratified_final_pilot}"
+[[ "$fixture_run" =~ ^[a-z0-9_-]+$ ]] || { echo 'Invalid fixture run'; exit 2; }
+fixture_dir="$project_dir/results/week9_multiplier/$fixture_run"
+[[ -d "$fixture_dir" ]] || { echo 'Missing frozen fixture directory'; exit 2; }
+# Run the default pilot first and compare to ModelSim before requesting the
+# full stratified corpus. Merely building this harness is not acceptance.
+result_dir="$project_dir/results/week9_multiplier/verilator/$fixture_run"
 mkdir -p -- "$result_dir/tmp"
 export TMPDIR="$result_dir/tmp"
 verilator --version > "$result_dir/version.log"
@@ -31,7 +37,7 @@ for format in '8 0' '16 1' '32 2' '32 3'; do
                 "${rtl[@]}" "$project_dir/tb/week9_multiplier_harness.cpp" \
                 > "$run_dir/build.log" 2>&1
             "$run_dir/obj_dir/Vposit_mul_iter" \
-                "$project_dir/results/week9_multiplier/acceptance_corpus/mul_${nb}_${es}_${scheme}_${rounding}.txt" \
+                "$fixture_dir/mul_${nb}_${es}_${scheme}_${rounding}.txt" \
                 | tee "$run_dir/run.log"
         done
     done

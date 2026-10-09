@@ -1,0 +1,222 @@
+{
+  "date": "2026-10-09",
+  "reviewed_report": "l1/baseline_verification_report.md",
+  "original_author_baseline_status": "NOT_ESTABLISHED",
+  "report_edit": "unchanged",
+  "normative_L1_RTL_SPEC": "unchanged",
+  "fresh_tests": "Three programs built afresh; exit0 each; scope UBSan exit0; Kim2unused-variable warnings recorded",
+  "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "commands": {
+    "build": "g++ -O3 -std=c++17 -Wall -Wextra -I l1/include l1/test/<source>.cpp -o results/baseline_report_review/<binary>; bitscan/table1 additionally -Werror; scope -O1 -g -fsanitize=undefined -fno-sanitize-recover=undefined",
+    "kim": "./results/baseline_report_review/test_kim_investigation 1000000 314159",
+    "bitscan": "./results/baseline_report_review/test_bitscan (fixed 1000000 samples, seed314159)",
+    "reported_table1": "./results/baseline_report_review/test_paper_table1 --samples 2000000 --profile source (default seed314159)",
+    "scope": "./results/baseline_report_review/check_scope",
+    "working_directory": "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC",
+    "wsl_shell": "bash --noprofile --norc",
+    "TMPDIR": "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\baseline_report_review\\tmp",
+    "journal_not_rerun": "Unchanged source/corpus; existing 10M evidence reused, no /tmp/j2024_val write"
+  },
+  "verified_existing_measurements": {
+    "test_out": {
+      "fig3": {
+        "samples": 1000000,
+        "max_gap_pp": 1.241
+      },
+      "guard12_pack12": {
+        "samples": 1000000,
+        "max_gap_pp": 1.292
+      },
+      "source_uncut": {
+        "samples": 1000000,
+        "max_gap_pp": 0.9365
+      }
+    },
+    "acceptance": {
+      "fig3": {
+        "samples": 200000000,
+        "max_gap_pp": 1.2923195
+      },
+      "guard12_pack12": {
+        "samples": 200000000,
+        "max_gap_pp": 1.338773
+      },
+      "source_uncut": {
+        "samples": 200000000,
+        "max_gap_pp": 0.984213
+      }
+    }
+  },
+  "shared_source_hashes": {
+    "l1/include/l1_multiplier_exact.hpp": {
+      "match": true,
+      "observed": "22b74fea86a300f18e64f4f77053006932c6c06aa4b6fe4e67ac1a62503ac1bd",
+      "reference": "22b74fea86a300f18e64f4f77053006932c6c06aa4b6fe4e67ac1a62503ac1bd"
+    },
+    "l1/include/l1_multiplier_iter.hpp": {
+      "match": true,
+      "observed": "9b516a8d7bbd0f29c1c28645499b081db95ce756fdd30930ffe5a9889ddf0736",
+      "reference": "9b516a8d7bbd0f29c1c28645499b081db95ce756fdd30930ffe5a9889ddf0736"
+    },
+    "l1/include/mul_norm.hpp": {
+      "match": true,
+      "observed": "5fd2e1aac6b0cecb0627f24429b2bee04d41531e280b2615fdaf7c4bedfee41a",
+      "reference": "5fd2e1aac6b0cecb0627f24429b2bee04d41531e280b2615fdaf7c4bedfee41a"
+    },
+    "l1/include/ops_sel.hpp": {
+      "match": true,
+      "observed": "558c0b319bd32da1e6ebcf1c5dc8539b26e1861104dfb94aa75f5c03d0b1a4bf",
+      "reference": "558c0b319bd32da1e6ebcf1c5dc8539b26e1861104dfb94aa75f5c03d0b1a4bf"
+    },
+    "l1/include/paper_babic.hpp": {
+      "match": true,
+      "observed": "33b89ecd7d6e7b746daec2c2d90900e1cb57b8f9c0331228278acdbe68edbda4",
+      "reference": "33b89ecd7d6e7b746daec2c2d90900e1cb57b8f9c0331228278acdbe68edbda4"
+    },
+    "l1/include/paper_fig3_accumulator.hpp": {
+      "match": true,
+      "observed": "872182bf83dd28503c74fe0a97d881fd5513eee4c5e8313765bdc29c90bd2742",
+      "reference": "872182bf83dd28503c74fe0a97d881fd5513eee4c5e8313765bdc29c90bd2742"
+    },
+    "l1/include/paper_measurement.hpp": {
+      "match": true,
+      "observed": "c4cdf0ce9895781f00717693fa50693e34f46a963235041329eb89258c16635f",
+      "reference": "c4cdf0ce9895781f00717693fa50693e34f46a963235041329eb89258c16635f"
+    },
+    "l1/include/paper_multiplier.hpp": {
+      "match": true,
+      "observed": "39d2dc4e49bbc67fa0f7491a33184589cfc332fc4ba38151a9fa3aa8bc6ca1bc",
+      "reference": "39d2dc4e49bbc67fa0f7491a33184589cfc332fc4ba38151a9fa3aa8bc6ca1bc"
+    },
+    "l1/include/paper_ops.hpp": {
+      "match": true,
+      "observed": "fb42bd0cd52fdc60cabeda11cdead840ad9d0e7d55f4d58a855a4f915ec1eda7",
+      "reference": "fb42bd0cd52fdc60cabeda11cdead840ad9d0e7d55f4d58a855a4f915ec1eda7"
+    },
+    "l1/include/posit_adder.hpp": {
+      "match": true,
+      "observed": "08d20c9ccc3aad3cb314c4ca42649f8a039364756633099dea3bebec60a80ba4",
+      "reference": "08d20c9ccc3aad3cb314c4ca42649f8a039364756633099dea3bebec60a80ba4"
+    },
+    "l1/include/posit_mac.hpp": {
+      "match": true,
+      "observed": "136aa7adc8038384785c249c12c2c779534f448f6e4b6b54fc26cbe26ab2c66a",
+      "reference": "136aa7adc8038384785c249c12c2c779534f448f6e4b6b54fc26cbe26ab2c66a"
+    },
+    "l1/include/posit_packer.hpp": {
+      "match": true,
+      "observed": "532e3e3af4416d925de83e38e1a4554129953ee5521d1d8114a4e30c539b57bb",
+      "reference": "532e3e3af4416d925de83e38e1a4554129953ee5521d1d8114a4e30c539b57bb"
+    },
+    "l1/include/posit_parser.hpp": {
+      "match": true,
+      "observed": "c6aaefa8d9dbf7afb5bc61a2f9615d28fd3372c6663d34edf12b13ebd97059ec",
+      "reference": "c6aaefa8d9dbf7afb5bc61a2f9615d28fd3372c6663d34edf12b13ebd97059ec"
+    },
+    "l1/include/posit_types.hpp": {
+      "match": true,
+      "observed": "4e3d61f091bc86917d8a983dcf6228af6ee14a12b49e491ba3b99be70b05771b",
+      "reference": "4e3d61f091bc86917d8a983dcf6228af6ee14a12b49e491ba3b99be70b05771b"
+    },
+    "l1/include/round_unpacked.hpp": {
+      "match": true,
+      "observed": "473a820638be6f80da99cebf0c35be80e68a18c08f18b31dfd07755e5332a62c",
+      "reference": "473a820638be6f80da99cebf0c35be80e68a18c08f18b31dfd07755e5332a62c"
+    },
+    "l1/include/sac.hpp": {
+      "match": true,
+      "observed": "aca2fdffd0df9060e167d5ad6d22e219c3e70a2258999da093388c565fe89625",
+      "reference": "aca2fdffd0df9060e167d5ad6d22e219c3e70a2258999da093388c565fe89625"
+    },
+    "l1/include/sbm.hpp": {
+      "match": true,
+      "observed": "88ab3e30b3b2c078bef18f335b39991029678338adae295c12d1cdddd1ff61c3",
+      "reference": "88ab3e30b3b2c078bef18f335b39991029678338adae295c12d1cdddd1ff61c3"
+    },
+    "l1/test/paper_discriminator_study.hpp": {
+      "match": true,
+      "observed": "a26722815573870e3dcb541890b71384032d5db22ad2bdd82fc71c3c233c0fb6",
+      "reference": "a26722815573870e3dcb541890b71384032d5db22ad2bdd82fc71c3c233c0fb6"
+    },
+    "l1/test/test_paper_discriminators.cpp": {
+      "match": true,
+      "observed": "e940fd1a5d4915b3a61ca4879b93b4f4aaa36c472715211f0cd917e13fa7f14c",
+      "reference": "e940fd1a5d4915b3a61ca4879b93b4f4aaa36c472715211f0cd917e13fa7f14c"
+    }
+  },
+  "findings": [
+    {
+      "line": 15,
+      "finding": "12 pilot cells verified at 1M/seed271828, max0.9365pp; report command instead 2M/defaultseed314159 returns max1.06145pp and NOT_REPRODUCED. Exit0 only execution, not acceptance."
+    },
+    {
+      "line": 125,
+      "finding": "Existing 200M/seed271828 source_uncut numeric PASS max0.984213pp; source fixture output0x1ae34800 differs from printed0x1ae34000. Statistical agreement not original author baseline."
+    },
+    {
+      "line": 158,
+      "finding": "Guard12 plus final cut12 fails 200M numeric criterion max1.338773pp. source_uncut retains output detail. No evidence guard>=12 always passes or implies normative MAC accumulator width."
+    },
+    {
+      "line": 12,
+      "finding": "UniformBits harness allows exponent0 while unpack adds hidden1; pack flushes exp<=0 to zero. 257995/1M accepted references subnormal, 257993 n3 outputs zero. Normal-input/normal-reference subset matches RND table within0.130175pp. This diagnostic does not establish author filters."
+    },
+    {
+      "line": 13,
+      "finding": "sqrt2 variant measured max0.6487pp, also below stated1pp threshold; closer1.5 supports plausibility, does not uniquely establish source hardware. ExactSub shares displayed RND percentages/max gaps with ones-complement."
+    },
+    {
+      "line": 79,
+      "finding": "Claimed .8785/.3263/.0138pp comes from 4b cut-X-only. 4a cut-both measured .8902/.6636/.3870pp; truncation policy must be declared."
+    },
+    {
+      "line": 90,
+      "finding": "Err<0.1 gaps from displayed percentages are7.95/36.38/65.82pp. 54.26 is n2 Err<5 max;57.46 is n3 Err<1 max. BitScan test counts total terms and uses frozen RND OPS, so excludes this candidate, not all source semantics."
+    },
+    {
+      "line": 141,
+      "finding": "Neural dataset/wide-regime asserted without source evidence. PaperVI-A states random200M; wide raw Posit pilot already8.95495%. Residual discrepancy confirmed, Fig9 causal explanation unresolved."
+    },
+    {
+      "line": 42,
+      "finding": "Journal command writes /tmp outside authorized project; no build commands/version/hash given for new Kim/bitscan binaries. Avoid loading shell profiles; keep output/TMPDIR in project."
+    }
+  ],
+  "scope_diagnostic": {
+    "accepted_bits_pairs": 1000000,
+    "input_subnormal": 4255,
+    "ideal_subnormal": 257995,
+    "forced_zero_n3": 257993,
+    "normal_subset_pairs": 742005,
+    "max_subset_gap_pp": 0.130175
+  },
+  "confirmed_fig4": {
+    "fig3": "0x1ae34000",
+    "guard12_pack12": "0x1ae34000",
+    "source_uncut": "0x1ae34800"
+  },
+  "source2024": "https://www.scribd.com/document/818436812/Area-Efficient-Iterative-Logarithmic-Approximate-Multipliers-for-IEEE-754-and-Posit-Numbers",
+  "recommended_conclusion": "A declared local reconstruction matches12 TableI cells within1pp on200M samples/seed271828, but source output differs; generator, SAC/n, OPS and internal precision provenance remain unresolved. Not enough to accept original-author baseline or change normative MAC guard width.",
+  "sha256": {
+    "l1/baseline_verification_report.md": "9cb27328510ac9c4d29ea5aaea1eb9dbf3c1cfffd55a6ea20851ebe53859e178",
+    "l1/include/kim_investigation.hpp": "5d984f8a7b387bf5b82313359eddffd468f7e3a81bd157cf75aac350f567a15b",
+    "l1/test/test_kim_baseline_investigation.cpp": "f629a58a056218b9c08aa54541ca9788e1b347e9189559b36224249cf54f0939",
+    "l1/test/test_bitscan.cpp": "bec54c0651216bb232a91e0d3d2914e25e543403d63eb2ab45186ae03ca80f22",
+    "l1/test/test_paper_table1.cpp": "7c010f6ea494ba8a42c1ededa170cca1c7287cf3af82f41dc091e762142061f9",
+    "l1/test/paper_discriminator_study.hpp": "a26722815573870e3dcb541890b71384032d5db22ad2bdd82fc71c3c233c0fb6",
+    "results/paper_discriminators/test_out/measurement.csv": "09be25a75635f76f6431b1aa2171e8878ed8e221478770d07f71e6bf2a5cc80d",
+    "results/paper_discriminators/acceptance/measurement.csv": "66f0e7fecdf177df2230232ff75a9416f576f7140818449e6fedc598b23f2a81",
+    "results/paper_discriminators/summary.json": "93c62ce7f44486f4899c6c78dcf0222efacd60969997c728b174efadc879755a",
+    "results/paper_journal2024/measurement/summary.json": "caa550a9a62b2298a655e38d8448fa0224a64608616cbbbe1d7eb158e8b7a114",
+    "results/baseline_report_review/bitscan_1m.log": "97a58c0449103d49be4fee6425e20513709e46bd20f34c3b273725b6d84d40cc",
+    "results/baseline_report_review/build_bitscan.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/baseline_report_review/build_kim.log": "5594f98dcf4bdb5ccb73787aecc904ce05a5dadcff2b635a6e4f66bf8031915a",
+    "results/baseline_report_review/build_scope.log": "4d5bc0109f9881633696ea3b3e6c340017299a1b0904f568de7284abd924546b",
+    "results/baseline_report_review/build_table1.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/baseline_report_review/check_scope.cpp": "f5a5430c7ffccf83af01f7b62659f3e4cd83490be3dead7baafcc91e05f1e362",
+    "results/baseline_report_review/compiler.txt": "b91618fdae3b67ebf403390a52d335e53ea64f2efff7fc74f3b6ca3843e9c734",
+    "results/baseline_report_review/kim_1m.log": "825937f6918d4eed99a2192a35ac6fbb5c79091c27c4351764a37701e8d66dbe",
+    "results/baseline_report_review/scope_diagnostic.log": "10b4882e2b81f3c90db8490d49c44a7bd050e7ce99684ab72d0e183320f5f61f",
+    "results/baseline_report_review/table1_source_2m.log": "a8d92da0322d43cfaa15041ae5390c2df64aa593d1a416e5507593b12ba2e35d"
+  }
+}

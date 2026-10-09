@@ -1,0 +1,8 @@
+In file included from results/baseline_report_review/check_scope.cpp:2:
+results/baseline_report_review/../../l1/test/test_kim_baseline_investigation.cpp: In function ‘int kim_investigation_original_main(int, char**)’:
+results/baseline_report_review/../../l1/test/test_kim_baseline_investigation.cpp:101:20: warning: unused variable ‘rnd_sqrt2_exact’ [-Wunused-variable]
+  101 |         RndOptions rnd_sqrt2_exact{true, false}; // sqrt(2) threshold, exact
+      |                    ^~~~~~~~~~~~~~~
+results/baseline_report_review/../../l1/test/test_kim_baseline_investigation.cpp:105:21: warning: unused variable ‘trnc_no_out’ [-Wunused-variable]
+  105 |         TrncOptions trnc_no_out{true, false, rnd_hw};
+      |                     ^~~~~~~~~~~

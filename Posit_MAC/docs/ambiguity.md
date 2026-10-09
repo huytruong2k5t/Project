@@ -54,3 +54,7 @@ Sau đó đã chốt/kiểm hợp đồng width/cut hữu hạn ở README mục
 Paper843 commit/Fig.4 đạt cùng giả định fig3; chưa có bằng chứng mới cho tie/prefix/internal guard hoặc generator gốc, nên không chạy lại TableI. W9-03..05 đã có code/test; Gate2/tuần9 processing. Verilator/lint còn thiếu; GitHub backup đã có checkout riêng trong dự án. Không đổi mô hình để né tiêu chí.
 
 ModelSim đối chiếu 16.815.920 giao dịch, hủy 80.080 giao dịch bằng reset,0 mismatch.
+
+## 5. Top paper tự hồi tiếp — 09/10/2026
+
+`paper_mul_iter`/`paper_mul_wrapper`/`paper_norm_comb` đã tự chạy từ A/B đến kết quả; ModelSim17.181 giao dịch và65.710 commit đạt0 mismatch,843 commit corpus cũ giữ nguyên, Fig.4=0x1ae34000. Linux/Windows/UBSan fixture MATCH; reset/stall/context/early-stop/special đạt trong suite. Hợp đồng research cố định posit32ES3/Q12, n_terms1..8, outputTRUNC; chi tiết PLAN L1 §7.5 và results/paper_top/{windows/summary,audit}.json. Không có nguồn mới hoặc thay đổi số học nên không chạy TableI; provenance baseline gốc và Gate2 vẫn processing.

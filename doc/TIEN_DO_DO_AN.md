@@ -116,7 +116,7 @@ Tuần theo lộ trình SPEC, chưa gắn với lịch học. Một phần công
 | STT | Mốc / nhóm công việc | Kết quả chính | Trạng thái |
 | --- | --- | --- | --- |
 | 1 | Lõi nhân RTL và tích hợp standalone — tuần9 | Hoàn thiện số học, controller và multiplier; lượt phân tầng16,8 triệu đạt0 mismatch và coverage chức năng. Còn lint/harness chính thức để đóng Gate2 | processing |
-| 2 | Đối chiếu paper bằng RTL tối thiểu | Trace phân biệt và Fig.4 khớp profile tái dựng; chưa có bằng chứng mới để chốt baseline gốc hoặc đổi kết quả TableI | ✅ |
+| 2 | Đối chiếu paper bằng RTL tối thiểu | Ghép top paper tự chạy từ A/B; kiểm từng vòng và kết quả đạt0 mismatch, giữ nguyên trace/Fig.4. Baseline gốc/TableI còn processing | ✅ |
 | 3 | Hồ sơ kiểm chứng và bảo toàn dữ liệu | Đồng bộ tài liệu, lưu compiler/seed/lệnh/log/hash; đã commit và push mã/báo cáo kiểm chứng lên GitHub (5163797) | ✅ |
 
 ### 4.9. Mẫu cập nhật tiếp theo

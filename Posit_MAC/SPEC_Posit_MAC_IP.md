@@ -1180,6 +1180,10 @@ ModelSim đối chiếu 16.815.920 giao dịch, hủy 80.080 giao dịch bằng 
 
 Gate2/tuần9 processing: cần lint/harness Verilator chính thức ; coverage chức năng §6.3 đã kiểm đạt, line/branch/toggle chưa đo. Quartus13 Analysis & Synthesis NB32/ES2 đạt0 lỗi,14 warning đã phân loại, không có cảnh báo latch; không thay STA/CDC/PPA. TableI không chạy lại vì chưa có thay đổi có căn cứ. Kế hoạch/bằng chứng chi tiết: PLAN L1 §7.4 và results/week9_implementation/summary.json. GitHub đã push checkpoint 0ae39c4 lên main bằng checkout riêng trong Posit_MAC; kết quả lượt lớn được bổ sung cuối phiên.
 
+### 11.5 Top paper tự hồi tiếp — 09/10/2026
+
+`paper_mul_iter`/`paper_mul_wrapper`/`paper_norm_comb` đã tự chạy từ A/B đến kết quả; ModelSim17.181 giao dịch và65.710 commit đạt0 mismatch,843 commit corpus cũ giữ nguyên, Fig.4=0x1ae34000. Linux/Windows/UBSan fixture MATCH; reset/stall/context/early-stop/special đạt trong suite. Hợp đồng research cố định posit32ES3/Q12, n_terms1..8, outputTRUNC; chi tiết PLAN L1 §7.5 và results/paper_top/{windows/summary,audit}.json. Không có nguồn mới hoặc thay đổi số học nên không chạy TableI; provenance baseline gốc và Gate2 vẫn processing.
+
 ## 12. Báo cáo và bảo vệ
 
 **Cấu trúc báo cáo đề xuất**

@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "observed_transactions": 17181,
+  "observed_commits": 65710,
+  "mismatches": 0,
+  "previous_frozen_trace_commits_identical": 843,
+  "previous_checked_trace_sha256": "11a9815c56bd7b803ff347743c7fee692815ded255eb1bef2221fb53ca8118b4",
+  "Linux_Windows_UBSan_fixture_replay": "MATCH after newline normalization",
+  "fixture_normalized_sha256": {
+    "transactions.txt": "b5d839de88ba9ecccd90b1d27708767d6fc743623cd12d2e6b3f1529ba16608c",
+    "traces.txt": "d82089a4b3cd6c7a2c0a1977c38ba59e4a2bbe92eda96f100f74ae0c8947e457"
+  },
+  "Fig4_accumulator_Q12": [
+    [
+      4616,
+      5770,
+      5914
+    ],
+    [
+      4616,
+      5770,
+      5914
+    ]
+  ],
+  "n_terms_covered": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "oracle": "frozen Fig3 L1 reconstruction, checked against independent Q96 signed residual; not author RTL",
+  "coverage": "directed functional scenarios only; no line/branch/toggle or Gate2 acceptance",
+  "TableI": "not rerun: autonomous feedback introduces no source-confirmed numerical change",
+  "compilers": {
+    "linux": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "windows": "x86_64-w64-mingw32-g++ (GCC) 13-win32"
+  },
+  "build_command": "make -C l1 gen_paper_top gen_paper_top.exe gen_paper_top_ubsan (TMPDIR=results/paper_top/tmp; WSL bash --noprofile --norc)",
+  "generator_commands": [
+    "./l1/gen_paper_top results/paper_discriminators/linux/vectors.csv results/paper_top/linux",
+    "./l1/gen_paper_top_ubsan results/paper_discriminators/linux/vectors.csv results/paper_top/ubsan",
+    "scripts/verify_paper_top_modelsim.ps1",
+    "scripts/audit_paper_top.py"
+  ],
+  "generator_binary_sha256": {
+    "gen_paper_top": "dbb78a8f1b2099a0cba539cea5c8a2f6159ec137f6e11e82edf15196025bcabc",
+    "gen_paper_top.exe": "87b5c462ac5853d17ca55ed04c2557f8961db214716371ac7b1d0834a23ceba6",
+    "gen_paper_top_ubsan": "a9cd0740dc09ea0f026b85dacc85a9e1c926403589c782af06dd123d4912574a"
+  },
+  "additional_source_sha256": {
+    "rtl/posit_mac.vh": "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88",
+    "l1/test/gen_paper_top.cpp": "b22edaf0e55ee62451b8a61dfbae87417e030877dc723d4320699589278a636f",
+    "l1/test/paper_discriminator_study.hpp": "a26722815573870e3dcb541890b71384032d5db22ad2bdd82fc71c3c233c0fb6",
+    "l1/include/paper_multiplier.hpp": "39d2dc4e49bbc67fa0f7491a33184589cfc332fc4ba38151a9fa3aa8bc6ca1bc",
+    "l1/include/paper_fig3_accumulator.hpp": "872182bf83dd28503c74fe0a97d881fd5513eee4c5e8313765bdc29c90bd2742",
+    "scripts/verify_paper_top_modelsim.ps1": "d885dd6208dcb9baa2bcf030870b9e09a8cd00394e6a7410845dcebdbef70c1a",
+    "scripts/audit_paper_top.py": "4df4b1317ca2a64823926eaa51db2de5fc5992c10179793d9bb4043356b703e8",
+    "results/paper_discriminators/linux/vectors.csv": "a7294e9fcf40b2faa22164f4dbfaad399e53c6e3e2446ef80100e656200fd0a6"
+  }
+}

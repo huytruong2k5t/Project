@@ -1,0 +1,23 @@
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim -do run.do -l simulate.log -c work.tb_paper_mul_iter 
+# Loading sv_std.std
+# Loading work.tb_paper_mul_iter
+# Loading work.paper_mul_iter
+# Loading work.paper_mul_wrapper
+# Loading work.posit_parser_comb
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# Loading work.paper_ops_comb
+# Loading work.paper_step_comb
+# Loading work.paper_norm_comb
+# Loading work.posit_pack_comb
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter
+# Loading work.posit_pack_finish
+# do run.do 
+# PAPER TOP PASS records=17181 commits=65710 specials=216 Fig4=2 negative=24036 zero_terms=14199 tail=45468 early=1082 long_stalls=178 resets=4 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_paper_mul_iter.sv(227)
+#    Time: 1684047 ns  Iteration: 0  Instance: /tb_paper_mul_iter

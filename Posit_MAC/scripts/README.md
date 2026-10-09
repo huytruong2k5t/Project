@@ -59,3 +59,9 @@ Lượt phân tầng cuối đạt16.815.920 giao dịch hoàn tất,80.080 rese
 Corner riêng đạt114.656 so sánh/544 reset hủy,3600 trường hợp khác nhau mỗi profile (100 cặp ×36 config), gồm ±1, ±minpos/maxpos và NaR×0/0×NaR; Linux/Windows/UBSan và replay32.000 dòng uniform cũ khớp. Pilot stall96 chu kỳ đạt31.840 so sánh/160 reset,336 lượt giữ dài;0 mismatch. Chỉ chỉnh khoảng trắng RTL để tách port/parameter, có proof và pilot biên dịch lại; SHA nguồn trước/sau lưu riêng. Logic không đổi, TableI không chạy lại.
 
 Gate2/W9-06 vẫn processing: Verilator chưa có, harness C++ và lint chính thức chưa build/chạy. Không tự cài công cụ hoặc thay tiêu chí. Bằng chứng: results/week9_multiplier/{stratified_acceptance,acceptance_parallel,corners_final_rtl,long_stall_pilot}; snapshot/version/seed/lệnh tại results/week9_implementation/summary.json.
+
+## 6. Tái chạy top paper tự hồi tiếp — 09/10/2026
+
+`paper_mul_iter`/`paper_mul_wrapper`/`paper_norm_comb` đã tự chạy từ A/B đến kết quả; ModelSim17.181 giao dịch và65.710 commit đạt0 mismatch,843 commit corpus cũ giữ nguyên, Fig.4=0x1ae34000. Linux/Windows/UBSan fixture MATCH; reset/stall/context/early-stop/special đạt trong suite. Hợp đồng research cố định posit32ES3/Q12, n_terms1..8, outputTRUNC; chi tiết PLAN L1 §7.5 và results/paper_top/{windows/summary,audit}.json. Không có nguồn mới hoặc thay đổi số học nên không chạy TableI; provenance baseline gốc và Gate2 vẫn processing.
+
+Trong WSL không nạp profile, cd vào Posit_MAC, đặt TMPDIR trong results/paper_top/tmp rồi make -C l1 gen_paper_top gen_paper_top.exe gen_paper_top_ubsan. Sinh fixture Linux/UBSan theo lệnh trong audit.json; PowerShell chạy scripts/verify_paper_top_modelsim.ps1, tiếp đó chạy scripts/audit_paper_top.py bằng Python có sẵn. ModelSim work/transcript/log/wave/temp đều ở results/paper_top; compiler timescale1ns/1ps nằm ở lệnh vlog. Không cài/sửa công cụ hệ thống.

@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "date": "2026-10-09T14:34:24.8724761+07:00",
+  "seed": "deterministic exhaustive/directed; no PRNG",
+  "RTLComparisons": 155648,
+  "mismatches": 0,
+  "rawFigureBoundaryDifferences": 8448,
+  "softwarePackComparisons": 3940352,
+  "SACPairsCompared": 163840,
+  "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "command": "scripts/verify_paper_contract_modelsim.ps1",
+  "fixtureSHA256": "2B3BF79DB781E7E9F221D2AC352683E2CE2E8B5CAA739C3E36CF8239B9A9D0DF",
+  "sourceSHA256": {
+    "rtl/dyn_right_shifter.sv": "F63BF24D1A36DE57B00089055D7D611ACB384FD0E0A6D78B0C6FE14CA29197FB",
+    "rtl/posit_pack_prepare.sv": "086DEA58B95F551EBE32BFF3410D5726AC5C66DDD050C4D173E72645F9106495",
+    "tb/tb_paper_fig5_pack.sv": "DBDF00EB032335E7BE1E6F5DFDA6A33F993B7CBD04662F5752AF8D321063CB23",
+    "rtl/posit_pack_comb.sv": "DC46A33E05290E6A46B7557D672090162E20B43360CEE3FBC034D50238254F24",
+    "rtl/posit_pack_finish.sv": "8DF33B0EEF98C0B32D7E5AEE31D66155A908FC41594C5FB8574F0292FAED75FC"
+  },
+  "scope": "literal Fig5 normal encoding, explicit project clamps at range edges; not source special flags, original SAC, TableI or Gate2 acceptance"
+}

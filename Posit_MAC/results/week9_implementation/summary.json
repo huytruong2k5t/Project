@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-09T13:19:01.873985+07:00",
+  "date": "2026-10-09T14:38:35.302269+07:00",
   "milestones": {
     "W9-03": "PASS",
     "W9-R1": "frozen reconstruction assumptions",
@@ -2022,6 +2022,152 @@
   "static_analysis": "Quartus13 Analysis & Synthesis NB32/ES2 RNE/FLOOR, 0 errors/14 reviewed warnings; not strict Verilator lint, STA, CDC or PPA",
   "static_warning_review": "parallel license unavailable; ASYNC_REG is a Xilinx attribute not recognized by Quartus13; bounded parameter constants resized to declared vector widths. No latch warning.",
   "paper_original_baseline": "not confirmed; Table I not rerun because RTL matches existing reconstruction without new source evidence",
+  "paper_source_contract_audit": {
+    "date": "2026-10-09",
+    "status": "AUDIT COMPLETE; original baseline not identified",
+    "source_facts": [
+      {
+        "source": "GLSVLSI2019 PDF p2 Algorithm1, p3 Eq10-12/Table1",
+        "fact": "n counts signed power terms; hardware rounds at significand1.5 and approximates upper residual by complement",
+        "test": "published Table1 mantissa/exponent reproduces powers[-1,-5,-8], coefficients[+1,-1,-1] and next exponents[-5,-9,-11]"
+      },
+      {
+        "source": "ISCAS2021 PDF p3 Fig3/4 and III-C",
+        "fact": "description scans next fraction one; example starts with Y, labels fraction updates n=1,2; output0x1ae34000",
+        "test": "2 fraction updates/3 total terms match; 2 total terms output0x1ad14000"
+      },
+      {
+        "source": "GLSVLSI2019 p5 Table3 and ISCAS2021 p4 TableI",
+        "fact": "all12 Kim2019 correct-rate cells are repeated exactly in Kim column2021",
+        "inference": "supports shared row labels for Kim comparator; does not uniquely establish Proposed SAC or its count convention"
+      },
+      {
+        "source": "ISCAS2021 p3 Fig5(b)",
+        "fact": "offset=Rgm[4:0] XOR replicatedRgm[5]; leading bits from XNOR/XOR with sign, lower29bits XOR sign; arithmetic shift then add sign",
+        "test": "independent gate reference equals L1 normal encoding across sign/fraction12 and sf[-240,240]; RTL directed/exhaustive subset passes"
+      }
+    ],
+    "SAC": {
+      "pairs": 163840,
+      "selection": "force A to isolate recurrence and count",
+      "counts": [
+        {
+          "n_terms": 1,
+          "pairs": 20480,
+          "rnd_vs_scan_same_total_differences": 10240,
+          "rnd_vs_scan_n_fraction_differences": 20475
+        },
+        {
+          "n_terms": 2,
+          "pairs": 20480,
+          "rnd_vs_scan_same_total_differences": 14331,
+          "rnd_vs_scan_n_fraction_differences": 19892
+        },
+        {
+          "n_terms": 3,
+          "pairs": 20480,
+          "rnd_vs_scan_same_total_differences": 16554,
+          "rnd_vs_scan_n_fraction_differences": 19437
+        },
+        {
+          "n_terms": 4,
+          "pairs": 20480,
+          "rnd_vs_scan_same_total_differences": 17368,
+          "rnd_vs_scan_n_fraction_differences": 18386
+        },
+        {
+          "n_terms": 5,
+          "pairs": 20480,
+          "rnd_vs_scan_same_total_differences": 17551,
+          "rnd_vs_scan_n_fraction_differences": 17079
+        },
+        {
+          "n_terms": 6,
+          "pairs": 20480,
+          "rnd_vs_scan_same_total_differences": 16771,
+          "rnd_vs_scan_n_fraction_differences": 15784
+        },
+        {
+          "n_terms": 7,
+          "pairs": 20480,
+          "rnd_vs_scan_same_total_differences": 15627,
+          "rnd_vs_scan_n_fraction_differences": 14837
+        },
+        {
+          "n_terms": 8,
+          "pairs": 20480,
+          "rnd_vs_scan_same_total_differences": 14837,
+          "rnd_vs_scan_n_fraction_differences": 14462
+        }
+      ],
+      "example": {
+        "x_Q12": 6144,
+        "y_Q12": 4097,
+        "n_total": 2,
+        "rnd": "0x42008000",
+        "scan": "0x42004000"
+      },
+      "conclusion": "not bit-equivalent; the all-positive Fig4 fixture cannot resolve the round-up/negative-term branch"
+    },
+    "packer": {
+      "status": "PASS",
+      "date": "2026-10-09T14:34:24.8724761+07:00",
+      "seed": "deterministic exhaustive/directed; no PRNG",
+      "RTLComparisons": 155648,
+      "mismatches": 0,
+      "rawFigureBoundaryDifferences": 8448,
+      "softwarePackComparisons": 3940352,
+      "SACPairsCompared": 163840,
+      "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+      "command": "scripts/verify_paper_contract_modelsim.ps1",
+      "fixtureSHA256": "2B3BF79DB781E7E9F221D2AC352683E2CE2E8B5CAA739C3E36CF8239B9A9D0DF",
+      "sourceSHA256": {
+        "rtl/dyn_right_shifter.sv": "F63BF24D1A36DE57B00089055D7D611ACB384FD0E0A6D78B0C6FE14CA29197FB",
+        "rtl/posit_pack_prepare.sv": "086DEA58B95F551EBE32BFF3410D5726AC5C66DDD050C4D173E72645F9106495",
+        "tb/tb_paper_fig5_pack.sv": "DBDF00EB032335E7BE1E6F5DFDA6A33F993B7CBD04662F5752AF8D321063CB23",
+        "rtl/posit_pack_comb.sv": "DC46A33E05290E6A46B7557D672090162E20B43360CEE3FBC034D50238254F24",
+        "rtl/posit_pack_finish.sv": "8DF33B0EEF98C0B32D7E5AEE31D66155A908FC41594C5FB8574F0292FAED75FC"
+      },
+      "scope": "literal Fig5 normal encoding, explicit project clamps at range edges; not source special flags, original SAC, TableI or Gate2 acceptance"
+    },
+    "range_limit": "raw Fig5 omits range/special flags.8448 directed raw/clamped differences are outside sf[-240,240], including underflow and wrapped six-bit Rgm controls; not RTL mismatch",
+    "cross_platform": "Linux/Windows/UBSan MATCH after newline normalization",
+    "normalized_fixture_sha256": {
+      "packer.txt": "ebf6a1b4165c81264045cd8450263eecd84159c8730a525dbafb9770c6cdaac0",
+      "divergent.csv": "18b3536d1491476ae734b346fce1c9c89ddbc6ad04b05e4bbf2062eee0fb5ad1",
+      "sac_counts.csv": "7ac9d52d2a2aef95536b7ef75eb47ce4a34e3ca1a8285bb5cc33cfbad9ff8a10",
+      "source2019_trace.csv": "cc996cf72a44f5fe1686d6a51b9666333d6070efaf8eed248fa21bab817584d3",
+      "source2021_count.csv": "cdd72004bff49649c1c9fb98d9d33dfde6b9d08cb49a93f0380a4a1925a04748"
+    },
+    "source_sha256": {
+      "An Approximate and Iterative Posit Multiplier Architecture for FPGAs.pdf": "5016d5eac4395c40ad513ee9a0294d5070041d8120a8328b55e5277b7e11548d",
+      "An Area-Efficient Iterative Single-Precision Floating-Point Multiplier Architecture for FPGA.pdf": "8f1755fcbb9eb4d405a5dfe616721cd29499b8c6f5f6c9a7fc36245ff6964cc3",
+      "l1/test/test_paper_contract_audit.cpp": "b46a3823057064a63d4868ba744044023939059f481657697bda0279426228ea",
+      "tb/tb_paper_fig5_pack.sv": "dbdf00eb032335e7be1e6f5dfda6a33f993b7cbd04662f5752af8d321063cb23",
+      "scripts/verify_paper_contract_modelsim.ps1": "7286e06e0a2a046d4537be89144bf9eec60a8abed0b4c3286bbec06127f6bfcb",
+      "scripts/summarize_paper_contract_audit.py": "a42b686e7f8349412ba75a5816bf73191179ea487316fb7c8c687e638d5cd684"
+    },
+    "compilers": {
+      "linux": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+      "windows": "x86_64-w64-mingw32-g++ (GCC) 13-win32"
+    },
+    "commands": [
+      "make -C l1 test_paper_contract_audit test_paper_contract_audit.exe test_paper_contract_audit_ubsan",
+      "./l1/test_paper_contract_audit results/paper_contract_audit/linux",
+      "./l1/test_paper_contract_audit_ubsan results/paper_contract_audit/ubsan",
+      "scripts/verify_paper_contract_modelsim.ps1",
+      "scripts/summarize_paper_contract_audit.py"
+    ],
+    "seed": "deterministic exhaustive/directed; no seed fitting",
+    "TableI": "NOT RERUN: source disagreement found, no uniquely source-confirmed numerical replacement selected",
+    "production_changes": "none; normative and frozen RND paper top unchanged",
+    "remaining": [
+      "source trace/code or clarification for Proposed2021 SAC/count",
+      "original OPS tie/prefix padding/score",
+      "internal cut/normalize flags",
+      "measurement generator/filter"
+    ]
+  },
   "paper_autonomous_top": {
     "status": "PASS",
     "date": "2026-10-09T13:14:39.7414823+07:00",
@@ -2118,6 +2264,7 @@
     "tb/tb_ops_compare.sv": "8f78b47c6db06294bbeef9e9e57fddbc46be4e321879d5be0011c9bbf4b6ae2e",
     "tb/tb_packer_finish_equivalence.sv": "1df46f6176ac5959ee5e795d155cdef96fc124641cfc26a069a4512daba4b4f0",
     "tb/tb_packer_ppa.sv": "89d597b53e11686b6cf22db9021aad13aefd3a0a2ba3c634c832956f5cd09db0",
+    "tb/tb_paper_fig5_pack.sv": "dbdf00eb032335e7be1e6f5dfda6a33f993b7cbd04662f5752af8d321063cb23",
     "tb/tb_paper_mul_iter.sv": "7d071ed4cae388a403d46a3634487ffed700f4b3cb3926698dcf806ce7fa0f79",
     "tb/tb_parser_packer.sv": "87de0bcb7011d5338c6de7a4cc4d5bf1afa85839ed6ceda85012999aa5fd702f",
     "tb/tb_posit_pack.sv": "cbb09e33c981885194357293cd97b0f389e284c5856d069492188f01ffa40ebe",
@@ -2139,16 +2286,19 @@
     "scripts/rebuild_l0_l1.sh": "82459d89db96e26f87956e2c855f6f6214148f89c9ce4d7bba97188d7824894d",
     "scripts/run_ops_compare.ps1": "d8b1d2814ce3fcf247ed40fd25c9905c5ebbe9cf00ea5d5b042ece49712aebe3",
     "scripts/run_packer_ppa.ps1": "f14062859e8593d9583e12d2fa14e766bf31ede29726175469a5964d7f24801b",
+    "scripts/summarize_paper_contract_audit.py": "a42b686e7f8349412ba75a5816bf73191179ea487316fb7c8c687e638d5cd684",
     "scripts/summarize_paper_discriminators.py": "add6fc92ebd29de2472c7231c483febafd822f4f1bf035daf29c68a9cf6c1ad2",
     "scripts/summarize_paper_fig3.py": "1183a4bbd7ed4f9ab81a29eadf577b1a4470cb740a1947de843625c28d5a279d",
     "scripts/summarize_week9_frontend.py": "5d4cd9918b5824eea9c9b8ba1e85fee1386ca45ec6a852482ff52156f1129ef2",
-    "scripts/summarize_week9_implementation.py": "b2d6ac098337bb1c3f3af75773d74b8aa5c185ae02b1f79f5e26c970d6f37875",
+    "scripts/summarize_week9_implementation.py": "4d6487fa09af061f4e4303abf983be9594698c9f83617b4e3545c95d51e0cf69",
+    "scripts/update_paper_contract_status.py": "fcdfb813c3ae6a58cf96315067c94f526eb940801812a8bfff20f71571a04230",
     "scripts/update_paper_top_status.py": "9a5e1857097a74df55ebe48ac92736936b7b5d8aaf9d4b35499747427fc9d070",
     "scripts/update_week9_status.py": "29ec8577c62a8176f0ebfccf33924467fd5ccbf9c9270b23c2680f35a422b3bb",
     "scripts/verify_dyn_left_shifter.py": "f79b7517e63ae724af5dfe66bd3b580e3687f5ec8a3dbbbe766bb2afa4ddd90a",
     "scripts/verify_dyn_right_shifter.py": "2dcc147a9e50bc859f686ffbc81b8a5159b19bead26301c309262eb51292113f",
     "scripts/verify_packer_modelsim.ps1": "1df4605e281c645be2c76e784390e4aa06436f66b8feccf739d4f9787302d0c4",
     "scripts/verify_packer_p2_equivalence.ps1": "f51d27fc59556aade04aa9c29f809dad99324c84844be2eb49457dc60f1aa716",
+    "scripts/verify_paper_contract_modelsim.ps1": "7286e06e0a2a046d4537be89144bf9eec60a8abed0b4c3286bbec06127f6bfcb",
     "scripts/verify_paper_top_modelsim.ps1": "d885dd6208dcb9baa2bcf030870b9e09a8cd00394e6a7410845dcebdbef70c1a",
     "scripts/verify_parser_comb_modelsim.ps1": "2533a3c7542b0bbe28512a0b89f290f2fcd8dd63d457d0ae83606c49a7045a4a",
     "scripts/verify_parser_modelsim.ps1": "9fef5080038b3fc52198dd44258ba07418d54b467b4f04e2d689cd069a789ce4",
@@ -2179,6 +2329,7 @@
     "l1/test/test_paper_anchor.cpp": "8c2c152d7845999624e31522c33c0237358cae495e48728900221d1f9271b7dc",
     "l1/test/test_paper_babic.cpp": "25eb9b9efe899951b2af31a5ec5ee38554bae222efea34665b91703bdece8a1d",
     "l1/test/test_paper_baseline.cpp": "a9aeaa3b985ab8a6548795ac120c186e57146feb12e17f12f4484cd22201e9d5",
+    "l1/test/test_paper_contract_audit.cpp": "b46a3823057064a63d4868ba744044023939059f481657697bda0279426228ea",
     "l1/test/test_paper_discriminators.cpp": "e940fd1a5d4915b3a61ca4879b93b4f4aaa36c472715211f0cd917e13fa7f14c",
     "l1/test/test_paper_fig3.cpp": "9ef7ada4fc5f88a7b4f116d88e9ba7956d8807e56cfbdf96d670d3fbc1a477ef",
     "l1/test/test_paper_measurement.cpp": "91343d7d57f684ec989f81cdde84e7fd1201f8d006c124f0e1c93352058cdf7d",
@@ -2191,9 +2342,9 @@
     "l1/test/test_round_unpacked.cpp": "3ea2229a998658d4fc39b3f1428af4514d1d37c6833450275641e93daf48888b",
     "l1/test/test_table1_reproduce.cpp": "cf13960d83b6c9a9315f65b5e877f227372d89171a9ce2b85d91f5ba3c25550c",
     "l1/test/test_tv_paper.cpp": "5d815e546f9dded97375b8c807314cb2ba2b59eb2a5bf4416025e92bb9cb4d3a",
-    "SPEC_Posit_MAC_IP.md": "22401d3180ba331b3a7b6600e26a62e137cd6bb194e16d612d650f4973456242",
-    "l1/PLAN.md": "3eb7c58b1c4967b1faaf8eb89afde6deb4fdf8480d5337509480759f4fb34661",
-    "l1/Makefile": "45e0d3f7d601e38da4508588c47e742a0823c1c87653f2d4302f7b0498097879",
+    "SPEC_Posit_MAC_IP.md": "4d2c0a1894e0e66195829ddcdfc4b31545e1ee6c40ea010a43bb099f482d44c4",
+    "l1/PLAN.md": "f2e75c58ed9c4c799f934efa2905713ae5e6c1f0a57bdb287ca3c85cb5aff9f4",
+    "l1/Makefile": "eaba4a828c0fc8448de271e7b8e6268f04d10365d54e854f3c6673d9f88d35af",
     "Makefile": "6a819bb307a6970327e706b2e06a18f8c66c908e21868858542fbda079c81b30"
   },
   "acceptance_fixture_sha256": {

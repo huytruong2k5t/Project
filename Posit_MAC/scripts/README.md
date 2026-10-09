@@ -65,3 +65,9 @@ Gate2/W9-06 vẫn processing: Verilator chưa có, harness C++ và lint chính t
 `paper_mul_iter`/`paper_mul_wrapper`/`paper_norm_comb` đã tự chạy từ A/B đến kết quả; ModelSim17.181 giao dịch và65.710 commit đạt0 mismatch,843 commit corpus cũ giữ nguyên, Fig.4=0x1ae34000. Linux/Windows/UBSan fixture MATCH; reset/stall/context/early-stop/special đạt trong suite. Hợp đồng research cố định posit32ES3/Q12, n_terms1..8, outputTRUNC; chi tiết PLAN L1 §7.5 và results/paper_top/{windows/summary,audit}.json. Không có nguồn mới hoặc thay đổi số học nên không chạy TableI; provenance baseline gốc và Gate2 vẫn processing.
 
 Trong WSL không nạp profile, cd vào Posit_MAC, đặt TMPDIR trong results/paper_top/tmp rồi make -C l1 gen_paper_top gen_paper_top.exe gen_paper_top_ubsan. Sinh fixture Linux/UBSan theo lệnh trong audit.json; PowerShell chạy scripts/verify_paper_top_modelsim.ps1, tiếp đó chạy scripts/audit_paper_top.py bằng Python có sẵn. ModelSim work/transcript/log/wave/temp đều ở results/paper_top; compiler timescale1ns/1ps nằm ở lệnh vlog. Không cài/sửa công cụ hệ thống.
+
+## 7. Audit SAC/n và packer theo nguồn — 09/10/2026
+
+Audit trực tiếp nguồn2019/2021 và kiểm deterministic163.840 cặp cho thấy RND/complement và quét bit1 không tương đương. Fig4 khớp n_fraction2/n_total3 (0x1ae34000), nhưng n_total2 cho0x1ad14000; TableI Proposed chưa khóa cách đếm/recurrence từ nguồn. Giữ nguyên profile normative và top RND nghiên cứu, không đổi n/seed để ép bảng.
+
+Reference cổng Fig5 độc lập khớp L1 trên3.940.352 trường hợp; ModelSim155.648 trường hợp đạt0 mismatch, Linux/Windows/UBSan MATCH.8.448 raw/clamped differences nằm ngoài miền sf−240..240, do range handling đồ án bổ sung; không phải lỗi RTL hoặc xác nhận clamp tác giả. Không chạy pilotTableI, baseline gốc/Gate2 vẫn processing. Chi tiết duy nhất tại README L1 §24; bằng chứng/lệnh/hash/compiler tại results/paper_contract_audit/{summary.json,windows/summary.json}.

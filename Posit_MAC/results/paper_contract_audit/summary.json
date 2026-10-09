@@ -1,0 +1,146 @@
+{
+  "date": "2026-10-09",
+  "status": "AUDIT COMPLETE; original baseline not identified",
+  "source_facts": [
+    {
+      "source": "GLSVLSI2019 PDF p2 Algorithm1, p3 Eq10-12/Table1",
+      "fact": "n counts signed power terms; hardware rounds at significand1.5 and approximates upper residual by complement",
+      "test": "published Table1 mantissa/exponent reproduces powers[-1,-5,-8], coefficients[+1,-1,-1] and next exponents[-5,-9,-11]"
+    },
+    {
+      "source": "ISCAS2021 PDF p3 Fig3/4 and III-C",
+      "fact": "description scans next fraction one; example starts with Y, labels fraction updates n=1,2; output0x1ae34000",
+      "test": "2 fraction updates/3 total terms match; 2 total terms output0x1ad14000"
+    },
+    {
+      "source": "GLSVLSI2019 p5 Table3 and ISCAS2021 p4 TableI",
+      "fact": "all12 Kim2019 correct-rate cells are repeated exactly in Kim column2021",
+      "inference": "supports shared row labels for Kim comparator; does not uniquely establish Proposed SAC or its count convention"
+    },
+    {
+      "source": "ISCAS2021 p3 Fig5(b)",
+      "fact": "offset=Rgm[4:0] XOR replicatedRgm[5]; leading bits from XNOR/XOR with sign, lower29bits XOR sign; arithmetic shift then add sign",
+      "test": "independent gate reference equals L1 normal encoding across sign/fraction12 and sf[-240,240]; RTL directed/exhaustive subset passes"
+    }
+  ],
+  "SAC": {
+    "pairs": 163840,
+    "selection": "force A to isolate recurrence and count",
+    "counts": [
+      {
+        "n_terms": 1,
+        "pairs": 20480,
+        "rnd_vs_scan_same_total_differences": 10240,
+        "rnd_vs_scan_n_fraction_differences": 20475
+      },
+      {
+        "n_terms": 2,
+        "pairs": 20480,
+        "rnd_vs_scan_same_total_differences": 14331,
+        "rnd_vs_scan_n_fraction_differences": 19892
+      },
+      {
+        "n_terms": 3,
+        "pairs": 20480,
+        "rnd_vs_scan_same_total_differences": 16554,
+        "rnd_vs_scan_n_fraction_differences": 19437
+      },
+      {
+        "n_terms": 4,
+        "pairs": 20480,
+        "rnd_vs_scan_same_total_differences": 17368,
+        "rnd_vs_scan_n_fraction_differences": 18386
+      },
+      {
+        "n_terms": 5,
+        "pairs": 20480,
+        "rnd_vs_scan_same_total_differences": 17551,
+        "rnd_vs_scan_n_fraction_differences": 17079
+      },
+      {
+        "n_terms": 6,
+        "pairs": 20480,
+        "rnd_vs_scan_same_total_differences": 16771,
+        "rnd_vs_scan_n_fraction_differences": 15784
+      },
+      {
+        "n_terms": 7,
+        "pairs": 20480,
+        "rnd_vs_scan_same_total_differences": 15627,
+        "rnd_vs_scan_n_fraction_differences": 14837
+      },
+      {
+        "n_terms": 8,
+        "pairs": 20480,
+        "rnd_vs_scan_same_total_differences": 14837,
+        "rnd_vs_scan_n_fraction_differences": 14462
+      }
+    ],
+    "example": {
+      "x_Q12": 6144,
+      "y_Q12": 4097,
+      "n_total": 2,
+      "rnd": "0x42008000",
+      "scan": "0x42004000"
+    },
+    "conclusion": "not bit-equivalent; the all-positive Fig4 fixture cannot resolve the round-up/negative-term branch"
+  },
+  "packer": {
+    "status": "PASS",
+    "date": "2026-10-09T14:34:24.8724761+07:00",
+    "seed": "deterministic exhaustive/directed; no PRNG",
+    "RTLComparisons": 155648,
+    "mismatches": 0,
+    "rawFigureBoundaryDifferences": 8448,
+    "softwarePackComparisons": 3940352,
+    "SACPairsCompared": 163840,
+    "simulator": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+    "command": "scripts/verify_paper_contract_modelsim.ps1",
+    "fixtureSHA256": "2B3BF79DB781E7E9F221D2AC352683E2CE2E8B5CAA739C3E36CF8239B9A9D0DF",
+    "sourceSHA256": {
+      "rtl/dyn_right_shifter.sv": "F63BF24D1A36DE57B00089055D7D611ACB384FD0E0A6D78B0C6FE14CA29197FB",
+      "rtl/posit_pack_prepare.sv": "086DEA58B95F551EBE32BFF3410D5726AC5C66DDD050C4D173E72645F9106495",
+      "tb/tb_paper_fig5_pack.sv": "DBDF00EB032335E7BE1E6F5DFDA6A33F993B7CBD04662F5752AF8D321063CB23",
+      "rtl/posit_pack_comb.sv": "DC46A33E05290E6A46B7557D672090162E20B43360CEE3FBC034D50238254F24",
+      "rtl/posit_pack_finish.sv": "8DF33B0EEF98C0B32D7E5AEE31D66155A908FC41594C5FB8574F0292FAED75FC"
+    },
+    "scope": "literal Fig5 normal encoding, explicit project clamps at range edges; not source special flags, original SAC, TableI or Gate2 acceptance"
+  },
+  "range_limit": "raw Fig5 omits range/special flags.8448 directed raw/clamped differences are outside sf[-240,240], including underflow and wrapped six-bit Rgm controls; not RTL mismatch",
+  "cross_platform": "Linux/Windows/UBSan MATCH after newline normalization",
+  "normalized_fixture_sha256": {
+    "packer.txt": "ebf6a1b4165c81264045cd8450263eecd84159c8730a525dbafb9770c6cdaac0",
+    "divergent.csv": "18b3536d1491476ae734b346fce1c9c89ddbc6ad04b05e4bbf2062eee0fb5ad1",
+    "sac_counts.csv": "7ac9d52d2a2aef95536b7ef75eb47ce4a34e3ca1a8285bb5cc33cfbad9ff8a10",
+    "source2019_trace.csv": "cc996cf72a44f5fe1686d6a51b9666333d6070efaf8eed248fa21bab817584d3",
+    "source2021_count.csv": "cdd72004bff49649c1c9fb98d9d33dfde6b9d08cb49a93f0380a4a1925a04748"
+  },
+  "source_sha256": {
+    "An Approximate and Iterative Posit Multiplier Architecture for FPGAs.pdf": "5016d5eac4395c40ad513ee9a0294d5070041d8120a8328b55e5277b7e11548d",
+    "An Area-Efficient Iterative Single-Precision Floating-Point Multiplier Architecture for FPGA.pdf": "8f1755fcbb9eb4d405a5dfe616721cd29499b8c6f5f6c9a7fc36245ff6964cc3",
+    "l1/test/test_paper_contract_audit.cpp": "b46a3823057064a63d4868ba744044023939059f481657697bda0279426228ea",
+    "tb/tb_paper_fig5_pack.sv": "dbdf00eb032335e7be1e6f5dfda6a33f993b7cbd04662f5752af8d321063cb23",
+    "scripts/verify_paper_contract_modelsim.ps1": "7286e06e0a2a046d4537be89144bf9eec60a8abed0b4c3286bbec06127f6bfcb",
+    "scripts/summarize_paper_contract_audit.py": "a42b686e7f8349412ba75a5816bf73191179ea487316fb7c8c687e638d5cd684"
+  },
+  "compilers": {
+    "linux": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "windows": "x86_64-w64-mingw32-g++ (GCC) 13-win32"
+  },
+  "commands": [
+    "make -C l1 test_paper_contract_audit test_paper_contract_audit.exe test_paper_contract_audit_ubsan",
+    "./l1/test_paper_contract_audit results/paper_contract_audit/linux",
+    "./l1/test_paper_contract_audit_ubsan results/paper_contract_audit/ubsan",
+    "scripts/verify_paper_contract_modelsim.ps1",
+    "scripts/summarize_paper_contract_audit.py"
+  ],
+  "seed": "deterministic exhaustive/directed; no seed fitting",
+  "TableI": "NOT RERUN: source disagreement found, no uniquely source-confirmed numerical replacement selected",
+  "production_changes": "none; normative and frozen RND paper top unchanged",
+  "remaining": [
+    "source trace/code or clarification for Proposed2021 SAC/count",
+    "original OPS tie/prefix padding/score",
+    "internal cut/normalize flags",
+    "measurement generator/filter"
+  ]
+}

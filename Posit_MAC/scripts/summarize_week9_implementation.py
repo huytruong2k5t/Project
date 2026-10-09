@@ -136,6 +136,8 @@ summary = {
     "static_analysis": "Quartus13 Analysis & Synthesis NB32/ES2 RNE/FLOOR, 0 errors/14 reviewed warnings; not strict Verilator lint, STA, CDC or PPA",
     "static_warning_review": "parallel license unavailable; ASYNC_REG is a Xilinx attribute not recognized by Quartus13; bounded parameter constants resized to declared vector widths. No latch warning.",
     "paper_original_baseline": "not confirmed; Table I not rerun because RTL matches existing reconstruction without new source evidence",
+    "paper_source_contract_audit": json.loads((root / "results/paper_contract_audit/summary.json").read_text(encoding="utf-8"))
+        if (root / "results/paper_contract_audit/summary.json").exists() else "NOT RUN",
     "paper_autonomous_top": json.loads((root / "results/paper_top/windows/summary.json").read_text(encoding="utf-8-sig"))
         if (root / "results/paper_top/windows/summary.json").exists() else "NOT RUN",
     "git_push": git_status,

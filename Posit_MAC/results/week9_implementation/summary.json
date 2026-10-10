@@ -6,7 +6,7 @@
     "W9-R2": "PASS functional corpus only",
     "W9-04": "PASS",
     "W9-05": "PASS baseline enabled features, four formats",
-    "W9-06": "processing: official Verilator run/lint unavailable"
+    "W9-06": "processing: Verilator installed; strict lint has 60 warnings, official harness not yet run"
   },
   "Gate2": "NOT ACCEPTED",
   "week9": "processing",
@@ -2411,5 +2411,15 @@
     "TableI_rerun": false,
     "Gate2": "NOT ACCEPTED",
     "backup": "commit/push performed separately; do not infer success from this entry"
+  },
+  "heartbeat_2026_10_10_after_install": {
+    "version": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)",
+    "command": "make lint",
+    "lint_option": "--timing",
+    "status": "FAIL: 60 warnings",
+    "NEEDTIMINGOPT_resolved": true,
+    "make_exit_code": 2,
+    "Gate2": "NOT ACCEPTED",
+    "scope": "Verilator 5.032 (Debian 5.032-1) is now installed by the user. Makefile lint explicitly uses --timing, preserving CK2Q delays. Re-run make lint: NEEDTIMINGOPT removed, exit 2 from make, 60 warnings remain (including MULTITOP, width and UNOPTFLAT diagnostics). No warning suppression, no RTL arithmetic changes, no functional harness run or Table I rerun; Gate2 remains processing. Raw output/version appended to results/week9_implementation/lint.log. Earlier missing-tool entry is historical."
   }
 }

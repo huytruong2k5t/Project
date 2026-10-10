@@ -33,7 +33,7 @@ help: ## Show this help message
 lint: ## Run RTL lint checks (Verilator / Verible)
 	@echo "==> Running RTL lint checks..."
 	@if command -v $(VERILATOR) >/dev/null 2>&1; then \
-		$(VERILATOR) --lint-only -Wall -I$(RTL_DIR) $(RTL_DIR)/*.sv; \
+		$(VERILATOR) --lint-only --timing -Wall -I$(RTL_DIR) $(RTL_DIR)/*.sv; \
 	else \
 		echo "BLOCKED: Verilator not found; lint has NOT passed."; exit 2; \
 	fi

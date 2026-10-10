@@ -127,7 +127,7 @@ Tuần theo lộ trình SPEC, chưa gắn với lịch học. Một phần công
 
 | STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
 | --- | --- | --- | --- |
-| 1 | Rà soát điều kiện đóng Gate 2 | Giữ bằng chứng ModelSim phân tầng 16.815.920 giao dịch, 0 mismatch; WSL chưa có Verilator, lint/harness chính thức chưa chạy. Không sửa RTL hoặc chạy lại Table I | processing |
+| 1 | Rà soát điều kiện đóng Gate 2 | Giữ bằng chứng ModelSim phân tầng 16.815.920 giao dịch, 0 mismatch; Đã có Verilator5.032; sửa tùy chọn timing giúp hết NEEDTIMINGOPT, lint còn60 cảnh báo và harness chưa chạy. Không sửa số học RTL hoặc chạy lại Table I | processing |
 
 ### 4.9. Mẫu cập nhật tiếp theo
 

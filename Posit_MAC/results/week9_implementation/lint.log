@@ -1,3 +1,290 @@
 ==> Running RTL lint checks...
 BLOCKED: Verilator not found; lint has NOT passed.
 make: *** [Makefile:35: lint] Error 2
+
+Recheck 2026-10-10 after user installation; explicit timing lint
+Verilator 5.032 2025-01-01 rev (Debian 5.032-1)
+==> Running RTL lint checks...
+%Warning-MULTITOP: rtl/packer_ppa_top.sv:14:8: Multiple top level modules
+                                             : ... Suggest see manual; fix the duplicates, or use --top-module to select top.
+                   ... For warning description see https://verilator.org/warn/MULTITOP?v=5.032
+                   ... Use "/* verilator lint_off MULTITOP */" and lint_on around source to disable this message.
+                                             : ... Top module 'ops_compare_top'
+    3 | module ops_compare_top #(parameter POLICY = 0) (
+      |        ^~~~~~~~~~~~~~~
+                                             : ... Top module 'packer_ppa_top'
+   14 | module packer_ppa_top #(
+      |        ^~~~~~~~~~~~~~
+                                             : ... Top module 'paper_mul_iter'
+   11 | module paper_mul_iter (
+      |        ^~~~~~~~~~~~~~
+                                             : ... Top module 'posit_mul_iter'
+    9 | module posit_mul_iter #(
+      |        ^~~~~~~~~~~~~~
+%Warning-GENUNNAMED: rtl/posit_parser_comb.sv:27:9: Unnamed generate block 'genblk1' (IEEE 1800-2023 27.6)
+                                                  : ... Suggest assign a label with 'begin : gen_<label_name>'
+   27 |         initial $fatal(1,"posit_parser_comb: unsupported parameters");
+      |         ^~~~~~~
+%Warning-VARHIDDEN: rtl/ops_sel_comb.sv:89:22: Declaration of signal hides declaration in upper scope: 'bit_index'
+   89 |             for (int bit_index = 0; bit_index < FRAC_MAX-FRAC_W; bit_index++) begin
+      |                      ^~~~~~~~~
+                    rtl/ops_sel_comb.sv:50:12: ... Location of original declaration
+   50 |     genvar bit_index;
+      |            ^~~~~~~~~
+%Warning-WIDTHEXPAND: rtl/posit_pack_prepare.sv:34:33: Operator SUB expects 64 bits on the LHS, but LHS's VARREF 'NB' generates 32 bits.
+                                                     : ... note: In instance 'packer_ppa_top.u_packer.u_prepare'
+   34 |     localparam int SF_MAX = (NB - 2) * (64'd1 << ES);
+      |                                 ^
+%Warning-WIDTHTRUNC: rtl/posit_pack_prepare.sv:34:20: Operator VAR 'SF_MAX' expects 32 bits on the Initial value, but Initial value's MUL generates 64 bits.
+                                                    : ... note: In instance 'packer_ppa_top.u_packer.u_prepare'
+   34 |     localparam int SF_MAX = (NB - 2) * (64'd1 << ES);
+      |                    ^~~~~~
+%Warning-WIDTHEXPAND: rtl/posit_parser_comb.sv:14:40: Operator SUB expects 64 bits on the LHS, but LHS's VARREF 'NB' generates 32 bits.
+                                                    : ... note: In instance 'paper_mul_iter.u_wrapper.u_b'
+   14 |     parameter int SF_W=$clog2(64'd4*(NB-2)*(64'd1<<ES)+64'd4)+1
+      |                                        ^
+%Warning-WIDTHTRUNC: rtl/posit_parser_comb.sv:25:34: Operator VAR 'MAX_COUNT' expects 5 bits on the Initial value, but Initial value's SUB generates 32 bits.
+                                                   : ... note: In instance 'paper_mul_iter.u_wrapper.u_b'
+   25 |     localparam logic [CNT_W-1:0] MAX_COUNT=NB-2;
+      |                                  ^~~~~~~~~
+%Warning-WIDTHEXPAND: rtl/posit_pack_comb.sv:16:45: Operator SUB expects 64 bits on the LHS, but LHS's VARREF 'NB' generates 32 bits.
+                                                  : ... note: In instance 'paper_mul_iter.u_wrapper.u_pack'
+   16 |     parameter int SF_W = $clog2(64'd4 * (NB - 2) * (64'd1 << ES) + 64'd4) + 1,
+      |                                             ^
+%Warning-WIDTHEXPAND: rtl/mul_iter_wrapper.sv:21:40: Operator SUB expects 64 bits on the LHS, but LHS's VARREF 'NB' generates 32 bits.
+                                                   : ... note: In instance 'posit_mul_iter.u_wrapper'
+   21 |     parameter int SF_W=$clog2(64'd4*(NB-2)*(64'd1<<ES)+64'd4)+1,
+      |                                        ^
+%Warning-WIDTHEXPAND: rtl/posit_parser.sv:22:49: Operator SUB expects 64 bits on the LHS, but LHS's VARREF 'NB' generates 32 bits.
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+   22 |     parameter int SF_W     = $clog2(64'd4 * (NB - 2) * (64'd1 << ES) + 64'd4) + 1
+      |                                                 ^
+%Warning-WIDTHTRUNC: rtl/posit_parser.sv:40:34: Operator VAR 'MAX_COUNT' expects 5 bits on the Initial value, but Initial value's SUB generates 32 bits.
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+   40 |     localparam logic [CNT_W-1:0] MAX_COUNT = NB - 2;
+      |                                  ^~~~~~~~~
+%Warning-WIDTHEXPAND: rtl/posit_pack.sv:18:45: Operator SUB expects 64 bits on the LHS, but LHS's VARREF 'NB' generates 32 bits.
+                                             : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+   18 |     parameter int SF_W = $clog2(64'd4 * (NB - 2) * (64'd1 << ES) + 64'd4) + 1,
+      |                                             ^
+%Warning-WIDTHTRUNC: rtl/iter_ctrl.sv:48:32: Operator VAR 'EXACT_LIMIT' expects 5 bits on the Initial value, but Initial value's VARREF 'FRAC_MAX' generates 32 bits.
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+   48 |     localparam logic [I_W-1:0] EXACT_LIMIT=FRAC_MAX;
+      |                                ^~~~~~~~~~~
+%Warning-WIDTHTRUNC: rtl/sac_step_comb.sv:29:30: Operator VAR 'MAX_SCALE' expects 6 bits on the Initial value, but Initial value's VARREF 'W_X' generates 32 bits.
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl.u_exact'
+   29 |     localparam logic [S_W:0] MAX_SCALE = W_X;
+      |                              ^~~~~~~~~
+%Warning-WIDTHEXPAND: rtl/sbm_shift_comb.sv:29:16: Operator ASSIGN expects 56 bits on the Assign RHS, but Assign RHS's VARREF 'y_mant' generates 28 bits.
+                                                 : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_shift'
+   29 |         y_base = y_mant;
+      |                ^
+%Warning-WIDTHEXPAND: rtl/sbm_shift_comb.sv:37:23: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARREF 'scale' generates 5 bits.
+                                                 : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_shift'
+   37 |         shift_discard = scale;
+      |                       ^
+%Warning-WIDTHEXPAND: rtl/iter_ctrl.sv:51:27: Operator COND expects 27 bits on the Conditional True, but Conditional True's VARREF 'fx_next_approx' generates 12 bits.
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+   51 |     assign fx_next=mode_q ? fx_next_approx : fx_next_exact;
+      |                           ^
+%Warning-WIDTHEXPAND: rtl/iter_ctrl.sv:113:41: Operator COND expects 5 bits on the Conditional True, but Conditional True's VARREF 'cfg_n' generates 4 bits.
+                                             : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  113 |                 limit_q <= #1 (cfg_mode ? cfg_n : EXACT_LIMIT);
+      |                                         ^
+%Warning-WIDTHTRUNC: rtl/posit_pack_finish.sv:14:15: Operator VAR 'ROUND_MODE' expects 24 bits on the Initial value, but Initial value's CONST '40'h5452554e43' generates 40 bits.
+                                                   : ... note: In instance 'paper_mul_iter.u_wrapper.u_pack.u_finish'
+   14 |     parameter ROUND_MODE = "RNE"
+      |               ^~~~~~~~~~
+%Warning-WIDTHEXPAND: rtl/posit_pack_prepare.sv:127:29: Operator GTS expects 32 bits on the LHS, but LHS's SIGNED generates 11 bits.
+                                                      : ... note: In instance 'paper_mul_iter.u_wrapper.u_pack.u_prepare'
+  127 |             if ($signed(sf) > SF_MAX || (|frac) || sticky) begin
+      |                             ^
+%Warning-WIDTHEXPAND: rtl/posit_pack_prepare.sv:131:34: Operator LTS expects 32 bits on the LHS, but LHS's SIGNED generates 11 bits.
+                                                      : ... note: In instance 'paper_mul_iter.u_wrapper.u_pack.u_prepare'
+  131 |         end else if ($signed(sf) < -SF_MAX) begin
+      |                                  ^
+%Warning-WIDTHEXPAND: rtl/posit_pack_prepare.sv:120:34: Operator GTES expects 32 bits on the LHS, but LHS's SIGNED generates 11 bits.
+                                                      : ... note: In instance 'paper_mul_iter.u_wrapper.u_pack.u_prepare'
+  120 |         end else if ($signed(sf) >= SF_MAX) begin
+      |                                  ^~
+%Warning-WIDTHEXPAND: rtl/posit_pack_prepare.sv:127:29: Operator GTS expects 32 bits on the LHS, but LHS's SIGNED generates 10 bits.
+                                                      : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack.u_prepare'
+  127 |             if ($signed(sf) > SF_MAX || (|frac) || sticky) begin
+      |                             ^
+%Warning-WIDTHEXPAND: rtl/posit_pack_prepare.sv:131:34: Operator LTS expects 32 bits on the LHS, but LHS's SIGNED generates 10 bits.
+                                                      : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack.u_prepare'
+  131 |         end else if ($signed(sf) < -SF_MAX) begin
+      |                                  ^
+%Warning-WIDTHEXPAND: rtl/posit_pack_prepare.sv:120:34: Operator GTES expects 32 bits on the LHS, but LHS's SIGNED generates 10 bits.
+                                                      : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack.u_prepare'
+  120 |         end else if ($signed(sf) >= SF_MAX) begin
+      |                                  ^~
+%Warning-WIDTHEXPAND: rtl/posit_parser_comb.sv:58:25: Operator ASSIGNW expects 11 bits on the Assign RHS, but Assign RHS's SIGNED generates 9 bits.
+                                                    : ... note: In instance 'paper_mul_iter.u_wrapper.u_b'
+   58 |         assign finite_sf=$signed({regime,exponent});
+      |                         ^
+%Warning-WIDTHEXPAND: rtl/posit_parser.sv:214:30: Operator ASSIGNW expects 10 bits on the Assign RHS, but Assign RHS's SIGNED generates 8 bits.
+                                                : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  214 |             assign finite_sf = $signed({regime, exponent});
+      |                              ^
+%Warning-WIDTHEXPAND: rtl/paper_step_comb.sv:34:41: Operator SUB expects 32 bits on the RHS, but RHS's SIGNED generates 8 bits.
+                                                  : ... note: In instance 'paper_mul_iter.u_wrapper.u_step'
+   34 |         shift_amount = (anchor ? 1 : 0) - $signed(power);
+      |                                         ^
+%Warning-WIDTHEXPAND: rtl/paper_ops_comb.sv:23:22: Operator ADD expects 32 bits on the RHS, but RHS's VARREF 'prefix' generates 7 bits.
+                                                 : ... note: In instance 'paper_mul_iter.u_wrapper.u_ops'
+   23 |             m = (128 + prefix) * 32;
+      |                      ^
+%Warning-WIDTHEXPAND: rtl/mul_iter_wrapper.sv:72:68: Operator LTE expects 32 bits on the LHS, but LHS's VARREF 'cfg_n' generates 4 bits.
+                                                   : ... note: In instance 'posit_mul_iter.u_wrapper'
+   72 |                      (cfg_mode || EXACT_EN) && (!cfg_mode || cfg_n <= N_MAX);
+      |                                                                    ^~
+%Warning-UNUSEDSIGNAL: rtl/ops_compare_top.sv:8:16: Bits of signal are not used: 'a_q'[4:0]
+                                                  : ... note: In instance 'ops_compare_top'
+    8 |     reg [11:0] a_q, b_q;
+      |                ^~~
+%Warning-UNUSEDSIGNAL: rtl/ops_compare_top.sv:8:21: Bits of signal are not used: 'b_q'[4:0]
+                                                  : ... note: In instance 'ops_compare_top'
+    8 |     reg [11:0] a_q, b_q;
+      |                     ^~~
+%Warning-UNUSEDSIGNAL: rtl/paper_mul_wrapper.sv:56:17: Bits of signal are not used: 'frac_a'[13:0]
+                                                     : ... note: In instance 'paper_mul_iter.u_wrapper'
+   56 |     wire [25:0] frac_a, frac_b;
+      |                 ^~~~~~
+%Warning-UNUSEDSIGNAL: rtl/paper_mul_wrapper.sv:56:25: Bits of signal are not used: 'frac_b'[13:0]
+                                                     : ... note: In instance 'paper_mul_iter.u_wrapper'
+   56 |     wire [25:0] frac_a, frac_b;
+      |                         ^~~~~~
+%Warning-UNUSEDSIGNAL: rtl/paper_mul_wrapper.sv:58:17: Signal is not used: 'score_a'
+                                                     : ... note: In instance 'paper_mul_iter.u_wrapper'
+   58 |     wire [11:0] score_a, score_b;
+      |                 ^~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/paper_mul_wrapper.sv:58:26: Signal is not used: 'score_b'
+                                                     : ... note: In instance 'paper_mul_iter.u_wrapper'
+   58 |     wire [11:0] score_a, score_b;
+      |                          ^~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/paper_mul_wrapper.sv:59:10: Signal is not used: 'swapped'
+                                                     : ... note: In instance 'paper_mul_iter.u_wrapper'
+   59 |     wire swapped;
+      |          ^~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/paper_mul_wrapper.sv:60:17: Signal is not used: 'normalized'
+                                                     : ... note: In instance 'paper_mul_iter.u_wrapper'
+   60 |     wire [13:0] normalized;
+      |                 ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/paper_mul_wrapper.sv:63:16: Signal is not used: 'packed_flags'
+                                                     : ... note: In instance 'paper_mul_iter.u_wrapper'
+   63 |     wire [4:0] packed_flags;
+      |                ^~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/mul_iter_wrapper.sv:53:28: Signal is not used: 'active_width'
+                                                    : ... note: In instance 'posit_mul_iter.u_wrapper'
+   53 |     wire [$clog2(F+1)-1:0] active_width;
+      |                            ^~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/mul_iter_wrapper.sv:54:27: Signal is not used: 'ops_swapped'
+                                                    : ... note: In instance 'posit_mul_iter.u_wrapper'
+   54 |     wire ops_sign,ops_cut,ops_swapped,ops_error;
+      |                           ^~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/mul_iter_wrapper.sv:54:39: Signal is not used: 'ops_error'
+                                                    : ... note: In instance 'posit_mul_iter.u_wrapper'
+   54 |     wire ops_sign,ops_cut,ops_swapped,ops_error;
+      |                                       ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/mul_iter_wrapper.sv:56:50: Signal is not used: 'core_error'
+                                                    : ... note: In instance 'posit_mul_iter.u_wrapper'
+   56 |     wire cfg_valid,core_ready,core_run,core_done,core_error,retire;
+      |                                                  ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/mul_iter_wrapper.sv:60:20: Signal is not used: 'iterations_done'
+                                                    : ... note: In instance 'posit_mul_iter.u_wrapper'
+   60 |     wire [I_W-1:0] iterations_done;
+      |                    ^~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/posit_pack_prepare.sv:43:28: Bits of signal are not used: 'regime'[9:5]
+                                                      : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack.u_prepare'
+   43 |     wire signed [SF_W-1:0] regime;
+      |                            ^~~~~~
+%Warning-UNUSEDSIGNAL: rtl/iter_ctrl.sv:42:45: Signal is not used: 'sa_exact'
+                                             : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+   42 |     wire [S_W-1:0] scale_exact,scale_approx,sa_exact,sa_approx;
+      |                                             ^~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/iter_ctrl.sv:42:54: Signal is not used: 'sa_approx'
+                                             : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+   42 |     wire [S_W-1:0] scale_exact,scale_approx,sa_exact,sa_approx;
+      |                                                      ^~~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/iter_ctrl.sv:43:10: Signal is not used: 'valid_exact'
+                                             : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+   43 |     wire valid_exact,valid_approx,exhausted_exact,exhausted_approx,error_exact,error_approx;
+      |          ^~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/iter_ctrl.sv:43:22: Signal is not used: 'valid_approx'
+                                             : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+   43 |     wire valid_exact,valid_approx,exhausted_exact,exhausted_approx,error_exact,error_approx;
+      |                      ^~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/iter_ctrl.sv:43:35: Signal is not used: 'exhausted_exact'
+                                             : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+   43 |     wire valid_exact,valid_approx,exhausted_exact,exhausted_approx,error_exact,error_approx;
+      |                                   ^~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: rtl/iter_ctrl.sv:43:51: Signal is not used: 'exhausted_approx'
+                                             : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+   43 |     wire valid_exact,valid_approx,exhausted_exact,exhausted_approx,error_exact,error_approx;
+      |                                                   ^~~~~~~~~~~~~~~~
+%Warning-SYNCASYNCNET: rtl/packer_ppa_boundary.sv:44:36: Signal flopped as both synchronous and async: 'packer_ppa_top.u_boundary.meta_sync2'
+                       rtl/packer_ppa_boundary.sv:59:14: ... Location of async usage
+   59 |         if (!reset_b_sync_clk) begin
+      |              ^~~~~~~~~~~~~~~~
+                       rtl/posit_pack.sv:118:38: ... Location of sync usage
+  118 |                     p1_valid_q <= #1 in_valid;
+      |                                      ^~~~~~~~
+%Warning-UNOPTFLAT: rtl/dyn_right_shifter.sv:60:23: Signal unoptimizable: Circular combinational logic: 'packer_ppa_top.u_packer.u_prepare.u_payload_shift.g_multi_bit.stage'
+   60 |         logic [N-1:0] stage [S:0];
+      |                       ^~~~~
+                    rtl/dyn_right_shifter.sv:60:23:      Example path: packer_ppa_top.u_packer.u_prepare.u_payload_shift.g_multi_bit.stage
+                    rtl/dyn_right_shifter.sv:76:39:      Example path: ASSIGNW
+                    rtl/dyn_right_shifter.sv:60:23:      Example path: packer_ppa_top.u_packer.u_prepare.u_payload_shift.g_multi_bit.stage
+%Warning-UNOPTFLAT: rtl/lod_lzd_core.sv:72:22: Signal unoptimizable: Circular combinational logic: 'paper_mul_iter.u_wrapper.u_a.lod.g_tree_levels[0].g_nodes[0].vld_hi'
+   72 |                 wire vld_hi = tree_vld[l][2*j + 1];
+      |                      ^~~~~~
+                    rtl/lod_lzd_core.sv:72:22:      Example path: paper_mul_iter.u_wrapper.u_a.lod.g_tree_levels[0].g_nodes[0].vld_hi
+                    rtl/lod_lzd_core.sv:75:41:      Example path: ASSIGNW
+                    rtl/lod_lzd_core.sv:55:24:      Example path: paper_mul_iter.u_wrapper.u_a.lod.tree_vld
+                    rtl/lod_lzd_core.sv:76:41:      Example path: ASSIGNW
+                    rtl/lod_lzd_core.sv:56:24:      Example path: paper_mul_iter.u_wrapper.u_a.lod.tree_pos
+                    rtl/lod_lzd_core.sv:76:41:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: rtl/lod_lzd_core.sv:73:22: Signal unoptimizable: Circular combinational logic: 'paper_mul_iter.u_wrapper.u_a.lod.g_tree_levels[0].g_nodes[0].vld_lo'
+   73 |                 wire vld_lo = tree_vld[l][2*j];
+      |                      ^~~~~~
+                    rtl/lod_lzd_core.sv:73:22:      Example path: paper_mul_iter.u_wrapper.u_a.lod.g_tree_levels[0].g_nodes[0].vld_lo
+                    rtl/lod_lzd_core.sv:75:41:      Example path: ASSIGNW
+                    rtl/lod_lzd_core.sv:55:24:      Example path: paper_mul_iter.u_wrapper.u_a.lod.tree_vld
+                    rtl/lod_lzd_core.sv:76:41:      Example path: ASSIGNW
+                    rtl/lod_lzd_core.sv:56:24:      Example path: paper_mul_iter.u_wrapper.u_a.lod.tree_pos
+                    rtl/lod_lzd_core.sv:76:41:      Example path: ASSIGNW
+%Warning-UNOPTFLAT: rtl/lod_lzd_core.sv:56:24: Signal unoptimizable: Circular combinational logic: 'paper_mul_iter.u_wrapper.u_a.lod.tree_pos'
+   56 |     logic [S-1:0]      tree_pos [S:0][POW2_N-1:0];
+      |                        ^~~~~~~~
+                    rtl/lod_lzd_core.sv:56:24:      Example path: paper_mul_iter.u_wrapper.u_a.lod.tree_pos
+                    rtl/lod_lzd_core.sv:76:41:      Example path: ASSIGNW
+                    rtl/lod_lzd_core.sv:56:24:      Example path: paper_mul_iter.u_wrapper.u_a.lod.tree_pos
+%Warning-UNOPTFLAT: rtl/sac_step_comb.sv:35:21: Signal unoptimizable: Circular combinational logic: 'posit_mul_iter.u_wrapper.u_core.u_ctrl.u_exact.step_amount'
+   35 |     logic [S_W-1:0] step_amount;
+      |                     ^~~~~~~~~~~
+                    rtl/sac_step_comb.sv:35:21:      Example path: posit_mul_iter.u_wrapper.u_core.u_ctrl.u_exact.step_amount
+                    rtl/dyn_left_shifter.sv:87:20:      Example path: ASSIGNW
+                    rtl/sac_step_comb.sv:34:20:      Example path: posit_mul_iter.u_wrapper.u_core.u_ctrl.u_exact.shifted
+                    rtl/sac_step_comb.sv:72:5:      Example path: ALWAYS
+                    rtl/sac_step_comb.sv:35:21:      Example path: posit_mul_iter.u_wrapper.u_core.u_ctrl.u_exact.step_amount
+%Warning-UNOPTFLAT: rtl/dyn_left_shifter.sv:50:23: Signal unoptimizable: Circular combinational logic: 'paper_mul_iter.u_wrapper.u_a.align_payload.g_multi_bit.stage'
+   50 |         logic [N-1:0] stage [S:0];
+      |                       ^~~~~
+                    rtl/dyn_left_shifter.sv:50:23:      Example path: paper_mul_iter.u_wrapper.u_a.align_payload.g_multi_bit.stage
+                    rtl/dyn_left_shifter.sv:66:39:      Example path: ASSIGNW
+                    rtl/dyn_left_shifter.sv:50:23:      Example path: paper_mul_iter.u_wrapper.u_a.align_payload.g_multi_bit.stage
+%Warning-UNOPTFLAT: rtl/ops_sel_comb.sv:48:24: Signal unoptimizable: Circular combinational logic: 'posit_mul_iter.u_wrapper.u_ops.count_b'
+   48 |     wire [COUNT_W-1:0] count_b [2*PAD_N-1:1];
+      |                        ^~~~~~~
+                    rtl/ops_sel_comb.sv:48:24:      Example path: posit_mul_iter.u_wrapper.u_ops.count_b
+                    rtl/ops_sel_comb.sv:75:34:      Example path: ASSIGNW
+                    rtl/ops_sel_comb.sv:48:24:      Example path: posit_mul_iter.u_wrapper.u_ops.count_b
+%Warning-UNOPTFLAT: rtl/ops_sel_comb.sv:47:24: Signal unoptimizable: Circular combinational logic: 'posit_mul_iter.u_wrapper.u_ops.count_a'
+   47 |     wire [COUNT_W-1:0] count_a [2*PAD_N-1:1];
+      |                        ^~~~~~~
+                    rtl/ops_sel_comb.sv:47:24:      Example path: posit_mul_iter.u_wrapper.u_ops.count_a
+                    rtl/ops_sel_comb.sv:74:34:      Example path: ASSIGNW
+                    rtl/ops_sel_comb.sv:47:24:      Example path: posit_mul_iter.u_wrapper.u_ops.count_a
+%Error: Exiting due to 60 warning(s)
+make: *** [Makefile:35: lint] Error 1

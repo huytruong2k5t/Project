@@ -1386,3 +1386,8 @@ Chức năng PASS Windows/Linux/UBSan, vét cạn16.777.216 cặp Q12, raw/corne
 README L1 mục20/`results/paper_discriminators/summary.json` ghi bốn bước đã hoàn thành:292 bản ghi/206 trường hợp,10 ứng viên,205.882 kiểm/nền tảng Windows/Linux/UBSan PASS và đối chiếu Fig.4/5 trực tiếp. Source không cut output trả0x1ae34800 thay0x1ae34000 nên bị loại khỏi baseline bit-exact2021; nghiệm thu source TableI trước đây chỉ giữ ý nghĩa thống kê lịch sử. Fraction đầu ra12 bit có căn cứ hình packer, guard nội bộ chưa được xác minh.
 
 Đo200M accepted seed271828/fingerprint04478e811a897da7, cùng corpus cho fig3/guard12-pack12/source-uncut: maxgap1,2923195 /1,3387730 /0,9842130 điểm %. Hai profile khớp output chưa đạt ngưỡng TableI; source chỉ đạt thống kê. Baseline gốc vẫn processing ở tiêu chí số học và provenance tie/PT2 padding/normalize/cờ/generator. Không thay hợp đồng normative §4–§6 hoặc chọn cấu hình nhờ khớp tỷ lệ đơn thuần.
+
+
+### Gate2 tool availability recheck - 10/10/2026
+
+Rechecked 2026-10-10: WSL PATH contains g++ and make, but no Verilator or yosys. No installation is authorized. Official Verilator lint/harness remain unrun; Gate2 stays processing. No RTL changes, no simulation rerun, no Table I rerun. Historical stratified ModelSim evidence remains 16,815,920 completed transactions, 80,080 reset aborts, 0 mismatch. W9-03/R1/R2/04/05 evidence is retained; W9-06 is not accepted. No new source evidence justifies W9-R3.

@@ -2396,5 +2396,20 @@
     "quartus_map multiplier",
     "make lint (BLOCKED)",
     "bash scripts/verify_week9_verilator.sh (BLOCKED before build)"
-  ]
+  ],
+  "heartbeat_2026_10_10": {
+    "status": "BLOCKED: required Verilator unavailable",
+    "command": "wsl.exe --cd '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC' --exec bash --noprofile --norc -c 'command -v verilator; command -v g++; command -v make; command -v yosys'",
+    "observed_stdout": [
+      "/usr/bin/g++",
+      "/usr/bin/make"
+    ],
+    "exit_code": 1,
+    "scope": "Rechecked 2026-10-10: WSL PATH contains g++ and make, but no Verilator or yosys. No installation is authorized. Official Verilator lint/harness remain unrun; Gate2 stays processing. No RTL changes, no simulation rerun, no Table I rerun.",
+    "new_simulation_comparisons": 0,
+    "new_mismatches": null,
+    "TableI_rerun": false,
+    "Gate2": "NOT ACCEPTED",
+    "backup": "commit/push performed separately; do not infer success from this entry"
+  }
 }

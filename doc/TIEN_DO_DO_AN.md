@@ -123,6 +123,12 @@ Tuần theo lộ trình SPEC, chưa gắn với lịch học. Một phần công
 | 6 | Kiểm báo cáo baseline mới | Chạy lại test và đối chiếu bằng chứng: có profile đạt ngưỡng thống kê, chưa đủ chốt baseline gốc; giữ trạng thái processing | ✅ |
 | 7 | Tinh gọn kết quả kiểm chứng | Xóa cache và vector lớn có thể sinh lại; giữ báo cáo nghiệm thu, trace, coverage, seed/lệnh/hash và hướng dẫn tái lập | ✅ |
 
+### Ngày 10/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Rà soát điều kiện đóng Gate 2 | Giữ bằng chứng ModelSim phân tầng 16.815.920 giao dịch, 0 mismatch; WSL chưa có Verilator, lint/harness chính thức chưa chạy. Không sửa RTL hoặc chạy lại Table I | processing |
+
 ### 4.9. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.

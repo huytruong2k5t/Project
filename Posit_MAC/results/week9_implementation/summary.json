@@ -6,7 +6,7 @@
     "W9-R2": "PASS functional corpus only",
     "W9-04": "PASS",
     "W9-05": "PASS baseline enabled features, four formats",
-    "W9-06": "processing: Verilator installed; strict lint has 60 warnings, official harness not yet run"
+    "W9-06": "processing: Verilator pilot PASS; strict lint/direct scoreboard/full stratified run remain"
   },
   "Gate2": "NOT ACCEPTED",
   "week9": "processing",
@@ -2421,5 +2421,19 @@
     "make_exit_code": 2,
     "Gate2": "NOT ACCEPTED",
     "scope": "Verilator 5.032 (Debian 5.032-1) is now installed by the user. Makefile lint explicitly uses --timing, preserving CK2Q delays. Re-run make lint: NEEDTIMINGOPT removed, exit 2 from make, 60 warnings remain (including MULTITOP, width and UNOPTFLAT diagnostics). No warning suppression, no RTL arithmetic changes, no functional harness run or Table I rerun; Gate2 remains processing. Raw output/version appended to results/week9_implementation/lint.log. Earlier missing-tool entry is historical."
+  },
+  "verilator_pilot_2026_10_10": {
+    "status": "PASS fixture replay; not Gate2",
+    "evidence": "results/week9_multiplier/verilator/final_pilot/summary.json",
+    "completed": 31840,
+    "reset_aborts": 160,
+    "long_stalls": 336,
+    "mismatches": 0,
+    "limitations": [
+      "strict lint unresolved",
+      "no direct L0/L1 library calls in scoreboard",
+      "10^7-vector Verilator acceptance not run",
+      "line/branch/toggle coverage not measured"
+    ]
   }
 }

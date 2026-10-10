@@ -1,6 +1,7 @@
 // Verilator path-A harness. Fixture expectations were checked against L1,
 // SoftPosit (ES0/1/2 exact RNE), and an independent ES3 integer/bit-list oracle.
-// Awaiting an installed Verilator: do not count this as executed RTL evidence.
+// Execution evidence is recorded by verify_week9_verilator.sh; fixtures are frozen.
+// This fixture replay is not a direct L0/L1 library scoreboard.
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
@@ -39,7 +40,13 @@ int main(int argc,char** argv) {
         top.eval(); reset(top);
         std::ifstream file(argv[1]);
         require(bool(file),"missing fixture");
-        uint64_t row=0,completed=0,aborted=0;
+        // Reserved OPS and excessive approximate iteration count must be rejected.
+        top.in_valid=1; top.cfg_ops=2;
+        for(unsigned k=0;k<3;++k) { tick(top); require(!top.in_ready,"reserved config accepted"); }
+        top.cfg_ops=0; top.cfg_mode=1; top.cfg_n=9;
+        for(unsigned k=0;k<3;++k) { tick(top); require(!top.in_ready,"invalid n accepted"); }
+        top.in_valid=0; top.cfg_mode=0; top.cfg_n=0;
+        uint64_t row=0,completed=0,aborted=0,long_stalls=0;
         uint64_t a,b,mode,n,ops,bits,flags,iterations;
         while(file>>std::hex>>a) {
             require(bool(file>>b>>mode>>n>>ops>>bits>>flags>>iterations),"malformed fixture");
@@ -68,7 +75,9 @@ int main(int argc,char** argv) {
                         <<" flags="<<unsigned(top.flags)<<" expected_flags="<<flags<<'\n';
                     throw std::runtime_error("RTL/L1 mismatch");
                 }
-                for(unsigned k=0;k<row%5;++k) {
+                unsigned stall_cycles=(row%97==7)?96:row%5;
+                if(stall_cycles==96) ++long_stalls;
+                for(unsigned k=0;k<stall_cycles;++k) {
                     tick(top);
                     require(top.out_valid && !top.in_ready && top.d==bits && top.flags==flags,"stall stability");
                 }
@@ -79,10 +88,11 @@ int main(int argc,char** argv) {
             ++row;
             if(row%100000==0) std::cout<<"VERILATOR PROGRESS rows="<<row<<std::endl;
         }
+        require(file.eof(),"invalid fixture token");
         top.final();
         require(row>0,"empty fixture");
         std::cout<<"VERILATOR MULTIPLIER PASS rows="<<row<<" completed="<<completed
-            <<" reset_aborts="<<aborted<<" mismatches=0\n";
+            <<" reset_aborts="<<aborted<<" long_stalls="<<long_stalls<<" mismatches=0\n";
     } catch(const std::exception& e) {
         std::cerr<<e.what()<<'\n';
         return 1;

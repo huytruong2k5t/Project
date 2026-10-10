@@ -953,3 +953,13 @@ python scripts/audit_journal2024_measurement.py
 ```
 
 GCC Linux15.2.0, MinGW13-win32, SoftPosit0.4.1; binary/source/hash/counters/fingerprint, compiler và lệnh tại `results/paper_journal2024/measurement/summary.json`. Hai CSV pilot giữ đủ16ô mỗi phân bố và cận OPS lý tưởng; trace nguồn tại `pilot_raw/table_vi_trace.csv`. Không coi exit0 của bộ đo là nghiệm thu Fig9.
+
+## 26. Scoreboard trực tiếp và Gate2 — 10/10/2026
+
+
+Gate2 multiplier **✅** theo mốc tuần9 (10/10/2026):16.815.920 giao dịch phân tầng/0 mismatch; scoreboard trực tiếp L1/L0 và oracle ES3; strict lint16/16 sạch; corner114.656/0 mismatch trên ModelSim và Verilator. Seed20261009, SoftPosit0.4.1, GCC15.2.0, Verilator5.032 và ModelSim10.1d; lệnh/hash/phiên bản lưu với bằng chứng.
+
+Coverage chức năng đạt256/256 bin posit32, min4104 mẫu/bin,26241 operands/run/polarity và36 ô config/profile; structural coverage sau ghép corner: line 91.67–96.23%; branch 91.84–94.79%; toggle 73.10–87.33%, giữ các điểm chưa hit. Mốc này không quy định ngưỡng phần trăm structural coverage và không phải coverage100% hoặc signoff vật lý.
+
+Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.json`; hướng dẫn tái lập và giải thích phạm vi tại PLAN L1 mục7.11. Những mục processing trước đây là lịch sử. Ma trận cuối SPEC§6.7, tuần10 adder/tuần11 MAC-Gate3 và PPA/Gate4 còn mở; provenance/TableI giữ processing, không chạy lại TableI trong phiên này.
+

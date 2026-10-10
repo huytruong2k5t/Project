@@ -1,0 +1,486 @@
+{
+  "scope": "Only regenerated stratified fixtures and Verilator build/source copies; all PASS logs, summaries, coverage, commands and hashes retained",
+  "removed": [
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_16_1_0_0.txt",
+      "files": 1,
+      "bytes": 25022630,
+      "fixture_sha256": "ee0726ebdd36c2c0488647068100ed65c621b5e47bc35e0da4609fb69651ba7d"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_16_1_0_1.txt",
+      "files": 1,
+      "bytes": 25020432,
+      "fixture_sha256": "628a2047607ec8a7ed45a6cf62ba00b0f920db85eeb6032893ced20942c4534f"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_16_1_1_0.txt",
+      "files": 1,
+      "bytes": 25022648,
+      "fixture_sha256": "ac508f118b94c6c728cdefbc8b993fd05605810af2b1fafb8d3823e135eb88c0"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_16_1_1_1.txt",
+      "files": 1,
+      "bytes": 25020404,
+      "fixture_sha256": "47fd28615f59f3ae428d2c01c8dcf9fad654441a428dd6cf7519ddc8b5bca7a7"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_32_2_0_0.txt",
+      "files": 1,
+      "bytes": 36089045,
+      "fixture_sha256": "b2c317502643c09d1ef4b43e33bd9625fa8d284311b033a039b1d9eb206b1524"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_32_2_0_1.txt",
+      "files": 1,
+      "bytes": 36085586,
+      "fixture_sha256": "0e70a80e000818fe0f71e2ee34a1da6e921734b3e5e8bfc7d26de0a48fb7bc21"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_32_2_1_0.txt",
+      "files": 1,
+      "bytes": 36088912,
+      "fixture_sha256": "1cd3e89ae74b108b1ce3cd90e892b9d250a997b49547f45db25c7943af63e739"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_32_2_1_1.txt",
+      "files": 1,
+      "bytes": 36085655,
+      "fixture_sha256": "92dd51e8c992405fb0ed1c0ab3d3ad563ead9d28ea249e19b4219af387f485bc"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_32_3_0_0.txt",
+      "files": 1,
+      "bytes": 36083989,
+      "fixture_sha256": "b6d8f1b7e6047a88b10ef32a2257928bcef3526866c2ffe634593f3e28cd3a83"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_32_3_0_1.txt",
+      "files": 1,
+      "bytes": 36080635,
+      "fixture_sha256": "cfe1e69289162310827bf9ffb720b7a2c93ecb577ec91986864f4887953b5a81"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_32_3_1_0.txt",
+      "files": 1,
+      "bytes": 36084020,
+      "fixture_sha256": "f6aa8db56516d1570a71dc8ca04546691a6fdb4143a0429ab4cbf039cc57aa17"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_32_3_1_1.txt",
+      "files": 1,
+      "bytes": 36080588,
+      "fixture_sha256": "d7a2f8f45e47a4a24c08b3394c0bf33e49128eb66e57af92993f828350086c7e"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_8_0_0_0.txt",
+      "files": 1,
+      "bytes": 19597314,
+      "fixture_sha256": "368085c30f96180914acf3b602f302dfe87ae051372b6f01263171249499813a"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_8_0_0_1.txt",
+      "files": 1,
+      "bytes": 19596857,
+      "fixture_sha256": "d6d08c842e35ea413ce889b8c5f1d0dfce6baa66675392082d1f02d3b27da182"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_8_0_1_0.txt",
+      "files": 1,
+      "bytes": 19597241,
+      "fixture_sha256": "8d0db48dc4be7b69508bb083e07164452755c1165baa6b068b41fdc35c660a6a"
+    },
+    {
+      "path": "results/week9_multiplier/stratified_corpus/mul_8_0_1_1.txt",
+      "files": 1,
+      "bytes": 19596932,
+      "fixture_sha256": "c97d0742edc1915ef636247f4b07e0d6fbe668757d70e8abf62459179a9ec723"
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/16_1_0_0/obj_dir",
+      "files": 30,
+      "bytes": 1415049,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/16_1_0_0/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/16_1_0_1/obj_dir",
+      "files": 30,
+      "bytes": 1393932,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/16_1_0_1/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/16_1_1_0/obj_dir",
+      "files": 30,
+      "bytes": 1413940,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/16_1_1_0/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/16_1_1_1/obj_dir",
+      "files": 30,
+      "bytes": 1392382,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/16_1_1_1/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_2_0_0/obj_dir",
+      "files": 30,
+      "bytes": 1734229,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_2_0_0/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_2_0_1/obj_dir",
+      "files": 30,
+      "bytes": 1717578,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_2_0_1/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_2_1_0/obj_dir",
+      "files": 30,
+      "bytes": 1732727,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_2_1_0/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_2_1_1/obj_dir",
+      "files": 30,
+      "bytes": 1716094,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_2_1_1/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_3_0_0/obj_dir",
+      "files": 30,
+      "bytes": 1738882,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_3_0_0/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_3_0_1/obj_dir",
+      "files": 30,
+      "bytes": 1706162,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_3_0_1/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_3_1_0/obj_dir",
+      "files": 30,
+      "bytes": 1737456,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_3_1_0/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_3_1_1/obj_dir",
+      "files": 30,
+      "bytes": 1704650,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/32_3_1_1/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/8_0_0_0/obj_dir",
+      "files": 30,
+      "bytes": 1259713,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/8_0_0_0/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/8_0_0_1/obj_dir",
+      "files": 30,
+      "bytes": 1238577,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/8_0_0_1/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/8_0_1_0/obj_dir",
+      "files": 30,
+      "bytes": 1258303,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/8_0_1_0/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/8_0_1_1/obj_dir",
+      "files": 30,
+      "bytes": 1237335,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_pilot/8_0_1_1/src",
+      "files": 40,
+      "bytes": 206667,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/16_1_0_0/obj_dir",
+      "files": 81,
+      "bytes": 179897575,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/16_1_0_0/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/16_1_0_1/obj_dir",
+      "files": 81,
+      "bytes": 179792709,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/16_1_0_1/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/16_1_1_0/obj_dir",
+      "files": 81,
+      "bytes": 179894021,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/16_1_1_0/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/16_1_1_1/obj_dir",
+      "files": 81,
+      "bytes": 179788796,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/16_1_1_1/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_2_0_0/obj_dir",
+      "files": 74,
+      "bytes": 183932869,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_2_0_0/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_2_0_1/obj_dir",
+      "files": 74,
+      "bytes": 183790852,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_2_0_1/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_2_1_0/obj_dir",
+      "files": 74,
+      "bytes": 183918381,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_2_1_0/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_2_1_1/obj_dir",
+      "files": 74,
+      "bytes": 183784841,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_2_1_1/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_3_0_0/obj_dir",
+      "files": 74,
+      "bytes": 183835070,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_3_0_0/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_3_0_1/obj_dir",
+      "files": 74,
+      "bytes": 183668449,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_3_0_1/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_3_1_0/obj_dir",
+      "files": 74,
+      "bytes": 183826697,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_3_1_0/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_3_1_1/obj_dir",
+      "files": 74,
+      "bytes": 183662136,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/32_3_1_1/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/8_0_0_0/obj_dir",
+      "files": 42,
+      "bytes": 4149599,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/8_0_0_0/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/8_0_0_1/obj_dir",
+      "files": 42,
+      "bytes": 4091390,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/8_0_0_1/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/8_0_1_0/obj_dir",
+      "files": 42,
+      "bytes": 4146218,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/8_0_1_0/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/8_0_1_1/obj_dir",
+      "files": 42,
+      "bytes": 4087968,
+      "fixture_sha256": null
+    },
+    {
+      "path": "results/week9_multiplier/verilator/gate2_stratified/8_0_1_1/src",
+      "files": 40,
+      "bytes": 206846,
+      "fixture_sha256": null
+    }
+  ],
+  "bytes": 2704433676
+}

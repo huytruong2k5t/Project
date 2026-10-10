@@ -47,7 +47,7 @@ module dyn_left_shifter #(
         localparam int S = $clog2(N);
 
         // Stage array: stage[0] is input, stage[S] is output after S MUX stages
-        logic [N-1:0] stage [S:0];
+        logic [N-1:0] stage [S:0] /* verilator split_var */;
         assign stage[0] = in;
 
         genvar i;

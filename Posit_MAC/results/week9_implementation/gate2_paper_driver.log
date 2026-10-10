@@ -1,0 +1,20 @@
+PAPER TOP GENERATOR PASS records=17181 commits=65710 specials=216 frozen=292 seed=20261009
+Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module lod_lzd_core
+-- Compiling module dyn_left_shifter
+-- Compiling module dyn_right_shifter
+-- Compiling module posit_parser_comb
+-- Compiling module posit_pack_prepare
+-- Compiling module posit_pack_finish
+-- Compiling module posit_pack_comb
+-- Compiling module paper_ops_comb
+-- Compiling module paper_step_comb
+-- Compiling module paper_norm_comb
+-- Compiling module paper_mul_wrapper
+-- Compiling module paper_mul_iter
+-- Compiling module tb_paper_mul_iter
+
+Top level modules:
+	tb_paper_mul_iter
+PAPER TOP PASS records=17181 commits=65710 specials=216 Fig4=2 negative=24036 zero_terms=14199 tail=45468 early=1082 long_stalls=178 resets=4 mismatch=0

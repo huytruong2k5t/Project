@@ -6,7 +6,7 @@
 #-----------------------------------------------------------------------------
 
 SHELL := bash
-PYTHON ?= python
+PYTHON ?= python3
 VERILATOR ?= verilator
 VIVADO ?= vivado
 
@@ -30,22 +30,20 @@ help: ## Show this help message
 	@echo "Posit MAC IP Makefile Targets:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-12s %s\n", $$1, $$2}'
 
-lint: ## Run RTL lint checks (Verilator / Verible)
-	@echo "==> Running RTL lint checks..."
-	@if command -v $(VERILATOR) >/dev/null 2>&1; then \
-		$(VERILATOR) --lint-only --timing -Wall -I$(RTL_DIR) $(RTL_DIR)/*.sv; \
-	else \
-		echo "BLOCKED: Verilator not found; lint has NOT passed."; exit 2; \
-	fi
+lint: ## Strict normative multiplier lint, all sixteen Gate2 profiles
+	@bash $(SCRIPTS_DIR)/lint_gate2.sh
 
-smoke: ## Run quick smoke tests on small configurations (posit8, posit16)
-	@echo "==> Running smoke tests..."
+smoke: ## Run Gate2 pilot across all sixteen multiplier configurations
+	@bash $(SCRIPTS_DIR)/verify_week9_verilator.sh final_pilot gate2_pilot
 
-regress: ## Run full regression test matrix (posit8, 16, 32 across n and corner cases)
-	@echo "==> Running regression suite..."
 
-cov: ## Collect and generate code & functional coverage reports
-	@echo "==> Collecting coverage..."
+regress: ## Run Gate2 multiplier stratified matrix (requires regenerated frozen fixtures)
+	@bash $(SCRIPTS_DIR)/verify_week9_verilator.sh stratified_corpus gate2_stratified
+
+
+cov: ## Audit Gate2 functional and measured line/branch/toggle coverage
+	$(PYTHON) $(SCRIPTS_DIR)/audit_week9_coverage.py results/week9_multiplier/stratified_corpus --rtl-summary results/week9_multiplier/verilator/gate2_stratified/summary.json --output results/week9_multiplier/verilator/gate2_stratified/functional_coverage.json
+	$(PYTHON) $(SCRIPTS_DIR)/audit_gate2_structure.py
 
 syn: ## Run FPGA synthesis and implementation via Vivado / Yosys
 	@echo "==> Running FPGA synthesis..."

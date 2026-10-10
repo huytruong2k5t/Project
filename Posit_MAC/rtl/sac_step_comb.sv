@@ -25,8 +25,9 @@ module sac_step_comb #(
     output logic exhausted,
     output logic state_error
 );
+    typedef logic [S_W:0] scale_limit_t;
     localparam int K_W = (W_X > 1) ? $clog2(W_X) : 1;
-    localparam logic [S_W:0] MAX_SCALE = W_X;
+    localparam logic [S_W:0] MAX_SCALE = scale_limit_t'(W_X);
     localparam logic [S_W-1:0] ONE_STEP = 1;
     wire [K_W-1:0] leading_count;
     wire [S_W-1:0] leading_count_extended;
@@ -69,11 +70,9 @@ module sac_step_comb #(
         .out(shifted)
     );
 
+    assign step_amount = leading_valid ? leading_count_extended + ONE_STEP : '0;
+
     always_comb begin
-        step_amount = '0;
-        if (leading_valid) begin
-            step_amount = leading_count_extended + ONE_STEP;
-        end
         scale_sum = {1'b0, scale} + {1'b0, step_amount};
         state_error = ({1'b0, scale} > MAX_SCALE) ||
                       (leading_valid && (scale_sum > MAX_SCALE));

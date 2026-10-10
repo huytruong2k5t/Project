@@ -1,0 +1,1955 @@
+{
+  "scope": "Gate2 source/documents/compact logs/hash/coverage; no executables, caches or large fixtures",
+  "files": [
+    {
+      "path": "Posit_MAC/rtl/dyn_left_shifter.sv",
+      "bytes": 3640,
+      "sha256": "537bfd27d3145ead9c5f74cc18d287ed83b89e0fd8a3e6ed834b75b55d017fb8"
+    },
+    {
+      "path": "Posit_MAC/rtl/dyn_right_shifter.sv",
+      "bytes": 4261,
+      "sha256": "89514601248f33eef173b113cbed062d2a777ec6f84d1f3b0fc66eacd946ef86"
+    },
+    {
+      "path": "Posit_MAC/rtl/iter_ctrl.sv",
+      "bytes": 4869,
+      "sha256": "3e9fcae9d9969787e2a11f2df37316b4e101de45990fb75988c11d2a36fd9d18"
+    },
+    {
+      "path": "Posit_MAC/rtl/lod_lzd_core.sv",
+      "bytes": 3620,
+      "sha256": "2c5f501f4bee6c70a67099cff299a9ff7f9e0375bc75ada57a73e6addbe432a7"
+    },
+    {
+      "path": "Posit_MAC/rtl/mul_iter_wrapper.sv",
+      "bytes": 8304,
+      "sha256": "83ff2e2f0772f0e47d6501077d35f7bad84754d7c907f40453694e00176166b5"
+    },
+    {
+      "path": "Posit_MAC/rtl/ops_sel_comb.sv",
+      "bytes": 5036,
+      "sha256": "962651190c14fc42e8235df55a082bddaaa1fee7288215010c395bfbe7b08424"
+    },
+    {
+      "path": "Posit_MAC/rtl/packer_ppa_top.sv",
+      "bytes": 2599,
+      "sha256": "f6a967fafb3c3e713e5459e87ce4d5d97e7a330de65e986b5ade99ef7c96625a"
+    },
+    {
+      "path": "Posit_MAC/rtl/posit_mul_iter.sv",
+      "bytes": 1719,
+      "sha256": "6643283e58450d2305007052e243871c637310a594e2fbf55b3cba35b6fcb647"
+    },
+    {
+      "path": "Posit_MAC/rtl/posit_pack.sv",
+      "bytes": 6803,
+      "sha256": "eb97ee2f9b93ebc3e51cba0f9506ae8f8efaeab0ca6fca71e0043e138aad27fe"
+    },
+    {
+      "path": "Posit_MAC/rtl/posit_pack_comb.sv",
+      "bytes": 2401,
+      "sha256": "d602169aa5fa8ce5dae29de89c69722ec0d6729f396fbd26e18788f15d811346"
+    },
+    {
+      "path": "Posit_MAC/rtl/posit_pack_finish.sv",
+      "bytes": 3768,
+      "sha256": "bf3a4dc17e3a9542cd5ef77215467aebb9fbc31c1c23b1f52124148d3b9dff5d"
+    },
+    {
+      "path": "Posit_MAC/rtl/posit_pack_prepare.sv",
+      "bytes": 5177,
+      "sha256": "21a544e78c3577e95c82aa38363f9006870c3103e678befa55be28ca5ea37328"
+    },
+    {
+      "path": "Posit_MAC/rtl/posit_parser.sv",
+      "bytes": 8935,
+      "sha256": "43acff8de2fad8592811dacc2cefc7ae658ff56e967a3062bbce5ce56e521329"
+    },
+    {
+      "path": "Posit_MAC/rtl/posit_parser_comb.sv",
+      "bytes": 3014,
+      "sha256": "3d619c0ab22e7433aecfc1012de1486caee39d36e89fe472208f07c845806c43"
+    },
+    {
+      "path": "Posit_MAC/rtl/sac_step_comb.sv",
+      "bytes": 3210,
+      "sha256": "ff01ec40baeb1c35026d82957bf33db21fba98a0d2f292ebd7b5aac554834b72"
+    },
+    {
+      "path": "Posit_MAC/rtl/sbm_shift_comb.sv",
+      "bytes": 1913,
+      "sha256": "e0fa8e48853748af065e6ca7d84bb2040e1e4981e3b58f9ed49ee0ccb290c5a8"
+    },
+    {
+      "path": "Posit_MAC/tb/week9_exact_reference.hpp",
+      "bytes": 1818,
+      "sha256": "27d11364e145005a748654030e08ee02f0f0f8c50fe3aced991041e5fcaf03ea"
+    },
+    {
+      "path": "Posit_MAC/tb/week9_multiplier_harness.cpp",
+      "bytes": 6774,
+      "sha256": "13745f7c4010d7f57757fa7bbd696914f01c54c1961992b2e2d8714c704ad635"
+    },
+    {
+      "path": "Posit_MAC/scripts/audit_gate2_acceptance.py",
+      "bytes": 4893,
+      "sha256": "65d8ebe4d818654281c89462fa57289eb2120c7e7a1e50921e9024ee303321c9"
+    },
+    {
+      "path": "Posit_MAC/scripts/audit_gate2_structure.py",
+      "bytes": 2592,
+      "sha256": "ad8c58894e5b1d395c1550de5e799d1136190ad856c647f84a30ae22d15791d4"
+    },
+    {
+      "path": "Posit_MAC/scripts/audit_week9_verilator.py",
+      "bytes": 5030,
+      "sha256": "0a9dfc379d1d8f6a8ce31cfb6781dd52ced017d1207e9969a05f9906df706043"
+    },
+    {
+      "path": "Posit_MAC/scripts/lint_gate2.sh",
+      "bytes": 1399,
+      "sha256": "0d0ee629becea9474b6ea46788af3d691099ec436def3ae5f81e229b43aa51b7"
+    },
+    {
+      "path": "Posit_MAC/scripts/verify_gate2_corners.sh",
+      "bytes": 854,
+      "sha256": "566d1d1e3bf28eb8324fa2449887b3923dd4d5e483b8e7228e4015bbb9d3d74f"
+    },
+    {
+      "path": "Posit_MAC/scripts/verify_week9_verilator.sh",
+      "bytes": 5184,
+      "sha256": "02eac965e5b3ecc471d77da4831d257b44735710a91fb62628deb25068ab25ba"
+    },
+    {
+      "path": "Posit_MAC/Makefile",
+      "bytes": 2479,
+      "sha256": "f0977e760c63f75ba75366173647e6d35d895fee4511702f3756cf1c486c7125"
+    },
+    {
+      "path": "Posit_MAC/SPEC_Posit_MAC_IP.md",
+      "bytes": 159595,
+      "sha256": "b5bfef39a0fe815d4021694be426d8971bc559436d1e5739e85db187ad4210b5"
+    },
+    {
+      "path": "Posit_MAC/l1/PLAN.md",
+      "bytes": 62933,
+      "sha256": "dcafde99bf5ba8cf5d9a90943cc5e1d4705f9c2dba1771f25bc282f0d80b606d"
+    },
+    {
+      "path": "Posit_MAC/l1/README.md",
+      "bytes": 112392,
+      "sha256": "342dcbfda0ff3306c5f1558723206726b55cbce07db2bb0a928db68bf615e7e1"
+    },
+    {
+      "path": "Posit_MAC/rtl/README.md",
+      "bytes": 30295,
+      "sha256": "4723299367aea98f135b48148f79806e23ff73d490b5df764f13a018ec98cc3b"
+    },
+    {
+      "path": "Posit_MAC/results/README.md",
+      "bytes": 5962,
+      "sha256": "1029278e14ab8b3eb2a8e0a69f87f062a5658b97108b7f49bb520fb07013f03b"
+    },
+    {
+      "path": "doc/TIEN_DO_DO_AN.md",
+      "bytes": 13075,
+      "sha256": "43ee64705219e2905dedb6d55a1a1a5f9bcd15041303c755c57c2c75a366af9c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/gate2_acceptance.json",
+      "bytes": 4472,
+      "sha256": "3a6cc79999a269f9554c18a39cf2e6e321d8a80bba2a0dfcca88b8c712976467"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/gate2_core_driver.log",
+      "bytes": 1752,
+      "sha256": "1b4d4035d57cfb0a338cc2e6be2581a2dc6e24161da63432b36806fd012b2f9c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/gate2_corners_driver.log",
+      "bytes": 826,
+      "sha256": "e89770e22324c555bbdf25462c61a955fce801e79f23b6340cf58895d3d54741"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/gate2_corner_generator.log",
+      "bytes": 107,
+      "sha256": "d4b58fbdeaf22c8f009b10642aa1441b5abbf52181f5fec0436526a914745385"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/gate2_frontend_driver.log",
+      "bytes": 1736,
+      "sha256": "8620bfa781087a3029a32405ecefa7b5f536d08d3836197b1ce2e298c0c37a91"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/gate2_generator.log",
+      "bytes": 117,
+      "sha256": "4d0e151f79bd695771104ac051f61c1fcdf8ddedfc69b58c99b3c681043e1fa7"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/gate2_generator_build.log",
+      "bytes": 293,
+      "sha256": "12bf940b8acb1299ac74e544bb499bc66699763b4bb313b202426a6632353c32"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/gate2_paper_driver.log",
+      "bytes": 943,
+      "sha256": "36925e54f18734814ef2df0e1664df5ab236a7e3316195fc90fa23fc4f3986e9"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2_matrix.log",
+      "bytes": 460,
+      "sha256": "798cbb4f7efb37f83b99528b0938eb0a34a1dba1a9af26df16842863a7b0edb1"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2_work.log",
+      "bytes": 297,
+      "sha256": "775a6b3a4a117e21ab15f65f4428ccefad066e74c926b0953220ff64e50327ca"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/summary.json",
+      "bytes": 106569,
+      "sha256": "fab61cf10ea3c90665dd0ed8a37c6f3d98c457d4017f4c1f836db2a521e5294d"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/16_1_0_RNE.log",
+      "bytes": 297,
+      "sha256": "5335858f293b1139050fdc80a2606e703d7c7c0a1afa5c52fb08a36f858a4038"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/16_1_0_TRUNC.log",
+      "bytes": 297,
+      "sha256": "f31a7e9d1946ba5fc66275453a37e88538969210b8c3637d33a02a6af88d7a49"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/16_1_1_RNE.log",
+      "bytes": 297,
+      "sha256": "e50f7fb1d94582738ccef4718281cd379df7f30d1570a33c0e6b109b68074fca"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/16_1_1_TRUNC.log",
+      "bytes": 297,
+      "sha256": "f165dae013717a83a3aa4287457b616e0aed7c29d9c9803f2ea2afb4469c9ec0"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/32_2_0_RNE.log",
+      "bytes": 297,
+      "sha256": "16aa1c56c1e09183baf36622458a57a528889c16d15a42133eaee26c2afcc083"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/32_2_0_TRUNC.log",
+      "bytes": 297,
+      "sha256": "9741a21a2c4f7a600458c4c4fa9f5aabda1d23ab83be57f668c9f8b776871418"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/32_2_1_RNE.log",
+      "bytes": 297,
+      "sha256": "caf64f9895a936614ebfff1d002b049e0caef654a3bdb6755c6983726eb3864d"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/32_2_1_TRUNC.log",
+      "bytes": 297,
+      "sha256": "4f56ce027f9b2fd74e4da3838bbc46b3dd5b06d46a34deb8f8aad7ee3107c515"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/32_3_0_RNE.log",
+      "bytes": 297,
+      "sha256": "5497f82809af5eacf2b3def5c449c3280845a0ae7217061b17166aff169d75da"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/32_3_0_TRUNC.log",
+      "bytes": 297,
+      "sha256": "035b5005c5a6281fddcf282e7d760480f3fda78a1cbfe506589c5b7596281aaf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/32_3_1_RNE.log",
+      "bytes": 297,
+      "sha256": "f55611812851245c261b34da3e9e0d0fe14baf485161d09c607f2eb57297d72d"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/32_3_1_TRUNC.log",
+      "bytes": 297,
+      "sha256": "bc85ec11f8290b16bce32d3f3df2ea669e0b13931a7d94677bdc3beb62eb334a"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/8_0_0_RNE.log",
+      "bytes": 297,
+      "sha256": "05226d4c1b9e44c0054f4d441f69c2084576d2966409fed871f88c63a241b99a"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/8_0_0_TRUNC.log",
+      "bytes": 297,
+      "sha256": "c600583c0696212542d8514cfd256220dc3252911f55b5e98922aa711663594e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/8_0_1_RNE.log",
+      "bytes": 297,
+      "sha256": "facbbb221062251244371331fa0c6fe91d7d1f217e3c3b014970ab32db8b97b4"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/8_0_1_TRUNC.log",
+      "bytes": 297,
+      "sha256": "a04d59ff5afb5d37a4c927f1357a5de093c13a5bec18a112c0c3f971aa1fcaee"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/source.sha256",
+      "bytes": 1570,
+      "sha256": "e6b53e0bb907ca8ac552524f4d83617422271fa07253a5fe3d81a24921c57bc7"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/lint_gate2/version.log",
+      "bytes": 48,
+      "sha256": "31ee8ba532711b2dcaef0bb2e203e20284e39ea422325f094074f3c2a9da7996"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/compiler.log",
+      "bytes": 239,
+      "sha256": "ac55452791ddd9d6e55f5e1f3dbcd5ee40f34b0b55ae18baade542748b008022"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/make_version.log",
+      "bytes": 300,
+      "sha256": "cb84250d994234272d0a465014ce2931be76e9e0cb114b9bffa078c3c211e8eb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/summary.json",
+      "bytes": 72176,
+      "sha256": "63311d09bc9d604a674cb44ee9d1ecb8d768f3477ab60ac68352475f4005aa74"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/version.log",
+      "bytes": 48,
+      "sha256": "31ee8ba532711b2dcaef0bb2e203e20284e39ea422325f094074f3c2a9da7996"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_0_0/build.log",
+      "bytes": 33363,
+      "sha256": "668492087c04b0797c3d03429e27be3eaf0aeba3d14f25503f59f40c92b720a2"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_0_0/fixture.sha256",
+      "bytes": 157,
+      "sha256": "477cd5fc6c839c1bcb85b05620915881911a3323f96ec04fc57fecab64667b30"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_0_0/run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_0_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_0_1/build.log",
+      "bytes": 30667,
+      "sha256": "2ca124c3f54e71760ed2823ee6861aa53f2db1570433ccf15a87e47f2dfa8e8a"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_0_1/fixture.sha256",
+      "bytes": 157,
+      "sha256": "c84764a8b385363a6b763aa36f044124574bb0186a2bd4bbe5b3e5df3b7a5fc5"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_0_1/run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_0_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_1_0/build.log",
+      "bytes": 33363,
+      "sha256": "cc9fdd8979efb905402772c3e7ed78c2e92fff4e84213eff340e6c08c18ad7f2"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_1_0/fixture.sha256",
+      "bytes": 157,
+      "sha256": "d10bf33ce963732d5ea0e8bb17a945eae037a2ecec0da729037544fd28c554fd"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_1_0/run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_1_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_1_1/build.log",
+      "bytes": 30667,
+      "sha256": "4275cba55aa46e677263191bbba904ad4f91d1d7a34721bfa8f82b366fe0ddf7"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_1_1/fixture.sha256",
+      "bytes": 157,
+      "sha256": "e72f7e857a13757cb20dc0c60a203255c6f22ead9fa03bb3bb3df790d0875f27"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_1_1/run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/16_1_1_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_0_0/build.log",
+      "bytes": 33363,
+      "sha256": "cad62ad3644e07b7c947d222fa63f21cb3dd0e3087ae0c409498673eff197423"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_0_0/fixture.sha256",
+      "bytes": 157,
+      "sha256": "2a1306918cbed81e0495f50ead9324dd3c6a99772a9ebb6f111c6896e59ed61d"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_0_0/run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_0_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_0_1/build.log",
+      "bytes": 30667,
+      "sha256": "f557d6dee6b3bf1eaf6c811c1000f15589c9f77a985da6f3b7daee9f09dc6e80"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_0_1/fixture.sha256",
+      "bytes": 157,
+      "sha256": "b51d98d9342f92bc7f47fb4a705eca6672140ea4e317483974d06bf7658af374"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_0_1/run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_0_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_1_0/build.log",
+      "bytes": 33363,
+      "sha256": "8b9ea4c39281287d9d876f7a0e4cbee926388a8b02f8102dafff47e1ef155713"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_1_0/fixture.sha256",
+      "bytes": 157,
+      "sha256": "ee04095d5df0e1337ae9d9436b985052993d06ca530f22018c04d152df8280f7"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_1_0/run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_1_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_1_1/build.log",
+      "bytes": 30667,
+      "sha256": "f6dbb03435df7d5907d204d165f399f314f996baac04f1628ba218103e8ea7d2"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_1_1/fixture.sha256",
+      "bytes": 157,
+      "sha256": "3ee52516101fbe13b0fdcc4fc3270a2978ad3d1c10c67be6c207045fdb47745b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_1_1/run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_2_1_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_0_0/build.log",
+      "bytes": 33363,
+      "sha256": "d439648c1c6857dd2e8255a0f41999b6d46b2fef5403a7516db547fcb8f3370f"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_0_0/fixture.sha256",
+      "bytes": 157,
+      "sha256": "7e7641445595155dff57b764bf318c52dfa82a2dbf0d6b4add8fba51aa253b0d"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_0_0/run.log",
+      "bytes": 138,
+      "sha256": "105e1c6aaa591a84e9692aa865d410584a22044bef6c23e4ad6e6e3e359131d6"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_0_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_0_1/build.log",
+      "bytes": 30667,
+      "sha256": "34e841e30e31d5fe7f6726a4e9eb30c585d67746eb24e68d55e61f8a7a3db939"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_0_1/fixture.sha256",
+      "bytes": 157,
+      "sha256": "f4863427d5ffc4c4573f84109abb75666ce7f0087d9fd1e5f13f6bdccb14d4be"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_0_1/run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_0_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_1_0/build.log",
+      "bytes": 33363,
+      "sha256": "b1791c5bd6b74bb6896793c9b9e4ae91de26874205b85c91c93ee8ce2e1388f1"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_1_0/fixture.sha256",
+      "bytes": 157,
+      "sha256": "6b6a8b4055451d612bad9f70ea3f962c94ee244495d02a59eac62a11e8c9deb3"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_1_0/run.log",
+      "bytes": 138,
+      "sha256": "105e1c6aaa591a84e9692aa865d410584a22044bef6c23e4ad6e6e3e359131d6"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_1_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_1_1/build.log",
+      "bytes": 30668,
+      "sha256": "b5441f9506d9e8642bf2ebe1d6c103298c4ad8e9cea1ed3b0b8203fc6ecf89b2"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_1_1/fixture.sha256",
+      "bytes": 157,
+      "sha256": "3358caca3dc22a5d7ba3c9ecb5cf3c923537f38f3683bb2dbf7821f90428fe0f"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_1_1/run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/32_3_1_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_0_0/build.log",
+      "bytes": 33351,
+      "sha256": "dd6784c8ad9aa62dd78583dda32f2093face2fac4908734e1caa40e666f18434"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_0_0/fixture.sha256",
+      "bytes": 156,
+      "sha256": "050435f0f6e06d640774a019e6b7a980020a83d0d2a6bb294b34c205d8456bd9"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_0_0/run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_0_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_0_1/build.log",
+      "bytes": 30655,
+      "sha256": "e4a7015ada25115bc71f6b66a26670140fa1ef91ed01d02a19454f600c774912"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_0_1/fixture.sha256",
+      "bytes": 156,
+      "sha256": "c2579f3e993d845ccbbfc728bb8896d857cba144342457d38ac43764e193788f"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_0_1/run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_0_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_1_0/build.log",
+      "bytes": 33351,
+      "sha256": "3511e7f038ec723640592e88263b12731146d5a06a866bc6fe960a7ae48d5537"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_1_0/fixture.sha256",
+      "bytes": 156,
+      "sha256": "49f9ad0a87b76131beee7cd4294fb26ea014f8caeb3078114ec16e60da8fce88"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_1_0/run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_1_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_1_1/build.log",
+      "bytes": 30655,
+      "sha256": "972838ae55c4f789327e1ef6425aba719a935ffdee1c458821b3a616e8a097f3"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_1_1/fixture.sha256",
+      "bytes": 156,
+      "sha256": "6e2c26f416263c609b929e48bfe67db5bfdf5423e31856395fc63bbddf85854b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_1_1/run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_1_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "64101b146bf121d6a10f8d597b30dc701cffa6264ed35ae6da8c72cc7dc1eaad"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/comparisons.csv",
+      "bytes": 2062,
+      "sha256": "0d6ce6e053aa0f2b3f5a9c4a97966d4c00d56d199794f786d0de99de55b58e02"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/compiler.log",
+      "bytes": 239,
+      "sha256": "ac55452791ddd9d6e55f5e1f3dbcd5ee40f34b0b55ae18baade542748b008022"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/functional_coverage.json",
+      "bytes": 106542,
+      "sha256": "69317791b05369cb32a5721595baa91e4db0c5b6c62bf111909a83f064ed7151"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/make_version.log",
+      "bytes": 300,
+      "sha256": "cb84250d994234272d0a465014ce2931be76e9e0cb114b9bffa078c3c211e8eb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/structural_coverage.json",
+      "bytes": 1955575,
+      "sha256": "1e8c24bc55770dcdc7212961403f5cc14f258d8ec1b6238f301e200962840ce7"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/summary.json",
+      "bytes": 72521,
+      "sha256": "381097730d234d37b7eebec10815cd28746b4dec9e79ada7390fa5fe2cd678ae"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/version.log",
+      "bytes": 48,
+      "sha256": "31ee8ba532711b2dcaef0bb2e203e20284e39ea422325f094074f3c2a9da7996"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_0/build.log",
+      "bytes": 46032,
+      "sha256": "f83d729377bfa88ac154bfc40accbf77154a3725c820fa9e8eb3ba903dbc2a23"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_0/corner_coverage.dat",
+      "bytes": 379761,
+      "sha256": "80b9e7df0783116aabd4832af92696957ffd12f017dfb8f796d0082d1d6dc0a4"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_0/corner_run.log",
+      "bytes": 138,
+      "sha256": "45ebe22d9e7edb33246c4154fa618242fb323d96e1e27671e5f36c6fe000ef0c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_0/coverage.dat",
+      "bytes": 387926,
+      "sha256": "cf5df45f0824632cb283cc033eeede9eac8da9c9b55764337817eabfe4984796"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_0/fixture.sha256",
+      "bytes": 163,
+      "sha256": "17e830a27323e16a0a66e0d84de514e42553de132b9796a34b8b84b8c99f96b5"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_0/pilot_coverage.dat",
+      "bytes": 382554,
+      "sha256": "9e0dd260a207a54973ddc046f69407a41b5a8c8fcf78a71db64e0fe17eb8fbb0"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_0/pilot_run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_0/run.log",
+      "bytes": 465,
+      "sha256": "05168b493668153c686cc20cd3316e99d9b2a02a1533d06f2ccd446812123732"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_1/build.log",
+      "bytes": 43336,
+      "sha256": "14ac1621579e2f6cb643728c550094ca50bc9abaf2ac11e4c3dd781535196af6"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_1/corner_coverage.dat",
+      "bytes": 379251,
+      "sha256": "3584874d25cbe5e2de2d4e4ebad26928caabbacf6fda2c5e3fdbc29526591c45"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_1/corner_run.log",
+      "bytes": 135,
+      "sha256": "6b881c8ddd91c030807a8c218d5b31448f005b9796356ff48cf5bdbdf226cf47"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_1/coverage.dat",
+      "bytes": 387388,
+      "sha256": "e0c3c1f1dab7f0e81d87043b3632a1fa073609bfea24190842323b48eb9e2bb3"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_1/fixture.sha256",
+      "bytes": 163,
+      "sha256": "1b55a851cd327ade3cba8432a723501c135fce1a48fddbe1c93accbd1007f448"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_1/pilot_coverage.dat",
+      "bytes": 382015,
+      "sha256": "f599b828182dd4504695425a3f32c8881a93871563564af00ffe44dc79ea4a61"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_1/pilot_run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_1/run.log",
+      "bytes": 460,
+      "sha256": "97c37d9996dad66f3501c9cb2307996e0b1d2aeecec0e30575208e150cd0cb3b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_0_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_0/build.log",
+      "bytes": 46032,
+      "sha256": "8bfca4f280c8898b757dced8e2663670f18a3048de7a86ab8a6e5ae3014e404f"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_0/corner_coverage.dat",
+      "bytes": 377595,
+      "sha256": "fe6328d1dfdad3e40458ad567c603929ec556f93401ab286ca3f371016b8784b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_0/corner_run.log",
+      "bytes": 138,
+      "sha256": "45ebe22d9e7edb33246c4154fa618242fb323d96e1e27671e5f36c6fe000ef0c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_0/coverage.dat",
+      "bytes": 385817,
+      "sha256": "b53919cec4b279b29ceba823c9f402344ee75c8ff1e61f92d33e58a28bdb632e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_0/fixture.sha256",
+      "bytes": 163,
+      "sha256": "8113c56634c4069a1d4d120a2def10e68d7e7851f0609e8a3afcdd6c995acbaf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_0/pilot_coverage.dat",
+      "bytes": 380391,
+      "sha256": "d90c701793bd7a70873ecdd95d614e39ee6dec1097b0a63823c1afa01d559df6"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_0/pilot_run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_0/run.log",
+      "bytes": 465,
+      "sha256": "05168b493668153c686cc20cd3316e99d9b2a02a1533d06f2ccd446812123732"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_1/build.log",
+      "bytes": 43336,
+      "sha256": "b59e951d6bed0f6c342ce6c3a4116da23b19456877ac3f3203d726ef997ec89f"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_1/corner_coverage.dat",
+      "bytes": 377085,
+      "sha256": "1ba1ec14e7d190a4b99463e6d1de21c3166a6155ccf7cbe8ab633bec341d9c14"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_1/corner_run.log",
+      "bytes": 135,
+      "sha256": "6b881c8ddd91c030807a8c218d5b31448f005b9796356ff48cf5bdbdf226cf47"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_1/coverage.dat",
+      "bytes": 385278,
+      "sha256": "6d9e3e7a7db2a4012d138ab602484366271ca2f55f8f3b280c11947493593d38"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_1/fixture.sha256",
+      "bytes": 163,
+      "sha256": "34d9ef3c526bf6656a22c0416c5458c1dc2ed8af57b00ca67b3f1c8619fa2425"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_1/pilot_coverage.dat",
+      "bytes": 379888,
+      "sha256": "bcc10cd59dcb1849035086ad200e33a707a4145571faa0272c0f1fa2fa5c656c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_1/pilot_run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_1/run.log",
+      "bytes": 460,
+      "sha256": "97c37d9996dad66f3501c9cb2307996e0b1d2aeecec0e30575208e150cd0cb3b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/16_1_1_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_0/build.log",
+      "bytes": 44668,
+      "sha256": "c6a293ad5a7da2a17c0b1e789072f0ffbeae4fc267118c3e4a938d9c84729515"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_0/corner_coverage.dat",
+      "bytes": 681224,
+      "sha256": "2e3d038e785043e520dbb3a84ae296ce242a1615875ee06d56d578dbb5e58ce0"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_0/corner_run.log",
+      "bytes": 138,
+      "sha256": "45ebe22d9e7edb33246c4154fa618242fb323d96e1e27671e5f36c6fe000ef0c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_0/coverage.dat",
+      "bytes": 696890,
+      "sha256": "011f7cec6b48a5960dfdcfcfe09a98d59fcf5b3e6b82c5131092e3b3926fae42"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_0/fixture.sha256",
+      "bytes": 163,
+      "sha256": "ec96525e14088cb3cc69df415fd364f0dc34ef534621bb52336d899316cb14e4"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_0/pilot_coverage.dat",
+      "bytes": 687761,
+      "sha256": "ba332fa84d7a60b0c15d91ba00312e3f7e4bb571447e1638ef9e6642ec553ba7"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_0/pilot_run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_0/run.log",
+      "bytes": 465,
+      "sha256": "15bc6a00ca65b011797c7065eda7ec28c4ffe0b71197d1cc4717f6cae7202573"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_1/build.log",
+      "bytes": 41972,
+      "sha256": "fee3f3f99f6a4b539718b733492b3bededcf43c3873b310856c1bbc2a816bfda"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_1/corner_coverage.dat",
+      "bytes": 680906,
+      "sha256": "be289d5a43a7cd4c8e0e4969d1a2bbe506d33c3586222800faf628f3664a14db"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_1/corner_run.log",
+      "bytes": 135,
+      "sha256": "6b881c8ddd91c030807a8c218d5b31448f005b9796356ff48cf5bdbdf226cf47"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_1/coverage.dat",
+      "bytes": 696546,
+      "sha256": "3782add89e171845483ecebef9313818c791b9ae403d7a78d07df636550bb3e3"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_1/fixture.sha256",
+      "bytes": 163,
+      "sha256": "be7ef4c3dd764af4c200de1b4003e92f7221b8d9f6e8a48d9f618998855d78aa"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_1/pilot_coverage.dat",
+      "bytes": 687363,
+      "sha256": "c8a101edd8ab7972a069400ea84b3f940d5bde0449616ca2dc96220920b1c476"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_1/pilot_run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_1/run.log",
+      "bytes": 460,
+      "sha256": "97c37d9996dad66f3501c9cb2307996e0b1d2aeecec0e30575208e150cd0cb3b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_0_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_0/build.log",
+      "bytes": 44668,
+      "sha256": "7ff8fec48cd5b15040cd37fec11de6fba9536e6926a5f277b572fe64b84bb8ff"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_0/corner_coverage.dat",
+      "bytes": 676907,
+      "sha256": "a70fc109dd0d5230fe0e593a8002106c1668c19e49bac37a03f554c9b8bbe2cc"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_0/corner_run.log",
+      "bytes": 138,
+      "sha256": "45ebe22d9e7edb33246c4154fa618242fb323d96e1e27671e5f36c6fe000ef0c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_0/coverage.dat",
+      "bytes": 692668,
+      "sha256": "0a23d0c808c5cd8a4543d4cfed1b103d7c550dbf3048d6eeab7e73e0e89def1b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_0/fixture.sha256",
+      "bytes": 163,
+      "sha256": "ce204a1a7e46e36654e58d5a5ed51d15c1a0f1711085c8642732d3262a55607f"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_0/pilot_coverage.dat",
+      "bytes": 683464,
+      "sha256": "a96234daeed4043e9bd2b6d2c602cc2f03c97af01dfe6c836ca5a3e93fc26ca1"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_0/pilot_run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_0/run.log",
+      "bytes": 465,
+      "sha256": "15bc6a00ca65b011797c7065eda7ec28c4ffe0b71197d1cc4717f6cae7202573"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_1/build.log",
+      "bytes": 41972,
+      "sha256": "4279d138d50c034b1b5056d9b9d8e97845fbd00b102f6f26346f984b31e03fac"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_1/corner_coverage.dat",
+      "bytes": 676589,
+      "sha256": "99c317c748de46be2379e029a6158a0144cf67a0434c8d3ac0fde81e1735c56f"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_1/corner_run.log",
+      "bytes": 135,
+      "sha256": "6b881c8ddd91c030807a8c218d5b31448f005b9796356ff48cf5bdbdf226cf47"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_1/coverage.dat",
+      "bytes": 692320,
+      "sha256": "47bef60e88bbedfe43066a28fab0ca0f05d6b9ed6cb0d99c293f489009aca908"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_1/fixture.sha256",
+      "bytes": 163,
+      "sha256": "bdef7bb46a938b8f1de1e3213bbc012cdf50dafa332298c6827b151b950cb103"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_1/pilot_coverage.dat",
+      "bytes": 683146,
+      "sha256": "b76f4cbef05bf124a8ca240da4daeb076520dbf7a97d058194ad6d66db0694b4"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_1/pilot_run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_1/run.log",
+      "bytes": 460,
+      "sha256": "97c37d9996dad66f3501c9cb2307996e0b1d2aeecec0e30575208e150cd0cb3b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_2_1_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_0/build.log",
+      "bytes": 44668,
+      "sha256": "3b08c963f9105e4a90aa81f86eb4bab43f59bc149fa391d9a9f31cb24ff6939f"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_0/corner_coverage.dat",
+      "bytes": 672678,
+      "sha256": "9680c73f094517b05050b4f11bba94756abcf67a1d09a445d590e9e533829659"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_0/corner_run.log",
+      "bytes": 138,
+      "sha256": "cd59f50331e675e96785650816b5ae235af12049d8e9e5ab534436f7fc6c9e09"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_0/coverage.dat",
+      "bytes": 688087,
+      "sha256": "1e89f414b98721460464841b9860029f99ddf5d2a14d42f52be0f9a5d55b08e2"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_0/fixture.sha256",
+      "bytes": 163,
+      "sha256": "a97e7aad087cbc2c4bcf9c477278ce0409739cad7d703ee799d60861765666d5"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_0/pilot_coverage.dat",
+      "bytes": 679004,
+      "sha256": "75f91902c37e586d4a8d71854f144fcd391b28bbca663da17221a11ebae74b6c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_0/pilot_run.log",
+      "bytes": 138,
+      "sha256": "105e1c6aaa591a84e9692aa865d410584a22044bef6c23e4ad6e6e3e359131d6"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_0/run.log",
+      "bytes": 465,
+      "sha256": "946ebea02573e684c0125987c12e4898577c9a2570db2f0f202941b0a14094fa"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_1/build.log",
+      "bytes": 41972,
+      "sha256": "88672cb3e73b3141fcd04081285f52b598f2763395e118985c7cae04071dd50f"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_1/corner_coverage.dat",
+      "bytes": 672360,
+      "sha256": "fc5ca1b8a2535a399090e8d4ddc3e738cf6ae09c867e62f80f4315a36e032d5b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_1/corner_run.log",
+      "bytes": 135,
+      "sha256": "6b881c8ddd91c030807a8c218d5b31448f005b9796356ff48cf5bdbdf226cf47"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_1/coverage.dat",
+      "bytes": 687736,
+      "sha256": "fa915187d6386568b34b2714f0fa495a35827ebade39cf0a559bb78348150efc"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_1/fixture.sha256",
+      "bytes": 163,
+      "sha256": "9684f3aefb332644d64eaf889f6fb8fa52217c588a23be1c6bb2d8e85f884e42"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_1/pilot_coverage.dat",
+      "bytes": 678778,
+      "sha256": "35a3914250029ab866640c63f83b01473beb4388e89b6f7d3afb1411d491142d"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_1/pilot_run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_1/run.log",
+      "bytes": 460,
+      "sha256": "97c37d9996dad66f3501c9cb2307996e0b1d2aeecec0e30575208e150cd0cb3b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_0_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_0/build.log",
+      "bytes": 44668,
+      "sha256": "a620423865ad8d17da5126775cdccb62faa88ae65fae79b1b0121b3ad8678f61"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_0/corner_coverage.dat",
+      "bytes": 668429,
+      "sha256": "ce8e5e9809f6f13328eec2bd9bda4527d87484df89889071d55e6ecad29229eb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_0/corner_run.log",
+      "bytes": 138,
+      "sha256": "cd59f50331e675e96785650816b5ae235af12049d8e9e5ab534436f7fc6c9e09"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_0/coverage.dat",
+      "bytes": 683936,
+      "sha256": "d66029b9420b16e09bb80323990a8aa6e43fed6ed78e88847e11304107d11267"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_0/fixture.sha256",
+      "bytes": 163,
+      "sha256": "2a7f39d9221d0fa2774d4157df93dbfe88e43d696f1f607cbd69f622bbaa51e3"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_0/pilot_coverage.dat",
+      "bytes": 674895,
+      "sha256": "db2eb094be1b86205ca589508d97a19d06a320069473569df16c46c6abe975cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_0/pilot_run.log",
+      "bytes": 138,
+      "sha256": "105e1c6aaa591a84e9692aa865d410584a22044bef6c23e4ad6e6e3e359131d6"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_0/run.log",
+      "bytes": 465,
+      "sha256": "946ebea02573e684c0125987c12e4898577c9a2570db2f0f202941b0a14094fa"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_1/build.log",
+      "bytes": 41972,
+      "sha256": "19acb4551d59b7bfd92695d026a73babff55d06814a907ed4b0e579e47168f01"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_1/corner_coverage.dat",
+      "bytes": 668111,
+      "sha256": "850610a9000cb647d0c21f5f418022ed819bac59ae5867f1f285780df85706bf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_1/corner_run.log",
+      "bytes": 135,
+      "sha256": "6b881c8ddd91c030807a8c218d5b31448f005b9796356ff48cf5bdbdf226cf47"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_1/coverage.dat",
+      "bytes": 683587,
+      "sha256": "5ec0f0facabc09dafb2767b23d556dcebaa932a2f1229e25434775d1a0a416b7"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_1/fixture.sha256",
+      "bytes": 163,
+      "sha256": "18d8319cc6ffc9b38bc6680497603a8fe6f61bd3f5de2a63f2523f156cb5ec4c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_1/pilot_coverage.dat",
+      "bytes": 674500,
+      "sha256": "2803c7e1e71adf7c85dae576885ff2c968b4f2dace632c4180e0d5461c43abeb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_1/pilot_run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_1/run.log",
+      "bytes": 460,
+      "sha256": "97c37d9996dad66f3501c9cb2307996e0b1d2aeecec0e30575208e150cd0cb3b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/32_3_1_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_0/build.log",
+      "bytes": 34455,
+      "sha256": "260293e93b73a90cd5e06def0bac8afc7c5b7ac793d0ccdd69f822d54a88c36c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_0/corner_coverage.dat",
+      "bytes": 254845,
+      "sha256": "50f2361c02c98ddec819c40b0b8912bee633165666fc8f6a09ed4143cbef9ee4"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_0/corner_run.log",
+      "bytes": 138,
+      "sha256": "45ebe22d9e7edb33246c4154fa618242fb323d96e1e27671e5f36c6fe000ef0c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_0/coverage.dat",
+      "bytes": 259061,
+      "sha256": "d038e49489690ed4307ce41a97104a5d110e4a823d2a677df6998b3dee70e597"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_0/fixture.sha256",
+      "bytes": 162,
+      "sha256": "c0a69fa2fbfdd9037d9c23c360500b121ee9b2d9a36b80317a6173177573b961"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_0/pilot_coverage.dat",
+      "bytes": 255760,
+      "sha256": "c0e9fd41a0ea5297a989b369a326c82458765af04ec4dd8e38c91940b9eb87df"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_0/pilot_run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_0/run.log",
+      "bytes": 465,
+      "sha256": "05168b493668153c686cc20cd3316e99d9b2a02a1533d06f2ccd446812123732"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_1/build.log",
+      "bytes": 31759,
+      "sha256": "beb6846ff5f857e1215397d22ab169b4b5324c446366875b883e8ab909c6aa19"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_1/corner_coverage.dat",
+      "bytes": 254244,
+      "sha256": "a1150a1c2441c57acc5ce45fe869edb3c681dcaefb4e5bf7184b3819602298db"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_1/corner_run.log",
+      "bytes": 135,
+      "sha256": "6b881c8ddd91c030807a8c218d5b31448f005b9796356ff48cf5bdbdf226cf47"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_1/coverage.dat",
+      "bytes": 258432,
+      "sha256": "b0bd2fb3544da191c9a4c6b17406ad76b3933fc8659ac5f7afb7c330581477f9"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_1/fixture.sha256",
+      "bytes": 162,
+      "sha256": "a6f714761a96e54f7fd664fa12ebdc3bfee9ca2352a1e1176768d1a6cd7ffbc0"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_1/pilot_coverage.dat",
+      "bytes": 255162,
+      "sha256": "8911699047b8d0393b83268c2c0ea0c51fe4fd1b64fe399e0e1ca634bee604d3"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_1/pilot_run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_1/run.log",
+      "bytes": 460,
+      "sha256": "97c37d9996dad66f3501c9cb2307996e0b1d2aeecec0e30575208e150cd0cb3b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_0_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_0/build.log",
+      "bytes": 34455,
+      "sha256": "419eed902d4200d043ab67732cad1badb07a9b84c66200380385d3cbfa85ea26"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_0/corner_coverage.dat",
+      "bytes": 253431,
+      "sha256": "6009c8a5ae5e3e5c1c9ae937bd98d070da3d46c430f36866016fe1031516e057"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_0/corner_run.log",
+      "bytes": 138,
+      "sha256": "45ebe22d9e7edb33246c4154fa618242fb323d96e1e27671e5f36c6fe000ef0c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_0/coverage.dat",
+      "bytes": 257677,
+      "sha256": "877007e3a0bb8d7f289e9b1f6f44e168f0074251fdec7144d763cd3704453244"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_0/fixture.sha256",
+      "bytes": 162,
+      "sha256": "2bf8afc49c88f627dadc5cd446ce64557562c592935ed2602cfdee687907b943"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_0/pilot_coverage.dat",
+      "bytes": 254362,
+      "sha256": "3b00420d721f120a9b8e047f5d9f773e371b48edd240b793d1c5106683c20c58"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_0/pilot_run.log",
+      "bytes": 138,
+      "sha256": "eb737b80ffdebe289cd3c94d4ff87379cbf42df258d64948ee25224c443c61cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_0/run.log",
+      "bytes": 465,
+      "sha256": "05168b493668153c686cc20cd3316e99d9b2a02a1533d06f2ccd446812123732"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_0/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_1/build.log",
+      "bytes": 31759,
+      "sha256": "f60e0e7950609502bacf5302aa38262920e12d13e41cb156fdc06530a3101416"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_1/corner_coverage.dat",
+      "bytes": 252831,
+      "sha256": "4776a7c776d09a540bc89c63f07a53e6b23fada20c9435eb831f5aea9aefc527"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_1/corner_run.log",
+      "bytes": 135,
+      "sha256": "6b881c8ddd91c030807a8c218d5b31448f005b9796356ff48cf5bdbdf226cf47"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_1/coverage.dat",
+      "bytes": 257048,
+      "sha256": "65f12ec2088a7799ca85acca80d533186948b696c5cd25f7bdc1129acd559fa7"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_1/fixture.sha256",
+      "bytes": 162,
+      "sha256": "296bd2d2fa6c3bf03f41850dfd12b0597ccfcc2572b4a866e6b1e26a2482daea"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_1/pilot_coverage.dat",
+      "bytes": 253782,
+      "sha256": "a33c65310492290ce5976e30f9188604eb4773afdeae95f6ac716dfcb68e2932"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_1/pilot_run.log",
+      "bytes": 135,
+      "sha256": "132ab37e25e66a6a9f666aa0b893bf5cd73af1b745cbf305e25e4b80c6cae4cb"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_1/run.log",
+      "bytes": 460,
+      "sha256": "97c37d9996dad66f3501c9cb2307996e0b1d2aeecec0e30575208e150cd0cb3b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/verilator/gate2_stratified/8_0_1_1/source.sha256",
+      "bytes": 3560,
+      "sha256": "fb761b9325fa95efc5b2fb1b6ad03fb8ed902d92529ade8667c49780cda08e7e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/compile.log",
+      "bytes": 1533,
+      "sha256": "6685f020da9838d6f549eec53e7b8f461408184f1b9da9029299a9529d9f302a"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/compile_console.log",
+      "bytes": 816,
+      "sha256": "4ceb3542f7a91b5803651abf22c505ba3b78a3bfa346a47442a050cdaad6f3e5"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/frozen_source_sha256.json",
+      "bytes": 2227,
+      "sha256": "e997e18998ab73df463f0c209377c8d09af1a72b17d15d7ee50875c36e9e19c4"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/summary.json",
+      "bytes": 4458,
+      "sha256": "7821f0dc699c386a623452c4e79fd1b957f001517546f5e592b29de59c553df5"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/version.log",
+      "bytes": 91,
+      "sha256": "5c04042df63bf8cdab7f8222d65cebf5d6638d01e08982fe4ca5edbea466161e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_0_0/console.log",
+      "bytes": 1166,
+      "sha256": "5f3e9558f486f9f380fb0e504d4d444372f9456559ae98083ea1d6538b715247"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_0_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_0_0/simulate.log",
+      "bytes": 1094,
+      "sha256": "60393a35971cd7e05b7c02ce2b9ce9cce6ea4fd74b72ed983a08939cec8c0884"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_0_1/console.log",
+      "bytes": 1166,
+      "sha256": "158fa35a82286c46dea609f1cefb46f95b7be2d0d42c9069eff38cdbfdb5a730"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_0_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_0_1/simulate.log",
+      "bytes": 1094,
+      "sha256": "000675a9ad12dea225f9a81b91a4e1c52e0db4a3575d224a140daad34705d108"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_1_0/console.log",
+      "bytes": 1166,
+      "sha256": "8afe255f3debd6f120a458d42ae43ca5355e109378fddbc061ad45cc34e3e7c1"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_1_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_1_0/simulate.log",
+      "bytes": 1094,
+      "sha256": "e2588f980a1be6d9f99ddd2a50aface8d3546a9257655dc4fb88d6f03cca6dfe"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_1_1/console.log",
+      "bytes": 1166,
+      "sha256": "eb78b202d9e1a7d62efd1c842008048d9459fca3b1e554cb2d0924e59dfd9211"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_1_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_16_1_1_1/simulate.log",
+      "bytes": 1094,
+      "sha256": "b9e63a0b5b7399809a495d662efbd9881a625bd2c6bc5348e431acc143a2d76b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_0_0/console.log",
+      "bytes": 1166,
+      "sha256": "a5c13cb1e29a513a1d05b3356fb5f3de572c315f187e9d9e4fb1f001920e79a8"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_0_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_0_0/simulate.log",
+      "bytes": 1094,
+      "sha256": "8875eb73210d8cb62544ebca7d715abd6a5c8e30664c4624b2de6bae629fc738"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_0_1/console.log",
+      "bytes": 1166,
+      "sha256": "76882e2e522f6139586362bfcbd2e4f166e969eda9ede25102ff9dab71757a34"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_0_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_0_1/simulate.log",
+      "bytes": 1094,
+      "sha256": "e339f3ad74bc5a8eb3e913e315bd43f201cc7f95706b23e1f532e74c93c00af3"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_1_0/console.log",
+      "bytes": 1166,
+      "sha256": "5cbed3b99564e62f3e4eb16f0cbc6a1819276e6506ca4258de459dad23146a80"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_1_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_1_0/simulate.log",
+      "bytes": 1094,
+      "sha256": "9fcce2a884c910dbaeedf6cd18e1b0f93d8a0eac770d3830ffe59a073cdc523e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_1_1/console.log",
+      "bytes": 1166,
+      "sha256": "c76b8029f444f31e27684a7584b532791279fa0d61100715ffa25c20824f7e14"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_1_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_2_1_1/simulate.log",
+      "bytes": 1094,
+      "sha256": "36804b41ff1882ddf3eb82dc013f6f25dc2cef772610f1271e2e835520b89dee"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_0_0/console.log",
+      "bytes": 1166,
+      "sha256": "832462359cc1cf40d99deb3b5c5ccdfff91576090b79d454dcccd62ebff565a6"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_0_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_0_0/simulate.log",
+      "bytes": 1094,
+      "sha256": "b817d854190aeb1aa0d2bbdd486b196efe04519a1d62f5fd0fe0328c4031dac6"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_0_1/console.log",
+      "bytes": 1166,
+      "sha256": "6cdbfa1a5ed089aff9deb456e17a2024e3655fac80c310c4266539acd6b91b71"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_0_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_0_1/simulate.log",
+      "bytes": 1094,
+      "sha256": "4872843e3dfd5e25eca2d6232d219d76b9cbe44ed29f1b8f2a7c52c16e7782c2"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_1_0/console.log",
+      "bytes": 1166,
+      "sha256": "1e52c6ac6bcaef95cb6dd9203f368bcb415e5d0b1afbd339393a3a268f5fe1e0"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_1_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_1_0/simulate.log",
+      "bytes": 1094,
+      "sha256": "110029a515ea704d15593eb6841ca1bd2d05debda58479755471075beef6371a"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_1_1/console.log",
+      "bytes": 1166,
+      "sha256": "500dc87a734c04bcbe8c19ee772f93e9243d3f7ae6099d1cd4e78442ddbd1575"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_1_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_32_3_1_1/simulate.log",
+      "bytes": 1094,
+      "sha256": "ea9d5c823a729ee03d0adbb72aa1740773f063d2bc8527470dcee1667bf3be5f"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_0_0/console.log",
+      "bytes": 1162,
+      "sha256": "2331cd56cf020052636805ed43a767fff747ba5a365ccf5e9f6872735e081980"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_0_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_0_0/simulate.log",
+      "bytes": 1090,
+      "sha256": "361d40e1473244131b5e0ab6b38fe192949e81a9bf7ab5812d8a16151075ec34"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_0_1/console.log",
+      "bytes": 1162,
+      "sha256": "48ff8d7a6803b91eddd7e804ac9038485555315aa1722c4aaa2a27b83637bdd8"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_0_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_0_1/simulate.log",
+      "bytes": 1090,
+      "sha256": "aec234963f8704a914e732a2c25a17d973bbbc179d61fc4025254828039e80c1"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_1_0/console.log",
+      "bytes": 1162,
+      "sha256": "f708d1d8ff6a60a902c0029628fdf330075a14ddd64d0d435f544649f700ff1c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_1_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_1_0/simulate.log",
+      "bytes": 1090,
+      "sha256": "3a41a1bf354dbf3db13bbdd06faa5664781ad0088234e643a1323d8fac4273fe"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_1_1/console.log",
+      "bytes": 1162,
+      "sha256": "2d6959c60f8bf3ccf4629245c170232f8f4efa1a547c2e9b42bb1853ce600c8e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_1_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_final_pilot/mul_8_0_1_1/simulate.log",
+      "bytes": 1090,
+      "sha256": "f80751faa1d875026911466c21e9cc6f024cf93313513a9a014731f0a46abc1d"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/compile.log",
+      "bytes": 1533,
+      "sha256": "6685f020da9838d6f549eec53e7b8f461408184f1b9da9029299a9529d9f302a"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/compile_console.log",
+      "bytes": 816,
+      "sha256": "4ceb3542f7a91b5803651abf22c505ba3b78a3bfa346a47442a050cdaad6f3e5"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/frozen_source_sha256.json",
+      "bytes": 2227,
+      "sha256": "5813f07b7ee9425f20c39e01e4b91da07e6e9291ec1bedfdd65c9962b630b323"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/summary.json",
+      "bytes": 4479,
+      "sha256": "e73af4e279d3f669efe5f8731b1a85dbe8af4e7809c5839e6fa3e35849fa2bf5"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/version.log",
+      "bytes": 91,
+      "sha256": "5c04042df63bf8cdab7f8222d65cebf5d6638d01e08982fe4ca5edbea466161e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_0_0/console.log",
+      "bytes": 1173,
+      "sha256": "538dc3476819e2c33481f91fb583999e8a58a90714d27ea475843844ecad3640"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_0_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_0_0/simulate.log",
+      "bytes": 1101,
+      "sha256": "bd678bfc992627161d05387ad0915ad1e85b1501aeb3b4699d162aa1f708185b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_0_1/console.log",
+      "bytes": 1173,
+      "sha256": "81b0f7e0b84aa2abf8db96a72bd82c56e27c6590291714e8d03ef4ba469531d3"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_0_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_0_1/simulate.log",
+      "bytes": 1101,
+      "sha256": "efc5ada0ea837f2c278165a3ab8010653b0d75a6dd65305d69b21f382631cf31"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_1_0/console.log",
+      "bytes": 1173,
+      "sha256": "97cffe7248f92999ea82c9973027701d5bb0aae60801ffaa1f729aded4570be2"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_1_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_1_0/simulate.log",
+      "bytes": 1101,
+      "sha256": "175707abe36ec8a9112a2e76ed9ce7e3eebe2402e8aba2bd342582eeedcad64b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_1_1/console.log",
+      "bytes": 1173,
+      "sha256": "3147fa1164bfeceecc9674828d05d1a2855da1138b10d492f2cbce8bd95b0ab1"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_1_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_16_1_1_1/simulate.log",
+      "bytes": 1101,
+      "sha256": "bc495fc3e666ac184b0301b3eed5cecd54d9ab4788b59b6fb0a3b6f1c4e03636"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_0_0/console.log",
+      "bytes": 1173,
+      "sha256": "d600caeb3b94481824aca2eab2947ab03c53c5947237de939c99968740095869"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_0_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_0_0/simulate.log",
+      "bytes": 1101,
+      "sha256": "942de65662ad2eca7dd062b2836167ffaccc70435c6a53f17944207413cb83af"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_0_1/console.log",
+      "bytes": 1173,
+      "sha256": "422e97a6f6bc9b537816339affba11fd22421dfd0f29ebec68ed85c280caf909"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_0_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_0_1/simulate.log",
+      "bytes": 1101,
+      "sha256": "d6fcd7f0b5b090783747b3d0331070976fc5002df0bee81fb0bc9f044e459293"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_1_0/console.log",
+      "bytes": 1173,
+      "sha256": "ce2688b2cfcc2e2e11b135bf2515287151081327191e5052c969d2f5ac688755"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_1_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_1_0/simulate.log",
+      "bytes": 1101,
+      "sha256": "ec07c9c9e3859ac3e17c591d97673b4f22110745244379b25456860efb70ae12"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_1_1/console.log",
+      "bytes": 1173,
+      "sha256": "d8e8b48a6aac29af589d4d25f22961403eb9572628bffc248a57b1f77522af3b"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_1_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_2_1_1/simulate.log",
+      "bytes": 1101,
+      "sha256": "16537e10637f8e77709ad46391810d1e99271153c5fa9badddbe38c18d97257c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_0_0/console.log",
+      "bytes": 1173,
+      "sha256": "bd5b4f0034ff8c53feba69be01967353061c3b8f72fec5781cbdf80cf1ee4d6c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_0_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_0_0/simulate.log",
+      "bytes": 1101,
+      "sha256": "1d021525660ca0c3825057160111ce47bc0e9d28b07d85a50602570a6db5210e"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_0_1/console.log",
+      "bytes": 1173,
+      "sha256": "204f532acfbf5dfa2d1b9bba970f5eebfdd6757c1df4159a3e39ad0820ffef95"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_0_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_0_1/simulate.log",
+      "bytes": 1101,
+      "sha256": "1a09de5719e6640c027df51fe9f29c5534bfc6786b83b93eaa9d7ea5e24a8e97"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_1_0/console.log",
+      "bytes": 1173,
+      "sha256": "d504cc5c1362f08d8ecc0bd19f1a8aa7cecb26ab0549058f57b5dda6ddfaaa1d"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_1_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_1_0/simulate.log",
+      "bytes": 1101,
+      "sha256": "87cdeccd86566ee9a1bbbfa66cd567512364a6247127ac62f19100a0a062ec9c"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_1_1/console.log",
+      "bytes": 1173,
+      "sha256": "da6efeeee81df07d0c04df265bd8d25b3cd7d499f54f064a628f02ecf5ed4e95"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_1_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_32_3_1_1/simulate.log",
+      "bytes": 1101,
+      "sha256": "fd1cf72cf94452f19479a48e1a7c7676223adf0d3b4c1a524ac9d9bcf45a24aa"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_0_0/console.log",
+      "bytes": 1169,
+      "sha256": "bdf9277453c88098451b1740a9a8b04894df7c657408acb54ae3828c1416fa0f"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_0_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_0_0/simulate.log",
+      "bytes": 1097,
+      "sha256": "7aadd3469248773ebbc7d48caf58cd4b9aaf4b43bab91e8a1186ff97be22bfd5"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_0_1/console.log",
+      "bytes": 1169,
+      "sha256": "a501628903ef660125c9d7847abc90caf96c506dff9bfdc11ce9b32092744c16"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_0_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_0_1/simulate.log",
+      "bytes": 1097,
+      "sha256": "c3ff5ec918c30839b30235bf05e5d52cf112802240284704cba4dfdfacafcf82"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_1_0/console.log",
+      "bytes": 1169,
+      "sha256": "73c198117c92c5df36172f050974e8722a0507c4fc9e631bbfe5448d9ea189b6"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_1_0/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_1_0/simulate.log",
+      "bytes": 1097,
+      "sha256": "5fc93ab044744a74c1a4350e23fdcdcae2baa83f09fe7088519d4e56c07a72f5"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_1_1/console.log",
+      "bytes": 1169,
+      "sha256": "25d18e45c54458205a40d04aab062a9e815b515ff9b5d6649c79f6771bb62f92"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_1_1/error.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Posit_MAC/results/week9_multiplier/gate2_corners_modelsim/mul_8_0_1_1/simulate.log",
+      "bytes": 1097,
+      "sha256": "f7f95184963015511faa674b7487f3573aa49c0a1d1241f1246617929d63ff74"
+    },
+    {
+      "path": "Posit_MAC/results/week9_frontend/windows/sources.sha256",
+      "bytes": 1109,
+      "sha256": "2f3856abddf7fdb79c53232fe77192856f4b6f04d16088cae0d43fb2d4cac773"
+    },
+    {
+      "path": "Posit_MAC/results/week9_frontend/windows/summary.json",
+      "bytes": 528,
+      "sha256": "6e84ad243ff1e1f201d11391f75f745bf5248c69aeb98b8953eda0a0ea55dafc"
+    },
+    {
+      "path": "Posit_MAC/results/week9_core/windows/summary.json",
+      "bytes": 464,
+      "sha256": "17a4a2bacc5aa67e2a962bab9a7788035fb5c6fb9285326e50d0babb5288ea09"
+    },
+    {
+      "path": "Posit_MAC/results/paper_top/windows/summary.json",
+      "bytes": 2425,
+      "sha256": "f6c309658588841eafea8337f993a551f3e37d1b9afa05ecbd9c12e7c20964cf"
+    },
+    {
+      "path": "Posit_MAC/results/week9_implementation/gate2_cleanup_manifest.json",
+      "bytes": 14894,
+      "sha256": "9208d6ae6d0486615917ede27a969c2bf857d61135ba5f55202c44417de37af7"
+    }
+  ]
+}

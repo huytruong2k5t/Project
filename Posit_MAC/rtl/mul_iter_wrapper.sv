@@ -14,11 +14,11 @@ module mul_iter_wrapper #(
     parameter int FRAC_W=12,
     parameter int N_MAX=8,
     parameter int ROUND_SCHEME=0,
-    parameter ROUND_MODE="RNE",
+    parameter [39:0] ROUND_MODE ="RNE",
     parameter bit EXACT_EN=1'b1,
     parameter bit OPS_EN=1'b1,
     parameter int F=NB-3-ES,
-    parameter int SF_W=$clog2(64'd4*(NB-2)*(64'd1<<ES)+64'd4)+1,
+    parameter int SF_W=$clog2(64'd4 * (longint'(NB) - 64'd2)*(64'd1<<ES)+64'd4)+1,
     parameter int N_W=(N_MAX>1)?$clog2(N_MAX+1):1,
     parameter int I_W=$clog2(((F>N_MAX)?F:N_MAX)+1),
     parameter int ACC_W=EXACT_EN?((2*F+2>FRAC_W+4)?2*F+2:FRAC_W+4):FRAC_W+4,
@@ -50,14 +50,15 @@ module mul_iter_wrapper #(
     wire [F-1:0] frac_a,frac_b;
     wire [F-1:0] ops_x,x;
     wire [F:0] ops_y,y;
-    wire [$clog2(F+1)-1:0] active_width;
-    wire ops_sign,ops_cut,ops_swapped,ops_error;
+    wire [$clog2(F+1)-1:0] unused_active_width;
+    wire ops_sign,ops_cut,unused_ops_swapped,unused_ops_error;
     wire signed [SF_W-1:0] ops_sf;
-    wire cfg_valid,core_ready,core_run,core_done,core_error,retire;
+    wire cfg_valid,core_ready,core_run,core_done,retire;
+    wire core_error /* verilator public_flat_rd */;
     wire bypass;
     wire [ACC_W-1:0] acc;
     wire sticky_acc,numerical_tail,approx_cut,core_sign,core_cut,core_mode;
-    wire [I_W-1:0] iterations_done;
+    wire [I_W-1:0] unused_iterations_done;
     wire signed [SF_W-1:0] core_sf,sf_norm;
     wire [FIN-1:0] frac_norm;
     wire sticky_norm;
@@ -69,7 +70,7 @@ module mul_iter_wrapper #(
     wire pack_ready,pack_out_valid;
     assign reset_n=reset_bridge_q;
     assign cfg_valid=(cfg_ops <= 1) && (OPS_EN || cfg_ops==0) &&
-                     (cfg_mode || EXACT_EN) && (!cfg_mode || cfg_n <= N_MAX);
+                     (cfg_mode || EXACT_EN) && (!cfg_mode || int'(cfg_n) <= N_MAX);
     assign in_ready=rst_n && meta_sync2 && core_run && pack_ready &&
                     ready_a && ready_b && !busy_q && cfg_valid;
     assign pair_accept=in_valid && in_ready;
@@ -139,12 +140,12 @@ module mul_iter_wrapper #(
         .cfg_ops(ops_q),
         .x_frac(ops_x),
         .y_mant(ops_y),
-        .active_width(active_width),
+        .active_width(unused_active_width),
         .sign_o(ops_sign),
         .sf_o(ops_sf),
-        .swapped(ops_swapped),
+        .swapped(unused_ops_swapped),
         .input_cut(ops_cut),
-        .cfg_error(ops_error)
+        .cfg_error(unused_ops_error)
     );
     mul_iter_core #(
         .FRAC_MAX(F),
@@ -170,7 +171,7 @@ module mul_iter_wrapper #(
         .acc(acc),
         .sticky_acc(sticky_acc),
         .numerical_tail(numerical_tail),
-        .iterations_done(iterations_done),
+        .iterations_done(unused_iterations_done),
         .approx_cut(approx_cut),
         .sign_o(core_sign),
         .sf_o(core_sf),

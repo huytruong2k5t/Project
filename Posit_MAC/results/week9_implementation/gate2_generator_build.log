@@ -1,0 +1,3 @@
+make: Entering directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/l1'
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -Werror test/gen_week9_multiplier.cpp -L../l0 -lsoftposit -Wl,-rpath,'$ORIGIN/../l0' -o gen_week9_multiplier
+make: Leaving directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/l1'

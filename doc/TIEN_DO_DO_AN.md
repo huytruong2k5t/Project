@@ -1,6 +1,6 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 09/10/2026 (giờ Việt Nam)  
+**Ngày cập nhật:** 10/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
 **Tài liệu chi tiết:** [SPEC v1.5](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
@@ -13,7 +13,7 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 
 Đã hoàn thành nền tảng L0, Gate1 của L1 và bộ cộng tuần5. Bộ nhân lặp L1 đã được kiểm chứng; profile source từng đạt ngưỡng TableI nhưng không khớp output ví dụ gốc. Baseline bài báo vẫn cần hoàn thiện.
 
-MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8 và chuỗi parser→packer đã kiểm chứng đạt ở cấp khối. Gate1/Gate1B✅; RTL MAC tích hợp và Gate2/3/4 chưa đạt. Đã khảo sát PPA riêng cho OPS và packer; chưa có PPA toàn hệ thống, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode sau tối ưu P2.
+MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8 và chuỗi parser→packer đã kiểm chứng đạt ở cấp khối. Gate1/Gate1B/Gate2 multiplier✅; RTL MAC tích hợp và Gate3/4 chưa đạt. Đã khảo sát PPA riêng cho OPS và packer; chưa có PPA toàn hệ thống, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode sau tối ưu P2.
 
 ## 2. Công việc còn lại và ưu tiên
 
@@ -21,10 +21,10 @@ MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8
 | --- | --- | --- |
 | Chốt baseline gốc | processing | Đã kiểm predictor, width/cut và vector phân biệt; loại profile không khớp ví dụ gốc. Còn hoàn thiện TableI, tie/cờ và cách sinh dữ liệu gốc |
 | MAC L1 — Gate1B | ✅ | MAC v0/v1, tích lũy và API đã triển khai, kiểm chứng đạt |
-| RTL và kiểm chứng tích hợp — Gate2/3 | processing | Đã triển khai và kiểm core/multiplier standalone; đã đạt lượt lớn/coverage chức năng; còn lint/harness chính thức Gate2 và RTL MAC/Gate3 |
+| RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2 multiplier đã nghiệm thu với scoreboard trực tiếp, lint và coverage; còn RTL adder/MAC và Gate3 |
 | PPA, mở rộng và hồ sơ — Gate4 | không | Đo toàn hệ thống, đối chiếu baseline; thực hiện mở rộng đã chọn, báo cáo và demo |
 
-**Thứ tự tiếp theo:** Hoàn tất kiểm lớn/lint multiplier tuần9 — Gate2 → RTL MAC/Gate3 → coverage/PPA/Gate4 → báo cáo và bảo vệ. Kế hoạch chi tiết tại PLAN L1 mục7.
+**Thứ tự tiếp theo:** RTL adder tuần10 → RTL MAC tuần11/Gate3 → coverage/PPA/Gate4 → báo cáo và bảo vệ. Kế hoạch chi tiết tại PLAN L1 mục7.
 
 ## 3. Tiến độ theo tuần
 
@@ -40,10 +40,10 @@ Tuần theo lộ trình SPEC, chưa gắn với lịch học. Một phần công
 | 6 | L1 MAC — Gate1B | ✅ | MAC v0/v1, tích lũy và API đạt kiểm chứng Linux/Windows |
 | 7 | RTL giải mã và khối cơ sở | ✅ | LOD/LZD, hai shifter và parser tổ hợp/pipeline kiểm chứng đơn vị đạt |
 | 8 | RTL mã hóa và làm tròn | ✅ | Packer tổ hợp/pipeline và parser→packer đạt; PPA đơn vị đã khảo sát, sau tối ưu P2, benchmark đạt setup100MHz ở ba seed mỗi mode |
-| 9 | RTL bộ nhân lặp — Gate2 | processing | Đã triển khai SBM/core/multiplier và kiểm pilot; paper trace đạt phạm vi tái dựng. Đạt lượt lớn/coverage chức năng; còn lint/harness chính thức Gate2; chưa chốt baseline gốc |
+| 9 | RTL bộ nhân lặp — Gate2 | ✅ | Multiplier đã nghiệm thu trên16 cấu hình,0 mismatch; lint và coverage đạt phạm vi tuần9. Baseline gốc theo dõi riêng ở tuần4 |
 | 10 | RTL bộ cộng | không | Chưa triển khai |
 | 11 | RTL MAC — Gate3 | không | Chưa triển khai |
-| 12 | Harness, regression và coverage | không | Chưa có môi trường kiểm chứng tích hợp |
+| 12 | Harness, regression và coverage | processing | Harness multiplier đã kiểm chứng; còn regression/coverage tích hợp toàn MAC |
 | 13 | FPGA PPA và đối chiếu baseline | không | Chưa đo toàn hệ thống |
 | 14 | Mở rộng và nghiệm thu — Gate4 | không | Mới có định hướng |
 | 15 | Báo cáo và kiểm tra tái lập | không | Chưa hoàn thiện hồ sơ cuối |
@@ -123,14 +123,14 @@ Tuần theo lộ trình SPEC, chưa gắn với lịch học. Một phần công
 | 6 | Kiểm báo cáo baseline mới | Chạy lại test và đối chiếu bằng chứng: có profile đạt ngưỡng thống kê, chưa đủ chốt baseline gốc; giữ trạng thái processing | ✅ |
 | 7 | Tinh gọn kết quả kiểm chứng | Xóa cache và vector lớn có thể sinh lại; giữ báo cáo nghiệm thu, trace, coverage, seed/lệnh/hash và hướng dẫn tái lập | ✅ |
 
-### Ngày 10/10/2026
+### 4.9. Ngày 10/10/2026
 
 | STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
 | --- | --- | --- | --- |
-| 1 | Rà soát điều kiện đóng Gate 2 | Giữ bằng chứng ModelSim phân tầng 16.815.920 giao dịch, 0 mismatch; Đã có Verilator5.032; sửa tùy chọn timing giúp hết NEEDTIMINGOPT, lint còn60 cảnh báo và harness chưa chạy. Không sửa số học RTL hoặc chạy lại Table I | processing |
-| 2 | Pilot harness Verilator tuần9 | Đủ16 cấu hình,31.840 giao dịch/0 mismatch; hash và counters khớp ModelSim. Còn lint, scoreboard trực tiếp và lượt phân tầng lớn để đóng Gate2 | processing |
+| 1 | Nghiệm thu bộ nhân RTL — Gate2/tuần9 | Hoàn thiện lint và scoreboard trực tiếp;16,8 triệu so sánh cùng corner/reset/stall/coverage đạt,0 mismatch. Đồng bộ tài liệu nghiệm thu | ✅ |
+| 2 | Phạm vi tiếp tục | Sẵn sàng triển khai adder/MAC tuần10–11; baseline gốc, regression cuối và PPA còn hoàn thiện theo mốc riêng | processing |
 
-### 4.9. Mẫu cập nhật tiếp theo
+### 4.10. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

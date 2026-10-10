@@ -21,7 +21,9 @@ for nb_es in '8 0' '16 1' '32 2' '32 3'; do
 done
 # Run the default pilot first and compare to ModelSim before requesting the
 # full stratified corpus. Merely building this harness is not acceptance.
-result_dir="$project_dir/results/week9_multiplier/verilator/$fixture_run"
+result_name="${2:-gate2_pilot}"
+[[ "$result_name" =~ ^[a-z0-9_-]+$ ]] || { echo "Invalid result name"; exit 2; }
+result_dir="$project_dir/results/week9_multiplier/verilator/$result_name"
 mkdir -p -- "$result_dir/tmp"
 export TMPDIR="$result_dir/tmp"
 verilator --version > "$result_dir/version.log"
@@ -47,28 +49,39 @@ for format in '8 0' '16 1' '32 2' '32 3'; do
             done
             cp -- "$project_dir/rtl/posit_mac.vh" "$run_dir/src/"
             cp -- "$project_dir/tb/week9_multiplier_harness.cpp" "$run_dir/src/"
+            cp -- "$project_dir/tb/week9_exact_reference.hpp" "$run_dir/src/"
+            cp -- "$project_dir/l0/softposit_api.h" "$run_dir/src/"
+            cp -- "$project_dir/l0/libsoftposit.so" "$run_dir/src/"
+            mkdir -p "$run_dir/src/l1"
+            cp -- "$project_dir/l1/include/"*.hpp "$run_dir/src/l1/"
             sha256sum "$fixture_dir/mul_${nb}_${es}_${scheme}_${rounding}.txt" > "$run_dir/fixture.sha256"
-            (cd -- "$run_dir" && sha256sum src/*) > "$run_dir/source.sha256"
+            (cd -- "$run_dir" && sha256sum src/*.sv src/*.vh src/*.cpp src/*.h src/*.hpp src/*.so src/l1/*.hpp) > "$run_dir/source.sha256"
             (cd -- "$run_dir"
             # Warnings are retained in build.log. This functional build does not
             # replace a separate reviewed strict lint run.
-            verilator --cc --exe --no-timing -Wall -Wno-fatal \
+            verilator --cc --exe --no-timing --coverage -Wall -Wno-fatal \
                 --top-module posit_mul_iter -Isrc \
                 "-GNB=$nb" "-GES=$es" "-GFRAC_W=$((nb-3-es<12?nb-3-es:12))" \
                 "-GROUND_SCHEME=$scheme" "-GROUND_MODE=\"$round\"" \
-                --Mdir obj_dir -CFLAGS "-O3 -DPROFILE_ROUNDING=$rounding" \
+                --Mdir obj_dir -CFLAGS "-O3 -std=c++17 -DPROFILE_ROUNDING=$rounding -DPROFILE_NB=$nb -DPROFILE_ES=$es -DPROFILE_SCHEME=$scheme -DPROFILE_FRAC_W=$((nb-3-es<12?nb-3-es:12))" -LDFLAGS "-L../src -lsoftposit" \
                 "${rtl[@]}" src/week9_multiplier_harness.cpp \
                 > build.log 2>&1
                 # All generated/source paths are relative. CURDIR=. represents
                 # the actual make working directory without an absolute space path.
                 make -C obj_dir -f Vposit_mul_iter.mk CURDIR=. -j2 >> build.log 2>&1)
-            "$run_dir/obj_dir/Vposit_mul_iter" \
-                "$fixture_dir/mul_${nb}_${es}_${scheme}_${rounding}.txt" \
-                | tee "$run_dir/run.log"
+            if [[ "$fixture_run" == stratified_corpus ]]; then
+                # Qualify the coverage-instrumented binary on the frozen pilot first.
+                LD_LIBRARY_PATH="$run_dir/src" "$run_dir/obj_dir/Vposit_mul_iter" \
+                    "$project_dir/results/week9_multiplier/final_pilot/mul_${nb}_${es}_${scheme}_${rounding}.txt" \
+                    "$run_dir/pilot_coverage.dat" | tee "$run_dir/pilot_run.log"
+            fi
+            LD_LIBRARY_PATH="$run_dir/src" "$run_dir/obj_dir/Vposit_mul_iter" \
+                "$fixture_dir/mul_${nb}_${es}_${scheme}_${rounding}.txt" "$run_dir/coverage.dat" \
+                2> "$run_dir/failure.log" | tee "$run_dir/run.log"
         done
     done
 done
-if [[ "$fixture_run" == final_pilot ]]; then
-    python3 "$project_dir/scripts/audit_week9_verilator.py" "$fixture_run"
+if [[ "$fixture_run" == final_pilot || "$fixture_run" == stratified_corpus ]]; then
+    python3 "$project_dir/scripts/audit_week9_verilator.py" "$fixture_run" "$result_name"
 fi
 echo 'Functional runs finished. Review count/coverage/lint before accepting Gate2.'

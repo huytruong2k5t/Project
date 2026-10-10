@@ -1,15 +1,15 @@
 {
-  "date": "2026-10-09T14:38:35.302269+07:00",
+  "date": "2026-10-10T13:36:10.334148+00:00",
   "milestones": {
     "W9-03": "PASS",
     "W9-R1": "frozen reconstruction assumptions",
     "W9-R2": "PASS functional corpus only",
     "W9-04": "PASS",
     "W9-05": "PASS baseline enabled features, four formats",
-    "W9-06": "processing: Verilator pilot PASS; strict lint/direct scoreboard/full stratified run remain"
+    "W9-06": "PASS: Week9 normative multiplier Gate2"
   },
-  "Gate2": "NOT ACCEPTED",
-  "week9": "processing",
+  "Gate2": "ACCEPTED: Week9 normative multiplier milestone",
+  "week9": "complete normative milestone; paper provenance remains open",
   "components": {
     "frontend": {
       "date": "2026-10-09T06:17:47.4550397+07:00",
@@ -2435,5 +2435,185 @@
       "10^7-vector Verilator acceptance not run",
       "line/branch/toggle coverage not measured"
     ]
+  },
+  "historical_fields": "Earlier components/heartbeat/pilot fields retain original historical scope; current status is gate2_2026_10_10.",
+  "gate2_2026_10_10": {
+    "status": "PASS",
+    "Gate2": "ACCEPTED: Week9 normative multiplier milestone",
+    "date": "2026-10-10T13:36:10.334148+00:00",
+    "scope": "PLAN section7 W9-01..06 / SPEC week9 threshold; not full final regression matrix section6.7, MAC RTL, PPA or recovered paper baseline",
+    "compared_transactions": 16815920,
+    "mismatches": 0,
+    "direct_l1_checks": 16896000,
+    "direct_l0_checks": 3168256,
+    "direct_es3_checks": 1056256,
+    "corners": [
+      {
+        "profile": "mul_16_1_0_0",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_16_1_0_1",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_16_1_1_0",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_16_1_1_1",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_32_2_0_0",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_32_2_0_1",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_32_2_1_0",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_32_2_1_1",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_32_3_0_0",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_32_3_0_1",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_32_3_1_0",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_32_3_1_1",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_8_0_0_0",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_8_0_0_1",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_8_0_1_0",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      },
+      {
+        "profile": "mul_8_0_1_1",
+        "rows": 7200,
+        "completed": 7166,
+        "reset_aborts": 34,
+        "long_stalls": 75,
+        "observed_corner_config_cells": 3600
+      }
+    ],
+    "strict_lint_profiles": 16,
+    "structural_coverage": "Measured raw line/branch/toggle; no percentage threshold is specified for this milestone; unhit points retained",
+    "evidence_sha256": {
+      "results/week9_multiplier/verilator/gate2_stratified/summary.json": "381097730d234d37b7eebec10815cd28746b4dec9e79ada7390fa5fe2cd678ae",
+      "results/week9_multiplier/verilator/gate2_stratified/functional_coverage.json": "69317791b05369cb32a5721595baa91e4db0c5b6c62bf111909a83f064ed7151",
+      "results/week9_multiplier/verilator/gate2_stratified/structural_coverage.json": "1e8c24bc55770dcdc7212961403f5cc14f258d8ec1b6238f301e200962840ce7",
+      "results/week9_multiplier/gate2_corners_modelsim/summary.json": "e73af4e279d3f669efe5f8731b1a85dbe8af4e7809c5839e6fa3e35849fa2bf5",
+      "results/week9_implementation/lint_gate2/source.sha256": "e6b53e0bb907ca8ac552524f4d83617422271fa07253a5fe3d81a24921c57bc7"
+    },
+    "remaining": [
+      "Gate3 MAC RTL integration",
+      "Final section6.7 large matrix",
+      "STA/PPA and CDC signoff",
+      "Original paper provenance/TableI"
+    ],
+    "evidence": "results/week9_implementation/gate2_acceptance.json",
+    "tools": {
+      "Verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)",
+      "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+      "ModelSim": "10.1d ALTERA STARTER",
+      "SoftPosit": "0.4.1",
+      "SoftPositLibrarySHA256": "8d6e33b23d924f3e76914569da7ebf06866aae61c5801ada77a182442a3eb761",
+      "seed": 20261009
+    },
+    "structural_ranges_percent": {
+      "line": [
+        91.66666666666667,
+        96.22641509433963
+      ],
+      "branch": [
+        91.83673469387755,
+        94.79166666666667
+      ],
+      "toggle": [
+        73.09875141884223,
+        87.32567678424938
+      ]
+    }
   }
 }

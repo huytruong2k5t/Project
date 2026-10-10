@@ -46,3 +46,15 @@ Packer cần fixture parser, nên phải sinh parser trước. Với ModelSim tr
 Lệnh trên dùng generator hiện hành. Để replay đúng một lượt lịch sử, đối chiếu phiên bản nguồn/compiler, seed, số dòng và hash fixture trong summary/manifest của lượt đó; nếu hash khác thì chưa được coi là cùng corpus. Giữ riêng báo cáo lịch sử trước khi chạy runner vào cùng thư mục.
 
 Không dùng `make clean && make all` như một cam kết tái tạo toàn bộ các thí nghiệm lịch sử. Từng nhóm có generator và runner riêng; lệnh, phiên bản công cụ và phạm vi kiểm nằm trong summary tương ứng.
+
+## 4. Bằng chứng Gate2 — 10/10/2026
+
+
+Gate2 multiplier **✅** theo mốc tuần9 (10/10/2026):16.815.920 giao dịch phân tầng/0 mismatch; scoreboard trực tiếp L1/L0 và oracle ES3; strict lint16/16 sạch; corner114.656/0 mismatch trên ModelSim và Verilator. Seed20261009, SoftPosit0.4.1, GCC15.2.0, Verilator5.032 và ModelSim10.1d; lệnh/hash/phiên bản lưu với bằng chứng.
+
+Coverage chức năng đạt256/256 bin posit32, min4104 mẫu/bin,26241 operands/run/polarity và36 ô config/profile; structural coverage sau ghép corner: line 91.67–96.23%; branch 91.84–94.79%; toggle 73.10–87.33%, giữ các điểm chưa hit. Mốc này không quy định ngưỡng phần trăm structural coverage và không phải coverage100% hoặc signoff vật lý.
+
+Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.json`; hướng dẫn tái lập và giải thích phạm vi tại PLAN L1 mục7.11. Những mục processing trước đây là lịch sử. Ma trận cuối SPEC§6.7, tuần10 adder/tuần11 MAC-Gate3 và PPA/Gate4 còn mở; provenance/TableI giữ processing, không chạy lại TableI trong phiên này.
+
+
+Sau nghiệm thu10/10 đã dọn 2579.15 MiB gồm fixture phân tầng vừa sinh và bản sao nguồn/cache Verilator. Giữ raw coverage, mọi log PASS/hash/report và fixture pilot/corner nhỏ. Danh mục tại `week9_implementation/gate2_cleanup_manifest.json`. Audit cần fixture/snapshot phải sinh lại và build theo PLAN7.11; thiếu file không được coi là PASS.

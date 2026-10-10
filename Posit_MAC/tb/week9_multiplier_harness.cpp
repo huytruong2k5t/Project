@@ -1,12 +1,18 @@
 // Verilator path-A harness. Fixture expectations were checked against L1,
 // SoftPosit (ES0/1/2 exact RNE), and an independent ES3 integer/bit-list oracle.
 // Execution evidence is recorded by verify_week9_verilator.sh; fixtures are frozen.
-// This fixture replay is not a direct L0/L1 library scoreboard.
+// Each input is checked directly against L1; exact/RNE also calls L0 or ES3 oracle.
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include "verilated.h"
+#if VM_COVERAGE
+#include "verilated_cov.h"
+#endif
 #include "Vposit_mul_iter.h"
+#include "l1/l1_multiplier_iter.hpp"
+#include "softposit_api.h"
+#include "week9_exact_reference.hpp"
 #ifndef PROFILE_ROUNDING
 #define PROFILE_ROUNDING 0
 #endif
@@ -32,7 +38,7 @@ void reset(Vposit_mul_iter& top) {
 }
 int main(int argc,char** argv) {
     Verilated::commandArgs(argc,argv);
-    if(argc!=2) return 2;
+    if(argc!=2 && argc!=3) return 2;
     try {
         Vposit_mul_iter top;
         top.clk=0; top.rst_n=0; top.a=0; top.b=0; top.in_valid=0;
@@ -47,9 +53,39 @@ int main(int argc,char** argv) {
         for(unsigned k=0;k<3;++k) { tick(top); require(!top.in_ready,"invalid n accepted"); }
         top.in_valid=0; top.cfg_mode=0; top.cfg_n=0;
         uint64_t row=0,completed=0,aborted=0,long_stalls=0;
+        uint64_t l1_checks=0,l0_checks=0,es3_checks=0;
         uint64_t a,b,mode,n,ops,bits,flags,iterations;
         while(file>>std::hex>>a) {
             require(bool(file>>b>>mode>>n>>ops>>bits>>flags>>iterations),"malformed fixture");
+            l1::IterConfig cfg;
+            cfg.exact=(mode==0); cfg.n=unsigned(n); cfg.ops=unsigned(ops);
+            cfg.scheme=PROFILE_SCHEME ? l1::ShiftRound::STICKY_ACC : l1::ShiftRound::FLOOR;
+            cfg.rounding=PROFILE_ROUNDING ? l1::RoundMode::TRUNC : l1::RoundMode::RNE;
+            const auto expected=l1::L1MultiplierIter<PROFILE_NB,PROFILE_ES,PROFILE_FRAC_W>::mul(
+                static_cast<l1::posit_storage_t<PROFILE_NB>>(a),
+                static_cast<l1::posit_storage_t<PROFILE_NB>>(b),cfg);
+            unsigned expected_flags=0;
+            const auto& unpacked=expected.unpacked;
+            if(unpacked.is_nar) expected_flags=16;
+            else if(!unpacked.is_zero) {
+                constexpr int limit=(PROFILE_NB-2)*(1<<PROFILE_ES);
+                const bool high=unpacked.sf>limit || (unpacked.sf==limit &&
+                    (unpacked.frac!=(uint64_t(1)<<63) || !unpacked.exact));
+                expected_flags=(high?8:0)|(unpacked.sf < -limit?4:0)|
+                    (expected.inexact?2:0)|(expected.approx_cut?1:0);
+            }
+            require(expected.bits==bits && expected_flags==flags &&
+                    expected.iterations==iterations,"fixture/direct L1 mismatch");
+            ++l1_checks;
+            if(cfg.exact && !PROFILE_ROUNDING) {
+                uint32_t reference;
+                if constexpr(PROFILE_NB==8) reference=l0_p8_mul(uint8_t(a),uint8_t(b));
+                else if constexpr(PROFILE_NB==16) reference=l0_p16_mul(uint16_t(a),uint16_t(b));
+                else if constexpr(PROFILE_ES==2) reference=l0_p32_mul(uint32_t(a),uint32_t(b));
+                else reference=exact_reference<PROFILE_NB,PROFILE_ES>(uint32_t(a),uint32_t(b));
+                require(expected.bits==reference,"L1/exact oracle mismatch");
+                if constexpr(PROFILE_ES==3) ++es3_checks; else ++l0_checks;
+            }
             top.a=a; top.b=b; top.cfg_mode=mode; top.cfg_n=n; top.cfg_ops=ops;
             top.in_valid=1; top.out_ready=0; top.eval();
             require(top.in_ready,"input not ready");
@@ -90,9 +126,14 @@ int main(int argc,char** argv) {
         }
         require(file.eof(),"invalid fixture token");
         top.final();
+#if VM_COVERAGE
+        require(argc==3,"missing coverage output path");
+        VerilatedCov::write(argv[2]);
+#endif
         require(row>0,"empty fixture");
         std::cout<<"VERILATOR MULTIPLIER PASS rows="<<row<<" completed="<<completed
-            <<" reset_aborts="<<aborted<<" long_stalls="<<long_stalls<<" mismatches=0\n";
+            <<" reset_aborts="<<aborted<<" long_stalls="<<long_stalls<<" mismatches=0 L1_checks="<<l1_checks<<" L0_checks="<<l0_checks
+            <<" ES3_checks="<<es3_checks<<"\n";
     } catch(const std::exception& e) {
         std::cerr<<e.what()<<'\n';
         return 1;

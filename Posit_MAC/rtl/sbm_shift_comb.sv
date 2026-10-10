@@ -22,11 +22,12 @@ module sbm_shift_comb #(
     output logic [ACC_W-1:0] term,
     output logic term_tail
 );
+    typedef logic [ACC_W-1:0] acc_value_t;
     logic [ACC_W-1:0] shifted;
     integer shift_discard;
     always_comb begin
         y_base = '0;
-        y_base = y_mant;
+        y_base = acc_value_t'(y_mant);
         if (cfg_mode) begin
             y_base = y_base << 2;
         end else begin
@@ -34,7 +35,7 @@ module sbm_shift_comb #(
         end
         shifted = y_base >> scale;
         term = shifted;
-        shift_discard = scale;
+        shift_discard = int'(scale);
         if (cfg_mode && ROUND_SCHEME == 0) begin
             term[1:0] = 2'b00;
             shift_discard = shift_discard + 2;

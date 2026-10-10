@@ -37,18 +37,20 @@ module iter_ctrl #(
     logic [FRAC_MAX-1:0] fx_q;
     logic [S_W-1:0] scale_q;
     logic [I_W-1:0] count_q,limit_q;
+    typedef logic [I_W-1:0] iteration_value_t;
+    typedef logic [FRAC_MAX-1:0] fraction_value_t;
     wire [FRAC_MAX-1:0] fx_next_exact;
     wire [FRAC_W-1:0] fx_approx,fx_next_approx;
-    wire [S_W-1:0] scale_exact,scale_approx,sa_exact,sa_approx;
-    wire valid_exact,valid_approx,exhausted_exact,exhausted_approx,error_exact,error_approx;
+    wire [S_W-1:0] scale_exact,scale_approx,unused_sa_exact,unused_sa_approx;
+    wire unused_valid_exact,unused_valid_approx,unused_exhausted_exact,unused_exhausted_approx,error_exact,error_approx;
     wire [FRAC_MAX-1:0] fx_next;
     wire [S_W-1:0] next_scale;
     wire is_init,is_last;
     wire [I_W-1:0] next_count;
-    localparam logic [I_W-1:0] EXACT_LIMIT=FRAC_MAX;
+    localparam logic [I_W-1:0] EXACT_LIMIT=iteration_value_t'(FRAC_MAX);
     assign run_ready=meta_sync2;
     assign fx_approx=fx_q[FRAC_W-1:0];
-    assign fx_next=mode_q ? fx_next_approx : fx_next_exact;
+    assign fx_next=mode_q ? fraction_value_t'(fx_next_approx) : fx_next_exact;
     assign next_scale=mode_q ? scale_approx : scale_exact;
     assign state_error=emitting_q && (mode_q ? error_approx : error_exact);
     assign is_init=(fx_q=='0) || (limit_q=='0);
@@ -59,11 +61,11 @@ module iter_ctrl #(
         .S_W(S_W)) u_exact (
         .fx(fx_q),
         .scale(scale_q),
-        .term_valid(valid_exact),
-        .sa(sa_exact),
+        .term_valid(unused_valid_exact),
+        .sa(unused_sa_exact),
         .scale_next(scale_exact),
         .fx_next(fx_next_exact),
-        .exhausted(exhausted_exact),
+        .exhausted(unused_exhausted_exact),
         .state_error(error_exact)
     );
     sac_step_comb #(
@@ -71,11 +73,11 @@ module iter_ctrl #(
         .S_W(S_W)) u_approx (
         .fx(fx_approx),
         .scale(scale_q),
-        .term_valid(valid_approx),
-        .sa(sa_approx),
+        .term_valid(unused_valid_approx),
+        .sa(unused_sa_approx),
         .scale_next(scale_approx),
         .fx_next(fx_next_approx),
-        .exhausted(exhausted_approx),
+        .exhausted(unused_exhausted_approx),
         .state_error(error_approx)
     );
     always_ff @(posedge clk or negedge reset_n) begin
@@ -110,7 +112,7 @@ module iter_ctrl #(
                 fx_q <= `CK2Q x_frac;
                 scale_q <= `CK2Q '0;
                 count_q <= `CK2Q '0;
-                limit_q <= `CK2Q (cfg_mode ? cfg_n : EXACT_LIMIT);
+                limit_q <= `CK2Q (cfg_mode ? iteration_value_t'(cfg_n) : EXACT_LIMIT);
             end else if (emitting_q) begin
                 first <= `CK2Q (count_q=='0);
                 last <= `CK2Q is_last;

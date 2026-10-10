@@ -1,0 +1,381 @@
+%Warning-ASSIGNDLY: src/sbm_accum.sv:64:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                          : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_acc'
+   64 |             meta_sync1 <= #1 1'b1;
+      |                           ^
+                    ... For warning description see https://verilator.org/warn/ASSIGNDLY?v=5.032
+                    ... Use "/* verilator lint_off ASSIGNDLY */" and lint_on around source to disable this message.
+%Warning-ASSIGNDLY: src/sbm_accum.sv:65:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                          : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_acc'
+   65 |             meta_sync2 <= #1 meta_sync1;
+      |                           ^
+%Warning-ASSIGNDLY: src/sbm_accum.sv:77:21: Ignoring timing control on this assignment/primitive due to --no-timing
+                                          : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_acc'
+   77 |             done <= #1 (commit_valid && last);
+      |                     ^
+%Warning-ASSIGNDLY: src/sbm_accum.sv:79:24: Ignoring timing control on this assignment/primitive due to --no-timing
+                                          : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_acc'
+   79 |                 acc <= #1 acc_next;
+      |                        ^
+%Warning-ASSIGNDLY: src/sbm_accum.sv:80:31: Ignoring timing control on this assignment/primitive due to --no-timing
+                                          : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_acc'
+   80 |                 sticky_acc <= #1 sticky_next;
+      |                               ^
+%Warning-ASSIGNDLY: src/sbm_accum.sv:81:35: Ignoring timing control on this assignment/primitive due to --no-timing
+                                          : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_acc'
+   81 |                 numerical_tail <= #1 numerical_next;
+      |                                   ^
+%Warning-ASSIGNDLY: src/sbm_accum.sv:82:36: Ignoring timing control on this assignment/primitive due to --no-timing
+                                          : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_acc'
+   82 |                 iterations_done <= #1 iteration;
+      |                                    ^
+%Warning-ASSIGNDLY: src/sbm_accum.sv:83:33: Ignoring timing control on this assignment/primitive due to --no-timing
+                                          : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_acc'
+   83 |                 approx_cut_o <= #1 approx_cut;
+      |                                 ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:88:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                          : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+   88 |             meta_sync1 <= #1 1'b1;
+      |                           ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:89:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                          : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+   89 |             meta_sync2 <= #1 meta_sync1;
+      |                           ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:108:28: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  108 |             token_valid <= #1 emitting_q;
+      |                            ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:110:31: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  110 |                 emitting_q <= #1 1'b1;
+      |                               ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:111:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  111 |                 mode_q <= #1 cfg_mode;
+      |                           ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:112:25: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  112 |                 fx_q <= #1 x_frac;
+      |                         ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:113:28: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  113 |                 scale_q <= #1 '0;
+      |                            ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:114:28: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  114 |                 count_q <= #1 '0;
+      |                            ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:115:28: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  115 |                 limit_q <= #1 (cfg_mode ? iteration_value_t'(cfg_n) : EXACT_LIMIT);
+      |                            ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:117:26: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  117 |                 first <= #1 (count_q=='0);
+      |                          ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:118:25: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  118 |                 last <= #1 is_last;
+      |                         ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:119:30: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  119 |                 init_only <= #1 is_init;
+      |                              ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:120:26: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  120 |                 scale <= #1 (is_init ? {S_W{1'b0}} : next_scale);
+      |                          ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:121:30: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  121 |                 iteration <= #1 (is_init ? {I_W{1'b0}} : next_count);
+      |                              ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:122:31: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  122 |                 approx_cut <= #1 (is_init ? (fx_q!='0) : (is_last && fx_next!='0));
+      |                               ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:123:25: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  123 |                 fx_q <= #1 fx_next;
+      |                         ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:124:28: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  124 |                 scale_q <= #1 next_scale;
+      |                            ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:125:28: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  125 |                 count_q <= #1 next_count;
+      |                            ^
+%Warning-ASSIGNDLY: src/iter_ctrl.sv:126:44: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_core.u_ctrl'
+  126 |                 if (is_last) emitting_q <= #1 1'b0;
+      |                                            ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:56:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+   56 |             meta_sync1 <= #1 1'b1;
+      |                           ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:57:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                           : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+   57 |             meta_sync2 <= #1 meta_sync1;
+      |                           ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:118:35: Ignoring timing control on this assignment/primitive due to --no-timing
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+  118 |                     p1_valid_q <= #1 in_valid;
+      |                                   ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:120:43: Ignoring timing control on this assignment/primitive due to --no-timing
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+  120 |                         p1_mag_trunc_q <= #1 p1_mag_trunc_d;
+      |                                           ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:121:43: Ignoring timing control on this assignment/primitive due to --no-timing
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+  121 |                         p1_guard_bit_q <= #1 p1_guard_bit_d;
+      |                                           ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:122:43: Ignoring timing control on this assignment/primitive due to --no-timing
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+  122 |                         p1_round_bit_q <= #1 p1_round_bit_d;
+      |                                           ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:123:44: Ignoring timing control on this assignment/primitive due to --no-timing
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+  123 |                         p1_sticky_bit_q <= #1 p1_sticky_bit_d;
+      |                                            ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:124:38: Ignoring timing control on this assignment/primitive due to --no-timing
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+  124 |                         p1_sign_q <= #1 p1_sign_d;
+      |                                      ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:125:45: Ignoring timing control on this assignment/primitive due to --no-timing
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+  125 |                         p1_special_sel_q <= #1 p1_special_sel_d;
+      |                                             ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:126:39: Ignoring timing control on this assignment/primitive due to --no-timing
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+  126 |                         p1_flags_q <= #1 p1_flags_d;
+      |                                       ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:151:35: Ignoring timing control on this assignment/primitive due to --no-timing
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+  151 |                     p2_valid_q <= #1 p1_valid_q;
+      |                                   ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:153:32: Ignoring timing control on this assignment/primitive due to --no-timing
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+  153 |                         d_q <= #1 d_d;
+      |                                ^
+%Warning-ASSIGNDLY: src/posit_pack.sv:154:36: Ignoring timing control on this assignment/primitive due to --no-timing
+                                            : ... note: In instance 'posit_mul_iter.u_wrapper.u_pack'
+  154 |                         flags_q <= #1 flags_d;
+      |                                    ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:128:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  128 |             meta_sync1 <= #1 1'b1;
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:129:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  129 |             meta_sync2 <= #1 meta_sync1;
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:149:43: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  149 |             if (release_result) busy_q <= #1 1'b0;
+      |                                           ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:151:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  151 |                 busy_q <= #1 1'b1;
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:152:24: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  152 |                 y_q <= #1 y_mant;
+      |                        ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:153:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  153 |                 sign_o <= #1 sign_i;
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:154:25: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  154 |                 sf_o <= #1 sf_i;
+      |                         ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:155:32: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  155 |                 input_cut_o <= #1 input_cut_i;
+      |                                ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:156:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  156 |                 mode_o <= #1 cfg_mode;
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:158:25: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  158 |             t2_valid <= #1 t1_valid;
+      |                         ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:160:29: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  160 |                 t2_first <= #1 t1_first;
+      |                             ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:161:28: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  161 |                 t2_last <= #1 t1_last;
+      |                            ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:162:28: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  162 |                 t2_init <= #1 t1_init;
+      |                            ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:163:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  163 |                 t2_cut <= #1 t1_cut;
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:164:28: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  164 |                 t2_tail <= #1 term_tail;
+      |                            ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:165:33: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  165 |                 t2_iteration <= #1 t1_iteration;
+      |                                 ^
+%Warning-ASSIGNDLY: src/mul_iter_core.sv:166:28: Ignoring timing control on this assignment/primitive due to --no-timing
+                                               : ... note: In instance 'posit_mul_iter.u_wrapper.u_core'
+  166 |                 t2_term <= #1 term;
+      |                            ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:104:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  104 |             meta_sync1 <= #1 1'b1;
+      |                           ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:105:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  105 |             meta_sync2 <= #1 meta_sync1;
+      |                           ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:180:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  180 |             p1_valid_q <= #1 in_valid;
+      |                           ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:183:38: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  183 |                 p1_s_q            <= #1 s_d;
+      |                                      ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:184:38: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  184 |                 p1_is_zero_q      <= #1 is_zero_d;
+      |                                      ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:185:38: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  185 |                 p1_is_nar_q       <= #1 is_nar_d;
+      |                                      ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:186:38: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  186 |                 p1_cnt_q          <= #1 cnt_d;
+      |                                      ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:187:42: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  187 |                 p1_first_regime_bit_q <= #1 first_regime_bit;
+      |                                          ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:188:38: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  188 |                 p1_payload_seed_q <= #1 payload_seed;
+      |                                      ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:240:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  240 |             p2_valid_q <= #1 p1_valid_q;
+      |                           ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:243:33: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  243 |                 p2_s_q       <= #1 p1_s_q;
+      |                                 ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:244:33: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  244 |                 p2_is_zero_q <= #1 p1_is_zero_q;
+      |                                 ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:245:33: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  245 |                 p2_is_nar_q  <= #1 p1_is_nar_q;
+      |                                 ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:246:33: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  246 |                 p2_sf_q      <= #1 sf_d;
+      |                                 ^
+%Warning-ASSIGNDLY: src/posit_parser.sv:247:33: Ignoring timing control on this assignment/primitive due to --no-timing
+                                              : ... note: In instance 'posit_mul_iter.u_wrapper.u_b'
+  247 |                 p2_frac_q    <= #1 frac_d;
+      |                                 ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:84:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                 : ... note: In instance 'posit_mul_iter.u_wrapper'
+   84 |         reset_bridge_q <= #1 rst_n;
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:91:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                 : ... note: In instance 'posit_mul_iter.u_wrapper'
+   91 |             meta_sync1 <= #1 1'b1;
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:92:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                 : ... note: In instance 'posit_mul_iter.u_wrapper'
+   92 |             meta_sync2 <= #1 meta_sync1;
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:233:35: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  233 |             if (retire) busy_q <= #1 1'b0;
+      |                                   ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:235:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  235 |                 busy_q <= #1 1'b1;
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:236:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  236 |                 mode_q <= #1 cfg_mode;
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:237:24: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  237 |                 n_q <= #1 cfg_n;
+      |                        ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:238:26: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  238 |                 ops_q <= #1 cfg_ops;
+      |                          ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:241:27: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  241 |                 zero_q <= #1 (z_a || z_b);
+      |                           ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:242:26: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  242 |                 nar_q <= #1 (nar_a || nar_b);
+      |                          ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:244:61: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  244 |             if (norm_valid_q && pack_ready) norm_valid_q <= #1 1'b0;
+      |                                                             ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:246:33: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  246 |                 norm_valid_q <= #1 1'b1;
+      |                                 ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:247:32: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  247 |                 norm_sign_q <= #1 core_sign;
+      |                                ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:248:32: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  248 |                 norm_zero_q <= #1 zero_q;
+      |                                ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:249:31: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  249 |                 norm_nar_q <= #1 nar_q;
+      |                               ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:250:30: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  250 |                 norm_sf_q <= #1 sf_norm;
+      |                              ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:251:32: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  251 |                 norm_frac_q <= #1 frac_norm;
+      |                                ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:252:34: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  252 |                 norm_sticky_q <= #1 sticky_norm;
+      |                                  ^
+%Warning-ASSIGNDLY: src/mul_iter_wrapper.sv:253:33: Ignoring timing control on this assignment/primitive due to --no-timing
+                                                  : ... note: In instance 'posit_mul_iter.u_wrapper'
+  253 |                 norm_flags_q <= #1 ((zero_q || nar_q) ? 5'b0 :
+      |                                 ^
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)
+- Verilator: Built from 0.680 MB sources in 18 modules, into 0.317 MB in 8 C++ files needing 0.000 MB
+- Verilator: Walltime 0.492 s (elab=0.098, cvt=0.111, bld=0.000); cpu 0.165 s on 1 threads; alloced 12.250 MB
+make: Entering directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_1_0/obj_dir'
+make: jobserver mkfifo: /mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/tmp/GMfifo8958: Operation not supported
+g++  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O3 -std=c++17 -DPROFILE_ROUNDING=0 -DPROFILE_NB=8 -DPROFILE_ES=0 -DPROFILE_SCHEME=1 -DPROFILE_FRAC_W=5   -Os  -c -o week9_multiplier_harness.o ../src/week9_multiplier_harness.cpp
+g++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O3 -std=c++17 -DPROFILE_ROUNDING=0 -DPROFILE_NB=8 -DPROFILE_ES=0 -DPROFILE_SCHEME=1 -DPROFILE_FRAC_W=5   -c -o verilated.o /usr/share/verilator/include/verilated.cpp
+g++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O3 -std=c++17 -DPROFILE_ROUNDING=0 -DPROFILE_NB=8 -DPROFILE_ES=0 -DPROFILE_SCHEME=1 -DPROFILE_FRAC_W=5   -c -o verilated_dpi.o /usr/share/verilator/include/verilated_dpi.cpp
+g++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O3 -std=c++17 -DPROFILE_ROUNDING=0 -DPROFILE_NB=8 -DPROFILE_ES=0 -DPROFILE_SCHEME=1 -DPROFILE_FRAC_W=5   -c -o verilated_threads.o /usr/share/verilator/include/verilated_threads.cpp
+python3 /usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vposit_mul_iter.cpp Vposit_mul_iter___024root__DepSet_hcaf1a55c__0.cpp Vposit_mul_iter___024root__DepSet_hc2322694__0.cpp Vposit_mul_iter__Dpi.cpp Vposit_mul_iter___024root__Slow.cpp Vposit_mul_iter___024root__DepSet_hcaf1a55c__0__Slow.cpp Vposit_mul_iter___024root__DepSet_hc2322694__0__Slow.cpp Vposit_mul_iter__Syms.cpp > Vposit_mul_iter__ALL.cpp
+echo "" > Vposit_mul_iter__ALL.verilator_deplist.tmp
+g++ -Os  -I.  -MMD -I/usr/share/verilator/include -I/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -O3 -std=c++17 -DPROFILE_ROUNDING=0 -DPROFILE_NB=8 -DPROFILE_ES=0 -DPROFILE_SCHEME=1 -DPROFILE_FRAC_W=5   -c -o Vposit_mul_iter__ALL.o Vposit_mul_iter__ALL.cpp
+g++    week9_multiplier_harness.o verilated.o verilated_dpi.o verilated_threads.o Vposit_mul_iter__ALL.a   -L../src -lsoftposit  -pthread -lpthread -latomic   -o Vposit_mul_iter
+rm Vposit_mul_iter__ALL.verilator_deplist.tmp
+make: Leaving directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week9_multiplier/verilator/gate2_pilot/8_0_1_0/obj_dir'

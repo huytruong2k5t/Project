@@ -44,8 +44,8 @@ module ops_sel_comb #(
     logic [FRAC_MAX-1:0] effective_b;
     logic discarded;
     wire choose_b;
-    wire [COUNT_W-1:0] count_a [2*PAD_N-1:1];
-    wire [COUNT_W-1:0] count_b [2*PAD_N-1:1];
+    wire [COUNT_W-1:0] count_a [2*PAD_N-1:1] /* verilator split_var */;
+    wire [COUNT_W-1:0] count_b [2*PAD_N-1:1] /* verilator split_var */;
 
     genvar bit_index;
     genvar node;
@@ -86,8 +86,8 @@ module ops_sel_comb #(
             effective_b = '0;
             effective_a[FRAC_W-1:0] = frac_a[FRAC_MAX-1 -: FRAC_W];
             effective_b[FRAC_W-1:0] = frac_b[FRAC_MAX-1 -: FRAC_W];
-            for (int bit_index = 0; bit_index < FRAC_MAX-FRAC_W; bit_index++) begin
-                discarded = discarded | frac_a[bit_index] | frac_b[bit_index];
+            for (int discarded_index = 0; discarded_index < FRAC_MAX-FRAC_W; discarded_index++) begin
+                discarded = discarded | frac_a[discarded_index] | frac_b[discarded_index];
             end
         end
     end

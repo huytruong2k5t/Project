@@ -12,7 +12,7 @@
 // $Log: Initial Quartus resource/timing benchmark. $
 
 module packer_ppa_top #(
-    parameter ROUND_MODE = "RNE"
+    parameter [39:0] ROUND_MODE = "RNE"
 )(
     input logic clk,
     input logic reset_n,

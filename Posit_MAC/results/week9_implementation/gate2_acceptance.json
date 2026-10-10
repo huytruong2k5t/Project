@@ -1,0 +1,156 @@
+{
+  "status": "PASS",
+  "Gate2": "ACCEPTED: Week9 normative multiplier milestone",
+  "date": "2026-10-10T13:36:10.334148+00:00",
+  "scope": "PLAN section7 W9-01..06 / SPEC week9 threshold; not full final regression matrix section6.7, MAC RTL, PPA or recovered paper baseline",
+  "compared_transactions": 16815920,
+  "mismatches": 0,
+  "direct_l1_checks": 16896000,
+  "direct_l0_checks": 3168256,
+  "direct_es3_checks": 1056256,
+  "corners": [
+    {
+      "profile": "mul_16_1_0_0",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_16_1_0_1",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_16_1_1_0",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_16_1_1_1",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_32_2_0_0",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_32_2_0_1",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_32_2_1_0",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_32_2_1_1",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_32_3_0_0",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_32_3_0_1",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_32_3_1_0",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_32_3_1_1",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_8_0_0_0",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_8_0_0_1",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_8_0_1_0",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    },
+    {
+      "profile": "mul_8_0_1_1",
+      "rows": 7200,
+      "completed": 7166,
+      "reset_aborts": 34,
+      "long_stalls": 75,
+      "observed_corner_config_cells": 3600
+    }
+  ],
+  "strict_lint_profiles": 16,
+  "structural_coverage": "Measured raw line/branch/toggle; no percentage threshold is specified for this milestone; unhit points retained",
+  "evidence_sha256": {
+    "results/week9_multiplier/verilator/gate2_stratified/summary.json": "381097730d234d37b7eebec10815cd28746b4dec9e79ada7390fa5fe2cd678ae",
+    "results/week9_multiplier/verilator/gate2_stratified/functional_coverage.json": "69317791b05369cb32a5721595baa91e4db0c5b6c62bf111909a83f064ed7151",
+    "results/week9_multiplier/verilator/gate2_stratified/structural_coverage.json": "1e8c24bc55770dcdc7212961403f5cc14f258d8ec1b6238f301e200962840ce7",
+    "results/week9_multiplier/gate2_corners_modelsim/summary.json": "e73af4e279d3f669efe5f8731b1a85dbe8af4e7809c5839e6fa3e35849fa2bf5",
+    "results/week9_implementation/lint_gate2/source.sha256": "e6b53e0bb907ca8ac552524f4d83617422271fa07253a5fe3d81a24921c57bc7"
+  },
+  "remaining": [
+    "Gate3 MAC RTL integration",
+    "Final section6.7 large matrix",
+    "STA/PPA and CDC signoff",
+    "Original paper provenance/TableI"
+  ]
+}

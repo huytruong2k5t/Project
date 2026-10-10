@@ -15,8 +15,8 @@ module posit_pack #(
     parameter int NB = 32,
     parameter int ES = 2,
     parameter int F_IN = 2 * (NB - 3 - ES) + 1,
-    parameter int SF_W = $clog2(64'd4 * (NB - 2) * (64'd1 << ES) + 64'd4) + 1,
-    parameter ROUND_MODE = "RNE"
+    parameter int SF_W = $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1,
+    parameter [39:0] ROUND_MODE = "RNE"
 )(
     input logic clk,
     input logic reset_n,

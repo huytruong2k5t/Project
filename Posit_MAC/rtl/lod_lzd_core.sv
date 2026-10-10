@@ -52,8 +52,8 @@ module lod_lzd_core #(
     //    tree_vld[l][j]: indicates if there is any '1' in the 2^l group
     //    tree_pos[l][j]: index of the first '1' within the 2^l group
     //-------------------------------------------------------------------------
-    logic [POW2_N-1:0] tree_vld [S:0];
-    logic [S-1:0]      tree_pos [S:0][POW2_N-1:0];
+    logic [POW2_N-1:0] tree_vld [S:0] /* verilator split_var */;
+    logic [S-1:0]      tree_pos [S:0][POW2_N-1:0] /* verilator split_var */;
 
     // Level 0: Leaves (individual bits)
     genvar l, j;

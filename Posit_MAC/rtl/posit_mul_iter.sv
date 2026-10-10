@@ -12,7 +12,7 @@ module posit_mul_iter #(
     parameter int FRAC_W=(NB-3-ES<12)?NB-3-ES:12,
     parameter int N_MAX=8,
     parameter int ROUND_SCHEME=0,
-    parameter ROUND_MODE="RNE",
+    parameter [39:0] ROUND_MODE ="RNE",
     parameter bit EXACT_EN=1'b1,
     parameter bit OPS_EN=1'b1,
     parameter int N_W=(N_MAX>1)?$clog2(N_MAX+1):1

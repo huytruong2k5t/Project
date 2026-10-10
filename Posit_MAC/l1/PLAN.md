@@ -1,6 +1,6 @@
 # Kế hoạch Triển khai Mô hình Thuật toán L1 (C++ Golden Model)
 
-**Hợp đồng tích hợp cập nhật 08/10/2026 — SPEC v1.5:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7 (trạng thái09/10/2026). Gate2 còn processing; MAC RTL chưa nghiệm thu. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
+**Hợp đồng tích hợp cập nhật 08/10/2026 — SPEC v1.5:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7 (trạng thái10/10/2026). Gate2 multiplier đã nghiệm thu theo mục7.11; MAC RTL chưa nghiệm thu. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
 
 > **Mục tiêu**: Xây dựng mô hình thuật toán C++ L1 (`l1/`) mô phỏng trung thực 100% từng bước biến đổi dữ liệu của vi kiến trúc phần cứng Posit MAC, tham số hóa theo `template <int NB, int ES, int FRAC_W>`, đóng vai trò làm thước đo chân lý bit-exact (AC-01) cho RTL SystemVerilog, vượt qua các cổng kiểm chuẩn nghiêm ngặt **Gate 1 (Tuần 3)** và **Gate 1B (Tuần 6)** theo [SPEC_Posit_MAC_IP.md](../SPEC_Posit_MAC_IP.md).
 
@@ -323,7 +323,7 @@ README mục20 và `results/paper_discriminators/summary.json` chứa36 ô/count
 
 ## 7. Kế hoạch thực thi tuần9 — lõi nhân RTL và đối chiếu paper
 
-**Mục tiêu chính:** hiện thực `posit_mul_iter` theo SPEC/L1 normative, đạt Gate2. **Mục tiêu nghiên cứu:** dựng RTL tối thiểu theo paper để kiểm giả thuyết width/cut bằng trace. Hai mục tiêu có oracle và tiêu chí riêng; nghiên cứu TableI không thay nghiệm thu Gate2. Tuần9 hiện **processing**, tách trạng thái với tuần4.
+**Mục tiêu chính:** hiện thực `posit_mul_iter` theo SPEC/L1 normative, đạt Gate2. **Mục tiêu nghiên cứu:** dựng RTL tối thiểu theo paper để kiểm giả thuyết width/cut bằng trace. Hai mục tiêu có oracle và tiêu chí riêng; nghiên cứu TableI không thay nghiệm thu Gate2. Tuần9 hiện **✅**, nghiệm thu Gate2 tại mục7.11; tuần4 giữ processing.
 
 ### 7.1. Công việc mở đầu đã thực hiện — 08/10/2026
 
@@ -344,7 +344,7 @@ ModelSim kiểm159.820 vector OPS (feature bật/tắt) và167.620 trạng thái
 | W9-R2 | RTL paper tối thiểu, Fig.4 và206 trường hợp phân biệt | So từng commit với harness; ép X ở fixture, output0x1ae34000; giải thích mismatch đầu tiên, không coi khớp harness là khớp RTL tác giả | ✅ |
 | W9-04 | `iter_ctrl` + SAC/Shifter/Accumulator có FF thành `mul_iter_core` | L0→done=t+2 nếu t>=1, hoặc3 nếu t=0; n=0/early-stop/max n/exact vượt N_MAX, drain, context cố định, reset/startup | ✅ |
 | W9-05 | Parser A/B + context M0 + core + norm + packer thành `posit_mul_iter` | A/B nhận nguyên tử, config/flags đi cùng, NaR ưu tiên zero, slot result dự trữ, stall/order/không mất hoặc nhân đôi giao dịch | ✅ |
-| W9-06 | Gate2, coverage và tái chạy | RTL=L1 bit-exact trên10^7 vector, coverage mọi n/policy/mode; exact/RNE so L0 ở format hỗ trợ, ES3 so oracle riêng; reset/stall/ordering và lint | processing |
+| W9-06 | Gate2, coverage và tái chạy | RTL=L1 bit-exact trên10^7 vector, coverage mọi n/policy/mode; exact/RNE so L0 ở format hỗ trợ, ES3 so oracle riêng; reset/stall/ordering và lint | ✅ (10/10, mục7.11) |
 | W9-R3 | TableI khi có thay đổi RTL được xác minh | Giữ corpus/oracle/seed; pilot trước,200M sau đối chuẩn. Chỉ chạy khi có căn cứ mới, không quét tham số để ép bảng | không |
 
 **Thứ tự:** W9-01→02→03; sau đó W9-R1→R2 để kiểm nghi vấn baseline phần cứng, rồi W9-04→05→06. R3 phụ thuộc R2 và bằng chứng nguồn, không phải điều kiện đóng Gate2. Khối dùng chung được reuse, nhưng OPS/SAC paper có thuật toán khác nên không trộn cfg_ops reserved vào profile chính. Nếu RND/coefficient âm cần lịch khác, ghi ngân sách research riêng.
@@ -417,3 +417,34 @@ Verilator 5.032 (Debian 5.032-1) is now installed by the user. Makefile lint exp
 ### 7.10. Harness Verilator pilot — 10/10/2026
 
 Pilot Verilator5.032 đã build/chạy đủ16 profile từ final_pilot:32.000 dòng,31.840 so sánh,160 reset hủy,336 stall96 chu kỳ,0 mismatch. Hash fixture và counters khớp ModelSim parallel_pilot; kiểm config reserved/n>8, startup/reset, latency, đổi context lúc busy, stall/order. Runner mặc định chuyển sang final_pilot còn giữ; preflight16 fixture, snapshot nguồn và make với đường dẫn tương đối/CURDIR=. xử lý thư mục có khoảng trắng, không sửa cài đặt. --no-timing bỏ delay CK2Q cho mô phỏng chu kỳ; warning giữ trong build.log, -Wno-fatal chỉ dùng build chức năng, không thay strict lint. Đây là fixture replay, chưa phải scoreboard gọi trực tiếp L1/L0. Gate2/W9-06 vẫn processing: lint còn cảnh báo, cần scoreboard trực tiếp, corpus phân tầng>=10^7 và coverage; line/branch/toggle chưa đo. Vector lớn đã dọn, phải sinh lại và kiểm hash trước replay. Không sửa RTL số học hoặc chạy TableI. Bằng chứng results/week9_multiplier/verilator/final_pilot/summary.json; lệnh bash --noprofile --norc scripts/verify_week9_verilator.sh final_pilot, audit scripts/audit_week9_verilator.py. Seed20261009; compiler/make/version và hash lưu cùng kết quả.
+
+### 7.11. Nghiệm thu Gate2 — 10/10/2026
+
+
+**Gate2 normative multiplier / W9-01..06: ✅ — 10/10/2026.** Nghiệm thu theo PLAN mục7 và mốc tuần9 của SPEC; không thay ma trận regression cuối §6.7, Gate3 MAC, STA/PPA hoặc baseline gốc của tác giả. Các ghi chép processing phía trước là trạng thái lịch sử, được thay bằng kết quả này.
+
+- Verilator5.032/GCC15.2.0:16 profile NB/ES=8/0,16/1,32/2,32/3 × FLOOR/JAM × RNE/TRUNC, EXACT_EN=OPS_EN=1. Corpus seed20261009 có16.896.000 dòng, hash khớp corpus ModelSim đã nghiệm thu; **16.815.920 so sánh,80.080 reset hủy,173.376 stall dài,0 mismatch**.
+- Scoreboard gọi L1 trực tiếp trên16.896.000 dòng; exact/RNE đối chiếu3.168.256 với L0 SoftPosit0.4.1 và1.056.256 với oracle ES3 integer/bit-list độc lập. Counts oracle gồm cả input bị reset hủy; counts RTL chỉ gồm giao dịch hoàn tất. Source/fixture/library SHA256, compiler và lệnh được lưu.
+- Corner đạt114.656 so sánh/544 reset hủy/0 mismatch trên cùng binary Verilator và ModelSim10.1d; đủ3600 ô corner/config mỗi profile. Pilot cuối31.840/160/0; frontend327.440, core39.580 và top paper17.181 giao dịch/65.710 commit đều0 mismatch khi chạy lại sau sửa lint; Fig.4 force-X giữ0x1ae34000.
+- Strict lint `--timing -Wall` sạch16/16, không tắt warning. Sửa cast/width, tên debug và tách dependency tổ hợp; split_var chỉ hướng dẫn phân tích array. Functional build dùng `--no-timing`, bỏ CK2Q cho kiểm chu kỳ; warning ASSIGNDLY được giữ, không thay lint/ModelSim4-state hoặc STA.
+- Coverage chức năng đạt mọi bin hợp lệ; posit32:256/256 bin regime–dấu, tối thiểu4104 mẫu/bin,26241 operands/run/polarity,36 ô mode/OPS/n mỗi profile. Raw coverage sau ghép stratified+corner: **line 91.67–96.23%; branch 91.84–94.79%; toggle 73.10–87.33%**. Giữ đầy đủ điểm chưa hit, không loại điểm để nâng tỷ lệ; padding/constants và nhánh config bị chặn ở top còn trong raw metrics. Mốc tuần9 không quy định ngưỡng phần trăm structural coverage. Chưa gọi đây là coverage100% hoặc signoff vật lý.
+
+Báo cáo chốt: `results/week9_implementation/gate2_acceptance.json`; bằng chứng `results/week9_multiplier/verilator/gate2_stratified/{summary.json,comparisons.csv,functional_coverage.json,structural_coverage.json}` và `results/week9_implementation/lint_gate2/`. JSON chức năng/structure riêng không tự nghiệm thu Gate2; báo cáo tích hợp là trạng thái hiện hành.
+
+Tái lập từ Posit_MAC với WSL `bash --noprofile --norc`, TMPDIR trong dự án:
+
+```sh
+make -C l1 gen_week9_multiplier
+./l1/gen_week9_multiplier results/week9_multiplier/stratified_corpus 1056000 stratified
+./l1/gen_week9_multiplier results/week9_multiplier/gate2_cornercorpus 7200 corners
+make lint
+bash scripts/verify_week9_verilator.sh stratified_corpus gate2_stratified
+bash scripts/verify_gate2_corners.sh
+make cov
+python3 scripts/audit_gate2_acceptance.py
+```
+
+WSL runner cuối trả lỗi parser shell sau khi16 binary đã PASS do script được chỉnh khi còn chạy. `bash -n` trên bản cuối đạt; audit nguồn/hash/counters được chạy độc lập rồi replay corner và audit coverage đạt. Không coi exit của runner ấy là nghiệm thu; chỉ báo cáo tích hợp dựa trên đủ16 log và hash đã kiểm. Khi tái lập phải giữ runner/nguồn cố định suốt phiên.
+
+Bước tiếp theo: tuần10 RTL adder → tuần11 MAC v1/Gate3. Ma trận lớn cuối §6.7, STA/CDC/PPA/Gate4 và provenance/TableI còn mở. Không có thay đổi số học được xác minh bằng nguồn paper trong phiên này, nên không chạy lại TableI; tuần4 giữ processing.
+

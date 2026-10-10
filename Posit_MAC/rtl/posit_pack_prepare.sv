@@ -14,7 +14,7 @@ module posit_pack_prepare #(
     parameter int NB = 32,
     parameter int ES = 2,
     parameter int F_IN = 2 * (NB - 3 - ES) + 1,
-    parameter int SF_W = $clog2(64'd4 * (NB - 2) * (64'd1 << ES) + 64'd4) + 1
+    parameter int SF_W = $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1
 )(
     input  logic sign,
     input  logic is_zero,
@@ -31,7 +31,7 @@ module posit_pack_prepare #(
     output logic [2:0] special_sel,
     output logic [4:0] flags_o
 );
-    localparam int SF_MAX = (NB - 2) * (64'd1 << ES);
+    localparam int SF_MAX = int'((longint'(NB) - 64'd2) * (64'd1 << ES));
     localparam int SHIFT_W = $clog2(NB - 1);
     localparam int PAYLOAD_W = 2 + ES + F_IN + 1;
     localparam logic [2:0] NORMAL = 3'd0;
@@ -40,7 +40,8 @@ module posit_pack_prepare #(
     localparam logic [2:0] MAXPOS = 3'd3;
     localparam logic [2:0] MINPOS = 3'd4;
 
-    wire signed [SF_W-1:0] regime;
+    typedef logic [SHIFT_W-1:0] offset_value_t;
+    wire [SHIFT_W-1:0] regime;
     wire first_regime_bit;
     wire [SHIFT_W-1:0] offset;
     wire [PAYLOAD_W-1:0] payload;
@@ -58,7 +59,7 @@ module posit_pack_prepare #(
 
     // Paper Fig.5(b): k>=0 gives m=k; k<0 gives m=~k=|k|-1.
     // Pre-clamping guarantees that the normal path uses offset <= NB-3.
-    assign regime = $signed(sf) >>> ES;
+    assign regime = offset_value_t'($signed(sf) >>> ES);
     assign first_regime_bit = !sf[SF_W-1];
     assign offset = regime[SHIFT_W-1:0]
                   ^ {SHIFT_W{sf[SF_W-1]}};
@@ -117,18 +118,18 @@ module posit_pack_prepare #(
             round_bit = 1'b0;
             sticky_bit = 1'b0;
             flags_o = {1'b0, flags_in[3:0]};
-        end else if ($signed(sf) >= SF_MAX) begin
+        end else if (int'($signed(sf)) >= SF_MAX) begin
             special_sel = MAXPOS;
             mag_trunc = {NB-1{1'b1}};
             guard_bit = 1'b0;
             round_bit = 1'b0;
             sticky_bit = 1'b0;
             flags_o = {1'b0, flags_in[3:0]};
-            if ($signed(sf) > SF_MAX || (|frac) || sticky) begin
+            if (int'($signed(sf)) > SF_MAX || (|frac) || sticky) begin
                 flags_o[3] = 1'b1;
                 flags_o[1] = 1'b1;
             end
-        end else if ($signed(sf) < -SF_MAX) begin
+        end else if (int'($signed(sf)) < -SF_MAX) begin
             special_sel = MINPOS;
             mag_trunc = {{NB-2{1'b0}}, 1'b1};
             guard_bit = 1'b0;

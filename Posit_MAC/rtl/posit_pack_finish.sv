@@ -11,7 +11,7 @@
 
 module posit_pack_finish #(
     parameter int NB = 32,
-    parameter ROUND_MODE = "RNE"
+    parameter [39:0] ROUND_MODE = "RNE"
 )(
     input  logic [NB-2:0] mag_trunc,
     input  logic guard_bit,
@@ -23,6 +23,8 @@ module posit_pack_finish #(
     output logic [NB-1:0] d,
     output logic [4:0] flags
 );
+    // TRUNC intentionally ignores G/R/S for increment; keep explicit consumption.
+    wire unused_trunc_grs = ^{guard_bit, round_bit, sticky_bit};
     localparam logic [2:0] NORMAL = 3'd0;
     localparam logic [2:0] ZERO = 3'd1;
     localparam logic [2:0] NAR = 3'd2;

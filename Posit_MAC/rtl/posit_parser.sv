@@ -19,7 +19,7 @@ module posit_parser #(
     parameter int NB       = 32,
     parameter int ES       = 2,
     parameter int FRAC_MAX = NB - 3 - ES,
-    parameter int SF_W     = $clog2(64'd4 * (NB - 2) * (64'd1 << ES) + 64'd4) + 1
+    parameter int SF_W     = $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1
 )(
     input  logic                    clk,
     input  logic                    reset_n,
@@ -37,11 +37,13 @@ module posit_parser #(
 
     localparam int CNT_W = $clog2(NB - 1);
     localparam int REG_W = CNT_W + 1;
-    localparam logic [CNT_W-1:0] MAX_COUNT = NB - 2;
+    typedef logic [CNT_W-1:0] count_value_t;
+    localparam logic [CNT_W-1:0] MAX_COUNT = count_value_t'(NB-2);
 
     // Reset synchronizer: no combinational logic before the first FF.
     (* ASYNC_REG = "TRUE" *) logic meta_sync1;
     (* ASYNC_REG = "TRUE" *) logic meta_sync2;
+    typedef logic signed [SF_W-1:0] sf_value_t;
     wire reset_b_sync_clk;
 
     wire [NB-1:0] magnitude;
@@ -206,12 +208,12 @@ module posit_parser #(
 
     generate
         if (ES == 0) begin : g_es0
-            assign finite_sf = regime;
+            assign finite_sf = sf_value_t'(regime);
         end else begin : g_exponent
             wire [ES-1:0] exponent;
 
             assign exponent  = payload[NB-4 -: ES];
-            assign finite_sf = $signed({regime, exponent});
+            assign finite_sf = sf_value_t'($signed({regime, exponent}));
         end
     endgenerate
 

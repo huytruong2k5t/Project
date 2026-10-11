@@ -1,0 +1,110 @@
+Flow report for multiplier
+Fri Oct 09 06:19:35 2026
+Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Flow Summary
+  3. Flow Settings
+  4. Flow Non-Default Global Settings
+  5. Flow Elapsed Time
+  6. Flow OS Summary
+  7. Flow Log
+  8. Flow Messages
+  9. Flow Suppressed Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2013 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++--------------------------------------------------------------------------------------+
+; Flow Summary                                                                         ;
++------------------------------------+-------------------------------------------------+
+; Flow Status                        ; Successful - Fri Oct 09 06:19:34 2026           ;
+; Quartus II 64-Bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
+; Revision Name                      ; multiplier                                      ;
+; Top-level Entity Name              ; posit_mul_iter                                  ;
+; Family                             ; Cyclone IV E                                    ;
+; Device                             ; EP4CE22F17C6                                    ;
+; Timing Models                      ; Final                                           ;
+; Total logic elements               ; 2,254                                           ;
+;     Total combinational functions  ; 2,224                                           ;
+;     Dedicated logic registers      ; 533                                             ;
+; Total registers                    ; 533                                             ;
+; Total pins                         ; 114                                             ;
+; Total virtual pins                 ; 0                                               ;
+; Total memory bits                  ; 0                                               ;
+; Embedded Multiplier 9-bit elements ; 0                                               ;
+; Total PLLs                         ; 0                                               ;
++------------------------------------+-------------------------------------------------+
+
+
++-----------------------------------------+
+; Flow Settings                           ;
++-------------------+---------------------+
+; Option            ; Setting             ;
++-------------------+---------------------+
+; Start date & time ; 10/09/2026 06:19:27 ;
+; Main task         ; Compilation         ;
+; Revision Name     ; multiplier          ;
++-------------------+---------------------+
+
+
++------------------------------------------------------------------------------------------------------------+
+; Flow Non-Default Global Settings                                                                           ;
++--------------------------+--------------------------------------+---------------+-------------+------------+
+; Assignment Name          ; Value                                ; Default Value ; Entity Name ; Section Id ;
++--------------------------+--------------------------------------+---------------+-------------+------------+
+; COMPILER_SIGNATURE_ID    ; 136824166922309.179150156708988      ; --            ; --          ; --         ;
+; PROJECT_OUTPUT_DIRECTORY ; output_files                         ; --            ; --          ; --         ;
+; SEARCH_PATH              ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl ; --            ; --          ; --         ;
+; TOP_LEVEL_ENTITY         ; posit_mul_iter                       ; multiplier    ; --          ; --         ;
++--------------------------+--------------------------------------+---------------+-------------+------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------+
+; Flow Elapsed Time                                                                                                        ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Analysis & Synthesis ; 00:00:07     ; 1.0                     ; 4589 MB             ; 00:00:07                           ;
+; Total                ; 00:00:07     ; --                      ; --                  ; 00:00:07                           ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+
+
++-----------------------------------------------------------------------------------+
+; Flow OS Summary                                                                   ;
++----------------------+------------------+-----------+------------+----------------+
+; Module Name          ; Machine Hostname ; OS Name   ; OS Version ; Processor type ;
++----------------------+------------------+-----------+------------+----------------+
+; Analysis & Synthesis ; MSI              ; Windows 7 ; 6.2        ; x86_64         ;
++----------------------+------------------+-----------+------------+----------------+
+
+
+------------
+; Flow Log ;
+------------
+quartus_map multiplier
+
+
+

@@ -63,3 +63,13 @@ Sau nghiệm thu10/10 đã dọn 2579.15 MiB gồm fixture phân tầng vừa si
 
 `l1_floor_rne_freeze/summary.json` và `frozen_sources.sha256` giữ profile/source/compiler/seed/lệnh. Logs Linux/Windows/UBSan, regression và normalized SHA pilot là bằng chứng. Binary và fixture replay là sản phẩm có thể build/sinh lại, không đưa vào Git; replay dùng generator 2000 dòng/profile và so final_pilot đóng băng. Hợp đồng tại SPEC§11.9, lệnh/checker PLAN§8.1. Chưa có L1/RTL fused được nghiệm thu.
 
+
+## 6. Dọn cache và corpus sinh lại — 11/10/2026
+
+Đã dọn2.039 file, tiết kiệm3.833,60 MiB: results giảm từ3.913,10 xuống khoảng80,50 MiB (gồm manifest mới). Xóa43 thư mục cache gốc (Verilator obj_dir, ModelSim work, tmp...) cùng16 fixture mul_*.txt phân tầng và wave sinh lại. Các thư mục rỗng được gỡ; các nhóm bằng chứng vẫn giữ nguyên.
+
+Giữ mọi summary/CSV/log/hash, raw structural/functional coverage, source snapshots lịch sử, fitter/STA, trace phân biệt, hình nguồn và fixture pilot/corner/replay nhỏ. Kiểm SHA256 cả2.982 file giữ lại PASS ngay sau dọn; README và tiến độ cập nhật sau phép kiểm. Manifest [cleanup_20261011_manifest.json](cleanup_20261011_manifest.json) ghi file/dung lượng/reason, hash corpus đã xóa và hash bằng chứng giữ. Cleanup không đổi nghiệm thu hoặc kết luận baseline; không chạy lại Gate2 trong phiên này. Audit L1 FLOOR/RNE vẫn PASS với replay nhỏ được giữ.
+
+**Chạy lại:** theo hướng dẫn [WSL/ModelSim](../../doc/HUONG_DAN_CHAY_WSL_MODELSIM.md), mục6.1 sinh stratified_corpus, mục6.4 build/run Verilator, rồi mới mục6.5 corners. Binary obj_dir không còn; không chạy corners ngay hoặc coi file thiếu là PASS. Corpus historical phải dùng đúng source/seed/compiler/hash của report, source snapshot và lịch sử Git; giữ report cũ trước khi runner ghi mới. Scripts/generator/reference ngoài results được giữ nguyên.
+
+**Dọn lần sau:** PowerShell7 (`pwsh`), từ Posit_MAC, `./scripts/cleanup_results.ps1` chỉ xem kế hoạch; thêm `-Apply -Checkpoint YYYYMMDD` mới xóa. Script kiểm mọi đích thuộc results, từ chối link/process simulator đang chạy, ghi manifest trước xóa và kiểm hash phần giữ sau xóa. Chọn checkpoint mới; không ghi đè manifest cũ. Khi chạy WSL, hoàn tất mọi build/sim trước dọn; kiểm process Windows không bảo đảm phát hiện process Linux.

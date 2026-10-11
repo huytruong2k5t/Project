@@ -1,0 +1,907 @@
+Analysis & Synthesis report for multiplier
+Fri Oct 09 06:19:35 2026
+Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. Registers Removed During Synthesis
+  9. General Register Statistics
+ 10. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 11. Parameter Settings for User Entity Instance: Top-level Entity: |posit_mul_iter
+ 12. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper
+ 13. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_a
+ 14. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lod
+ 15. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lzd
+ 16. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_a|dyn_left_shifter:u_align_payload
+ 17. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_b
+ 18. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lod
+ 19. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lzd
+ 20. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_b|dyn_left_shifter:u_align_payload
+ 21. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|ops_sel_comb:u_ops
+ 22. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core
+ 23. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl
+ 24. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact
+ 25. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|lod_lzd_core:g_detector.u_lod
+ 26. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|dyn_left_shifter:u_shift
+ 27. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx
+ 28. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|lod_lzd_core:g_detector.u_lod
+ 29. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|dyn_left_shifter:u_shift
+ 30. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_shift_comb:u_shift
+ 31. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc
+ 32. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|sbm_accum_comb:u_add
+ 33. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_norm_comb:u_norm
+ 34. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_pack:u_pack
+ 35. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare
+ 36. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift
+ 37. Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_finish:g_rne.u_finish
+ 38. Port Connectivity Checks: "mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift"
+ 39. Port Connectivity Checks: "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx"
+ 40. Port Connectivity Checks: "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact"
+ 41. Port Connectivity Checks: "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core"
+ 42. Port Connectivity Checks: "mul_iter_wrapper:u_wrapper|ops_sel_comb:u_ops"
+ 43. Elapsed Time Per Partition
+ 44. Analysis & Synthesis Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2013 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++--------------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                         ;
++------------------------------------+-------------------------------------------------+
+; Analysis & Synthesis Status        ; Successful - Fri Oct 09 06:19:34 2026           ;
+; Quartus II 64-Bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
+; Revision Name                      ; multiplier                                      ;
+; Top-level Entity Name              ; posit_mul_iter                                  ;
+; Family                             ; Cyclone IV E                                    ;
+; Total logic elements               ; 2,254                                           ;
+;     Total combinational functions  ; 2,224                                           ;
+;     Dedicated logic registers      ; 533                                             ;
+; Total registers                    ; 533                                             ;
+; Total pins                         ; 114                                             ;
+; Total virtual pins                 ; 0                                               ;
+; Total memory bits                  ; 0                                               ;
+; Embedded Multiplier 9-bit elements ; 0                                               ;
+; Total PLLs                         ; 0                                               ;
++------------------------------------+-------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                                        ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Option                                                                     ; Setting            ; Default Value      ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Device                                                                     ; EP4CE22F17C6       ;                    ;
+; Top-level entity name                                                      ; posit_mul_iter     ; multiplier         ;
+; Family name                                                                ; Cyclone IV E       ; Cyclone IV GX      ;
+; Use smart compilation                                                      ; Off                ; Off                ;
+; Enable parallel Assembler and TimeQuest Timing Analyzer during compilation ; On                 ; On                 ;
+; Enable compact report table                                                ; Off                ; Off                ;
+; Restructure Multiplexers                                                   ; Auto               ; Auto               ;
+; Create Debugging Nodes for IP Cores                                        ; Off                ; Off                ;
+; Preserve fewer node names                                                  ; On                 ; On                 ;
+; Disable OpenCore Plus hardware evaluation                                  ; Off                ; Off                ;
+; Verilog Version                                                            ; Verilog_2001       ; Verilog_2001       ;
+; VHDL Version                                                               ; VHDL_1993          ; VHDL_1993          ;
+; State Machine Processing                                                   ; Auto               ; Auto               ;
+; Safe State Machine                                                         ; Off                ; Off                ;
+; Extract Verilog State Machines                                             ; On                 ; On                 ;
+; Extract VHDL State Machines                                                ; On                 ; On                 ;
+; Ignore Verilog initial constructs                                          ; Off                ; Off                ;
+; Iteration limit for constant Verilog loops                                 ; 5000               ; 5000               ;
+; Iteration limit for non-constant Verilog loops                             ; 250                ; 250                ;
+; Add Pass-Through Logic to Inferred RAMs                                    ; On                 ; On                 ;
+; Infer RAMs from Raw Logic                                                  ; On                 ; On                 ;
+; Parallel Synthesis                                                         ; On                 ; On                 ;
+; DSP Block Balancing                                                        ; Auto               ; Auto               ;
+; NOT Gate Push-Back                                                         ; On                 ; On                 ;
+; Power-Up Don't Care                                                        ; On                 ; On                 ;
+; Remove Redundant Logic Cells                                               ; Off                ; Off                ;
+; Remove Duplicate Registers                                                 ; On                 ; On                 ;
+; Ignore CARRY Buffers                                                       ; Off                ; Off                ;
+; Ignore CASCADE Buffers                                                     ; Off                ; Off                ;
+; Ignore GLOBAL Buffers                                                      ; Off                ; Off                ;
+; Ignore ROW GLOBAL Buffers                                                  ; Off                ; Off                ;
+; Ignore LCELL Buffers                                                       ; Off                ; Off                ;
+; Ignore SOFT Buffers                                                        ; On                 ; On                 ;
+; Limit AHDL Integers to 32 Bits                                             ; Off                ; Off                ;
+; Optimization Technique                                                     ; Balanced           ; Balanced           ;
+; Carry Chain Length                                                         ; 70                 ; 70                 ;
+; Auto Carry Chains                                                          ; On                 ; On                 ;
+; Auto Open-Drain Pins                                                       ; On                 ; On                 ;
+; Perform WYSIWYG Primitive Resynthesis                                      ; Off                ; Off                ;
+; Auto ROM Replacement                                                       ; On                 ; On                 ;
+; Auto RAM Replacement                                                       ; On                 ; On                 ;
+; Auto DSP Block Replacement                                                 ; On                 ; On                 ;
+; Auto Shift Register Replacement                                            ; Auto               ; Auto               ;
+; Allow Shift Register Merging across Hierarchies                            ; Auto               ; Auto               ;
+; Auto Clock Enable Replacement                                              ; On                 ; On                 ;
+; Strict RAM Replacement                                                     ; Off                ; Off                ;
+; Allow Synchronous Control Signals                                          ; On                 ; On                 ;
+; Force Use of Synchronous Clear Signals                                     ; Off                ; Off                ;
+; Auto RAM Block Balancing                                                   ; On                 ; On                 ;
+; Auto RAM to Logic Cell Conversion                                          ; Off                ; Off                ;
+; Auto Resource Sharing                                                      ; Off                ; Off                ;
+; Allow Any RAM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any ROM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any Shift Register Size For Recognition                              ; Off                ; Off                ;
+; Use LogicLock Constraints during Resource Balancing                        ; On                 ; On                 ;
+; Ignore translate_off and synthesis_off directives                          ; Off                ; Off                ;
+; Timing-Driven Synthesis                                                    ; On                 ; On                 ;
+; Report Parameter Settings                                                  ; On                 ; On                 ;
+; Report Source Assignments                                                  ; On                 ; On                 ;
+; Report Connectivity Checks                                                 ; On                 ; On                 ;
+; Ignore Maximum Fan-Out Assignments                                         ; Off                ; Off                ;
+; Synchronization Register Chain Length                                      ; 2                  ; 2                  ;
+; PowerPlay Power Optimization                                               ; Normal compilation ; Normal compilation ;
+; HDL message level                                                          ; Level2             ; Level2             ;
+; Suppress Register Optimization Related Messages                            ; Off                ; Off                ;
+; Number of Removed Registers Reported in Synthesis Report                   ; 5000               ; 5000               ;
+; Number of Swept Nodes Reported in Synthesis Report                         ; 5000               ; 5000               ;
+; Number of Inverted Registers Reported in Synthesis Report                  ; 100                ; 100                ;
+; Clock MUX Protection                                                       ; On                 ; On                 ;
+; Auto Gated Clock Conversion                                                ; Off                ; Off                ;
+; Block Design Naming                                                        ; Auto               ; Auto               ;
+; SDC constraint protection                                                  ; Off                ; Off                ;
+; Synthesis Effort                                                           ; Auto               ; Auto               ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal               ; On                 ; On                 ;
+; Pre-Mapping Resynthesis Optimization                                       ; Off                ; Off                ;
+; Analysis & Synthesis Message Level                                         ; Medium             ; Medium             ;
+; Disable Register Merging Across Hierarchies                                ; Auto               ; Auto               ;
+; Resource Aware Inference For Block RAM                                     ; On                 ; On                 ;
+; Synthesis Seed                                                             ; 1                  ; 1                  ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+
+
+Parallel compilation was disabled, but you have multiple processors available. Enable parallel compilation to reduce compilation time.
++-------------------------------------+
+; Parallel Compilation                ;
++----------------------------+--------+
+; Processors                 ; Number ;
++----------------------------+--------+
+; Number detected on machine ; 12     ;
+; Maximum allowed            ; 1      ;
++----------------------------+--------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                     ;
++------------------------------------+-----------------+------------------------------+------------------------------------------------------------+---------+
+; File Name with User-Entered Path   ; Used in Netlist ; File Type                    ; File Name with Absolute Path                               ; Library ;
++------------------------------------+-----------------+------------------------------+------------------------------------------------------------+---------+
+; ../../../rtl/lod_lzd_core.sv       ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/lod_lzd_core.sv       ;         ;
+; ../../../rtl/dyn_left_shifter.sv   ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/dyn_left_shifter.sv   ;         ;
+; ../../../rtl/dyn_right_shifter.sv  ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/dyn_right_shifter.sv  ;         ;
+; ../../../rtl/posit_parser.sv       ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_parser.sv       ;         ;
+; ../../../rtl/ops_sel_comb.sv       ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/ops_sel_comb.sv       ;         ;
+; ../../../rtl/sac_step_comb.sv      ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/sac_step_comb.sv      ;         ;
+; ../../../rtl/sbm_shift_comb.sv     ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/sbm_shift_comb.sv     ;         ;
+; ../../../rtl/sbm_accum_comb.sv     ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/sbm_accum_comb.sv     ;         ;
+; ../../../rtl/iter_ctrl.sv          ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/iter_ctrl.sv          ;         ;
+; ../../../rtl/sbm_accum.sv          ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/sbm_accum.sv          ;         ;
+; ../../../rtl/mul_iter_core.sv      ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/mul_iter_core.sv      ;         ;
+; ../../../rtl/mul_norm_comb.sv      ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/mul_norm_comb.sv      ;         ;
+; ../../../rtl/posit_pack_prepare.sv ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_pack_prepare.sv ;         ;
+; ../../../rtl/posit_pack_finish.sv  ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_pack_finish.sv  ;         ;
+; ../../../rtl/posit_pack.sv         ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_pack.sv         ;         ;
+; ../../../rtl/mul_iter_wrapper.sv   ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/mul_iter_wrapper.sv   ;         ;
+; ../../../rtl/posit_mul_iter.sv     ; yes             ; User SystemVerilog HDL File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_mul_iter.sv     ;         ;
+; posit_mac.vh                       ; yes             ; Auto-Found Unspecified File  ; C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_mac.vh          ;         ;
++------------------------------------+-----------------+------------------------------+------------------------------------------------------------+---------+
+
+
++-------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary                                         ;
++---------------------------------------------+---------------------------------------+
+; Resource                                    ; Usage                                 ;
++---------------------------------------------+---------------------------------------+
+; Estimated Total logic elements              ; 2,254                                 ;
+;                                             ;                                       ;
+; Total combinational functions               ; 2224                                  ;
+; Logic element usage by number of LUT inputs ;                                       ;
+;     -- 4 input functions                    ; 1240                                  ;
+;     -- 3 input functions                    ; 827                                   ;
+;     -- <=2 input functions                  ; 157                                   ;
+;                                             ;                                       ;
+; Logic elements by mode                      ;                                       ;
+;     -- normal mode                          ; 2005                                  ;
+;     -- arithmetic mode                      ; 219                                   ;
+;                                             ;                                       ;
+; Total registers                             ; 533                                   ;
+;     -- Dedicated logic registers            ; 533                                   ;
+;     -- I/O registers                        ; 0                                     ;
+;                                             ;                                       ;
+; I/O pins                                    ; 114                                   ;
+; Embedded Multiplier 9-bit elements          ; 0                                     ;
+; Maximum fan-out node                        ; mul_iter_wrapper:u_wrapper|meta_sync2 ;
+; Maximum fan-out                             ; 542                                   ;
+; Total fan-out                               ; 10335                                 ;
+; Average fan-out                             ; 3.46                                  ;
++---------------------------------------------+---------------------------------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                                                                                                                                ;
++-------------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------+
+; Compilation Hierarchy Node                      ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                                                                   ; Library Name ;
++-------------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------+
+; |posit_mul_iter                                 ; 2224 (1)          ; 533 (0)      ; 0           ; 0            ; 0       ; 0         ; 114  ; 0            ; |posit_mul_iter                                                                                                                       ; work         ;
+;    |mul_iter_wrapper:u_wrapper|                 ; 2223 (54)         ; 533 (83)     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper                                                                                            ; work         ;
+;       |mul_iter_core:u_core|                    ; 876 (36)          ; 215 (101)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core                                                                       ; work         ;
+;          |iter_ctrl:u_ctrl|                     ; 404 (237)         ; 54 (54)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl                                                      ; work         ;
+;             |sac_step_comb:u_approx|            ; 48 (14)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx                               ; work         ;
+;                |dyn_left_shifter:u_shift|       ; 23 (23)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|dyn_left_shifter:u_shift      ; work         ;
+;                |lod_lzd_core:g_detector.u_lod|  ; 11 (11)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|lod_lzd_core:g_detector.u_lod ; work         ;
+;             |sac_step_comb:u_exact|             ; 119 (17)          ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact                                ; work         ;
+;                |dyn_left_shifter:u_shift|       ; 71 (71)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|dyn_left_shifter:u_shift       ; work         ;
+;                |lod_lzd_core:g_detector.u_lod|  ; 31 (31)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|lod_lzd_core:g_detector.u_lod  ; work         ;
+;          |sbm_accum:u_acc|                      ; 116 (57)          ; 60 (60)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc                                                       ; work         ;
+;             |sbm_accum_comb:u_add|              ; 59 (59)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|sbm_accum_comb:u_add                                  ; work         ;
+;          |sbm_shift_comb:u_shift|               ; 320 (320)         ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_shift_comb:u_shift                                                ; work         ;
+;       |mul_norm_comb:u_norm|                    ; 111 (111)         ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_norm_comb:u_norm                                                                       ; work         ;
+;       |ops_sel_comb:u_ops|                      ; 139 (139)         ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|ops_sel_comb:u_ops                                                                         ; work         ;
+;       |posit_pack:u_pack|                       ; 529 (13)          ; 81 (81)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack                                                                          ; work         ;
+;          |posit_pack_finish:g_rne.u_finish|     ; 119 (119)         ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_finish:g_rne.u_finish                                         ; work         ;
+;          |posit_pack_prepare:u_prepare|         ; 397 (208)         ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare                                             ; work         ;
+;             |dyn_right_shifter:u_payload_shift| ; 189 (189)         ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift           ; work         ;
+;       |posit_parser:u_a|                        ; 259 (149)         ; 78 (78)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_a                                                                           ; work         ;
+;          |dyn_left_shifter:u_align_payload|     ; 80 (80)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_a|dyn_left_shifter:u_align_payload                                          ; work         ;
+;          |lod_lzd_core:u_lod|                   ; 10 (10)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lod                                                        ; work         ;
+;          |lod_lzd_core:u_lzd|                   ; 20 (20)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lzd                                                        ; work         ;
+;       |posit_parser:u_b|                        ; 255 (145)         ; 76 (76)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_b                                                                           ; work         ;
+;          |dyn_left_shifter:u_align_payload|     ; 80 (80)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_b|dyn_left_shifter:u_align_payload                                          ; work         ;
+;          |lod_lzd_core:u_lod|                   ; 10 (10)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lod                                                        ; work         ;
+;          |lod_lzd_core:u_lzd|                   ; 20 (20)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lzd                                                        ; work         ;
++-------------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+---------------------------------------------------------------------------------------------------------------------------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Registers Removed During Synthesis                                                                                                                                ;
++-----------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+; Register name                                                               ; Reason for Removal                                                                  ;
++-----------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+; mul_iter_wrapper:u_wrapper|norm_flags_q[2..4]                               ; Stuck at GND due to stuck port data_in                                              ;
+; mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|meta_sync1 ; Merged with mul_iter_wrapper:u_wrapper|meta_sync1                                   ;
+; mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|meta_sync1                  ; Merged with mul_iter_wrapper:u_wrapper|meta_sync1                                   ;
+; mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|meta_sync1  ; Merged with mul_iter_wrapper:u_wrapper|meta_sync1                                   ;
+; mul_iter_wrapper:u_wrapper|posit_pack:u_pack|meta_sync1                     ; Merged with mul_iter_wrapper:u_wrapper|meta_sync1                                   ;
+; mul_iter_wrapper:u_wrapper|posit_parser:u_a|meta_sync1                      ; Merged with mul_iter_wrapper:u_wrapper|meta_sync1                                   ;
+; mul_iter_wrapper:u_wrapper|posit_parser:u_b|meta_sync1                      ; Merged with mul_iter_wrapper:u_wrapper|meta_sync1                                   ;
+; mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|meta_sync2 ; Merged with mul_iter_wrapper:u_wrapper|meta_sync2                                   ;
+; mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|meta_sync2                  ; Merged with mul_iter_wrapper:u_wrapper|meta_sync2                                   ;
+; mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|meta_sync2  ; Merged with mul_iter_wrapper:u_wrapper|meta_sync2                                   ;
+; mul_iter_wrapper:u_wrapper|posit_pack:u_pack|meta_sync2                     ; Merged with mul_iter_wrapper:u_wrapper|meta_sync2                                   ;
+; mul_iter_wrapper:u_wrapper|posit_parser:u_a|meta_sync2                      ; Merged with mul_iter_wrapper:u_wrapper|meta_sync2                                   ;
+; mul_iter_wrapper:u_wrapper|posit_parser:u_b|meta_sync2                      ; Merged with mul_iter_wrapper:u_wrapper|meta_sync2                                   ;
+; mul_iter_wrapper:u_wrapper|posit_pack:u_pack|g_rne.p1_special_sel_q[2]      ; Merged with mul_iter_wrapper:u_wrapper|posit_pack:u_pack|g_rne.p1_flags_q[2]        ;
+; mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|mode_o                      ; Merged with mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|mode_q ;
+; mul_iter_wrapper:u_wrapper|posit_parser:u_b|p1_valid_q                      ; Merged with mul_iter_wrapper:u_wrapper|posit_parser:u_a|p1_valid_q                  ;
+; mul_iter_wrapper:u_wrapper|posit_parser:u_b|p2_valid_q                      ; Merged with mul_iter_wrapper:u_wrapper|posit_parser:u_a|p2_valid_q                  ;
+; mul_iter_wrapper:u_wrapper|posit_parser:u_b|p2_sf_q[8,9]                    ; Merged with mul_iter_wrapper:u_wrapper|posit_parser:u_b|p2_sf_q[7]                  ;
+; mul_iter_wrapper:u_wrapper|posit_parser:u_a|p2_sf_q[8,9]                    ; Merged with mul_iter_wrapper:u_wrapper|posit_parser:u_a|p2_sf_q[7]                  ;
+; mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|t2_term[55]                 ; Stuck at GND due to stuck port data_in                                              ;
+; mul_iter_wrapper:u_wrapper|norm_frac_q[0]                                   ; Stuck at GND due to stuck port data_in                                              ;
+; mul_iter_wrapper:u_wrapper|ops_q[1]                                         ; Stuck at GND due to stuck port data_in                                              ;
+; mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sf_o[8]                     ; Merged with mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sf_o[9]                 ;
+; Total Number of Removed Registers = 27                                      ;                                                                                     ;
++-----------------------------------------------------------------------------+-------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 533   ;
+; Number of registers using Synchronous Clear  ; 103   ;
+; Number of registers using Synchronous Load   ; 119   ;
+; Number of registers using Asynchronous Clear ; 532   ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 519   ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                                                                                                                     ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                                                                                                           ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------------------------------------------------------+
+; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack|g_rne.p1_special_sel_q[1]                                                               ;
+; 3:1                ; 10 bits   ; 20 LEs        ; 10 LEs               ; 10 LEs                 ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|count_q[2]                                                          ;
+; 3:1                ; 16 bits   ; 32 LEs        ; 16 LEs               ; 16 LEs                 ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|t2_term[45]                                                                          ;
+; 3:1                ; 23 bits   ; 46 LEs        ; 46 LEs               ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|t2_term[23]                                                                          ;
+; 3:1                ; 30 bits   ; 60 LEs        ; 60 LEs               ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|norm_frac_q[20]                                                                                           ;
+; 3:1                ; 11 bits   ; 22 LEs        ; 22 LEs               ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|norm_frac_q[43]                                                                                           ;
+; 4:1                ; 13 bits   ; 26 LEs        ; 13 LEs               ; 13 LEs                 ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_b|p2_frac_q[3]                                                                             ;
+; 4:1                ; 13 bits   ; 26 LEs        ; 13 LEs               ; 13 LEs                 ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_a|p2_frac_q[8]                                                                             ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|t2_term[14]                                                                          ;
+; 4:1                ; 26 bits   ; 52 LEs        ; 52 LEs               ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|y_q[8]                                                                               ;
+; 5:1                ; 3 bits    ; 9 LEs         ; 6 LEs                ; 3 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_b|p2_frac_q[15]                                                                            ;
+; 5:1                ; 5 bits    ; 15 LEs        ; 10 LEs               ; 5 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_b|p2_frac_q[20]                                                                            ;
+; 5:1                ; 3 bits    ; 9 LEs         ; 6 LEs                ; 3 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_a|p2_frac_q[15]                                                                            ;
+; 5:1                ; 5 bits    ; 15 LEs        ; 10 LEs               ; 5 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_a|p2_frac_q[20]                                                                            ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|t2_term[4]                                                                           ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack|g_rne.p1_sticky_bit_q                                                                   ;
+; 6:1                ; 30 bits   ; 120 LEs       ; 120 LEs              ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack|g_rne.p1_mag_trunc_q[26]                                                                ;
+; 6:1                ; 27 bits   ; 108 LEs       ; 54 LEs               ; 54 LEs                 ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|fx_q[3]                                                             ;
+; 6:1                ; 4 bits    ; 16 LEs        ; 12 LEs               ; 4 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_b|p2_frac_q[21]                                                                            ;
+; 6:1                ; 4 bits    ; 16 LEs        ; 12 LEs               ; 4 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_a|p2_frac_q[22]                                                                            ;
+; 6:1                ; 2 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|t2_term[3]                                                                           ;
+; 6:1                ; 30 bits   ; 120 LEs       ; 120 LEs              ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack|g_rne.d_q[3]                                                                            ;
+; 7:1                ; 2 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_b|p2_frac_q[26]                                                                            ;
+; 7:1                ; 2 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_a|p2_frac_q[25]                                                                            ;
+; 8:1                ; 2 bits    ; 10 LEs        ; 8 LEs                ; 2 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_b|p2_sf_q[1]                                                                               ;
+; 8:1                ; 2 bits    ; 10 LEs        ; 8 LEs                ; 2 LEs                  ; Yes        ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_parser:u_a|p2_sf_q[1]                                                                               ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|ShiftLeft0                                                 ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift|g_multi_bit.stage[5][15] ;
+; 4:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift|g_multi_bit.stage[5][5]  ;
+; 4:1                ; 5 bits    ; 10 LEs        ; 10 LEs               ; 0 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|next_scale[1]                                                       ;
+; 5:1                ; 2 bits    ; 6 LEs         ; 6 LEs                ; 0 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift|g_multi_bit.stage[5][2]  ;
+; 6:1                ; 4 bits    ; 16 LEs        ; 12 LEs               ; 4 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|fx_next[15]                                                         ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 9 LEs                ; 3 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|fx_next[16]                                                         ;
+; 7:1                ; 4 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|fx_next[19]                                                         ;
+; 8:1                ; 2 bits    ; 10 LEs        ; 10 LEs               ; 0 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|fx_next[23]                                                         ;
+; 8:1                ; 4 bits    ; 20 LEs        ; 12 LEs               ; 8 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|fx_next[3]                                                          ;
+; 9:1                ; 2 bits    ; 12 LEs        ; 10 LEs               ; 2 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|fx_next[25]                                                         ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 12 LEs               ; 12 LEs                 ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|fx_next[7]                                                          ;
+; 10:1               ; 2 bits    ; 12 LEs        ; 10 LEs               ; 2 LEs                  ; No         ; |posit_mul_iter|mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|fx_next[9]                                                          ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++--------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Top-level Entity: |posit_mul_iter ;
++----------------+-------+-------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                  ;
++----------------+-------+-------------------------------------------------------+
+; NB             ; 32    ; Signed Integer                                        ;
+; ES             ; 2     ; Signed Integer                                        ;
+; FRAC_W         ; 12    ; Signed Integer                                        ;
+; N_MAX          ; 8     ; Signed Integer                                        ;
+; ROUND_SCHEME   ; 0     ; Signed Integer                                        ;
+; ROUND_MODE     ; RNE   ; String                                                ;
+; EXACT_EN       ; 1     ; Unsigned Binary                                       ;
+; OPS_EN         ; 1     ; Unsigned Binary                                       ;
+; N_W            ; 4     ; Signed Integer                                        ;
++----------------+-------+-------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper ;
++----------------+-------+------------------------------------------------+
+; Parameter Name ; Value ; Type                                           ;
++----------------+-------+------------------------------------------------+
+; NB             ; 32    ; Signed Integer                                 ;
+; ES             ; 2     ; Signed Integer                                 ;
+; FRAC_W         ; 12    ; Signed Integer                                 ;
+; N_MAX          ; 8     ; Signed Integer                                 ;
+; ROUND_SCHEME   ; 0     ; Signed Integer                                 ;
+; ROUND_MODE     ; RNE   ; String                                         ;
+; EXACT_EN       ; 1     ; Unsigned Binary                                ;
+; OPS_EN         ; 1     ; Unsigned Binary                                ;
+; F              ; 27    ; Signed Integer                                 ;
+; SF_W           ; 10    ; Signed Integer                                 ;
+; N_W            ; 4     ; Signed Integer                                 ;
+; I_W            ; 5     ; Signed Integer                                 ;
+; ACC_W          ; 56    ; Signed Integer                                 ;
+; FIN            ; 55    ; Signed Integer                                 ;
++----------------+-------+------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_a ;
++----------------+-------+-----------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                            ;
++----------------+-------+-----------------------------------------------------------------+
+; NB             ; 32    ; Signed Integer                                                  ;
+; ES             ; 2     ; Signed Integer                                                  ;
+; FRAC_MAX       ; 27    ; Signed Integer                                                  ;
+; SF_W           ; 10    ; Signed Integer                                                  ;
++----------------+-------+-----------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lod ;
++----------------+-------+------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                               ;
++----------------+-------+------------------------------------------------------------------------------------+
+; N              ; 30    ; Signed Integer                                                                     ;
+; MODE           ; 0     ; Signed Integer                                                                     ;
+; S              ; 5     ; Signed Integer                                                                     ;
++----------------+-------+------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lzd ;
++----------------+-------+------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                               ;
++----------------+-------+------------------------------------------------------------------------------------+
+; N              ; 30    ; Signed Integer                                                                     ;
+; MODE           ; 1     ; Signed Integer                                                                     ;
+; S              ; 5     ; Signed Integer                                                                     ;
++----------------+-------+------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_a|dyn_left_shifter:u_align_payload ;
++----------------+-------+--------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                             ;
++----------------+-------+--------------------------------------------------------------------------------------------------+
+; N              ; 29    ; Signed Integer                                                                                   ;
+; SHIFT_W        ; 5     ; Signed Integer                                                                                   ;
++----------------+-------+--------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_b ;
++----------------+-------+-----------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                            ;
++----------------+-------+-----------------------------------------------------------------+
+; NB             ; 32    ; Signed Integer                                                  ;
+; ES             ; 2     ; Signed Integer                                                  ;
+; FRAC_MAX       ; 27    ; Signed Integer                                                  ;
+; SF_W           ; 10    ; Signed Integer                                                  ;
++----------------+-------+-----------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lod ;
++----------------+-------+------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                               ;
++----------------+-------+------------------------------------------------------------------------------------+
+; N              ; 30    ; Signed Integer                                                                     ;
+; MODE           ; 0     ; Signed Integer                                                                     ;
+; S              ; 5     ; Signed Integer                                                                     ;
++----------------+-------+------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lzd ;
++----------------+-------+------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                               ;
++----------------+-------+------------------------------------------------------------------------------------+
+; N              ; 30    ; Signed Integer                                                                     ;
+; MODE           ; 1     ; Signed Integer                                                                     ;
+; S              ; 5     ; Signed Integer                                                                     ;
++----------------+-------+------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_parser:u_b|dyn_left_shifter:u_align_payload ;
++----------------+-------+--------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                             ;
++----------------+-------+--------------------------------------------------------------------------------------------------+
+; N              ; 29    ; Signed Integer                                                                                   ;
+; SHIFT_W        ; 5     ; Signed Integer                                                                                   ;
++----------------+-------+--------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|ops_sel_comb:u_ops ;
++----------------+-------+-------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                              ;
++----------------+-------+-------------------------------------------------------------------+
+; FRAC_MAX       ; 27    ; Signed Integer                                                    ;
+; FRAC_W         ; 12    ; Signed Integer                                                    ;
+; SF_W           ; 10    ; Signed Integer                                                    ;
+; EXACT_EN       ; 1     ; Unsigned Binary                                                   ;
+; OPS_EN         ; 1     ; Unsigned Binary                                                   ;
+; WIDTH_W        ; 5     ; Signed Integer                                                    ;
++----------------+-------+-------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core ;
++----------------+-------+---------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                ;
++----------------+-------+---------------------------------------------------------------------+
+; FRAC_MAX       ; 27    ; Signed Integer                                                      ;
+; FRAC_W         ; 12    ; Signed Integer                                                      ;
+; N_MAX          ; 8     ; Signed Integer                                                      ;
+; ROUND_SCHEME   ; 0     ; Signed Integer                                                      ;
+; EXACT_EN       ; 1     ; Unsigned Binary                                                     ;
+; SF_W           ; 10    ; Signed Integer                                                      ;
+; S_W            ; 5     ; Signed Integer                                                      ;
+; N_W            ; 4     ; Signed Integer                                                      ;
+; I_W            ; 5     ; Signed Integer                                                      ;
+; ACC_W          ; 56    ; Signed Integer                                                      ;
++----------------+-------+---------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl ;
++----------------+-------+--------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                 ;
++----------------+-------+--------------------------------------------------------------------------------------+
+; FRAC_MAX       ; 27    ; Signed Integer                                                                       ;
+; FRAC_W         ; 12    ; Signed Integer                                                                       ;
+; N_MAX          ; 8     ; Signed Integer                                                                       ;
+; S_W            ; 5     ; Signed Integer                                                                       ;
+; N_W            ; 4     ; Signed Integer                                                                       ;
+; I_W            ; 5     ; Signed Integer                                                                       ;
++----------------+-------+--------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact ;
++----------------+-------+------------------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                       ;
++----------------+-------+------------------------------------------------------------------------------------------------------------+
+; W_X            ; 27    ; Signed Integer                                                                                             ;
+; S_W            ; 5     ; Signed Integer                                                                                             ;
++----------------+-------+------------------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|lod_lzd_core:g_detector.u_lod ;
++----------------+-------+------------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                                                     ;
++----------------+-------+------------------------------------------------------------------------------------------------------------------------------------------+
+; N              ; 27    ; Signed Integer                                                                                                                           ;
+; MODE           ; 0     ; Signed Integer                                                                                                                           ;
+; S              ; 5     ; Signed Integer                                                                                                                           ;
++----------------+-------+------------------------------------------------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|dyn_left_shifter:u_shift ;
++----------------+-------+-------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                                                ;
++----------------+-------+-------------------------------------------------------------------------------------------------------------------------------------+
+; N              ; 27    ; Signed Integer                                                                                                                      ;
+; SHIFT_W        ; 5     ; Signed Integer                                                                                                                      ;
++----------------+-------+-------------------------------------------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx ;
++----------------+-------+-------------------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                        ;
++----------------+-------+-------------------------------------------------------------------------------------------------------------+
+; W_X            ; 12    ; Signed Integer                                                                                              ;
+; S_W            ; 5     ; Signed Integer                                                                                              ;
++----------------+-------+-------------------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|lod_lzd_core:g_detector.u_lod ;
++----------------+-------+-------------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                                                      ;
++----------------+-------+-------------------------------------------------------------------------------------------------------------------------------------------+
+; N              ; 12    ; Signed Integer                                                                                                                            ;
+; MODE           ; 0     ; Signed Integer                                                                                                                            ;
+; S              ; 4     ; Signed Integer                                                                                                                            ;
++----------------+-------+-------------------------------------------------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|dyn_left_shifter:u_shift ;
++----------------+-------+--------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                                                 ;
++----------------+-------+--------------------------------------------------------------------------------------------------------------------------------------+
+; N              ; 12    ; Signed Integer                                                                                                                       ;
+; SHIFT_W        ; 5     ; Signed Integer                                                                                                                       ;
++----------------+-------+--------------------------------------------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_shift_comb:u_shift ;
++----------------+-------+--------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                       ;
++----------------+-------+--------------------------------------------------------------------------------------------+
+; FRAC_MAX       ; 27    ; Signed Integer                                                                             ;
+; FRAC_W         ; 12    ; Signed Integer                                                                             ;
+; ROUND_SCHEME   ; 0     ; Signed Integer                                                                             ;
+; EXACT_EN       ; 1     ; Unsigned Binary                                                                            ;
+; S_W            ; 5     ; Signed Integer                                                                             ;
+; ACC_W          ; 56    ; Signed Integer                                                                             ;
++----------------+-------+--------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc ;
++----------------+-------+-------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                ;
++----------------+-------+-------------------------------------------------------------------------------------+
+; ACC_W          ; 56    ; Signed Integer                                                                      ;
+; I_W            ; 5     ; Signed Integer                                                                      ;
+; ROUND_SCHEME   ; 0     ; Signed Integer                                                                      ;
++----------------+-------+-------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|sbm_accum_comb:u_add ;
++----------------+-------+----------------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                     ;
++----------------+-------+----------------------------------------------------------------------------------------------------------+
+; ACC_W          ; 56    ; Signed Integer                                                                                           ;
+; ROUND_SCHEME   ; 0     ; Signed Integer                                                                                           ;
++----------------+-------+----------------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|mul_norm_comb:u_norm ;
++----------------+-------+---------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                ;
++----------------+-------+---------------------------------------------------------------------+
+; FRAC_MAX       ; 27    ; Signed Integer                                                      ;
+; FRAC_W         ; 12    ; Signed Integer                                                      ;
+; ROUND_SCHEME   ; 0     ; Signed Integer                                                      ;
+; EXACT_EN       ; 1     ; Unsigned Binary                                                     ;
+; ACC_W          ; 56    ; Signed Integer                                                      ;
+; SF_W           ; 10    ; Signed Integer                                                      ;
+; F_IN           ; 55    ; Signed Integer                                                      ;
++----------------+-------+---------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_pack:u_pack ;
++----------------+-------+------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                             ;
++----------------+-------+------------------------------------------------------------------+
+; NB             ; 32    ; Signed Integer                                                   ;
+; ES             ; 2     ; Signed Integer                                                   ;
+; F_IN           ; 55    ; Signed Integer                                                   ;
+; SF_W           ; 10    ; Signed Integer                                                   ;
+; ROUND_MODE     ; RNE   ; String                                                           ;
++----------------+-------+------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare ;
++----------------+-------+-----------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                          ;
++----------------+-------+-----------------------------------------------------------------------------------------------+
+; NB             ; 32    ; Signed Integer                                                                                ;
+; ES             ; 2     ; Signed Integer                                                                                ;
+; F_IN           ; 55    ; Signed Integer                                                                                ;
+; SF_W           ; 10    ; Signed Integer                                                                                ;
++----------------+-------+-----------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift ;
++----------------+-------+---------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                                            ;
++----------------+-------+---------------------------------------------------------------------------------------------------------------------------------+
+; N              ; 60    ; Signed Integer                                                                                                                  ;
+; SHIFT_W        ; 5     ; Signed Integer                                                                                                                  ;
+; ARITH          ; 0     ; Unsigned Binary                                                                                                                 ;
++----------------+-------+---------------------------------------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_finish:g_rne.u_finish ;
++----------------+-------+---------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                              ;
++----------------+-------+---------------------------------------------------------------------------------------------------+
+; NB             ; 32    ; Signed Integer                                                                                    ;
+; ROUND_MODE     ; RNE   ; String                                                                                            ;
++----------------+-------+---------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift" ;
++-------+-------+----------+--------------------------------------------------------------------------------------------------------------+
+; Port  ; Type  ; Severity ; Details                                                                                                      ;
++-------+-------+----------+--------------------------------------------------------------------------------------------------------------+
+; in[0] ; Input ; Info     ; Stuck at GND                                                                                                 ;
++-------+-------+----------+--------------------------------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx"  ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; term_valid ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; sa         ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; exhausted  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact"   ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; term_valid ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; sa         ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; exhausted  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++---------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core"                                               ;
++-----------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port            ; Type   ; Severity ; Details                                                                             ;
++-----------------+--------+----------+-------------------------------------------------------------------------------------+
+; iterations_done ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; state_error     ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++-----------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "mul_iter_wrapper:u_wrapper|ops_sel_comb:u_ops"                                              ;
++--------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port         ; Type   ; Severity ; Details                                                                             ;
++--------------+--------+----------+-------------------------------------------------------------------------------------+
+; active_width ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; swapped      ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; cfg_error    ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++--------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:05     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus II 64-Bit Analysis & Synthesis
+    Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+    Info: Copyright (C) 1991-2013 Altera Corporation. All rights reserved.
+    Info: Your use of Altera Corporation's design tools, logic functions 
+    Info: and other software and tools, and its AMPP partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Altera Program License 
+    Info: Subscription Agreement, Altera MegaCore Function License 
+    Info: Agreement, or other applicable license agreement, including, 
+    Info: without limitation, that your use is for the sole purpose of 
+    Info: programming logic devices manufactured by Altera and sold by 
+    Info: Altera or its authorized distributors.  Please refer to the 
+    Info: applicable agreement for further details.
+    Info: Processing started: Fri Oct 09 06:19:27 2026
+Info: Command: quartus_map multiplier
+Warning (20028): Parallel compilation is not licensed and has been disabled
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/lod_lzd_core.sv
+    Info (12023): Found entity 1: lod_lzd_core
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/dyn_left_shifter.sv
+    Info (12023): Found entity 1: dyn_left_shifter
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/dyn_right_shifter.sv
+    Info (12023): Found entity 1: dyn_right_shifter
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/posit_parser.sv(43)
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/posit_parser.sv(44)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/posit_parser.sv
+    Info (12023): Found entity 1: posit_parser
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/ops_sel_comb.sv
+    Info (12023): Found entity 1: ops_sel_comb
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/sac_step_comb.sv
+    Info (12023): Found entity 1: sac_step_comb
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/sbm_shift_comb.sv
+    Info (12023): Found entity 1: sbm_shift_comb
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/sbm_accum_comb.sv
+    Info (12023): Found entity 1: sbm_accum_comb
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/iter_ctrl.sv(34)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/iter_ctrl.sv
+    Info (12023): Found entity 1: iter_ctrl
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/sbm_accum.sv(36)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/sbm_accum.sv
+    Info (12023): Found entity 1: sbm_accum
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/mul_iter_core.sv(48)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/mul_iter_core.sv
+    Info (12023): Found entity 1: mul_iter_core
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/mul_norm_comb.sv
+    Info (12023): Found entity 1: mul_norm_comb
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/posit_pack_prepare.sv
+    Info (12023): Found entity 1: posit_pack_prepare
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/posit_pack_finish.sv
+    Info (12023): Found entity 1: posit_pack_finish
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/posit_pack.sv(47)
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/posit_pack.sv(48)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/posit_pack.sv
+    Info (12023): Found entity 1: posit_pack
+Warning (10335): Unrecognized synthesis attribute "ASYNC_REG" at ../../../rtl/mul_iter_wrapper.sv(42)
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/mul_iter_wrapper.sv
+    Info (12023): Found entity 1: mul_iter_wrapper
+Info (12021): Found 1 design units, including 1 entities, in source file /hcmut/hk261/do an 2/posit_mac/rtl/posit_mul_iter.sv
+    Info (12023): Found entity 1: posit_mul_iter
+Info (12127): Elaborating entity "posit_mul_iter" for the top level hierarchy
+Info (12128): Elaborating entity "mul_iter_wrapper" for hierarchy "mul_iter_wrapper:u_wrapper"
+Info (12128): Elaborating entity "posit_parser" for hierarchy "mul_iter_wrapper:u_wrapper|posit_parser:u_a"
+Warning (10230): Verilog HDL assignment warning at posit_parser.sv(40): truncated value with size 32 to match size of target (5)
+Info (12128): Elaborating entity "lod_lzd_core" for hierarchy "mul_iter_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lod"
+Info (10008): Verilog HDL or VHDL information: EDA Netlist Writer cannot regroup multidimensional array "tree_pos" into its bus
+Info (12128): Elaborating entity "lod_lzd_core" for hierarchy "mul_iter_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lzd"
+Info (10008): Verilog HDL or VHDL information: EDA Netlist Writer cannot regroup multidimensional array "tree_pos" into its bus
+Info (12128): Elaborating entity "dyn_left_shifter" for hierarchy "mul_iter_wrapper:u_wrapper|posit_parser:u_a|dyn_left_shifter:u_align_payload"
+Info (12128): Elaborating entity "ops_sel_comb" for hierarchy "mul_iter_wrapper:u_wrapper|ops_sel_comb:u_ops"
+Info (12128): Elaborating entity "mul_iter_core" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core"
+Info (12128): Elaborating entity "iter_ctrl" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl"
+Warning (10230): Verilog HDL assignment warning at iter_ctrl.sv(48): truncated value with size 32 to match size of target (5)
+Info (12128): Elaborating entity "sac_step_comb" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact"
+Warning (10230): Verilog HDL assignment warning at sac_step_comb.sv(29): truncated value with size 32 to match size of target (6)
+Info (12128): Elaborating entity "lod_lzd_core" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|lod_lzd_core:g_detector.u_lod"
+Info (10008): Verilog HDL or VHDL information: EDA Netlist Writer cannot regroup multidimensional array "tree_pos" into its bus
+Info (12128): Elaborating entity "dyn_left_shifter" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|dyn_left_shifter:u_shift"
+Info (12128): Elaborating entity "sac_step_comb" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx"
+Warning (10230): Verilog HDL assignment warning at sac_step_comb.sv(29): truncated value with size 32 to match size of target (6)
+Info (12128): Elaborating entity "lod_lzd_core" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|lod_lzd_core:g_detector.u_lod"
+Info (10008): Verilog HDL or VHDL information: EDA Netlist Writer cannot regroup multidimensional array "tree_pos" into its bus
+Info (12128): Elaborating entity "dyn_left_shifter" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|dyn_left_shifter:u_shift"
+Info (12128): Elaborating entity "sbm_shift_comb" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_shift_comb:u_shift"
+Info (12128): Elaborating entity "sbm_accum" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc"
+Info (12128): Elaborating entity "sbm_accum_comb" for hierarchy "mul_iter_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|sbm_accum_comb:u_add"
+Info (12128): Elaborating entity "mul_norm_comb" for hierarchy "mul_iter_wrapper:u_wrapper|mul_norm_comb:u_norm"
+Info (12128): Elaborating entity "posit_pack" for hierarchy "mul_iter_wrapper:u_wrapper|posit_pack:u_pack"
+Info (12128): Elaborating entity "posit_pack_prepare" for hierarchy "mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare"
+Warning (10230): Verilog HDL assignment warning at posit_pack_prepare.sv(34): truncated value with size 64 to match size of target (32)
+Info (12128): Elaborating entity "dyn_right_shifter" for hierarchy "mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift"
+Info (12128): Elaborating entity "posit_pack_finish" for hierarchy "mul_iter_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_finish:g_rne.u_finish"
+Info (286030): Timing-Driven Synthesis is running
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Info (21057): Implemented 2456 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 75 input pins
+    Info (21059): Implemented 39 output pins
+    Info (21061): Implemented 2342 logic cells
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 14 warnings
+    Info: Peak virtual memory: 4600 megabytes
+    Info: Processing ended: Fri Oct 09 06:19:35 2026
+    Info: Elapsed time: 00:00:08
+    Info: Total CPU time (on all processors): 00:00:07
+
+

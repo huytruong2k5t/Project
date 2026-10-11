@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.6 — 2026-10-11 — Baseline nội bộ non-fused và so sánh fused, lịch trước05/12 |
+| Phiên bản | v1.7 — 2026-10-11 — Chốt FLOOR/RNE prepack và đóng băng L1 |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -24,6 +24,8 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.5 | 2026-10-07 | Triển khai packer tổ hợp và pipeline RNE2/TRUNC1; khóa F_IN/adapter; sửa pre-clamping minpos thành sf<-SF_MAX theo L1 để giữ RNE tại đúng biên. Bằng chứng tuần8 tại results/packer/; khảo sát PPA packer riêng tại results/packer_ppa/, chưa nghiệm thu MAC tích hợp hoặc Gate4. |
 
 | v1.6 | 2026-10-11 | Chuyển mục tiêu so sánh sang baseline nội bộ MAC v1 vs fused v2; AC03/AC06 cập nhật, fused trở thành hạng mục chính; bảo toàn hợp đồng số học đã nghiệm thu và ma trận kiểm cuối. |
+
+| v1.7 | 2026-10-11 | Chốt profile nhân FLOOR/RNE, exporter tích prepack và metadata; kiểm độc lập Linux/Windows/UBSan, đóng băng L1 hiện có; fused signed residual còn theo mốc riêng. |
 
 **Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Các phần khác dẫn chiếu, không đặt thêm quy tắc khác cho cùng hành vi.
 
@@ -1434,7 +1436,7 @@ Quyết định này cập nhật ưu tiên các phần kế hoạch cũ: TableI
 
 Baseline chính là **MAC v1 non-fused normative**, biến thể là **MAC v2 fused**. Lõi nhân tuần9 tái sử dụng theo SPEC, không gọi là RTL gốc của [P]. Paper giữ vai trò nguồn kiến trúc/thảo luận và các thí nghiệm lịch sử; thiếu provenance không chặn các mốc mới. Không kết luận paper sai từ việc không tái hiện được.
 
-Profile so sánh chính dự kiến: NB32/ES3, FRAC_W12, RNE, FLOOR, OPS1; kiểm các n hợp lệ0..8, báo paired results cho n2/4/8 trước rồi bổ sung sweep đầy đủ. Chốt trong tuần10 trước đo; format32/ES2 là kiểm bổ trợ có SoftPosit. Các format/feature đã nghiệm thu ở multiplier giữ nguyên trạng thái; không tự suy chúng đã được triển khai/kiểm trong fused. TRUNC/JAM và exact fused rộng là khảo sát bổ sung sau profile chính.
+Profile nhân so sánh đã chốt11/10: NB32/ES3, FRAC_W12, RNE, FLOOR, OPS1, N_MAX8; kiểm các n hợp lệ0..8, báo paired results cho n2/4/8 trước rồi bổ sung sweep đầy đủ. Tích prepack theo SPEC§11.9; matrix fused/corpus đánh giá còn chốt trước đo; format32/ES2 là kiểm bổ trợ có SoftPosit. Các format/feature đã nghiệm thu ở multiplier giữ nguyên trạng thái; không tự suy chúng đã được triển khai/kiểm trong fused. TRUNC/JAM và exact fused rộng là khảo sát bổ sung sau profile chính.
 
 Gọi P_hat là tích xấp xỉ **trước pack** từ cùng hợp đồng nhân: NF=R(R(P_hat)+C); F=R(P_hat+C), với R là RNE về cùng Posit. Khi RTL F có cửa sổ hữu hạn W, L1 phải mô hình đầy đủ từng cut và phần dư có dấu; phải báo sai số cửa sổ riêng, không ngầm coi F_W là R(A×B+C) exact. Muốn cô lập tác động rounding phải có reference phần mềm dùng chung P_hat đủ chính xác và báo khác biệt do W. Không lấy tích đã pack của NF làm input F rồi gọi là fused.
 
@@ -1447,4 +1449,28 @@ So PPA cùng part/speed-grade/tool, clock/I/O constraints và chính sách DSP/B
 Pilot đo100.000 triple/profile; phép so chính tối thiểu1.000.000 triple/profile trên corpus paired đã đóng băng, kèm các ca phân tầng/triệt tiêu. Đây là số mẫu đánh giá kiến trúc, **không thay ngưỡng kiểm đúng AC01/AC02/§6.7**. Fused chọn ma trận bắt buộc riêng trong tuần10–12: RNE/profile chính, n0..8 và control/flags theo contract; chốt trước khi chạy, không giảm sau khi thấy FAIL. AC04 cuối vẫn line≥95%,branch≥90%,toggle≥85% và functional bins; coverage Gate2 milestone chưa đồng nghĩa đã đạt AC04 cuối.
 
 Tính mới cần trình bày là hiện thực và kiểm chứng hai kiến trúc trên cùng multiplier lặp, xử lý width/cut/đuôi có dấu, phân tích đánh đổi bằng thực nghiệm và khả năng tái lập. Fused arithmetic có trước; không gọi việc thêm fused là thuật toán mới nếu chưa có cải tiến cụ thể và so sánh nguồn. Nguồn định nghĩa single-round FMA: https://www.gnu.org/software/c-intro-and-ref/manual/html_node/Fused-Multiply_002dAdd.html; SoftPosit có fused-multiply-add: https://www.posithub.org/khub_community.
+
+### 11.9. Hợp đồng tích prepack FLOOR/RNE và checkpoint L1 — 11/10/2026
+
+**Đã chốt** profile `L1_FLOOR_RNE_PREPACK_V1`: NB32/ES3,FRAC_W12,N_MAX8,OPS1 (min-popcount/tie-A),ROUND_SCHEME=FLOOR,ROUND_MODE=RNE. cfg_n đếm fraction, hidden riêng; n=0 chỉ hidden, n>8 bị từ chối. Đây là cấu hình so sánh chính; không đổi mặc định IterConfig legacy (OPS0/TRUNC) hoặc profile research. API chọn tường minh `floor_rne_profile(n)` và `FloorRneMultiplier`.
+
+Với hữu hạn khác0: P_hat=(-1)^sign * magnitude * 2^(scale-fractional_bits). `scale=sf_A+sf_B` trước normalization; magnitude chứa hidden/carry, chưa pack, chưa saturate và chưa round về Posit. Scale signed11 bit đủ cho cấu hình32/3 (tổng scale hữu hạn[-480,480]); L1 lưu int32_t. Không suy ES3 là scale3 bit.
+
+| Trường PrepackProduct | Nghĩa và quy tắc |
+| --- | --- |
+| magnitude | Accumulator unsigned trước mul_norm; FLOOR giữ tổng từng số hạng đã cắt. Không lấy lại từ parse(bits) |
+| fractional_bits / magnitude_bits | Q và độ rộng hữu ích Q+2. FLOOR Q12/14 bit; exact Q52/54 bit ở32/3; JAM Q14/16 bit là profile phụ, không đóng băng cho fused |
+| sign / scale | Dấu A XOR B và scale chưa chuẩn hóa; mantissa không bắt buộc trong[1,2) |
+| is_nar / is_zero | NaR ưu tiên Zero; special magnitude=0,scale=0,sign=0,sticky=0; Q/width vẫn mô tả config nhưng công thức hữu hạn không áp cho NaR |
+| numerical_sticky | Với FLOOR luôn0: phần đã bỏ trong thuật toán không còn thuộc P_hat. JAM sticky chỉ thông báo, không định lượng residual; không được dùng nó để suy exact fused |
+| input_cut / iteration_cut / term_cut | Ba loại mất thông tin: cut input, fraction còn sau n, cut từng term. Là metadata, không đưa vào GRS của P_hat. `IterResult.approx_cut` legacy vẫn chỉ phần iteration, không tự đổi semantics flags |
+| iterations / remaining_fx | Giữ trong IterResult; đếm và trace kiểm trước/sau mỗi term |
+
+Mapping RTL hiện hành: FLOOR export magnitude=acc>>2,Q12 vì hai bit thấp là padding0; exact export acc,Q52; JAM acc,Q14. ACC_W vật lý32/3 với EXACT_EN1 là54 bit (EXACT_EN0 approximate-only16 bit), khác độ rộng hữu ích14 bit FLOOR. Giới hạn64 bit của L1 an toàn cho các format đã nghiệm thu; không tuyên bố arbitrary NB/ES.
+
+NF=R(R(P_hat)+C); reference F=R(P_hat+C). FLOOR loss được ghi vào metadata và không khôi phục bằng numerical_tail. Phần dư phát sinh khi căn C với P_hat phải có dấu và oracle integer/rational giữ đủ; `acc=0` chưa bảo đảm sum0 khi còn residual. Cửa sổ F hữu hạn phải có hợp đồng riêng trước RTL; chưa chốt ACC_WIN/jam/borrow của F trong checkpoint này. Nếu stream term thẳng vào C, phải chứng minh cùng P_hat và đúng thứ tự cut; cut sau căn chỉnh không tự tương đương cut trước căn chỉnh. Các shortcut chọn mốc/sticky §5.12 còn là sketch cần kiểm, không nghiệm thu bằng checkpoint prepack.
+
+Kiểm đã chạy: Linux và Windows mỗi bản17.184.416 kiểm,2.097.703 kiểm trace từng term,99.641 exact/RNE so oracle integer/bit-list độc lập; trong đó16.777.216 cặp Q12 vét cạn ở n2/OPS1. Random/corner bốn format bao n0..8,OPS0/1,FLOOR/JAM,RNE/TRUNC,exact/approx; không phải vét cạn tất cả config. UBSan smoke51.296 kiểm đạt; MAC regression264.000 và round_unpacked4.954.184 kiểm đạt. Replay32.000 payload dòng pilot lịch sử khớp hoàn toàn sau chuẩn hóa LF/CRLF. Mismatch0; seed test20261011, generator20261009.
+
+Checkpoint đóng băng **L1 hiện có và giao diện tích**, không phải L1 fused đã hoàn thiện hoặc RTL fused. Bằng chứng/hash/source/compiler/commands tại `results/l1_floor_rne_freeze/{summary.json,frozen_sources.sha256}`; code `prepack_product.hpp`, `floor_rne_profile.hpp`, exporter trong `l1_multiplier_iter.hpp`. Không sửa RTL/số học/default; Gate2 lịch sử giữ checkpoint nguồn cũ, không gọi đây là rerun16,8M RTL. Sau thay source phải kiểm lại trước tạo checkpoint mới; audit mặc định từ chối source hash đổi, `--refreeze` chỉ dùng sau review/test và giữ lịch sử Git.
 

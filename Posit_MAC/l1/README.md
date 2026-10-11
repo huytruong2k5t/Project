@@ -963,3 +963,7 @@ Coverage chức năng đạt256/256 bin posit32, min4104 mẫu/bin,26241 operand
 
 Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.json`; hướng dẫn tái lập và giải thích phạm vi tại PLAN L1 mục7.11. Những mục processing trước đây là lịch sử. Ma trận cuối SPEC§6.7, tuần10 adder/tuần11 MAC-Gate3 và PPA/Gate4 còn mở; provenance/TableI giữ processing, không chạy lại TableI trong phiên này.
 
+## 27. L1 FLOOR/RNE prepack đã đóng băng — 11/10/2026
+
+Hợp đồng và giới hạn tại SPEC§11.9; cách kiểm tại PLAN§8.1. Bản ghi PrepackProduct là dữ liệu trước normalization/pack, không phải parse(output). Profile chính NB32/ES3/F12/OPS1/FLOOR/RNE,n0..8; mặc định legacy giữ nguyên. Linux/Windows mỗi bản17.184.416 kiểm,0 mismatch,UBSan smoke đạt. Bằng chứng/hash/compiler/lệnh tại results/l1_floor_rne_freeze/summary.json. Chỉ L1 hiện có và tích được freeze; fused signed alignment/residual chưa được nghiệm thu.
+

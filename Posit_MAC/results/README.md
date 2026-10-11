@@ -58,3 +58,8 @@ Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.jso
 
 
 Sau nghiệm thu10/10 đã dọn 2579.15 MiB gồm fixture phân tầng vừa sinh và bản sao nguồn/cache Verilator. Giữ raw coverage, mọi log PASS/hash/report và fixture pilot/corner nhỏ. Danh mục tại `week9_implementation/gate2_cleanup_manifest.json`. Audit cần fixture/snapshot phải sinh lại và build theo PLAN7.11; thiếu file không được coi là PASS.
+
+## 5. Checkpoint L1 FLOOR/RNE — 11/10/2026
+
+`l1_floor_rne_freeze/summary.json` và `frozen_sources.sha256` giữ profile/source/compiler/seed/lệnh. Logs Linux/Windows/UBSan, regression và normalized SHA pilot là bằng chứng. Binary và fixture replay là sản phẩm có thể build/sinh lại, không đưa vào Git; replay dùng generator 2000 dòng/profile và so final_pilot đóng băng. Hợp đồng tại SPEC§11.9, lệnh/checker PLAN§8.1. Chưa có L1/RTL fused được nghiệm thu.
+

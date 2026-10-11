@@ -2,6 +2,15 @@ CXX ?= g++
 CXXFLAGS = -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0
 WIN_CXX = x86_64-w64-mingw32-g++
 
+test_prepack_product: test/test_prepack_product.cpp include/*.hpp ../tb/week9_exact_reference.hpp
+	$(CXX) $(CXXFLAGS) -Werror $< -o $@
+
+test_prepack_product.exe: test/test_prepack_product.cpp include/*.hpp ../tb/week9_exact_reference.hpp
+	$(WIN_CXX) $(CXXFLAGS) -Werror -static-libgcc -static-libstdc++ $< -o $@
+
+test_prepack_product_ubsan: test/test_prepack_product.cpp include/*.hpp ../tb/week9_exact_reference.hpp
+	$(CXX) -O1 -g -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude $< -o $@
+
 WEEK9_GENERATORS = gen_week9_arithmetic gen_week9_core gen_week9_paper gen_paper_top test_paper_contract_audit
 $(WEEK9_GENERATORS): %: test/%.cpp include/*.hpp
 	$(CXX) $(CXXFLAGS) -Werror $< -o $@

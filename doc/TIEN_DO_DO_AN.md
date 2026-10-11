@@ -3,7 +3,7 @@
 **Ngày cập nhật:** 11/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.6](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
+**Tài liệu chi tiết:** [SPEC v1.7](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -37,7 +37,7 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 1 | Tài liệu và nền tảng dự án | processing | Đã có đặc tả, kế hoạch và khung dự án; còn hoàn thiện lint/luồng tự động |
 | 2 | Mô hình tham chiếu L0 | ✅ | SoftPosit đã build và kiểm thử đạt |
 | 3 | L1 số học chính xác — Gate1 | ✅ | Parser/packer, nhân exact và round đã nghiệm thu |
-| 4 | L1 nhân lặp và nghiên cứu bài báo | processing | Chức năng đã kiểm; provenance/TableI chưa đạt, giữ nghiên cứu phụ không chặn NF/F |
+| 4 | L1 nhân lặp và hợp đồng tích nội bộ | ✅ | FLOOR/RNE prepack đã chốt, kiểm độc lập và đóng băng; provenance/TableI lưu nghiên cứu phụ, fused còn theo tuần12 |
 | 5 | L1 bộ cộng | ✅ | Đã triển khai và kiểm chứng đạt |
 | 6 | L1 MAC — Gate1B | ✅ | MAC v0/v1, tích lũy và API đạt kiểm chứng Linux/Windows |
 | 7 | RTL giải mã và khối cơ sở | ✅ | LOD/LZD, hai shifter và parser tổ hợp/pipeline kiểm chứng đơn vị đạt |
@@ -137,7 +137,8 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 
 | STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
 | --- | --- | --- | --- |
-| 1 | Chuyển baseline và sắp lại timeline | Chốt non-fused đối chứng/fused biến thể; giữ Gate2, đồng bộ SPEC v1.6/PLAN. Lịch chính đến29/11, đệm trước05/12; chưa viết RTL mới | ✅ |
+| 1 | Chuyển baseline và sắp lại timeline | Chốt non-fused đối chứng/fused biến thể; giữ Gate2, đồng bộ SPEC/PLAN. Lịch chính đến29/11, đệm trước05/12; chưa viết RTL mới | ✅ |
+| 2 | Chốt tích nội bộ và đóng băng L1 — tuần4 | FLOOR/RNE prepack đã kiểm Linux/Windows/UBSan và regression đạt,0 mismatch; dữ liệu cũ không đổi. Fused signed residual chưa triển khai | ✅ |
 
 ### 4.11. Mẫu cập nhật tiếp theo
 

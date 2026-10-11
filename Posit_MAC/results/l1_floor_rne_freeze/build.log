@@ -1,0 +1,8 @@
+make: Entering directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/l1'
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -Werror test/test_prepack_product.cpp -o test_prepack_product
+x86_64-w64-mingw32-g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -Werror -static-libgcc -static-libstdc++ test/test_prepack_product.cpp -o test_prepack_product.exe
+g++ -O1 -g -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -Iinclude test/test_prepack_product.cpp -o test_prepack_product_ubsan
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 -Werror test/gen_week9_multiplier.cpp -L../l0 -lsoftposit -Wl,-rpath,'$ORIGIN/../l0' -o gen_week9_multiplier
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_mac_gate1b.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -o test_mac_gate1b
+g++ -O3 -std=c++17 -Wall -Wextra -Iinclude -I../l0 test/test_round_unpacked.cpp -L../l0 -lsoftposit -Wl,-rpath,../l0 -lm -o test_round_unpacked
+make: Leaving directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/l1'

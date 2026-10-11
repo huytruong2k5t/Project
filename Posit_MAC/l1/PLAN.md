@@ -1,6 +1,6 @@
 # Kế hoạch Triển khai Mô hình Thuật toán L1 (C++ Golden Model)
 
-**Hợp đồng tích hợp08/10, cập nhật phạm vi11/10/2026 — SPEC v1.6:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7 (trạng thái10/10/2026). Gate2 multiplier đã nghiệm thu theo mục7.11; MAC RTL chưa nghiệm thu. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
+**Hợp đồng tích hợp08/10, cập nhật phạm vi11/10/2026 — SPEC v1.7:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7 (trạng thái10/10/2026). Gate2 multiplier đã nghiệm thu theo mục7.11; MAC RTL chưa nghiệm thu. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
 
 > **Mục tiêu**: Xây dựng mô hình thuật toán C++ L1 (`l1/`) mô phỏng trung thực 100% từng bước biến đổi dữ liệu của vi kiến trúc phần cứng Posit MAC, tham số hóa theo `template <int NB, int ES, int FRAC_W>`, đóng vai trò làm thước đo chân lý bit-exact (AC-01) cho RTL SystemVerilog, vượt qua các cổng kiểm chuẩn nghiêm ngặt **Gate 1 (Tuần 3)** và **Gate 1B (Tuần 6)** theo [SPEC_Posit_MAC_IP.md](../SPEC_Posit_MAC_IP.md).
 
@@ -468,7 +468,7 @@ Theo lựa chọn của sinh viên: ưu tiên hoàn thành trước05/12/2026; �
 
 Baseline chính là **MAC v1 non-fused normative**, biến thể là **MAC v2 fused**. Lõi nhân tuần9 tái sử dụng theo SPEC, không gọi là RTL gốc của [P]. Paper giữ vai trò nguồn kiến trúc/thảo luận và các thí nghiệm lịch sử; thiếu provenance không chặn các mốc mới. Không kết luận paper sai từ việc không tái hiện được.
 
-Profile so sánh chính dự kiến: NB32/ES3, FRAC_W12, RNE, FLOOR, OPS1; kiểm các n hợp lệ0..8, báo paired results cho n2/4/8 trước rồi bổ sung sweep đầy đủ. Chốt trong tuần10 trước đo; format32/ES2 là kiểm bổ trợ có SoftPosit. Các format/feature đã nghiệm thu ở multiplier giữ nguyên trạng thái; không tự suy chúng đã được triển khai/kiểm trong fused. TRUNC/JAM và exact fused rộng là khảo sát bổ sung sau profile chính.
+Profile nhân so sánh đã chốt11/10: NB32/ES3, FRAC_W12, RNE, FLOOR, OPS1, N_MAX8; kiểm các n hợp lệ0..8, báo paired results cho n2/4/8 trước rồi bổ sung sweep đầy đủ. Tích prepack theo SPEC§11.9; matrix fused/corpus đánh giá còn chốt trước đo; format32/ES2 là kiểm bổ trợ có SoftPosit. Các format/feature đã nghiệm thu ở multiplier giữ nguyên trạng thái; không tự suy chúng đã được triển khai/kiểm trong fused. TRUNC/JAM và exact fused rộng là khảo sát bổ sung sau profile chính.
 
 Gọi P_hat là tích xấp xỉ **trước pack** từ cùng hợp đồng nhân: NF=R(R(P_hat)+C); F=R(P_hat+C), với R là RNE về cùng Posit. Khi RTL F có cửa sổ hữu hạn W, L1 phải mô hình đầy đủ từng cut và phần dư có dấu; phải báo sai số cửa sổ riêng, không ngầm coi F_W là R(A×B+C) exact. Muốn cô lập tác động rounding phải có reference phần mềm dùng chung P_hat đủ chính xác và báo khác biệt do W. Không lấy tích đã pack của NF làm input F rồi gọi là fused.
 
@@ -487,4 +487,21 @@ Tính mới cần trình bày là hiện thực và kiểm chứng hai kiến tr
 NF contract/adder → NF RTL/Gate3 → F L1/oracle → F RTL → paired regression → PPA → báo cáo. Bước ngay tiếp theo là W10-01: chốt giao diện adder và matrix so sánh, chuẩn bị vector carry/borrow/triệt tiêu/round; sau đó RTL adder theo Digital Design Guidelines. Lập lịch không đồng nghĩa đã viết RTL mới.
 
 Dừng dò baseline gốc/TableI trong đường găng; chỉ mở lại khi có source/trace tác giả hoặc yêu cầu riêng. Không tự điều chỉnh seed để đạt số liệu paper. Cuối tuần12 phải kiểm khả năng P&R và chốt W; nếu vướng oracle/cancellation, giảm khảo sát phụ (ASIC, FP32/FP16, TRUNC/JAM, exact fused toàn miền, chồng lấn), giữ hai bản và tính đúng ở profile chính. Không gọi fused hoàn thành khi còn mismatch. Nếu mốc bắt buộc không đạt, báo ngay phạm vi thiếu và ảnh hưởng đến hạn; không đổi nhãn nghiệm thu để giữ lịch.
+
+### 8.1. Checkpoint FLOOR/RNE prepack — 11/10/2026
+
+Profile chính đã khóa tại SPEC§11.9, chọn tường minh qua `floor_rne_profile(n)`; không đổi API legacy. Exporter giữ magnitude/scale/Q trước mul_norm/pack, metadata cut tách khỏi numerical sticky. Linux/Windows17.184.416 kiểm mỗi bản khớp, UBSan smoke đạt; MAC/round regression và32.000 payload pilot cũ không đổi. Hash đóng băng tại results/l1_floor_rne_freeze/summary.json. Mốc W4 mới “hợp đồng nhân và tích nội bộ” đã kiểm; research TableI chưa xác nhận và được giữ riêng.
+
+Đóng băng này không nghiệm thu L1 fused/căn chỉnh C/đuôi có dấu hoặc MAC RTL. Bước tiếp theo vẫn adder/NF/Gate3; L1 F cần oracle riêng và chính sách cửa sổ/cancellation trước RTL.
+
+Tái kiểm từ Posit_MAC, WSL với TMPDIR trong dự án và LD_LIBRARY_PATH trỏ l0/l1:
+
+```sh
+make -C l1 test_prepack_product test_prepack_product.exe test_prepack_product_ubsan
+./l1/test_prepack_product
+./l1/test_prepack_product_ubsan --smoke
+python3 scripts/audit_l1_floor_rne.py
+```
+
+Windows chạy l1/test_prepack_product.exe; audit còn cần log Linux/Windows, regression và fixture replay. Không xóa fixture replay trước audit. Source đổi thì audit từ chối; không dùng --refreeze để bỏ qua test lỗi.
 

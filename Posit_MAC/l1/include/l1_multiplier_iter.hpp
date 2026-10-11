@@ -7,6 +7,7 @@
 #include "sac.hpp"
 #include "sbm.hpp"
 #include "mul_norm.hpp"
+#include "prepack_product.hpp"
 namespace l1 {
 struct IterConfig {
     bool exact = false;
@@ -22,6 +23,7 @@ template<int NB, int ES> struct IterResult {
     bool swapped = false, approx_cut = false, input_cut = false;
     bool inexact = false, saturated = false;
     uint64_t remaining_fx = 0;
+    PrepackProduct prepack{};
 };
 template<int NB, int ES, unsigned FRAC_W = 12, unsigned N_MAX = 8,
          bool EXACT_EN = true, bool OPS_EN = true>
@@ -46,12 +48,18 @@ public:
         if (trace) trace->clear();
         auto ua = parse<NB, ES>(a), ub = parse<NB, ES>(b);
         IterResult<NB, ES> result;
+        const unsigned w = cfg.exact ? F : FRAC_W;
+        const unsigned q = cfg.exact ? 2 * F :
+            w + (cfg.scheme == ShiftRound::STICKY_ACC ? 2 : 0);
+        result.prepack.fractional_bits = q;
+        result.prepack.magnitude_bits = q + 2;
         if (ua.is_nar || ub.is_nar || ua.is_zero || ub.is_zero) {
             result.bits = (ua.is_nar || ub.is_nar) ? storage_t(uint64_t(1) << (NB - 1)) : 0;
             result.unpacked = parse<NB, ES>(result.bits);
+            result.prepack.is_nar = result.unpacked.is_nar;
+            result.prepack.is_zero = result.unpacked.is_zero;
             return result;
         }
-        const unsigned w = cfg.exact ? F : FRAC_W;
         const uint64_t mask = (uint64_t(1) << w) - 1;
         uint64_t xa = (ua.frac >> (63 - w)) & mask;
         uint64_t xb = (ub.frac >> (63 - w)) & mask;
@@ -60,7 +68,6 @@ public:
         result.swapped = ops_swap(xa, xb, cfg.ops);
         if (result.swapped) std::swap(xa, xb);
         SacState sac(xa, w);
-        const unsigned q = cfg.exact ? 2 * F : w + (cfg.scheme == ShiftRound::STICKY_ACC ? 2 : 0);
         SbmState sbm((uint64_t(1) << w) | xb, w, q);
         const unsigned limit = cfg.exact ? F : cfg.n;
         bool floor_tail = false;
@@ -73,6 +80,13 @@ public:
         result.iterations = sac.iterations;
         result.remaining_fx = sac.fx;
         result.approx_cut = sac.fx != 0;
+        result.prepack.magnitude = sbm.acc;
+        result.prepack.scale = ua.sf + ub.sf;
+        result.prepack.sign = ua.sign ^ ub.sign;
+        result.prepack.numerical_sticky = sbm.sticky;
+        result.prepack.input_cut = result.input_cut;
+        result.prepack.iteration_cut = result.approx_cut;
+        result.prepack.term_cut = !cfg.exact && floor_tail;
         // Input truncation and omitted terms are algorithmic approximations;
         // only SBM's numerical tail participates in final RNE sticky.
         result.unpacked = mul_norm<NB, ES>(sbm.acc, q, ua.sf + ub.sf,

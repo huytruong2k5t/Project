@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.5 — 2026-10-07 — Packer RTL tổ hợp/pipeline, giao diện fraction và nghiệm thu tuần8 |
+| Phiên bản | v1.6 — 2026-10-11 — Baseline nội bộ non-fused và so sánh fused, lịch trước05/12 |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -23,6 +23,8 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.4 | 2026-10-06 | Phân biệt số hạng thanh ghi/latency/handshake; khóa profile RTL và n; chốt reset bridge, lịch core n=0/early termination; cập nhật mục 11 và tài liệu phụ. Bổ sung ranh giới packer RNE P1/P2 ở §5.9-D; chưa nghiệm thu RTL tích hợp hoặc PPA. |
 | v1.5 | 2026-10-07 | Triển khai packer tổ hợp và pipeline RNE2/TRUNC1; khóa F_IN/adapter; sửa pre-clamping minpos thành sf<-SF_MAX theo L1 để giữ RNE tại đúng biên. Bằng chứng tuần8 tại results/packer/; khảo sát PPA packer riêng tại results/packer_ppa/, chưa nghiệm thu MAC tích hợp hoặc Gate4. |
 
+| v1.6 | 2026-10-11 | Chuyển mục tiêu so sánh sang baseline nội bộ MAC v1 vs fused v2; AC03/AC06 cập nhật, fused trở thành hạng mục chính; bảo toàn hợp đồng số học đã nghiệm thu và ma trận kiểm cuối. |
+
 **Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Các phần khác dẫn chiếu, không đặt thêm quy tắc khác cho cùng hành vi.
 
 ---
@@ -31,7 +33,7 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 
 ### 1.1 Mục tiêu
 
-Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham số hóa, trong đó phép nhân là **nhân xấp xỉ dạng lặp dịch-cộng** (theo [P], kế thừa [15]) với số vòng lặp `n` chọn được lúc chạy, kèm môi trường kiểm chứng tự động bit-accurate với SoftPosit, và bộ số liệu PPA có thể tái lập so với baseline IEEE-754 FP32/FP16.
+Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham số hóa, trong đó phép nhân là **nhân xấp xỉ dạng lặp dịch-cộng** (theo [P], kế thừa [15]) với số vòng lặp `n` chọn được lúc chạy, kèm môi trường kiểm chứng tự động bit-accurate với SoftPosit, và bộ số liệu accuracy/PPA tái lập giữa MAC v1 non-fused (baseline nội bộ) và MAC v2 fused. FP32/FP16 là đối chứng bổ sung khi có thời gian; không yêu cầu tái hiện RTL gốc tác giả để đóng mục tiêu này.
 
 ### 1.2 Phạm vi
 
@@ -41,7 +43,7 @@ Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham
 - Các khối: Parser, Operand Selector (OPS), Shift Amount Calculator (SAC), Shift-Based Multiplier (SBM) + bộ điều khiển lặp, Posit Adder, Rounder/Packer, MAC top.
 - Ba tầng đối chiếu L0 SoftPosit, L1 mô hình thuật toán và Ideal; RTL là thiết kế được kiểm chứng (§6.1).
 - Testbench tự động, coverage, hồi quy, thống kê sai số (Error Rate, MSE, max error).
-- Tổng hợp/P&R Vivado theo **chính sách bậc thang thiết bị (§7.6)**: Ưu tiên UltraScale+ D0 (`xcvu9p`) hoặc D1 (miễn phí), có đường đối chiếu tỉ lệ trên 7-Series D2 (`xc7a100t`) và luồng mã nguồn mở D3/D4; so sánh công bằng với FP32/FP16 MAC.
+- Tổng hợp/P&R Vivado theo **chính sách bậc thang thiết bị (§7.6)**: Ưu tiên UltraScale+ D0 (`xcvu9p`) hoặc D1 (miễn phí), có đường đối chiếu tỉ lệ trên 7-Series D2 (`xc7a100t`) và luồng mã nguồn mở D3/D4; so sánh công bằng giữa NF/F; FP32/FP16 MAC là đối chứng bổ sung.
 - **Chiến lược phân kỳ hiện thực (Staged Implementation Strategy)**:
   - *Giai đoạn 1 (Baseline - Hoàn thành trước Gate 3)*: Hoàn thiện lõi MAC **đơn lẻ cô lập**; exact/RNE khớp L0, approx khớp L1. Bắt tay, giữ đầu ra khi bị chặn và xử lý Zero/NaR đúng là bắt buộc từ giai đoạn này.
   - *Giai đoạn 2 (Advanced Optimization - Tích hợp sau Gate 3)*: Kích hoạt các kỹ thuật tối ưu hóa nâng cao gồm: chồng lấn giao dịch (Pipelined Interleaving $\text{II} \approx n$), mạch ngắt sớm và Bypass Zero/NaR (Order FIFO), Output Skid Buffer, và quản lý năng lượng qua Clock Enable (CE).
@@ -58,8 +60,8 @@ Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham
 | --- | --- | --- |
 | C1 | Lõi **MAC** (thêm adder, làm tròn, đóng gói) trên nền multiplier của [P] vốn chỉ có phép nhân | Paper không có adder; đây là phần mới |
 | C2 | Golden model 3 tầng và phương pháp kiểm chứng phân tầng theo độ dài regime | Vá điểm yếu "random đều" |
-| C3 | Tái hiện có kiểm soát Table I/II/III của [P], kèm ghi nhận sai khác | Giá trị khoa học của một đồ án |
-| C4 | So sánh PPA với FP32/FP16 dưới cùng điều kiện, có phân tích throughput/LUT trung thực | Xem §7.4 |
+| C3 | Đối chiếu kiến trúc với [P], ghi rõ giả định và giới hạn tái dựng | TableI/provenance là nghiên cứu phụ, không chặn baseline nội bộ |
+| C4 | So accuracy/PPA MAC v1 non-fused vs v2 fused cùng cấu hình và corpus | Xem §11.8; FP32/FP16 bổ sung |
 | C5 (chọn) | Luồng ASIC (EXT-A) hoặc khảo sát không gian thiết kế (EXT-B) | Xem §8 |
 
 ### 1.4 Tiêu chí nghiệm thu (Acceptance Criteria)
@@ -68,11 +70,11 @@ Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham
 | --- | --- | --- |
 | AC-01 | RTL khớp L1 bit-exact | **0 mismatch** trên ≥ 10^7 vector cho mỗi điểm approx bắt buộc của §6.7, gồm từng OPS, n, ROUND_MODE và ROUND_SCHEME đã chọn; exact theo AC-02. Các hàng MAY/EXT chỉ áp dụng khi triển khai |
 | AC-02 | Chế độ exact (EXACT_EN=1, cfg_mode=0, RNE) khớp SoftPosit bit-exact | posit8: exhaustive mul (2^16 cặp), add (2^16 cặp), MAC (2^24 bộ ba); posit16: exhaustive mul và add (2^32 cặp); posit32: ≥ 10^8 vector ngẫu nhiên phân tầng + toàn bộ corner list. **0 mismatch** |
-| AC-03 | Tái hiện Table I của [P] | Sai lệch mỗi ô ≤ 1.0 điểm phần trăm, N ≥ 10^7 vector/ô (xem Phụ lục B) |
+| AC-03 | Đánh giá paired accuracy NF/F theo §11.8 | Pilot10^5, phép đo chính≥10^6 triple/profile; oracle độc lập, seed/corpus/ngoại lệ đóng băng, báo cả kết quả bất lợi. Không thay AC01/AC02 |
 | AC-04 | Bao phủ | Line ≥ 95%, branch ≥ 90%, toggle ≥ 85%; functional coverage 100% các bin hợp lệ của §6.6. Bin không thể đạt do cấu hình phải có giải thích và loại trừ được truy vết |
 | AC-05 | Tổng hợp | Báo cáo LUT/FF/CARRY/DSP/BRAM, WNS, fmax post-route cho ≥ 3 cấu hình; DSP = 0, BRAM = 0. Nền tảng theo chính sách bậc thang §7.6 (có phương án khi không có `xcvu9p`) |
-| AC-06 | So sánh PPA | Bảng PPA Posit MAC vs FP32 MAC vs FP16 MAC cùng device, cùng ràng buộc (§7) |
-| AC-07 | Tái lập | Lệnh `make all` từ repo sạch tạo lại toàn bộ bảng số liệu, không can thiệp tay |
+| AC-06 | So sánh PPA | MAC v1 NF vs v2 F cùng device/tool/ràng buộc/config; ≥3 run/config, latency/II/throughput và tài nguyên; FP32/FP16 là MAY |
+| AC-07 | Tái lập | Luồng build/generate/sim/audit/PPA được tài liệu hóa và chạy từ nguồn đóng băng; chỉ gọi make all là đầy đủ sau khi orchestration triển khai thực sự |
 | AC-08 | Truy vết | Ma trận FR → TC → kết quả đầy đủ (Phụ lục D) |
 
 ### 1.5 Mức độ hoàn thành
@@ -81,7 +83,7 @@ Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham
 | --- | --- |
 | Tier 1 (đạt) | Parser/Packer đúng, multiplier lặp đúng với L1, adder đúng, AC-01 với posit32, AC-05 |
 | Tier 2 (giỏi) | Toàn bộ AC-01..AC-08, MAC v1 (làm tròn trong miền unpacked), phân tích Err/MSE theo regime |
-| Tier 3 (xuất sắc) | Tier 2 và ít nhất một mở rộng hoàn chỉnh: EXT-A, EXT-B, EXT-C hoặc MAC fused FR-11; ghi rõ mở rộng được chọn |
+| Tier 3 (mục tiêu đầy đủ) | Tier2 cùng fused FR11 và paired accuracy/PPA; EXT-A/B/C là bổ sung. Các Tier là mốc nội bộ, không bảo đảm xếp loại hội đồng |
 
 ---
 
@@ -173,7 +175,7 @@ Quy tắc: xây chuỗi `regime | exponent | fraction` đầy đủ, cắt tại
 | FR-08 | SHOULD | OPS chọn toán hạng làm X: cố định A, hoặc chọn toán hạng có ít bit 1 hơn (popcount) theo `cfg_ops` |
 | FR-09 | MUST | Adder khớp `p<N>_add` bit-exact (RNE) |
 | FR-10 | MUST | MAC non-fused: `D = round(round(A×B) + C)`; chế độ exact khớp `p<N>_add(p<N>_mul(a,b), c)` |
-| FR-11 | MAY | MAC fused v2: làm tròn một lần ở đầu ra (§5.12). Approx cửa sổ hữu hạn phải khớp L1; so L0 chỉ đánh giá sai số. Exact fused posit8/16 chỉ được tuyên bố khi giữ đủ tích và phần căn chỉnh để khớp `p<N>_mulAdd`; không suy ra exact từ `ACC_WIN` mặc định |
+| FR-11 | MUST (profile so sánh §11.8) | MAC fused v2: làm tròn một lần ở đầu ra (§5.12). Approx cửa sổ hữu hạn phải khớp L1; so L0 chỉ đánh giá sai số. Exact fused posit8/16 chỉ được tuyên bố khi giữ đủ tích và phần căn chỉnh để khớp `p<N>_mulAdd`; không suy ra exact từ `ACC_WIN` mặc định |
 | FR-12 | SHOULD | `acc_mode=1` dùng trạng thái tích lũy làm C, bỏ qua c bên ngoài; làm tròn sau từng bước, duy trì `acc_nar_q`. Thứ tự cập nhật và ngữ nghĩa `acc_clr` theo §4.2 |
 | FR-13 | MUST | Giao tiếp valid/ready, chịu backpressure, độ trễ thay đổi theo `n` |
 | FR-14 | SHOULD | Cờ trạng thái: `nar`, `sat_max`, `sat_min`, `inexact`, `approx_cut` (bị cắt do đạt `cfg_n`) |
@@ -715,7 +717,7 @@ Bảng là kiểm tay lịch mục tiêu. Gate2/3 phải xác nhận bằng TB; 
 
 SVA tập trung ở §6.6. Bổ sung ít nhất 10^6 giao dịch back-to-back với n thay đổi, n=0, Zero/NaR, acc_mode/acc_clr và out_ready ngẫu nhiên/kéo thấp dài; scoreboard kiểm thứ tự, không mất/nhân đôi giao dịch. Đo riêng II khi không stalled để đánh giá mục tiêu throughput; backpressure có thể làm II lớn hơn. Không bắt in_ready trở lại đúng một khoảng cố định khi FIFO đang đầy.
 
-### 5.12 MAC v2 fused (MAY, ngoài đường găng)
+### 5.12 MAC v2 fused (profile chính bắt buộc theo §11.8, sau NF/Gate3)
 
 V2 tích lũy C và các số hạng tích trước Packer cuối. Không có bước làm tròn tích về lưới Posit như v1; tuy nhiên cắt fraction/căn chỉnh trong cửa sổ approx vẫn gây sai số. Vì vậy approx chỉ khớp L1, không được tuyên bố khớp p32_mulAdd.
 
@@ -1088,20 +1090,21 @@ Dùng L1 thay phép nhân trong (i) bộ lọc FIR có hệ số biết trước
 | 7 | RTL parser + LOD/LZD + barrel shifter + testbench đơn vị | `posit_parser` | Exhaustive posit8/16 |
 | 8 | RTL packer + RNE + pre-clamping; kiểm parser→packer đồng nhất | `posit_pack` | Corner list, exhaustive posit8/16 |
 | 9 | RTL OPS + SAC + SBM + `iter_ctrl`; multiplier top | `posit_mul_iter` | **Gate 2**: RTL Multiplier = L1, $10^7$ vector, mọi n; exact mode khớp L0 |
-| 10 | RTL adder (Stages A1, A2, A3); exhaustive posit8/16 | `posit_add` | Adder = L0 bit-exact |
-| 11 | RTL MAC Top v0 & v1 (`round_unpacked`), Operand C FIFO, credit counter, `acc_mode`, flags; Khởi động L1 Fused MAC (`l1_mac_fused`, Tier 3) | `posit_mac_top`, L1 fused | **Gate 3**: MAC RTL (v1) = L1; exact = L0; tổng hợp sơ bộ v1 |
-| 12 | Testbench đường A hoàn chỉnh, hồi quy toàn bộ §6.7; hoàn thiện L1 Fused MAC vs `p<N>_mulAdd` | `results/` đầy đủ, L1 fused suite | AC-01, AC-02, AC-04 cho v1 |
-| 13 | Tổng hợp/P&R Vivado (v1 baseline); RTL MAC v2 Fused (Tier 3, sau Gate 3); baseline PACoGen và FP32/FP16 | `ppa.csv`, RTL MAC v2 | AC-05, AC-06; So sánh v1 vs v2 PPA |
-| 14 | Mở rộng đã chọn (EXT-A/B/C và hoàn tất kiểm thử RTL v2 Fused) | Số liệu mở rộng & RTL v2 | **Gate 4**: đủ số liệu cho báo cáo |
-| 15 | Viết báo cáo, rà soát ma trận truy vết (Phụ lục D), chạy `make all` từ repo sạch | Bản thảo báo cáo | AC-07, AC-08 |
-| 16 | Đệm, sửa theo phản hồi, slide, demo, tập bảo vệ | Báo cáo cuối, slide | Sẵn sàng bảo vệ |
+| 10 | 12–18/10: chốt contract/corpus NF/F và RTL adder | posit_add, testbench và matrix | Adder=L1/L0, control/flags đạt |
+| 11 | 19–25/10: MAC v1 non-fused, bắt đầu L1 F | Baseline NF có tag/hash, L1 F pilot | Gate3 NF; không gọi L1 F đã nghiệm thu |
+| 12 | 26/10–01/11: L1 F/oracle, width/cut/cancellation, PPA sơ bộ NF | Hợp đồng F đóng băng, corpus đối chuẩn | G-F-L1; xác nhận công cụ P&R |
+| 13 | 02–08/11: RTL F theo model đã kiểm | MAC v2 và checker | Pilot RTL F=L1 F, protocol/corner đạt |
+| 14 | 09–15/11: regression, coverage và paired accuracy | Report NF/F cùng corpus | G-F-RTL, AC01/AC04 và phép đo AC03 mới |
+| 15 | 16–22/11: P&R hai bản, ≥3 run/config, bản thảo | Bảng accuracy/PPA và hồ sơ | Gate4, AC05/AC06 |
+| 16 | 23–29/11: báo cáo/slide/demo/tái lập; đệm30/11–04/12 | Hồ sơ chính hoàn tất29/11 | AC07/AC08; hoàn tất trước05/12 |
 
 **Phân cấp lộ trình và quản lý rủi ro tiến độ**:
 - **Đường găng dự án (Critical Path - Bắt buộc)**: Gate 1 (Tuần 3) $\rightarrow$ Gate 1B (Tuần 6) $\rightarrow$ Gate 2 (Tuần 9) $\rightarrow$ Gate 3 (Tuần 11) đều chỉ tập trung vào bộ nhân lặp và **MAC v1 Non-fused** để bảo đảm tiến độ tốt nghiệp vững chắc.
-- **Tính năng mở rộng Fused MAC v2 (Tier 3, FR-11)**: Tuyệt đối không đưa vào đường găng của Gate 1..Gate 3. L1 Fused được phát triển độc lập ở Tuần 11–12; RTL MAC v2 được triển khai sau Gate 3 ở Tuần 13–14 như một hạng mục nâng cấp xuất sắc.
-- Nếu chậm tiến độ: Cắt theo thứ tự (1) EXT-C, (2) RTL MAC v2 FUSED, (3) đường B của testbench, (4) EXT-B; không cắt AC-01/02 và MAC v1.
+- **MAC fused v2 (FR11)**: hạng mục so sánh chính của kế hoạch11/10; vẫn không chặn việc đóng NF/Gate3. L1 tuần11–12, RTL tuần13–14 sau oracle; lịch và phạm vi bắt buộc hiện hành tại §11.8.
+- Nếu chậm tiến độ: giảm EXT-A/B/C, FP32/FP16, chồng lấn và cấu hình F phụ; giữ NF, fused profile chính và AC01/AC02/AC04. Báo rủi ro thay vì tuyên bố đạt khi còn mismatch.
 
 ---
+
 
 ## 10. Repo, chuẩn code, công cụ
 
@@ -1168,7 +1171,7 @@ Cập nhật 08/10/2026. SPEC là hợp đồng; kết quả nghiệm thu phải
 3. **Đã nghiệm thu packer RTL tuần8:** tổ hợp/pipeline RNE2/TRUNC1 và parser→packer đạt0 mismatch trên bốn format; F_IN/adapter theo §5.9-D. Tuần9 đã chốt giao diện §5.5-A và kiểm OPS/SAC tổ hợp327.440 vector ModelSim,0 mismatch; SBM/core/top standalone đã triển khai và kiểm pilot 09/10; Gate2 multiplier đã nghiệm thu10/10: strict lint16 cấu hình, scoreboard trực tiếp và16.815.920 so sánh/0 mismatch; bằng chứng PLAN L1 mục7.11 và gate2_acceptance.json. Paper RTL843 commit/Fig.4 đạt trong profile tái dựng, không xác nhận baseline gốc. Sau tối ưu P2, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode; tiếp tục STA khi tích hợp, không gọi là Gate4 hoặc fmax toàn MAC.
 4. **Trước nghiệm thu tích hợp:** thực hiện reset bridge, startup barrier và lịch core §4.2/§5.5; TB đối chiếu cạnh, config, flags, metadata và slot output. Multiplier standalone đã có reset bridge, startup barrier và kiểm pilot; Gate2 multiplier đã nghiệm thu; RTL adder/MAC và Gate3 còn theo tuần10–11.
 5. **Chồng lấn sau baseline:** thêm FIFO/credit và chứng minh lịch first/last, n=0/drain, acc feedback trước khi kết luận II/throughput. Sức chứa phải suy ra, không dùng skid2 để bảo đảm mọi giao dịch đang bay.
-6. **Tái hiện/PPA và v2:** provenance Table I, corpus Table II và PPA toàn khối còn mở; ghi đúng giới hạn. Fused v2 là mở rộng, không chặn tuần8 hoặc baseline MAC v1.
+6. **Tái hiện/PPA và v2:** provenance Table I, corpus Table II và PPA toàn khối còn mở; ghi đúng giới hạn. Fused v2 là mục tiêu so sánh chính theo §11.8; không thay bằng chứng tuần8 hoặc điều kiện đóng NF/Gate3.
 
 ---
 
@@ -1321,7 +1324,7 @@ Bằng chứng: `results/paper_table1_200m.log`, `paper_baseline_verified.log`, 
 | FR-08 | TC-OPS-* | `results/ops.csv` |
 | FR-09 | TC-ADD-EXH8, EXH16, RAND32 | `results/add.csv` |
 | FR-10 | TC-MAC-* | `results/mac.csv` |
-| FR-11 | TC-FUSED-* (nếu làm) | `results/fused.csv` |
+| FR-11 | TC-FUSED-* (profile chính §11.8) | `results/fused.csv` |
 | FR-12..FR-16 | TC-PROTO-*, TC-PIPE-*, SVA A-01..A-09 | `results/proto.log, results/pipe.csv` |
 | NFR-02..05 | Báo cáo Vivado | `results/ppa.csv` |
 
@@ -1410,4 +1413,38 @@ Gate2 multiplier **✅** theo mốc tuần9 (10/10/2026):16.815.920 giao dịch 
 Coverage chức năng đạt256/256 bin posit32, min4104 mẫu/bin,26241 operands/run/polarity và36 ô config/profile; structural coverage sau ghép corner: line 91.67–96.23%; branch 91.84–94.79%; toggle 73.10–87.33%, giữ các điểm chưa hit. Mốc này không quy định ngưỡng phần trăm structural coverage và không phải coverage100% hoặc signoff vật lý.
 
 Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.json`; hướng dẫn tái lập và giải thích phạm vi tại PLAN L1 mục7.11. Những mục processing trước đây là lịch sử. Ma trận cuối SPEC§6.7, tuần10 adder/tuần11 MAC-Gate3 và PPA/Gate4 còn mở; provenance/TableI giữ processing, không chạy lại TableI trong phiên này.
+
+### 11.8. Baseline nội bộ và lịch NF/F — quyết định11/10/2026
+
+Quyết định này cập nhật ưu tiên các phần kế hoạch cũ: TableI không còn là AC03 bắt buộc, bài báo không được gọi là baseline đã tái hiện; fused không còn là hạng mục có thể cắt khỏi mục tiêu đầy đủ. Logs/Phụ lục B mang nhãn AC03 cũ giữ ý nghĩa lịch sử paper, không đổi kết quả. Các hợp đồng số học §4–§5, ngưỡng kiểm đúng AC01/AC02/§6.7 và coverage AC04 cuối không được hạ vì thay timeline.
+
+| Tuần | Ngày dự kiến năm2026 | Việc chính | Điều kiện kết thúc / bàn giao |
+| --- | --- | --- | --- |
+| 10 | 12–18/10 | Khóa hợp đồng so sánh; RTL adder, testbench và căn chỉnh/GRS; xác định đủ oracle NF/F | Adder đạt L1/L0 ở format hỗ trợ; corner/flags/reset/stall; bảng config/corpus/width của hai bản được chốt |
+| 11 | 19–25/10 | Ghép MAC v1 non-fused đơn giao dịch; C/context, reset/stall/acc_mode; bắt đầu L1 fused | Gate3 v1 đạt với bằng chứng; đóng băng tag/hash baseline NF trước đo so sánh; L1 F có trace triệt tiêu đầu tiên |
+| 12 | 26/10–01/11 | Hoàn thiện L1 fused và oracle độc lập; khảo sát width/đuôi có dấu/borrow; tổng hợp sơ bộ NF | G-F-L1:0 mismatch với reference phù hợp profile; exact p8 oracle self-test/vét cạn theo hợp đồng; freeze hợp đồng F trước RTL; xác nhận công cụ P&R hoạt động |
+| 13 | 02–08/11 | RTL fused theo contract đã kiểm; reuse parser/OPS/SAC khi hợp lệ, căn C/acc/ABS-norm/packer riêng | Pilot RTL F=L1 F đạt; reset/order/stall, NaR/zero, gần triệt tiêu và scale lệch lớn; không mặc định exact từ ACC_WIN |
+| 14 | 09–15/11 | Regression lớn NF/F, coverage và corpus ứng dụng/corner chung; đo accuracy pilot rồi lượt chính | G-F-RTL:0 mismatch RTL↔oracle của từng bản trên ma trận đã chốt; đáp ứng AC01/AC04 áp dụng, lưu counts/hash; paired accuracy hợp lệ |
+| 15 | 16–22/11 | Tổng hợp/P&R hai bản cùng thiết bị/ràng buộc; ít nhất3 run mỗi cấu hình; bảng accuracy–PPA và bản thảo | Gate4: số liệu post-route/II/latency tái lập; raw report và script; kết luận không chọn riêng seed có lợi |
+| 16 | 23–29/11 | Chốt báo cáo, slide, demo hai bản; kiểm lại từ nguồn đóng băng | Hồ sơ chính hoàn tất29/11; chạy tái lập, truy vết FR→TC→report; ghi giới hạn và câu hỏi phản biện |
+| Đệm | 30/11–04/12 | Sửa phản hồi, lỗi tái lập và tập bảo vệ; không thêm kiến trúc | Hoàn tất trước05/12; mọi thay đổi RTL phải chạy lại test liên quan |
+
+
+### Hợp đồng baseline nội bộ và so sánh
+
+Baseline chính là **MAC v1 non-fused normative**, biến thể là **MAC v2 fused**. Lõi nhân tuần9 tái sử dụng theo SPEC, không gọi là RTL gốc của [P]. Paper giữ vai trò nguồn kiến trúc/thảo luận và các thí nghiệm lịch sử; thiếu provenance không chặn các mốc mới. Không kết luận paper sai từ việc không tái hiện được.
+
+Profile so sánh chính dự kiến: NB32/ES3, FRAC_W12, RNE, FLOOR, OPS1; kiểm các n hợp lệ0..8, báo paired results cho n2/4/8 trước rồi bổ sung sweep đầy đủ. Chốt trong tuần10 trước đo; format32/ES2 là kiểm bổ trợ có SoftPosit. Các format/feature đã nghiệm thu ở multiplier giữ nguyên trạng thái; không tự suy chúng đã được triển khai/kiểm trong fused. TRUNC/JAM và exact fused rộng là khảo sát bổ sung sau profile chính.
+
+Gọi P_hat là tích xấp xỉ **trước pack** từ cùng hợp đồng nhân: NF=R(R(P_hat)+C); F=R(P_hat+C), với R là RNE về cùng Posit. Khi RTL F có cửa sổ hữu hạn W, L1 phải mô hình đầy đủ từng cut và phần dư có dấu; phải báo sai số cửa sổ riêng, không ngầm coi F_W là R(A×B+C) exact. Muốn cô lập tác động rounding phải có reference phần mềm dùng chung P_hat đủ chính xác và báo khác biệt do W. Không lấy tích đã pack của NF làm input F rồi gọi là fused.
+
+Mỗi bản kiểm bit-exact với L1 riêng. NF exact so add(mul(A,B),C); F exact so mulAdd(A,B,C) ở format L0 hỗ trợ, ES3 dùng integer/rational độc lập. Exact oracle/reference không biến profile approx/cửa sổ hẹp thành exact. FMA một giao dịch làm tròn cuối không đồng nghĩa dot-product/quire tích lũy cả chuỗi chỉ làm tròn một lần; ghi rõ chuỗi acc_mode có làm tròn mỗi giao dịch.
+
+Cùng bộ A/B/C, seed đóng băng, phân bố và quy tắc đặc biệt; dùng oracle số nguyên/hữu tỉ độ chính xác đủ cho A×B+C của input ban đầu để đo accuracy, không dùng NF làm chân lý của F. Báo sai số tuyệt đối/ULP-distance, NMSE theo miền, percentile/max, số ca triệt tiêu/zero/NaR và tỷ lệ mỗi bản thắng/thua/hòa. Với r=0 báo riêng, không chia tương đối; gần0 phải có nhóm riêng. Fused không được mặc định luôn tốt hơn khi nhân xấp xỉ hoặc cắt cửa sổ.
+
+So PPA cùng part/speed-grade/tool, clock/I/O constraints và chính sách DSP/BRAM, cùng n/OPS/precision; ghi số stage khác nhau thay vì ép pipeline bất lợi cho một bản. Báo LUT/FF/CARRY/DSP/BRAM, WNS/hold post-route, fmax đạt timing, latency, II, throughput=fclk/II và throughput/LUT; tối thiểu3 run/config, báo min/median/max. Power chỉ đánh giá năng lượng/phép tính khi có activity phù hợp; không suy từ vectorless. Nếu chưa có công cụ P&R hợp lệ, ghi rõ blocker và không gọi synthesis-only là fmax post-route.
+
+Pilot đo100.000 triple/profile; phép so chính tối thiểu1.000.000 triple/profile trên corpus paired đã đóng băng, kèm các ca phân tầng/triệt tiêu. Đây là số mẫu đánh giá kiến trúc, **không thay ngưỡng kiểm đúng AC01/AC02/§6.7**. Fused chọn ma trận bắt buộc riêng trong tuần10–12: RNE/profile chính, n0..8 và control/flags theo contract; chốt trước khi chạy, không giảm sau khi thấy FAIL. AC04 cuối vẫn line≥95%,branch≥90%,toggle≥85% và functional bins; coverage Gate2 milestone chưa đồng nghĩa đã đạt AC04 cuối.
+
+Tính mới cần trình bày là hiện thực và kiểm chứng hai kiến trúc trên cùng multiplier lặp, xử lý width/cut/đuôi có dấu, phân tích đánh đổi bằng thực nghiệm và khả năng tái lập. Fused arithmetic có trước; không gọi việc thêm fused là thuật toán mới nếu chưa có cải tiến cụ thể và so sánh nguồn. Nguồn định nghĩa single-round FMA: https://www.gnu.org/software/c-intro-and-ref/manual/html_node/Fused-Multiply_002dAdd.html; SoftPosit có fused-multiply-add: https://www.posithub.org/khub_community.
 

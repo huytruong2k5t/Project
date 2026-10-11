@@ -1,9 +1,9 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 10/10/2026 (giờ Việt Nam)  
+**Ngày cập nhật:** 11/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.5](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
+**Tài liệu chi tiết:** [SPEC v1.6](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -13,7 +13,7 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 
 ## 1. Tổng quan
 
-Đã hoàn thành nền tảng L0, Gate1 của L1 và bộ cộng tuần5. Bộ nhân lặp L1 đã được kiểm chứng; profile source từng đạt ngưỡng TableI nhưng không khớp output ví dụ gốc. Baseline bài báo vẫn cần hoàn thiện.
+Đã hoàn thành nền tảng L0, Gate1 của L1 và bộ cộng tuần5. Bộ nhân lặp L1 đã được kiểm chứng; profile source từng đạt ngưỡng TableI nhưng không khớp output ví dụ gốc. Baseline gốc bài báo chưa xác định; giữ nghiên cứu phụ. Mục tiêu chính chuyển sang MAC non-fused làm baseline nội bộ và fused làm biến thể so sánh.
 
 MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8 và chuỗi parser→packer đã kiểm chứng đạt ở cấp khối. Gate1/Gate1B/Gate2 multiplier✅; RTL MAC tích hợp và Gate3/4 chưa đạt. Đã khảo sát PPA riêng cho OPS và packer; chưa có PPA toàn hệ thống, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode sau tối ưu P2.
 
@@ -21,35 +21,35 @@ MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8
 
 | Mốc lớn | Trạng thái | Phần cần hoàn thiện |
 | --- | --- | --- |
-| Chốt baseline gốc | processing | Đã kiểm predictor, width/cut và vector phân biệt; loại profile không khớp ví dụ gốc. Còn hoàn thiện TableI, tie/cờ và cách sinh dữ liệu gốc |
+| Baseline nội bộ và so sánh NF/F | processing | Đã chốt hướng: non-fused làm đối chứng, fused là mục tiêu chính; cần hoàn thiện RTL, oracle, accuracy và PPA. Baseline paper giữ nghiên cứu phụ |
 | MAC L1 — Gate1B | ✅ | MAC v0/v1, tích lũy và API đã triển khai, kiểm chứng đạt |
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2 multiplier đã nghiệm thu với scoreboard trực tiếp, lint và coverage; còn RTL adder/MAC và Gate3 |
 | PPA, mở rộng và hồ sơ — Gate4 | không | Đo toàn hệ thống, đối chiếu baseline; thực hiện mở rộng đã chọn, báo cáo và demo |
 
-**Thứ tự tiếp theo:** RTL adder tuần10 → RTL MAC tuần11/Gate3 → coverage/PPA/Gate4 → báo cáo và bảo vệ. Kế hoạch chi tiết tại PLAN L1 mục7.
+**Thứ tự tiếp theo:** RTL adder → non-fused/Gate3 → fused L1/RTL → paired regression/accuracy → PPA → báo cáo. Hoàn tất chính29/11, đệm30/11–04/12 trước05/12/2026; chi tiết tại PLAN L1 mục8 và SPEC§11.8.
 
 ## 3. Tiến độ theo tuần
 
-Tuần theo lộ trình SPEC, chưa gắn với lịch học. Một phần công việc hoàn thành không đồng nghĩa cả tuần đã đạt.
+Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/2026 theo hạn trước05/12. Ngày dự kiến không đồng nghĩa nghiệm thu đã đạt. Một phần công việc hoàn thành không đồng nghĩa cả tuần đã đạt.
 
 | Tuần | Mốc cần đạt | Trạng thái | Kết quả chính / phần còn lại |
 | --- | --- | --- | --- |
 | 1 | Tài liệu và nền tảng dự án | processing | Đã có đặc tả, kế hoạch và khung dự án; còn hoàn thiện lint/luồng tự động |
 | 2 | Mô hình tham chiếu L0 | ✅ | SoftPosit đã build và kiểm thử đạt |
 | 3 | L1 số học chính xác — Gate1 | ✅ | Parser/packer, nhân exact và round đã nghiệm thu |
-| 4 | L1 nhân lặp và baseline bài báo | processing | Chức năng đã kiểm; baseline khớp ví dụ gốc chưa đạt TableI, provenance còn mở |
+| 4 | L1 nhân lặp và nghiên cứu bài báo | processing | Chức năng đã kiểm; provenance/TableI chưa đạt, giữ nghiên cứu phụ không chặn NF/F |
 | 5 | L1 bộ cộng | ✅ | Đã triển khai và kiểm chứng đạt |
 | 6 | L1 MAC — Gate1B | ✅ | MAC v0/v1, tích lũy và API đạt kiểm chứng Linux/Windows |
 | 7 | RTL giải mã và khối cơ sở | ✅ | LOD/LZD, hai shifter và parser tổ hợp/pipeline kiểm chứng đơn vị đạt |
 | 8 | RTL mã hóa và làm tròn | ✅ | Packer tổ hợp/pipeline và parser→packer đạt; PPA đơn vị đã khảo sát, sau tối ưu P2, benchmark đạt setup100MHz ở ba seed mỗi mode |
 | 9 | RTL bộ nhân lặp — Gate2 | ✅ | Multiplier đã nghiệm thu trên16 cấu hình,0 mismatch; lint và coverage đạt phạm vi tuần9. Baseline gốc theo dõi riêng ở tuần4 |
-| 10 | RTL bộ cộng | không | Chưa triển khai |
-| 11 | RTL MAC — Gate3 | không | Chưa triển khai |
-| 12 | Harness, regression và coverage | processing | Harness multiplier đã kiểm chứng; còn regression/coverage tích hợp toàn MAC |
-| 13 | FPGA PPA và đối chiếu baseline | không | Chưa đo toàn hệ thống |
-| 14 | Mở rộng và nghiệm thu — Gate4 | không | Mới có định hướng |
-| 15 | Báo cáo và kiểm tra tái lập | không | Chưa hoàn thiện hồ sơ cuối |
-| 16 | Slide, demo và bảo vệ | processing | Đã có slide một khối; chưa có demo/slide toàn đồ án |
+| 10 | RTL adder và chốt so sánh NF/F | processing | 12–18/10: khóa contract/corpus/config, triển khai và kiểm adder; mới lập lịch, RTL chưa triển khai |
+| 11 | MAC non-fused — Gate3 | không | 19–25/10: tích hợp/kiểm MAC v1, đóng băng baseline; bắt đầu L1 fused |
+| 12 | Oracle/L1 fused và PPA sơ bộ NF | không | 26/10–01/11: width/cut/đuôi có dấu, kiểm triệt tiêu; chốt hợp đồng F và khả năng công cụ |
+| 13 | RTL fused | không | 02–08/11: triển khai theo L1 đã kiểm, pilot số học/protocol; không mặc định exact |
+| 14 | Regression và accuracy paired NF/F | không | 09–15/11: nghiệm thu đúng riêng từng bản, coverage và corpus chung |
+| 15 | PPA hai bản và bản thảo — Gate4 | không | 16–22/11: cùng điều kiện,≥3 run/config; accuracy/timing/II/tài nguyên và kết luận |
+| 16 | Báo cáo, demo và bảo vệ | processing | 23–29/11: chốt hồ sơ/tái lập/slide/demo; hiện mới có slide các khối. Đệm30/11–04/12 |
 
 ## 4. Nhật ký theo ngày
 
@@ -133,7 +133,13 @@ Tuần theo lộ trình SPEC, chưa gắn với lịch học. Một phần công
 | 2 | Phạm vi tiếp tục | Sẵn sàng triển khai adder/MAC tuần10–11; baseline gốc, regression cuối và PPA còn hoàn thiện theo mốc riêng | processing |
 | 3 | Hướng dẫn tái chạy kiểm chứng | Tổng hợp build L0/L1, kiểm RTL và Gate2 trên WSL/ModelSim từ CMD; ghi dependency sau dọn cache và cách đọc kết quả | ✅ |
 
-### 4.10. Mẫu cập nhật tiếp theo
+### 4.10. Ngày 11/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Chuyển baseline và sắp lại timeline | Chốt non-fused đối chứng/fused biến thể; giữ Gate2, đồng bộ SPEC v1.6/PLAN. Lịch chính đến29/11, đệm trước05/12; chưa viết RTL mới | ✅ |
+
+### 4.11. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

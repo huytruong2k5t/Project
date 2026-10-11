@@ -1,6 +1,6 @@
 # Kế hoạch Triển khai Mô hình Thuật toán L1 (C++ Golden Model)
 
-**Hợp đồng tích hợp08/10, cập nhật phạm vi11/10/2026 — SPEC v1.7:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7 (trạng thái10/10/2026). Gate2 multiplier đã nghiệm thu theo mục7.11; MAC RTL chưa nghiệm thu. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
+**Hợp đồng tích hợp08/10, cập nhật phạm vi11/10/2026 — SPEC v1.8:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7 (trạng thái10/10/2026). Gate2 multiplier đã nghiệm thu theo mục7.11; MAC RTL chưa nghiệm thu. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
 
 > **Mục tiêu**: Xây dựng mô hình thuật toán C++ L1 (`l1/`) mô phỏng trung thực 100% từng bước biến đổi dữ liệu của vi kiến trúc phần cứng Posit MAC, tham số hóa theo `template <int NB, int ES, int FRAC_W>`, đóng vai trò làm thước đo chân lý bit-exact (AC-01) cho RTL SystemVerilog, vượt qua các cổng kiểm chuẩn nghiêm ngặt **Gate 1 (Tuần 3)** và **Gate 1B (Tuần 6)** theo [SPEC_Posit_MAC_IP.md](../SPEC_Posit_MAC_IP.md).
 
@@ -505,3 +505,9 @@ python3 scripts/audit_l1_floor_rne.py
 
 Windows chạy l1/test_prepack_product.exe; audit còn cần log Linux/Windows, regression và fixture replay. Không xóa fixture replay trước audit. Source đổi thì audit từ chối; không dùng --refreeze để bỏ qua test lỗi.
 
+
+### 8.2. Điều hành tuần10 và checklist tạm — 11/10/2026
+
+Fused profile chính32/3,FRAC_W12,OPS1,FLOOR/RNE,n0..8 là MUST ở SPEC v1.8§6.7; ≥10^7 vector/n/bản cho nghiệm thu cuối, giữ các yêu cầu cũ. Exact fused/F32/2 là MAY; width/cut/residual và latency F còn phải khóa sau oracle tuần12.
+
+Checklist thực thi W10-01..07 và lịch12–18/10 đặt tại doc/TIEN_DO_DO_AN.md mục3.1, cập nhật theo bằng chứng. Khi cả tuần10 được nghiệm thu, gỡ mục3.1 khỏi tiến độ, giữ hàng tổng kết tuần10, nhật ký/ngày và đường dẫn report; sau đó thay bằng kế hoạch tuần11 khi bắt đầu. Không tự gỡ vì hết ngày dự kiến. Mục8 giữ lịch tổng thể và SPEC giữ hợp đồng lâu dài.

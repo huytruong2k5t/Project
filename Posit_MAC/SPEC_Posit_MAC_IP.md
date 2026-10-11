@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.7 — 2026-10-11 — Chốt FLOOR/RNE prepack và đóng băng L1 |
+| Phiên bản | v1.8 — 2026-10-11 — Đồng bộ mục tiêu NF/F bắt buộc và kế hoạch tuần10 |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -27,6 +27,8 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 
 | v1.7 | 2026-10-11 | Chốt profile nhân FLOOR/RNE, exporter tích prepack và metadata; kiểm độc lập Linux/Windows/UBSan, đóng băng L1 hiện có; fused signed residual còn theo mốc riêng. |
 
+| v1.8 | 2026-10-11 | Đồng bộ fused profile chính thành MUST trong latency/top/matrix/PPA/rủi ro; giữ exact fused và cấu hình phụ là MAY. Thêm matrix NF/F32/3 FLOOR/RNE n0..8, phân biệt sketch với hợp đồng chưa nghiệm thu; checklist tuần10 đặt tạm trong tiến độ. |
+
 **Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Các phần khác dẫn chiếu, không đặt thêm quy tắc khác cho cùng hành vi.
 
 ---
@@ -43,6 +45,7 @@ Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham
 
 - Định dạng posit tham số hóa `(NB, ES)`; cấu hình chuẩn: `(8,0)`, `(16,1)`, `(32,2)`, `(32,3)`.
 - Các khối: Parser, Operand Selector (OPS), Shift Amount Calculator (SAC), Shift-Based Multiplier (SBM) + bộ điều khiển lặp, Posit Adder, Rounder/Packer, MAC top.
+- **Hai bản bắt buộc:** MAC v1 non-fused làm baseline nội bộ và MAC v2 fused profile §11.8; hoàn thành NF/Gate3 trước, hoàn thành fused trước nghiệm thu đề tài. Exact fused và cấu hình F phụ là MAY.
 - Ba tầng đối chiếu L0 SoftPosit, L1 mô hình thuật toán và Ideal; RTL là thiết kế được kiểm chứng (§6.1).
 - Testbench tự động, coverage, hồi quy, thống kê sai số (Error Rate, MSE, max error).
 - Tổng hợp/P&R Vivado theo **chính sách bậc thang thiết bị (§7.6)**: Ưu tiên UltraScale+ D0 (`xcvu9p`) hoặc D1 (miễn phí), có đường đối chiếu tỉ lệ trên 7-Series D2 (`xc7a100t`) và luồng mã nguồn mở D3/D4; so sánh công bằng giữa NF/F; FP32/FP16 MAC là đối chứng bổ sung.
@@ -84,8 +87,8 @@ Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham
 | Mức | Nội dung |
 | --- | --- |
 | Tier 1 (đạt) | Parser/Packer đúng, multiplier lặp đúng với L1, adder đúng, AC-01 với posit32, AC-05 |
-| Tier 2 (giỏi) | Toàn bộ AC-01..AC-08, MAC v1 (làm tròn trong miền unpacked), phân tích Err/MSE theo regime |
-| Tier 3 (mục tiêu đầy đủ) | Tier2 cùng fused FR11 và paired accuracy/PPA; EXT-A/B/C là bổ sung. Các Tier là mốc nội bộ, không bảo đảm xếp loại hội đồng |
+| Tier 2 (mốc NF) | MAC v1/Gate3 và kiểm đúng, coverage áp dụng cho NF; chuẩn bị baseline nội bộ. Chưa hoàn thành toàn bộ AC khi thiếu fused/paired accuracy/PPA |
+| Tier 3 (mục tiêu đầy đủ) | Tier2 cùng fused FR11 ở profile chính, toàn bộ AC-01..AC-08 áp dụng và paired accuracy/PPA; EXT-A/B/C là bổ sung. Các Tier là mốc nội bộ, không bảo đảm xếp loại hội đồng |
 
 ---
 
@@ -212,8 +215,8 @@ Ngưỡng NFR là đề xuất khởi điểm; chốt với GVHD sau tổng hợ
 | `EXACT_EN` | 1 | Bật khả năng chạy exact; chế độ từng giao dịch do `cfg_mode` chọn. Exact: `ACC_W = 2×FRAC_MAX + 2`. Approx vẫn dùng độ rộng/chính sách §5.6 dù `EXACT_EN=1` |
 | `N_MAX` | 8 | Giá trị lớn nhất của `cfg_n` (quyết định độ rộng bộ đếm lặp) |
 | `OPS_EN` | 1 | Bật khối chọn toán hạng (Operand Selector) |
-| `FUSED` | 0 | 0: MAC v1 (làm tròn 2 lần, non-fused). 1: MAC v2 (làm tròn 1 lần, C gộp vào accumulator, fused) |
-| `ACC_WIN` | `FRAC_MAX + 6` | Cửa sổ số học v2 approx: 1 bit dấu + 3 bit nguyên + `FRAC_MAX` bit phân số + 2 bit G/R; sticky là cờ riêng, không cộng như bit số học. Với ES=2: 33 bit, miền mantissa có dấu $[-8,8)$; với ES=3: 32 bit. Không dùng cửa sổ này làm bảo đảm exact fused |
+| `FUSED` | 0 | 0: MAC v1 (làm tròn 2 lần, non-fused). 1: MAC v2 (fused profile chính, làm tròn cuối một lần; topology ghép C khóa sau L1 §5.12/§11.9) |
+| `ACC_WIN` | ứng viên `FRAC_MAX + 6`, chưa khóa | Cửa sổ số học v2 approx: 1 bit dấu + 3 bit nguyên + `FRAC_MAX` bit phân số + 2 bit G/R; sticky là cờ riêng, không cộng như bit số học. Với ES=2: 33 bit, miền mantissa có dấu $[-8,8)$; với ES=3: 32 bit. Không dùng cửa sổ này làm bảo đảm exact fused |
 | `ROUND_MODE` | `"RNE"` | Quy ước làm tròn tại Packer/round_unpacked: `"RNE"` theo FloPoCo/SoftPosit; `"TRUNC"` cắt cụt theo [P] |
 | `ROUND_SCHEME` | 0 | Cơ chế xử lý bit khi dịch phải trong bộ nhân lặp SBM theo [15]: `0: FLOOR` (cắt bỏ hoàn toàn bit rơi ra ngoài); `1: STICKY_ACC` (gom bit rơi vào cờ `sticky_acc`) |
 | `PIPE_PARSE` | 2 | Số tầng pipeline của parser. Mặc định 2 khớp Fig. 5(a), có hai hạng thanh ghi: sau mux LOD/LZD và sau bộ dịch |
@@ -286,7 +289,7 @@ Bảng dưới là **ngân sách H theo lịch mục tiêu**, không phải số
 | Multiplier | parse → OPS → core → norm/pack | q+6 | q+7 |
 | MAC v0 | mul → pack → parse → add → pack | q+12 | q+14 |
 | MAC v1 | core → norm/round_unpacked → add → pack | q+10 | q+11 |
-| MAC v2 (MAY) | core có vòng hidden bit → abs_norm → pack | n+8, chưa chốt lịch | n+9, chưa chốt lịch |
+| MAC v2 (MUST profile chính; lịch dự kiến) | core có vòng hidden bit → abs_norm → pack | n+8, chưa chốt lịch | n+9, chưa chốt lịch |
 
 Multiplier gộp chuẩn hóa vào cuối core/packer; v1 thêm một tầng norm/round riêng. Ví dụ MAC v1 RNE, n=2: H=13, L_valid=12 và L_handshake=13 theo lịch không bubble. Đây là mục tiêu kiểm TB, chưa là nghiệm thu. V2 có n+1 số hạng và hai chu kỳ xả Shifter/Accumulator; ABS/LZC, bubble và hồi tiếp phải được lịch hóa riêng trước khi dùng ngân sách này.
 
@@ -432,7 +435,8 @@ SAC xác định last từ fx kế tiếp bằng 0 hoặc đạt n_lim, không c
   - Mỗi số hạng được cộng/trừ tích lũy tùy theo bit dấu của tích $s_P = s_A \oplus s_B$:
     $$\text{acc} \Leftarrow s_P \ ? \ (\text{acc} - (Y \gg S')) : (\text{acc} + (Y \gg S'))$$
     với lượng dịch tổng cộng $S' = S + \text{shift\_extra}$.
-  - Thanh ghi `sticky`: Thu gom OR logic của mọi bit bị trôi ra khỏi cửa sổ `ACC_WIN` khi thực hiện dịch $Y \gg S'$. Nếu $S' > \text{FRAC\_MAX} + 2$, toàn bộ số hạng tích trôi ra ngoài cửa sổ và chỉ đóng góp vào bit `sticky`. (Xem chi tiết quy tắc trừ có mượn sticky tại §5.12-c).
+  - **Sketch chưa nghiệm thu cho fused:** sticky OR không phải chính sách residual có dấu. Các phép cộng/cắt stream trên chỉ hợp lệ khi chứng minh tương đương §11.9; không dùng để bỏ qua oracle/borrow/cancellation.
+  - Thanh ghi `sticky` trong sketch: Thu gom OR logic của mọi bit bị trôi ra khỏi cửa sổ `ACC_WIN` khi thực hiện dịch $Y \gg S'$. Nếu $S' > \text{FRAC\_MAX} + 2$, toàn bộ số hạng tích trôi ra ngoài cửa sổ và chỉ đóng góp vào bit `sticky`. (Xem chi tiết quy tắc trừ có mượn sticky tại §5.12-c).
 
 **Ví dụ số TV-ITER-01** (bài toán nhỏ để kiểm tay): FracX = `1.0100`₂ = 1.25, FracY = `1.0110`₂ = 1.375, tích đúng = 1.71875.
 
@@ -721,9 +725,11 @@ SVA tập trung ở §6.6. Bổ sung ít nhất 10^6 giao dịch back-to-back v�
 
 ### 5.12 MAC v2 fused (profile chính bắt buộc theo §11.8, sau NF/Gate3)
 
+**Hợp đồng ưu tiên hiện hành:** dùng cùng P_hat từ §11.9 cho NF và F: NF=R(R(P_hat)+C_eff), F_ref=R(P_hat+C_eff). RTL cửa sổ hữu hạn F_W phải công bố sai số/cut riêng và khớp L1 F_W; không ngầm thay P_hat bằng tích exact hoặc tích đã pack. Triển khai ban đầu có thể cộng C_eff với bản ghi prepack sau nhân; stream từng term vào C chỉ được dùng sau chứng minh cùng thứ tự FLOOR/cut và cùng P_hat. Các mục a/b/e và accumulator stream §5.6 dưới đây là sketch cần kiểm, không tự chốt topology, ACC_WIN hoặc latency.
+
 V2 tích lũy C và các số hạng tích trước Packer cuối. Không có bước làm tròn tích về lưới Posit như v1; tuy nhiên cắt fraction/căn chỉnh trong cửa sổ approx vẫn gây sai số. Vì vậy approx chỉ khớp L1, không được tuyên bố khớp p32_mulAdd.
 
-**Trạng thái thiết kế:** phần chọn mốc và hai vector không mất bit dưới đây đủ làm mô hình toán học khởi đầu. Chính sách đuôi có dấu qua nhiều phép cộng/trừ và triệt tiêu sâu (§5.12-c) chưa được chốt để viết RTL v2. Hoàn tất L1 và kiểm chứng độc lập chính sách đó là điều kiện trước triển khai mở rộng này.
+**Trạng thái thiết kế:** phần chọn mốc và hai vector không mất bit dưới đây đủ làm mô hình toán học khởi đầu. Chính sách đuôi có dấu qua nhiều phép cộng/trừ và triệt tiêu sâu (§5.12-c) chưa được chốt để viết RTL v2. Hoàn tất L1 và kiểm chứng độc lập chính sách đó là điều kiện trước triển khai RTL fused bắt buộc; chưa nghiệm thu width, lịch hoặc chính sách phần dư từ các sketch này.
 
 #### a. Căn chỉnh Scale Factor và Chọn Mốc (Scale Alignment & Anchor Selection)
 Đặt $sf_P = sf_A + sf_B$ là scale factor của tích trước khi chuẩn hóa (tích mantissa nằm trong khoảng $[1.0, 4.0)$). Chênh lệch scale factor được xác định bởi:
@@ -759,6 +765,7 @@ Trước khi code v2, L1 phải quy định điểm cắt, cách jam/borrow theo
 - **Triệt tiêu**: zero của kết quả nội bộ phải xét cả phần dư theo §5.12-c. Approx không được suy ra đã triệt tiêu chính xác tích thật chỉ từ acc=0.
 
 #### e. Máy trạng thái điều khiển (FSM) của MAC v2
+Lịch dưới là ứng viên stream; phải chốt lại sau L1/cut và lựa chọn topology, kiểm cạnh/reset/stall trước công bố latency.
 `IDLE → PARSE (2 cyc) → INIT (1 cyc: tính ΔSF, chọn mốc, căn C' song song) → ITER/DRAIN (n+1 số hạng, cộng thêm 2 chu kỳ xả pipeline) → ABS_NORM (1 cyc) → PACK (1-2 cyc) → DONE`.
 
 #### f. Hai Ví dụ Số Kiểm Chứng Chi Tiết (Golden Test Vectors)
@@ -783,7 +790,7 @@ Trước khi code v2, L1 phải quy định điểm cắt, cách jam/borrow theo
 
 ### 5.13 MAC top và điều khiển
 
-Đường v0/v1/v2 theo §5.1; v2 là MAY. FSM v1:
+Đường v0/v1/v2 theo §5.1; v2 là MUST ở profile chính §6.7/§11.8, sau nghiệm thu NF/Gate3. FSM v1:
 IDLE → PARSE → INIT → ITER/DRAIN → NORM_ROUND → ADD_A1 → ADD_A2 → ADD_A3 → PACK → HOLD_OUTPUT.
 NORM_ROUND là một tầng mục tiêu, không hai chu kỳ NORM và ROUND riêng. HOLD_OUTPUT giữ kết quả đến khi có nơi lưu đầu ra; không tự thêm một chu kỳ nếu kết quả đã chốt hợp lệ.
 
@@ -798,7 +805,7 @@ Nhánh ngoại lệ theo §5.3; thứ tự và sức chứa đầu ra theo §5.1
 | Tầng | Vai trò | So với RTL |
 | --- | --- | --- |
 | **L0** | SoftPosit (`p8_*`, `p16_*`, `p32_*`, các hàm `convertDoubleToP32`, `convertP32ToDouble`, `p32_mul`, `p32_add`, `p32_mulAdd`) | Chế độ exact: bit-exact. Chế độ approx: thống kê sai số (Err, MSE) |
-| **L1** | Mô hình C++ tự viết của **chính thuật toán** (parser, OPS, SAC, SBM, normalize, round, add, pack; hàm `l1_mac_fused` bit-exact tại cửa sổ `ACC_WIN`, sticky và chọn mốc), tham số hóa `NB, ES, FRAC_W, n, ops` | **Bit-exact 100%** với RTL ở mọi cấu hình |
+| **L1** | Mô hình C++ tự viết của **chính thuật toán** (parser, OPS, SAC, SBM, normalize, round, add, pack); L1 fused là hạng mục tuần11–12 chưa nghiệm thu, phải mô hình điểm cắt/cửa sổ và phần dư có dấu theo §5.12-c. Tham số hóa `NB, ES, FRAC_W, n, ops` | **Bit-exact 100%** với RTL ở mọi cấu hình |
 | **Ideal** | Tích/tổng chính xác của hai giá trị thực bằng số nguyên rộng (`unsigned __int128` cho mantissa, hoặc Python `fractions.Fraction`) | Dùng để tính Err theo định nghĩa của [P] |
 
 Lý do cần tầng Ideal riêng: tích của hai mantissa 27 bit dài 54 bit, vượt độ chính xác 53 bit của `double`, nên không được dùng `double` làm chuẩn ở posit32.
@@ -876,7 +883,7 @@ import "DPI-C" function int unsigned l0_p32_mulAdd(input int unsigned a, input i
 // API scalar exact RNE đã triển khai ở tuần6:
 import "DPI-C" function int unsigned l1_p32_mul   (input int unsigned a, input int unsigned b);
 import "DPI-C" function int unsigned l1_p32_mac   (input int unsigned a, input int unsigned b, input int unsigned c);
-// API fused dưới đây là dự kiến cho giai đoạn mở rộng, chưa triển khai:
+// API fused dưới đây là dự kiến cho mục tiêu chính tuần11–14, chưa triển khai:
 import "DPI-C" function int unsigned l1_mac_fused (input int unsigned a, input int unsigned b, input int unsigned c,
                                                    input int mode, input int n, input int ops, input int frac_w);
 ```
@@ -918,11 +925,12 @@ Nhóm regime 256 bin áp dụng posit32; với NB nhỏ hơn phải cắt các k
 | Exact posit32 | (32,2) | 27 | exact | 0,1 | ≥ 10^8 | L0 bit-exact |
 | Approx posit32-paper | (32,3) | 12 | n ∈ {0,1,2,3,4,5,6,8} | 0,1 | ≥ 10^7 mỗi điểm bắt buộc | L1 bit-exact; Ideal/posit exact ES=3 thống kê, không dùng p32 ES=2 làm chuẩn cùng giá trị |
 | Approx posit32 | (32,2) | 12 | n ∈ {1,2,3,4} | 0,1 | ≥ 10^7 mỗi n | L1 bit-exact; L0 thống kê |
-| v2 approx posit32 (MAY) | (32,2) | 12 | n ∈ {1,2,3,4} | 0,1 | ≥ 10^7 mỗi n/OPS nếu triển khai | L1 fused sau khi chốt §5.12-c; p32_mulAdd thống kê |
+| NF/F profile so sánh chính (MUST, cả hai bản) | (32,3) | 12 | approx; n ∈ {0,1,2,3,4,5,6,7,8} | 1 | ≥ 10^7 mỗi n và mỗi bản, FLOOR/RNE | NF=L1 NF; F_W=L1 F_W sau §5.12-c; oracle ES3 integer/rational cho kiểm reference/accuracy, không dùng SoftPosit ES2 |
+| v2 approx posit32 bổ trợ (MAY) | (32,2) | 12 | n ∈ {1,2,3,4} | 0,1 | ≥ 10^7 mỗi n/OPS nếu triển khai | L1 fused sau khi chốt §5.12-c; p32_mulAdd thống kê |
 | v2 exact posit8 (MAY) | (8,0) | 5 | exact | 0 | exhaustive (2^24) nếu triển khai | p8_mulAdd bit-exact, oracle đủ rộng |
 | Quét FRAC_W (MAY) | (32,2) hoặc (32,3) | 8, 12, 16, 23 | n = 3 | 1 | ≥ 10^6 | Cho EXT-B |
 
-Ma trận final khác ngưỡng Gate 1/1B ở §6.1. Profile bắt buộc: exact/RNE; approx/RNE+STICKY_ACC; tái hiện [P] dùng TRUNC+FLOOR cho (32,3), FRAC_W=12. Chạy từng OPS và n đã liệt kê; tổ hợp ROUND_MODE/SCHEME khác là MAY và phải có regression nếu công bố hỗ trợ. n=0 luôn có test đơn vị/corner cho mọi profile, dù không phải mỗi hàng đều chạy 10 triệu mẫu ở n=0.
+Ma trận final khác ngưỡng Gate 1/1B ở §6.1. Hàng NF/F profile chính bổ sung, không thay hoặc giảm các hàng bắt buộc đã có. F32/3 OPS1/FLOOR/RNE là MUST; exact fused posit8 và F32/2 vẫn MAY. Nghiệm thu F gồm cả acc_mode/control/flags và coverage §6.6 hợp lệ; chọn test/corpus trước chạy. Profile bắt buộc: exact/RNE; approx/RNE+STICKY_ACC; tái hiện [P] dùng TRUNC+FLOOR cho (32,3), FRAC_W=12. Chạy từng OPS và n đã liệt kê; tổ hợp ROUND_MODE/SCHEME khác là MAY và phải có regression nếu công bố hỗ trợ. n=0 luôn có test đơn vị/corner cho mọi profile, dù không phải mỗi hàng đều chạy 10 triệu mẫu ở n=0.
 
 ### 6.8 Chỉ số sai số
 
@@ -975,9 +983,9 @@ Công thức khoảng tin cậy trên giả định mẫu Bernoulli độc lập
 
 | Nhóm | Thiết kế |
 | --- | --- |
-| Đề tài | (1) **Posit MAC v1** (Non-fused): `(32,2)` và `(32,3)`; `FRAC_W ∈ {8, 12, 16}`; `EXACT_EN ∈ {0,1}`.<br>(2) **Posit MAC v2** (MAY): FUSED=1, ACC_WIN theo NB/ES của §4.1; chỉ đo sau khi chốt L1 fused. So sánh trực tiếp v1 vs v2 theo: số lượng LUT, $f_{\max}$, độ trễ chu kỳ, và sai số (NMSE so với Ideal, do v2 chỉ làm tròn một lần). *(Lưu ý: Không đặt trước ngưỡng $f_{\max}$ tiên nghiệm cho vòng cộng dồn 33 bit có dấu trước khi tổng hợp thử nghiệm thực tế)*. |
-| Baseline posit | PACoGen multiplier ([23], mã nguồn [24]) sinh ra cho **cùng** `(NB, ES)` với thiết kế của bạn, DSP thay bằng LUT |
-| Baseline FP32/FP16 | (B1) Xilinx Floating-Point Operator IP: bộ nhân + bộ cộng, không dùng DSP, độ trễ chọn để fmax gần nhất với thiết kế của bạn; (B2, MAY) bộ FP sinh bởi FloPoCo hoặc tự viết |
+| Đề tài | **So sánh chính MUST:** MAC v1 NF baseline nội bộ và MAC v2 F, cùng `(32,3)`, FRAC_W12, OPS1, FLOOR/RNE; n0..8, ưu tiên đo n2/4/8 rồi đủ sweep. F dùng ACC_WIN/chính sách cut được khóa sau L1 tuần12, không mặc định theo ứng viên §4.1. So accuracy, LUT/FF/CARRY/DSP/BRAM, timing post-route, latency, II và throughput theo §11.8. NF32/2 giữ yêu cầu bắt buộc của §6.7; F32/2, quét FRAC_W và exact fused là khảo sát bổ trợ; không đặt trước fmax hoặc mặc định F chính xác hơn NF. |
+| Đối chứng posit bổ sung (MAY) | PACoGen multiplier ([23], mã nguồn [24]) sinh ra cho **cùng** `(NB, ES)` với thiết kế của bạn, DSP thay bằng LUT |
+| Đối chứng FP32/FP16 bổ sung (MAY) | (B1) Xilinx Floating-Point Operator IP: bộ nhân + bộ cộng, không dùng DSP, độ trễ chọn để fmax gần nhất với thiết kế của bạn; (B2, MAY) bộ FP sinh bởi FloPoCo hoặc tự viết |
 | Đối chiếu bài báo | Multiplier riêng lẻ (không adder), `(32,3)`, `FRAC_W=12` để so với 698 LUT / 289 FF / 575 MHz của [P] (so tuyệt đối chỉ khi ở bậc D0; nếu không thì so tỉ lệ theo §7.6) |
 
 Lưu ý: [P] ghi so sánh với PACoGen dùng `es=6` mặc định, trong khi thiết kế của [P] dùng `es=3`. Phải so sánh cùng `ES` và ghi chú sự khác biệt này.
@@ -1101,7 +1109,7 @@ Dùng L1 thay phép nhân trong (i) bộ lọc FIR có hệ số biết trước
 | 16 | 23–29/11: báo cáo/slide/demo/tái lập; đệm30/11–04/12 | Hồ sơ chính hoàn tất29/11 | AC07/AC08; hoàn tất trước05/12 |
 
 **Phân cấp lộ trình và quản lý rủi ro tiến độ**:
-- **Đường găng dự án (Critical Path - Bắt buộc)**: Gate 1 (Tuần 3) $\rightarrow$ Gate 1B (Tuần 6) $\rightarrow$ Gate 2 (Tuần 9) $\rightarrow$ Gate 3 (Tuần 11) đều chỉ tập trung vào bộ nhân lặp và **MAC v1 Non-fused** để bảo đảm tiến độ tốt nghiệp vững chắc.
+- **Đường găng dự án (Critical Path - Bắt buộc)**: Gate 1 (Tuần 3) $\rightarrow$ Gate 1B (Tuần 6) $\rightarrow$ Gate 2 (Tuần 9) $\rightarrow$ Gate 3 (Tuần 11) là các mốc nền tảng bộ nhân lặp và **MAC v1 Non-fused**. Đường hoàn tất mục tiêu đầy đủ tiếp tục qua L1 F → RTL F → kiểm paired/coverage → PPA NF/F → hồ sơ tuần16; NF/Gate3 riêng chưa hoàn thành đề tài.
 - **MAC fused v2 (FR11)**: hạng mục so sánh chính của kế hoạch11/10; vẫn không chặn việc đóng NF/Gate3. L1 tuần11–12, RTL tuần13–14 sau oracle; lịch và phạm vi bắt buộc hiện hành tại §11.8.
 - Nếu chậm tiến độ: giảm EXT-A/B/C, FP32/FP16, chồng lấn và cấu hình F phụ; giữ NF, fused profile chính và AC01/AC02/AC04. Báo rủi ro thay vì tuyên bố đạt khi còn mismatch.
 
@@ -1163,8 +1171,8 @@ Cập nhật 08/10/2026. SPEC là hợp đồng; kết quả nghiệm thu phải
 | Chồng lấn ghi đè accumulator, FIFO thiếu chỗ hoặc đọc C cũ | Cao | Baseline một giao dịch trước; sau đó chứng minh credit/capacity, ordering và hồi tiếp. Không ấn định FIFO6–8 hoặc II=max(1,n) như bảo đảm |
 | Table I khớp corpus nhưng thiếu provenance/độ ổn định | Trung bình | Giữ nhãn tái dựng, công bố seed/profile và sensitivity; không chọn seed/width chỉ để ép khớp |
 | Vivado không chạy tổng hợp/STA vì thiếu license | Cao đối với PPA | ModelSim dùng kiểm chức năng; Vivado compile/elaborate đã chạy cho parser nhưng không thay STA. Khôi phục license hoặc dùng luồng §7.6 và ghi rõ thiết bị/công cụ |
-| Hết thời gian hoặc so PPA thiếu công bằng | Cao | Ưu tiên MAC v1/Gate2/3; cắt mở rộng theo §9; so cùng điều kiện và phân biệt OPS riêng với toàn MAC |
-| Fused v2 mất đuôi có dấu/triệt tiêu sâu, ABS/LZC hoặc carry dài | Cao cho mở rộng | Chốt oracle/hợp đồng §5.12-c trước RTL v2; đo STA nếu triển khai. Giữ ngoài đường găng Gate1..3 |
+| Hết thời gian hoặc so PPA thiếu công bằng | Cao | Giữ NF và fused profile chính; cắt khảo sát phụ theo §9; so cùng điều kiện và phân biệt OPS riêng với toàn MAC |
+| Fused v2 mất đuôi có dấu/triệt tiêu sâu, ABS/LZC hoặc carry dài | Cao đối với mục tiêu đầy đủ | Chốt oracle/hợp đồng §5.12-c trước RTL v2; đo STA/PPA. Không chặn NF/Gate3, nhưng bắt buộc trên đường hoàn tất tuần12–16 |
 
 ### 11.3 Điều kiện sẵn sàng và thứ tự thực hiện
 

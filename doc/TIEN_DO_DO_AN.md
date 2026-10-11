@@ -3,7 +3,7 @@
 **Ngày cập nhật:** 11/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.7](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
+**Tài liệu chi tiết:** [SPEC v1.8](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -43,13 +43,33 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 7 | RTL giải mã và khối cơ sở | ✅ | LOD/LZD, hai shifter và parser tổ hợp/pipeline kiểm chứng đơn vị đạt |
 | 8 | RTL mã hóa và làm tròn | ✅ | Packer tổ hợp/pipeline và parser→packer đạt; PPA đơn vị đã khảo sát, sau tối ưu P2, benchmark đạt setup100MHz ở ba seed mỗi mode |
 | 9 | RTL bộ nhân lặp — Gate2 | ✅ | Multiplier đã nghiệm thu trên16 cấu hình,0 mismatch; lint và coverage đạt phạm vi tuần9. Baseline gốc theo dõi riêng ở tuần4 |
-| 10 | RTL adder và chốt so sánh NF/F | processing | 12–18/10: khóa contract/corpus/config, triển khai và kiểm adder; mới lập lịch, RTL chưa triển khai |
+| 10 | RTL adder và chốt so sánh NF/F | processing | 12–18/10: SPEC đã đồng bộ NF/F bắt buộc; checklist tạm ở mục3.1, RTL adder chưa triển khai |
 | 11 | MAC non-fused — Gate3 | không | 19–25/10: tích hợp/kiểm MAC v1, đóng băng baseline; bắt đầu L1 fused |
 | 12 | Oracle/L1 fused và PPA sơ bộ NF | không | 26/10–01/11: width/cut/đuôi có dấu, kiểm triệt tiêu; chốt hợp đồng F và khả năng công cụ |
 | 13 | RTL fused | không | 02–08/11: triển khai theo L1 đã kiểm, pilot số học/protocol; không mặc định exact |
 | 14 | Regression và accuracy paired NF/F | không | 09–15/11: nghiệm thu đúng riêng từng bản, coverage và corpus chung |
 | 15 | PPA hai bản và bản thảo — Gate4 | không | 16–22/11: cùng điều kiện,≥3 run/config; accuracy/timing/II/tài nguyên và kết luận |
 | 16 | Báo cáo, demo và bảo vệ | processing | 23–29/11: chốt hồ sơ/tái lập/slide/demo; hiện mới có slide các khối. Đệm30/11–04/12 |
+
+### 3.1. Kế hoạch thực hiện tuần10 — 12–18/10/2026 (tạm thời)
+
+Mục tiêu: RTL adder đúng và bàn giao để ghép NF/Gate3 tuần11; khóa phạm vi so sánh NF/F. Profile nhân đã đóng băng32/3,FRAC_W12,OPS1,FLOOR/RNE,n0..8 được giữ nguyên. Trạng thái: ✅ có bằng chứng hoàn thành; processing đang làm; không chưa làm.
+
+| Mã / ngày dự kiến | Công việc chính | Điều kiện hoàn thành / bàn giao | Trạng thái |
+| --- | --- | --- | --- |
+| W10-01 / 12/10 | Chốt giao diện posit_add và ranh giới pipeline | Unpacked input/output, GRS, special/flags, reset/enable/stall, latency; thống nhất SPEC/L1 và packer. SPEC đã đồng bộ mục tiêu nhưng giao diện adder chưa chốt | processing |
+| W10-02 / 13/10 | Chuẩn bị oracle, vector và matrix kiểm adder | Dùng L1 đã nghiệm thu; L0 đúng format, ES3 oracle độc lập. Seed/hash/compiler/lệnh; carry/borrow/cancellation, scale-clamp, RNE ties và special | không |
+| W10-03 / 13–14/10 | RTL chọn độ lớn và căn chỉnh | So(sf,m), dịch/clamp, giữ G/R/đuôi và xử lý dấu khi trừ; test từng khối đạt | không |
+| W10-04 / 14–15/10 | RTL cộng/trừ và chuẩn hóa | Carry/borrow, zero/NaR, LZD/scale và output unpacked/GRS; tổ hợp khớp L1, không latch | không |
+| W10-05 / 16/10 | Pipeline và giao thức | Reset rỗng/đang tính/output stall; dữ liệu/metadata cùng giao dịch, không mất/lặp/đổi thứ tự, latency đo đúng | không |
+| W10-06 / 17/10 | Regression và rà soát guideline | Lint sạch; RTL=L1 và oracle phù hợp,0 mismatch; ModelSim corner/protocol và harness lượt lớn; coverage/bin thiếu được ghi rõ | không |
+| W10-07 / 18/10 | Chốt corpus/ma trận NF/F và bàn giao | Corpus paired/seed/filter/zero/NaR, accuracy metrics và ma trận bắt buộc khóa trước đo; requirements width/cut F cùng điểm còn mở; cập nhật tài liệu, hash và push GitHub | không |
+
+**Phạm vi kiểm tuần10:** chốt trước khi chạy tại W10-02; tối thiểu posit8 vét cạn65.536 cặp, posit32 ES2/ES3 mỗi format10^7 cặp phân tầng cùng corner; ES2=L0, ES3=oracle integer độc lập. Pilot pipeline/control trên ModelSim, harness lượt lớn có scoreboard trực tiếp; giữ posit16 exhaustive và posit32≥10^8 của AC02 cho nghiệm thu cuối, không gọi smoke/pilot là đạt toàn AC02. Kiểm adder output unpacked và sau pack RNE; test TRUNC nếu công bố hỗ trợ. Reset/stall/order và flags phải kiểm, không chỉ so bits cuối.
+
+**Điều kiện đóng tuần10:** W10-01..07 có bằng chứng đạt, adder số học/giao thức không còn mismatch; report nêu cấu hình, counts/coverage, seed, compiler, lệnh và hash. Signed residual/cửa sổ/latency F chưa khóa trong tuần10: hoàn thiện L1/oracle tuần12 trước RTL. Gate3 và các ngưỡng final AC01/AC02/AC04 vẫn thực hiện ở các mốc sau.
+
+**Quy tắc gỡ checklist:** khi tuần10 được nghiệm thu, xóa riêng mục3.1 này; giữ hàng tổng kết tuần10 và nhật ký kết quả/đường dẫn bằng chứng. Khi bắt đầu tuần11, đặt checklist tuần11 thay thế. Không gỡ theo ngày nếu công việc chưa đạt.
 
 ## 4. Nhật ký theo ngày
 
@@ -139,6 +159,7 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | --- | --- | --- | --- |
 | 1 | Chuyển baseline và sắp lại timeline | Chốt non-fused đối chứng/fused biến thể; giữ Gate2, đồng bộ SPEC/PLAN. Lịch chính đến29/11, đệm trước05/12; chưa viết RTL mới | ✅ |
 | 2 | Chốt tích nội bộ và đóng băng L1 — tuần4 | FLOOR/RNE prepack đã kiểm Linux/Windows/UBSan và regression đạt,0 mismatch; dữ liệu cũ không đổi. Fused signed residual chưa triển khai | ✅ |
+| 3 | Đồng bộ mục tiêu NF/F và kế hoạch tuần10 | SPEC v1.8 sửa nhãn fused/matrix/PPA cho nhất quán; thêm checklist W10-01..07 tạm, gỡ sau nghiệm thu. Chưa triển khai hoặc kiểm RTL adder mới | ✅ |
 
 ### 4.11. Mẫu cập nhật tiếp theo
 

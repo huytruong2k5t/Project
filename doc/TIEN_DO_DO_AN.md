@@ -1,9 +1,9 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 11/10/2026 (giờ Việt Nam)  
+**Ngày cập nhật:** 12/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.8](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
+**Tài liệu chi tiết:** [SPEC v1.9](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -43,7 +43,7 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 7 | RTL giải mã và khối cơ sở | ✅ | LOD/LZD, hai shifter và parser tổ hợp/pipeline kiểm chứng đơn vị đạt |
 | 8 | RTL mã hóa và làm tròn | ✅ | Packer tổ hợp/pipeline và parser→packer đạt; PPA đơn vị đã khảo sát, sau tối ưu P2, benchmark đạt setup100MHz ở ba seed mỗi mode |
 | 9 | RTL bộ nhân lặp — Gate2 | ✅ | Multiplier đã nghiệm thu trên16 cấu hình,0 mismatch; lint và coverage đạt phạm vi tuần9. Baseline gốc theo dõi riêng ở tuần4 |
-| 10 | RTL adder và chốt so sánh NF/F | processing | 12–18/10: SPEC đã đồng bộ NF/F bắt buộc; checklist tạm ở mục3.1, RTL adder chưa triển khai |
+| 10 | RTL adder và chốt so sánh NF/F | processing | 12–18/10: W10-01 chốt giao diện/ba tầng và kiểm mapping đạt; tiếp W10-02; RTL adder chưa triển khai, checklist tạm ở mục3.1 |
 | 11 | MAC non-fused — Gate3 | không | 19–25/10: tích hợp/kiểm MAC v1, đóng băng baseline; bắt đầu L1 fused |
 | 12 | Oracle/L1 fused và PPA sơ bộ NF | không | 26/10–01/11: width/cut/đuôi có dấu, kiểm triệt tiêu; chốt hợp đồng F và khả năng công cụ |
 | 13 | RTL fused | không | 02–08/11: triển khai theo L1 đã kiểm, pilot số học/protocol; không mặc định exact |
@@ -57,7 +57,7 @@ Mục tiêu: RTL adder đúng và bàn giao để ghép NF/Gate3 tuần11; khóa
 
 | Mã / ngày dự kiến | Công việc chính | Điều kiện hoàn thành / bàn giao | Trạng thái |
 | --- | --- | --- | --- |
-| W10-01 / 12/10 | Chốt giao diện posit_add và ranh giới pipeline | Unpacked input/output, GRS, special/flags, reset/enable/stall, latency; thống nhất SPEC/L1 và packer. SPEC đã đồng bộ mục tiêu nhưng giao diện adder chưa chốt | processing |
+| W10-01 / 12/10 | Chốt giao diện posit_add và ranh giới pipeline | SPEC v1.9§5.8: unpacked/GRS/flags, ba tầng elastic/reset/stall/lịch cạnh; projection Linux/UBSan đạt, RTL chưa triển khai | ✅ |
 | W10-02 / 13/10 | Chuẩn bị oracle, vector và matrix kiểm adder | Dùng L1 đã nghiệm thu; L0 đúng format, ES3 oracle độc lập. Seed/hash/compiler/lệnh; carry/borrow/cancellation, scale-clamp, RNE ties và special | không |
 | W10-03 / 13–14/10 | RTL chọn độ lớn và căn chỉnh | So(sf,m), dịch/clamp, giữ G/R/đuôi và xử lý dấu khi trừ; test từng khối đạt | không |
 | W10-04 / 14–15/10 | RTL cộng/trừ và chuẩn hóa | Carry/borrow, zero/NaR, LZD/scale và output unpacked/GRS; tổ hợp khớp L1, không latch | không |
@@ -162,7 +162,13 @@ Mục tiêu: RTL adder đúng và bàn giao để ghép NF/Gate3 tuần11; khóa
 | 3 | Đồng bộ mục tiêu NF/F và kế hoạch tuần10 | SPEC v1.8 sửa nhãn fused/matrix/PPA cho nhất quán; thêm checklist W10-01..07 tạm, gỡ sau nghiệm thu. Chưa triển khai hoặc kiểm RTL adder mới | ✅ |
 | 4 | Dọn kết quả có thể tái sinh | Giải phóng khoảng3,74 GiB cache/corpus; giữ báo cáo, coverage, trace/hash và fixture nhỏ; manifest kiểm phần giữ không đổi, hướng dẫn build/sinh lại đã cập nhật | ✅ |
 
-### 4.11. Mẫu cập nhật tiếp theo
+### 4.11. Ngày 12/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | W10-01 — hợp đồng adder | Chốt giao diện NF, width/adapter và ba tầng elastic; mapping L1→packer Linux/UBSan0 mismatch, hash L1 giữ nguyên. W10-02 và RTL còn thực hiện | ✅ |
+
+### 4.12. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.8 — 2026-10-11 — Đồng bộ mục tiêu NF/F bắt buộc và kế hoạch tuần10 |
+| Phiên bản | v1.9 — 2026-10-12 — Chốt giao diện và pipeline adder W10-01 |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -28,6 +28,8 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.7 | 2026-10-11 | Chốt profile nhân FLOOR/RNE, exporter tích prepack và metadata; kiểm độc lập Linux/Windows/UBSan, đóng băng L1 hiện có; fused signed residual còn theo mốc riêng. |
 
 | v1.8 | 2026-10-11 | Đồng bộ fused profile chính thành MUST trong latency/top/matrix/PPA/rủi ro; giữ exact fused và cấu hình phụ là MAY. Thêm matrix NF/F32/3 FLOOR/RNE n0..8, phân biệt sketch với hợp đồng chưa nghiệm thu; checklist tuần10 đặt tạm trong tiến độ. |
+
+| v1.9 | 2026-10-12 | Chốt posit_add NF: input exact unpacked, output fraction mở rộng/sticky/flags, width và adapter; ba tầng elastic A1/A2/A3 với lịch cạnh/reset/stall; review mapping L1, chưa triển khai RTL adder. |
 
 **Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Các phần khác dẫn chiếu, không đặt thêm quy tắc khác cho cùng hành vi.
 
@@ -464,15 +466,75 @@ SAC xác định last từ fx kế tiếp bằng 0 hoặc đạt n_lim, không c
 
 ### 5.8 Adder (`posit_add`)
 
-Ngõ vào hai bộ ba unpacked `(s, sf, m)` với `m = 1.f` rộng `W = FRAC_MAX + 1`; ngõ ra bộ ba unpacked chưa làm tròn kèm các bit cờ `guard, round, sticky` (G, R, S).
+Ngõ vào hai bộ ba unpacked `(s, sf, m)` với `m = 1.f` rộng `W = FRAC_MAX + 1`; ngõ ra unpacked chưa làm tròn; G/R nằm trong fraction mở rộng, sticky ngoài giữ numerical tail. GRS cuối do packer quyết định theo regime (§5.8-B/§5.9).
 
 **Đặc tả chi tiết và giới hạn Alignment Shifter**:
 
 - Chọn số hạng có độ lớn lớn hơn theo (sf,m); đặt $d=sf_L-sf_S\ge0$, dấu kết quả theo số hạng lớn khi trừ. Alignment phải giữ G/R và phần dư; khi trừ không được xử lý phần dư như một số hạng cộng dương.
-- **Cơ chế Kẹp Cứng (Clamping)**: Do dải scale factor $sf$ rất rộng ($[-240, 240]$ với posit32), nếu thiết kế bộ dịch theo toàn bộ dải $sf$ sẽ tiêu tốn tài nguyên LUTs khổng lồ và làm giảm nghiêm trọng $f_{max}$. Nhận xét rằng nếu $d > \text{FRAC\_MAX} + 2$, toàn bộ mantissa $m_2$ sẽ bị dịch trôi hoàn toàn ra ngoài vùng bit có nghĩa (ngoài cả bit Guard và Round). Khi đó:
+- **Cơ chế Kẹp Cứng (Clamping)**: Do dải scale factor $sf$ rất rộng ($[-240, 240]$ với posit32/ES3; ES2 là $[-120,120]$), nếu thiết kế bộ dịch theo toàn bộ dải $sf$ sẽ tiêu tốn tài nguyên LUTs khổng lồ và làm giảm nghiêm trọng $f_{max}$. Nhận xét rằng nếu $d > \text{FRAC\_MAX} + 2$, toàn bộ mantissa $m_2$ sẽ bị dịch trôi hoàn toàn ra ngoài vùng bit có nghĩa (ngoài cả bit Guard và Round). Khi đó:
   - Mạch kích hoạt cơ chế kẹp cứng: $d_{clamp} = \min(d, \text{FRAC\_MAX} + 2)$.
   - Nếu $d > \text{FRAC\_MAX} + 2$, toàn bộ $m_2$ được bypass/dồn thẳng vào bit Sticky: $S = |m_2| \ne 0$.
   - Nhờ vậy, bộ Alignment Barrel Shifter chỉ cần độ rộng dịch tối đa là $\text{FRAC\_MAX} + 2$ vị trí (ví dụ: với posit32, $\text{FRAC\_MAX}=27$, shifter chỉ cần 5 bit điều khiển cho tối đa 29 vị trí dịch).
+
+#### A. Hợp đồng giao diện W10-01 — chốt 12/10/2026
+
+**Phạm vi:** posit_add cho NF/v0/v1 và cộng hai Posit độc lập; bốn format nghiệm thu (8,0),(16,1),(32,2),(32,3). F=FRAC_MAX=NB-3-ES là fraction đầy đủ của format, khác FRAC_W12 của multiplier approximate. NB32/ES3 dùng F26, không cắt đầu vào adder còn12 bit. Các cấu hình khác chưa nghiệm thu; adapter baseline yêu cầu F>=2, không tuyên bố hỗ trợ toàn bộ tuple hợp lệ của IP. Không đổi mô hình L1 đóng băng.
+
+Đầu vào hữu hạn khác0 là exact normalized 1.f: `a_frac/b_frac` chỉ chứa F bit sau hidden, scale signed trong[-SF_MAX,SF_MAX]; parser hoặc round_unpacked cung cấp. Không nhận prepack P_hat, GRS/đuôi của tích chưa round, hay sticky_input; metadata flags không thay giá trị toán hạng. Hai toán hạng, special và flags_in được nhận nguyên tử tại cùng handshake. Không có cfg_n/cfg_ops hoặc acc_mode bên trong adder; MAC quản lý C_eff/config/feedback theo §4.2.
+
+| Cổng posit_add | Hướng / độ rộng | Hợp đồng |
+| --- | --- | --- |
+| clk / reset_n | in / 1 | Leaf reset assert bất đồng bộ, release qua hai FF theo guideline; top rst_n qua bridge/barrier §4.2 |
+| in_valid / in_ready | in / out,1 | Handshake nhận cả A/B/flags; nguồn giữ toàn bộ payload khi valid và chưa ready |
+| a_sign / b_sign | in / 1 | Dấu từng toán hạng |
+| a_is_zero / b_is_zero | in / 1 | Khi1, sf/frac bị bỏ qua |
+| a_is_nar / b_is_nar | in / 1 | NaR ưu tiên Zero và dữ liệu hữu hạn |
+| a_sf / b_sf | in / signed SF_W | SF_W theo §2.3; không dùng ES làm độ rộng sf |
+| a_frac / b_frac | in / F | Không chứa hidden; hữu hạn khác0 khôi phục hidden1 |
+| flags_in | in / 5 | Metadata từ bước nhân/round; thứ tự §4.2; không OR vào sticky số học |
+| out_valid / out_ready | out / in,1 | Xuất unpacked, chưa làm tròn; giữ cả payload khi stalled |
+| sign / is_zero / is_nar | out / 1 | Canonical special theo mục C dưới |
+| sf | out / signed SF_W | Scale sau normalize; không clamp về Posit tại adder |
+| frac | out / F_OUT=2F+1 | Fraction mở rộng, không hidden; nối frac của packer F_IN=F_OUT |
+| sticky | out / 1 | Numerical tail theo L1 `!sum.exact`; không phải OR của metadata approximate |
+| flags_out | out / 5 | Metadata qua adder; packer nhận qua flags_in để hoàn thiện flags cuối |
+
+F, F_OUT, SF_W là kích thước suy từ NB/ES theo công thức hiện hành; ghi đè sai phải bị chặn lúc elaboration. Module tổ hợp posit_add_comb dùng cùng cổng số học (không clk/reset/valid/ready); pipeline posit_add và comb phải cho cùng output. Mỗi module một file, named ports, mỗi cổng một dòng, always_comb có default, bank dùng always_ff/enable/CK2Q theo guideline. Không tạo stub RTL chưa có chức năng để gọi là triển khai.
+
+#### B. Độ rộng, alignment và adapter packer
+
+Q=F+3; x=unsigned({1,a_frac})<<3, y=unsigned({1,b_frac})<<3 sau chọn lớn theo(sf,m); tie độ lớn giữ A. Word sum/carry rộng Q+2=F+5; magnitude đã normalize rộng Q+1=F+4. Khôi phục hidden và zero-extend vào ADD_W trước khi dịch trái3; không dịch trong biểu thức hẹp F+1 bit làm mất MSB. Delta scale được tính bằng sign-extension rộng SF_W+1 rồi chuyển unsigned sau bảo đảm d>=0; không wrap subtraction trước clamp.
+
+| NB/ES | F | Q | Word sum/carry | F_OUT | SF_W |
+| --- | --- | --- | --- | --- | --- |
+| 8/0 | 5 | 8 | 10 | 11 | 6 |
+| 16/1 | 12 | 15 | 17 | 25 | 8 |
+| 32/2 | 27 | 30 | 32 | 55 | 10 |
+| 32/3 | 26 | 29 | 31 | 53 | 11 |
+
+Ở d<=F+2: dịch y, gom mọi bit mất vào tail và jam bit0 như L1; ở d>F+2: y=1,tail=1 với toán hạng nhỏ hữu hạn khác0. Đây là clamp F+2 của mô hình đã kiểm, không lấy y sau dịch ở F+2 rồi OR1 cho nhánh vượt ngưỡng. Khác dấu tính x-y trên độ lớn đã chọn; không cộng tail dương vào tổng âm. Carry dịch phải1, jam bit rơi, tăng sf1; nếu nhỏ hơn hidden thì LZD/dịch trái và giảm sf đúng số vị trí; zero kiểm trước LZD.
+
+Mapping hữu hạn: `frac={magnitude[Q-1:0], {(F-2){1'b0}}}`; `sticky=alignment_tail | carry_lost_bit` đúng L1 !sum.exact. Q bit fraction đã gồm F bit fraction, G=mag[2],R=mag[1],bit jam=mag[0]; S_trace=mag[0]|tail. G/R/S_trace là quan sát nội bộ, không thêm port G/R riêng và không OR mag[0] tùy tiện vào sticky ngoài: bit jam vẫn nằm trong frac, có thể được dịch lên khi normalize. Packer tự dịch regime và tính GRS cuối; không bỏ G/R trước pack, không round tại A3. Bypass zero operand đệm F_OUT-F bit0 vào fraction của operand còn lại. Các special trả frac/sticky0.
+
+flags_out hữu hạn giữ flags_in[3:0] và OR numerical tail vào inexact; không tạo approx_cut mới. Các G/R và fraction thấp được packer dùng xác định inexact cuối theo §5.9; không báo saturation trước khi có kết quả normalized. Packer OR các flags trung gian, xác định sat_max/sat_min và final inexact; kết quả NaR luôn flags10000. Hòa/rounding/clamp cuối do ROUND_MODE của packer, không cần ROUND_MODE trong adder.
+
+#### C. Special và giao thức ba tầng elastic
+
+NaR nếu a_is_nar|b_is_nar|flags_in[4]: sign1,is_nar1,is_zero0,sf0,frac0,sticky0,flags_out10000. Hai Zero hoặc triệt tiêu exact: sign0,is_zero1,is_nar0,sf0,frac0,sticky0; giữ metadata hữu hạn flags_in[3:0]. Một Zero: giữ giá trị operand hữu hạn còn lại, frac đệm0, sticky0; vẫn qua pipeline. Không bypass special vượt thứ tự. Payload vô nghĩa khi out_valid0, nhưng dữ liệu/flags xác định sau reset.
+
+| Tầng / cạnh không stall | Công việc và trạng thái cần giữ |
+| --- | --- |
+| A1 / E0 nhận input | Special/flags; chọn độ lớn/dấu/phép cộng-trừ; delta/clamp/dịch-jam; chốt x,y,tail,sf_base và context |
+| A2 / E1 | Cộng/trừ magnitude, carry/zero candidate; chốt kết quả và context |
+| A3 / E2 | Carry hoặc LZD-normalize, scale, adapter frac/sticky và flags; chốt output unpacked |
+
+Ba slot elastic, enable độc lập: ready3=!valid3|out_ready; ready2=!valid2|ready3; ready1=!valid1|ready2. in_ready bị gate bởi reset/startup; stage chỉ cập nhật khi ready của chính stage và startup đã nhả. Không dùng enable chung làm mất giao dịch dưới backpressure. Không có CE ngoài ở giao diện đã chốt; clock enable là load-enable nội bộ. Có thể push/pop đồng thời, II=1 không stall; không nhân đôi handshake nếu downstream giữ ready.
+
+Input handshake E0 → out_valid sau E2 → output handshake sớm nhất E3: H_ADD=3,L_valid=2,L_handshake=3. Startup chờ hai cạnh synchronizer release, stall báo riêng. Reset xóa cả3 valid/data/context và hủy giao dịch đang chờ; in_ready=out_valid0 khi reset/startup. Khi out_valid&&!out_ready, toàn bộ output giữ đến handshake hoặc reset. Reset ưu tiên handshake. RNE packer tiếp theo hai slot theo §5.9-D: giao dịch đầu vào adder E0 sang packer ở E3, packer valid sau E4 và handshake E5 nếu không stall; TRUNC packer valid sau E3 và handshake E4. Không tính hai lần bank A3/P1. Lịch feedback round_unpacked và C/context toàn MAC còn kiểm ở tuần11; ba tầng adder không tự nghiệm thu II_acc.
+
+#### D. Điều kiện bàn giao W10-01
+
+Hợp đồng trên đã chốt thiết kế, chưa có RTL adder. Review/projection365.836 cặp trên bốn format (posit8 exhaustive),23.413.504 kiểm metadata/mode, Linux và UBSan cùng PASS/0 mismatch,seed20261012; bằng chứng tại results/week10_contract; kiểm mapping L1 sang giao diện/packer không thay nghiệm thu số học L0 hoặc pipeline. W10-02 khóa vector/oracle/flags/control và counts trước chạy; W10-03..06 hiện thực/kiểm comb, pipeline, timing và assertions. Không coi interface PASS là RTL PASS, STA hoặc Gate3. Cửa sổ/residual fused tiếp tục §5.12, không đưa prepack vào giao diện NF này.
 
 ### 5.9 Packer (`posit_pack`)
 

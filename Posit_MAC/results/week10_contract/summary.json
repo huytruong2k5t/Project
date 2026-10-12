@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-12",
+  "timezone": "Asia/Saigon",
+  "milestone": "W10-01",
+  "status": "CONTRACT_REVIEW_AND_PROJECTION_PASS",
+  "rtl_adder_implemented": false,
+  "pipeline_simulated": false,
+  "arithmetic_oracle_independent": false,
+  "contract": "SPEC v1.9 section5.8-A..D",
+  "formats": [
+    [
+      8,
+      0
+    ],
+    [
+      16,
+      1
+    ],
+    [
+      32,
+      2
+    ],
+    [
+      32,
+      3
+    ]
+  ],
+  "stages": 3,
+  "latency_no_stall": {
+    "input_handshake": "E0",
+    "output_valid": "after E2",
+    "output_handshake": "E3",
+    "II": 1
+  },
+  "seed": 20261012,
+  "checks": 365836,
+  "metadata_mode_checks": 23413504,
+  "mismatches": 0,
+  "projection": "W10_CONTRACT_PROJECTION PASS checks=365836 metadata_mode_checks=23413504 clamped=25208 subtract_tail=88222 cancellation=273 carry=42164 seed=20261012 mismatches=0; no RTL simulated",
+  "ubsan": "W10_CONTRACT_PROJECTION PASS checks=365836 metadata_mode_checks=23413504 clamped=25208 subtract_tail=88222 cancellation=273 carry=42164 seed=20261012 mismatches=0; no RTL simulated",
+  "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "frozen_L1_source_hash_check": "PASS unchanged",
+  "reviewed_source_sha256": {
+    "l1/include/posit_adder.hpp": "08d20c9ccc3aad3cb314c4ca42649f8a039364756633099dea3bebec60a80ba4",
+    "l1/include/posit_packer.hpp": "532e3e3af4416d925de83e38e1a4554129953ee5521d1d8114a4e30c539b57bb",
+    "l1/include/posit_mac.hpp": "136aa7adc8038384785c249c12c2c779534f448f6e4b6b54fc26cbe26ab2c66a",
+    "rtl/posit_pack.sv": "eb97ee2f9b93ebc3e51cba0f9506ae8f8efaeab0ca6fca71e0043e138aad27fe",
+    "rtl/posit_pack_prepare.sv": "21a544e78c3577e95c82aa38363f9006870c3103e678befa55be28ca5ea37328",
+    "rtl/posit_pack_finish.sv": "bf3a4dc17e3a9542cd5ef77215467aebb9fbc31c1c23b1f52124148d3b9dff5d",
+    "rtl/posit_mac.vh": "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88",
+    "Digital_Design_Guidelines.md": "71e24384c5018e3d8a8614e44c1c6845a22dee017b80ddf6477a807492316af6",
+    "SPEC_Posit_MAC_IP.md": "fe8a0388d6571d4ac01c78a8b1f43fa2e848e7d92fe3874614c99ce5a48304c7",
+    "l1/test/test_week10_adder_contract.cpp": "0de66edfa6644c2c261bc5b7eb262ba22206b9091f3e117492edbc8c6c6d5073"
+  },
+  "binary_sha256": {
+    "test_projection": "9a1ab05001bb8cc2adb0936b3a35c0000038f87f95568faeed9fc4413c365d52",
+    "test_projection_ubsan": "76f0f8521eaae08654c1957db34178868d36fbf54cb25f06590ff233f2510af4"
+  },
+  "commands": [
+    "mkdir -p results/week10_contract/tmp; export TMPDIR=\"$PWD/results/week10_contract/tmp\"",
+    "g++ -O2 -std=c++17 -Wall -Wextra -Werror -I l1/include l1/test/test_week10_adder_contract.cpp -o results/week10_contract/test_projection",
+    "./results/week10_contract/test_projection",
+    "g++ -O1 -g -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I l1/include l1/test/test_week10_adder_contract.cpp -o results/week10_contract/test_projection_ubsan",
+    "./results/week10_contract/test_projection_ubsan"
+  ],
+  "remaining": [
+    "W10-02 vector/oracle/control/flags matrix",
+    "W10-03..06 RTL arithmetic/pipeline/reset/stall/order and coverage",
+    "MAC/Gate3 integration week11",
+    "Fused residual/window contract week12"
+  ]
+}

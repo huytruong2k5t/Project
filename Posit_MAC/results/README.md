@@ -73,3 +73,7 @@ Giữ mọi summary/CSV/log/hash, raw structural/functional coverage, source sna
 **Chạy lại:** theo hướng dẫn [WSL/ModelSim](../../doc/HUONG_DAN_CHAY_WSL_MODELSIM.md), mục6.1 sinh stratified_corpus, mục6.4 build/run Verilator, rồi mới mục6.5 corners. Binary obj_dir không còn; không chạy corners ngay hoặc coi file thiếu là PASS. Corpus historical phải dùng đúng source/seed/compiler/hash của report, source snapshot và lịch sử Git; giữ report cũ trước khi runner ghi mới. Scripts/generator/reference ngoài results được giữ nguyên.
 
 **Dọn lần sau:** PowerShell7 (`pwsh`), từ Posit_MAC, `./scripts/cleanup_results.ps1` chỉ xem kế hoạch; thêm `-Apply -Checkpoint YYYYMMDD` mới xóa. Script kiểm mọi đích thuộc results, từ chối link/process simulator đang chạy, ghi manifest trước xóa và kiểm hash phần giữ sau xóa. Chọn checkpoint mới; không ghi đè manifest cũ. Khi chạy WSL, hoàn tất mọi build/sim trước dọn; kiểm process Windows không bảo đảm phát hiện process Linux.
+
+## 7. W10-01 — hợp đồng adder, 12/10/2026
+
+week10_contract/summary.json, projection.log và ubsan.log kiểm mapping L1 sang cổng unpacked/packer365.836 cặp,bốn format,0 mismatch. Không phải test RTL/control hoặc oracle độc lập. Contract ở SPEC§5.8-A..D; source/lệnh/compiler/hash đi cùng summary. Binary/tmp có thể build lại, không đưa Git; không sửa L1 frozen.

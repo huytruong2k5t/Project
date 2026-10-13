@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-13",
+  "status": "FROZEN BEFORE MAC SIMULATION",
+  "main": {"NB":32,"ES":3,"FRAC_W":12,"ROUND_MODE":"RNE","ROUND_SCHEME":"FLOOR","N_MAX":8,"OPS":[0,1],"mode":["exact","approx"],"acc_mode":[0,1]},
+  "supplementary": [[8,0],[16,1],[32,2]],
+  "seed": "20261013 + 100*NB + ES, mt19937_64",
+  "pilot_completed_per_format": 20000,
+  "acceptance_completed_32_3": 10000000,
+  "config_bins": "72 = n0..8 * OPS0/1 * exact/approx * acc_mode0/1; n ignored by exact arithmetic",
+  "distribution": "deterministic mixture of raw bits, regime run buckets with sign/polarity, fraction zero/ones/alternating/onehot/random, specials and cancellation candidates",
+  "protocol": "one transaction; random stalls and 96-cycle block; reset every4093 cycles, cancelled transactions excluded from completed counts; invalid config rejected",
+  "oracle": "direct new NF model; independent dyadic prepack encoder and full-grid integer adder; exact product integer oracle, SoftPosit on its supported formats",
+  "scope": "Gate3 milestone, not final per-n10M NF/F accuracy/PPA/AC04"
+}

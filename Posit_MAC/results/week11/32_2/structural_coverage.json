@@ -1,0 +1,6497 @@
+{
+  "metrics": {
+    "toggle": {
+      "hit": 6338,
+      "total": 7254,
+      "percent": 87.37248414667769
+    },
+    "line": {
+      "hit": 65,
+      "total": 67,
+      "percent": 97.01492537313433
+    },
+    "branch": {
+      "hit": 115,
+      "total": 122,
+      "percent": 94.26229508196721
+    }
+  },
+  "unhit_points": [
+    {
+      "kind": "toggle",
+      "file": "src/dyn_left_shifter.sv",
+      "line": "24",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.u_shift",
+      "object": "b[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/dyn_left_shifter.sv",
+      "line": "25",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.u_shift",
+      "object": "out[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/dyn_left_shifter.sv",
+      "line": "25",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.u_shift",
+      "object": "out[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/dyn_right_shifter.sv",
+      "line": "28",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align.u_align_shift",
+      "object": "in[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/dyn_right_shifter.sv",
+      "line": "28",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align.u_align_shift",
+      "object": "in[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/dyn_right_shifter.sv",
+      "line": "28",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align.u_align_shift",
+      "object": "in[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/dyn_right_shifter.sv",
+      "line": "28",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align.u_align_shift",
+      "object": "in[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/dyn_right_shifter.sv",
+      "line": "28",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare.u_payload_shift",
+      "object": "in[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/dyn_right_shifter.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align.u_align_shift",
+      "object": "fill_val"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/dyn_right_shifter.sv",
+      "line": "31",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align.u_align_shift",
+      "object": "out[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/dyn_right_shifter.sv",
+      "line": "47",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align.u_align_shift",
+      "object": "fill"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/iter_ctrl.sv",
+      "line": "32",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl",
+      "object": "state_error"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/iter_ctrl.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl",
+      "object": "fx_next_exact[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/iter_ctrl.sv",
+      "line": "43",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl",
+      "object": "fx_next_approx[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/iter_ctrl.sv",
+      "line": "44",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl",
+      "object": "unused_sa_approx[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/iter_ctrl.sv",
+      "line": "45",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl",
+      "object": "error_exact"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/iter_ctrl.sv",
+      "line": "46",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl",
+      "object": "fx_next[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "data_pad[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "data_pad[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "data_pad[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "data_pad[3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "data_pad[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "data_pad[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "data_pad[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "data_pad[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "data_pad[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "data_pad[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "data_pad[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "data_pad[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "data_pad[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "41",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "data_pad[3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[0][0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[0][1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[0][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[0][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[0][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[1][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[2][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[3][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[4][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact.g_detector.u_lod",
+      "object": "tree_vld[5][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[0][0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[0][1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[1][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[2][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[3][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[4][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lzd",
+      "object": "tree_vld[5][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[0][0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[0][1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[1][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[2][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[3][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[4][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*lod",
+      "object": "tree_vld[5][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[0][0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[1][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[2][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[3][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[4][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][27]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][28]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize.u_lod",
+      "object": "tree_vld[5][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[0][0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[0][1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[0][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[0][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[1][0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[1][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[1][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[1][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[1][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[1][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[1][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[1][1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[1][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[1][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[2][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[3][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/lod_lzd_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx.g_detector.u_lod",
+      "object": "tree_vld[4][9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "106",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "unused_ops_error"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "113",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "core_error"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "116",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "unused_sticky_acc"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "68",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "norm_flags[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "68",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "norm_flags[3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "68",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "norm_flags[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "77",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "sum_frac[9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mac_nf_wrapper.sv",
+      "line": "80",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper",
+      "object": "ops_q[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "38",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "sticky_acc"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "46",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "state_error"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "ctrl_error"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "55",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "carry_error"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "y_base[55]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "term[55]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "60",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "t2_term[54]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/mul_iter_core.sv",
+      "line": "60",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core",
+      "object": "t2_term[55]"
+    },
+    {
+      "kind": "branch",
+      "file": "src/ops_sel_comb.sv",
+      "line": "108",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_ops",
+      "object": "else"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/ops_sel_comb.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_ops",
+      "object": "cfg_ops[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/ops_sel_comb.sv",
+      "line": "38",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_ops",
+      "object": "cfg_error"
+    },
+    {
+      "kind": "branch",
+      "file": "src/posit_add.sv",
+      "line": "164",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "else"
+    },
+    {
+      "kind": "branch",
+      "file": "src/posit_add.sv",
+      "line": "175",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "else"
+    },
+    {
+      "kind": "branch",
+      "file": "src/posit_add.sv",
+      "line": "198",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "else"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac[9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "67",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "a1_d.x[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "67",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "a1_d.x[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "67",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "a1_d.x[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "67",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "a1_d.x[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "67",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "a1_d.y[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "68",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "a1_q.x[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "68",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "a1_q.x[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "68",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "a1_q.x[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "68",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "a1_q.x[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "68",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "a1_q.y[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add.sv",
+      "line": "75",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add",
+      "object": "frac_d[9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "x[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "x[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "x[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "x[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "y[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "46",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "x_seed[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "46",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "x_seed[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "46",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "x_seed[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "46",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "x_seed[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "47",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "y_seed[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "47",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "y_seed[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "47",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "y_seed[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "47",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "y_seed[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "50",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "delta_sf[10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "50",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "delta_sf[8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "50",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "delta_sf[9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "53",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "shifted_y[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "54",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "lost_mask[29]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "54",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "lost_mask[30]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "54",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "lost_mask[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_align.sv",
+      "line": "56",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_align",
+      "object": "fill_val"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_arith.sv",
+      "line": "15",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_arith",
+      "object": "x[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_arith.sv",
+      "line": "15",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_arith",
+      "object": "x[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_arith.sv",
+      "line": "15",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_arith",
+      "object": "x[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_arith.sv",
+      "line": "15",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_arith",
+      "object": "x[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_arith.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_arith",
+      "object": "y[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_add_normalize.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_add.u_normalize",
+      "object": "frac[9]"
+    },
+    {
+      "kind": "branch",
+      "file": "src/posit_pack.sv",
+      "line": "117",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "else"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[10]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[11]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[12]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[13]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[14]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[6]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[7]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[8]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "frac[9]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack.sv",
+      "line": "42",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_pack",
+      "object": "p1_special_sel_d[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_comb.sv",
+      "line": "24",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_round.u_pack",
+      "object": "sticky"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_comb.sv",
+      "line": "25",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_round.u_pack",
+      "object": "flags_in[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_comb.sv",
+      "line": "25",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_round.u_pack",
+      "object": "flags_in[3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_comb.sv",
+      "line": "25",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_round.u_pack",
+      "object": "flags_in[4]"
+    },
+    {
+      "kind": "line",
+      "file": "src/posit_pack_finish.sv",
+      "line": "91",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*.u_finish",
+      "object": "elsif"
+    },
+    {
+      "kind": "line",
+      "file": "src/posit_pack_finish.sv",
+      "line": "99",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*.u_finish",
+      "object": "case"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "47",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "payload[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[31]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[32]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[33]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[34]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[35]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[36]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[37]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[38]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[39]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[40]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[41]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[42]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[43]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[44]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[45]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[46]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[47]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[48]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[49]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[50]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[51]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[52]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[53]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[54]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[55]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[56]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[57]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[58]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/posit_pack_prepare.sv",
+      "line": "49",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*ack.u_prepare",
+      "object": "lost_mask[59]"
+    },
+    {
+      "kind": "branch",
+      "file": "src/posit_parser.sv",
+      "line": "179",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*",
+      "object": "else"
+    },
+    {
+      "kind": "branch",
+      "file": "src/posit_parser.sv",
+      "line": "239",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_*",
+      "object": "else"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/round_unpacked_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_round",
+      "object": "flags_in[2]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/round_unpacked_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_round",
+      "object": "flags_in[3]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/round_unpacked_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_round",
+      "object": "flags_in[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/round_unpacked_comb.sv",
+      "line": "30",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_round",
+      "object": "numerical_sticky"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sac_step_comb.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx",
+      "object": "sa[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sac_step_comb.sv",
+      "line": "24",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact",
+      "object": "fx_next[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sac_step_comb.sv",
+      "line": "24",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx",
+      "object": "fx_next[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sac_step_comb.sv",
+      "line": "26",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact",
+      "object": "state_error"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sac_step_comb.sv",
+      "line": "33",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx",
+      "object": "leading_count_extended[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sac_step_comb.sv",
+      "line": "35",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact",
+      "object": "shifted[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sac_step_comb.sv",
+      "line": "35",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx",
+      "object": "shifted[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sac_step_comb.sv",
+      "line": "36",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx",
+      "object": "step_amount[4]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sac_step_comb.sv",
+      "line": "37",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_exact",
+      "object": "scale_sum[5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sac_step_comb.sv",
+      "line": "37",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_ctrl.u_approx",
+      "object": "scale_sum[5]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "y_base[55]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "23",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "term[54]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "23",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "term[55]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "29",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "sticky_acc"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "34",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "carry_error"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum.sv",
+      "line": "39",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc",
+      "object": "carry_raw"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "16",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "y_base[55]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "17",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "term[54]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "17",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "term[55]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "20",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "sticky_acc"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "25",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "carry_error"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_accum_comb.sv",
+      "line": "27",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_acc.u_add",
+      "object": "sum[56]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[0]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[15]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[16]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[17]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[18]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[19]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[1]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[20]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[21]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[22]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[23]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[24]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[25]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[26]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "21",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "y_base[55]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "22",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "term[55]"
+    },
+    {
+      "kind": "toggle",
+      "file": "src/sbm_shift_comb.sv",
+      "line": "26",
+      "hierarchy": "TOP.posit_mac_nf.u_wrapper.u_core.u_shift",
+      "object": "shifted[55]"
+    }
+  ],
+  "exclusions": "None"
+}

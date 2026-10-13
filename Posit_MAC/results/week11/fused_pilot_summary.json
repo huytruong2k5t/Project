@@ -1,0 +1,13 @@
+{
+  "status": "PASS: W11 software fused full-sum pilot only",
+  "checked": 100000,
+  "mismatches": 0,
+  "exact_zero": 24996,
+  "exact_cancellation": 24996,
+  "seed": 20261013,
+  "format": "32/3 Q12 FLOOR OPS1 n0..8",
+  "limits": [
+    "No fused RTL/window/flags/acc_mode acceptance",
+    "Python checks exact P_hat+C; not paper provenance or accuracy versus original A*B+C"
+  ]
+}

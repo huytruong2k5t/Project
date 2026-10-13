@@ -1,0 +1,26 @@
+{
+  "status": "FROZEN NF MILESTONE",
+  "source_sha256": {
+    "rtl\\mac_nf_wrapper.sv": "0dc05a19d096835748ee8c5c1d5d0a740f030c21cb6d4597672695c64bf4ac9a",
+    "rtl\\posit_mac_nf.sv": "72eb98146d83e7675b721c58c183216be15709caa2a1590a8e7bf10daba0cf66",
+    "rtl\\round_unpacked_comb.sv": "b1594ddbca6e4c6d1ef2daed7bf6b3b29d985b0923d02cd3a0d6a483d2700c06",
+    "rtl\\mul_prepack_norm_comb.sv": "7d1af9a74ad05e1cb76fefbbaf9477526914a4c37174b0c989f494d2e653e9b7",
+    "tb\\tb_week11_mac.sv": "5224ea7a57fa8ff0d398970fe6180d0e12977913a7494747e495388a2eec6ac1",
+    "tb\\week11_fused_model.hpp": "2840282bb0bf1e41e1a3307b35ebe3c5709a094d28c8196bc97ef56a306b91f5",
+    "tb\\week11_mac_harness.cpp": "2772172f17ff2ffe41fed7485d21bebf92b51c73015859123a24adbccdfc125e",
+    "tb\\week11_model.hpp": "e597d25d22c69b58437fde3c8c961b3a4c0f14da8d0ce6d8e3fad9ecc3a025a3",
+    "l1\\test\\gen_week11_mac.cpp": "e45f385de873b143cf539745c0ead383f0e3a4b4029ae6345bc9b5afaef5335c",
+    "l1\\test\\test_week11_fused.cpp": "d2e84e0049abd14986b505562290169e9b5e17dd4993094343302d27973f95c6",
+    "l1\\test\\test_week11_prepack.cpp": "cde9c8c318394af22e38e89018c17f9c56cb711d282547e8e5dbc6f5016fb7a3",
+    "scripts\\audit_week11_mac.py": "008a07a958402113a576ac529501915099b0c567009af8a3c69facdfdc0483ee",
+    "scripts\\check_week11_fused.py": "4db6735304e6996c37573755aa00736bddacdce4da34a1d23d633b6906b761c6",
+    "scripts\\verify_week11_mac.sh": "b04cdf8b24759d93b1df9df015d42809431e874a2c66e33711311183451bb9e8",
+    "scripts\\verify_week11_modelsim.ps1": "532770db2b768806e33ea89c6a6de4380792c621899a5ff1f68bf77dbf9949ef"
+  },
+  "report_sha256": "1d93dcc9f877f1b44067e7e889a872fea6c9da0e1e529a3dab951993b7540376",
+  "limits": [
+    "Not final AC02/AC04 or final per-n10M NF/F matrix",
+    "No fused RTL/window/acc_mode/flags acceptance, no paired accuracy or PPA/STA/CDC signoff",
+    "Native no-timing checks cycle function; ModelSim retains CK2Q/4-state"
+  ]
+}

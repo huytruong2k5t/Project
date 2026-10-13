@@ -190,3 +190,8 @@ Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.jso
 ## 13. RTL adder — nghiệm thu đơn vị tuần10, 12/10/2026
 
 posit_add_comb và pipeline posit_add dùng chung posit_add_align/arith/normalize. Ba slot, E0 nhận→valid E2→handshake E3,II1 không stall, reset leaf2FF. ModelSim comb143.976, pipeline143.376/600 abort,0 mismatch; Verilator20.000.004 completedES2/ES3, oracle độc lập/flags/unpacked và RNE/TRUNC đạt. Strict lint8/8 sạch; canonical results/week10_adder/summary.json. Raw coverage chưa đạt finalAC04, giữ unhit points; không phải MAC/Gate3, STA hay fused. Source L1 frozen không đổi. Runner/commands tại PLAN8.4; không đưa prepack chưa round vào adder NF.
+
+
+## 14. MAC NF — nghiệm thu Gate3 milestone, 13/10/2026
+
+posit_mac_nf/mac_nf_wrapper dùng mul_prepack_norm_comb bảo toàn carry và round_unpacked_comb=parse(pack(u)) tổ hợp; legacy L1/RTL freeze giữ nguyên. Approximate NF mới có thể khác legacy; cùng P_hat theo SPEC v1.11§11.10. Gate3 native32/3 10.000.000 completed, ModelSim28.512 completed/288 reset-aborted,0 mismatch; strict lint4/4,72 control bins và256 regime–dấu main. Canonical results/week11/summary.json; baseline_nf_manifest.json/source+binary+fixture hashes, raw coverage/unhit giữ nguyên. L1 fused full-sum pilot100k/Python independent0 mismatch; chưa fused RTL/window/flags/acc_mode, final AC02/AC04/per-n matrix hoặc accuracy/PPA. Commands PLAN8.6; rebuild binaries/fixtures trước audit sau cleanup.

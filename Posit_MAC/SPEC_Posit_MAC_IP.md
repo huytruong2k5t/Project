@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.10 — 2026-10-12 — Triển khai/kiểm RTL adder và bàn giao tuần10 |
+| Phiên bản | v1.11 — 2026-10-13 — MAC NF prepack-preserving/Gate3; fused L1 pilot |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -32,6 +32,8 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.9 | 2026-10-12 | Chốt posit_add NF: input exact unpacked, output fraction mở rộng/sticky/flags, width và adapter; ba tầng elastic A1/A2/A3 với lịch cạnh/reset/stall; review mapping L1, chưa triển khai RTL adder. |
 
 | v1.10 | 2026-10-12 | Hiện thực comb/pipeline adder ba tầng, oracle integer độc lập; ModelSim/pilot/20M lượt lớn đạt0 mismatch. Chốt input corpus NF/F và bàn giao tuần10; coverage AC04, MAC/Gate3, fused và PPA còn mở. |
+
+| v1.11 | 2026-10-13 | Kiểm carry xác nhận legacy khác R(P_hat); thêm adapter bảo toàn prepack và MAC NF đơn giao dịch RNE/FLOOR, Gate3 đạt. Giữ freeze/Gate2 legacy; fused full-sum mới pilot, chưa RTL/coverage cuối/PPA. |
 
 **Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Các phần khác dẫn chiếu, không đặt thêm quy tắc khác cho cùng hành vi.
 
@@ -263,7 +265,7 @@ Ràng buộc IP: `NB >= 4`, `0 <= ES <= NB-4`, `1 <= FRAC_W <= FRAC_MAX`, `N_MAX
 - Trong v0/v1, bốn cờ số học được OR qua bước nhân/làm tròn tích và bước cộng/đóng gói tổng; vì vậy cờ bão hòa có thể phản ánh tích trung gian dù kết quả cuối không ở biên. Bypass không thực hiện số học thì bốn cờ bằng 0.
 - Top hiện là MAC; multiplier standalone là module/harness riêng. Trong MAC, đặt C=0 không thay thế hoàn toàn giao diện multiplier vì NaR và cờ vẫn xử lý theo ngữ cảnh giao dịch.
 
-**Reset bridge của RTL tích hợp (standalone multiplier đã triển khai; MAC còn theo kế hoạch):** rst_n ở top chỉ được lấy mẫu tại cạnh clk. Một thanh ghi reset bridge nhận 0 khi rst_n=0 và 1 khi rst_n=1; ngõ ra thanh ghi này cấp cùng nguồn reset_n cho các leaf có assert bất đồng bộ/deassert đồng bộ. Không nối trực tiếp rst_n đồng bộ vào chân reset bất đồng bộ của leaf. Khi top lấy mẫu reset=0, top flush valid, pending, credit, metadata và accumulator; leaf được assert sau cạnh đó. Không có handshake hợp lệ tại cạnh reset.
+**Reset bridge của RTL tích hợp (standalone multiplier và MAC NF đã triển khai; hợp đồng NF hiện thực tại §11.10):** rst_n ở top chỉ được lấy mẫu tại cạnh clk. Một thanh ghi reset bridge nhận 0 khi rst_n=0 và 1 khi rst_n=1; ngõ ra thanh ghi này cấp cùng nguồn reset_n cho các leaf có assert bất đồng bộ/deassert đồng bộ. Không nối trực tiếp rst_n đồng bộ vào chân reset bất đồng bộ của leaf. Khi top lấy mẫu reset=0, top flush valid, pending, credit, metadata và accumulator; leaf được assert sau cạnh đó. Không có handshake hợp lệ tại cạnh reset.
 
 Sau nhả reset, startup barrier giữ in_ready=out_valid=0 cho đến khi tất cả leaf đã nhả reset; phải tính cả cạnh bridge nhả và hai FF của leaf, không mặc định toàn MAC chỉ chờ hai cạnh như parser đơn vị. Barrier dùng các trạng thái init_done hoặc bộ đếm startup bảo thủ phù hợp số tầng reset của mọi leaf; điều kiện và số cạnh thực tế phải được TB kiểm trước Gate3. A/B/C chỉ nhận đồng thời khi cả ba parser sẵn sàng và top có slot: top_in_ready=run_ready && slot_free && ready_A && ready_B && ready_C; valid vào mỗi parser chỉ phát cùng một handshake top. Reset lúc rỗng/đang tính/đang stall phải hủy giao dịch cũ và không được xuất lại kết quả trước reset.
 
@@ -532,7 +534,7 @@ NaR nếu a_is_nar|b_is_nar|flags_in[4]: sign1,is_nar1,is_zero0,sf0,frac0,sticky
 
 Ba slot elastic, enable độc lập: ready3=!valid3|out_ready; ready2=!valid2|ready3; ready1=!valid1|ready2. in_ready bị gate bởi reset/startup; stage chỉ cập nhật khi ready của chính stage và startup đã nhả. Không dùng enable chung làm mất giao dịch dưới backpressure. Không có CE ngoài ở giao diện đã chốt; clock enable là load-enable nội bộ. Có thể push/pop đồng thời, II=1 không stall; không nhân đôi handshake nếu downstream giữ ready.
 
-Input handshake E0 → out_valid sau E2 → output handshake sớm nhất E3: H_ADD=3,L_valid=2,L_handshake=3. Startup chờ hai cạnh synchronizer release, stall báo riêng. Reset xóa cả3 valid/data/context và hủy giao dịch đang chờ; in_ready=out_valid0 khi reset/startup. Khi out_valid&&!out_ready, toàn bộ output giữ đến handshake hoặc reset. Reset ưu tiên handshake. RNE packer tiếp theo hai slot theo §5.9-D: giao dịch đầu vào adder E0 sang packer ở E3, packer valid sau E4 và handshake E5 nếu không stall; TRUNC packer valid sau E3 và handshake E4. Không tính hai lần bank A3/P1. Lịch feedback round_unpacked và C/context toàn MAC còn kiểm ở tuần11; ba tầng adder không tự nghiệm thu II_acc.
+Input handshake E0 → out_valid sau E2 → output handshake sớm nhất E3: H_ADD=3,L_valid=2,L_handshake=3. Startup chờ hai cạnh synchronizer release, stall báo riêng. Reset xóa cả3 valid/data/context và hủy giao dịch đang chờ; in_ready=out_valid0 khi reset/startup. Khi out_valid&&!out_ready, toàn bộ output giữ đến handshake hoặc reset. Reset ưu tiên handshake. RNE packer tiếp theo hai slot theo §5.9-D: giao dịch đầu vào adder E0 sang packer ở E3, packer valid sau E4 và handshake E5 nếu không stall; TRUNC packer valid sau E3 và handshake E4. Không tính hai lần bank A3/P1. Lịch feedback round_unpacked và C/context NF đã kiểm ở §11.10; ba tầng adder không tự nghiệm thu II_acc.
 
 #### D. Điều kiện bàn giao W10-01
 
@@ -546,7 +548,7 @@ Harness coverage/scoreboard trực tiếp: ES2 10.000.003 completed/9.787 reset-
 
 Bằng chứng canonical results/week10_adder/summary.json; matrix.json, raw coverage và structural_coverage.json giữ tất cả unhit points. Coverage raw toàn verification hierarchy: line80,00–80,95%,branch92,31–96,15%,toggle75,18–84,74%; không loại point và **chưa đạt final AC04**, không dùng milestone tuần10 thay signoff coverage. Phần P16 exhaustive RTL2^32, P32 final>=10^8 theo AC02, tích hợp MAC/feedback/Gate3 và STA/PPA còn mở. L1 frozen source hashes giữ nguyên; không gọi pipeline này là MAC fused.
 
-Corpus NF/F common100.000 triple đầu vào đã đóng băng/replay byte-exact ở paired/manifest.json; chưa đo accuracy, oracle F/Ideal full-sum và window/residual vẫn theo tuần12. Tham chiếu software1024 bit trên grid2^-532 đủ bảo thủ cho32/3 (4SF_MAX+2F+4=1016 bit); không phải width RTL. Checklist tuần10 đã nghiệm thu phạm vi đơn vị và gỡ khỏi tiến độ, giữ nhật ký/report; tiếp tuần11 NF/Gate3. Ghép adder với packer pipeline và round_unpacked/feedback cần test toàn MAC, không suy từ testbench packer tổ hợp.
+Corpus NF/F common100.000 triple đầu vào đã đóng băng/replay byte-exact ở paired/manifest.json; chưa đo accuracy, oracle F/Ideal full-sum và window/residual vẫn theo tuần12. Tham chiếu software1024 bit trên grid2^-532 đủ bảo thủ cho32/3 (4SF_MAX+2F+4=1016 bit); không phải width RTL. Checklist tuần10 đã nghiệm thu phạm vi đơn vị và gỡ khỏi tiến độ, giữ nhật ký/report; tiếp tuần11 NF/Gate3. Ghép NF với packer pipeline/round_unpacked/feedback đã kiểm toàn MAC ở §11.10; kết quả đó không suy từ testbench packer tổ hợp.
 
 ### 5.9 Packer (`posit_pack`)
 
@@ -1253,7 +1255,7 @@ Cập nhật 08/10/2026. SPEC là hợp đồng; kết quả nghiệm thu phải
 1. **Đã nghiệm thu mô hình số học:** Gate1, round_unpacked tương đương parse(pack(u)), Adder và MAC L1 v0/v1 Gate1B. Bằng chứng tại README L1 mục15 và results/week6_*; ES3 dùng oracle riêng, không gọi là L0 SoftPosit ES3.
 2. **Đã nghiệm thu parser RTL đơn vị:** comb và pipeline bốn format, 2.465.812 fixture, 0 mismatch; reset/stall/ordering/II được kiểm ở parser. Bằng chứng results/parser_comb/, results/parser_pipeline/ và rtl/README.md mục5. Không suy thành Gate2/3 toàn MAC.
 3. **Đã nghiệm thu packer RTL tuần8:** tổ hợp/pipeline RNE2/TRUNC1 và parser→packer đạt0 mismatch trên bốn format; F_IN/adapter theo §5.9-D. Tuần9 đã chốt giao diện §5.5-A và kiểm OPS/SAC tổ hợp327.440 vector ModelSim,0 mismatch; SBM/core/top standalone đã triển khai và kiểm pilot 09/10; Gate2 multiplier đã nghiệm thu10/10: strict lint16 cấu hình, scoreboard trực tiếp và16.815.920 so sánh/0 mismatch; bằng chứng PLAN L1 mục7.11 và gate2_acceptance.json. Paper RTL843 commit/Fig.4 đạt trong profile tái dựng, không xác nhận baseline gốc. Sau tối ưu P2, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode; tiếp tục STA khi tích hợp, không gọi là Gate4 hoặc fmax toàn MAC.
-4. **Trước nghiệm thu tích hợp:** thực hiện reset bridge, startup barrier và lịch core §4.2/§5.5; TB đối chiếu cạnh, config, flags, metadata và slot output. Multiplier standalone đã có reset bridge, startup barrier và kiểm pilot; Gate2 multiplier đã nghiệm thu; RTL adder đơn vị đã nghiệm thu§5.8-E; tích hợp MAC/C/context và Gate3 còn theo tuần11.
+4. **Trước nghiệm thu tích hợp:** thực hiện reset bridge, startup barrier và lịch core §4.2/§5.5; TB đối chiếu cạnh, config, flags, metadata và slot output. Multiplier standalone đã có reset bridge, startup barrier và kiểm pilot; Gate2 multiplier đã nghiệm thu; RTL adder đơn vị đã nghiệm thu§5.8-E; MAC NF/C/context và Gate3 đã kiểm theo §11.10; final matrix và fused còn mở.
 5. **Chồng lấn sau baseline:** thêm FIFO/credit và chứng minh lịch first/last, n=0/drain, acc feedback trước khi kết luận II/throughput. Sức chứa phải suy ra, không dùng skid2 để bảo đảm mọi giao dịch đang bay.
 6. **Tái hiện/PPA và v2:** provenance Table I, corpus Table II và PPA toàn khối còn mở; ghi đúng giới hạn. Fused v2 là mục tiêu so sánh chính theo §11.8; không thay bằng chứng tuần8 hoặc điều kiện đóng NF/Gate3.
 
@@ -1550,7 +1552,7 @@ Với hữu hạn khác0: P_hat=(-1)^sign * magnitude * 2^(scale-fractional_bits
 
 Mapping RTL hiện hành: FLOOR export magnitude=acc>>2,Q12 vì hai bit thấp là padding0; exact export acc,Q52; JAM acc,Q14. ACC_W vật lý32/3 với EXACT_EN1 là54 bit (EXACT_EN0 approximate-only16 bit), khác độ rộng hữu ích14 bit FLOOR. Giới hạn64 bit của L1 an toàn cho các format đã nghiệm thu; không tuyên bố arbitrary NB/ES.
 
-**Điểm kiểm tích hợp mở — 13/10/2026:** checkpoint prepack đã kiểm giao diện/trace nhưng chưa tự chứng minh đường mul_norm/pack legacy bằng R(P_hat) khi carry và magnitude lẻ. W11-01 (PLAN§8.5) phải đối chiếu bằng vector phân biệt và oracle trước freeze baseline NF/F. Chưa đo số mismatch cho nghi vấn này; không sửa checkpoint/Gate2 lịch sử hoặc coi sticky là bit có trọng số để khôi phục tích.
+**Kết quả kiểm tích hợp — 13/10/2026:** W11-01 xác nhận238.906/900.000 cặp ngẫu nhiên khác giữa pack(mul_norm legacy) và R(P_hat); thêm344.064 phép kiểm magnitude/scale/sign biên, tổng1.244.064 kiểm adapter mới với oracle dyadic độc lập,0 mismatch. `mul_prepack_norm_comb` giữ grid nguyên, đổi vị trí hidden từ Q sang Q+1 khi carry; không dịch bỏ bit thấp hoặc dùng metadata cut làm sticky. Legacy L1/RTL/Gate2 và hash freeze giữ nguyên. MAC so sánh mới dùng `week11::Model`/`posit_mac_nf`, không tuyên bố approximate bit-exact với PositMac legacy.
 
 NF=R(R(P_hat)+C); reference F=R(P_hat+C). FLOOR loss được ghi vào metadata và không khôi phục bằng numerical_tail. Phần dư phát sinh khi căn C với P_hat phải có dấu và oracle integer/rational giữ đủ; `acc=0` chưa bảo đảm sum0 khi còn residual. Cửa sổ F hữu hạn phải có hợp đồng riêng trước RTL; chưa chốt ACC_WIN/jam/borrow của F trong checkpoint này. Nếu stream term thẳng vào C, phải chứng minh cùng P_hat và đúng thứ tự cut; cut sau căn chỉnh không tự tương đương cut trước căn chỉnh. Các shortcut chọn mốc/sticky §5.12 còn là sketch cần kiểm, không nghiệm thu bằng checkpoint prepack.
 
@@ -1558,3 +1560,18 @@ Kiểm đã chạy: Linux và Windows mỗi bản17.184.416 kiểm,2.097.703 ki�
 
 Checkpoint đóng băng **L1 hiện có và giao diện tích**, không phải L1 fused đã hoàn thiện hoặc RTL fused. Bằng chứng/hash/source/compiler/commands tại `results/l1_floor_rne_freeze/{summary.json,frozen_sources.sha256}`; code `prepack_product.hpp`, `floor_rne_profile.hpp`, exporter trong `l1_multiplier_iter.hpp`. Không sửa RTL/số học/default; Gate2 lịch sử giữ checkpoint nguồn cũ, không gọi đây là rerun16,8M RTL. Sau thay source phải kiểm lại trước tạo checkpoint mới; audit mặc định từ chối source hash đổi, `--refreeze` chỉ dùng sau review/test và giữ lịch sử Git.
 
+
+
+### 11.10. Hợp đồng hiện thực NF tuần11 — 13/10/2026
+
+`posit_mac_nf` là top structural mới; `mac_nf_wrapper` chứa điều khiển một giao dịch, không sửa standalone multiplier đã nghiệm thu. Profile hiện thực RNE/FLOOR, EXACT_EN=OPS_EN=1, NB/ES8/0,16/1,32/2,32/3; FRAC_W=min(F,12), N_MAX8, cfg_ops0/1, approximate n0..8. TRUNC/JAM/fused và feature-disable chưa được nghiệm thu trong top này. Profile so sánh chính32/3 OPS1 giữ cùng P_hat cho NF/F; OPS0 và exact là kiểm bổ trợ.
+
+Luồng thực: parser A/B/C_eff hai tầng → OPS/core → normalize bảo toàn prepack + round_unpacked_comb → thanh ghi product/context → adder A1/A2/A3 → packer RNE P1/P2. round_unpacked_comb dùng pack/parse **tổ hợp**, kiểm đúng parse(pack(u)); không có thanh ghi Posit trung gian như v0. Đây là hiện thực đúng chức năng ban đầu; đường tổ hợp norm/pack/parse dài cần STA trước tuyên bố fmax. Với t=iterations thực tế,q=max(1,t): E0 nhận→L_valid=q+10→L_handshake=q+11 khi out_ready luôn1; early-stop/special dùng t thực tế, không luôn dùng cfg_n. Không có bypass rút ngắn latency. Top không nhận lại tại cạnh retire: II không stall tối thiểuq+12, khác II1 của riêng adder.
+
+A/B/C_eff/config/acc_mode/acc_clr được nhận cùng handshake. C_eff=c nếu acc_mode0, accumulator nếu acc_mode1, và0 nếu acc_clr1. NaR được lưu ngay trong mã accumulator; parser C_eff suy is_nar, không cần bank acc_nar độc lập có thể lệch dữ liệu. Cổng rst_n đồng bộ đi qua bridge; leaf nhả bằng hai FF; startup gate đợi core_run, ba parser, adder và packer sẵn sàng. Không dùng tên reset top làm lý do bỏ bridge theo guideline.
+
+Output-commit của wrapper là cạnh đầu tiên quan sát pack_out_valid && !committed_q; cập nhật accumulator đúng một lần nếu acc_mode_q, dù output đang stall. Kết quả giữ trong bank P2 của packer tới retire; busy chỉ nhả sau retire, nên giao dịch sau không đọc trạng thái cũ. acc_clr chỉ xóa khi input handshake; reset hủy pending và xóa accumulator/valid/context. Invalid cfg_ops2/3,n>8 hoặc acc_clr1 khi acc_mode0 không được nhận. Giữ flags OR qua tích và tổng, NaR ưu tiên/xóa bốn cờ khác; Zero product không đưa metadata cut vào flags.
+
+Gate3 milestone: native32/3 10.000.000 completed/75.801 reset-aborted,0 mismatch; ModelSim28.512 completed/288 aborted, bốn format; strict lint4/4 sạch. Native bốn pilot20k/format; scoreboard gọi mô hình NF mới, oracle dyadic/full-grid add độc lập và exact product oracle; SoftPosit đúng format cho pilot8/0,16/1,32/2.72 config/control bins và256/256 regime–dấu ở main, min34944/bin; latency, reset/stall/context/flags/accumulation đã kiểm. Raw coverage ghép: line/branch từ pilot+main, toggle từ pilot; line96.92%,branch94.26%,toggle88.71%; giữ unhit, chưa thay final AC02/AC04/§6.7. Bằng chứng/hash/tool/seed/lệnh tại results/week11/summary.json và baseline_nf_manifest.json.
+
+L1 fused full-sum pilot100.000 mẫu32/3,FLOOR/Q12,OPS1,n0..8 đã đối chiếu Python integer độc lập0 mismatch;24.996 triệt tiêu chính xác. Software grid2^-532 và16 limb64 bit giữ tổng có dấu; chưa chốt cửa sổ RTL, flags hoặc state acc_mode F. Chưa gọi pilot này là oracle/L1 fused cuối, paired accuracy, baseline paper hoặc RTL F. Tuần12 tiếp tục oracle/width/residual và PPA sơ bộ NF; final NF/F matrix, coverage và STA/PPA còn ở các mốc sau.

@@ -976,3 +976,11 @@ L1 core frozen giữ nguyên; thêm gen_week10_adder.cpp và oracle tb/week10_ad
 ## 29. MAC NF prepack-preserving và L1 F pilot — 13/10/2026
 
 posit_mac_nf/mac_nf_wrapper dùng mul_prepack_norm_comb bảo toàn carry và round_unpacked_comb=parse(pack(u)) tổ hợp; legacy L1/RTL freeze giữ nguyên. Approximate NF mới có thể khác legacy; cùng P_hat theo SPEC v1.11§11.10. Gate3 native32/3 10.000.000 completed, ModelSim28.512 completed/288 reset-aborted,0 mismatch; strict lint4/4,72 control bins và256 regime–dấu main. Canonical results/week11/summary.json; baseline_nf_manifest.json/source+binary+fixture hashes, raw coverage/unhit giữ nguyên. L1 fused full-sum pilot100k/Python independent0 mismatch; chưa fused RTL/window/flags/acc_mode, final AC02/AC04/per-n matrix hoặc accuracy/PPA. Commands PLAN8.6; rebuild binaries/fixtures trước audit sau cleanup.
+
+## 30. Cập nhật phạm vi nghiệm thu — 14/10/2026
+
+SPEC v1.13 đã được rà toàn bộ theo RTL/model/bằng chứng hiện hành. Nguồn RTL và L1 frozen không đổi; kết quả W11 numeric/protocol10.000.000 completed,0 mismatch vẫn giữ nguyên.
+
+Gate3 đầy đủ còn **processing**: cận trên near-cancellation ở đầu vào adder NF chỉ420.303/10.000.000=4,20303%, thấp hơn yêu cầu30% của SPEC§6.3. Các bin regime/config đã hit không thay yêu cầu phân bố này. Counters từng run/polarity và packer bins cần được lưu đủ trước signoff; không hạ ngưỡng hoặc sửa report lịch sử.
+
+Checkpoint13/10 và manifest NF đóng băng mốc số học/giao thức, không chứng minh mọi AC đã đạt. Công việc bổ sung tại PLAN§8.7/SPEC§11.11; chứng cứ rà soát ở results/spec_review_20261014/summary.json. F full-sum vẫn là pilot phần mềm; F RTL/window/flags/acc_mode, ma trận final và accuracy/PPA còn mở.

@@ -1,6 +1,6 @@
 # Kế hoạch Triển khai Mô hình Thuật toán L1 (C++ Golden Model)
 
-**Hợp đồng tích hợp08/10, cập nhật phạm vi13/10/2026 — SPEC v1.12:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7 (trạng thái10/10/2026). Gate2 multiplier đã nghiệm thu theo mục7.11; NF prepack-preserving/Gate3 đạt theo mục8.6, giữ riêng MAC legacy. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
+**Hợp đồng tích hợp08/10, cập nhật phạm vi14/10/2026 — SPEC v1.13:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7 (trạng thái10/10/2026). Gate2 multiplier đã nghiệm thu theo mục7.11; NF prepack-preserving đạt mốc numeric/protocol theo mục8.6; strict coverage Gate3 còn theo mục8.7,giữ riêng MAC legacy. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
 
 > **Mục tiêu**: Xây dựng mô hình thuật toán C++ L1 (`l1/`) mô phỏng trung thực 100% từng bước biến đổi dữ liệu của vi kiến trúc phần cứng Posit MAC, tham số hóa theo `template <int NB, int ES, int FRAC_W>`, đóng vai trò làm thước đo chân lý bit-exact (AC-01) cho RTL SystemVerilog, vượt qua các cổng kiểm chuẩn nghiêm ngặt **Gate 1 (Tuần 3)** và **Gate 1B (Tuần 6)** theo [SPEC_Posit_MAC_IP.md](../SPEC_Posit_MAC_IP.md).
 
@@ -590,3 +590,12 @@ Windows chạy `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/veri
 
 
 Đối chiếu kiến trúc paper/NF hiện hành được gom tại SPEC v1.12§5.10-G; đây là cập nhật tài liệu ngày13/10, không đổi RTL/seed/hợp đồng số học hoặc kết quả Gate3.
+
+
+### 8.7. Rà soát SPEC và coverage Gate3 còn mở — 14/10/2026
+
+SPEC v1.13 đồng nhất profile/normalize,params,special/feedback/latency và trạng thái fused/PPA/công cụ; không sửa RTL/L1 hoặc counters cũ. W11-01..05 và F full-sum pilot giữ PASS; W11-06 đạt numeric/protocol nhưng strict coverage chưa đóng. W11-07 manifest là freeze mốc nguồn/test13/10,không signoff mọi yêu cầu SPEC. Bảng✅ mục8.5 và bàn giao8.6 là phạm vi checkpoint lúc13/10; trạng thái hiện hành bổ sung ở đây.
+
+W11-COV (processing): bổ sung corpus đạtnear>=30% tại ngõ vào adder với C_eff thực tế; tách acc_mode/standalone,specials và reset-abort; giữ min4k/cross256 và per-run/polarity>=10k,thu packer bins riêng. Counters W11 hiện cho cậnnear<=4,20303% trên10M,không đủ30%. Pilot oracle/ModelSim trước lượt chính; log bộ đếm trực tiếpΔsf0..4,histogram/seed/hash và0 mismatch trước đóng strict Gate3. Không hạ ngưỡng hoặc đổi corpus để đẹp số. Có thể chuẩn bị L1 F độc lập; trước RTL F vẫn phải khóa oracle/window/residual theo tuần12.
+
+Giữ nguyên AC01/AC02/AC04 final và timeline hạn05/12. Tối ưu pipeline NF/F tuần12–13 dựa critical path đo được,regression tuần14 rồi post-route tuần15; không tuyên bố Fmax từ số tầng. Trạng thái mốc sơ bộ và final luôn ghi riêng. Chi tiết findings và proofgap tại results/spec_review_20261014/summary.json, SPEC§11.11.

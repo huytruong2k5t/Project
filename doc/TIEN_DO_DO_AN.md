@@ -1,9 +1,9 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 13/10/2026 (giờ Việt Nam)  
+**Ngày cập nhật:** 14/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.12](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
+**Tài liệu chi tiết:** [SPEC v1.13](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -15,7 +15,7 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 
 Đã hoàn thành nền tảng L0, Gate1 của L1 và bộ cộng tuần5. Bộ nhân lặp L1 đã được kiểm chứng; profile source từng đạt ngưỡng TableI nhưng không khớp output ví dụ gốc. Baseline gốc bài báo chưa xác định; giữ nghiên cứu phụ. Mục tiêu chính chuyển sang MAC non-fused làm baseline nội bộ và fused làm biến thể so sánh.
 
-MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8 và chuỗi parser→packer đã kiểm chứng đạt ở cấp khối. Gate1/Gate1B/Gate2 multiplier✅; RTL MAC NF/Gate3 đã đạt mốc tuần11; Gate4, fused và ma trận cuối còn mở. Đã khảo sát PPA riêng cho OPS và packer; chưa có PPA toàn hệ thống, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode sau tối ưu P2.
+MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8 và chuỗi parser→packer đã kiểm chứng đạt ở cấp khối. Gate1/Gate1B/Gate2 multiplier✅; NF đã đạt mốc số học/protocol tuần11; coverage Gate3 đầy đủ còn bổ sung. Gate4,fused và ma trận cuối còn mở. Đã khảo sát PPA riêng cho OPS và packer; chưa có PPA toàn hệ thống, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode sau tối ưu P2.
 
 ## 2. Công việc còn lại và ưu tiên
 
@@ -23,10 +23,10 @@ MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8
 | --- | --- | --- |
 | Baseline nội bộ và so sánh NF/F | processing | Đã chốt hướng: non-fused làm đối chứng, fused là mục tiêu chính; cần hoàn thiện RTL, oracle, accuracy và PPA. Baseline paper giữ nghiên cứu phụ |
 | MAC L1 — Gate1B | ✅ | MAC v0/v1, tích lũy và API đã triển khai, kiểm chứng đạt |
-| RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2 multiplier, adder và NF/Gate3 đã nghiệm thu; còn ma trận/coverage cuối và fused |
+| RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder và NF numeric/protocol đã kiểm; còn coverage near30% để đóng strict Gate3,ma trận cuối và fused |
 | PPA, mở rộng và hồ sơ — Gate4 | không | Đo toàn hệ thống, đối chiếu baseline; thực hiện mở rộng đã chọn, báo cáo và demo |
 
-**Thứ tự tiếp theo:** oracle/L1 fused → RTL fused → paired regression/accuracy → PPA → báo cáo. NF/Gate3 đã đạt phạm vi tuần11. Hoàn tất chính29/11, đệm30/11–04/12 trước05/12/2026; chi tiết tại PLAN L1 mục8 và SPEC§11.8.
+**Thứ tự tiếp theo:** oracle/L1 fused → RTL fused → paired regression/accuracy → PPA → báo cáo. NF numeric/protocol đã đạt; bổ sung coverage Gate3 theo PLAN8.7. Hoàn tất chính29/11, đệm30/11–04/12 trước05/12/2026; chi tiết tại PLAN L1 mục8 và SPEC§11.8.
 
 ## 3. Tiến độ theo tuần
 
@@ -44,12 +44,20 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 8 | RTL mã hóa và làm tròn | ✅ | Packer tổ hợp/pipeline và parser→packer đạt; PPA đơn vị đã khảo sát, sau tối ưu P2, benchmark đạt setup100MHz ở ba seed mỗi mode |
 | 9 | RTL bộ nhân lặp — Gate2 | ✅ | Multiplier đã nghiệm thu trên16 cấu hình,0 mismatch; lint và coverage đạt phạm vi tuần9. Baseline gốc theo dõi riêng ở tuần4 |
 | 10 | RTL adder và chốt so sánh NF/F | ✅ | Hoàn tất12/10: comb/pipeline, oracle/lượt lớn0 mismatch; matrix và corpus input đã chốt. Cần xác minh R(P_hat) khi carry trước ghép NF/F; coverage cuối/MAC/fused còn mở |
-| 11 | MAC non-fused — Gate3 | ✅ | Hoàn tất sớm13/10: chốt R(P_hat), tích hợp NF và regression10 triệu/0 mismatch; freeze manifest. L1 F pilot đạt, chưa nghiệm thu fused cuối |
+| 11 | MAC non-fused — Gate3 | processing | NF10 triệu/0 mismatch và F pilot đạt; rà soát14/10 phát hiện chưa đạtnear30%,cần bổ sung coverage trước strict Gate3 |
 | 12 | Oracle/L1 fused và PPA sơ bộ NF | không | 26/10–01/11: width/cut/đuôi có dấu, kiểm triệt tiêu; chốt hợp đồng F và khả năng công cụ |
 | 13 | RTL fused | không | 02–08/11: triển khai theo L1 đã kiểm, pilot số học/protocol; không mặc định exact |
 | 14 | Regression và accuracy paired NF/F | không | 09–15/11: nghiệm thu đúng riêng từng bản, coverage và corpus chung |
 | 15 | PPA hai bản và bản thảo — Gate4 | không | 16–22/11: cùng điều kiện,≥3 run/config; accuracy/timing/II/tài nguyên và kết luận |
 | 16 | Báo cáo, demo và bảo vệ | processing | 23–29/11: chốt hồ sơ/tái lập/slide/demo; hiện mới có slide các khối. Đệm30/11–04/12 |
+
+## 3.1. Bổ sung coverage tuần11
+
+| Mốc | Công việc còn lại | Trạng thái |
+| --- | --- | --- |
+| W11-COV | Corpus>=30% near-cancellation với C_eff; counters per-run/polarity và packer bins; pilot/oracle/regression0 mismatch,audit/hash mới trước strict Gate3 | processing |
+
+Giữ nguyên kết quả numeric/protocol13/10; chi tiết PLAN8.7/SPEC§11.11. Gỡ bảng này sau khi có bằng chứng bổ sung đạt,không theo ngày dự kiến.
 
 ## 4. Nhật ký theo ngày
 
@@ -157,7 +165,13 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 2 | Nghiệm thu NF/Gate3 và chuẩn bị fused — tuần11 | Xác nhận/sửa đường tích bằng adapter riêng; main10.000.000 và ModelSim28.512 completed,0 mismatch. Freeze NF manifest; F full-sum pilot100k đạt. Gỡ checklist tuần11; final coverage/accuracy/PPA và F RTL còn mở | ✅ |
 | 3 | Làm rõ kiến trúc paper và NF | SPEC v1.12 gom khác biệt OPS, làm tròn, width/carry và pipeline; sửa mapping/metadata cho đúng RTL. Không đổi mã hoặc bằng chứng Gate3 | ✅ |
 
-### 4.13. Mẫu cập nhật tiếp theo
+### 4.13. Ngày 14/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Rà toàn SPEC và đồng bộ hiện thực | SPEC v1.13 đồng nhất với RTL/model; audit W10/W11 PASS, nguồn và kết quả0 mismatch giữ nguyên. Near-cancellation W11 có cận trên4,20303%,chưa đạt30%; Gate3 đầy đủ processing,đã bổ sung việc coverage | ✅ |
+
+### 4.14. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

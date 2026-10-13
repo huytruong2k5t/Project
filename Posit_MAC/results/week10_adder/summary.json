@@ -1,0 +1,355 @@
+{
+  "status": "PASS: Week10 adder unit milestone and comparison-input contract",
+  "date": "2026-10-12",
+  "scope": "W10-02..07; NF MAC/Gate3 and fused implementation remain later milestones",
+  "comb_modelsim_rows": 143976,
+  "pipeline_modelsim_completed": 143376,
+  "pipeline_modelsim_reset_aborts": 600,
+  "large_completed": 20000004,
+  "mismatches": 0,
+  "profiles": [
+    {
+      "NB": 8,
+      "ES": 0,
+      "comb_rows": 70146,
+      "pipeline_modelsim": {
+        "accepted": 70146,
+        "completed": 69849,
+        "reset_aborts": 297,
+        "stalls": 41517,
+        "input_stalls": 29031,
+        "max_occupancy": 3,
+        "reset_events": 118
+      },
+      "pilot": {
+        "NB": 8,
+        "ES": 0,
+        "seed": 20261812,
+        "accepted": 50054,
+        "completed": 50002,
+        "reset_aborts": 52,
+        "output_stalls": 18672,
+        "input_stalls": 12987,
+        "reset_busy": 18,
+        "reset_output_stall": 4,
+        "long_stalls": 1898,
+        "max_slots": 3,
+        "independent_mode_checks": 100108,
+        "L0_RNE_checks": 50054,
+        "mismatches": 0
+      },
+      "acceptance": null,
+      "coverage_metrics": {
+        "toggle": {
+          "hit": 1124,
+          "total": 1495,
+          "percent": 75.18394648829431
+        },
+        "line": {
+          "hit": 34,
+          "total": 42,
+          "percent": 80.95238095238095
+        },
+        "branch": {
+          "hit": 25,
+          "total": 26,
+          "percent": 96.15384615384616
+        }
+      },
+      "fixture_sha256": "09a6dc45ea7b3266e85404ca7838a2785966603f5e7bfeefca2876275f436232"
+    },
+    {
+      "NB": 16,
+      "ES": 1,
+      "comb_rows": 24610,
+      "pipeline_modelsim": {
+        "accepted": 24610,
+        "completed": 24509,
+        "reset_aborts": 101,
+        "stalls": 14684,
+        "input_stalls": 10310,
+        "max_occupancy": 3,
+        "reset_events": 42
+      },
+      "pilot": {
+        "NB": 16,
+        "ES": 1,
+        "seed": 20262613,
+        "accepted": 50053,
+        "completed": 50003,
+        "reset_aborts": 50,
+        "output_stalls": 18715,
+        "input_stalls": 12860,
+        "reset_busy": 18,
+        "reset_output_stall": 5,
+        "long_stalls": 1898,
+        "max_slots": 3,
+        "independent_mode_checks": 100106,
+        "L0_RNE_checks": 50053,
+        "mismatches": 0
+      },
+      "acceptance": null,
+      "coverage_metrics": {
+        "toggle": {
+          "hit": 1782,
+          "total": 2103,
+          "percent": 84.73609129814551
+        },
+        "line": {
+          "hit": 34,
+          "total": 42,
+          "percent": 80.95238095238095
+        },
+        "branch": {
+          "hit": 24,
+          "total": 26,
+          "percent": 92.3076923076923
+        }
+      },
+      "fixture_sha256": "1d09d7e19c189ccaf69af2cab13af1fce3b00d0bcb6573bd7a24efee7ddcf56c"
+    },
+    {
+      "NB": 32,
+      "ES": 2,
+      "comb_rows": 24610,
+      "pipeline_modelsim": {
+        "accepted": 24610,
+        "completed": 24509,
+        "reset_aborts": 101,
+        "stalls": 14684,
+        "input_stalls": 10310,
+        "max_occupancy": 3,
+        "reset_events": 42
+      },
+      "pilot": {
+        "NB": 32,
+        "ES": 2,
+        "seed": 20264214,
+        "accepted": 50053,
+        "completed": 50003,
+        "reset_aborts": 50,
+        "output_stalls": 18705,
+        "input_stalls": 12876,
+        "reset_busy": 17,
+        "reset_output_stall": 5,
+        "long_stalls": 1892,
+        "max_slots": 3,
+        "independent_mode_checks": 100106,
+        "L0_RNE_checks": 50053,
+        "mismatches": 0
+      },
+      "acceptance": {
+        "NB": 32,
+        "ES": 2,
+        "seed": 20264214,
+        "accepted": 10009790,
+        "completed": 10000003,
+        "reset_aborts": 9787,
+        "output_stalls": 3701630,
+        "input_stalls": 2555203,
+        "reset_busy": 3666,
+        "reset_output_stall": 896,
+        "long_stalls": 367113,
+        "max_slots": 3,
+        "independent_mode_checks": 20019580,
+        "L0_RNE_checks": 10009790,
+        "mismatches": 0
+      },
+      "coverage_metrics": {
+        "toggle": {
+          "hit": 3132,
+          "total": 3856,
+          "percent": 81.2240663900415
+        },
+        "line": {
+          "hit": 34,
+          "total": 42,
+          "percent": 80.95238095238095
+        },
+        "branch": {
+          "hit": 24,
+          "total": 26,
+          "percent": 92.3076923076923
+        }
+      },
+      "fixture_sha256": "af7ca9745b579f6b3438c07613c2b88e36ebac3bba1242b7428cc1bf36b8f1cd"
+    },
+    {
+      "NB": 32,
+      "ES": 3,
+      "comb_rows": 24610,
+      "pipeline_modelsim": {
+        "accepted": 24610,
+        "completed": 24509,
+        "reset_aborts": 101,
+        "stalls": 14684,
+        "input_stalls": 10310,
+        "max_occupancy": 3,
+        "reset_events": 42
+      },
+      "pilot": {
+        "NB": 32,
+        "ES": 3,
+        "seed": 20264215,
+        "accepted": 50053,
+        "completed": 50002,
+        "reset_aborts": 51,
+        "output_stalls": 18543,
+        "input_stalls": 12836,
+        "reset_busy": 18,
+        "reset_output_stall": 2,
+        "long_stalls": 1900,
+        "max_slots": 3,
+        "independent_mode_checks": 100106,
+        "L0_RNE_checks": 0,
+        "mismatches": 0
+      },
+      "acceptance": {
+        "NB": 32,
+        "ES": 3,
+        "seed": 20264215,
+        "accepted": 10009863,
+        "completed": 10000001,
+        "reset_aborts": 9862,
+        "output_stalls": 3703727,
+        "input_stalls": 2556070,
+        "reset_busy": 3675,
+        "reset_output_stall": 906,
+        "long_stalls": 367231,
+        "max_slots": 3,
+        "independent_mode_checks": 20019726,
+        "L0_RNE_checks": 0,
+        "mismatches": 0
+      },
+      "coverage_metrics": {
+        "toggle": {
+          "hit": 2986,
+          "total": 3569,
+          "percent": 83.66489212664612
+        },
+        "line": {
+          "hit": 32,
+          "total": 40,
+          "percent": 80.0
+        },
+        "branch": {
+          "hit": 24,
+          "total": 26,
+          "percent": 92.3076923076923
+        }
+      },
+      "fixture_sha256": "808813af79fc2e6c473f7f6a24da0085e8a679e769f4faaf6908148984870a87"
+    }
+  ],
+  "strict_lint": "8/8 clean --timing -Wall",
+  "invalid_params": "3/3 rejected: SF_W too narrow, F mismatch, F_OUT mismatch",
+  "seed_base": 20261012,
+  "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)",
+  "modelsim": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+  "softposit_sha256": "8d6e33b23d924f3e76914569da7ebf06866aae61c5801ada77a182442a3eb761",
+  "frozen_L1": "PASS all source hashes unchanged",
+  "paired_input": {
+    "date": "2026-10-12",
+    "status": "INPUT_CORPUS_AND_COMPARISON_CONTRACT_FROZEN; NO_ACCURACY_RESULTS_YET",
+    "format": {
+      "NB": 32,
+      "ES": 3,
+      "FRAC_W": 12,
+      "OPS": 1,
+      "scheme": "FLOOR",
+      "rounding": "RNE",
+      "n": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    "seed": 20261012,
+    "engine": "std::mt19937_64",
+    "pilot_triples": 100000,
+    "main_triples_minimum": 1000000,
+    "reuse": "identical A/B/C for NF and F and every n; no seed tuning, no filtering after results",
+    "cohorts_by_i_mod_10": {
+      "0": "force A0",
+      "1": "force C0",
+      "2": "C=-RNE(exact A*B), cancellation candidate",
+      "3": "C=-RNE(exact A*B) plus/minus one encoded step, near-cancellation candidate",
+      "4": "force A NaR",
+      "5..9": "raw32 random A/B/C"
+    },
+    "cancellation_note": "These are candidates: rounded product or saturated product does not guarantee exact A*B+C==0. Classify by independent full-sum oracle when evaluating.",
+    "counts": {
+      "triples": 100000,
+      "NaR_any": 10000,
+      "A_or_B_zero": 10000,
+      "C_zero": 10000,
+      "finite_all": 90000
+    },
+    "sha256": "4aef4ba47f7cc13bb6182950006c5937b5ad60b24e2ebcce70d1e9ef4f846814",
+    "replay": "byte-exact PASS,100000 triples generated twice",
+    "generator_sha256": "cf335d3b9ae37efa0c8cd1737e41c46077c9f08d3e8602803ae3a8c4bafe46c6",
+    "precision": {
+      "prepack": "SPEC11.9 magnitude14/Q12 and signedSF11, numerical_sticky0; algorithmic cuts stay metadata",
+      "NF": "R(R(P_hat)+C_eff), existing L1/NF adder",
+      "F_reference": "R(P_hat+C_eff), independent signed integer/rational; not yet implemented/accepted",
+      "Ideal_accuracy": "exact A*B+C of initial inputs; neither NF nor F_W used as truth",
+      "reference_candidate": "For32/3, use signed1024-bit integer on2^-532 grid (2SF_MAX+2F); conservative4SF_MAX+2F+4=1016 bits fits1024. Software precision, not RTL ACC_WIN",
+      "F_RTL_window": "TBD after L1/residual/cancellation proof week12; record F_W error separately"
+    },
+    "metrics": [
+      "absolute_error",
+      "signed_code_ULP_distance",
+      "NMSE by declared domain",
+      "percentile/max",
+      "NF/F win/loss/tie",
+      "exact_zero/near_zero/NaR counts"
+    ],
+    "exceptions": "NaR reported separately; exact zero no relative division; nearzero cohort separate; retain finite saturation; all exclusions/counters declared before measuring",
+    "comparison": "same device/tool/constraints/DSP/BRAM policy; >=3 PPA runs/config; report actual stages/latency/II/throughput",
+    "commands": [
+      "g++ -O3 -std=c++17 -Wall -Wextra -Werror -I l1/include l1/test/gen_nf_f_corpus.cpp -o results/week10_adder/gen_paired",
+      "results/week10_adder/gen_paired results/week10_adder/paired/pilot.txt 100000"
+    ],
+    "remaining": [
+      "independent F/Ideal full-sum oracle and signed residual policy week12",
+      "NF/Gate3 integration week11",
+      "F_W RTL and actual paired accuracy/PPA later weeks"
+    ]
+  },
+  "source_sha256": {
+    "rtl\\posit_add.sv": "1b0d2dd3a1d684616f61598be3a7f35158ed37b7826aed8d8aa2e69a54ffc8de",
+    "rtl\\posit_add_align.sv": "b6d8506eeb9ec4c72c2c17050e6be93e2d0457e34103f9611e3c129794e5465c",
+    "rtl\\posit_add_arith.sv": "58ff5e589c86cd65a1c9982b0c91c6ff8b29585b2221dcc3dde850c16d86f8e2",
+    "rtl\\posit_add_comb.sv": "8ca7d8d86cca51d05c54448637fab88327079fe847649b3bdce4d38d90f7da6f",
+    "rtl\\posit_add_normalize.sv": "f6dc84735c6985d4ed7512a5be3d93abc2def2235ff6023437cc960a0c0f2a29",
+    "tb\\tb_week10_adder_comb.sv": "d69a2d8895db1019750c46fec47cd8e316cef7ffcdfbae00904633db0d33604b",
+    "tb\\tb_week10_adder_pipeline.sv": "d5f44b6dd91ba269512442eccd45c4fd7f7f046a9f7630344e7e537865db6267",
+    "tb\\tb_week10_invalid_params.sv": "df143d680ebe607001cd85a59fdc18e193ea121d26894caa8dc4c511741a9e21",
+    "tb\\week10_adder_harness.cpp": "0fc3b20386fda150375e76cc1a7b416c3d03ee43d67c438b49b368abe9e6ec95",
+    "tb\\week10_add_reference.hpp": "743ad192d18649bd30abc50e0c17873263ff0e90acea4f558a8fb1e87a896234",
+    "tb\\adder_verification_top.sv": "2baa086c3d134b1acedd99cc06d0ab06823a08ac2376a57687b4d68ede084e7d",
+    "l1\\test\\gen_week10_adder.cpp": "380b48a0cfeb7258996dff5075ca32f341ae0d04a96ca66373ef47f43d3c73e8",
+    "l1\\test\\gen_nf_f_corpus.cpp": "cf335d3b9ae37efa0c8cd1737e41c46077c9f08d3e8602803ae3a8c4bafe46c6",
+    "scripts\\audit_week10_adder.py": "e99889c3df2d6bc30513bd04301072099d23db627b5f86c02f9894a6afaf016f",
+    "scripts\\prepare_week10_adder.sh": "d7da5f4b46daf86c6d436c43789ab9930d8b775649738299e579aad3c347d557",
+    "scripts\\verify_week10_adder_comb.ps1": "2f7ce791c0305e13784a9218fbd8157c86a87851d1b9f1268984bd7cf8004529",
+    "scripts\\verify_week10_adder_lint.sh": "78a23e15b36355f48b601bfb22837e9b0d553368cbf38e35f14acdcf5a8b63fb",
+    "scripts\\verify_week10_adder_pipeline.ps1": "5dff37c0467184e1502e8b3f7f2cc13048ff6aa599a9b2aee7afc0ccecd3324e",
+    "scripts\\verify_week10_adder_verilator.sh": "70861207c21f43d134e1c178ab4848340984ede0aa2f5fb39a4aa38de967a47d",
+    "scripts\\verify_week10_invalid_params.ps1": "9135e20d6ec4d434685b1b97c198c8f91dad754d0226a7627bc0120edece466b"
+  },
+  "limits": [
+    "Raw coverage unhit points retained, no final AC04 signoff claimed",
+    "P16 full2^32 and P32 final>=1e8 AC02 remain open",
+    "No MAC NF/C_eff/acc_mode feedback integration or Gate3 yet",
+    "No fused residual/window RTL, no paired accuracy or PPA results",
+    "Verilator --no-timing checks clocked function; ModelSim retains CK2Q/4-state checks"
+  ]
+}

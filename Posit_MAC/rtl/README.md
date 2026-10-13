@@ -186,3 +186,7 @@ Coverage chức năng đạt256/256 bin posit32, min4104 mẫu/bin,26241 operand
 
 Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.json`; hướng dẫn tái lập và giải thích phạm vi tại PLAN L1 mục7.11. Những mục processing trước đây là lịch sử. Ma trận cuối SPEC§6.7, tuần10 adder/tuần11 MAC-Gate3 và PPA/Gate4 còn mở; provenance/TableI giữ processing, không chạy lại TableI trong phiên này.
 
+
+## 13. RTL adder — nghiệm thu đơn vị tuần10, 12/10/2026
+
+posit_add_comb và pipeline posit_add dùng chung posit_add_align/arith/normalize. Ba slot, E0 nhận→valid E2→handshake E3,II1 không stall, reset leaf2FF. ModelSim comb143.976, pipeline143.376/600 abort,0 mismatch; Verilator20.000.004 completedES2/ES3, oracle độc lập/flags/unpacked và RNE/TRUNC đạt. Strict lint8/8 sạch; canonical results/week10_adder/summary.json. Raw coverage chưa đạt finalAC04, giữ unhit points; không phải MAC/Gate3, STA hay fused. Source L1 frozen không đổi. Runner/commands tại PLAN8.4; không đưa prepack chưa round vào adder NF.

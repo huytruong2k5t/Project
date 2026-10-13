@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-12",
+  "scope": "Week10 NF adder unit milestone, not full AC02/final AC04 or MAC Gate3",
+  "seed_base": 20261012,
+  "formats": [
+    [
+      8,
+      0
+    ],
+    [
+      16,
+      1
+    ],
+    [
+      32,
+      2
+    ],
+    [
+      32,
+      3
+    ]
+  ],
+  "round_modes": [
+    "RNE",
+    "TRUNC"
+  ],
+  "oracle": "tb/week10_add_reference.hpp independent raw decoder, full-grid signed integer add and serial RNE/TRUNC encoder; no L1 parser/adder/packer",
+  "secondary_reference": "SoftPosit RNE only for8/0,16/1,32/2; ES3 not SoftPosit ES2",
+  "requirements": {
+    "p8_comb": "all65536 operand pairs plus directed metadata/special",
+    "p16": "pilot and directed/control; final2^32 exhaustive remains open",
+    "p32_2_and_p32_3": "at least10000000 completed comparisons each plus directed corner/control",
+    "pipeline": "all three slots, first E2 valid/E3 handshake, stable blocked source/output, reset empty/busy/output-stalled, abort accounting, ordered unpacked/packed/flags",
+    "coverage": "report raw unhit points; final AC04 thresholds not waived or claimed by week10"
+  },
+  "distribution": "Pilot: corners\u00d732 metadata, ties, p8 exhaustive, non-p8 random/near-cancel. Harness: stratified regime/sign/density,40% near-cancel, explicit NaR/maxpos and metadata cycling; own MT19937_64 seed_base+100NB+ES",
+  "commands": [
+    "results/week10_adder/gen_vectors results/week10_adder/pilot 20000; see build_generator.log/compiler.log",
+    "PowerShell scripts/verify_week10_adder_comb.ps1 -RunName modelsim_comb_final",
+    "PowerShell scripts/verify_week10_adder_pipeline.ps1 -RunName modelsim_pipeline_final",
+    "WSL bash scripts/verify_week10_adder_verilator.sh"
+  ],
+  "limits": [
+    "All mathematical reference decisions use integers, strict tie-even; no floating-point error comparator",
+    "Numeric flags checked independently from exact sum versus encoded result",
+    "RTLapprox input is rounded Posit before this adder",
+    "No STA/fmax or whole-MAC acceptance here; fused input/prepack residual uses a separate contract"
+  ]
+}

@@ -77,3 +77,9 @@ Giữ mọi summary/CSV/log/hash, raw structural/functional coverage, source sna
 ## 7. W10-01 — hợp đồng adder, 12/10/2026
 
 week10_contract/summary.json, projection.log và ubsan.log kiểm mapping L1 sang cổng unpacked/packer365.836 cặp,bốn format,0 mismatch. Không phải test RTL/control hoặc oracle độc lập. Contract ở SPEC§5.8-A..D; source/lệnh/compiler/hash đi cùng summary. Binary/tmp có thể build lại, không đưa Git; không sửa L1 frozen.
+
+## 8. Bàn giao tuần10 — 12/10/2026
+
+week10_adder/summary.json canonical cho adder đơn vị: ModelSim143.976 comb,143.376 completed+600 abort; native full20.000.004 completedES2/ES3,0 mismatch; oracle/flags/latency/reset/stall/order và lint8/8 đạt. matrix.json, source/fixture/binary hashes, compiler, generator/UBSan/model logs và rawcoverage/unhit points được giữ. Raw line80,00–80,95%,branch92,31–96,15%,toggle75,18–84,74% chưa đạt finalAC04; AC02 cuối, MAC/Gate3, F và PPA vẫn mở. paired/manifest.json khóa common100k input/seed/metric/reference-width requirements, chưa có accuracy NF/F. Lệnh PLAN8.4; chạy audit sau sinh/build/sim, không coi file thiếu là PASS.
+
+Sau kiểm W10 đã dọn553 file/361,93 MiB cache, wave, binary generator và bản replay/UBSan có thể sinh lại; results còn khoảng97,85 MiB. Primary pilot/corpus input, source snapshots, log/hash/report và rawcoverage giữ nguyên, hash đã kiểm. Danh mục results/cleanup_20261012_manifest.json; chạy lại prepare/build trước dùng binary, audit vẫn PASS sau dọn.

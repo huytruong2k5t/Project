@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.9 — 2026-10-12 — Chốt giao diện và pipeline adder W10-01 |
+| Phiên bản | v1.10 — 2026-10-12 — Triển khai/kiểm RTL adder và bàn giao tuần10 |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -30,6 +30,8 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.8 | 2026-10-11 | Đồng bộ fused profile chính thành MUST trong latency/top/matrix/PPA/rủi ro; giữ exact fused và cấu hình phụ là MAY. Thêm matrix NF/F32/3 FLOOR/RNE n0..8, phân biệt sketch với hợp đồng chưa nghiệm thu; checklist tuần10 đặt tạm trong tiến độ. |
 
 | v1.9 | 2026-10-12 | Chốt posit_add NF: input exact unpacked, output fraction mở rộng/sticky/flags, width và adapter; ba tầng elastic A1/A2/A3 với lịch cạnh/reset/stall; review mapping L1, chưa triển khai RTL adder. |
+
+| v1.10 | 2026-10-12 | Hiện thực comb/pipeline adder ba tầng, oracle integer độc lập; ModelSim/pilot/20M lượt lớn đạt0 mismatch. Chốt input corpus NF/F và bàn giao tuần10; coverage AC04, MAC/Gate3, fused và PPA còn mở. |
 
 **Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Các phần khác dẫn chiếu, không đặt thêm quy tắc khác cho cùng hành vi.
 
@@ -534,7 +536,17 @@ Input handshake E0 → out_valid sau E2 → output handshake sớm nhất E3: H_
 
 #### D. Điều kiện bàn giao W10-01
 
-Hợp đồng trên đã chốt thiết kế, chưa có RTL adder. Review/projection365.836 cặp trên bốn format (posit8 exhaustive),23.413.504 kiểm metadata/mode, Linux và UBSan cùng PASS/0 mismatch,seed20261012; bằng chứng tại results/week10_contract; kiểm mapping L1 sang giao diện/packer không thay nghiệm thu số học L0 hoặc pipeline. W10-02 khóa vector/oracle/flags/control và counts trước chạy; W10-03..06 hiện thực/kiểm comb, pipeline, timing và assertions. Không coi interface PASS là RTL PASS, STA hoặc Gate3. Cửa sổ/residual fused tiếp tục §5.12, không đưa prepack vào giao diện NF này.
+Hợp đồng W10-01 đã chốt trước hiện thực; RTL adder hiện đã kiểm theo §5.8-E. Review/projection365.836 cặp trên bốn format (posit8 exhaustive),23.413.504 kiểm metadata/mode, Linux và UBSan cùng PASS/0 mismatch,seed20261012; bằng chứng tại results/week10_contract; kiểm mapping L1 sang giao diện/packer không thay nghiệm thu số học L0 hoặc pipeline. W10-02 khóa vector/oracle/flags/control và counts trước chạy; W10-03..06 hiện thực/kiểm comb, pipeline, timing và assertions. Không coi interface PASS là RTL PASS, STA hoặc Gate3. Cửa sổ/residual fused tiếp tục §5.12, không đưa prepack vào giao diện NF này.
+
+#### E. Nghiệm thu adder đơn vị tuần10 — 12/10/2026
+
+Đã hiện thực posit_add_align → posit_add_arith → posit_add_normalize dùng chung ở posit_add_comb và posit_add ba tầng elastic. ModelSim10.1d: comb143.976 vector (posit8 có toàn65.536 cặp), pipeline143.376 completed/600 reset-aborted,0 mismatch; so từng khối, output unpacked, RNE/TRUNC và flags. Kiểm E2/E3, ba slot, input/output stall, reset/startup và thứ tự. Strict Verilator5.032 --timing -Wall8/8 format/top sạch.
+
+Harness coverage/scoreboard trực tiếp: ES2 10.000.003 completed/9.787 reset-aborted; ES3 10.000.001/9.862;0 mismatch. Mỗi input nhận được đối chiếu L1, oracle integer/bit-list độc lập (decode/add/pack không dùng L1); SoftPosit RNE ở format hỗ trợ, không gán ES3 cho L0 ES2. Kiểm cả unpacked/packed RNE/TRUNC và flags; pilot bốn format chạy trước lượt lớn. UBSan generator đạt. Seed_base20261012, seed format=base+100NB+ES; compilerGCC15.2.0, SoftPosit0.4.1/hash/lệnh/source/binary/fixture cùng report.
+
+Bằng chứng canonical results/week10_adder/summary.json; matrix.json, raw coverage và structural_coverage.json giữ tất cả unhit points. Coverage raw toàn verification hierarchy: line80,00–80,95%,branch92,31–96,15%,toggle75,18–84,74%; không loại point và **chưa đạt final AC04**, không dùng milestone tuần10 thay signoff coverage. Phần P16 exhaustive RTL2^32, P32 final>=10^8 theo AC02, tích hợp MAC/feedback/Gate3 và STA/PPA còn mở. L1 frozen source hashes giữ nguyên; không gọi pipeline này là MAC fused.
+
+Corpus NF/F common100.000 triple đầu vào đã đóng băng/replay byte-exact ở paired/manifest.json; chưa đo accuracy, oracle F/Ideal full-sum và window/residual vẫn theo tuần12. Tham chiếu software1024 bit trên grid2^-532 đủ bảo thủ cho32/3 (4SF_MAX+2F+4=1016 bit); không phải width RTL. Checklist tuần10 đã nghiệm thu phạm vi đơn vị và gỡ khỏi tiến độ, giữ nhật ký/report; tiếp tuần11 NF/Gate3. Ghép adder với packer pipeline và round_unpacked/feedback cần test toàn MAC, không suy từ testbench packer tổ hợp.
 
 ### 5.9 Packer (`posit_pack`)
 
@@ -1241,7 +1253,7 @@ Cập nhật 08/10/2026. SPEC là hợp đồng; kết quả nghiệm thu phải
 1. **Đã nghiệm thu mô hình số học:** Gate1, round_unpacked tương đương parse(pack(u)), Adder và MAC L1 v0/v1 Gate1B. Bằng chứng tại README L1 mục15 và results/week6_*; ES3 dùng oracle riêng, không gọi là L0 SoftPosit ES3.
 2. **Đã nghiệm thu parser RTL đơn vị:** comb và pipeline bốn format, 2.465.812 fixture, 0 mismatch; reset/stall/ordering/II được kiểm ở parser. Bằng chứng results/parser_comb/, results/parser_pipeline/ và rtl/README.md mục5. Không suy thành Gate2/3 toàn MAC.
 3. **Đã nghiệm thu packer RTL tuần8:** tổ hợp/pipeline RNE2/TRUNC1 và parser→packer đạt0 mismatch trên bốn format; F_IN/adapter theo §5.9-D. Tuần9 đã chốt giao diện §5.5-A và kiểm OPS/SAC tổ hợp327.440 vector ModelSim,0 mismatch; SBM/core/top standalone đã triển khai và kiểm pilot 09/10; Gate2 multiplier đã nghiệm thu10/10: strict lint16 cấu hình, scoreboard trực tiếp và16.815.920 so sánh/0 mismatch; bằng chứng PLAN L1 mục7.11 và gate2_acceptance.json. Paper RTL843 commit/Fig.4 đạt trong profile tái dựng, không xác nhận baseline gốc. Sau tối ưu P2, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode; tiếp tục STA khi tích hợp, không gọi là Gate4 hoặc fmax toàn MAC.
-4. **Trước nghiệm thu tích hợp:** thực hiện reset bridge, startup barrier và lịch core §4.2/§5.5; TB đối chiếu cạnh, config, flags, metadata và slot output. Multiplier standalone đã có reset bridge, startup barrier và kiểm pilot; Gate2 multiplier đã nghiệm thu; RTL adder/MAC và Gate3 còn theo tuần10–11.
+4. **Trước nghiệm thu tích hợp:** thực hiện reset bridge, startup barrier và lịch core §4.2/§5.5; TB đối chiếu cạnh, config, flags, metadata và slot output. Multiplier standalone đã có reset bridge, startup barrier và kiểm pilot; Gate2 multiplier đã nghiệm thu; RTL adder đơn vị đã nghiệm thu§5.8-E; tích hợp MAC/C/context và Gate3 còn theo tuần11.
 5. **Chồng lấn sau baseline:** thêm FIFO/credit và chứng minh lịch first/last, n=0/drain, acc feedback trước khi kết luận II/throughput. Sức chứa phải suy ra, không dùng skid2 để bảo đảm mọi giao dịch đang bay.
 6. **Tái hiện/PPA và v2:** provenance Table I, corpus Table II và PPA toàn khối còn mở; ghi đúng giới hạn. Fused v2 là mục tiêu so sánh chính theo §11.8; không thay bằng chứng tuần8 hoặc điều kiện đóng NF/Gate3.
 
@@ -1537,6 +1549,8 @@ Với hữu hạn khác0: P_hat=(-1)^sign * magnitude * 2^(scale-fractional_bits
 | iterations / remaining_fx | Giữ trong IterResult; đếm và trace kiểm trước/sau mỗi term |
 
 Mapping RTL hiện hành: FLOOR export magnitude=acc>>2,Q12 vì hai bit thấp là padding0; exact export acc,Q52; JAM acc,Q14. ACC_W vật lý32/3 với EXACT_EN1 là54 bit (EXACT_EN0 approximate-only16 bit), khác độ rộng hữu ích14 bit FLOOR. Giới hạn64 bit của L1 an toàn cho các format đã nghiệm thu; không tuyên bố arbitrary NB/ES.
+
+**Điểm kiểm tích hợp mở — 13/10/2026:** checkpoint prepack đã kiểm giao diện/trace nhưng chưa tự chứng minh đường mul_norm/pack legacy bằng R(P_hat) khi carry và magnitude lẻ. W11-01 (PLAN§8.5) phải đối chiếu bằng vector phân biệt và oracle trước freeze baseline NF/F. Chưa đo số mismatch cho nghi vấn này; không sửa checkpoint/Gate2 lịch sử hoặc coi sticky là bit có trọng số để khôi phục tích.
 
 NF=R(R(P_hat)+C); reference F=R(P_hat+C). FLOOR loss được ghi vào metadata và không khôi phục bằng numerical_tail. Phần dư phát sinh khi căn C với P_hat phải có dấu và oracle integer/rational giữ đủ; `acc=0` chưa bảo đảm sum0 khi còn residual. Cửa sổ F hữu hạn phải có hợp đồng riêng trước RTL; chưa chốt ACC_WIN/jam/borrow của F trong checkpoint này. Nếu stream term thẳng vào C, phải chứng minh cùng P_hat và đúng thứ tự cut; cut sau căn chỉnh không tự tương đương cut trước căn chỉnh. Các shortcut chọn mốc/sticky §5.12 còn là sketch cần kiểm, không nghiệm thu bằng checkpoint prepack.
 

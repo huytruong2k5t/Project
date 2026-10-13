@@ -1,0 +1,19 @@
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim -do run.do -l case_1.log -c -wlf case_1.wlf -gCASE=1 work.tb_week10_invalid_params 
+# Loading sv_std.std
+# Loading work.tb_week10_invalid_params
+# Loading work.posit_add_comb
+# Loading work.posit_add_align
+# Loading work.dyn_right_shifter
+# Loading work.posit_add_arith
+# Loading work.posit_add_normalize
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# do run.do 
+# ** Fatal: posit_add_align: unsupported parameters
+#    Time: 0 ps  Scope: tb_week10_invalid_params.dut.u_align.g_invalid File: C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_add_align.sv Line: 61
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_add_align.sv(61)
+#    Time: 0 ps  Iteration: 0  Region: /tb_week10_invalid_params/dut/u_align/g_invalid

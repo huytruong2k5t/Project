@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-12",
+  "status": "INPUT_CORPUS_AND_COMPARISON_CONTRACT_FROZEN; NO_ACCURACY_RESULTS_YET",
+  "format": {
+    "NB": 32,
+    "ES": 3,
+    "FRAC_W": 12,
+    "OPS": 1,
+    "scheme": "FLOOR",
+    "rounding": "RNE",
+    "n": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  "seed": 20261012,
+  "engine": "std::mt19937_64",
+  "pilot_triples": 100000,
+  "main_triples_minimum": 1000000,
+  "reuse": "identical A/B/C for NF and F and every n; no seed tuning, no filtering after results",
+  "cohorts_by_i_mod_10": {
+    "0": "force A0",
+    "1": "force C0",
+    "2": "C=-RNE(exact A*B), cancellation candidate",
+    "3": "C=-RNE(exact A*B) plus/minus one encoded step, near-cancellation candidate",
+    "4": "force A NaR",
+    "5..9": "raw32 random A/B/C"
+  },
+  "cancellation_note": "These are candidates: rounded product or saturated product does not guarantee exact A*B+C==0. Classify by independent full-sum oracle when evaluating.",
+  "counts": {
+    "triples": 100000,
+    "NaR_any": 10000,
+    "A_or_B_zero": 10000,
+    "C_zero": 10000,
+    "finite_all": 90000
+  },
+  "sha256": "4aef4ba47f7cc13bb6182950006c5937b5ad60b24e2ebcce70d1e9ef4f846814",
+  "replay": "byte-exact PASS,100000 triples generated twice",
+  "generator_sha256": "cf335d3b9ae37efa0c8cd1737e41c46077c9f08d3e8602803ae3a8c4bafe46c6",
+  "precision": {
+    "prepack": "SPEC11.9 magnitude14/Q12 and signedSF11, numerical_sticky0; algorithmic cuts stay metadata",
+    "NF": "R(R(P_hat)+C_eff), existing L1/NF adder",
+    "F_reference": "R(P_hat+C_eff), independent signed integer/rational; not yet implemented/accepted",
+    "Ideal_accuracy": "exact A*B+C of initial inputs; neither NF nor F_W used as truth",
+    "reference_candidate": "For32/3, use signed1024-bit integer on2^-532 grid (2SF_MAX+2F); conservative4SF_MAX+2F+4=1016 bits fits1024. Software precision, not RTL ACC_WIN",
+    "F_RTL_window": "TBD after L1/residual/cancellation proof week12; record F_W error separately"
+  },
+  "metrics": [
+    "absolute_error",
+    "signed_code_ULP_distance",
+    "NMSE by declared domain",
+    "percentile/max",
+    "NF/F win/loss/tie",
+    "exact_zero/near_zero/NaR counts"
+  ],
+  "exceptions": "NaR reported separately; exact zero no relative division; nearzero cohort separate; retain finite saturation; all exclusions/counters declared before measuring",
+  "comparison": "same device/tool/constraints/DSP/BRAM policy; >=3 PPA runs/config; report actual stages/latency/II/throughput",
+  "commands": [
+    "g++ -O3 -std=c++17 -Wall -Wextra -Werror -I l1/include l1/test/gen_nf_f_corpus.cpp -o results/week10_adder/gen_paired",
+    "results/week10_adder/gen_paired results/week10_adder/paired/pilot.txt 100000"
+  ],
+  "remaining": [
+    "independent F/Ideal full-sum oracle and signed residual policy week12",
+    "NF/Gate3 integration week11",
+    "F_W RTL and actual paired accuracy/PPA later weeks"
+  ]
+}

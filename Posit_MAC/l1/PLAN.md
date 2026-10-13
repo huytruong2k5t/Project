@@ -1,6 +1,6 @@
 # Kế hoạch Triển khai Mô hình Thuật toán L1 (C++ Golden Model)
 
-**Hợp đồng tích hợp08/10, cập nhật phạm vi11/10/2026 — SPEC v1.9:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7 (trạng thái10/10/2026). Gate2 multiplier đã nghiệm thu theo mục7.11; MAC RTL chưa nghiệm thu. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
+**Hợp đồng tích hợp08/10, cập nhật phạm vi11/10/2026 — SPEC v1.10:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7 (trạng thái10/10/2026). Gate2 multiplier đã nghiệm thu theo mục7.11; MAC RTL chưa nghiệm thu. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
 
 > **Mục tiêu**: Xây dựng mô hình thuật toán C++ L1 (`l1/`) mô phỏng trung thực 100% từng bước biến đổi dữ liệu của vi kiến trúc phần cứng Posit MAC, tham số hóa theo `template <int NB, int ES, int FRAC_W>`, đóng vai trò làm thước đo chân lý bit-exact (AC-01) cho RTL SystemVerilog, vượt qua các cổng kiểm chuẩn nghiêm ngặt **Gate 1 (Tuần 3)** và **Gate 1B (Tuần 6)** theo [SPEC_Posit_MAC_IP.md](../SPEC_Posit_MAC_IP.md).
 
@@ -484,7 +484,7 @@ Tính mới cần trình bày là hiện thực và kiểm chứng hai kiến tr
 
 ### Thứ tự thực thi và quản lý rủi ro
 
-NF contract/adder → NF RTL/Gate3 → F L1/oracle → F RTL → paired regression → PPA → báo cáo. Bước ngay tiếp theo là W10-01: chốt giao diện adder và matrix so sánh, chuẩn bị vector carry/borrow/triệt tiêu/round; sau đó RTL adder theo Digital Design Guidelines. Lập lịch không đồng nghĩa đã viết RTL mới.
+NF contract/adder → NF RTL/Gate3 → F L1/oracle → F RTL → paired regression → PPA → báo cáo. W10-01..07 đã bàn giao theo mục8.4; tiếp tuần11 tích hợp NF/Gate3. Các mốc sau vẫn là kế hoạch, không suy từ adder đơn vị.
 
 Dừng dò baseline gốc/TableI trong đường găng; chỉ mở lại khi có source/trace tác giả hoặc yêu cầu riêng. Không tự điều chỉnh seed để đạt số liệu paper. Cuối tuần12 phải kiểm khả năng P&R và chốt W; nếu vướng oracle/cancellation, giảm khảo sát phụ (ASIC, FP32/FP16, TRUNC/JAM, exact fused toàn miền, chồng lấn), giữ hai bản và tính đúng ở profile chính. Không gọi fused hoàn thành khi còn mismatch. Nếu mốc bắt buộc không đạt, báo ngay phạm vi thiếu và ảnh hưởng đến hạn; không đổi nhãn nghiệm thu để giữ lịch.
 
@@ -517,3 +517,45 @@ Checklist thực thi W10-01..07 và lịch12–18/10 đặt tại doc/TIEN_DO_DO
 Đã chốt posit_add NF ở SPEC§5.8-A..D: operand exact normalized F bits sau parser/round_unpacked; output F_OUT=2F+1+sticky tách metadata, ba tầng elastic A1/A2/A3 (H3,valid E2,handshake E3 khi input E0). GRS cuối do packer, không truyền tích prepack chưa round vào adder NF. Reset leaf/bridge, special/flags, enables và slot/order đã quy định; pipeline chưa triển khai.
 
 Projection L1→ports→packer365.836 cặp,bốn format,0 mismatch; kiểm mọi32 metadata và RNE/TRUNC, UBSan cùng đạt. Kết quả chỉ kiểm hợp đồng/mapping, không thay RTL/oracle/STA. L1 frozen source hash giữ nguyên. Bằng chứng results/week10_contract/summary.json và l1/test/test_week10_adder_contract.cpp; W10-01✅, tuần10 processing. Tiếp W10-02: khóa vector/oracle/control/flags matrix trước RTL.
+
+### 8.4. Bàn giao tuần10 — 12/10/2026
+
+W10-02 oracle raw-bit/full-grid/serial-pack độc lập đã kiểm L1 và L0 ở đúng format; W10-03/04 comb align/arithmetic/normalize; W10-05 ba tầng elastic; W10-06 strict lint8/8,ModelSim143.976 comb/143.376 completed+600 abort,0 mismatch và fullES2/ES3 tổng20.000.004 completed; W10-07 matrix/corpus input/metric/width requirements đã chốt. Canonical results/week10_adder/summary.json. Không đổi hash L1 đã frozen, không chạy TableI.
+
+W10✅ ở phạm vi adder đơn vị, không phải Gate3 hoặc final AC02/AC04: raw line80,00–80,95%,branch92,31–96,15%,toggle75,18–84,74%; giữ mọi unhit point, không waiver. P16 fullRTL2^32/P32>=1e8 và final coverage còn thực hiện; không giảm ngưỡng. F reference/Ideal full-sum, signed residual và RTL window còn tuần12. Input corpus paired100k/seed20261012 đã replay byte-exact; chưa có accuracy hoặc PPA NF/F.
+
+Tái chạy từ Posit_MAC: build gen_week10_adder.cpp -I l1/include -L l0 -lsoftposit với LD_LIBRARY_PATH l0, sinh pilot20000; chạy scripts/verify_week10_adder_comb.ps1 và pipeline.ps1 với RunName *_final; WSL bash scripts/verify_week10_adder_verilator.sh; cuối cùng python scripts/audit_week10_adder.py. Build snapshot/relative paths giải quyết thư mục có khoảng trắng, TMPDIR đặt trong results/week10_adder. Audit cần fixture/source snapshot/rawcoverage được giữ tới cuối kiểm; missing không là PASS.
+
+Theo yêu cầu sinh viên, checklist tạm W10 đã gỡ khỏi tiến độ sau nghiệm thu; giữ hàng tổng kết và nhật ký/report. Bước tiếp tuần11: ghép multiplier đã kiểm→round_unpacked→adder→packer, context C_eff/reset/acc_mode, rồi Gate3. Tại checkpoint12/10 chưa tạo checklist tuần11 hoặc triển khai MAC mới; kế hoạch hiện hành bổ sung ở mục8.5 ngày13/10.
+
+Lệnh W10 chuẩn đã kiểm từ nguồn (WSL không nạp profile, các runner PowerShell từ Posit_MAC):
+
+```sh
+bash scripts/prepare_week10_adder.sh
+bash scripts/verify_week10_adder_verilator.sh
+python3 scripts/audit_week10_adder.py
+```
+
+Giữa prepare và audit chạy Windows `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify_week10_adder_comb.ps1 -RunName modelsim_comb_final`, tương tự pipeline.ps1 với modelsim_pipeline_final, và verify_week10_invalid_params.ps1. Chạy cả ModelSim và Verilator trước audit. prepare chốt pilot143.976 rows/UBSan/corpus paired100k; native runner pilot50k/format trước full10M/format32. Invalid params3/3 chặn F/SF_W/F_OUT sai. Khi dùng Git, scripts W10 .sh giữ LF bằng .gitattributes. Giữ report cũ trước chạy lại nếu cần bảo toàn checkpoint lịch sử.
+
+
+### 8.5. Kế hoạch thực thi tuần11 — 13/10/2026
+
+Lịch chính19–25/10/2026; có thể chuẩn bị sớm từ13–18/10. Giữ hạn hồ sơ29/11 và đệm30/11–04/12. Tuần10 đã đạt phạm vi adder đơn vị: audit ngày13/10 xác nhận143.976 comb,143.376 pipeline và20.000.004 giao dịch lớn,0 mismatch. Audit đọc bằng chứng đã lưu, không phải chạy lại mô phỏng. W10-07 mới chốt đầu vào/matrix so sánh; sự tương đương đường tích legacy với R(P_hat) còn phải xác minh trước freeze baseline NF/F.
+
+**Điểm chặn cần xử lý đầu tiên:** mul_norm legacy khi carry có thể đưa bit thấp của magnitude sang sticky và giảm một bit chính xác. Với FLOOR/Q12 và fraction Posit32/ES3 dài26 bit, không mặc định pack(mul_norm(M))=R(M*2^(scale-Q)). Đây là nghi vấn từ đọc nguồn, chưa có vector phân biệt hoặc số mismatch được đo. Không sửa checkpoint L1/Gate2 lịch sử trước khi có bằng chứng. Nếu có khác biệt, xây adapter/model so sánh có tên riêng bảo toàn giá trị P_hat; review hợp đồng và kiểm lại đường bị ảnh hưởng. Không thay P_hat bằng tích đã pack trong fused.
+
+| ID | Lịch mục tiêu | Công việc / điều kiện nghiệm thu | Trạng thái |
+| --- | --- | --- | --- |
+| W11-01 | Chuẩn bị sớm, chốt19/10 | Đối chiếu raw P_hat, legacy normalize/pack và oracle RNE độc lập; vector carry chẵn/lẻ, n0..8, scale/biên dải. Khóa đường R(P_hat), width/cut/sticky và phép OR flags; giữ regression/checkpoint cũ, ghi rõ khác biệt nếu có | không |
+| W11-02 | 19/10 | Khóa giao diện MAC v1, lịch cạnh/reset/startup và matrix trước chạy. A/B/C_eff/config nhận nguyên tử; một giao dịch đang xử lý; acc_clr chỉ hiệu lực khi handshake; xác định sự kiện output-commit cập nhật accumulator | không |
+| W11-03 | 20/10 | Ghép parser→multiplier/profile đã chốt→round_unpacked/adapter→adder A1/A2/A3→packer. Giữ C/context đúng giao dịch, named ports, một module/file, code xuống dòng; không mặc định đường ghép pack→parse và ngân sách pipeline trong SPEC có cùng latency | không |
+| W11-04 | 21/10 | Controller, output holding và feedback: reset hủy đang chạy/đang stall, startup barrier, config không đổi khi busy, acc_mode/acc_clr/acc_nar; accumulator cập nhật đúng một lần khi chốt output, chưa nhận giao dịch sau trước retire | không |
+| W11-05 | 22/10 | ModelSim4-state pilot, strict lint, scoreboard L1 và oracle độc lập. Kiểm NaR ưu tiên Zero, triệt tiêu/gần triệt tiêu, bão hòa tích rồi cộng ngược dấu, n0/early-stop, stall dài/order/flags; đo L_valid/L_handshake/II theo cạnh | không |
+| W11-06 | 23–24/10 | Gate3: RTL=L1 NF trên >=10^7 giao dịch hoàn tất, mọi n hợp lệ và bins/config/mode đã chốt, không tính reset-abort vào so sánh. Exact/RNE so L0 đúng format; ES3 dùng oracle integer độc lập. Kiểm standalone và chuỗi acc_mode, coverage chức năng/control; lưu raw structural coverage, không gọi AC04 cuối đạt nếu dưới ngưỡng | không |
+| W11-07 | 25/10 | Audit nguồn/hash/log/seed/counters và FR→TC→report; freeze baseline NF bằng commit/tag hoặc manifest hash sau PASS. Gỡ checklist tuần11 khỏi tiến độ chỉ khi các mục bắt buộc đạt; giữ báo cáo/nhật ký và sao lưu GitHub | không |
+| W11-08 | Sau khi W11-01 chốt, ưu tiên sau Gate3 | Bắt đầu L1 fused full-sum từ cùng P_hat+C_eff; giữ phần dư có dấu, trace triệt tiêu chính xác/gần triệt tiêu và C=0. Pilot oracle độc lập0 mismatch; bàn giao tuần12, chưa chốt cửa sổ RTL hoặc nghiệm thu fused | không |
+
+W11-01→02→03→04→05→06→07 là đường bắt buộc; W11-08 là chuẩn bị mốc F, không thay điều kiện Gate3. Profile so sánh chính32/3,FRAC_W12,OPS1,FLOOR/RNE,n0..8; format8/0,16/1,32/2 và exact/OPS0 dùng kiểm bổ trợ theo phạm vi công bố. Đóng băng seed, phân bố, số mẫu/profile và coverage bins ở W11-02; không điều chỉnh sau khi thấy kết quả. Pilot trước lượt lớn, chỉ chạy lại khối đơn vị khi nguồn thay hoặc có lỗi cần xác minh. >=10^7 ở Gate3 không thay yêu cầu final theo SPEC§6.7, đặc biệt >=10^7/n/bản profile NF/F chính; mọi mục final còn thiếu phải ghi riêng.
+
+Các điểm còn mở chuyển tiếp: AC04 cuối line>=95%,branch>=90%,toggle>=85%; AC02/ma trận final; oracle/cửa sổ fused; paired accuracy; STA/CDC/PPA toàn MAC. Không chạy lại TableI khi chưa có bằng chứng nguồn mới. Nếu W11-01 phải sửa số học hoặc Gate3 FAIL, giữ trạng thái processing và báo ảnh hưởng lịch; cắt khảo sát phụ trước, không giảm tiêu chí NF/F bắt buộc.

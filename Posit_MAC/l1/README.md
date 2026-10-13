@@ -967,3 +967,7 @@ Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.jso
 
 Hợp đồng và giới hạn tại SPEC§11.9; cách kiểm tại PLAN§8.1. Bản ghi PrepackProduct là dữ liệu trước normalization/pack, không phải parse(output). Profile chính NB32/ES3/F12/OPS1/FLOOR/RNE,n0..8; mặc định legacy giữ nguyên. Linux/Windows mỗi bản17.184.416 kiểm,0 mismatch,UBSan smoke đạt. Bằng chứng/hash/compiler/lệnh tại results/l1_floor_rne_freeze/summary.json. Chỉ L1 hiện có và tích được freeze; fused signed alignment/residual chưa được nghiệm thu.
 
+
+## 28. Adder RTL bàn giao tuần10 — 12/10/2026
+
+L1 core frozen giữ nguyên; thêm gen_week10_adder.cpp và oracle tb/week10_add_reference.hpp độc lập decode/add/pack. ModelSim comb143.976/pipeline143.376+600 reset abort, native20.000.004 completedES2/ES3,0 mismatch; 8/8 strictlint và3/3 invalid param rejected. Corpus input NF/F100k đã đóng băng, chưa đo accuracy. Canonical results/week10_adder/summary.json; commands PLAN8.4, SPEC v1.10§5.8-E. Raw coverage chưa finalAC04, fullAC02/MAC-Gate3/fused/PPA còn mở; không suy L1 fused đã có từ adder này.

@@ -42,6 +42,19 @@ foreach ($file in $allFiles) {
     if ($file.DirectoryName -eq $fixtureRoot -and $file.Name -match '^mul_\d+_\d+_[01]_[01]\.txt$') {
         $reason = 'Regenerate: gen_week9_multiplier results/week9_multiplier/stratified_corpus 1056000 stratified'
     }
+    $w10Prefix = [IO.Path]::GetFullPath((Join-Path $resultsRoot 'week10_adder')) + [IO.Path]::DirectorySeparatorChar
+    $projectionPrefix = [IO.Path]::GetFullPath((Join-Path $resultsRoot 'week10_contract')) + [IO.Path]::DirectorySeparatorChar
+    if (($file.FullName.StartsWith($w10Prefix, [StringComparison]::OrdinalIgnoreCase) -and
+         $file.Name -in @('gen_vectors','gen_vectors_ubsan','gen_paired')) -or
+        ($file.FullName.StartsWith($projectionPrefix, [StringComparison]::OrdinalIgnoreCase) -and
+         $file.Name -in @('test_projection','test_projection_ubsan'))) {
+        $reason = 'Rebuild W10 ELF test/generator executable from source'
+    }
+    if ($file.FullName.StartsWith($w10Prefix, [StringComparison]::OrdinalIgnoreCase) -and
+        (($file.DirectoryName.EndsWith('ubsan_vectors') -and $file.Name -like 'add_*.txt') -or
+         ($file.DirectoryName.EndsWith('paired') -and $file.Name -eq 'replay.txt'))) {
+        $reason = 'Rebuild W10 UBSan fixture or identical paired replay; keep primary pilot inputs and logs'
+    }
     if ($file.Extension -in @('.wlf','.vcd','.fst','.vpd')) { $reason = 'Regenerate simulation waveform' }
     $relative = [IO.Path]::GetRelativePath($resultsRoot, $file.FullName).Replace('\','/')
     if ($reason) {
@@ -74,7 +87,7 @@ $manifest = [ordered]@{
     date=[DateTime]::ParseExact($Checkpoint,'yyyyMMdd',[Globalization.CultureInfo]::InvariantCulture).ToString('yyyy-MM-dd'); timezone='Asia/Saigon'; status='PLANNED'; scope='Only Posit_MAC/results'
     before_bytes=$beforeBytes; removed_bytes=$removedBytes; removed_file_count=$removeFiles.Count
     cache_directory_count=$cacheDirs.Count
-    policy='Keep all historical summaries/logs/CSV/coverage/source snapshots/PPA evidence and small pilot/corner/replay fixtures; remove caches, large stratified mul fixtures and waves. Cache hashes omitted; fixture and retained evidence hashes recorded.'
+    policy='Keep all historical summaries/logs/CSV/coverage/source snapshots/PPA evidence and small pilot/corner/replay fixtures; remove caches, large stratified mul fixtures and waves. W10 ELF generators/UBSan duplicate inputs are also rebuilt; primary pilot input retained. Cache hashes omitted; stratified fixture and retained evidence hashes recorded.'
     rebuild_guide='../../doc/HUONG_DAN_CHAY_WSL_MODELSIM.md sections6.1/6.4/6.5; results/README.md'
     removed=$removeFiles; retained=$retainedHashes
 }

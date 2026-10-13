@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.11 — 2026-10-13 — MAC NF prepack-preserving/Gate3; fused L1 pilot |
+| Phiên bản | v1.12 — 2026-10-13 — Làm rõ đối chiếu Fig.3 với MAC NF hiện thực |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -34,6 +34,8 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.10 | 2026-10-12 | Hiện thực comb/pipeline adder ba tầng, oracle integer độc lập; ModelSim/pilot/20M lượt lớn đạt0 mismatch. Chốt input corpus NF/F và bàn giao tuần10; coverage AC04, MAC/Gate3, fused và PPA còn mở. |
 
 | v1.11 | 2026-10-13 | Kiểm carry xác nhận legacy khác R(P_hat); thêm adapter bảo toàn prepack và MAC NF đơn giao dịch RNE/FLOOR, Gate3 đạt. Giữ freeze/Gate2 legacy; fused full-sum mới pilot, chưa RTL/coverage cuối/PPA. |
+
+| v1.12 | 2026-10-13 | Gom khác biệt paper/NF tại §5.10-G; sửa mapping module, unsigned shift, metadata register và carry adapter. Chỉ làm rõ tài liệu, không đổi RTL hoặc hợp đồng số học đã kiểm. |
 
 **Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Các phần khác dẫn chiếu, không đặt thêm quy tắc khác cho cùng hành vi.
 
@@ -681,22 +683,22 @@ run_ready chỉ có hiệu lực sau reset/startup. P1 nhận bundle mới khi i
 
 ### 5.10 Đối chiếu vi kiến trúc với Block Diagram Fig. 3 của [P]
 
-Nhằm đảm bảo tính trung thực học thuật và khả năng tái hiện chính xác số liệu phần cứng của bài báo tham chiếu chính [P] (Norris & Kim, ISCAS 2021), sơ đồ khối Fig. 3 được phân tích và ánh xạ trực tiếp sang các module RTL của đề tài.
+Fig.3 của [P] là nguồn tham khảo cấu trúc Parser → OPS → SAC → SBM shifter → SBM accumulator → Packer. Bảng dưới ánh xạ chức năng sang RTL hiện thực, không chứng minh RTL, vị trí thanh ghi, LUT/FF hoặc kết quả Table I giống tác giả. Các khác biệt có chủ đích và giới hạn bằng chứng được tập hợp tại §5.10-G; hợp đồng NF hiện hành tại §11.10.
 
-#### A. Bảng ánh xạ khối Fig. 3 ↔ Module RTL
+#### A. Bảng ánh xạ khối Fig.3 ↔ Module RTL hiện thực
 
-| Khối trên Fig. 3 của [P] | Tương ứng trong RTL đề tài | Chức năng phần cứng & Tương đương |
+| Khối/chức năng trên Fig.3 | Module RTL hiện tại | Chức năng và giới hạn tương đương |
 | --- | --- | --- |
-| **Data Parser (Operand 1 & 2)** | `posit_parser` × 2 (hoặc × 3 cho MAC) | Giải mã bitstring Posit thành bộ ba unpacked `(sign, sf, frac)`, trích xuất bit regime, exponent, hidden bit $1.f$ và nhận diện sớm Zero/NaR. |
-| **OPS (Operand Selection)** | `ops_sel` | Lựa chọn toán hạng $X$ (điều khiển số vòng lặp) và $Y$ (bị dịch), xor bit dấu `sign_o = sA ^ sB`. |
-| **Rgm Exp Processing (Adder / Subtractor / Comparator)** | Tích hợp trong `ops_sel` / Datapath Scale Factor gộp | Fig. 3 tách riêng hai bộ cộng cho Regime và Exponent kèm bộ so sánh $\ge 8$. Đề tài hợp nhất thành biến Scale Factor bù hai $sf = k \cdot 2^{ES} + e$ (xem chứng minh tương đương toán học bên dưới). |
-| **First Mux (trước SAC)** | Mux khởi tạo $fx$ trong `sac` | Chu kỳ đầu (`first = 1`): nạp fraction $fx$ từ OPS. Các chu kỳ lặp sau (`first = 0`): nạp $fx$ đã dịch loại bỏ bit 1 từ ngõ ra SAC. |
-| **SAC (Shift Amount Calculator)** | `sac` | Chứa bộ dò số 0 đầu chuỗi (LZD/CLZ), xác định vị trí bit 1 tiếp theo $sa = \text{clz}(fx) + 1$, tích lũy tổng độ dịch $S = S + sa$, và dịch loại bit 1: $fx \ll sa$. |
-| **Shift Register / Delay Line** | Shifter Stage trong `sbm` | Nhận độ dịch lũy kế $S$ từ thanh ghi Reg sau SAC, thực hiện dịch phải số học $1.f_Y \gg S$. |
-| **First Mux (trước Accumulator)** | Mux khởi tạo `acc` trong `sbm` | Chu kỳ đầu (`first = 1`): nạp trực tiếp mantissa $1.f_Y$ (đóng góp của hidden bit của $X$). Các chu kỳ lặp sau (`first = 0`): nạp tổng tích lũy từ ngõ ra Accumulator. |
-| **Accumulator** | Bộ cộng tích lũy trong `sbm` | Cộng dồn: $\text{acc} = \text{acc} + (1.f_Y \gg S)$. Duy trì bit `sticky_acc` gom các bit bị đẩy ra ngoài. |
-| **Normalizer** | `mul_norm` | Kiểm tra bit tràn của tích ($\text{acc} \ge 2.0$), dịch phải 1 bit nếu cần và tăng scale factor: $sf = sf + 1$. |
-| **Data Packer** | `round_unpacked` + `posit_pack` | Chuyển đổi dữ liệu mantissa và scale factor trở lại định dạng Posit chuẩn với thuật toán làm tròn RNE ([F]) hoặc cắt cụt TRUNC ([P]). |
+| Parser X/Y | `posit_parser` ×2; thêm parser C_eff cho MAC | Tách dấu, sf, fraction không hidden và Zero/NaR; hidden được khôi phục trong đường số học. Parser hai tầng theo §5.2 |
+| OPS và hai mux chọn X/Y | `ops_sel_comb` | Chọn X/Y; cfg_ops0 giữ A, cfg_ops1 min-popcount/tie-A. Không dùng prefix predictor của paper trong NF hiện tại |
+| XOR dấu, Rgm/Exp adder | `ops_sel_comb` | sign=sA XOR sB, sf=sfA+sfB. Scale gộp tương đương số học theo §5.10-B; Fig.3 không công bố logic cổng bên trong Rgm/Exp adder |
+| First mux trước SAC và feedback | `iter_ctrl` | Launch nạp fraction X; các vòng sau dùng fx_next. Config/sign/sf giữ nguyên trong context của giao dịch |
+| SAC | `sac_step_comb` + bank token trong `iter_ctrl` | Tìm bit1 tiếp theo, sa=clz(fx)+1, cộng tổng S và dịch loại bit đã xử lý. Hợp đồng normative ở §5.5, không mặc định đồng nhất mọi recurrence nghiên cứu của tác giả |
+| SBM shifter | `sbm_shift_comb` | Dịch phải magnitude Y unsigned theo S; FLOOR cắt từng term. Scale có dấu không biến phép dịch magnitude thành arithmetic shift |
+| First mux trước accumulator | `sbm_accum_comb` | Token đầu chọn y_base thay acc; cộng term nếu không init_only. Token init_only nạp Y đúng một lần |
+| SBM accumulator | `sbm_accum` + `sbm_accum_comb` | Hồi tiếp tổng magnitude; numerical_tail/metadata cut tách khỏi numerical sticky. Trong FLOOR, phần đã cắt không còn thuộc P_hat và không được OR vào GRS của P_hat |
+| Chuẩn hóa tích, không vẽ thành khối riêng trong Fig.3 | NF mới: `mul_prepack_norm_comb`; standalone legacy: `mul_norm_comb` | Khi carry, NF mới tăng sf và đổi vị trí hidden, giữ nguyên grid/bit thấp. Khác đường legacy dịch bỏ một bit; xem §11.9 |
+| Packer của multiplier / làm tròn tích để ghép NF | Standalone: `posit_pack`; NF: `round_unpacked_comb` rồi `posit_add` và `posit_pack` cuối | round_unpacked_comb=parse(pack(u)) tổ hợp, lưu product unpacked vào một bank. Adder và packer tổng là phần mở rộng MAC ngoài Fig.3 |
 
 #### B. Scale factor gộp
 
@@ -706,7 +708,7 @@ RTL có thể dùng một bộ cộng sf có dấu thay các khối điều ch�
 
 #### C. Chức năng 5 đường thanh ghi (Reg) và hai bộ Mux First trong Fig. 3
 
-Fig. 3 sử dụng các vạch đứt đoạn biểu diễn ranh giới 5 tầng thanh ghi pipeline:
+Fig.3 đánh dấu năm ranh giới Reg ở mức sơ đồ tổng. Danh sách dưới giải thích vị trí chức năng của các ranh giới đó; không suy ra toàn multiplier/NF có đúng năm tầng vật lý, vì parser/packer còn có thanh ghi bên trong. Lịch RTL đo được theo §5.2, §5.5 và §11.10:
 
 1. **Reg 1 (sau Parser)**: dấu, Rgm/Exp, Frac của x và y.
 2. **Reg 2 (sau OPS, mux, XOR, Rgm/Exp adder)**: X và Y đã chọn, sf và dấu đầu ra.
@@ -754,9 +756,22 @@ Mỗi giao dịch mang {tag, sign, sf, C_eff, cfg, flags}; độ sâu FIFO phả
 Qua việc đối chiếu sâu bản vẽ Fig. 3, đề tài ghi nhận các điểm mơ hồ kỹ thuật mà tác giả [P] chưa công bố chi tiết:
 
 1. **Thiếu cơ chế điều khiển FSM khi $n$ biến thiên động**: Fig. 3 không mô tả mạch tạo xung `first` và bộ đếm lặp khi các giao dịch liên tiếp có số bit 1 khác nhau ($n_1 \ne n_2$). *Xử lý*: Đề tài thiết kế bộ điều khiển lặp `iter_ctrl` với bộ đếm bit 1 động và cờ `first_q` được pipeline hóa.
-2. **Đường truyền trễ của Rgm và Exp (Scale Factor)**: Trong Fig. 3, đường tín hiệu từ Rgm Exp Processing đi qua các Reg rồi vào khối accumulator, nhưng bản vẽ không vẽ rõ số tầng thanh ghi trễ bên trong để đồng bộ nhịp với mantissa. *Xử lý*: Đề tài sử dụng Metadata FIFO lưu trữ Scale Factor gộp $sf = k \cdot 2^{ES} + e$ và dấu $sign$, đồng bộ hóa độ trễ tuyệt đối với mantissa datapath.
+2. **Đường truyền trễ của Rgm và Exp (Scale Factor)**: Trong Fig. 3, đường tín hiệu từ Rgm Exp Processing đi qua các Reg rồi vào khối accumulator, nhưng bản vẽ không vẽ rõ số tầng thanh ghi trễ bên trong để đồng bộ nhịp với mantissa. *Xử lý*: baseline NF hiện tại giữ sf/sign/config trong thanh ghi context của một giao dịch; các bundle đi qua bank cùng dữ liệu. Metadata FIFO/tag chỉ áp dụng khi triển khai chồng lấn sau baseline (§5.11), chưa có trong NF tuần11.
 3. **Early termination**: khi fx=0 không còn số hạng fraction để phát; vẫn phải xả các tầng còn token. TV-PAPER-01 hết bit 1 sau hai vòng nhưng vẫn có sai số cắt 12 bit (§5.6), nên không coi là exact toàn độ rộng.
 4. **Bypass Zero/NaR chưa được thể hiện trong Fig. 3**: không suy ra paper đã mô tả đầy đủ đường ngoại lệ từ sơ đồ này. *Xử lý*: kết quả ngoại lệ đúng là bắt buộc; bypass rút ngắn và Order FIFO là tối ưu sau baseline, với ngân sách hạng và quy ước cạnh tại §5.3.
+
+#### G. Các khác biệt giữa paper và baseline MAC NF — 13/10/2026
+
+| Nội dung | Bài báo [P] / Fig.3–5 | Đồ án hiện thực `posit_mac_nf` | Ý nghĩa khi báo cáo |
+| --- | --- | --- | --- |
+| OPS | Paper mô tả predictor dựa trên prefix fraction; LUT, tie và toàn bộ hợp đồng nguồn chưa được xác nhận. PT2/prefix7 là nhánh nghiên cứu tái dựng riêng | Profile chính cfg_ops1 đếm toàn bộ fraction đang dùng:12 bit cao ở approx32/3, toàn F bit ở exact; chọn ít bit1 hơn, hòa giữ A. cfg_ops0 giữ A | Khác chính sách chọn X/Y; có thể đổi số vòng thực tế và sai số khi giới hạn n. Không gọi min-popcount là predictor của tác giả |
+| Làm tròn | Fig.5(b) lấy12 fraction bit, đệm0 và mã hóa dấu; nguồn không mô tả tầng RNE G/R/S như đồ án | FLOOR cắt từng term trong SBM; sau đó RNE(P_hat) trước cộng và RNE tổng ở cuối NF. Metadata cut không tham gia GRS của P_hat | Phân biệt ROUND_SCHEME nội bộ và ROUND_MODE đóng gói (§4.1/§5.9). RNE không khôi phục các term đã bị cắt |
+| Width/carry | Fig.3 không công bố đủ width/bit carry/cut để xác nhận RTL nguyên bản; không lấy nhãn fraction12 làm width toàn accumulator | Approx FLOOR32/3: P_hat Q12,14 bit hữu ích; bank vật lý54 bit khi EXACT_EN1 để hỗ trợ exact Q52. Adapter NF giữ cả bit thấp khi carry, không dùng sticky thay trọng số bit đó | Kết quả W11 khác biệt carry là của legacy địa phương so với hợp đồng prepack; không suy thành lỗi RTL paper. Chi tiết/bằng chứng §5.6/§11.9 |
+| Scale | Khối Rgm/Exp adder xử lý regime/exponent | Dùng sf signed và cộng sfA+sfB; carry mantissa tăng sf thêm1 | Tương đương về giá trị; chưa chứng minh giảm LUT hoặc tăng Fmax (§5.10-B) |
+| Pipeline/control | Fig.3 thể hiện Reg/feedback/First nhưng không đủ quy tắc valid/ready/reset/order hoặc số tầng bên trong mọi khối | Parser2 tầng; core SAC→shift→acc; một bank norm/round; adder3 tầng; packer RNE2 tầng. Context một giao dịch, reset bridge, stall và output holding theo §11.10 | L_valid=max(1,t)+10; handshake không stall thêm1; II baseline tối thiểumax(1,t)+12. Không suy số này từ năm Reg của hình; timing/Fmax còn cần STA |
+| Mở rộng MAC | Fig.3 dừng ở tích A×B | NF thêm C_eff, adder, packer tổng và trạng thái acc_mode/acc_clr | NF=R(R(P_hat)+C_eff), F_ref=R(P_hat+C_eff). Fused RTL chưa được nghiệm thu; xem §5.12/§11.10 |
+
+**Cách mô tả phạm vi:** lõi nhân kế thừa cấu trúc dịch–cộng lặp của Fig.3; đồ án chọn hợp đồng số học/OPS/pipeline riêng và mở rộng thành MAC NF. Gate3 chứng minh RTL mới khớp mô hình/oracle của đồ án trong phạm vi đã kiểm, không chứng minh đã có baseline RTL tác giả hoặc tái hiện Table I. So sánh NF/F dùng cùng P_hat, corpus và điều kiện PPA theo §11.8–§11.10; lợi ích về tài nguyên/timing phải đo, không suy từ bảng mapping.
 
 ### 5.11 Vi kiến trúc Pipeline MAC tích hợp Adder và Chồng lấn giao dịch
 

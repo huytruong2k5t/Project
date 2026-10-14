@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.13 — 2026-10-14 — Rà soát toàn SPEC theo hiện thực và phạm vi bằng chứng |
+| Phiên bản | v1.14 — 2026-10-14 — Đóng coverage NF/Gate3 tuần11 bằng checkpoint mới |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -30,8 +30,9 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.11 | 2026-10-13 | Kiểm carry xác nhận legacy khác R(P_hat); thêm adapter bảo toàn prepack và MAC NF đơn giao dịch RNE/FLOOR, Gate3 đạt. Giữ freeze/Gate2 legacy; fused full-sum mới pilot, chưa RTL/coverage cuối/PPA. |
 | v1.12 | 2026-10-13 | Gom khác biệt paper/NF tại §5.10-G; sửa mapping module, unsigned shift, metadata register và carry adapter. Chỉ làm rõ tài liệu, không đổi RTL hoặc hợp đồng số học đã kiểm. |
 | v1.13 | 2026-10-14 | Đồng nhất profile/params, normalize/carry, ngoại lệ, feedback/latency và trạng thái fused; sửa pseudocode G/R/S, oracle ES3, luồng công cụ/PPA và truy vết. Phát hiện W11 chưa đạt tỷ lệ near-cancellation30%; giữ ngưỡng và mở lại phần coverage Gate3, không đổi RTL hoặc kết quả lịch sử. |
+| v1.14 | 2026-10-14 | Bổ sung corpus/counters/probe NF: main10M/0 mismatch,near52,55548%,run/polarity và packer bins đạt; ModelSim corner82.944/0 mismatch. Đóng Gate3 tuần11,giữ checkpoint cũ và các yêu cầu final/F/PPA còn mở. |
 
-**Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Profile hiện thực và giới hạn bằng chứng được tóm tắt tại §1.6/§11.10–§11.11. Nhật ký có ngày ở phụ lục là lịch sử, không ghi đè hợp đồng hiện hành hoặc tự mở rộng một mốc PASS thành toàn bộ AC.
+**Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Profile hiện thực và giới hạn bằng chứng được tóm tắt tại §1.6/§11.10–§11.12. Nhật ký có ngày ở phụ lục là lịch sử, không ghi đè hợp đồng hiện hành hoặc tự mở rộng một mốc PASS thành toàn bộ AC.
 
 ---
 
@@ -91,7 +92,7 @@ Các Tier là định nghĩa mức nghiệm thu, không phải tự đánh dấu
 | Mức | Điều kiện | Hiện trạng14/10/2026 |
 | --- | --- | --- |
 | Tier1 — nền tảng | Parser/packer, multiplier và adder đúng ở profile công bố; hoàn tất AC01/AC02/AC05 áp dụng | Các mốc đơn vị/Gate1/Gate2 đạt; ma trận final và PPA toàn khối chưa đạt |
-| Tier2 — NF | MAC NF đúng số học/giao thức và coverage tích hợp theo SPEC; baseline nội bộ có nguồn đóng băng | Mốc W11 số học/protocol đạt0 mismatch; coverage near-cancellation30% chưa đạt, Gate3 đầy đủ còn processing (§11.11) |
+| Tier2 — NF | MAC NF đúng số học/giao thức và coverage tích hợp theo SPEC; baseline nội bộ có nguồn đóng băng | Gate3 tuần11 đạt số học/protocol và coverage phân bố,near52,55548% (§11.12); ma trận final/PPA còn mở |
 | Tier3 — mục tiêu đầy đủ | Tier2 cùng fused profile chính, paired accuracy/PPA và toàn bộ AC01..08 áp dụng | Chưa đạt; fused full-sum mới pilot, chưa RTL/window/flags/acc_mode F và Gate4 |
 
 Các Tier không bảo đảm xếp loại hội đồng. Một report PASS có phạm vi riêng không thay chứng cứ của các AC chưa chạy.
@@ -101,7 +102,7 @@ Các Tier không bảo đảm xếp loại hội đồng. Một report PASS có 
 | Nhánh | Hiện thực / oracle | Phạm vi đã kiểm |
 | --- | --- | --- |
 | Legacy giữ lịch sử | L1 `PositMac`, `L1MultiplierIter`; RTL `posit_mul_iter`/`mul_iter_wrapper` với `mul_norm_comb` | Gate1/Gate1B/Gate2 và freeze L1 giữ nguyên. Multiplier đã kiểm bốn format,FLOOR/JAM,RNE/TRUNC; không dùng bits legacy làm R(P_hat) cho so NF/F khi carry |
-| NF so sánh chính | `posit_mac_nf`/`mac_nf_wrapper`; `mul_prepack_norm_comb`; `week11::Model` ở tb/week11_model.hpp | RNE/FLOOR,main32/3,FRAC_W12,OPS1,n0..8; OPS0/exact kiểm bổ trợ. Main10M completed và pilot bốn format0 mismatch; chưa toàn ma trận final/coverage §6.3 |
+| NF so sánh chính | `posit_mac_nf`/`mac_nf_wrapper`; `mul_prepack_norm_comb`; `week11::Model` ở tb/week11_model.hpp | RNE/FLOOR,main32/3,FRAC_W12,OPS1,n0..8; OPS0/exact kiểm bổ trợ. Main mới10M,near52,55548% và coverage Gate3 đạt; pilot bốn format0 mismatch. Chưa toàn ma trận final |
 | F reference phần mềm | `FusedFullSum` ở tb/week11_fused_model.hpp; Python integer độc lập | 100k32/3,FLOOR/Q12,OPS1,n0..8,0 mismatch. Chưa nghiệm thu L1 F cuối, cửa sổ RTL, flags/acc_mode F |
 | Paper research | `paper_mul_iter`, predictor/RND và các profile có tên riêng | Trace/Fig.4 và các khảo sát lịch sử có bằng chứng riêng; chưa có RTL tác giả/provenance/TableI nguyên bản |
 
@@ -571,7 +572,7 @@ Hợp đồng W10-01 đã chốt trước hiện thực; RTL adder hiện đã k
 
 Harness coverage/scoreboard trực tiếp: ES2 10.000.003 completed/9.787 reset-aborted; ES3 10.000.001/9.862;0 mismatch. Mỗi input nhận được đối chiếu L1, oracle integer/bit-list độc lập (decode/add/pack không dùng L1); SoftPosit RNE ở format hỗ trợ, không gán ES3 cho L0 ES2. Kiểm cả unpacked/packed RNE/TRUNC và flags; pilot bốn format chạy trước lượt lớn. UBSan generator đạt. Seed_base20261012, seed format=base+100NB+ES; compilerGCC15.2.0, SoftPosit0.4.1/hash/lệnh/source/binary/fixture cùng report.
 
-Bằng chứng canonical results/week10_adder/summary.json; matrix.json, raw coverage và structural_coverage.json giữ tất cả unhit points. Coverage raw toàn verification hierarchy: line80,00–80,95%,branch92,31–96,15%,toggle75,18–84,74%; không loại point và **chưa đạt final AC04**, không dùng milestone tuần10 thay signoff coverage. Tại checkpoint tuần10 ngày12/10, P16 exhaustive RTL2^32, P32 final>=10^8 theo AC02, tích hợp MAC/feedback/Gate3 và STA/PPA còn mở. Mốc NF đã kiểm sau đó và phần coverage còn thiếu được cập nhật tại §11.10–§11.11. L1 frozen source hashes giữ nguyên; không gọi pipeline này là MAC fused.
+Bằng chứng canonical results/week10_adder/summary.json; matrix.json, raw coverage và structural_coverage.json giữ tất cả unhit points. Coverage raw toàn verification hierarchy: line80,00–80,95%,branch92,31–96,15%,toggle75,18–84,74%; không loại point và **chưa đạt final AC04**, không dùng milestone tuần10 thay signoff coverage. Tại checkpoint tuần10 ngày12/10, P16 exhaustive RTL2^32, P32 final>=10^8 theo AC02, tích hợp MAC/feedback/Gate3 và STA/PPA còn mở. Mốc NF và phần coverage bổ sung đã đạt được cập nhật tại §11.10–§11.12. L1 frozen source hashes giữ nguyên; không gọi pipeline này là MAC fused.
 
 Corpus NF/F common100.000 triple đầu vào đã đóng băng/replay byte-exact ở paired/manifest.json; chưa đo accuracy, oracle F/Ideal full-sum và window/residual vẫn theo tuần12. Tham chiếu software1024 bit trên grid2^-532 đủ bảo thủ cho32/3 (4SF_MAX+2F+4=1016 bit); không phải width RTL. Checklist tuần10 đã nghiệm thu phạm vi đơn vị và gỡ khỏi tiến độ, giữ nhật ký/report; tiếp tuần11 NF/Gate3. Ghép NF với packer pipeline/round_unpacked/feedback đã kiểm toàn MAC ở §11.10; kết quả đó không suy từ testbench packer tổ hợp.
 
@@ -808,7 +809,7 @@ NF RNE đã kiểm theo lịch này với t thực tế; TRUNC chỉ là ngân s
 
 #### D. Kiểm chứng pipeline
 
-SVA tập trung ở §6.6. Yêu cầu kiểm gửi liên tục ít nhất10^6 giao dịch, chấp nhận mỗi giao dịch chỉ khi in_ready1 (không đồng nghĩa nhận mỗi chu kỳ), với n thay đổi, n=0, Zero/NaR, acc_mode/acc_clr và out_ready ngẫu nhiên/kéo thấp dài; scoreboard kiểm thứ tự, không mất/nhân đôi giao dịch. Đo riêng II khi không stalled để đánh giá mục tiêu throughput; backpressure có thể làm II lớn hơn. NF hiện chưa có FIFO transaction; nếu triển khai FIFO/chồng lấn sau này,không ép khoảng ready cố định khi FIFO đầy. W11 đã kiểm mốc numeric/protocol,phân bố coverage còn theo §11.11.
+SVA tập trung ở §6.6. Yêu cầu kiểm gửi liên tục ít nhất10^6 giao dịch, chấp nhận mỗi giao dịch chỉ khi in_ready1 (không đồng nghĩa nhận mỗi chu kỳ), với n thay đổi, n=0, Zero/NaR, acc_mode/acc_clr và out_ready ngẫu nhiên/kéo thấp dài; scoreboard kiểm thứ tự, không mất/nhân đôi giao dịch. Đo riêng II khi không stalled để đánh giá mục tiêu throughput; backpressure có thể làm II lớn hơn. NF hiện chưa có FIFO transaction; nếu triển khai FIFO/chồng lấn sau này,không ép khoảng ready cố định khi FIFO đầy. W11 đã kiểm mốc numeric/protocol và phân bố coverage tại §11.12; các yêu cầu final vẫn mở.
 
 ### 5.12 MAC v2 fused (profile chính bắt buộc theo §11.8, sau NF/Gate3)
 
@@ -1055,12 +1056,13 @@ Công thức khoảng tin cậy trên giả định mẫu Bernoulli độc lập
 | --- | --- | --- |
 | Legacy Gate2 | make lint/smoke/regress/cov và scripts/audit_gate2_acceptance.py | Chỉ multiplier16 profile; không tự chạy NF/F final |
 | Adder W10 | prepare_week10_adder.sh,verify_week10_adder_verilator.sh,runner ModelSim,audit_week10_adder.py | Scope đơn vị theo report |
-| NF W11 | verify_week11_mac.sh,verify_week11_modelsim.ps1,audit_week11_mac.py | 10M aggregate/main,fixture4-state,raw coverage; chưa phân bố near30% hoặc final per-n matrix |
+| NF W11 checkpoint13/10 | verify_week11_mac.sh,verify_week11_modelsim.ps1,audit_week11_mac.py | 10M aggregate/main,fixture4-state,raw coverage; chưa phân bố near30% hoặc final per-n matrix |
+| NF W11 coverage14/10 | prepare_nf_coverage.sh,verify_nf_coverage.sh,verify_nf_coverage_modelsim.ps1,audit_nf_completion.py; suite nf_corners riêng | Main mới10M/0 mismatch,near52,55548%,coverage chức năng/corner đạt; chưa final per-n/F/PPA |
 | F pilot | test_week11_fused.cpp,check_week11_fused.py | Full-sum software100k,không RTL/window F |
 
 Build/generate fixtures trước audit sau cleanup; lệnh cụ thể tại PLAN8.4/8.6 và doc/HUONG_DAN_CHAY_WSL_MODELSIM.md. Audit phải từ chối RUNNING,thiếu log/fixture hoặc nguồn/hash đổi. --no-timing dùng kiểm chu kỳ; ModelSim giữCK2Q/4-state; strict lint dùng --timing -Wall. Các luồng này không thay STA/CDC/RDC.
 
-FAIL khi mismatch RTL/L1 hoặc exact/oracle đúng format; giữ seed/input/config và kết quả để tái lập. Harness NF hiện in serial/expected/actual; tự xuất fail-vector đầy đủ và sinh regression cố định là công việc còn mở,không tuyên bố đã tự động hóa. make all/syn/ppa/report/asic hiện chưa là orchestration đầy đủ (§10),không dùng echo/header CSV làm PASS AC07.
+FAIL khi mismatch RTL/L1 hoặc exact/oracle đúng format; giữ seed/input/config và kết quả để tái lập. Harness13/10 in serial/expected/actual; harness coverage14/10 xuất thêm A/B/C_port/C_eff/config và expected/actual/flags vào failure JSON khi mismatch số học. Tự tạo regression và artifact cho mọi lỗi protocol vẫn còn mở. make all/syn/ppa/report/asic hiện chưa là orchestration đầy đủ (§10),không dùng echo/header CSV làm PASS AC07.
 
 ---
 
@@ -1249,7 +1251,7 @@ Cập nhật14/10/2026. SPEC là hợp đồng; kết quả nghiệm thu phải 
 | 7 | TRUNC và RNE | ROUND_MODE là đóng gói; ROUND_SCHEME là cut/sticky nội bộ. TRUNC cắt độ lớn về 0; lỗi có dấu phụ thuộc dấu toán hạng | L1/round_unpacked và packer RTL RNE/TRUNC đã nghiệm thu đơn vị07/10; results/packer/summary.json |
 | 8 | Số tầng và latency | Parser hai hạng đã kiểm. H, L_valid, L_handshake theo §5.1; packer RNE hai hạng là ngân sách mục tiêu, không phải tối thiểu đã đo STA | Parser E0→valid E1→handshake E2, II=1 đã kiểm; packer RNE P1/P2 đã kiểm latency/II/reset/stall ở đơn vị; sau tối ưu P2, khảo sát Quartus RNE fmax122,50–124,42MHz, ba seed đạt100MHz; lịch NF numeric đã kiểm §11.10; Fmax/PPA toàn MAC chưa đo |
 | 9 | Ý nghĩa n | cfg_n normative đếm fraction, hidden riêng; n_terms=n_fraction+1 chỉ chuyển bộ đếm của cùng chuỗi khai triển (§5.5/PB-04) | Đã khóa profile RTL. Khác recurrence/cut/OPS không được coi tương đương chỉ nhờ đổi n |
-| 10 | Reset và lịch core | Reset bridge/startup barrier §4.2; n=0/init_only, first/last và drain theo §5.5. Baseline giữ một giao dịch, dự trữ một slot đầu ra | Core/bridge/standalone đã kiểm Gate2; NF numeric/protocol W11 đạt. Coverage tích hợp còn theo §11.11 |
+| 10 | Reset và lịch core | Reset bridge/startup barrier §4.2; n=0/init_only, first/last và drain theo §5.5. Baseline giữ một giao dịch, dự trữ một slot đầu ra | Core/bridge/standalone đã kiểm Gate2; NF numeric/protocol W11 đạt. Coverage Gate3 bổ sung đạt tại §11.12; final vẫn mở |
 
 ### 11.2 Rủi ro hiện tại
 
@@ -1276,7 +1278,7 @@ Cập nhật14/10/2026. SPEC là hợp đồng; kết quả nghiệm thu phải 
 
 ---
 
-Các mục11.4–11.7 dưới đây giữ kết luận **tại ngày của từng phiên**; câu “Gate2 processing” ở09/10 không phải trạng thái hiện hành. Gate2 hiện đã nghiệm thu10/10; trạng thái NF/F và coverage hiện hành ở §11.10–§11.11.
+Các mục11.4–11.7 dưới đây giữ kết luận **tại ngày của từng phiên**; câu “Gate2 processing” ở09/10 không phải trạng thái hiện hành. Gate2 hiện đã nghiệm thu10/10; trạng thái NF/F và coverage hiện hành ở §11.10–§11.12.
 
 ### 11.4 Bằng chứng RTL tuần9 — 09/10/2026
 
@@ -1362,11 +1364,13 @@ A/B/C_eff/config/acc_mode/acc_clr được nhận cùng handshake. C_eff=c nếu
 
 Output-commit của wrapper là cạnh đầu tiên quan sát pack_out_valid && !committed_q; cập nhật accumulator đúng một lần nếu acc_mode_q, dù output đang stall. Kết quả giữ trong bank P2 của packer tới retire; busy chỉ nhả sau retire, nên giao dịch sau không đọc trạng thái cũ. acc_clr chỉ xóa khi input handshake; reset hủy pending và xóa accumulator/valid/context. Invalid cfg_ops2/3,n>N_MAX khi approximate hoặc acc_clr1 khi acc_mode0 không được nhận. Exact bỏ qua cfg_n; dataset W11 cấp n0..8. Giữ flags OR qua tích và tổng, NaR ưu tiên/xóa bốn cờ khác; Zero product không đưa metadata cut vào flags.
 
-Mốc số học/protocol Gate3 đã lưu13/10 (không phải đóng toàn coverage §6.3): native32/3 10.000.000 completed/75.801 reset-aborted,0 mismatch; ModelSim28.512 completed/288 aborted, bốn format; strict lint4/4 sạch. Native bốn pilot20k/format; scoreboard gọi mô hình NF mới, oracle dyadic/full-grid add độc lập và exact product oracle; SoftPosit đúng format cho pilot8/0,16/1,32/2.72 config/control bins và256/256 regime–dấu ở main, min34944/bin;24/24 reachable adder bins và7/7 iteration bins; latency, reset/stall/context/flags/accumulation đã kiểm. Raw coverage ghép: line/branch từ pilot+main, toggle từ pilot; line96.92%,branch94.26%,toggle88.71%; giữ unhit, chưa thay final AC02/AC04/§6.7. Bằng chứng/hash/tool/seed/lệnh tại results/week11/summary.json và baseline_nf_manifest.json. Rà soát14/10 phát hiện thiếu phân bố near-cancellation30%; Gate3 đầy đủ còn processing theo §11.11. Không sửa hoặc xóa report/manifest lịch sử.
+Mốc số học/protocol Gate3 đã lưu13/10 (không phải đóng toàn coverage §6.3): native32/3 10.000.000 completed/75.801 reset-aborted,0 mismatch; ModelSim28.512 completed/288 aborted, bốn format; strict lint4/4 sạch. Native bốn pilot20k/format; scoreboard gọi mô hình NF mới, oracle dyadic/full-grid add độc lập và exact product oracle; SoftPosit đúng format cho pilot8/0,16/1,32/2.72 config/control bins và256/256 regime–dấu ở main, min34944/bin;24/24 reachable adder bins và7/7 iteration bins; latency, reset/stall/context/flags/accumulation đã kiểm. Raw coverage ghép: line/branch từ pilot+main, toggle từ pilot; line96.92%,branch94.26%,toggle88.71%; giữ unhit, chưa thay final AC02/AC04/§6.7. Bằng chứng/hash/tool/seed/lệnh tại results/week11/summary.json và baseline_nf_manifest.json. Rà soát14/10 phát hiện thiếu phân bố near-cancellation30%; Phát hiện tại §11.11 đã được xử lý bằng checkpoint mới14/10 ở §11.12. Không sửa hoặc xóa report/manifest lịch sử.
 
 L1 fused full-sum pilot100.000 mẫu32/3,FLOOR/Q12,OPS1,n0..8 đã đối chiếu Python integer độc lập0 mismatch;24.996 triệt tiêu chính xác. Software grid2^-532 và16 limb64 bit giữ tổng có dấu; chưa chốt cửa sổ RTL, flags hoặc state acc_mode F. Chưa gọi pilot này là oracle/L1 fused cuối, paired accuracy, baseline paper hoặc RTL F. Tuần12 tiếp tục oracle/width/residual và PPA sơ bộ NF; final NF/F matrix, coverage và STA/PPA còn ở các mốc sau.
 
 ### 11.11. Rà soát toàn SPEC và phạm vi nghiệm thu — 14/10/2026
+
+Phát hiện dưới đây giữ lịch sử rà soát; phần coverage NF đã được đóng bằng checkpoint mới ở §11.12 trong cùng ngày.
 
 Đã đối chiếu các mục 1–12 và phụ lục với RTL, model, Makefile và canonical reports. Phiên này chỉ sửa tài liệu; nguồn số học, L1 frozen, reset và pipeline đã kiểm giữ nguyên. Gate1/Gate1B legacy, Gate2, W10 unit và W11 numeric/protocol vẫn có bằng chứng **0 mismatch**.
 
@@ -1381,6 +1385,18 @@ L1 fused full-sum pilot100.000 mẫu32/3,FLOOR/Q12,OPS1,n0..8 đã đối chiế
 Các yêu cầu chưa đạt khác vẫn mở: ma trận final AC01/AC02 theo n/profile, AC04 toàn phạm vi, hợp đồng và RTL F_W (width/residual/flags/acc_mode), paired accuracy, STA/CDC/RDC và PPA toàn top. Collector/orchestration còn scaffold. NFR MHz/LUT là mục tiêu khảo sát, chưa phải số đo.
 
 Khác biệt carry giữa legacy và R(P_hat) đã có adapter riêng và bằng chứng ở §5.7/§11.9; không suy thành lỗi RTL tác giả. Báo cáo phiên rà soát tại `results/spec_review_20261014/summary.json`; bằng chứng thực thi ở `results/week9_implementation`, `week10_adder` và `week11`. Cập nhật SPEC không phải chạy lại10M hoặc nghiệm thu thêm F/PPA.
+
+### 11.12. Đóng coverage NF/Gate3 tuần11 — 14/10/2026
+
+**Tuần11 hoàn thành trong phạm vi Gate3 NF của PLAN8.5.** Checkpoint mới tại `results/nf_coverage_20261014/completion.json`; giữ nguyên report/manifest13/10 và proofgap tại §11.11. Chỉ bổ sung bộ kiểm/corpus/probes chỉ đọc, không sửa datapath RTL hoặc L1 frozen. Không suy Gate3 thành nghiệm thu toàn bộ AC, fused hoặc timing.
+
+- Main mới32/3,FRAC_W12,FLOOR/RNE: **10.000.000 completed,75.379 reset-aborted,0 mismatch**; oracle độc lập và đối chiếu trực tiếp product/C_eff tại handshake adder. Near-cancellation **5.255.548/10.000.000=52,55548%**, vượt30%; đo trực tiếp Δsf0..4, tách standalone/acc_mode. Specials không vào tử số; reset-abort và corner bổ sung không vào mẫu số.
+- **256/256** cross regime–dấu,min30.114/bin; **61/61** run/polarity hữu hạn,min199.470 operands;72/72 control,24/24 adder reachable,6/6 popcount và13/13 iteration×mode reachable. Approx>8 không thể đạt vì N_MAX8; p8 không có popcount/iteration>8.
+- Packer7/7 loại đã quan sát ở P1 trong RTL tích và tổng; lưu counts riêng. Sat-min tại packer cuối NF không thể đạt: hai toán hạng đã là mã Posit, tổng khác0 là bội nguyên của minpos. Kiểm underflow ở packer tích; giữ điểm chưa hit trong raw coverage, không xóa điểm để tăng tỷ lệ.
+- Pilot native20.000/format8/0,16/1,32/2,32/3; ModelSim fixture mới28.512 completed/288 abort,0 mismatch. Corner ModelSim riêng **82.944 completed,0 mismatch**, phủ8 mã biên^3×exact/approx×n0..8×OPS0/1 và fraction0/ones/AA/55 theo4 cặp dấu. Exact chạy tới F=5/12/27/26 vòng; kiểm latency tới36 ở32/3. UBSan generator đạt, strict lint4/4 sạch; kiểm reset/stall/context/flags/feedback và audit source/fixture/counters đã đạt.
+- Verilator5.032,GCC15.2.0,SoftPosit0.4.1,ModelSim10.1d; seedbase20261014+100·NB+ES,mt19937_64. Source/corpus khóa sau pilot và kiểm lại trước main; audit từ chối RUNNING,hash đổi hoặc near<30%. Lệnh tái chạy tại PLAN8.9. Coverage main32/3 line96,9231%,branch94,2623%,toggle88,7136%; toggle từ pilot, không phải finalAC04 toàn ma trận.
+
+**Còn mở, chuyển tuần12–15:** oracle/L1 F_W và hợp đồng signed residual/window/flags/acc_mode; RTL F; paired accuracy; final AC01/AC02 theo n/profile và exhaustive; AC04 đầy đủ, STA/CDC/RDC/PPA toàn MAC. Không có thay đổi số học hoặc nguồn paper mới nên không chạy lại TableI. W12-01 đã được xử lý trong phiên đóng tuần11; W12-02..07 chưa thực hiện.
 
 ## 12. Báo cáo và bảo vệ
 

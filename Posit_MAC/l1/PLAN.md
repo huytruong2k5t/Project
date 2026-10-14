@@ -592,7 +592,9 @@ Windows chạy `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/veri
 Đối chiếu kiến trúc paper/NF hiện hành được gom tại SPEC v1.12§5.10-G; đây là cập nhật tài liệu ngày13/10, không đổi RTL/seed/hợp đồng số học hoặc kết quả Gate3.
 
 
-### 8.7. Rà soát SPEC và coverage Gate3 còn mở — 14/10/2026
+### 8.7. Rà soát SPEC và coverage Gate3 còn mở — 14/10/2026 (lịch sử trước bổ sung)
+
+Phần thiếu tại lúc rà soát đã đóng bằng bằng chứng mới ở §8.9; giữ counters/checkpoint cũ bên dưới.
 
 SPEC v1.13 đồng nhất profile/normalize,params,special/feedback/latency và trạng thái fused/PPA/công cụ; không sửa RTL/L1 hoặc counters cũ. W11-01..05 và F full-sum pilot giữ PASS; W11-06 đạt numeric/protocol nhưng strict coverage chưa đóng. W11-07 manifest là freeze mốc nguồn/test13/10,không signoff mọi yêu cầu SPEC. Bảng✅ mục8.5 và bàn giao8.6 là phạm vi checkpoint lúc13/10; trạng thái hiện hành bổ sung ở đây.
 
@@ -602,7 +604,7 @@ Giữ nguyên AC01/AC02/AC04 final và timeline hạn05/12. Tối ưu pipeline N
 
 ### 8.8. Kế hoạch thực thi tuần12 — lập ngày14/10/2026
 
-**Mục tiêu:** đóng phần coverage NF còn thiếu, có L1 fused và oracle độc lập đủ để bàn giao RTL tuần13, xác định critical path NF và ranh giới pipeline cần khảo sát. Phần triển khai tuần12 chưa bắt đầu; việc lập kế hoạch không thay trạng thái nghiệm thu.
+**Mục tiêu:** có L1 fused và oracle độc lập đủ để bàn giao RTL tuần13, xác định critical path NF và ranh giới pipeline cần khảo sát. W12-01 đã được hoàn thành trong phiên đóng tuần11 (§8.9); W12-02..07 chưa bắt đầu.
 
 Lịch gốc là **26/10–01/11/2026**. Có thể thực hiện sớm khi sinh viên yêu cầu bắt đầu; khi đó dùng thứ tự Ngày1–7 bên dưới, ghi ngày chạy thật vào nhật ký. Giữ hạn hồ sơ29/11 và đệm30/11–04/12 trước05/12. Không gỡ mục W11-COV hoặc đánh dấu tuần11 hoàn thành chỉ vì đã sang tuần12.
 
@@ -610,7 +612,7 @@ Lịch gốc là **26/10–01/11/2026**. Có thể thực hiện sớm khi sinh 
 
 | Mốc | Việc thực hiện | Điều kiện đạt / bằng chứng cần lưu | Trạng thái |
 | --- | --- | --- | --- |
-| W12-01 | Bổ sung suite coverage NF theo W11-COV | Pilot rồi lượt mới ≥10^7 completed/0 mismatch; near-cancellation≥30%, đủ counters/corner/coverage theo phạm vi Gate3; audit/hash checkpoint mới | không |
+| W12-01 | Bổ sung suite coverage NF theo W11-COV | Pilot rồi lượt mới ≥10^7 completed/0 mismatch; near-cancellation≥30%, đủ counters/corner/coverage theo phạm vi Gate3; audit/hash checkpoint mới | ✅ — đóng trong tuần11,§8.9 |
 | W12-02 | Hoàn thiện oracle full-sum và kiểm độc lập | Exact p8 self-test2^24 triples/0 mismatch; p16/1,p32/2 smoke≥100k/format so SoftPosit FMA; F_ref32/3 cùng P_hat so integer/rational độc lập/0 mismatch | không |
 | W12-03 | Khóa hợp đồng F và corpus trước model cửa sổ | Prepack, C_eff, sign/scale/Q, các điểm cut/residual, flags/config/acc_mode, topology và tiêu chí chọn W được quy định; danh mục test và seed cố định trước chạy | không |
 | W12-04 | Hiện thực, kiểm và đóng băng L1 F_W | Pilot≥100k/profile trước lượt ≥10^6/profile được chọn; phân bố rõ n0..8, near≥30% và corners; F_W khớp oracle cùng policy0 mismatch, báo riêng khác biệt với F_ref/Ideal; Linux/Windows/UBSan và audit đạt | không |
@@ -618,7 +620,7 @@ Lịch gốc là **26/10–01/11/2026**. Có thể thực hiện sớm khi sinh 
 | W12-06 | Đánh giá ranh giới pipeline dựa trên timing | So đường OPS, SAC, norm/pack/parse và ready/control; đề xuất có FF/latency/II. Chuyển hai MUX chỉ khi có căn cứ; bản RTL ứng viên nếu có phải kiểm lại trước thay baseline | không |
 | W12-07 | Bàn giao tuần12 và kế hoạch RTL F tuần13 | Audit nguồn/corpus/log, freeze L1 F/contract/cấu hình, xác định stage/latency/handshake cần triển khai; đồng bộ SPEC/PLAN/tiến độ và commit/push, ghi rõ mọi mốc còn thiếu | không |
 
-#### W12-01: đóng coverage NF trong một checkpoint mới
+#### W12-01: đóng coverage NF trong một checkpoint mới (đã đạt ở §8.9)
 
 - Bổ sung counters trực tiếp Δsf=0,1,2,3,4 tại đầu vào adder: R(P_hat) và C_eff hữu hạn khác0, trái dấu. Mẫu số là giao dịch completed; reset-abort tách riêng. Trong acc_mode, dùng accumulator thật thay raw port C.
 - Giữ min4.000/cross256 regime–dấu hợp lệ ở main32/3, ≥10.000 operands mỗi run/polarity hữu hạn, các bin packer chuyên biệt và config/control/iteration/flags theo SPEC. Lưu counts trước và sau reset; không thay số liệu13/10 hoặc chỉ dùng bucket2–7 để ký nhóm≤4.
@@ -668,6 +670,44 @@ W12-06 trước hết bàn giao đề xuất dựa trên STA. Nếu có thời g
 | Ngày6:31/10 | W12-04 audit/freeze; W12-06 kiểm ứng viên nếu có | Contract/model đạt, candidate regression hoặc đề xuất giữ nguyên có căn cứ |
 | Ngày7:01/11 | W12-07 | Bàn giao tuần13, cập nhật tài liệu/trạng thái và backup GitHub |
 
-Đường số học: W12-02 → W12-03 → W12-04 → W12-07. Đường timing: W12-05 → W12-06 → W12-07, có thể thực hiện khi lượt model đang chạy. W12-01 là việc đóng Gate3 chuyển tiếp và bắt buộc trước khi gọi NF đủ nghiệm thu/ghép RTL F tuần13. Không cần chờ coverage NF để phân tích oracle F phần mềm, nhưng lỗi số học/context NF phải được xử lý trước khi freeze so sánh chung.
+Đường số học: W12-02 → W12-03 → W12-04 → W12-07. Đường timing: W12-05 → W12-06 → W12-07, có thể thực hiện khi lượt model đang chạy. W12-01 đã đóng phạm vi Gate3 tuần11 ở §8.9; oracle/model/contract F vẫn bắt buộc trước ghép RTL F tuần13. Không cần chờ coverage NF để phân tích oracle F phần mềm, nhưng lỗi số học/context NF phải được xử lý trước khi freeze so sánh chung.
 
 **Kết thúc tuần12:** có checkpoint coverage NF đạt trong phạm vi Gate3, oracle và L1 F_W đạt/nguồn đóng băng, hợp đồng F đủ viết RTL, report timing/tool sơ bộ và quyết định pipeline có căn cứ. Nếu một mốc thiếu, giữ processing và báo tác động tuần13; có thể chuẩn bị ports/testbench theo phần contract đã chốt, không tuyên bố đã nghiệm thu F. Gỡ checklist tuần12 khỏi tiến độ khi mọi mốc bắt buộc đạt bằng chứng, giữ lịch sử tại PLAN/report. Final AC01/AC02/AC04, F RTL, paired accuracy và PPA post-route vẫn theo các tuần sau.
+
+### 8.9. Hoàn tất tuần11 và bàn giao — 14/10/2026
+
+W11-COV **✅**,W11-06/07 đã đóng phạm vi Gate3 NF bằng checkpoint mới `results/nf_coverage_20261014/completion.json`; SPECv1.14§11.12 là hiện trạng mới. Kết quả: main10.000.000/75.379 reset-abort,0 mismatch,near52,55548%;256 cross min30.114 và61 run/polarity min199.470;72 control,24 adder,6 popcount,13 iteration×mode reachable và7 nhóm packer. Counters đo thụ động RTL tại handshake, chỉ cộng vào coverage khi giao dịch completed. Corpus mới khóa sau pilot; không sửa RTL/model frozen/report13/10.
+
+ModelSim fixture mới28.512 completed/288 abort và corner82.944 completed/0 abort đều0 mismatch. Corner giữ riêng:8 mã Zero/NaR/±1/±minpos/±maxpos cubed,36 config/mode/OPS,n0..8;16 cặp fraction0/ones/AA/55×4 cặp dấu. Đường exact chạm hết F=5/12/27/26. Corner không cộng vào mẫu số near của main. Format SoftPosit0.4.1 chỉ8/0,16/1,32/2;32/3 dùng oracle dyadic/exact/full-grid độc lập.
+
+Định nghĩa bin P1: up=g&&(LSB||r||s),down-inexact=(g||r||s)&&!up,tie=g&&!r&&!s;tie-up/hold theo LSB. Sat-max/min quan sát special_sel3/4 kèm cờ tương ứng;carry-regime khi increment làm đổi run/polarity mã magnitude. Counts riêng ở product/final packer;final NF sat-min unreachable do tổng hai Posit là bội minpos. Approx iteration>8 unreachable;exact>8 không áp dụngp8. Raw unhit giữ nguyên;mainline96,9231%,branch94,2623%,togglepilot88,7136%;chưa finalAC04 toàn ma trận.
+
+**Tái chạy trên WSL**,từ project path có khoảng trắng (bash --noprofile --norc):
+
+```bash
+cd '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC'
+bash scripts/prepare_nf_coverage.sh
+bash scripts/verify_nf_coverage.sh pilot
+python3 scripts/audit_nf_coverage.py pilot
+bash scripts/verify_nf_coverage.sh acceptance
+bash scripts/prepare_nf_corners.sh
+```
+
+**ModelSim từ Windows CMD**,working directory Posit_MAC:
+
+```cmd
+cd /d "C:\HCMUT\HK261\Do an 2\Posit_MAC"
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify_nf_coverage_modelsim.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify_nf_corners_modelsim.ps1
+```
+
+Sau khi hai luồng ModelSim COMPLETE,quay WSL:
+
+```bash
+python3 scripts/test_nf_coverage_audit.py
+python3 scripts/audit_nf_completion.py
+```
+
+Build runtime L0 trước nếu libsoftposit.so đã dọn;phụ thuộc xem PLAN8.6. Rebuild/generate snapshots/fixtures trước audit sau cleanup. Thư mục mới giữ report/seed/lệnh/hash/raw coverage gọn;binaries,obj/work/wave/fixtures tái sinh không đưa Git. Compiler GCC15.2.0,Verilator5.032,ModelSim10.1d;seed20261014+100·NB+ES,mt19937_64;generator UBSan byte-identical. Audit phản chứng4/4 từ chối RUNNING,source/fixture đổi và near<30%.
+
+**Việc chưa hoàn thành,không chặn đóng tuần11:** final≥10^7/n/bản NF/F và exhaustive/AC02;AC04 toàn matrix;F_W contract/oracle/model/RTL/flags/state;paired accuracy;STA/CDC/RDC và PPA toàn MAC. Không phát hiện mismatch RTL trong phiên này. Không đo/tuyên bố Fmax và không chạy TableI. W12-01 được giải quyết khi đóng tuần11,W12-02..07 vẫn không; tiếp theo ưu tiên W12-02→03→04,nhánh timing W12-05→06 khi đủ công cụ.

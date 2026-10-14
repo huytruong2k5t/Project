@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-14",
+  "tool_versions": {
+    "Verilator": "5.032 Debian5.032-1",
+    "compiler": "GCC15.2.0 Ubuntu15.2.0-16ubuntu1",
+    "SoftPosit": "0.4.1, local l0/SoftPosit_src/README.md; library SHA in checkpoint manifest",
+    "ModelSim": "ALTERA STARTER10.1d"
+  },
+  "seed_base": 20261014,
+  "seed_formula": "20261014+100*NB+ES",
+  "rng": "mt19937_64",
+  "main_seed": 20264217,
+  "main": "32/3 F26 FRAC_W12 FLOOR/RNE OPS0/1 exact/approx n0..8 acc_mode0/1",
+  "pilot_completed_per_format": 20000,
+  "source_seal": "checkpoint_manifest.json produced after pilot before acceptance",
+  "commands": [
+    "bash scripts/prepare_nf_coverage.sh",
+    "bash scripts/verify_nf_coverage.sh pilot",
+    "python3 scripts/audit_nf_coverage.py pilot",
+    "bash scripts/verify_nf_coverage.sh acceptance",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify_nf_coverage_modelsim.ps1",
+    "bash scripts/prepare_nf_corners.sh",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify_nf_corners_modelsim.ps1",
+    "python3 scripts/test_nf_coverage_audit.py",
+    "python3 scripts/audit_nf_completion.py"
+  ],
+  "scope": "New10M denominator only; supplemental corners and historical evidence kept separate",
+  "traceability": {
+    "FR-01,03 / TC-NF-COV-REGIME": "4-format pilot/ModelSim,61 per-run/polarity and256 regime-sign counters",
+    "FR-02,04 / TC-NF-COV-PACK": "eight corner codes cubed; passive RTL P1 GRS/endpoint/carry counters",
+    "FR-05,06,07,08 / TC-NF-COV-ITER": "exact independent/L0 checks,OPS0/1,n0..8,popcount and iteration-mode bins;full-depth corners",
+    "FR-09,10 / TC-NF-COV-ADD": "RTL input adapter/C_eff versus parsed oracle; independent full-grid NF sum;nearDelta0..4/24 reachable crosses",
+    "SPEC4.2/5.11/6.6 A-01,02,05..09 / TC-NF-COV-PROTOCOL": "ModelSim4-state/reset;native stable-out/one outstanding/order/reset-abort/latency/feedback/config checks",
+    "SPEC6.9 / TC-NF-COV-AUDIT": "source/fixture/snapshot hash,bound report counts and four negative guards"
+  }
+}

@@ -1,0 +1,30 @@
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+C:\altera\13.0sp1\modelsim_ase\win32aloem\vlog.exe -sv -timescale 1ns/1ps +incdir+C:\HCMUT\HK261\Do an 2\Posit_MAC/rtl -work work C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\lod_lzd_core.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\dyn_left_shifter.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\dyn_right_shifter.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\posit_parser.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\posit_parser_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\ops_sel_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\sac_step_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\sbm_shift_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\sbm_accum_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\iter_ctrl.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\sbm_accum.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\mul_iter_core.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\mul_prepack_norm_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\posit_pack_prepare.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\posit_pack_finish.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\posit_pack_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\round_unpacked_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\posit_add_align.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\posit_add_arith.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\posit_add_normalize.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\posit_add.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\posit_pack.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\mac_nf_wrapper.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\posit_mac_nf.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\tb\tb_week11_mac.sv -l compile.log 
+-- Compiling module lod_lzd_core
+-- Compiling module dyn_left_shifter
+-- Compiling module dyn_right_shifter
+-- Compiling module posit_parser
+-- Compiling module posit_parser_comb
+-- Compiling module ops_sel_comb
+-- Compiling module sac_step_comb
+-- Compiling module sbm_shift_comb
+-- Compiling module sbm_accum_comb
+-- Compiling module iter_ctrl
+-- Compiling module sbm_accum
+-- Compiling module mul_iter_core
+-- Compiling module mul_prepack_norm_comb
+-- Compiling module posit_pack_prepare
+-- Compiling module posit_pack_finish
+-- Compiling module posit_pack_comb
+-- Compiling module round_unpacked_comb
+-- Compiling module posit_add_align
+-- Compiling module posit_add_arith
+-- Compiling module posit_add_normalize
+-- Compiling module posit_add
+-- Compiling module posit_pack
+-- Compiling module mac_nf_wrapper
+-- Compiling module posit_mac_nf
+-- Compiling module tb_week11_mac
+
+Top level modules:
+	tb_week11_mac

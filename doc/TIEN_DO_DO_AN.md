@@ -3,7 +3,7 @@
 **Ngày cập nhật:** 14/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.13](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
+**Tài liệu chi tiết:** [SPEC v1.14](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -15,7 +15,7 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 
 Đã hoàn thành nền tảng L0, Gate1 của L1 và bộ cộng tuần5. Bộ nhân lặp L1 đã được kiểm chứng; profile source từng đạt ngưỡng TableI nhưng không khớp output ví dụ gốc. Baseline gốc bài báo chưa xác định; giữ nghiên cứu phụ. Mục tiêu chính chuyển sang MAC non-fused làm baseline nội bộ và fused làm biến thể so sánh.
 
-MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8 và chuỗi parser→packer đã kiểm chứng đạt ở cấp khối. Gate1/Gate1B/Gate2 multiplier✅; NF đã đạt mốc số học/protocol tuần11; coverage Gate3 đầy đủ còn bổ sung. Gate4,fused và ma trận cuối còn mở. Đã khảo sát PPA riêng cho OPS và packer; chưa có PPA toàn hệ thống, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode sau tối ưu P2.
+MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8 và chuỗi parser→packer đã kiểm chứng đạt ở cấp khối. Gate1/Gate1B/Gate2 multiplier✅; NF đã hoàn thành Gate3 tuần11 về số học/protocol và coverage phân bố bằng lượt mới10 triệu/0 mismatch,near52,55548%. Gate4,fused và ma trận cuối còn mở. Đã khảo sát PPA riêng cho OPS và packer; chưa có PPA toàn hệ thống, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode sau tối ưu P2.
 
 ## 2. Công việc còn lại và ưu tiên
 
@@ -23,10 +23,10 @@ MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8
 | --- | --- | --- |
 | Baseline nội bộ và so sánh NF/F | processing | Đã chốt hướng: non-fused làm đối chứng, fused là mục tiêu chính; cần hoàn thiện RTL, oracle, accuracy và PPA. Baseline paper giữ nghiên cứu phụ |
 | MAC L1 — Gate1B | ✅ | MAC v0/v1, tích lũy và API đã triển khai, kiểm chứng đạt |
-| RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder và NF numeric/protocol đã kiểm; còn coverage near30% để đóng strict Gate3,ma trận cuối và fused |
+| RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder và Gate3 NF tuần11 đạt; còn ma trận final,coverage cuối và fused |
 | PPA, mở rộng và hồ sơ — Gate4 | không | Đo toàn hệ thống, đối chiếu baseline; thực hiện mở rộng đã chọn, báo cáo và demo |
 
-**Thứ tự tiếp theo:** bổ sung coverage NF và chuẩn bị oracle/L1 fused độc lập → chốt hợp đồng F → RTL fused → paired regression/accuracy → PPA → báo cáo. NF numeric/protocol đã đạt; kế hoạch tuần12 tại PLAN8.8, coverage còn theo PLAN8.7. Hoàn tất chính29/11, đệm30/11–04/12 trước05/12/2026; chi tiết tại PLAN L1 mục8 và SPEC§11.8.
+**Thứ tự tiếp theo:** hoàn thiện oracle/L1 fused độc lập → chốt hợp đồng F → RTL fused → paired regression/accuracy → PPA → báo cáo. NF/Gate3 tuần11 đã đạt,chi tiết PLAN8.9; kế hoạch tuần12 tại PLAN8.8. Hoàn tất chính29/11, đệm30/11–04/12 trước05/12/2026; chi tiết tại PLAN L1 mục8 và SPEC§11.8.
 
 ## 3. Tiến độ theo tuần
 
@@ -42,30 +42,22 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 6 | L1 MAC — Gate1B | ✅ | MAC v0/v1, tích lũy và API đạt kiểm chứng Linux/Windows |
 | 7 | RTL giải mã và khối cơ sở | ✅ | LOD/LZD, hai shifter và parser tổ hợp/pipeline kiểm chứng đơn vị đạt |
 | 8 | RTL mã hóa và làm tròn | ✅ | Packer tổ hợp/pipeline và parser→packer đạt; PPA đơn vị đã khảo sát, sau tối ưu P2, benchmark đạt setup100MHz ở ba seed mỗi mode |
-| 9 | RTL bộ nhân lặp — Gate2 | ✅ | Multiplier đã nghiệm thu trên16 cấu hình,0 mismatch; lint và coverage đạt phạm vi tuần9. Baseline gốc theo dõi riêng ở tuần4 |
-| 10 | RTL adder và chốt so sánh NF/F | ✅ | Hoàn tất12/10: comb/pipeline, oracle/lượt lớn0 mismatch; matrix và corpus input đã chốt. Cần xác minh R(P_hat) khi carry trước ghép NF/F; coverage cuối/MAC/fused còn mở |
-| 11 | MAC non-fused — Gate3 | processing | NF10 triệu/0 mismatch và F pilot đạt; rà soát14/10 phát hiện chưa đạtnear30%,cần bổ sung coverage trước strict Gate3 |
-| 12 | Oracle/L1 fused và timing sơ bộ NF | không | Đã lập W12-01..07: bổ sung coverage NF, chốt F/window/residual, kiểm model và đo critical path. Lịch26/10–01/11, có thể làm sớm; chưa triển khai |
+| 9 | RTL bộ nhân lặp — Gate2 | ✅ | Multiplier đã nghiệm thu trên16 cấu hình,0 mismatch; lint và coverage đạt phạm vi tuần9. Baseline gốc giữ nghiên cứu phụ |
+| 10 | RTL adder và chốt so sánh NF/F | ✅ | Hoàn tất12/10: comb/pipeline, oracle/lượt lớn0 mismatch; matrix và corpus input đã chốt. R(P_hat)/carry đã xử lý ở tuần11; ma trận cuối/fused/PPA còn mở |
+| 11 | MAC non-fused — Gate3 | ✅ | Hoàn thành14/10: lượt mới10 triệu/0 mismatch,near52,55548%,coverage và ModelSim corner đạt; giữ F pilot,final/F RTL/PPA còn theo các tuần sau |
+| 12 | Oracle/L1 fused và timing sơ bộ NF | processing | W12-01 đã xử lý khi đóng tuần11; W12-02..07 về F/window/model/timing chưa triển khai. Lịch26/10–01/11,có thể làm sớm |
 | 13 | RTL fused | không | 02–08/11: triển khai theo L1 đã kiểm, pilot số học/protocol; không mặc định exact |
 | 14 | Regression và accuracy paired NF/F | không | 09–15/11: nghiệm thu đúng riêng từng bản, coverage và corpus chung |
 | 15 | PPA hai bản và bản thảo — Gate4 | không | 16–22/11: cùng điều kiện,≥3 run/config; accuracy/timing/II/tài nguyên và kết luận |
 | 16 | Báo cáo, demo và bảo vệ | processing | 23–29/11: chốt hồ sơ/tái lập/slide/demo; hiện mới có slide các khối. Đệm30/11–04/12 |
 
-## 3.1. Bổ sung coverage tuần11
+## 3.1. Kế hoạch tuần12
 
-| Mốc | Công việc còn lại | Trạng thái |
-| --- | --- | --- |
-| W11-COV | Corpus>=30% near-cancellation với C_eff; counters per-run/polarity và packer bins; pilot/oracle/regression0 mismatch,audit/hash mới trước strict Gate3 | processing |
-
-Giữ nguyên kết quả numeric/protocol13/10; chi tiết PLAN8.7/SPEC§11.11. Gỡ bảng này sau khi có bằng chứng bổ sung đạt,không theo ngày dự kiến.
-
-## 3.2. Kế hoạch tuần12
-
-Mục tiêu: có oracle/L1 fused và hợp đồng đủ bàn giao RTL tuần13, đồng thời bổ sung coverage NF và xác định đường timing cần tối ưu. Lịch gốc26/10–01/11/2026, có thể thực hiện sớm theo thứ tự; chi tiết/tiêu chí tại PLAN L1§8.8. Kế hoạch đã lập, các công việc dưới đây chưa triển khai.
+Mục tiêu: có oracle/L1 fused và hợp đồng đủ bàn giao RTL tuần13, NF coverage đã đạt ở W12-01 và tiếp tục xác định đường timing cần tối ưu. Lịch gốc26/10–01/11/2026, có thể thực hiện sớm theo thứ tự; chi tiết/tiêu chí tại PLAN L1§8.8. W12-01 đã hoàn thành trong phiên đóng tuần11,các mục còn lại chưa triển khai.
 
 | Mốc | Công việc chính | Trạng thái |
 | --- | --- | --- |
-| W12-01 | Bổ sung coverage NF: near≥30%, counters/corner đầy đủ, lượt mới0 mismatch và audit | không |
+| W12-01 | Coverage NF: near≥30%,counters/corner,lượt mới0 mismatch và audit | ✅ — đóng cùng tuần11 |
 | W12-02 | Oracle full-sum độc lập; kiểm exact p8 và smoke SoftPosit p16/p32 ES2, kiểm F_ref32/3 | không |
 | W12-03 | Chốt hợp đồng fused: cùng prepack, width/cut/phần dư có dấu, flags/config/acc_mode và corpus | không |
 | W12-04 | Hiện thực/kiểm L1 F_W, phân biệt sai số cửa sổ và nhân; đóng băng model đạt | không |
@@ -73,7 +65,7 @@ Mục tiêu: có oracle/L1 fused và hợp đồng đủ bàn giao RTL tuần13,
 | W12-06 | Đánh giá pipeline từ STA, gồm vị trí hai MUX OPS; kiểm bản ứng viên nếu triển khai | không |
 | W12-07 | Audit/bàn giao tuần13, đồng bộ SPEC/PLAN và sao lưu GitHub | không |
 
-Giữ W11-COV processing ở mục3.1 đến khi có bằng chứng bổ sung đạt. Khi tuần12 hoàn tất, gỡ bảng tạm này và giữ nhật ký/report; chưa đánh dấu fused RTL hoặc Gate4 hoàn thành.
+W11-COV đã đạt và bảng tạm được gỡ;chi tiết/report giữ tại PLAN8.9. Khi tuần12 hoàn tất, gỡ bảng tạm này và giữ nhật ký/report; chưa đánh dấu fused RTL hoặc Gate4 hoàn thành.
 
 ## 4. Nhật ký theo ngày
 
@@ -188,6 +180,7 @@ Giữ W11-COV processing ở mục3.1 đến khi có bằng chứng bổ sung đ
 | 1 | Rà toàn SPEC và đồng bộ hiện thực | SPEC v1.13 đồng nhất với RTL/model; audit W10/W11 PASS, nguồn và kết quả0 mismatch giữ nguyên. Near-cancellation W11 có cận trên4,20303%,chưa đạt30%; Gate3 đầy đủ processing,đã bổ sung việc coverage | ✅ |
 | 2 | Slide datapath OPS, SAC và SBM | 7 slide nền trắng, sơ đồ tổng và phân rã theo RTL32/3; khối/mũi tên/bảng chỉnh sửa được, có lịch pipeline và ví dụ12 bit. Đã rà nguồn và kiểm bố cục, không đổi trạng thái coverage Gate3 | ✅ |
 | 3 | Lập kế hoạch tuần12 | W12-01..07 ưu tiên coverage NF, oracle/hợp đồng/model fused và timing/pipeline; cập nhật PLAN8.8 và checklist tạm. Chỉ hoàn thành việc lập kế hoạch, chưa chạy hoặc nghiệm thu công việc tuần12 | ✅ |
+| 4 | Hoàn tất tuần11 — coverage NF/Gate3 | Main mới10 triệu/0 mismatch,near52,55548%;coverage chức năng/ModelSim corner đạt,nguồn đóng băng và audit PASS. Gỡ W11-COV,đánh dấu W12-01 đạt; final matrix,F_W/F RTL và accuracy/PPA còn mở | ✅ |
 
 ### 4.14. Mẫu cập nhật tiếp theo
 

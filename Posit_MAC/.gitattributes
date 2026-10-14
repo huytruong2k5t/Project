@@ -1,3 +1,12 @@
 # Preserve executable W10 shell scripts on Windows checkouts.
 scripts/*week10*.sh text eol=lf
 scripts/*week11*.sh text eol=lf
+
+# NF checkpoint: preserve source/evidence bytes used by SHA256 manifests.
+tb/nf_coverage* -text
+l1/test/gen_nf_* -text
+scripts/*nf_*.py -text
+scripts/*nf_*.ps1 -text
+scripts/*nf_*.sh text eol=lf
+results/nf_coverage_20261014/** -text
+results/nf_corners_20261014/** -text

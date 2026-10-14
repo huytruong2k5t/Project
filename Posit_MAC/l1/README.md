@@ -984,3 +984,10 @@ SPEC v1.13 đã được rà toàn bộ theo RTL/model/bằng chứng hiện hà
 Gate3 đầy đủ còn **processing**: cận trên near-cancellation ở đầu vào adder NF chỉ420.303/10.000.000=4,20303%, thấp hơn yêu cầu30% của SPEC§6.3. Các bin regime/config đã hit không thay yêu cầu phân bố này. Counters từng run/polarity và packer bins cần được lưu đủ trước signoff; không hạ ngưỡng hoặc sửa report lịch sử.
 
 Checkpoint13/10 và manifest NF đóng băng mốc số học/giao thức, không chứng minh mọi AC đã đạt. Công việc bổ sung tại PLAN§8.7/SPEC§11.11; chứng cứ rà soát ở results/spec_review_20261014/summary.json. F full-sum vẫn là pilot phần mềm; F RTL/window/flags/acc_mode, ma trận final và accuracy/PPA còn mở.
+
+
+## 31. Hoàn thành coverage NF/Gate3 — 14/10/2026
+
+Checkpoint mới `results/nf_coverage_20261014/completion.json` đạt main32/3 10.000.000 completed,75.379 reset-aborted,0 mismatch;near-cancellation52,55548% đo trực tiếp tại ngõ vào adder với C_eff.256 cross min30.114,61 run/polarity min199.470 và counters packer/control/popcount/iteration đã đạt. ModelSim fixture mới28.512 completed/288 abort và corner82.944 completed đều0 mismatch;fraction0/ones/AA/55 và exact depth5/12/27/26 đã kiểm.
+
+Nguồn RTL/L1 frozen và checkpoint13/10 giữ nguyên; bổ sung verification/corpus/probe chỉ đọc. Mục cập nhật phạm vi trước đó là lịch sử phát hiện gap,bổ sung mới đã đóng tuần11. Lệnh/seed/hash/tool/audit tại PLAN8.9,SPECv1.14§11.12. Gate3 tuần11 không thay final per-n/exhaustive/AC04,oracle/model/cửa sổ/RTL fused,paired accuracy hoặc STA/CDC/RDC/PPA. W12-01 đạt;ưu tiên W12-02..04 tiếp theo.

@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-14",
+  "slides": 7,
+  "profile": "32/3 FRAC_W12 FLOOR EXACT_EN1",
+  "allDiagramsNative": true,
+  "sourceHashes": {
+    "rtl/ops_sel_comb.sv": "4b168cf0fb121ed9e72af64d76a34f18d1851840e1c7f83be31340b500934e3e",
+    "rtl/sac_step_comb.sv": "ff01ec40baeb1c35026d82957bf33db21fba98a0d2f292ebd7b5aac554834b72",
+    "rtl/iter_ctrl.sv": "3e9fcae9d9969787e2a11f2df37316b4e101de45990fb75988c11d2a36fd9d18",
+    "rtl/mul_iter_core.sv": "a15a44a6659e002a4491eae1e7fe1eed5886f2477482e2ec4042e976c269f5a8",
+    "rtl/sbm_shift_comb.sv": "e0fa8e48853748af065e6ca7d84bb2040e1e4981e3b58f9ed49ee0ccb290c5a8",
+    "rtl/sbm_accum_comb.sv": "1c23cc558198e6eaa8274483c3ff35c97df35c2639b15e4fb9b6054d1314d7ef",
+    "rtl/sbm_accum.sv": "a8f9e4017513e5aa4d43cea1ebd16bd0e1d4fb61869cfb4dea20ac4b8e12940c",
+    "SPEC_Posit_MAC_IP.md": "ff10489b9997f494775ad55231a52fef94cbef9279770addf62bcb7a616aa65b"
+  },
+  "deck": "DATAPATH_OPS_SAC_SBM_r5.pptx",
+  "deckSha256": "8f40c374ab17357e2742de440b59d13a49310d57bcff120668853abb5e0940be",
+  "builder": "scripts/build_datapath_ops_sac_sbm.mjs",
+  "builderSha256": "7761fe99d64adbe819a646aadaa4e245acd4de85141c9f5d1fcf919b60e60be3",
+  "baseDeck": "DATAPATH_OPS_SAC_SBM_r3.pptx",
+  "baseDeckSha256": "4b9500f16b96a26df5922099c330e84f18cce4e028144eca76f2ab8c7df06aef",
+  "editedSlides": [
+    1,
+    2
+  ],
+  "preservedSlides": [
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "scope": "Current normative RTL; masked popcount parallel to aligned X/Y candidate preparation; one final swap stage with two bus MUXes; R0 unchanged",
+  "slideTitles": [
+    "Datapath nhân lặp: OPS, SAC và SBM",
+    "OPS: điều khiển và dữ liệu chạy song song",
+    "SAC: quét bit 1 và tính lượng dịch tích lũy",
+    "SBM Shift: tạo số hạng trên cùng lưới tích lũy",
+    "SBM Accumulator: commit term và giữ tổng",
+    "Pipeline core: token đi cùng số hạng",
+    "Ví dụ 12 bit: hai vòng fraction"
+  ]
+}

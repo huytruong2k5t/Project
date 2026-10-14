@@ -1,6 +1,6 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 14/10/2026 (giờ Việt Nam)  
+**Ngày cập nhật:** 15/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
 **Tài liệu chi tiết:** [SPEC v1.15](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
@@ -26,7 +26,7 @@ MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder và Gate3 NF tuần11 đạt; còn ma trận final,coverage cuối và fused |
 | PPA, mở rộng và hồ sơ — Gate4 | không | Đo toàn hệ thống, đối chiếu baseline; thực hiện mở rộng đã chọn, báo cáo và demo |
 
-**Thứ tự tiếp theo:** hoàn thiện oracle/L1 fused độc lập → chốt hợp đồng F → RTL fused → paired regression/accuracy → PPA → báo cáo. NF/Gate3 tuần11 đã đạt,chi tiết PLAN8.9; kế hoạch tuần12 tại PLAN8.8. Hoàn tất chính29/11, đệm30/11–04/12 trước05/12/2026; chi tiết tại PLAN L1 mục8 và SPEC§11.8.
+**Thứ tự tiếp theo:** xem khảo sát mức bit fraction và số vòng trước khi chọn cấu hình → hoàn thiện oracle/L1 fused độc lập → chốt hợp đồng F → RTL fused → paired regression/accuracy → PPA → báo cáo. Khảo sát số học ban đầu đã có bảng/biểu đồ ở PLAN8.11,chưa chọn ngưỡng/width hoặc đổi baseline. NF/Gate3 tuần11 đã đạt,chi tiết PLAN8.9; kế hoạch tuần12 tại PLAN8.8. Hoàn tất chính29/11, đệm30/11–04/12 trước05/12/2026; chi tiết tại PLAN L1 mục8 và SPEC§11.8.
 
 ## 3. Tiến độ theo tuần
 
@@ -45,7 +45,7 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 9 | RTL bộ nhân lặp — Gate2 | ✅ | Multiplier đã nghiệm thu trên16 cấu hình,0 mismatch; lint và coverage đạt phạm vi tuần9. Baseline gốc giữ nghiên cứu phụ |
 | 10 | RTL adder và chốt so sánh NF/F | ✅ | Hoàn tất12/10: comb/pipeline, oracle/lượt lớn0 mismatch; matrix và corpus input đã chốt. R(P_hat)/carry đã xử lý ở tuần11; ma trận cuối/fused/PPA còn mở |
 | 11 | MAC non-fused — Gate3 | ✅ | Hoàn thành14/10: lượt mới10 triệu/0 mismatch,near52,55548%,coverage và ModelSim corner đạt; giữ F pilot,final/F RTL/PPA còn theo các tuần sau |
-| 12 | Oracle/L1 fused và timing sơ bộ NF | processing | W12-01 đã xử lý khi đóng tuần11; F/window/model/STA toàn MAC chưa triển khai;OPS comb refactor đã kiểm và đo sơ bộ. Lịch26/10–01/11,có thể làm sớm |
+| 12 | Oracle/L1 fused và timing sơ bộ NF | processing | W12-01 đã xử lý khi đóng tuần11;OPS comb đã kiểm/đo sơ bộ,khảo sát fraction có bảng và biểu đồ. Chưa chọn width/ngưỡng;F/window/model/STA toàn MAC còn mở. Lịch26/10–01/11,có thể làm sớm |
 | 13 | RTL fused | không | 02–08/11: triển khai theo L1 đã kiểm, pilot số học/protocol; không mặc định exact |
 | 14 | Regression và accuracy paired NF/F | không | 09–15/11: nghiệm thu đúng riêng từng bản, coverage và corpus chung |
 | 15 | PPA hai bản và bản thảo — Gate4 | không | 16–22/11: cùng điều kiện,≥3 run/config; accuracy/timing/II/tài nguyên và kết luận |
@@ -184,7 +184,13 @@ W11-COV đã đạt và bảng tạm được gỡ;chi tiết/report giữ tại
 | 5 | Tối ưu OPS và kiểm lại NF | Masked popcount/candidates song song đã kiểm bit-exact,lượt NF10 triệu0 mismatch. OPS riêng giảm9,26%LUT4,medianFmax tăng3,64%;không thêm tầng M0. Timing/PPA toàn MAC còn mở | ✅ |
 | 6 | Đồng bộ slide theo OPS mới | PowerPoint r5 vẽ rõ hai nhánh chạy song song và hai Swap MUX cuối;hidden củaY chuẩn bị trước swap. Giữ hình SAC/SBM,pipeline và ví dụ;đã rà cả7slide,khối/mũi tên/bảng vẫn chỉnh sửa được | ✅ |
 
-### 4.14. Mẫu cập nhật tiếp theo
+### 4.14. Ngày 15/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Khảo sát mức fraction và số vòng | Có bảng/biểu đồ8–26bit trên300.000 cặp,ba phân bố;pilot/UBSan và oracle độc lập đạt. Đã tách sai số cắt đầu vào,FLOOR và giới hạn vòng;chưa chọn ngưỡng/cấu hình,chưa đổi RTL hoặc đo PPA | ✅ |
+
+### 4.15. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

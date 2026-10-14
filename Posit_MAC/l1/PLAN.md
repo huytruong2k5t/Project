@@ -740,3 +740,32 @@ Sau các luồng COMPLETE:`python3 scripts/audit_ops_refactor.py`. WSL dùngbash
 Đây là phần khảo sát sớm W12-06:chưa chuyển MUX qua M0 hoặc chốt pipeline toàn NF,chưa STA/PPA toàn MAC(W12-05). Lịch/source freezeF/model vẫn theo W12-02..04.
 
 Hình OPS đã đồng bộ sau refactor tại [PowerPoint r5](../presentation/DATAPATH_OPS_SAC_SBM_r5.pptx),giữ bản r3 để tham chiếu lịch sử. Slide2 tách nhánh masked popcount và nhánh căn phải/tạo bốn ứng viên chạy song song,hidden chỉ chèn trongY trước một tầng swap gồm haiMUX bus. Nét liền là dữ liệu,nét đứt là select;X/Y chốt ởR0 tạiL0 như trước. Slide1 cập nhật nhãn OPS,slide3..7 giữ nguyên. Đã xem bản render từng slide và kiểm các đối tượng native,7slide/0ảnh raster,hai bảng chỉnh sửa được;không tuyên bố đã chạy trong PowerPoint. Manifest `presentation/DATAPATH_OPS_SAC_SBM_r5_source.json` lưu hash RTL/SPEC,bản nguồn và deck. Tái xuất từ working directory Posit_MAC bằng runtime Node có sẵn:`node scripts/build_datapath_ops_sac_sbm.mjs <revision-mới>`;script nhập r3,không ghi đè file output đã tồn tại. Việc sửa hình không thay đổi RTL,latency hoặc trạng thái nghiệm thu timing/PPA toànMAC.
+
+### 8.11. Khảo sát mức fraction trước lựa chọn cấu hình — 15/10/2026
+
+Theo yêu cầu sinh viên, lập thống kê và biểu đồ trước khi chọn mức bit/triển khai bước tiếp theo. **Chưa chốt ngưỡng hoặc cấu hình mới.** Giữ SPEC v1.15, L1/RTL frozen và baseline NF12bit/n0..8; không đổi tên approximate thành exact. Đây là khảo sát số học bộ nhân, chưa phải accuracy NF/F hoặc PPA. W12-02..07 không được nghiệm thu bởi khảo sát này.
+
+**Ma trận đã chạy:** posit(32,3), fraction8/10/12/14/16/18/20/24/26, OPS1 min-popcount/tie-A, FLOOR mỗi term và RNE tích theo prepack-preserving. So giới hạn n2/n4/n8 với xử lý hết fraction; nhánh `input_only` nhân chính xác hai significand đã cắt để tách riêng sai số lượng tử hóa đầu vào. Exact dùng toàn26bit đầu vào và lưới tíchQ52 làm đối chứng. 26bit/FLOOR Q26 kể cả chạy hết vòng vẫn là approximate. N_MAX26 chỉ nằm trong runner nghiên cứu để đo `full`, không tuyên bố RTL cfg_n hỗ trợ trên8.
+
+**Phân bố và mẫu số:** SplitMix64,seed20261015;100.000 cặp/nhóm,300.000 cặp chính,138 hàng thống kê/13.800.000 lượt đánh giá số học. Các ứng viên dùng cùng cặp trong từng nhóm,hash corpus ghi ở report. near_one: độ lớn A/B trong[1,2),26bit fraction ngẫu nhiên,dấu ngẫu nhiên. balanced_scale: sf đều[-32,31],26bit significand/dấu ngẫu nhiên rồi RNE sang Posit,đo trên giá trị Posit thực tế. uniform_bits: mã32bit ngẫu nhiên loạiZero/NaR; bao gồm đuôi biên và clamp,ghi riêng số mẫu trong range. Ba nhóm không được trộn trọng số để tự kết luận phân bố ứng dụng hoặc paper. Zero/NaR/corner có kiểm riêng,không đưa vào mẫu số sai số tương đối.
+
+**Oracle và thống kê:** reference exact đọc trực tiếp rawPosit rồi nhân/encode bằng integer/bit-list; so L1 exact trên toàn300.000 cặp. Recurrence approximate được kiểm bằng quét vị trí bit độc lập SAC/SBM. RNE kiểm L1 normalize-preserving/packer so serial dyadic encoder. 38.700.073 kiểm tra điều kiện độc lập,0 mismatch; pilot1.000/nhóm và UBSan cho CSV giống byte. Sai số%=100×|giá trị đo−A×B|/|A×B|,với A/B đã decode; lưu riêng prepack và output RNE,mean/P50/P95/P99/max,tỷ lệ khớp bit với R(A×B),CDF ngưỡng nghiêm ngặt `<`,số vòng trung bình,iteration_cut và vector sai số lớn nhất. P99 dùng nearest-rank; sai số output gồm làm tròn/clamp vốn có,không coi exact là0 sai số so tích chưa round. Code distance chỉ là bước mã Posit,không gọi là ULP có giá trị cố định.
+
+| Fraction | Mean output%,n8 | P99 output%,n8 | P99 output%,hết fraction | Vòng trung bình,hết fraction |
+| --- | --- | --- | --- | --- |
+| 12 | 0,04792283 | 0,09481529 | 0,09401057 | 5,03011 |
+| 16 | 0,00441030 | 0,01956308 | 0,00730434 | 6,88420 |
+| 18 | 0,00201460 | 0,01955483 | 0,00201567 | 7,81429 |
+| 20 | 0,00148903 | 0,02112145 | 0,00054471 | 8,74601 |
+| 26 | 0,00160351 | 0,02586121 | 0,00000921 | 11,56655 |
+
+Bảng là100.000 cặp near_one,không phải toàn miền. 16–20bit là các ứng viên đáng khảo sát thêm,**chưa chọn tối ưu**: mean và P99 có đánh đổi khi n8; đổi width có thể đổi quyết định OPS và số bit1 chưa xử lý nên không bảo đảm monotonic. Trong cả ba phân bố,mức24/26 bị mức20 chi phối về width/mean/P99 n8 ở lượt này,nhưng đây chỉ là frontier số học dùng width làm proxy,không phải LUT/Fmax/power frontier. Chênh nhỏ P99 giữa16/18 không đủ để khẳng định18 tốt hơn cho mọi dữ liệu. Bước tiếp sau khi sinh viên xem bảng: chốt mục tiêu mean/P99/tỷ lệ dưới ngưỡng,số vòng và phân bố ứng dụng; rồi mở thêm seed/mẫu cho ứng viên và đo PPA cùng điều kiện. Chưa sửa RTL hoặc mở rộng fused dựa trên một seed.
+
+**Kết quả và tái chạy:** [bảng chọn cấu hình](../results/fraction_survey_20261015/selection_table.csv),[biểu đồ accuracy](../results/fraction_survey_20261015/fraction_accuracy.png),[bảng phân bố CDF](../results/fraction_survey_20261015/fraction_distribution.png). Report/hash:results/fraction_survey_20261015/summary.json,accuracy.csv,source.sha256; có SVG để đưa vào báo cáo. GCC15.2.0;WSL bash --noprofile --norc;long double64bit significand,đủ biểu diễn tích dyadic54bit. Không dùng SoftPosit ES2 làm oracle ES3. Lệnh từ Posit_MAC:
+
+```bash
+bash scripts/run_fraction_survey.sh
+python3 scripts/summarize_fraction_survey.py --no-plots
+```
+
+Vẽ chart bằng Python cómatplotlib/numpy:`python scripts/summarize_fraction_survey.py`. Phiên này dùng runtime Python3.12,matplotlib3.11.2/numpy2.5.4 cài riêng `scratch/fraction_plot_deps`,cache trong results/.../tmp;không cài hệ thống. Không backup dependencies/cache/binary;giữ source,CSV/hash/log gọn,PNG/SVG và summary để tái chạy. Chưa nghiệm thu RTL/PPA,FMA hoặc chọn ngưỡng độ chính xác.

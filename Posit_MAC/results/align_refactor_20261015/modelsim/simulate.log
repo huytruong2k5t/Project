@@ -1,0 +1,22 @@
+# vsim -do run.do -l simulate.log -c -wlf local.wlf work.tb_align_refactor 
+# Loading sv_std.std
+# Loading work.tb_align_refactor
+# Loading work.align_refactor_checker
+# Loading work.posit_add_align
+# Loading work.dyn_right_shifter
+# Loading work.posit_add_align_candidate
+# do run.do 
+# ALIGN PASS NB=16 ES=1 SW=8 checks=73952 mismatch=0 nar_zero=13653 clamp=5303 threshold=562 tie=72
+# ALIGN PASS NB=32 ES=2 SW=10 checks=73952 mismatch=0 nar_zero=13596 clamp=5338 threshold=547 tie=72
+# ALIGN PASS NB=32 ES=3 SW=11 checks=73952 mismatch=0 nar_zero=13693 clamp=5339 threshold=546 tie=72
+# ALIGN PASS NB=32 ES=3 SW=13 checks=73952 mismatch=0 nar_zero=13554 clamp=5404 threshold=544 tie=72
+# ALIGN PASS NB=32 ES=2 SW=12 checks=73952 mismatch=0 nar_zero=13635 clamp=5432 threshold=545 tie=72
+# ALIGN PASS NB=5 ES=0 SW=5 checks=74048 mismatch=0 nar_zero=13566 clamp=5032 threshold=672 tie=191
+# ALIGN PASS NB=6 ES=1 SW=7 checks=74048 mismatch=0 nar_zero=13604 clamp=5372 threshold=586 tie=188
+# ALIGN PASS NB=32 ES=27 SW=35 checks=74048 mismatch=0 nar_zero=13821 clamp=5471 threshold=560 tie=184
+# ALIGN PASS NB=7 ES=1 SW=7 checks=74400 mismatch=0 nar_zero=13702 clamp=5361 threshold=627 tie=81
+# ALIGN PASS NB=16 ES=10 SW=17 checks=74400 mismatch=0 nar_zero=13699 clamp=5587 threshold=608 tie=80
+# ALIGN PASS NB=8 ES=0 SW=6 checks=83168 mismatch=0 nar_zero=13718 clamp=6129 threshold=1600 tie=105
+# ALIGN MATRIX PASS profiles=11 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_align_refactor.sv(25)
+#    Time: 83168 ns  Iteration: 1  Instance: /tb_align_refactor

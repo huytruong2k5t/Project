@@ -769,3 +769,41 @@ python3 scripts/summarize_fraction_survey.py --no-plots
 ```
 
 Vẽ chart bằng Python cómatplotlib/numpy:`python scripts/summarize_fraction_survey.py`. Phiên này dùng runtime Python3.12,matplotlib3.11.2/numpy2.5.4 cài riêng `scratch/fraction_plot_deps`,cache trong results/.../tmp;không cài hệ thống. Không backup dependencies/cache/binary;giữ source,CSV/hash/log gọn,PNG/SVG và summary để tái chạy. Chưa nghiệm thu RTL/PPA,FMA hoặc chọn ngưỡng độ chính xác.
+
+### 8.12. Thử refactor alignment adder — 15/10/2026
+
+Theo yêu cầu sinh viên, đã tạo `rtl/posit_add_align_candidate.sv` để thử hai hiệu sf signed chạy song song, tính abs(delta) từ sf trực tiếp,không chờ so sánh fraction hoặc MUX chọn sf lớn/nhỏ. Chọn dữ liệu vẫn dùng so sánh sf/fraction trực tiếp. Giữ mask,shifter,jam,clamp F+2 và toàn bộ logic ngoại lệ/output của bản hiện tại;NaR ưu tiên Zero. Cast từng toán hạng trước phép trừ; hằng clamp viết `delta_t'(F)+delta_t'(2)` để sạch lint khi SF_W35. Parameter/default/ports giữ nguyên ngoài tên module ứng viên. **Không thay `posit_add_align.sv`,không thêm bank/latency hoặc thay L1/SPEC normative.** Snapshot baseline tại results/align_refactor_20261015/before; bản đo đầu trước sửa cast lưu ở ppa_r1,số đo ba seed ứng viên giữ nguyên sau sửa cast.
+
+**Kiểm chức năng:** ModelSim10.1d kiểm823.872 trường hợp/11 cấu hình,0 mismatch giữa baseline,candidate và oracle alignment số nguyên độc lập. Gồm bốn format nghiệm thu,F2/F3,F5 vét cạn fraction ở delta biên,SF_W tăng và SF_W35,raw signed min/max,tie A,delta0/F+2/F+3,flags32 giá trị và payload special bẩn. Đã kiểm tổ hợp haiZero với NaR/flags_in[4] trả is_zero0. Không tuyên bố formal hoặc vét cạn toàn input. Strict Verilator5.032 --timing -Wall:9 leaf+4 integrated profiles sạch,không latch. Harness chu kỳ --no-timing chỉ bỏ ASSIGNDLY của CK2Q; không waiver lint định thời.
+
+**Pipeline ứng viên trong source copy riêng:** pilot50k ở(8,0),(16,1),(32,2),(32,3),rồi trial≥1m ES3; tổng1.200.012 completed/1.194 reset-aborted,0 mismatch với L1/oracle integer/bit-list và SoftPosit ở format hỗ trợ. ES3 không so SoftPosit ES2. Giữ H_ADD3,handshake không stall3 cạnh,max_slots3,reset khi busy/output stalled,long/input/output stalls,thứ tự và payload/flags RNE/TRUNC. Seed harness giữ20261012+100NB+ES; unitseed20261015+100NB+ES+10000SF_W,xorshift32. GCC15.2.0,ModelSim10.1d,Verilator5.032,oracle/library/source hashes và lệnh lưu trong checkpoint. Lượt trial chưa thay regression frozen NF10 triệu hoặc coverage final.
+
+**PPA thực đo:** Quartus13.0sp1,EP4CE30F23C6/LUT4,NB32/ES3 F26/SF_W11,bank input/output giống nhau,cả hai xử lý full raw I/O,clock10ns,cùng seed1/2/3.
+
+| Chỉ tiêu leaf benchmark | Baseline | Candidate | Đánh đổi |
+| --- | --- | --- | --- |
+| LUT4 | 404 | 420 | +3,96% |
+| FF | 163 | 163 | Giữ nguyên |
+| Fmax trung vị | 69,84MHz | 95,63MHz | +36,93% |
+| Fmax từng seed | 74,13 /68,91 /69,84MHz | 95,23 /95,63 /95,66MHz | Cả ba ứng viên cao hơn cả ba baseline |
+| Setup WNS trung vị ở10ns,slow85 | −4,318ns | −0,457ns | **Cả hai chưa đạt100MHz** |
+
+Hold đạt cả18 tổ hợp run/corner slow85/slow0/fast0. Setup/TNS,cảnh báo công cụ và top10 paths giữ trong raw reports/ppa/critical_paths.json. Seed1: trước b_frac_q[0]→alignment_tail,data13,768ns; sau b_sf_q[1]→y[0],data10,783ns. Đường điều khiển dịch/jam từsf vẫn cần xem xét nếu tối ưu tiếp; endpoint alone không chứng minh riêng lost_mask là nút thắt duy nhất. Benchmark riêng không suy Fmax toànadder/MAC,Xilinx LUT6 hoặc power. I/O không có board/input/output delay constraints; cảnh báo pin constants/I/O assignments và feature license không được dùng là giới hạn benchmark,không tự sửa license hoặc tạo timing exception.
+
+**Kết luận:** thử nghiệm cải thiện timing rõ với chi phí16LUT4,không mất chức năng trong phạm vi đã kiểm; giữ làm ứng viên,**chưa thay baseline sản xuất**. W12-06 vẫn processing vì chưa STA/PPA toànNF và chưa kiểm lại toànNF với ứng viên. Nếu chọn đưa vào baseline,cần regression/source freeze NF thích hợp và số đo full-system trước tuyên bố Fmax/latency/II củaMAC. Không dùng trial này để chọn width của khảo sát8.11 hoặc nghiệm thu fused/Gate4.
+
+Report canonical: `results/align_refactor_20261015/summary.json`,modelsim/summary.json,ppa/summary.json và ppa/critical_paths.json. Lệnh từ Posit_MAC:
+
+```cmd
+powershell -NoProfile -File scripts\verify_align_refactor_modelsim.ps1
+powershell -NoProfile -File scripts\run_align_refactor_ppa.ps1
+```
+
+```bash
+bash scripts/verify_align_refactor.sh
+python3 scripts/audit_align_refactor.py
+```
+
+Chỉ source copy riêng ở results/integration thay tên candidate thành posit_add_align; core RTL và pipeline thật giữ nguyên. `-CandidateOnly` chỉ tái đo ứng viên khi baseline ba seed đã có và hash boundary/reference còn đúng. Backup source/snapshot,summary/log/raw PPA gọn; binary,work,wave,db,obj/cache tái tạo từ script.
+
+Trong Git backup,raw STA lưu lossless dạng `align.sta.rpt.gz`;local giữ bản .rpt để đọc/audit. Muốn audit toàn checkpoint trên checkout mới,tái chạy các script trên để tạo lại source copy/runtime rồi audit;summary/log gọn đọc được ngay. Byte baseline và hai helper có sẵn được bảo toàn theo .gitattributes để hash tái chạy không đổi vì CRLF/LF; không đổi logic hoặc ghép candidate vào posit_add.

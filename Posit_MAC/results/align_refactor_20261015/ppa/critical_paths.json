@@ -1,0 +1,596 @@
+[
+  {
+    "variant": "before",
+    "seed": 1,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": -3.49,
+        "setup_tns_ns": -38.672,
+        "hold_wns_ns": 0.371,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": -2.038,
+        "setup_tns_ns": -8.327,
+        "hold_wns_ns": 0.337,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 2.447,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.192,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": -3.49,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.283,
+        "data_delay_ns": 13.768
+      },
+      {
+        "slack_ns": -3.487,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.283,
+        "data_delay_ns": 13.765
+      },
+      {
+        "slack_ns": -3.464,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.283,
+        "data_delay_ns": 13.742
+      },
+      {
+        "slack_ns": -3.461,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.283,
+        "data_delay_ns": 13.739
+      },
+      {
+        "slack_ns": -3.391,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.283,
+        "data_delay_ns": 13.669
+      },
+      {
+        "slack_ns": -3.388,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.283,
+        "data_delay_ns": 13.666
+      },
+      {
+        "slack_ns": -3.349,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.283,
+        "data_delay_ns": 13.627
+      },
+      {
+        "slack_ns": -3.346,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.283,
+        "data_delay_ns": 13.624
+      },
+      {
+        "slack_ns": -3.333,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[3]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.283,
+        "data_delay_ns": 13.611
+      },
+      {
+        "slack_ns": -3.33,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[3]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.283,
+        "data_delay_ns": 13.608
+      }
+    ]
+  },
+  {
+    "variant": "before",
+    "seed": 2,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": -4.512,
+        "setup_tns_ns": -55.151,
+        "hold_wns_ns": 0.397,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": -2.982,
+        "setup_tns_ns": -20.165,
+        "hold_wns_ns": 0.351,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 1.804,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.213,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": -4.512,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.284,
+        "data_delay_ns": 14.791
+      },
+      {
+        "slack_ns": -4.51,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.284,
+        "data_delay_ns": 14.789
+      },
+      {
+        "slack_ns": -4.45,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.284,
+        "data_delay_ns": 14.729
+      },
+      {
+        "slack_ns": -4.448,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.284,
+        "data_delay_ns": 14.727
+      },
+      {
+        "slack_ns": -4.43,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.284,
+        "data_delay_ns": 14.709
+      },
+      {
+        "slack_ns": -4.428,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.284,
+        "data_delay_ns": 14.707
+      },
+      {
+        "slack_ns": -4.36,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.284,
+        "data_delay_ns": 14.639
+      },
+      {
+        "slack_ns": -4.358,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.284,
+        "data_delay_ns": 14.637
+      },
+      {
+        "slack_ns": -4.335,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.284,
+        "data_delay_ns": 14.614
+      },
+      {
+        "slack_ns": -4.333,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.284,
+        "data_delay_ns": 14.612
+      }
+    ]
+  },
+  {
+    "variant": "before",
+    "seed": 3,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": -4.318,
+        "setup_tns_ns": -57.633,
+        "hold_wns_ns": 0.39,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": -2.822,
+        "setup_tns_ns": -22.631,
+        "hold_wns_ns": 0.353,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 1.921,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.204,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": -4.318,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.311,
+        "data_delay_ns": 14.624
+      },
+      {
+        "slack_ns": -4.317,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.311,
+        "data_delay_ns": 14.623
+      },
+      {
+        "slack_ns": -4.284,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.312,
+        "data_delay_ns": 14.591
+      },
+      {
+        "slack_ns": -4.283,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.312,
+        "data_delay_ns": 14.59
+      },
+      {
+        "slack_ns": -4.282,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.314,
+        "data_delay_ns": 14.591
+      },
+      {
+        "slack_ns": -4.281,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.314,
+        "data_delay_ns": 14.59
+      },
+      {
+        "slack_ns": -4.249,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.313,
+        "data_delay_ns": 14.557
+      },
+      {
+        "slack_ns": -4.248,
+        "startpoint": "align_ppa_boundary:u_boundary|b_frac_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.313,
+        "data_delay_ns": 14.556
+      },
+      {
+        "slack_ns": -4.227,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.313,
+        "data_delay_ns": 14.535
+      },
+      {
+        "slack_ns": -4.226,
+        "startpoint": "align_ppa_boundary:u_boundary|a_frac_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.313,
+        "data_delay_ns": 14.534
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "seed": 1,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": -0.501,
+        "setup_tns_ns": -0.848,
+        "hold_wns_ns": 0.374,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 0.624,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.333,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 4.091,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.196,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": -0.501,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.287,
+        "data_delay_ns": 10.783
+      },
+      {
+        "slack_ns": -0.454,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.287,
+        "data_delay_ns": 10.736
+      },
+      {
+        "slack_ns": -0.347,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.287,
+        "data_delay_ns": 10.629
+      },
+      {
+        "slack_ns": -0.325,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[5]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.298,
+        "data_delay_ns": 10.618
+      },
+      {
+        "slack_ns": -0.319,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[6]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.287,
+        "data_delay_ns": 10.601
+      },
+      {
+        "slack_ns": -0.3,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|alignment_tail",
+        "clock_skew_ns": 0.287,
+        "data_delay_ns": 10.582
+      },
+      {
+        "slack_ns": -0.29,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[5]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.287,
+        "data_delay_ns": 10.572
+      },
+      {
+        "slack_ns": -0.288,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.287,
+        "data_delay_ns": 10.57
+      },
+      {
+        "slack_ns": -0.235,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[3]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.298,
+        "data_delay_ns": 10.528
+      },
+      {
+        "slack_ns": -0.211,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.298,
+        "data_delay_ns": 10.504
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "seed": 2,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": -0.457,
+        "setup_tns_ns": -0.457,
+        "hold_wns_ns": 0.399,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 0.664,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.355,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 4.006,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.215,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": -0.457,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.292,
+        "data_delay_ns": 10.744
+      },
+      {
+        "slack_ns": -0.445,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[5]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.292,
+        "data_delay_ns": 10.732
+      },
+      {
+        "slack_ns": -0.441,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.292,
+        "data_delay_ns": 10.728
+      },
+      {
+        "slack_ns": -0.405,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.292,
+        "data_delay_ns": 10.692
+      },
+      {
+        "slack_ns": -0.367,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.292,
+        "data_delay_ns": 10.654
+      },
+      {
+        "slack_ns": -0.333,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[3]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.292,
+        "data_delay_ns": 10.62
+      },
+      {
+        "slack_ns": -0.332,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[6]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.292,
+        "data_delay_ns": 10.619
+      },
+      {
+        "slack_ns": -0.275,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[3]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.292,
+        "data_delay_ns": 10.562
+      },
+      {
+        "slack_ns": -0.256,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[6]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.292,
+        "data_delay_ns": 10.543
+      },
+      {
+        "slack_ns": -0.254,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.292,
+        "data_delay_ns": 10.541
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "seed": 3,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": -0.454,
+        "setup_tns_ns": -0.454,
+        "hold_wns_ns": 0.401,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 0.652,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.354,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 4.029,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.212,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": -0.454,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.28,
+        "data_delay_ns": 10.729
+      },
+      {
+        "slack_ns": -0.171,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.28,
+        "data_delay_ns": 10.446
+      },
+      {
+        "slack_ns": -0.152,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[5]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.28,
+        "data_delay_ns": 10.427
+      },
+      {
+        "slack_ns": -0.149,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[8]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.28,
+        "data_delay_ns": 10.424
+      },
+      {
+        "slack_ns": -0.132,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.28,
+        "data_delay_ns": 10.407
+      },
+      {
+        "slack_ns": -0.125,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[1]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.28,
+        "data_delay_ns": 10.4
+      },
+      {
+        "slack_ns": -0.056,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[2]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.28,
+        "data_delay_ns": 10.331
+      },
+      {
+        "slack_ns": -0.027,
+        "startpoint": "align_ppa_boundary:u_boundary|b_sf_q[3]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.28,
+        "data_delay_ns": 10.302
+      },
+      {
+        "slack_ns": 0.011,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[0]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.28,
+        "data_delay_ns": 10.264
+      },
+      {
+        "slack_ns": 0.076,
+        "startpoint": "align_ppa_boundary:u_boundary|a_sf_q[3]",
+        "endpoint": "align_ppa_boundary:u_boundary|y[0]",
+        "clock_skew_ns": 0.28,
+        "data_delay_ns": 10.199
+      }
+    ]
+  }
+]

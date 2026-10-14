@@ -1,0 +1,129 @@
+{
+  "status": "PASS",
+  "date": "2026-10-15",
+  "seed_base": 20261015,
+  "rng": "xorshift32 per profile",
+  "profiles": [
+    {
+      "NB": 16,
+      "ES": 1,
+      "SF_W": 8,
+      "checks": 73952,
+      "nar_zero": 13653,
+      "clamp": 5303,
+      "threshold": 562,
+      "tie": 72
+    },
+    {
+      "NB": 32,
+      "ES": 2,
+      "SF_W": 10,
+      "checks": 73952,
+      "nar_zero": 13596,
+      "clamp": 5338,
+      "threshold": 547,
+      "tie": 72
+    },
+    {
+      "NB": 32,
+      "ES": 3,
+      "SF_W": 11,
+      "checks": 73952,
+      "nar_zero": 13693,
+      "clamp": 5339,
+      "threshold": 546,
+      "tie": 72
+    },
+    {
+      "NB": 32,
+      "ES": 3,
+      "SF_W": 13,
+      "checks": 73952,
+      "nar_zero": 13554,
+      "clamp": 5404,
+      "threshold": 544,
+      "tie": 72
+    },
+    {
+      "NB": 32,
+      "ES": 2,
+      "SF_W": 12,
+      "checks": 73952,
+      "nar_zero": 13635,
+      "clamp": 5432,
+      "threshold": 545,
+      "tie": 72
+    },
+    {
+      "NB": 5,
+      "ES": 0,
+      "SF_W": 5,
+      "checks": 74048,
+      "nar_zero": 13566,
+      "clamp": 5032,
+      "threshold": 672,
+      "tie": 191
+    },
+    {
+      "NB": 6,
+      "ES": 1,
+      "SF_W": 7,
+      "checks": 74048,
+      "nar_zero": 13604,
+      "clamp": 5372,
+      "threshold": 586,
+      "tie": 188
+    },
+    {
+      "NB": 32,
+      "ES": 27,
+      "SF_W": 35,
+      "checks": 74048,
+      "nar_zero": 13821,
+      "clamp": 5471,
+      "threshold": 560,
+      "tie": 184
+    },
+    {
+      "NB": 7,
+      "ES": 1,
+      "SF_W": 7,
+      "checks": 74400,
+      "nar_zero": 13702,
+      "clamp": 5361,
+      "threshold": 627,
+      "tie": 81
+    },
+    {
+      "NB": 16,
+      "ES": 10,
+      "SF_W": 17,
+      "checks": 74400,
+      "nar_zero": 13699,
+      "clamp": 5587,
+      "threshold": 608,
+      "tie": 80
+    },
+    {
+      "NB": 8,
+      "ES": 0,
+      "SF_W": 6,
+      "checks": 83168,
+      "nar_zero": 13718,
+      "clamp": 6129,
+      "threshold": 1600,
+      "tie": 105
+    }
+  ],
+  "checks": 823872.0,
+  "mismatches": 0,
+  "source_sha256": {
+    "scripts/verify_align_refactor_modelsim.ps1": "4f1029d8973aa54f72a03123f76e497d0ec775cc49156d904fbe51571cbd4e1d",
+    "tb/tb_align_refactor.sv": "4ba76d25489f0b6771d7ceae95a8c61ad53958f3382bf8eaa1d5b5dc0e4a3787",
+    "rtl/posit_add_align_candidate.sv": "3d37b0d68d8000ceca77bff3e25c101e4ec4c0a40ad64bdbf79b9e491180fa20",
+    "rtl/dyn_right_shifter.sv": "89514601248f33eef173b113cbed062d2a777ec6f84d1f3b0fc66eacd946ef86",
+    "tb/align_refactor_checker.sv": "6082b42da0a1432371505442bcc46240daf140bcf27b926e510ad0aa13d6a6a4",
+    "rtl/posit_add_align.sv": "b6d8506eeb9ec4c72c2c17050e6be93e2d0457e34103f9611e3c129794e5465c"
+  },
+  "limits": "Known binary inputs; raw full signed scale range, dirty special payloads; not formal exhaustive HDL proof"
+}

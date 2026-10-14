@@ -31,3 +31,16 @@ scripts/*fraction_survey*.py -text
 scripts/*fraction_survey*.sh text eol=lf
 results/fraction_survey_20261015/** -text
 tb/week10_add_reference.hpp -text
+
+# Isolated alignment candidate and measured checkpoint.
+rtl/posit_add_align_candidate.sv -text
+rtl/align_ppa_*.sv -text
+tb/*align_refactor*.sv -text
+scripts/*align_refactor*.ps1 -text
+scripts/*align_refactor*.py -text
+scripts/*align_refactor*.sh text eol=lf
+results/align_refactor_20261015/** -text
+# Preserve the already measured baseline/helper bytes; logic is unchanged.
+rtl/posit_add_align.sv -text
+tb/week10_adder_harness.cpp -text
+tb/adder_verification_top.sv -text

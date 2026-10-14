@@ -148,3 +148,9 @@ results/nf_corners_20261014/fixtures/
 # OPS refactor checkpoint and rebuildable products.
 results/ops_refactor_20261014/**/fixtures/
 results/ops_refactor_20261014/**/*.wlf
+
+# Alignment trial: keep source and compact reports; regenerate heavy builds.
+results/align_refactor_20261015/**/*.wlf
+results/align_refactor_20261015/**/src/
+results/align_refactor_20261015/**/transcript
+results/align_refactor_20261015/**/modelsim.ini

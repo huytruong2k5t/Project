@@ -1,0 +1,11 @@
+# vsim -do run.do -l simulate_1.log -c -wlf matrix_1.wlf -gFULL_TEST=1 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=1 FW=1 SW=11 WW=1 checks=128 mismatch=0
+# OPS REFACTOR BATCH PASS F=1 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 32 ns  Iteration: 1  Instance: /tb_ops_refactor

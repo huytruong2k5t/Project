@@ -991,3 +991,8 @@ Checkpoint13/10 và manifest NF đóng băng mốc số học/giao thức, khôn
 Checkpoint mới `results/nf_coverage_20261014/completion.json` đạt main32/3 10.000.000 completed,75.379 reset-aborted,0 mismatch;near-cancellation52,55548% đo trực tiếp tại ngõ vào adder với C_eff.256 cross min30.114,61 run/polarity min199.470 và counters packer/control/popcount/iteration đã đạt. ModelSim fixture mới28.512 completed/288 abort và corner82.944 completed đều0 mismatch;fraction0/ones/AA/55 và exact depth5/12/27/26 đã kiểm.
 
 Nguồn RTL/L1 frozen và checkpoint13/10 giữ nguyên; bổ sung verification/corpus/probe chỉ đọc. Mục cập nhật phạm vi trước đó là lịch sử phát hiện gap,bổ sung mới đã đóng tuần11. Lệnh/seed/hash/tool/audit tại PLAN8.9,SPECv1.14§11.12. Gate3 tuần11 không thay final per-n/exhaustive/AC04,oracle/model/cửa sổ/RTL fused,paired accuracy hoặc STA/CDC/RDC/PPA. W12-01 đạt;ưu tiên W12-02..04 tiếp theo.
+
+
+## 32. OPS refactor bit-exact — 14/10/2026
+
+ops_sel_comb tách masked-popcount và data alignment/hidden song song,trước một tầng swap cuối. Parameter/ports,hidden-X/Y,M0/latency và L1 giữ nguyên. ModelSim matrix1.334.048 checks/0 mismatch,398 lint sạch và NFmain10M/0 mismatch;ModelSim NF28.512 completed0 mismatch. Benchmarkcùng6run3seed/bản,F26/FW12/SW11,Quartus13/EP4CE30F23C6:216→196LUT4,151FF giữ nguyên,median108,08→112,01MHz. Đây làOPS riêng,không Fmax MAC hoặc LUT6. Canonicalresults/ops_refactor_20261014/summary.json;SPECv1.15§5.4/11.13 và PLAN8.10 có lệnh/scope. Source-bound lịch sử giữ nguyên,dùng snapshot cũ để audit lịch sử; dùng checkpoint mới cho RTL hiện hành. Fused/final matrix/toàn MAC timing/PPA còn mở.

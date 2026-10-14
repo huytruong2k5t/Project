@@ -1,0 +1,35 @@
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim {+VECTOR_DIR=C:\HCMUT\HK261\Do an 2\Posit_MAC\results\ops_refactor_20261014\nf\fixtures} -do run.do -l simulate_32_3.log -c -wlf simulate_32_3.wlf -gES=3 -gNB=32 work.tb_week11_mac 
+# Loading sv_std.std
+# Loading work.tb_week11_mac
+# Loading work.posit_mac_nf
+# Loading work.mac_nf_wrapper
+# Loading work.posit_parser
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.mul_iter_core
+# Loading work.iter_ctrl
+# Loading work.sac_step_comb
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum
+# Loading work.sbm_accum_comb
+# Loading work.mul_prepack_norm_comb
+# Loading work.round_unpacked_comb
+# Loading work.posit_pack_comb
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter
+# Loading work.posit_pack_finish
+# Loading work.posit_parser_comb
+# Loading work.posit_add
+# Loading work.posit_add_align
+# Loading work.posit_add_arith
+# Loading work.posit_add_normalize
+# Loading work.posit_pack
+# do run.do 
+# W11 MODELSIM PASS NB=32 ES=3 rows=7200 completed=7128 aborted=72 stalls=32429 mismatches=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_week11_mac.sv(165)
+#    Time: 1514480 ns  Iteration: 1  Instance: /tb_week11_mac

@@ -617,7 +617,7 @@ Lịch gốc là **26/10–01/11/2026**. Có thể thực hiện sớm khi sinh 
 | W12-03 | Khóa hợp đồng F và corpus trước model cửa sổ | Prepack, C_eff, sign/scale/Q, các điểm cut/residual, flags/config/acc_mode, topology và tiêu chí chọn W được quy định; danh mục test và seed cố định trước chạy | không |
 | W12-04 | Hiện thực, kiểm và đóng băng L1 F_W | Pilot≥100k/profile trước lượt ≥10^6/profile được chọn; phân bố rõ n0..8, near≥30% và corners; F_W khớp oracle cùng policy0 mismatch, báo riêng khác biệt với F_ref/Ideal; Linux/Windows/UBSan và audit đạt | không |
 | W12-05 | Đo tài nguyên/timing sơ bộ toàn NF | Part/tool/constraints hợp lệ, raw report LUT/FF/CARRY/DSP/BRAM, WNS/TNS/hold và top đường dài; ghi rõ synthesis-only hay post-route, thiếu công cụ/report là blocker | không |
-| W12-06 | Đánh giá ranh giới pipeline dựa trên timing | So đường OPS, SAC, norm/pack/parse và ready/control; đề xuất có FF/latency/II. Chuyển hai MUX chỉ khi có căn cứ; bản RTL ứng viên nếu có phải kiểm lại trước thay baseline | không |
+| W12-06 | Đánh giá ranh giới pipeline dựa trên timing | So đường OPS, SAC, norm/pack/parse và ready/control; đề xuất có FF/latency/II. Chuyển hai MUX chỉ khi có căn cứ; bản RTL ứng viên nếu có phải kiểm lại trước thay baseline | processing — OPS comb đã kiểm/đo; STA toàn NF còn mở |
 | W12-07 | Bàn giao tuần12 và kế hoạch RTL F tuần13 | Audit nguồn/corpus/log, freeze L1 F/contract/cấu hình, xác định stage/latency/handshake cần triển khai; đồng bộ SPEC/PLAN/tiến độ và commit/push, ghi rõ mọi mốc còn thiếu | không |
 
 #### W12-01: đóng coverage NF trong một checkpoint mới (đã đạt ở §8.9)
@@ -711,3 +711,30 @@ python3 scripts/audit_nf_completion.py
 Build runtime L0 trước nếu libsoftposit.so đã dọn;phụ thuộc xem PLAN8.6. Rebuild/generate snapshots/fixtures trước audit sau cleanup. Thư mục mới giữ report/seed/lệnh/hash/raw coverage gọn;binaries,obj/work/wave/fixtures tái sinh không đưa Git. Compiler GCC15.2.0,Verilator5.032,ModelSim10.1d;seed20261014+100·NB+ES,mt19937_64;generator UBSan byte-identical. Audit phản chứng4/4 từ chối RUNNING,source/fixture đổi và near<30%.
 
 **Việc chưa hoàn thành,không chặn đóng tuần11:** final≥10^7/n/bản NF/F và exhaustive/AC02;AC04 toàn matrix;F_W contract/oracle/model/RTL/flags/state;paired accuracy;STA/CDC/RDC và PPA toàn MAC. Không phát hiện mismatch RTL trong phiên này. Không đo/tuyên bố Fmax và không chạy TableI. W12-01 được giải quyết khi đóng tuần11,W12-02..07 vẫn không; tiếp theo ưu tiên W12-02→03→04,nhánh timing W12-05→06 khi đủ công cụ.
+
+### 8.10. Refactor OPS và kiểm lại NF — 14/10/2026
+
+OPS refactor **✅ trong phạm vi tổ hợp**,giữ public parameters/ports,hidden chỉ ởY vàgenerate no-cut. Matrix378 cặp fraction widths×4features,extra SW2/WW tăng:1.334.048 checks/0 mismatch;398 strict lint0warning/no latch. Proof đếm trên masked prefix bằng đếm trên prefix căn phải; chuẩn bị hidden trước swap giữ cùng kết quả. F<=5 exhaustive,larger directed/random,không formal HDL solver hoặc quét2^54.
+
+NF với OPS mới:pilot4format20k và main32/3 10.000.000 completed/75.379 reset-abort,0 mismatch,cùngseed20264217/corpus checkpoint8.9;near52,55548%. ModelSim4format28.512 completed/288abort0 mismatch. Các counters/latency/reset/stall/metadata/feedback giữ nguyên. Source/L1 frozen không đổi ngoàiops_sel_comb; không ghi đè8.9 hoặc kết quả lịch sử. Audit source-bound cũ fail với hash OPS mới là expected; dùng nguồn snapshot/commit trước để replay lịch sử. Checkpoint hiện hành:results/ops_refactor_20261014/summary.json và nf/summary.json.
+
+Đo OPS F26/FW12/SW11,dynamic exact/approx vàOPS,bank input/output giống nhau,3seed/bản,Quartus13.0sp1/EP4CE30F23C6:216→196LUT4 (-9,26%),151FF không đổi;median108,08→112,01MHz (+3,64%). Seed1 datapathcfg_mode_q→Y12 before,data9,045ns;→X8 after,data8,866ns. Setup/hold R2R6/6 đạt10ns;top10/raw STA giữ. Full I/O benchmark cần nhiều pins:partF17 không fit,virtual IO không có subscription;package/device hợp lệF23 dùng chung toàn6run,không sửa license. Không ngoại suy LUT6,V9 hoặc Fmax/II/PPA toàn MAC.
+
+Lệnh từ working directory Posit_MAC:
+
+```bash
+bash scripts/lint_ops_refactor.sh
+bash scripts/verify_ops_refactor_nf.sh pilot
+python3 scripts/audit_ops_refactor_nf.py pilot
+bash scripts/verify_ops_refactor_nf.sh acceptance
+```
+
+```cmd
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify_ops_refactor_modelsim.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify_ops_refactor_nf_modelsim.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\run_ops_refactor_ppa.ps1
+```
+
+Sau các luồng COMPLETE:`python3 scripts/audit_ops_refactor.py`. WSL dùngbash --noprofile --norc;compilerGCC15.2.0,Verilator5.032,SoftPosit0.4.1,ModelSim10.1d. Unitseed20261014+xorshift theo profile;NFseed20261014+100NB+ES. Fixture NF giữ nguyên hash từ8.9,cần sinh lại với prepare_nf_coverage.sh nếu đã dọn,rồi copy sang checkpoint refactor đúng namespace. Binary/work/waves/fixtures không backup;giữ source/oracle/hash/report/raw coverage gọn.
+
+Đây là phần khảo sát sớm W12-06:chưa chuyển MUX qua M0 hoặc chốt pipeline toàn NF,chưa STA/PPA toàn MAC(W12-05). Lịch/source freezeF/model vẫn theo W12-02..04. Slide OPS r3 tham chiếu trước refactor;cần cập nhật nhánh mask/candidates nếu dùng hình đó để mô tả RTL mới;chưa sửa PowerPoint trong phiên này.

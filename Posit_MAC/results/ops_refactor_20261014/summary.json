@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "date": "2026-10-14",
+  "module": "ops_sel_comb",
+  "public_interface": "identical",
+  "source_before": "962651190c14fc42e8235df55a082bddaaa1fee7288215010c395bfbe7b08424",
+  "source_after": "4b168cf0fb121ed9e72af64d76a34f18d1851840e1c7f83be31340b500934e3e",
+  "equivalence_checks": 1334048.0,
+  "width_pairs": 378,
+  "feature_combinations": 4,
+  "lint_profiles": 398,
+  "lint_warnings": 0,
+  "inferred_latches": 0,
+  "nf_completed": 10000000,
+  "nf_mismatches": 0,
+  "nf_counters_identical_before_after": true,
+  "modelsim_nf_completed": 28512,
+  "new_near_percent": 52.55548,
+  "benchmark": {
+    "device": "EP4CE30F23C6",
+    "profile": "F26 FW12 SF_W11 EXACT_EN=OPS_EN=1, dynamic cfg_mode/cfg_ops",
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "LUT4_before": 216,
+    "LUT4_after": 196,
+    "LUT4_reduction_percent": 9.25925925925926,
+    "registers_before": 151,
+    "registers_after": 151,
+    "median_fmax_before_MHz": 108.08,
+    "median_fmax_after_MHz": 112.01,
+    "median_fmax_gain_percent": 3.6361954108068195,
+    "rows": [
+      {
+        "variant": "before",
+        "seed": 1,
+        "LUT4": 216,
+        "registers": 151,
+        "fmax_MHz": 109.73,
+        "setup_wns_ns": 0.887
+      },
+      {
+        "variant": "before",
+        "seed": 2,
+        "LUT4": 216,
+        "registers": 151,
+        "fmax_MHz": 106.97,
+        "setup_wns_ns": 0.652
+      },
+      {
+        "variant": "before",
+        "seed": 3,
+        "LUT4": 216,
+        "registers": 151,
+        "fmax_MHz": 108.08,
+        "setup_wns_ns": 0.748
+      },
+      {
+        "variant": "after",
+        "seed": 1,
+        "LUT4": 196,
+        "registers": 151,
+        "fmax_MHz": 112.01,
+        "setup_wns_ns": 1.072
+      },
+      {
+        "variant": "after",
+        "seed": 2,
+        "LUT4": 196,
+        "registers": 151,
+        "fmax_MHz": 117.1,
+        "setup_wns_ns": 1.46
+      },
+      {
+        "variant": "after",
+        "seed": 3,
+        "LUT4": 196,
+        "registers": 151,
+        "fmax_MHz": 108.74,
+        "setup_wns_ns": 0.804
+      }
+    ]
+  },
+  "mathematical_argument": [
+    "Exact popcount receives every fraction bit unchanged.",
+    "Approx popcount(high_prefix with masked low zeros) equals popcount(right_aligned_prefix).",
+    "COUNT_W>=clog2(FRAC_MAX+1) prevents count overflow; strict < preserves tie-A.",
+    "Prepared X equals old effective fraction; prepared Y equals hidden(W) OR effective fraction.",
+    "Hidden insertion commutes with swapping because W/hidden are shared by A/B.",
+    "Invalid-config candidates are zero; all metadata and modulo-SF_W addition preserve the old contract.",
+    "Reduction OR equals the old OR fold; no-cut generate emits zero."
+  ],
+  "limits": [
+    "Known 0/1 interface controls and data; no guaranteed behavior for X/Z configuration",
+    "Small F<=5 fraction pairs exhaustive; large F directed/random, not 2^54 exhaustive or a formal HDL proof",
+    "PPA is full-IO OPS benchmark on CycloneIV LUT4, not Xilinx LUT6 or full-MAC Fmax",
+    "No production pipeline register or latency/II change; benchmark FF banks are measurement only",
+    "Historical Gate2/NF source-bound audits intentionally reject current OPS hash; use preserved sources/reports for history and this checkpoint for current RTL"
+  ]
+}

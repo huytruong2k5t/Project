@@ -1,0 +1,653 @@
+# vsim -do run.do -l simulate_1.log -c -wlf matrix_1.wlf -gFULL_TEST=1 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=1 FW=1 SW=11 WW=1 checks=128 mismatch=0
+# OPS REFACTOR BATCH PASS F=1 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 32 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_2.log -c -wlf matrix_2.wlf -gFULL_TEST=2 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=2 FW=1 SW=11 WW=2 checks=512 mismatch=0
+# OPS REFACTOR PASS F=2 FW=2 SW=11 WW=2 checks=512 mismatch=0
+# OPS REFACTOR BATCH PASS F=2 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 128 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_3.log -c -wlf matrix_3.wlf -gFULL_TEST=3 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=3 FW=1 SW=11 WW=2 checks=2048 mismatch=0
+# OPS REFACTOR PASS F=3 FW=2 SW=11 WW=2 checks=2048 mismatch=0
+# OPS REFACTOR PASS F=3 FW=3 SW=11 WW=2 checks=2048 mismatch=0
+# OPS REFACTOR BATCH PASS F=3 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 512 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_4.log -c -wlf matrix_4.wlf -gFULL_TEST=4 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=4 FW=1 SW=11 WW=3 checks=8192 mismatch=0
+# OPS REFACTOR PASS F=4 FW=2 SW=11 WW=3 checks=8192 mismatch=0
+# OPS REFACTOR PASS F=4 FW=3 SW=11 WW=3 checks=8192 mismatch=0
+# OPS REFACTOR PASS F=4 FW=4 SW=11 WW=3 checks=8192 mismatch=0
+# OPS REFACTOR BATCH PASS F=4 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 2048 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_5.log -c -wlf matrix_5.wlf -gFULL_TEST=5 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=5 FW=1 SW=11 WW=3 checks=32768 mismatch=0
+# OPS REFACTOR PASS F=5 FW=2 SW=11 WW=3 checks=32768 mismatch=0
+# OPS REFACTOR PASS F=5 FW=3 SW=11 WW=3 checks=32768 mismatch=0
+# OPS REFACTOR PASS F=5 FW=4 SW=11 WW=3 checks=32768 mismatch=0
+# OPS REFACTOR PASS F=5 FW=5 SW=11 WW=3 checks=32768 mismatch=0
+# OPS REFACTOR BATCH PASS F=5 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 8192 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_6.log -c -wlf matrix_6.wlf -gFULL_TEST=6 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=6 FW=1 SW=11 WW=3 checks=1760 mismatch=0
+# OPS REFACTOR PASS F=6 FW=2 SW=11 WW=3 checks=1760 mismatch=0
+# OPS REFACTOR PASS F=6 FW=3 SW=11 WW=3 checks=1760 mismatch=0
+# OPS REFACTOR PASS F=6 FW=4 SW=11 WW=3 checks=1760 mismatch=0
+# OPS REFACTOR PASS F=6 FW=5 SW=11 WW=3 checks=1760 mismatch=0
+# OPS REFACTOR PASS F=6 FW=6 SW=11 WW=3 checks=1760 mismatch=0
+# OPS REFACTOR BATCH PASS F=6 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 440 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_7.log -c -wlf matrix_7.wlf -gFULL_TEST=7 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=7 FW=1 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=2 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=3 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=4 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=5 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=6 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=7 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR BATCH PASS F=7 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 464 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_8.log -c -wlf matrix_8.wlf -gFULL_TEST=8 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=8 FW=1 SW=11 WW=4 checks=1952 mismatch=0
+# OPS REFACTOR PASS F=8 FW=2 SW=11 WW=4 checks=1952 mismatch=0
+# OPS REFACTOR PASS F=8 FW=3 SW=11 WW=4 checks=1952 mismatch=0
+# OPS REFACTOR PASS F=8 FW=4 SW=11 WW=4 checks=1952 mismatch=0
+# OPS REFACTOR PASS F=8 FW=5 SW=11 WW=4 checks=1952 mismatch=0
+# OPS REFACTOR PASS F=8 FW=6 SW=11 WW=4 checks=1952 mismatch=0
+# OPS REFACTOR PASS F=8 FW=7 SW=11 WW=4 checks=1952 mismatch=0
+# OPS REFACTOR PASS F=8 FW=8 SW=11 WW=4 checks=1952 mismatch=0
+# OPS REFACTOR BATCH PASS F=8 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 488 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_9.log -c -wlf matrix_9.wlf -gFULL_TEST=9 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=9 FW=1 SW=11 WW=4 checks=2048 mismatch=0
+# OPS REFACTOR PASS F=9 FW=2 SW=11 WW=4 checks=2048 mismatch=0
+# OPS REFACTOR PASS F=9 FW=3 SW=11 WW=4 checks=2048 mismatch=0
+# OPS REFACTOR PASS F=9 FW=4 SW=11 WW=4 checks=2048 mismatch=0
+# OPS REFACTOR PASS F=9 FW=5 SW=11 WW=4 checks=2048 mismatch=0
+# OPS REFACTOR PASS F=9 FW=6 SW=11 WW=4 checks=2048 mismatch=0
+# OPS REFACTOR PASS F=9 FW=7 SW=11 WW=4 checks=2048 mismatch=0
+# OPS REFACTOR PASS F=9 FW=8 SW=11 WW=4 checks=2048 mismatch=0
+# OPS REFACTOR PASS F=9 FW=9 SW=11 WW=4 checks=2048 mismatch=0
+# OPS REFACTOR BATCH PASS F=9 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 512 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_10.log -c -wlf matrix_10.wlf -gFULL_TEST=10 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=10 FW=1 SW=11 WW=4 checks=2144 mismatch=0
+# OPS REFACTOR PASS F=10 FW=2 SW=11 WW=4 checks=2144 mismatch=0
+# OPS REFACTOR PASS F=10 FW=3 SW=11 WW=4 checks=2144 mismatch=0
+# OPS REFACTOR PASS F=10 FW=4 SW=11 WW=4 checks=2144 mismatch=0
+# OPS REFACTOR PASS F=10 FW=5 SW=11 WW=4 checks=2144 mismatch=0
+# OPS REFACTOR PASS F=10 FW=6 SW=11 WW=4 checks=2144 mismatch=0
+# OPS REFACTOR PASS F=10 FW=7 SW=11 WW=4 checks=2144 mismatch=0
+# OPS REFACTOR PASS F=10 FW=8 SW=11 WW=4 checks=2144 mismatch=0
+# OPS REFACTOR PASS F=10 FW=9 SW=11 WW=4 checks=2144 mismatch=0
+# OPS REFACTOR PASS F=10 FW=10 SW=11 WW=4 checks=2144 mismatch=0
+# OPS REFACTOR BATCH PASS F=10 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 536 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_11.log -c -wlf matrix_11.wlf -gFULL_TEST=11 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=11 FW=1 SW=11 WW=4 checks=2240 mismatch=0
+# OPS REFACTOR PASS F=11 FW=2 SW=11 WW=4 checks=2240 mismatch=0
+# OPS REFACTOR PASS F=11 FW=3 SW=11 WW=4 checks=2240 mismatch=0
+# OPS REFACTOR PASS F=11 FW=4 SW=11 WW=4 checks=2240 mismatch=0
+# OPS REFACTOR PASS F=11 FW=5 SW=11 WW=4 checks=2240 mismatch=0
+# OPS REFACTOR PASS F=11 FW=6 SW=11 WW=4 checks=2240 mismatch=0
+# OPS REFACTOR PASS F=11 FW=7 SW=11 WW=4 checks=2240 mismatch=0
+# OPS REFACTOR PASS F=11 FW=8 SW=11 WW=4 checks=2240 mismatch=0
+# OPS REFACTOR PASS F=11 FW=9 SW=11 WW=4 checks=2240 mismatch=0
+# OPS REFACTOR PASS F=11 FW=10 SW=11 WW=4 checks=2240 mismatch=0
+# OPS REFACTOR PASS F=11 FW=11 SW=11 WW=4 checks=2240 mismatch=0
+# OPS REFACTOR BATCH PASS F=11 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 560 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_12.log -c -wlf matrix_12.wlf -gFULL_TEST=12 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=12 FW=1 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR PASS F=12 FW=2 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR PASS F=12 FW=3 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR PASS F=12 FW=4 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR PASS F=12 FW=5 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR PASS F=12 FW=6 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR PASS F=12 FW=7 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR PASS F=12 FW=8 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR PASS F=12 FW=9 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR PASS F=12 FW=10 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR PASS F=12 FW=11 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR PASS F=12 FW=12 SW=11 WW=4 checks=2336 mismatch=0
+# OPS REFACTOR BATCH PASS F=12 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 584 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_13.log -c -wlf matrix_13.wlf -gFULL_TEST=13 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=13 FW=1 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=2 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=3 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=4 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=5 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=6 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=7 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=8 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=9 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=10 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=11 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=12 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR PASS F=13 FW=13 SW=11 WW=4 checks=2432 mismatch=0
+# OPS REFACTOR BATCH PASS F=13 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 608 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_14.log -c -wlf matrix_14.wlf -gFULL_TEST=14 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=14 FW=1 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=2 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=3 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=4 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=5 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=6 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=7 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=8 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=9 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=10 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=11 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=12 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=13 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR PASS F=14 FW=14 SW=11 WW=4 checks=2528 mismatch=0
+# OPS REFACTOR BATCH PASS F=14 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 632 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_15.log -c -wlf matrix_15.wlf -gFULL_TEST=15 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=15 FW=1 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=2 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=3 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=4 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=5 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=6 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=7 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=8 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=9 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=10 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=11 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=12 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=13 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=14 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR PASS F=15 FW=15 SW=11 WW=4 checks=2624 mismatch=0
+# OPS REFACTOR BATCH PASS F=15 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 656 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_16.log -c -wlf matrix_16.wlf -gFULL_TEST=16 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=16 FW=1 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=2 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=3 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=4 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=5 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=6 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=7 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=8 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=9 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=10 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=11 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=12 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=13 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=14 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=15 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR PASS F=16 FW=16 SW=11 WW=5 checks=2720 mismatch=0
+# OPS REFACTOR BATCH PASS F=16 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 680 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_17.log -c -wlf matrix_17.wlf -gFULL_TEST=17 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=17 FW=1 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=2 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=3 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=4 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=5 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=6 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=7 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=8 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=9 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=10 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=11 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=12 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=13 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=14 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=15 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=16 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR PASS F=17 FW=17 SW=11 WW=5 checks=2816 mismatch=0
+# OPS REFACTOR BATCH PASS F=17 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 704 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_18.log -c -wlf matrix_18.wlf -gFULL_TEST=18 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=18 FW=1 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=2 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=3 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=4 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=5 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=6 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=7 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=8 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=9 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=10 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=11 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=12 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=13 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=14 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=15 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=16 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=17 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR PASS F=18 FW=18 SW=11 WW=5 checks=2912 mismatch=0
+# OPS REFACTOR BATCH PASS F=18 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 728 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_19.log -c -wlf matrix_19.wlf -gFULL_TEST=19 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=19 FW=1 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=2 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=3 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=4 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=5 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=6 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=7 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=8 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=9 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=10 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=11 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=12 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=13 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=14 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=15 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=16 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=17 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=18 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR PASS F=19 FW=19 SW=11 WW=5 checks=3008 mismatch=0
+# OPS REFACTOR BATCH PASS F=19 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 752 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_20.log -c -wlf matrix_20.wlf -gFULL_TEST=20 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=20 FW=1 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=2 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=3 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=4 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=5 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=6 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=7 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=8 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=9 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=10 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=11 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=12 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=13 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=14 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=15 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=16 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=17 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=18 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=19 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR PASS F=20 FW=20 SW=11 WW=5 checks=3104 mismatch=0
+# OPS REFACTOR BATCH PASS F=20 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 776 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_21.log -c -wlf matrix_21.wlf -gFULL_TEST=21 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=21 FW=1 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=2 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=3 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=4 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=5 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=6 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=7 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=8 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=9 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=10 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=11 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=12 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=13 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=14 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=15 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=16 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=17 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=18 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=19 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=20 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR PASS F=21 FW=21 SW=11 WW=5 checks=3200 mismatch=0
+# OPS REFACTOR BATCH PASS F=21 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 800 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_22.log -c -wlf matrix_22.wlf -gFULL_TEST=22 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=22 FW=1 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=2 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=3 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=4 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=5 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=6 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=7 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=8 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=9 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=10 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=11 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=12 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=13 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=14 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=15 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=16 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=17 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=18 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=19 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=20 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=21 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR PASS F=22 FW=22 SW=11 WW=5 checks=3296 mismatch=0
+# OPS REFACTOR BATCH PASS F=22 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 824 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_23.log -c -wlf matrix_23.wlf -gFULL_TEST=23 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=23 FW=1 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=2 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=3 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=4 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=5 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=6 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=7 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=8 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=9 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=10 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=11 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=12 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=13 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=14 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=15 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=16 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=17 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=18 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=19 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=20 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=21 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=22 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR PASS F=23 FW=23 SW=11 WW=5 checks=3392 mismatch=0
+# OPS REFACTOR BATCH PASS F=23 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 848 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_24.log -c -wlf matrix_24.wlf -gFULL_TEST=24 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=24 FW=1 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=2 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=3 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=4 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=5 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=6 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=7 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=8 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=9 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=10 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=11 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=12 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=13 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=14 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=15 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=16 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=17 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=18 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=19 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=20 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=21 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=22 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=23 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR PASS F=24 FW=24 SW=11 WW=5 checks=3488 mismatch=0
+# OPS REFACTOR BATCH PASS F=24 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 872 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_25.log -c -wlf matrix_25.wlf -gFULL_TEST=25 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=25 FW=1 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=2 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=3 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=4 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=5 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=6 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=7 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=8 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=9 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=10 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=11 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=12 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=13 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=14 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=15 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=16 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=17 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=18 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=19 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=20 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=21 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=22 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=23 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=24 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR PASS F=25 FW=25 SW=11 WW=5 checks=3584 mismatch=0
+# OPS REFACTOR BATCH PASS F=25 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 896 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_26.log -c -wlf matrix_26.wlf -gFULL_TEST=26 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=26 FW=1 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=2 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=3 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=4 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=5 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=6 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=7 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=8 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=9 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=10 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=11 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=12 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=13 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=14 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=15 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=16 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=17 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=18 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=19 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=20 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=21 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=22 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=23 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=24 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=25 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=26 FW=26 SW=11 WW=5 checks=3680 mismatch=0
+# OPS REFACTOR BATCH PASS F=26 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 920 ns  Iteration: 1  Instance: /tb_ops_refactor
+# vsim -do run.do -l simulate_27.log -c -wlf matrix_27.wlf -gFULL_TEST=27 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=1 FW=1 SW=2 WW=4 checks=128 mismatch=0
+# OPS REFACTOR PASS F=26 FW=12 SW=2 WW=8 checks=3680 mismatch=0
+# OPS REFACTOR PASS F=27 FW=1 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=2 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=3 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=4 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=5 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=6 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=7 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=8 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=9 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=10 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=11 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=12 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=13 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=14 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=15 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=16 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=17 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=18 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=19 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=20 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=21 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=22 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=23 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=24 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=25 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=26 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=27 SW=11 WW=5 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=27 FW=27 SW=2 WW=8 checks=3776 mismatch=0
+# OPS REFACTOR PASS F=5 FW=1 SW=2 WW=6 checks=32768 mismatch=0
+# OPS REFACTOR BATCH PASS F=27 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 8192 ns  Iteration: 1  Instance: /tb_ops_refactor
+

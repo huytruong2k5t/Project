@@ -10,3 +10,12 @@ scripts/*nf_*.ps1 -text
 scripts/*nf_*.sh text eol=lf
 results/nf_coverage_20261014/** -text
 results/nf_corners_20261014/** -text
+
+# OPS refactor checkpoint and rebuildable products.
+rtl/ops_sel_comb.sv -text
+rtl/ops_ppa_*.sv -text
+tb/*ops_refactor*.sv -text
+scripts/*ops_refactor*.py -text
+scripts/*ops_refactor*.ps1 -text
+scripts/*ops_refactor*.sh text eol=lf
+results/ops_refactor_20261014/** -text

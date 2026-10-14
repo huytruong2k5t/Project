@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.14 — 2026-10-14 — Đóng coverage NF/Gate3 tuần11 bằng checkpoint mới |
+| Phiên bản | v1.15 — 2026-10-14 — OPS refactor bit-exact và benchmark trước/sau |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -31,8 +31,9 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.12 | 2026-10-13 | Gom khác biệt paper/NF tại §5.10-G; sửa mapping module, unsigned shift, metadata register và carry adapter. Chỉ làm rõ tài liệu, không đổi RTL hoặc hợp đồng số học đã kiểm. |
 | v1.13 | 2026-10-14 | Đồng nhất profile/params, normalize/carry, ngoại lệ, feedback/latency và trạng thái fused; sửa pseudocode G/R/S, oracle ES3, luồng công cụ/PPA và truy vết. Phát hiện W11 chưa đạt tỷ lệ near-cancellation30%; giữ ngưỡng và mở lại phần coverage Gate3, không đổi RTL hoặc kết quả lịch sử. |
 | v1.14 | 2026-10-14 | Bổ sung corpus/counters/probe NF: main10M/0 mismatch,near52,55548%,run/polarity và packer bins đạt; ModelSim corner82.944/0 mismatch. Đóng Gate3 tuần11,giữ checkpoint cũ và các yêu cầu final/F/PPA còn mở. |
+| v1.15 | 2026-10-14 | Tách masked-popcount/data candidates và hidden trước swap; interface/M0 giữ nguyên. Matrix1,334M và NF10M0 mismatch;398 lint sạch;OPS216→196LUT4,median108,08→112,01MHz trên3seed/cấu hình. Giữ source-bound checkpoints cũ và giới hạn PPA toàn MAC. |
 
-**Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Profile hiện thực và giới hạn bằng chứng được tóm tắt tại §1.6/§11.10–§11.12. Nhật ký có ngày ở phụ lục là lịch sử, không ghi đè hợp đồng hiện hành hoặc tự mở rộng một mốc PASS thành toàn bộ AC.
+**Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Profile hiện thực và giới hạn bằng chứng được tóm tắt tại §1.6/§11.10–§11.13. Nhật ký có ngày ở phụ lục là lịch sử, không ghi đè hợp đồng hiện hành hoặc tự mở rộng một mốc PASS thành toàn bộ AC.
 
 ---
 
@@ -381,6 +382,9 @@ Ngoài ra OPS thực hiện: `sign_o = sA ^ sB`; `sf_o = sfA + sfB`.
 
 **Giao diện tổ hợp tuần9:** `ops_sel_comb` nhận fraction parser không hidden, rộng FRAC_MAX; ở approx lấy FRAC_W bit cao trước popcount. `x_frac` được căn phải, không hidden; `y_mant` căn phải trên Q(W_X), hidden nằm ở bit W_X. `active_width=W_X`. Input bị bỏ bit thấp đặt `input_cut`, không đưa cờ này vào sticky số học. `cfg_error` báo cfg_ops reserved, exact khi EXACT_EN=0 hoặc cfg_ops khác0 khi OPS_EN=0; bundle dữ liệu về0 và wrapper/TB phải từ chối cấu hình này. Khi OPS_EN=0, cấu hình hợp lệ cfg_ops=0 luôn giữ X=A, đồng nhất API L1. Zero/NaR được wrapper xử lý trước đường finite này.
 
+
+**Refactor14/10/2026:** nhánh control giữ prefix FRAC_W ở vị trí gốc; các bit thấp AND với !cfg_mode rồi vào cây popcount. Popcount không phụ thuộc vị trí bit nên choose_b/tie-A giữ nguyên. Nhánh dữ liệu chuẩn bị độc lập X_A/X_B căn phải không hidden và Y_A/Y_B căn phải có hidden; chỉ chọn hai bus bằng một tầng Swap MUX cuối. cfg_error xóa các ứng viên trước swap; metadata swapped được tách khỏi block chuẩn bị dữ liệu. discarded dùng Reduction OR,generate no-cut trả0 khi FRAC_W=FRAC_MAX. Không thêm clock/FF/latency trong ops_sel_comb; M0/core launch vẫn giữ nguyên. Đây là hợp đồng 0/1 ở interface; không cam kết cách xử lý cfg_mode X/Z. Bằng chứng refactor/timing tại §11.13.
+
 ### 5.5 SAC (`sac`) và bộ điều khiển lặp
 
 Trạng thái: thanh ghi fx chứa fraction X sau hidden bit, rộng W_X=FRAC_W ở approx và FRAC_MAX ở exact; tổng dịch S và bộ đếm i phải đủ cho W_X. Không dùng thanh ghi FRAC_W để cắt đường exact.
@@ -572,7 +576,7 @@ Hợp đồng W10-01 đã chốt trước hiện thực; RTL adder hiện đã k
 
 Harness coverage/scoreboard trực tiếp: ES2 10.000.003 completed/9.787 reset-aborted; ES3 10.000.001/9.862;0 mismatch. Mỗi input nhận được đối chiếu L1, oracle integer/bit-list độc lập (decode/add/pack không dùng L1); SoftPosit RNE ở format hỗ trợ, không gán ES3 cho L0 ES2. Kiểm cả unpacked/packed RNE/TRUNC và flags; pilot bốn format chạy trước lượt lớn. UBSan generator đạt. Seed_base20261012, seed format=base+100NB+ES; compilerGCC15.2.0, SoftPosit0.4.1/hash/lệnh/source/binary/fixture cùng report.
 
-Bằng chứng canonical results/week10_adder/summary.json; matrix.json, raw coverage và structural_coverage.json giữ tất cả unhit points. Coverage raw toàn verification hierarchy: line80,00–80,95%,branch92,31–96,15%,toggle75,18–84,74%; không loại point và **chưa đạt final AC04**, không dùng milestone tuần10 thay signoff coverage. Tại checkpoint tuần10 ngày12/10, P16 exhaustive RTL2^32, P32 final>=10^8 theo AC02, tích hợp MAC/feedback/Gate3 và STA/PPA còn mở. Mốc NF và phần coverage bổ sung đã đạt được cập nhật tại §11.10–§11.12. L1 frozen source hashes giữ nguyên; không gọi pipeline này là MAC fused.
+Bằng chứng canonical results/week10_adder/summary.json; matrix.json, raw coverage và structural_coverage.json giữ tất cả unhit points. Coverage raw toàn verification hierarchy: line80,00–80,95%,branch92,31–96,15%,toggle75,18–84,74%; không loại point và **chưa đạt final AC04**, không dùng milestone tuần10 thay signoff coverage. Tại checkpoint tuần10 ngày12/10, P16 exhaustive RTL2^32, P32 final>=10^8 theo AC02, tích hợp MAC/feedback/Gate3 và STA/PPA còn mở. Mốc NF và phần coverage bổ sung đã đạt được cập nhật tại §11.10–§11.13. L1 frozen source hashes giữ nguyên; không gọi pipeline này là MAC fused.
 
 Corpus NF/F common100.000 triple đầu vào đã đóng băng/replay byte-exact ở paired/manifest.json; chưa đo accuracy, oracle F/Ideal full-sum và window/residual vẫn theo tuần12. Tham chiếu software1024 bit trên grid2^-532 đủ bảo thủ cho32/3 (4SF_MAX+2F+4=1016 bit); không phải width RTL. Checklist tuần10 đã nghiệm thu phạm vi đơn vị và gỡ khỏi tiến độ, giữ nhật ký/report; tiếp tuần11 NF/Gate3. Ghép NF với packer pipeline/round_unpacked/feedback đã kiểm toàn MAC ở §11.10; kết quả đó không suy từ testbench packer tổ hợp.
 
@@ -1278,7 +1282,7 @@ Cập nhật14/10/2026. SPEC là hợp đồng; kết quả nghiệm thu phải 
 
 ---
 
-Các mục11.4–11.7 dưới đây giữ kết luận **tại ngày của từng phiên**; câu “Gate2 processing” ở09/10 không phải trạng thái hiện hành. Gate2 hiện đã nghiệm thu10/10; trạng thái NF/F và coverage hiện hành ở §11.10–§11.12.
+Các mục11.4–11.7 dưới đây giữ kết luận **tại ngày của từng phiên**; câu “Gate2 processing” ở09/10 không phải trạng thái hiện hành. Gate2 hiện đã nghiệm thu10/10; trạng thái NF/F và coverage hiện hành ở §11.10–§11.13.
 
 ### 11.4 Bằng chứng RTL tuần9 — 09/10/2026
 
@@ -1397,6 +1401,16 @@ Khác biệt carry giữa legacy và R(P_hat) đã có adapter riêng và bằng
 - Verilator5.032,GCC15.2.0,SoftPosit0.4.1,ModelSim10.1d; seedbase20261014+100·NB+ES,mt19937_64. Source/corpus khóa sau pilot và kiểm lại trước main; audit từ chối RUNNING,hash đổi hoặc near<30%. Lệnh tái chạy tại PLAN8.9. Coverage main32/3 line96,9231%,branch94,2623%,toggle88,7136%; toggle từ pilot, không phải finalAC04 toàn ma trận.
 
 **Còn mở, chuyển tuần12–15:** oracle/L1 F_W và hợp đồng signed residual/window/flags/acc_mode; RTL F; paired accuracy; final AC01/AC02 theo n/profile và exhaustive; AC04 đầy đủ, STA/CDC/RDC/PPA toàn MAC. Không có thay đổi số học hoặc nguồn paper mới nên không chạy lại TableI. W12-01 đã được xử lý trong phiên đóng tuần11; W12-02..07 chưa thực hiện.
+
+### 11.13. OPS parallel-path refactor — 14/10/2026
+
+Đã refactor ops_sel_comb theo §5.4, giữ toàn bộ parameter/default/port và số học; bản trước lưu tại results/ops_refactor_20261014/before/ops_sel_comb.sv. Audit so public header,source hashes và oracle; không sửa L1 hoặc M0/SAC/SBM/reset. X vẫn không hidden; Y có hidden trước Swap MUX. No-cut guard hợp lệ ở FRAC_W=FRAC_MAX.
+
+ModelSim so RTL mới/cũ và oracle bit-count độc lập đạt **1.334.048 kiểm/0 mismatch**:378 cặp F1..27/FW1..F,4 feature combinations EXACT_EN/OPS_EN,4 profile SF_W2/WIDTH_W tăng. F<=5 vét cạn cặp fraction,mode0/1 và cfg_ops0..3; F>5 directed/random,không tuyên bố vét cạn2^54 hoặc formal HDL proof. Verilator strict lint398 profile0 warning; không latch. NF pilot20k/format và main32/3 mới10M/0 mismatch cùng seed/corpus; near52,55548%;ModelSim tích hợp28.512 completed/288 reset-abort,0 mismatch. Đã kiểm pipeline/control/flags và adapter theo oracle đúng format; không đổi latency/II.
+
+Benchmark OPS toàn I/O,cùng bank input/output,dynamic mode/OPS,F26/FW12/SF_W11,ba seed mỗi bản,Quartus13.0sp1/EP4CE30F23C6/LUT4: **216→196 LUT4 (-9,2593%)**,151 FF giữ nguyên; Fmax trung vị **108,08→112,01MHz (+3,6362%)**. Cả6 run setup/hold R2R đạt ở10ns. Path seed1 từcfg_mode_q:before→y_mant[12],data9,045ns;after→x_frac[8],data8,866ns. Path control vẫn là ứng viên critical; không kết luận đã tối ưu tuyệt đối hoặc Fmax MAC đạt112MHz. Pins vật lý;không có I/O delay/board signoff. Package F17 ban đầu thiếu pins và virtual-pin không có license; đã dùng cùng partF23 hợp lệ cho cả6 run,không sửa license.
+
+Canonical results/ops_refactor_20261014/summary.json; raw timing/top10 ở ppa/critical_paths.json và report STA. Checkpoint13/10 và coverage NF14/10 trước refactor giữ nguyên; audit lịch sử sẽ từ chối nguồn OPS mới do hash khác,đây là đúng cơ chế freeze. Dùng snapshot/commit nguồn cũ khi tái chạy lịch sử; dùng checkpoint refactor NF khi kiểm RTL hiện hành. Gate3 tuần11 vẫn đạt phạm vi đã kiểm;final per-n/AC02/AC04,F_W/F RTL,paired accuracy và STA/PPA toàn MAC còn mở. Không chạy TableI vì không có thay đổi hợp đồng hoặc nguồn paper mới.
 
 ## 12. Báo cáo và bảo vệ
 

@@ -1,0 +1,17 @@
+# vsim -do run.do -l simulate_7.log -c -wlf matrix_7.wlf -gFULL_TEST=7 work.tb_ops_refactor 
+# Loading sv_std.std
+# Loading work.tb_ops_refactor
+# Loading work.ops_refactor_checker
+# Loading work.ops_sel_comb
+# Loading work.ops_sel_before
+# do run.do 
+# OPS REFACTOR PASS F=7 FW=1 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=2 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=3 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=4 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=5 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=6 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR PASS F=7 FW=7 SW=11 WW=3 checks=1856 mismatch=0
+# OPS REFACTOR BATCH PASS F=7 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_ops_refactor.sv(44)
+#    Time: 464 ns  Iteration: 1  Instance: /tb_ops_refactor

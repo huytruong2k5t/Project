@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "date": "2026-10-14",
+  "device": "EP4CE30F23C6",
+  "clock_ns": 10,
+  "profile": "F26 FW12 SF_W11 EXACT_EN=OPS_EN=1, dynamic cfg_mode/cfg_ops",
+  "source_sha256": {
+    "rtl/ops_sel_comb.sv": "4b168cf0fb121ed9e72af64d76a34f18d1851840e1c7f83be31340b500934e3e",
+    "rtl/ops_ppa_top.sv": "cc649ff5ff311c33de28532c20d7c7b12d91f8c313d017387c303a9c53623243",
+    "results/ops_refactor_20261014/before/ops_sel_comb.sv": "962651190c14fc42e8235df55a082bddaaa1fee7288215010c395bfbe7b08424",
+    "rtl/ops_ppa_boundary.sv": "1a92866261e1448c81cb52dd642d3c9ef6dc87b2627c400dcb033c109c4b38d8",
+    "scripts/run_ops_refactor_ppa.ps1": "42d2fa3d4937ff473d3e8ee6b8e6499a861d37b73d0e1397c49cdb66bda99f73"
+  },
+  "rows": [
+    {
+      "variant": "before",
+      "seed": 1,
+      "LUT4": 216,
+      "registers": 151,
+      "fmax_MHz": 109.73,
+      "setup_wns_ns": 0.887
+    },
+    {
+      "variant": "before",
+      "seed": 2,
+      "LUT4": 216,
+      "registers": 151,
+      "fmax_MHz": 106.97,
+      "setup_wns_ns": 0.652
+    },
+    {
+      "variant": "before",
+      "seed": 3,
+      "LUT4": 216,
+      "registers": 151,
+      "fmax_MHz": 108.08,
+      "setup_wns_ns": 0.748
+    },
+    {
+      "variant": "after",
+      "seed": 1,
+      "LUT4": 196,
+      "registers": 151,
+      "fmax_MHz": 112.01,
+      "setup_wns_ns": 1.072
+    },
+    {
+      "variant": "after",
+      "seed": 2,
+      "LUT4": 196,
+      "registers": 151,
+      "fmax_MHz": 117.1,
+      "setup_wns_ns": 1.46
+    },
+    {
+      "variant": "after",
+      "seed": 3,
+      "LUT4": 196,
+      "registers": 151,
+      "fmax_MHz": 108.74,
+      "setup_wns_ns": 0.804
+    }
+  ],
+  "limits": "Standalone complete OPS OOC benchmark with identical register banks and physical data I/O, LUT4; not full MAC or Xilinx LUT6. Register-register STA; external I/O delay not constrained, no board/system signoff or power claim."
+}

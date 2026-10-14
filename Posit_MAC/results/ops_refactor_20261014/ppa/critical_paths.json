@@ -1,0 +1,506 @@
+[
+  {
+    "variant": "before",
+    "seed": 1,
+    "hold_ns": 0.887,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_ns": 0.887,
+        "hold_ns": 0.887
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_ns": 0.887,
+        "hold_ns": 0.887
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_ns": 0.887,
+        "hold_ns": 0.887
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": 0.887,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[12]",
+        "data_delay_ns": 9.045
+      },
+      {
+        "slack_ns": 0.945,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[7]",
+        "data_delay_ns": 8.983
+      },
+      {
+        "slack_ns": 0.959,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[19]",
+        "data_delay_ns": 8.972
+      },
+      {
+        "slack_ns": 0.96,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[22]",
+        "data_delay_ns": 8.971
+      },
+      {
+        "slack_ns": 0.96,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[23]",
+        "data_delay_ns": 8.971
+      },
+      {
+        "slack_ns": 0.961,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[5]",
+        "data_delay_ns": 8.967
+      },
+      {
+        "slack_ns": 0.961,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[23]",
+        "data_delay_ns": 8.97
+      },
+      {
+        "slack_ns": 0.962,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[7]",
+        "data_delay_ns": 8.966
+      },
+      {
+        "slack_ns": 0.964,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[22]",
+        "data_delay_ns": 8.967
+      },
+      {
+        "slack_ns": 0.965,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[19]",
+        "data_delay_ns": 8.966
+      }
+    ]
+  },
+  {
+    "variant": "before",
+    "seed": 2,
+    "hold_ns": 0.652,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_ns": 0.652,
+        "hold_ns": 0.652
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_ns": 0.652,
+        "hold_ns": 0.652
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_ns": 0.652,
+        "hold_ns": 0.652
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": 0.652,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[13]",
+        "data_delay_ns": 9.281
+      },
+      {
+        "slack_ns": 0.658,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[13]",
+        "data_delay_ns": 9.275
+      },
+      {
+        "slack_ns": 0.766,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[17]",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[13]",
+        "data_delay_ns": 9.167
+      },
+      {
+        "slack_ns": 0.772,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[17]",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[13]",
+        "data_delay_ns": 9.161
+      },
+      {
+        "slack_ns": 0.803,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[19]",
+        "data_delay_ns": 9.129
+      },
+      {
+        "slack_ns": 0.806,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[19]",
+        "data_delay_ns": 9.126
+      },
+      {
+        "slack_ns": 0.818,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[9]",
+        "data_delay_ns": 9.115
+      },
+      {
+        "slack_ns": 0.818,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[9]",
+        "data_delay_ns": 9.115
+      },
+      {
+        "slack_ns": 0.819,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[12]",
+        "data_delay_ns": 9.114
+      },
+      {
+        "slack_ns": 0.819,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[14]",
+        "data_delay_ns": 9.114
+      }
+    ]
+  },
+  {
+    "variant": "before",
+    "seed": 3,
+    "hold_ns": 0.748,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_ns": 0.748,
+        "hold_ns": 0.748
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_ns": 0.748,
+        "hold_ns": 0.748
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_ns": 0.748,
+        "hold_ns": 0.748
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": 0.748,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[12]",
+        "data_delay_ns": 9.178
+      },
+      {
+        "slack_ns": 0.976,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[21]",
+        "data_delay_ns": 8.953
+      },
+      {
+        "slack_ns": 0.977,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[0]",
+        "data_delay_ns": 8.952
+      },
+      {
+        "slack_ns": 0.977,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[22]",
+        "data_delay_ns": 8.952
+      },
+      {
+        "slack_ns": 0.977,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[24]",
+        "data_delay_ns": 8.952
+      },
+      {
+        "slack_ns": 0.977,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[25]",
+        "data_delay_ns": 8.952
+      },
+      {
+        "slack_ns": 0.978,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[21]",
+        "data_delay_ns": 8.951
+      },
+      {
+        "slack_ns": 0.978,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_b_q[17]",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[12]",
+        "data_delay_ns": 8.947
+      },
+      {
+        "slack_ns": 0.979,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[23]",
+        "data_delay_ns": 8.95
+      },
+      {
+        "slack_ns": 0.979,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[11]",
+        "data_delay_ns": 8.951
+      }
+    ]
+  },
+  {
+    "variant": "after",
+    "seed": 1,
+    "hold_ns": 1.072,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_ns": 1.072,
+        "hold_ns": 1.072
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_ns": 1.072,
+        "hold_ns": 1.072
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_ns": 1.072,
+        "hold_ns": 1.072
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": 1.072,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[8]",
+        "data_delay_ns": 8.866
+      },
+      {
+        "slack_ns": 1.072,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[10]",
+        "data_delay_ns": 8.866
+      },
+      {
+        "slack_ns": 1.072,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[11]",
+        "data_delay_ns": 8.866
+      },
+      {
+        "slack_ns": 1.072,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[8]",
+        "data_delay_ns": 8.866
+      },
+      {
+        "slack_ns": 1.072,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[10]",
+        "data_delay_ns": 8.866
+      },
+      {
+        "slack_ns": 1.072,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[11]",
+        "data_delay_ns": 8.866
+      },
+      {
+        "slack_ns": 1.104,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[2]",
+        "data_delay_ns": 8.835
+      },
+      {
+        "slack_ns": 1.104,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[3]",
+        "data_delay_ns": 8.835
+      },
+      {
+        "slack_ns": 1.104,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[2]",
+        "data_delay_ns": 8.835
+      },
+      {
+        "slack_ns": 1.104,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[3]",
+        "data_delay_ns": 8.835
+      }
+    ]
+  },
+  {
+    "variant": "after",
+    "seed": 2,
+    "hold_ns": 1.46,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_ns": 1.46,
+        "hold_ns": 1.46
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_ns": 1.46,
+        "hold_ns": 1.46
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_ns": 1.46,
+        "hold_ns": 1.46
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": 1.46,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[16]",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[6]",
+        "data_delay_ns": 8.471
+      },
+      {
+        "slack_ns": 1.46,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[16]",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[7]",
+        "data_delay_ns": 8.471
+      },
+      {
+        "slack_ns": 1.46,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[16]",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[8]",
+        "data_delay_ns": 8.471
+      },
+      {
+        "slack_ns": 1.46,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[16]",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[9]",
+        "data_delay_ns": 8.471
+      },
+      {
+        "slack_ns": 1.46,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[16]",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[6]",
+        "data_delay_ns": 8.471
+      },
+      {
+        "slack_ns": 1.46,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[16]",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[7]",
+        "data_delay_ns": 8.471
+      },
+      {
+        "slack_ns": 1.46,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[16]",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[8]",
+        "data_delay_ns": 8.471
+      },
+      {
+        "slack_ns": 1.46,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[16]",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[9]",
+        "data_delay_ns": 8.471
+      },
+      {
+        "slack_ns": 1.465,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[19]",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[6]",
+        "data_delay_ns": 8.466
+      },
+      {
+        "slack_ns": 1.465,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_a_q[19]",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[7]",
+        "data_delay_ns": 8.466
+      }
+    ]
+  },
+  {
+    "variant": "after",
+    "seed": 3,
+    "hold_ns": 0.804,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_ns": 0.804,
+        "hold_ns": 0.804
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_ns": 0.804,
+        "hold_ns": 0.804
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_ns": 0.804,
+        "hold_ns": 0.804
+      }
+    ],
+    "top10_setup": [
+      {
+        "slack_ns": 0.804,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_b_q[1]",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[2]",
+        "data_delay_ns": 9.127
+      },
+      {
+        "slack_ns": 0.804,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_b_q[1]",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[3]",
+        "data_delay_ns": 9.127
+      },
+      {
+        "slack_ns": 0.804,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_b_q[1]",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[2]",
+        "data_delay_ns": 9.127
+      },
+      {
+        "slack_ns": 0.804,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_b_q[1]",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[3]",
+        "data_delay_ns": 9.127
+      },
+      {
+        "slack_ns": 0.836,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_b_q[1]",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[4]",
+        "data_delay_ns": 9.097
+      },
+      {
+        "slack_ns": 0.836,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_b_q[1]",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[5]",
+        "data_delay_ns": 9.097
+      },
+      {
+        "slack_ns": 0.836,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_b_q[1]",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[4]",
+        "data_delay_ns": 9.097
+      },
+      {
+        "slack_ns": 0.836,
+        "startpoint": "ops_ppa_boundary:u_boundary|frac_b_q[1]",
+        "endpoint": "ops_ppa_boundary:u_boundary|y_mant[5]",
+        "data_delay_ns": 9.097
+      },
+      {
+        "slack_ns": 0.915,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[2]",
+        "data_delay_ns": 9.016
+      },
+      {
+        "slack_ns": 0.915,
+        "startpoint": "ops_ppa_boundary:u_boundary|cfg_mode_q",
+        "endpoint": "ops_ppa_boundary:u_boundary|x_frac[3]",
+        "data_delay_ns": 9.016
+      }
+    ]
+  }
+]

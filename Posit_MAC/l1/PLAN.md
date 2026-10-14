@@ -456,7 +456,7 @@ Theo lựa chọn của sinh viên: ưu tiên hoàn thành trước05/12/2026; �
 | --- | --- | --- | --- |
 | 10 | 12–18/10 | Khóa hợp đồng so sánh; RTL adder, testbench và căn chỉnh/GRS; xác định đủ oracle NF/F | Adder đạt L1/L0 ở format hỗ trợ; corner/flags/reset/stall; bảng config/corpus/width của hai bản được chốt |
 | 11 | 19–25/10 | Ghép MAC v1 non-fused đơn giao dịch; C/context, reset/stall/acc_mode; bắt đầu L1 fused | Gate3 v1 đạt với bằng chứng; đóng băng tag/hash baseline NF trước đo so sánh; L1 F có trace triệt tiêu đầu tiên |
-| 12 | 26/10–01/11 | Hoàn thiện L1 fused và oracle độc lập; khảo sát width/đuôi có dấu/borrow; tổng hợp sơ bộ NF | G-F-L1:0 mismatch với reference phù hợp profile; exact p8 oracle self-test/vét cạn theo hợp đồng; freeze hợp đồng F trước RTL; xác nhận công cụ P&R hoạt động |
+| 12 | 26/10–01/11, có thể thực hiện sớm | Bổ sung coverage NF; oracle/L1 fused, chốt window/residual và hợp đồng; đo NF/đánh giá pipeline theo mục8.8 | G-F-L1 đạt trong phạm vi công bố, coverage Gate3 bổ sung đạt, bàn giao contract F và báo cáo timing/tool; chưa nghiệm thu RTL F hoặc Gate4 |
 | 13 | 02–08/11 | RTL fused theo contract đã kiểm; reuse parser/OPS/SAC khi hợp lệ, căn C/acc/ABS-norm/packer riêng | Pilot RTL F=L1 F đạt; reset/order/stall, NaR/zero, gần triệt tiêu và scale lệch lớn; không mặc định exact từ ACC_WIN |
 | 14 | 09–15/11 | Regression lớn NF/F, coverage và corpus ứng dụng/corner chung; đo accuracy pilot rồi lượt chính | G-F-RTL:0 mismatch RTL↔oracle của từng bản trên ma trận đã chốt; đáp ứng AC01/AC04 áp dụng, lưu counts/hash; paired accuracy hợp lệ |
 | 15 | 16–22/11 | Tổng hợp/P&R hai bản cùng thiết bị/ràng buộc; ít nhất3 run mỗi cấu hình; bảng accuracy–PPA và bản thảo | Gate4: số liệu post-route/II/latency tái lập; raw report và script; kết luận không chọn riêng seed có lợi |
@@ -484,7 +484,7 @@ Tính mới cần trình bày là hiện thực và kiểm chứng hai kiến tr
 
 ### Thứ tự thực thi và quản lý rủi ro
 
-NF contract/adder → NF RTL/Gate3 → F L1/oracle → F RTL → paired regression → PPA → báo cáo. W10 bàn giao ở mục8.4, NF/Gate3 tuần11 đạt theo mục8.6; tiếp tuần12 oracle/L1 fused. Các mốc sau vẫn là kế hoạch, không suy từ adder đơn vị.
+NF contract/adder → NF RTL/Gate3 → F L1/oracle → F RTL → paired regression → PPA → báo cáo. W10 bàn giao ở mục8.4; NF tuần11 đạt số học/protocol ở mục8.6, coverage Gate3 còn theo mục8.7. Kế hoạch tuần12 chi tiết ở mục8.8: bổ sung coverage NF và chuẩn bị F L1/oracle, đo timing sơ bộ. Có thể chuẩn bị phần mềm F độc lập khi coverage NF đang chạy; chỉ bàn giao RTL F sau các điều kiện mục8.8. Các mốc sau vẫn là kế hoạch.
 
 Dừng dò baseline gốc/TableI trong đường găng; chỉ mở lại khi có source/trace tác giả hoặc yêu cầu riêng. Không tự điều chỉnh seed để đạt số liệu paper. Cuối tuần12 phải kiểm khả năng P&R và chốt W; nếu vướng oracle/cancellation, giảm khảo sát phụ (ASIC, FP32/FP16, TRUNC/JAM, exact fused toàn miền, chồng lấn), giữ hai bản và tính đúng ở profile chính. Không gọi fused hoàn thành khi còn mismatch. Nếu mốc bắt buộc không đạt, báo ngay phạm vi thiếu và ảnh hưởng đến hạn; không đổi nhãn nghiệm thu để giữ lịch.
 
@@ -599,3 +599,75 @@ SPEC v1.13 đồng nhất profile/normalize,params,special/feedback/latency và 
 W11-COV (processing): bổ sung corpus đạtnear>=30% tại ngõ vào adder với C_eff thực tế; tách acc_mode/standalone,specials và reset-abort; giữ min4k/cross256 và per-run/polarity>=10k,thu packer bins riêng. Counters W11 hiện cho cậnnear<=4,20303% trên10M,không đủ30%. Pilot oracle/ModelSim trước lượt chính; log bộ đếm trực tiếpΔsf0..4,histogram/seed/hash và0 mismatch trước đóng strict Gate3. Không hạ ngưỡng hoặc đổi corpus để đẹp số. Có thể chuẩn bị L1 F độc lập; trước RTL F vẫn phải khóa oracle/window/residual theo tuần12.
 
 Giữ nguyên AC01/AC02/AC04 final và timeline hạn05/12. Tối ưu pipeline NF/F tuần12–13 dựa critical path đo được,regression tuần14 rồi post-route tuần15; không tuyên bố Fmax từ số tầng. Trạng thái mốc sơ bộ và final luôn ghi riêng. Chi tiết findings và proofgap tại results/spec_review_20261014/summary.json, SPEC§11.11.
+
+### 8.8. Kế hoạch thực thi tuần12 — lập ngày14/10/2026
+
+**Mục tiêu:** đóng phần coverage NF còn thiếu, có L1 fused và oracle độc lập đủ để bàn giao RTL tuần13, xác định critical path NF và ranh giới pipeline cần khảo sát. Phần triển khai tuần12 chưa bắt đầu; việc lập kế hoạch không thay trạng thái nghiệm thu.
+
+Lịch gốc là **26/10–01/11/2026**. Có thể thực hiện sớm khi sinh viên yêu cầu bắt đầu; khi đó dùng thứ tự Ngày1–7 bên dưới, ghi ngày chạy thật vào nhật ký. Giữ hạn hồ sơ29/11 và đệm30/11–04/12 trước05/12. Không gỡ mục W11-COV hoặc đánh dấu tuần11 hoàn thành chỉ vì đã sang tuần12.
+
+**Profile chính:** NB32/ES3, FRAC_W12, OPS1, FLOOR/RNE, n0..8. NF dùng R(R(P_hat)+C_eff); reference fused dùng R(P_hat+C_eff). P_hat là prepack đã chốt, không pack/làm tròn/bão hòa tích trước cộng. Giữ checkpoint NF13/10 và L1 legacy; bổ sung kết quả mới bằng checkpoint riêng. Chính sách hiện thực F ưu tiên cộng C_eff **sau khi core xuất prepack** để tái sử dụng OPS/SAC/SBM và cùng thứ tự FLOOR. Stream từng term vào C là khảo sát bổ sung, cần chứng minh tương đương trước lựa chọn.
+
+| Mốc | Việc thực hiện | Điều kiện đạt / bằng chứng cần lưu | Trạng thái |
+| --- | --- | --- | --- |
+| W12-01 | Bổ sung suite coverage NF theo W11-COV | Pilot rồi lượt mới ≥10^7 completed/0 mismatch; near-cancellation≥30%, đủ counters/corner/coverage theo phạm vi Gate3; audit/hash checkpoint mới | không |
+| W12-02 | Hoàn thiện oracle full-sum và kiểm độc lập | Exact p8 self-test2^24 triples/0 mismatch; p16/1,p32/2 smoke≥100k/format so SoftPosit FMA; F_ref32/3 cùng P_hat so integer/rational độc lập/0 mismatch | không |
+| W12-03 | Khóa hợp đồng F và corpus trước model cửa sổ | Prepack, C_eff, sign/scale/Q, các điểm cut/residual, flags/config/acc_mode, topology và tiêu chí chọn W được quy định; danh mục test và seed cố định trước chạy | không |
+| W12-04 | Hiện thực, kiểm và đóng băng L1 F_W | Pilot≥100k/profile trước lượt ≥10^6/profile được chọn; phân bố rõ n0..8, near≥30% và corners; F_W khớp oracle cùng policy0 mismatch, báo riêng khác biệt với F_ref/Ideal; Linux/Windows/UBSan và audit đạt | không |
+| W12-05 | Đo tài nguyên/timing sơ bộ toàn NF | Part/tool/constraints hợp lệ, raw report LUT/FF/CARRY/DSP/BRAM, WNS/TNS/hold và top đường dài; ghi rõ synthesis-only hay post-route, thiếu công cụ/report là blocker | không |
+| W12-06 | Đánh giá ranh giới pipeline dựa trên timing | So đường OPS, SAC, norm/pack/parse và ready/control; đề xuất có FF/latency/II. Chuyển hai MUX chỉ khi có căn cứ; bản RTL ứng viên nếu có phải kiểm lại trước thay baseline | không |
+| W12-07 | Bàn giao tuần12 và kế hoạch RTL F tuần13 | Audit nguồn/corpus/log, freeze L1 F/contract/cấu hình, xác định stage/latency/handshake cần triển khai; đồng bộ SPEC/PLAN/tiến độ và commit/push, ghi rõ mọi mốc còn thiếu | không |
+
+#### W12-01: đóng coverage NF trong một checkpoint mới
+
+- Bổ sung counters trực tiếp Δsf=0,1,2,3,4 tại đầu vào adder: R(P_hat) và C_eff hữu hạn khác0, trái dấu. Mẫu số là giao dịch completed; reset-abort tách riêng. Trong acc_mode, dùng accumulator thật thay raw port C.
+- Giữ min4.000/cross256 regime–dấu hợp lệ ở main32/3, ≥10.000 operands mỗi run/polarity hữu hạn, các bin packer chuyên biệt và config/control/iteration/flags theo SPEC. Lưu counts trước và sau reset; không thay số liệu13/10 hoặc chỉ dùng bucket2–7 để ký nhóm≤4.
+- Khóa generator/seed/corpus, chạy pilot Verilator và ModelSim bốn format, rồi main32/3 mới≥10^7 completed. Near≥30% phải đạt trên chính suite nghiệm thu được công bố; không suy từ một pilot nhỏ hoặc trộn tùy ý corpus cũ. Audit từ chối report chưa COMPLETE, source/hash đổi hoặc thiếu bin.
+- Gate3 được đóng chỉ theo tiêu chí áp dụng đã đủ. Mốc mới không thay final AC01/AC02/AC04 hay yêu cầu≥10^7/n/bản NF/F ở SPEC§6.7. Khối đơn vị không đổi chỉ chạy lại khi regression liên quan hoặc phát hiện lỗi cần xác minh.
+
+#### W12-02..04: oracle, hợp đồng và model fused
+
+**Ba phép so tách biệt:** F_ref là R(P_hat+C_eff) full-sum. F_W có cut/window/residual riêng và phải bit-exact với một reference độc lập áp đúng policy đó. Ideal dùng A×B+C_eff của input ban đầu để đo accuracy. Khác F_W với F_ref là sai số cửa sổ, khác F_ref với Ideal có thành phần xấp xỉ nhân; không dùng NF hoặc SoftPosit ES2 làm chân lý cho F32/3. Không tuyên bố fused luôn chính xác hơn NF.
+
+Oracle self-test exact thay P_hat bằng tích exact, kiểm p8/0 exhaustive và smoke p16/1,p32/2 với pN_mulAdd. SoftPosit có p32_mulAdd ES2; lựa chọn exact p8/16 là phạm vi triển khai, không phải giới hạn thư viện. ES3 vẫn kiểm độc lập trên chính format. Tái sử dụng pilot F full-sum100k đã kiểm ở W11 làm smoke, bổ sung flags/acc_mode/corner/trace còn thiếu; không gọi pilot đó là L1 F cuối.
+
+Corpus mặc định dùng seed_base20261014, lưu thuật toán PRNG, thứ tự case, tool/source hash và payload hash trước lượt nghiệm thu. Các ứng viên W dùng cùng input/profile khi đo khác biệt; không dò seed sau kết quả. Đóng băng runner/harness trong suốt phiên chạy, nếu sửa nguồn thì ngừng và lập run mới. Với paired standalone, NF/F dùng cùng A/B/C. Với acc_mode, chạy cùng chuỗi A/B/config nhưng giữ state NF/F riêng và reference phù hợp; C_eff có thể khác sau một lần làm tròn, không lấy state NF làm input F hoặc ép hai state bằng nhau.
+
+Hợp đồng W12-03 phải chốt rõ:
+
+1. Giữ magnitude/sign/scale/Q/carry của prepack, không nạp bits đã RNE của NF. C_eff từ c hoặc accumulator; acc_clr chỉ tác động cùng giao dịch nhận được, accumulator làm tròn sau mỗi giao dịch FMA.
+2. W là tổng bit dấu/nguyên/fraction/G-R của cửa sổ; residual/metadata riêng phải khai báo thêm. Khảo sát các ứng viên32/48/64/96 bit khi phù hợp representation, không mặc định84 bit bảo đảm exact. Width tham chiếu full-grid phần mềm không bắt buộc là width RTL.
+3. Quy định anchor, alignment và từng cut. Với phần bỏ âm, xử lý dấu/borrow và trường hợp tổng phần giữ=0 nhưng residual≠0. Oracle giữ đủ để phát hiện carry, triệt tiêu và hòa RNE. Không lấy một sticky OR chung làm chứng minh exact hoặc áp clamp adder NF nguyên xi cho prepack chưa round.
+4. NaR ưu tiên và flags10000. Sat_max/min của F phản ánh kẹp cuối, không lấy saturation của tích NF đã pack. Inexact phân biệt metadata input/term/window/final rounding; approx_cut vẫn là fraction còn sau giới hạn n. C=0, sản phẩm0, triệt tiêu và range handling phải có vector riêng.
+5. Chốt ma trận hỗ trợ: profile approx32/3 là MUST, format phụ/exact F theo phạm vi lựa chọn. Nếu cfg_mode exact chưa hỗ trợ thì từ chối request, không âm thầm đổi thành approximate. Luồng PPA NF/F phải cùng chính sách EXACT_EN/OPS/precision; nếu dùng NF approximate-only để so F approximate-only, kiểm và freeze biến thể đó riêng, giữ baseline NF gốc.
+6. API/trace model phải xuất state trước/sau alignment, retained magnitude và residual, sign, normalize, G/R/S, kết quả/flags cuối. Seed/corpus/corners và ngưỡng lựa chọn W phải chốt trước chạy. Chỉ chọn W có policy xác định, model/reference đồng nhất và sai số cửa sổ được báo đầy đủ.
+
+Pilot mỗi ứng viên≥100k trước đánh giá sâu. Lượt đóng model được chọn≥10^6 cases/profile, phân bổ ít nhất100k/n cho n0..8 và đủ nhóm hợp lệ; bổ sung để thỏa số bin nếu số mẫu này chưa đủ. Kiểm C_eff/state bằng cùng chuỗi transaction, NaR/zero, dấu cùng/khác, carry prepack, tie even/odd, minpos/maxpos, Δsf lớn và residual ngược dấu. p8 exact exhaustive ở W12-02 là tự kiểm oracle, không nghiệm thu RTL exact fused. Các mốc model không thay regression RTL tuần14.
+
+Không sinh/sửa RTL F khi còn mismatch hoặc contract window/residual chưa khóa. Sau model đạt mới đồng bộ lựa chọn vào SPEC§5.12/§4.1/§6.7 và lập bảng stage/ports/token để bàn giao tuần13. Code mới theo guideline: module/file riêng, named ports, cổng từng dòng, width/cast tường minh, no latch, always_ff/enables/CK2Q, reset bridge và hai FF ở leaf, valid/context đi cùng dữ liệu.
+
+#### W12-05..06: timing NF và ứng viên pipeline
+
+Đo nguyên bản NF trước mọi thay đổi. Chọn part/tool theo SPEC§7.6 và khả năng bản cài hiện có; không cài thêm hoặc sửa license/cấu hình ngoài quyền đã cấp. Bộ nhân/adder/packer benchmark riêng không thay số đo MAC. Có thể dùng clock mục tiêu ban đầu10ns để khảo sát, chưa gọi đạt100MHz; ghi I/O constraints, uncertainty, tool/source hash và seed.
+
+Thu ít nhất top10 setup paths, startpoint/endpoint, logic/routing delay và fanout. Phân loại riêng OPS(popcount/compare/mux), feedback SAC(LOD/+1/adder/shifter), đường norm/pack/parse, accumulator và ready/control. Review reset/RDC và đường unconstrained; không dùng false-path/multicycle để che đường chức năng. collect_ppa.py hiện mới tạo header: phải thu report thật và xử lý thiếu/parse lỗi bằng FAIL, không gọi CSV rỗng là PPA.
+
+Ứng viên đầu tiên theo thảo luận: đặt bank A/B+choose_b trước hai MUX thay bank X/Y đã chọn. Phải xét lại nạp/hồi tiếp fx_q, giữ Y và metadata đúng transaction, startup/reset/stall. Hai MUX song song nên chuyển chúng chỉ chuyển một độ trễ MUX khỏi đường OPS; có thể làm SAC dài hơn. Ghi FF, latency, II và đường chậm nhất trước/sau, không giả định tăng Fmax hoặc bắt buộc thêm một chu kỳ.
+
+W12-06 trước hết bàn giao đề xuất dựa trên STA. Nếu có thời gian hiện thực bản ứng viên, giữ checkpoint nguồn cũ, dùng tên/biến thể riêng, pilot L1/ModelSim và lint trước lượt lớn; chỉ thay baseline sau regression và timing đủ. Mỗi run so dùng cùng part/tool/constraints/profile. ≥3 run/config và kết luận post-route NF/F là tuần15 theo AC05/AC06; tuần12 chỉ đo sơ bộ, chưa Gate4. Nếu công cụ P&R không dùng được, ghi blocker và bằng chứng mức đo được, không suy fmax từ synthesis hoặc số tầng.
+
+#### Lịch Ngày1–7 và thứ tự phụ thuộc
+
+| Ngày dự kiến theo lịch gốc | Mốc chính | Bàn giao trong ngày |
+| --- | --- | --- |
+| Ngày1:26/10 | W12-01 preflight/counters/pilot; W12-02 smoke nguồn | Corpus NF mới và định nghĩa counters được khóa, oracle hiện có không regression |
+| Ngày2:27/10 | W12-01 main; W12-02 oracle self-test; W12-03 contract bản đầu | Counts/trace và cơ sở oracle; danh sách cửa sổ/flags/control để kiểm |
+| Ngày3:28/10 | W12-03..04 model cửa sổ/pilot | Counterexamples signed tail/cancellation được giải quyết hoặc ghi rõ lỗi |
+| Ngày4:29/10 | W12-04 lượt đóng model; W12-05 preflight/tool/top NF | Report model và report tài nguyên/timing đầu tiên nếu tool hợp lệ |
+| Ngày5:30/10 | W12-05..06 phân tích đường dài | So ranh giới OPS/SAC/norm, đề xuất pipeline và impact FF/latency/II |
+| Ngày6:31/10 | W12-04 audit/freeze; W12-06 kiểm ứng viên nếu có | Contract/model đạt, candidate regression hoặc đề xuất giữ nguyên có căn cứ |
+| Ngày7:01/11 | W12-07 | Bàn giao tuần13, cập nhật tài liệu/trạng thái và backup GitHub |
+
+Đường số học: W12-02 → W12-03 → W12-04 → W12-07. Đường timing: W12-05 → W12-06 → W12-07, có thể thực hiện khi lượt model đang chạy. W12-01 là việc đóng Gate3 chuyển tiếp và bắt buộc trước khi gọi NF đủ nghiệm thu/ghép RTL F tuần13. Không cần chờ coverage NF để phân tích oracle F phần mềm, nhưng lỗi số học/context NF phải được xử lý trước khi freeze so sánh chung.
+
+**Kết thúc tuần12:** có checkpoint coverage NF đạt trong phạm vi Gate3, oracle và L1 F_W đạt/nguồn đóng băng, hợp đồng F đủ viết RTL, report timing/tool sơ bộ và quyết định pipeline có căn cứ. Nếu một mốc thiếu, giữ processing và báo tác động tuần13; có thể chuẩn bị ports/testbench theo phần contract đã chốt, không tuyên bố đã nghiệm thu F. Gỡ checklist tuần12 khỏi tiến độ khi mọi mốc bắt buộc đạt bằng chứng, giữ lịch sử tại PLAN/report. Final AC01/AC02/AC04, F RTL, paired accuracy và PPA post-route vẫn theo các tuần sau.

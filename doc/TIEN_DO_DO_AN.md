@@ -26,7 +26,7 @@ MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser/packer và Gate2 multip
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder và Gate3 NF tuần11 đạt; còn ma trận final,coverage cuối và fused |
 | PPA, mở rộng và hồ sơ — Gate4 | processing | Đã đo sơ bộ toàn NF và có đường critical path;chưa đạt100MHz,còn tối ưu/đo matched NF/F,accuracy và hồ sơ cuối |
 
-**Thứ tự tiếp theo:** triển khai RTL fused theo model/contract W12-F-1 → pilot/regression/accuracy paired → PPA → báo cáo. Các đề xuất cải thiện timing NF ở PLAN8.14 chờ sinh viên lựa chọn để thử riêng;chưa sửa baseline. Giữ fraction nhân12 bit;ACC_WIN32 là cửa sổ cộng fused,không phải lựa chọn fraction mới từ khảo sát8.11. Hạn chính29/11,đệm30/11–04/12 trước05/12/2026 giữ nguyên. Bàn giao tuần13 tại PLAN8.15.
+**Thứ tự tiếp theo:** xem xét kế hoạch tối ưu timing/LUT tại PLAN§8.16 → thực hiện phạm vi được chọn và bàn giao thay đổi dùng chung → triển khai RTL fused theo W12-F-1 → pilot/regression/accuracy paired → PPA → báo cáo. Kế hoạch tối ưu đang ở bản đề xuất, chưa sửa RTL hoặc chạy lại; không bắt buộc thử mọi nhánh làm lùi RTL F. Giữ fraction nhân12 bit;ACC_WIN32 là cửa sổ cộng fused,không phải lựa chọn fraction mới từ khảo sát8.11. Hạn chính29/11,đệm30/11–04/12 trước05/12/2026 giữ nguyên. Bàn giao tuần13 tại PLAN8.15.
 
 ## 3. Tiến độ theo tuần
 
@@ -55,7 +55,7 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 
 Checklist tuần12 đã nghiệm thu và gỡ;giữ nhật ký/report tại PLAN8.14 và results/week12/summary.json. Tuần13 triển khai RTL fused theo W12-F-1: align/residual → add/sub/borrow → normalize/packer → top/protocol → pilot/regression → STA/audit. Chi tiết PLAN8.15;chưa bắt đầu RTL F.
 
-Ưu tiên tinh chỉnh timing NF: fixed slices trong chuẩn hóa tích,đo lại đường norm/pack/parse,rồi xét align và phân lại LOD giữa A2/A3. Các đề xuất chưa áp dụng;mọi thay đổi pipeline phải kiểm lại số học/flags/reset/stall và cập nhật latency/II. Giữ fraction nhân12 bit;chưa chọn mức precision mới.
+Kế hoạch tối ưu chi tiết tại [PLAN§8.16](../Posit_MAC/l1/PLAN.md#816-kế-hoạch-tối-ưu-timinglut-trước-khi-sửa-rtl--bản-xem-xét-15102026), đang chờ sinh viên xem xét/chỉnh sửa. Ưu tiên ánh xạ bit hằng ở chuẩn hóa tích và thử align trong toàn NF, rồi chọn thêm tầng norm/pack/parse, phân lại LOD A2/A3 hoặc rút SAC theo STA. Mỗi ứng viên kiểm riêng trước khi kết hợp; báo LUT/FF, latency/II và throughput cùng Fmax. Chưa sửa RTL, SPEC hoặc chạy lại regression/PPA trong phiên lập kế hoạch. Giữ fraction nhân12 bit;chưa chọn mức precision mới.
 
 ## 4. Nhật ký theo ngày
 
@@ -183,6 +183,7 @@ Checklist tuần12 đã nghiệm thu và gỡ;giữ nhật ký/report tại PLAN
 | 3 | Khảo sát refactor normalization | Hai ứng viên đã kiểm đơn vị/pipeline0 mismatch;giảm4/7LUT4 nhưng chưa chứng minh cải thiện timing bền vững qua3seed. Giữ flags/sticky và RTL chính, lưu bản thử/report;chưa đo fullMAC | ✅ |
 | 4 | Oracle và L1 fused — tuần12 | Chốt W32/flags/state;oracle p8 exhaustive và main phân tầng2.208.768 ca/nền tảng đạt0 mismatch. Giữ fraction12,RTL F và accuracy cuối còn ở tuần13–14 | ✅ |
 | 5 | Timing toàn NF và bàn giao tuần12 | Đo post-route3seed,median45,07MHz/chưa100MHz;có5 đề xuất tối ưu và plan RTL F. Audit và sao lưu đạt;đã bàn giao tuần13 | ✅ |
+| 6 | Lập kế hoạch tối ưu timing/LUT trước refactor | Bổ sung PLAN§8.16 với thứ tự thử, điều kiện thêm pipeline, kiểm từng ứng viên và đánh đổi FF/latency/II. Đã hoàn thành bản kế hoạch để xem xét; phần triển khai chưa bắt đầu | ✅ |
 
 ### 4.15. Mẫu cập nhật tiếp theo
 

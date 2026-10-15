@@ -1,5 +1,7 @@
 # Kế hoạch Triển khai Mô hình Thuật toán L1 (C++ Golden Model)
 
+**Trạng thái hiện hành 15/10/2026:** tuần12 đã nghiệm thu theo §8.14, SPEC v1.16. Kế hoạch tối ưu timing/LUT và pipeline tại §8.16 là **bản đề xuất để sinh viên xem xét**, chưa cho phép suy ra đã sửa RTL, chốt thêm stage hoặc chạy lại regression/PPA. Các mốc ghi theo ngày bên dưới giữ vai trò lịch sử.
+
 **Hợp đồng tích hợp08/10, cập nhật phạm vi14/10/2026 — SPEC v1.13:** RTL baseline v0/v1 giữ cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; profile predictor/RND của paper là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n thực tế), last hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Parser/packer đã nghiệm thu đơn vị; core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng theo mục7 (trạng thái10/10/2026). Gate2 multiplier đã nghiệm thu theo mục7.11; NF prepack-preserving đạt mốc numeric/protocol theo mục8.6; strict coverage Gate3 còn theo mục8.7,giữ riêng MAC legacy. Chi tiết tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md); kế hoạch thực thi tuần9 tại mục7. Chồng lấn bổ sung sau baseline.
 
 > **Mục tiêu**: Xây dựng mô hình thuật toán C++ L1 (`l1/`) mô phỏng trung thực 100% từng bước biến đổi dữ liệu của vi kiến trúc phần cứng Posit MAC, tham số hóa theo `template <int NB, int ES, int FRAC_W>`, đóng vai trò làm thước đo chân lý bit-exact (AC-01) cho RTL SystemVerilog, vượt qua các cổng kiểm chuẩn nghiêm ngặt **Gate 1 (Tuần 3)** và **Gate 1B (Tuần 6)** theo [SPEC_Posit_MAC_IP.md](../SPEC_Posit_MAC_IP.md).
@@ -934,3 +936,131 @@ Audit đầy đủ cần sinh lạibin/corpus/source copy trên checkout mới. 
 Chưa bắt đầu RTL F. Thứ tự: W13-01 chốt ports/cạnh/fixture từmodel frozen → W13-02 F1/F2 vàlost-mask song song → W13-03 F3/F4 vàsigned borrow/special → W13-04 F5/packer → W13-05 top reset/stall/order/acc_mode → W13-06 pilot rồi≥10^7 soRTL/L1 vàcoverage theoSPEC → W13-07 STA/audit/backup. Lịch gốc02–08/11,có thể làm sớm theo yêu cầu. Final per-n/matrix tuần14 giữ nguyên,không dùng≥10^7 tích hợp đầu để giảm final.
 
 Mỗi module mộtfile,cổng mỗi dòng,named mapping,cast/width tường minh,no latch,always_ff/load-enable/CK2Q;structural top,reset/valid/context theoSPEC. Fused dựa modelW32,không dùng clampF+2 củaadderNF để giả làmF. Đề xuất tối ưuNF ở8.14 chờ sinh viên chọn để tạo candidate vàđo;chưa tự sửa baseline hoặc hứa đạt100MHz. Final accuracy/PPA/Gate4 và hạn trước05/12 không thay đổi.
+
+### 8.16. Kế hoạch tối ưu timing/LUT trước khi sửa RTL — bản xem xét 15/10/2026
+
+**Trạng thái: DRAFT — chỉ lập kế hoạch.** Sinh viên xem xét, chỉnh sửa và lựa chọn phạm vi trước khi triển khai. Phiên lập kế hoạch không sửa `.sv`, L1, script kiểm chứng, constraints hoặc các báo cáo nghiệm thu; không chạy lại mô phỏng, synthesis hay P&R.
+
+Phạm vi là IP MAC NF hiện tại và phần dùng chung với F dự kiến tuần13. Kit FPGA, AXI/DMA và AI accelerator là bước tích hợp tiếp theo sau khi chọn phần cứng; chưa đưa vào đường bắt buộc của đợt tối ưu này. Các hợp đồng số học và tiêu chí nghiệm thu vẫn lấy từ SPEC v1.16 và Digital_Design_Guidelines.md.
+
+#### 8.16.1. Mục tiêu và những điều giữ cố định
+
+- Rút ngắn đường tổ hợp dài, giảm LUT khi có căn cứ, sau đó cân bằng các tầng pipeline.
+- Giữ kết quả, flags, thứ tự giao dịch, reset và trạng thái accumulator bit-exact với mô hình đã đóng băng. Không thay corpus/oracle để làm ứng viên đạt.
+- Profile chính giữ `NB=32`, `ES=3`, `FRAC_W=12`, `N_MAX=8`, FLOOR/RNE, OPS1 và n0..8. Exact và OPS0 tiếp tục kiểm theo khả năng công bố của từng top.
+- Giữ nguyên cổng và parameter hiện có của các module được refactor tổ hợp. Nếu cần tín hiệu nội bộ hoặc module pipeline mới, lập bảng giao diện trước; top NF vẫn giữ giao diện giao dịch. Không thêm parameter chưa được kiểm rồi tuyên bố đã hỗ trợ.
+- `ACC_WIN=32` của F là cửa sổ cộng, không phải thay fraction nhân thành32 hoặc chọn lại precision của §8.11. F tiếp tục dùng W12-F-1, không pack/làm tròn tích trước cộng.
+- Giữ NF đã nghiệm thu và mọi report/hash cũ. Mỗi ứng viên chạy trong source copy/project riêng, chỉ thay một ý tưởng mỗi lần; bản kết hợp phải được kiểm và đo riêng.
+
+**Mốc timing đề xuất để xem xét:** khảo sát đạt setup ở chu kỳ10ns trên nền tảng đang có, đồng thời tăng throughput thực tế. Đây là mốc trung gian100MHz, chưa phải cam kết và không thay NFR. SPEC§3.2 đã quy định NFR02..04 là mục tiêu khảo sát ban đầu; với nền tảng khác D0, NFR04 phải chốt riêng theo part cùng GVHD. Chỉ chọn tần số chạy sau khi kiểm setup/hold tại chính tần số đó.
+
+#### 8.16.2. Điểm xuất phát đã đo
+
+Baseline: toàn NF32/3, `EXACT_EN=OPS_EN=1`, Quartus13.0sp1/TimeQuest, `EP4CE30F23C6`, cùng constraints và seed1/2/3 của tuần12. Tài nguyên3926LUT4/823FF; DSP0, memory0. Fmax47,10/45,07/44,65MHz, trung vị45,07MHz. Nguồn bằng chứng: `results/week12/nf_ppa/{summary,stages}.json`, `stages.csv` và raw reports.
+
+| Đường / tầng | Data delay seed1 | Setup WNS tại10ns | Ý nghĩa đối với kế hoạch |
+| --- | --- | --- | --- |
+| Tích: accumulator → normalize → pack/parse → product register | 21,477ns | −11,233ns | Ưu tiên cao nhất; phải phân rã delay trước chọn vị trí thêm bank |
+| Adder A1 align | 17,203ns | −7,642ns | Nút thắt thứ hai; ứng viên tách delta đã có nhưng chưa đo trong toàn NF |
+| SAC feedback | 12,314ns | −2,383ns | Cần giảm logic hồi tiếp; thêm tầng có thể làm tăng khoảng phát term |
+| Adder A3 normalize | 12,144ns | −2,216ns | Có thể chuyển một phần công việc về A2 |
+| Adder A2 arithmetic | 4,893ns | +5,031ns | Có slack để khảo sát LOD sau phép cộng; không cộng/trừ trực tiếp slack để bảo đảm closure |
+| OPS → M0/core | 10,301ns | −0,382ns | Xét sau các đường dài hơn; tránh đẩy MUX sang SAC đang chậm |
+
+Các delay là số đo seed1 để định hướng, không phải dự đoán mức cải thiện. Kết luận toàn thiết kế phải dùng cả ba seed, gồm logic, routing, fanout và control paths. Reset release có fanout833; Quartus13 chưa nhận thuộc tính ASYNC_REG của Xilinx nên cần review riêng, không xem STA đạt là đã ký duyệt CDC/RDC/MTBF.
+
+#### 8.16.3. Các bước thực hiện được đề xuất
+
+Tất cả các dòng dưới có trạng thái **chưa thực hiện trong đợt tối ưu này**. Những thử nghiệm đơn vị đã có ở §8.12/8.13 được dùng làm đầu vào, không đổi thành bằng chứng toàn MAC.
+
+| ID | Công việc và phương án | Kết quả cần có để xem xét bước tiếp |
+| --- | --- | --- |
+| OPT-00 | Khóa snapshot nguồn, source list, tools, profile, constraints, seed và lịch cạnh của baseline; kiểm runner có dùng đúng snapshot | Manifest và bảng so sánh trước/sau. Chỉ tái chạy baseline nếu nguồn/điều kiện đã khác hoặc thiếu report cần đối chứng |
+| OPT-01 | Refactor `mul_prepack_norm_comb`: thay chỉ số đích động/runtime integer bằng ánh xạ bit hằng cho exact/approx và carry/no-carry, chọn ứng viên ở cuối | Bit-exact mọi output trong miền hỗ trợ; không thêm FF/cycle. Đo lại toàn NF để biết nút thắt còn ở normalize hay pack/parse |
+| OPT-02 | Ghép riêng `posit_add_align_candidate` đã kiểm ở §8.12 vào source copy của NF; nhánh delta chạy song song với so sánh fraction, lost-mask chạy song song barrel shift | Whole-NF pilot và PPA; xác định lợi ích timing với chi phí LUT. Mức +16LUT4 của leaf không được dùng làm chi phí toàn MAC |
+| OPT-03 | Nếu đường tích vẫn quá dài: khảo sát bank tại đầu ra packed-value; nếu norm+pack còn chậm, cân nhắc tách chuẩn hóa và/hoặc dùng các tầng RNE P1/P2 đã có trước parser | Bảng delay từng đoạn, số bank/FF/context, latency/II mới; chọn số tầng tối thiểu đạt mục tiêu đang xét |
+| OPT-04 | Cân bằng A2/A3: tính LOD từ `magnitude_d` sau phép cộng ở A2, chốt count/valid cùng magnitude; A3 nhận sẵn điều khiển dịch và cập nhật scale | Giữ H_ADD3 nếu cả A2/A3 đều đạt; khoảng5 bit count+1valid là ước lượng cho32/3, tài nguyên thực phải tổng hợp |
+| OPT-05 | Rút SAC: dịch theo clz rồi dịch1 cố định; tính sa/scale song song. Chỉ khảo sát remaining-scale budget nếu STA còn chỉ ra state_error gating là nút thắt | Giữ từng term, scale, fx_next, exhausted/state_error và số vòng; không thêm tầng hồi tiếp trong phương án đầu |
+| OPT-06 | Khảo sát tiết kiệm LUT có chọn lọc: ghép riêng bản `zero` hoặc `shared` của normalization đã kiểm ở §8.13; kiểm mapper của phép cộng/trừ A2 trước cân nhắc chia sẻ carry chain | Chọn theo PPA toàn hệ thống; không mặc định cách viết một adder sẽ sinh một carry chain hoặc tăng Fmax |
+| OPT-07 | Chọn tổ hợp ứng viên có lợi, kiểm tương tác và chạy regression tích hợp chính thức; cập nhật SPEC/lịch, freeze và backup sau khi có bằng chứng | 0 mismatch, protocol/coverage đạt phạm vi áp dụng, ≥3 P&R run/config; ghi rõ phần final còn thiếu |
+| OPT-08 | Bàn giao thay đổi dùng chung cho RTL F tuần13; chuẩn bị comparator NF approximate-only đã kiểm riêng trước paired PPA | NF/F cùng precision, OPS, feature policy, part/tool/constraints; tách lợi ích fusion khỏi lợi ích refactor |
+
+**Thứ tự mặc định:** OPT-00 → OPT-01 → OPT-02 → đọc lại STA → chọn OPT-03/04/05 theo đường dài hiện tại → OPT-07 → OPT-08. OPT-06 là nhánh tùy chọn, không chặn RTL F nếu lợi ích nhỏ. Nếu sau OPT-01 đường pack/parse vẫn chi phối quá lớn, có thể chuyển sang OPT-03 trước OPT-02; phải ghi lý do từ report.
+
+**OPT-01 — điều kiện về parameter:** các lát bit ở §8.14 chỉ minh họa trường hợp `F_IN=2F+1`. Cần giữ đúng mapping khi override `F_IN`, `ACC_W`, `SF_W` trong miền công bố; dùng generate/ánh xạ từng bit tại elaboration để tránh dải âm, replication âm và out-of-range. Với `EXACT_EN=0`, không tham chiếu nhánh exact không tồn tại. Không rút width, bỏ carry hay coi hai bit padding của FLOOR là numerical sticky. Kiểm cả carry/no-carry, zero/NaR payload và scale signed biên.
+
+**OPT-03 — lựa chọn pipeline cần trình bày trước khi sửa:**
+
+- Phương án A: `norm+pack → bank packed/flags/valid → parse → product bank`. Thêm tối thiểu38FF payload/control cho32-bit packed result,5flags,1valid; còn CE/reset và metadata phụ. Chưa bảo đảm đoạn norm+pack đạt10ns.
+- Phương án B: tách thêm bank normalized và/hoặc dùng RNE P1/P2, rồi parser. Lập riêng ngân sách từng đoạn; không giả định dùng packer2 tầng chỉ tăng đúng một chu kỳ.
+- C và config đã được wrapper giữ khi busy thì ưu tiên tái sử dụng context hiện có. Chỉ bỏ bank dư sau khi chứng minh ổn định suốt vòng đời giao dịch; data, flags, valid và trạng thái commit phải cùng token.
+- Nếu A1 vẫn vi phạm sau OPT-02, khảo sát tách `SF/delta/swap preparation → bank → shift/lost-tail/jam`. Đây là lựa chọn thêm tầng adder, khác OPT-04 retiming và phải sửa lịch adder/top tương ứng.
+
+Việc viết lại `round_unpacked` trực tiếp để tránh pack→parse là nhánh nghiên cứu sâu, rủi ro cao hơn: chỉ mở khi sinh viên chọn và cần chứng minh đầy đủ `parse(pack(u))`, RNE qua biên regime, minpos/maxpos, sign/special và flags. Không thay bằng cắt fraction hoặc dùng sticky của metadata để rút logic.
+
+**OPT-04/06 — giới hạn:** bản normalization hiện giữ inexact đầu vào khi kết quả0; giữ riêng ý nghĩa retained bit và sticky. Không xóa flags/sticky hoặc thay zero rule để làm số liệu LUT đẹp hơn. Tương đương với dữ liệu nhị phân hợp lệ và không-X trên output sau reset cần kiểm riêng; không tuyên bố đã chứng minh mọi tổ hợp X/Z.
+
+**OPT-05 — giới hạn:** giữ cả hành vi scale không hợp lệ, fx=0 và `sa=W_X`; kiểm exact26/27-bit và approximate12-bit riêng. Pipeline trong feedback chỉ mở như thay đổi kiến trúc sau khi có lịch term/first/last mới, vì có thể giảm throughput dù tăng MHz.
+
+OPS/MUX relocation và reset fanout là nhánh sau: chỉ chuyển swap khi cone OPS thực sự giới hạn toàn top. Không sửa reset contract hoặc thêm timing exception để che đường dữ liệu. Mọi thay đổi synchronizer/CE phải review theo đúng vendor và giữ quy tắc reset của SPEC/guideline.
+
+#### 8.16.4. Cách kiểm từng ứng viên trước lượt lớn
+
+| Cổng kiểm | Phạm vi dự kiến | Điều kiện qua |
+| --- | --- | --- |
+| T0 — source/lint | So diff với snapshot; strict Verilator `--timing -Wall`, các tuple/parameter chịu ảnh hưởng; xem latch/width/signedness | Không lỗi lint chưa giải quyết, không latch; chỉ có thay đổi dự định |
+| T1 — leaf | Baseline/candidate/oracle độc lập; directed trước random, exhaustive miền nhỏ khả thi; giữ seed cố định trước chạy | 0 mismatch trên mọi output, gồm flags và trạng thái lỗi được công bố |
+| T2 — pipeline/top pilot | Native tối thiểu20k completed mỗi tuple8/0,16/1,32/2,32/3 đang hỗ trợ; trial32/3 ≥100k. ModelSim replay/corner với CK2Q và4-state | Reset/startup, busy/stall, stable output, thứ tự, flags, acc_clr/acc_mode và lịch cạnh đúng; aborted không tính completed |
+| T3 — PPA khảo sát | Whole-NF candidate cùng điều kiện; seed1 để xem cone/chi phí, sau đó đủ1/2/3 cho ứng viên được giữ | Report đủ, parse thiếu phải FAIL; ghi số đo kể cả seed bất lợi |
+| T4 — xác nhận tổ hợp | Ứng viên kết hợp sau khi chọn: replay corpus NF phân tầng10M của checkpoint hiện hành với runner/lịch cập nhật; đủ ModelSim corner và coverage liên quan | 0 mismatch, coverage không suy giảm thiếu giải thích, freeze nguồn/corpus/commands; không gọi là đã thay toàn ma trận final |
+
+Exact ở8/0,16/1,32/2 dùng SoftPosit đúng format khi áp dụng;32/3 dùng integer/rational oracle độc lập. NF và F so L1 riêng; bit-exact trước/sau đối chiếu theo transaction ID nếu retiming, không ép output cùng chu kỳ khi latency được phép đổi.
+
+Với OPT-01 cần kiểm tuple và các override width/feature đã công bố; với align/normalize có thể kế thừa leaf report cũ nếu nguồn và môi trường không đổi, nhưng tích hợp vào NF vẫn cần T2/T4. Không chạy lại tất cả unit suites cho từng ứng viên không đụng tới chúng. Dừng khi gặp mismatch và giữ vector/seed/config đầu tiên để debug; không chạy P&R lượt lớn khi chức năng chưa đạt.
+
+T4 là kiểm an toàn sau refactor, **không hạ AC01/AC02/AC04 hoặc SPEC§6.7**. Ma trận final tuần14 vẫn gồm ≥10^7 mỗi n0..8 và mỗi bản NF/F profile chính, cùng các hàng MUST khác; line≥95%, branch≥90%, toggle≥85% và functional bins hợp lệ. Phải lập lại manifest/coverage cho bản cuối đã thay nguồn, không gắn report Gate3 cũ cho RTL mới.
+
+#### 8.16.5. Quy tắc đo và lựa chọn
+
+1. Giữ nền tảng Cyclone IV của tuần12 để đo tác động refactor trước. Đổi sang kit Artix-7/Zynq thì tạo baseline mới cùng part/tool/constraints cho cả hai bản; số LUT4 và LUT6 không quy đổi trực tiếp. Chưa chọn kit hoặc pinout nên chưa có board signoff.
+2. Dùng snapshot baseline hiện có khi hash/runner/constraints còn phù hợp; runner mới phải ghi thư mục kết quả riêng như `results/nf_optimization/<candidate>/`, không ghi đè `results/week12/nf_ppa` hoặc report lịch sử. Không sửa nguồn/constraints trong lúc run.
+3. Khóa clock mục tiêu10ns, ngân sách I/O khảo sát max0,5/min0,1ns và derive_clock_uncertainty như tuần12 để so trước/sau. Không bỏ exact logic, đổi width/OPS, thêm false-path/multicycle, đổi seed hoặc hạ clock riêng cho ứng viên nhằm tạo lợi thế.
+4. Báo LUT/FF/arithmetic-mode LE/DSP/memory, WNS/TNS setup/hold/recovery/removal, unconstrained paths, top paths theo stage, fanout và min/median/max ba seed. Arithmetic-mode LE không cộng thêm như một loại LUT độc lập; Xilinx dùng tên tài nguyên tương ứng.
+5. Fmax từ timing model là khảo sát. Sau khi chọn tần số vận hành phải P&R/xác nhận setup và hold với constraints của tần số đó; không chỉ lấy nghịch đảo data delay hoặc Fmax báo cáo ở run đang fail10ns rồi gọi đã closure.
+6. Với `f_run_Hz` tính bằng Hz, đánh giá `throughput_ops_s=f_run_Hz/II`, `latency_ns=10^9*L_handshake/f_run_Hz` và throughput/LUT ở n2/4/8, dùng số vòng thực tế q và không stall; báo riêng workload có early-stop. Không dùng cfg_n thay q hoặc lấy II của leaf adder làm II của MAC.
+7. Với NF baseline một giao dịch, ngân sách hiện hành là `L_valid=q+10`, `L_handshake=q+11`, `II_min=q+12`. Nếu chỉ thêm d tầng nối tiếp và giữ controller thì ngân sách dự kiến tăng d cho cả ba đại lượng; phải kiểm theo cạnh, reset và stall trước ghi thành kết quả. Retiming A2/A3 cố gắng d=0. Thay feedback SAC cần lập lịch riêng, không áp máy móc công thức này.
+8. Một phương án thêm tầng chỉ tăng throughput khi tỷ số tần số đạt được lớn hơn tỷ số II mới/cũ; vẫn báo tác động latency và FF. Nếu giảm LUT nhưng timing hoặc throughput giảm, trình bảng đánh đổi cho sinh viên; không tự ghép chỉ vì tốt hơn ở một chỉ tiêu.
+
+Không cam kết tiết kiệm một số LUT hoặc đạt một mức MHz trước khi đo. Khi lợi ích nằm trong dao động giữa seed hoặc không ổn định, giữ là ứng viên chưa được chọn. Chọn Pareto theo timing/tài nguyên/latency/II, không chỉ seed tốt nhất.
+
+#### 8.16.6. Liên hệ NF/F, guideline và phạm vi nghiệm thu
+
+- NF gốc `EXACT_EN=1` vẫn là checkpoint đã kiểm. F tuần13 là approximate-only `EXACT_EN=0`; comparator NF approximate-only phải kiểm/freeze riêng. Tiết kiệm do bỏ exact được báo riêng, không gọi là hiệu quả của refactor hoặc fusion.
+- Phần nhân/OPS/SAC/chuẩn hóa dùng chung phải có cùng phiên bản trong phép so NF/F, hoặc trình riêng từng yếu tố. Tầng pack/parse tích của NF là riêng cho NF; F không kế thừa bước làm tròn tích này. F dùng signed residual/borrow của W12-F-1, không lấy clamp F+2 của adder NF làm align fused.
+- Bàn giao F1..F5/P1/P2 và ngân sách q+12 hiện ở §8.15 vẫn là đề xuất. Đổi stage phải cập nhật bảng token/context/reset/ready và cạnh accept/valid/retire trong SPEC, PLAN, TB, README và tiến độ trước freeze mới.
+- RTL mới theo guideline: một module/file, structural top, named ports/mỗi port một dòng, width/cast tường minh, combinational có defaults, no latch, sequential always_ff/load-enable/CK2Q, reset bridge/2FF release leaf. Không dùng LUT-gated clocks. Chỉ mô phỏng chu kỳ mới dùng --no-timing; ModelSim giữ CK2Q và strict lint vẫn --timing.
+- Chưa có bằng chứng bất đồng số học mới giữa SPEC và RTL từ phiên lập kế hoạch. Điểm cần quyết định là part/timing target và thay đổi lịch pipeline; không tự sửa SPEC để biến lựa chọn đang xem xét thành hợp đồng đã chốt.
+
+#### 8.16.7. Thời lượng đề xuất và các điểm sinh viên lựa chọn
+
+Tính từ khi sinh viên chọn phạm vi, có thể làm sớm trong tuần13; thời lượng dưới đây là ước lượng, phụ thuộc thời gian P&R và lỗi cần xử lý.
+
+| Chặng | Thời lượng dự kiến | Điểm kiểm soát |
+| --- | --- | --- |
+| A — OPT-00/01 | 1 ngày | Báo kết quả fixed mapping, giữ nguyên latency |
+| B — OPT-02 và đo lại cone | 0,5–1 ngày | Quyết định có cần thêm tầng cho norm/pack/parse hoặc A1 |
+| C — pipeline/retiming/SAC theo nút thắt còn lại | 1–3 ngày | Báo từng cấu hình, FF/latency/II trước khi chọn tổ hợp |
+| D — OPT-07, bàn giao OPT-08 | 1–2 ngày | Regression tích hợp, matched PPA, freeze/backup và bàn giao RTL F |
+
+Không bắt buộc thử hết nhánh nếu đã đạt mục tiêu được chọn hoặc lợi ích nhỏ so với rủi ro tiến độ. Chốt pipeline trước regression lớn tuần14 (dự kiến09/11); paired PPA tuần15 và hồ sơ29/11, đệm30/11–04/12 giữ nguyên. Đợt tối ưu không được kéo dài vô hạn làm lùi RTL F.
+
+Các lựa chọn còn mở để sinh viên chỉnh trước triển khai:
+
+| Nội dung | Đề xuất ban đầu | Chưa chốt |
+| --- | --- | --- |
+| Thứ tự | Fixed mapping tích → thử align → phân tầng theo STA → A2/A3/SAC nếu cần | Có đưa OPT-06 hoặc direct round_unpacked vào phạm vi hay không |
+| Ưu tiên đánh đổi | Đúng chức năng trước; ưu tiên timing/throughput, hạn chế bank/context dư | Ngân sách tăng FF/LUT và latency tối đa chấp nhận |
+| Thiết bị / tần số | Giữ Cyclone IV cho vòng so refactor; khảo sát10ns, sau đó chốt target theo part thực | Kit cuối và mục tiêu được GVHD thống nhất; chưa mặc định100MHz hay250MHz là ngưỡng nghiệm thu |
+| Thời điểm freeze | Sau kiểm tổ hợp, trước lượt final tuần14 | Chọn cấu hình có bằng chứng; không tự thay baseline ngay khi pilot đạt |
+
+Sau khi sinh viên sửa/chọn kế hoạch mới bắt đầu OPT-00. Phiên này chỉ cập nhật PLAN và tiến độ, kiểm diff và sao lưu tài liệu; không có kết quả chức năng/PPA mới.

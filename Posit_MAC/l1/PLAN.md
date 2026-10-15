@@ -971,11 +971,14 @@ Các delay là số đo seed1 để định hướng, không phải dự đoán 
 
 #### 8.16.3. Các bước thực hiện được đề xuất
 
-Tất cả các dòng dưới có trạng thái **chưa thực hiện trong đợt tối ưu này**. Những thử nghiệm đơn vị đã có ở §8.12/8.13 được dùng làm đầu vào, không đổi thành bằng chứng toàn MAC.
+Các bước RTL/PPA dưới đây **chưa thực hiện trong đợt tối ưu này**. Rà soát Note.docx và kiểm đẳng thức số học tại §8.16.8 chỉ là bằng chứng đánh giá đề xuất, không phải kiểm RTL. Theo yêu cầu mới, tối ưu khối cơ sở trước rồi mới ghép SAC/parser và các khối lớn. Những thử nghiệm đơn vị đã có ở §8.12/8.13 được dùng làm đầu vào, không đổi thành bằng chứng toàn MAC.
 
 | ID | Công việc và phương án | Kết quả cần có để xem xét bước tiếp |
 | --- | --- | --- |
 | OPT-00 | Khóa snapshot nguồn, source list, tools, profile, constraints, seed và lịch cạnh của baseline; kiểm runner có dùng đúng snapshot | Manifest và bảng so sánh trước/sau. Chỉ tái chạy baseline nếu nguồn/điều kiện đã khác hoặc thiếu report cần đối chứng |
+| BASE-01 | Thử riêng left shifter: bỏ comparator cho phần b thấp vì cascade tự dịch hết bit. Sau đó thử tương tự ở right shifter, giữ fill/sign và guard bit b cao | Kiểm toàn miền shift mã hóa, N không lũy thừa2, SHIFT_W nhỏ/bằng/lớn, N1; đo leaf trước, chưa ghép vào toàn NF |
+| BASE-02 | Thử cây LOD/LZD tạo K0 ngay trong cây bằng bit nhánh thấp có qualify vld_lo; thu hẹp phần MUX theo level | Giữ K0 khi vld0, cả MODE và padding/S override; không chỉ bỏ MUX cuối của bản cũ. Lint/unit rồi đo leaf |
+| BASE-03 | Đo cặp LOD→shifter có input/output bank giống nhau; ghép hai thay đổi đã qua unit. Đảo thứ tự stage là biến thể riêng; radix4 chỉ xét theo FPGA được chọn | Đánh giá delay từ data và từng bit control, fanout/LUT; giữ tổ hợp có lợi. Không suy timing MAC từ benchmark riêng |
 | OPT-01 | Refactor `mul_prepack_norm_comb`: thay chỉ số đích động/runtime integer bằng ánh xạ bit hằng cho exact/approx và carry/no-carry, chọn ứng viên ở cuối | Bit-exact mọi output trong miền hỗ trợ; không thêm FF/cycle. Đo lại toàn NF để biết nút thắt còn ở normalize hay pack/parse |
 | OPT-02 | Ghép riêng `posit_add_align_candidate` đã kiểm ở §8.12 vào source copy của NF; nhánh delta chạy song song với so sánh fraction, lost-mask chạy song song barrel shift | Whole-NF pilot và PPA; xác định lợi ích timing với chi phí LUT. Mức +16LUT4 của leaf không được dùng làm chi phí toàn MAC |
 | OPT-03 | Nếu đường tích vẫn quá dài: khảo sát bank tại đầu ra packed-value; nếu norm+pack còn chậm, cân nhắc tách chuẩn hóa và/hoặc dùng các tầng RNE P1/P2 đã có trước parser | Bảng delay từng đoạn, số bank/FF/context, latency/II mới; chọn số tầng tối thiểu đạt mục tiêu đang xét |
@@ -985,7 +988,7 @@ Tất cả các dòng dưới có trạng thái **chưa thực hiện trong đ�
 | OPT-07 | Chọn tổ hợp ứng viên có lợi, kiểm tương tác và chạy regression tích hợp chính thức; cập nhật SPEC/lịch, freeze và backup sau khi có bằng chứng | 0 mismatch, protocol/coverage đạt phạm vi áp dụng, ≥3 P&R run/config; ghi rõ phần final còn thiếu |
 | OPT-08 | Bàn giao thay đổi dùng chung cho RTL F tuần13; chuẩn bị comparator NF approximate-only đã kiểm riêng trước paired PPA | NF/F cùng precision, OPS, feature policy, part/tool/constraints; tách lợi ích fusion khỏi lợi ích refactor |
 
-**Thứ tự mặc định:** OPT-00 → OPT-01 → OPT-02 → đọc lại STA → chọn OPT-03/04/05 theo đường dài hiện tại → OPT-07 → OPT-08. OPT-06 là nhánh tùy chọn, không chặn RTL F nếu lợi ích nhỏ. Nếu sau OPT-01 đường pack/parse vẫn chi phối quá lớn, có thể chuyển sang OPT-03 trước OPT-02; phải ghi lý do từ report.
+**Thứ tự hiện hành sau góp ý Note.docx:** OPT-00 → BASE-01 → BASE-02 → BASE-03 → OPT-05 (SAC-A/B/C đã chọn) → OPT-01 → OPT-02 → đọc lại STA → chọn OPT-03/04 theo đường dài hiện tại → OPT-07 → OPT-08. Nhánh parser XOR một detector ở §8.16.8 chỉ thử sau các leaf, riêng với SAC để tách tác động. OPT-06, đổi thứ tự stage/radix4 và parser XOR là nhánh lựa chọn, không chặn RTL F nếu lợi ích nhỏ. Nút thắt toàn NF vẫn là norm/pack/parse của §8.16.2; không coi nghiệm thu leaf là đã xử lý nút thắt đó.
 
 **OPT-01 — điều kiện về parameter:** các lát bit ở §8.14 chỉ minh họa trường hợp `F_IN=2F+1`. Cần giữ đúng mapping khi override `F_IN`, `ACC_W`, `SF_W` trong miền công bố; dùng generate/ánh xạ từng bit tại elaboration để tránh dải âm, replication âm và out-of-range. Với `EXACT_EN=0`, không tham chiếu nhánh exact không tồn tại. Không rút width, bỏ carry hay coi hai bit padding của FLOOR là numerical sticky. Kiểm cả carry/no-carry, zero/NaR payload và scale signed biên.
 
@@ -1031,7 +1034,7 @@ OPS/MUX relocation và reset fanout là nhánh sau: chỉ chuyển swap khi cone
 | T0 — source/lint | So diff với snapshot; strict Verilator `--timing -Wall`, các tuple/parameter chịu ảnh hưởng; xem latch/width/signedness | Không lỗi lint chưa giải quyết, không latch; chỉ có thay đổi dự định |
 | T1 — leaf | Baseline/candidate/oracle độc lập; directed trước random, exhaustive miền nhỏ khả thi; giữ seed cố định trước chạy | 0 mismatch trên mọi output, gồm flags và trạng thái lỗi được công bố |
 | T2 — pipeline/top pilot | Native tối thiểu20k completed mỗi tuple8/0,16/1,32/2,32/3 đang hỗ trợ; trial32/3 ≥100k. ModelSim replay/corner với CK2Q và4-state | Reset/startup, busy/stall, stable output, thứ tự, flags, acc_clr/acc_mode và lịch cạnh đúng; aborted không tính completed |
-| T3 — PPA khảo sát | Whole-NF candidate cùng điều kiện; seed1 để xem cone/chi phí, sau đó đủ1/2/3 cho ứng viên được giữ | Report đủ, parse thiếu phải FAIL; ghi số đo kể cả seed bất lợi |
+| T3 — PPA khảo sát | BASE-01/02 đo leaf, BASE-03 đo cặp LOD→shifter cùng bank trước; sau đó ứng viên tích hợp đo whole-NF cùng điều kiện. Seed1 để xem cone/chi phí, đủ1/2/3 cho ứng viên được giữ | Report đủ, parse thiếu phải FAIL; ghi số đo kể cả seed bất lợi; benchmark leaf không thay whole-NF |
 | T4 — xác nhận tổ hợp | Ứng viên kết hợp sau khi chọn: replay corpus NF phân tầng10M của checkpoint hiện hành với runner/lịch cập nhật; đủ ModelSim corner và coverage liên quan | 0 mismatch, coverage không suy giảm thiếu giải thích, freeze nguồn/corpus/commands; không gọi là đã thay toàn ma trận final |
 
 Exact ở8/0,16/1,32/2 dùng SoftPosit đúng format khi áp dụng;32/3 dùng integer/rational oracle độc lập. NF và F so L1 riêng; bit-exact trước/sau đối chiếu theo transaction ID nếu retiming, không ép output cùng chu kỳ khi latency được phép đổi.
@@ -1067,9 +1070,9 @@ Tính từ khi sinh viên chọn phạm vi, có thể làm sớm trong tuần13;
 
 | Chặng | Thời lượng dự kiến | Điểm kiểm soát |
 | --- | --- | --- |
-| A — OPT-00/01 | 1 ngày | Báo kết quả fixed mapping, giữ nguyên latency |
-| B — OPT-02 và đo lại cone | 0,5–1 ngày | Quyết định có cần thêm tầng cho norm/pack/parse hoặc A1 |
-| C — pipeline/retiming/SAC theo nút thắt còn lại | 1–3 ngày | Báo từng cấu hình, FF/latency/II trước khi chọn tổ hợp |
+| A — OPT-00 và BASE-01/02/03 | 1–2 ngày | Leaf shifter/LOD và cặp LOD→shifter trước; giữ nguyên latency |
+| B — OPT-05; parser XOR nếu chọn | 1–2 ngày | SAC-A/B/C theo thứ tự đã chọn; thử riêng parser, không ghép đồng thời để suy lợi ích |
+| C — OPT-01/02 rồi pipeline/retiming theo STA | 1–3 ngày | Chỉ đi khối lớn sau kiểm leaf; báo FF/latency/II trước chọn tổ hợp |
 | D — OPT-07, bàn giao OPT-08 | 1–2 ngày | Regression tích hợp, matched PPA, freeze/backup và bàn giao RTL F |
 
 Không bắt buộc thử hết nhánh nếu đã đạt mục tiêu được chọn hoặc lợi ích nhỏ so với rủi ro tiến độ. Chốt pipeline trước regression lớn tuần14 (dự kiến09/11); paired PPA tuần15 và hồ sơ29/11, đệm30/11–04/12 giữ nguyên. Đợt tối ưu không được kéo dài vô hạn làm lùi RTL F.
@@ -1078,9 +1081,42 @@ Các lựa chọn còn mở để sinh viên chỉnh trước triển khai:
 
 | Nội dung | Đề xuất ban đầu | Chưa chốt |
 | --- | --- | --- |
-| Thứ tự | Fixed mapping tích → thử align → phân tầng theo STA → A2/A3/SAC nếu cần | Có đưa OPT-06 hoặc direct round_unpacked vào phạm vi hay không |
+| Thứ tự | Shifters → LOD/LZD → cặp LOD/shifter → SAC-A/B/C → các khối lớn theo STA | Có thêm parser XOR, radix4, OPT-06 hoặc direct round_unpacked hay không |
 | Ưu tiên đánh đổi | Đúng chức năng trước; ưu tiên timing/throughput, hạn chế bank/context dư | Ngân sách tăng FF/LUT và latency tối đa chấp nhận |
 | Thiết bị / tần số | Giữ Cyclone IV cho vòng so refactor; khảo sát10ns, sau đó chốt target theo part thực | Kit cuối và mục tiêu được GVHD thống nhất; chưa mặc định100MHz hay250MHz là ngưỡng nghiệm thu |
 | Thời điểm freeze | Sau kiểm tổ hợp, trước lượt final tuần14 | Chọn cấu hình có bằng chứng; không tự thay baseline ngay khi pilot đạt |
 
 Sau khi sinh viên sửa/chọn kế hoạch mới bắt đầu OPT-00. Phiên này chỉ cập nhật PLAN và tiến độ, kiểm diff và sao lưu tài liệu; không có kết quả chức năng/PPA mới.
+
+#### 8.16.8. Rà soát Note.docx và chuyển sang tối ưu khối cơ sở — 15/10/2026
+
+Đã đọc toàn bộ244 paragraph và41 công thức native của `../doc/Note.docx`; không có ảnh, embedded code file hoặc tracked changes. SHA256 của Word: `5420827cac2516273380b873e431fb2a3ed9fc953e2edc417c51b108063c9de9`. Hai module mã tham khảo là lod_lzd_core và dyn_left_shifter; phần parser XOR là ý tưởng, chưa phải một parser RTL hoàn chỉnh. Word, RTL, SPEC và guideline được giữ nguyên.
+
+| Góp ý trong Note | Đánh giá khả thi | Điều kiện / điểm cần sửa trong lập luận |
+| --- | --- | --- |
+| Bỏ comparator b thấp>=N ở left shifter | Đáng thử trước; đúng với cascade trên dữ liệu nhị phân | Tổng lượng dịch thấp>=N đã làm dữ liệu về0. Giữ guard OR phần b cao khi SHIFT_W>S; giữ N1. Có thể mở rộng sang right shifter nhưng kết quả phải là fill, không luôn0 |
+| Giảm số stage khi SHIFT_W<S | Đúng chức năng, giúp biểu diễn gọn | Các stage b thiếu của bản cũ vốn là wire/bypass và có thể đã được synthesis bỏ; chưa chứng minh giảm LUT |
+| Cây LOD tự tạo K0 khi không có match | Mã tham khảo hợp lý về số học; cần thử RTL/PPA | Dùng nhánh `~vld_hi & vld_lo` ở từng level và chọn phần position thấp; nhờ invariant invalid→pos0 mới bỏ được MUX cuối. Bỏ MUX cuối riêng lẻ ở bản cũ sẽ làm K invalid thành toàn1 |
+| Thu hẹp position/MUX theo level | Hợp lý để thể hiện cấu trúc; lợi ích vật lý chưa đo | Mã Note vẫn khai báo tree_pos rộng S ở mọi node. So 155 MUX với26 bằng số bit khai báo bỏ qua constant propagation của baseline; không dùng làm mức tiết kiệm LUT |
+| Thay loop padding bằng nối vector | Đúng với parameter hợp lệ, dễ đọc | Loop hiện tại unroll thành wiring, không phải dịch tuần tự theo clock. Không mặc định có lợi ích LUT/timing |
+| Đảo thứ tự stage shifter | Tương đương số học khi giữ fill và guard; là ứng viên đo riêng | K MSB vẫn chờ cây valid phía dưới, không phải chỉ một cổng tính từ input. Các bit thấp chỉ bị xóa khi select dịch lớn bằng1, không luôn là hằng0. Cần arrival time sau mapping/route |
+| Radix4 / ghép hai MUX2 thành MUX4 trong LUT6 | Có thể phù hợp 7-series/UltraScale+; tùy tool và part | Không cam kết mỗi hai stage luôn thành một LUT6 hoặc delay giảm một nửa. Nền tảng tuần12 là LUT4 CycloneIV; phải đo riêng khi chuyển FPGA |
+| Parser dùng XOR và một detector | Ý tưởng khả thi sau khi sửa điểm bắt đầu đếm | Giữ r riêng; XOR `magnitude[NB-3:0]` với r, đếm NB-2 bit sau FRB. Nếu không match thì cnt=NB-2. Không đưa count từ vector NB-1 bit gồm FRB vào logic cnt/k/payload hiện tại |
+
+**Sửa lệch một bit của parser:** parser hiện dùng cnt=m-1 khi có terminator, không dùng m. Ví dụ posit8/0 `0x40` là1: cnt0, k0, sf0. Đếm cả FRB theo XOR rồi đưa count1 vào công thức cũ sẽ thành k1/sf1, tức2. Cách XOR đúng là giữ cùng miền đếm sau FRB; nếu chọn đếm cả FRB thì phải thiết kế lại chuyển đổi count và xử lý no-terminator, không thay trực tiếp một dây. Khi hiện thực phải đồng bộ comb/pipeline và SPEC§5.2, giữ cnt/r/payload bank và hai tầng elastic đã kiểm.
+
+Không khẳng định giảm50% LUT parser hoặc đúng một LUT6_2 cho mỗi cụm4bit. LUT6_2 chỉ có hai output; một detector4bit đầy đủ có hai bit K và vld. Input inversion có thể được absorb trong LUT nhưng chưa xác minh tài nguyên tổng thể. Tham khảo chính hãng: [AMD LUT6_2](https://docs.amd.com/r/2025.2-English/ug953-vivado-7series-libraries/LUT6_2), [AMD LUT6](https://docs.amd.com/r/2025.2-English/ug953-vivado-7series-libraries/LUT6). Chỉ dẫn `verilator split_var` dành cho chia biến của Verilator; chưa có căn cứ quy nó thành rào cản LUT combining của Vivado: [Verilator extensions](https://verilator.org/guide/latest/extensions.html).
+
+**Kiểm đánh giá đã chạy, chỉ mô hình số học 0/1:** `scripts/review_note_primitives.py`, seed20261015, report `results/note_review_20261015/summary.json`. Có hash Word, hai đoạn mã tham khảo, RTL/SPEC/guideline và script để truy vết; script không thực thi code trong Word.
+
+| Nhóm | Số ca | Kết quả / phạm vi |
+| --- | --- | --- |
+| Cây LOD baseline/Note/oracle scan độc lập | 42.348 | 0 khác biệt; vét cạn N2..12, cả MODE và S=min/min+1; N lớn tới64 có directed/random |
+| Shifters ascending/descending, guard mới/cũ và oracle từng bit | 1.570.320 | 0 khác biệt; left, right fill0/fill1/sign; N1..64 theo danh sách report, SHIFT_W nhỏ/bằng/lớn; N<=8 vét cạn data, mọi shift mã hóa |
+| Parser XOR tail đúng so quy tắc đếm hiện tại | 66.184 | 0 khác biệt trên fields; vét cạn raw8/0,16/1, sample32/2 và32/3. Cách full-vector thay trực tiếp có66.170 ca khác, minh họa lỗi tích hợp, không phải kết luận ý tưởng XOR sai |
+
+Chưa compile mã tham khảo, chưa RTL simulation/formal/XZ equivalence, synthesis hoặc STA mới. Các report ModelSim shifter/parser và Gate3 cũ thuộc nguồn cũ, không chuyển thành nghiệm thu các ứng viên này. Khi triển khai phải kiểm known-binary bit-exact, invalid K0, no-X sau reset với valid và báo rõ các khác biệt X/Z nếu có; không tự thay hợp đồng để làm test qua.
+
+Theo thứ tự mới, BASE-01 là điểm bắt đầu triển khai được đề xuất: left shifter riêng, sau đó right shifter riêng; BASE-02 LOD/LZD tiếp theo, rồi đo cặp ở BASE-03. Mỗi leaf giữ I/O/parameter, không thêm clock hoặc stage. Sau khi đủ T0/T1 và benchmark leaf mới ghép SAC/parser, sau đó whole-NF; không chạy ngay toàn bộ regression cuối cho mỗi thay đổi nhỏ.
+
+Tái chạy phần đánh giá bằng Python3 chuẩn, đọc đúng Note.docx trong doc; phiên này dùng Python bundled của workspace. Lệnh từ Posit_MAC: `python scripts/review_note_primitives.py --note ../doc/Note.docx`. Không tạo thêm Markdown, không sửa Word hoặc RTL trong phiên rà soát.

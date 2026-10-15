@@ -1,0 +1,136 @@
+{
+  "status": "PASS_ARITHMETIC_REVIEW_ONLY",
+  "date": "2026-10-15",
+  "seed": 20261015,
+  "python": "3.12.14",
+  "note": {
+    "file": "Note.docx",
+    "sha256": "5420827cac2516273380b873e431fb2a3ed9fc953e2edc417c51b108063c9de9",
+    "paragraphs": 244,
+    "native_equations": 41,
+    "media": 0,
+    "reference_module_text_sha256": {
+      "lod_lzd_core": "f96d3d425db856b43b9d3786cc168652ec6e44a8eb6baf6b76509b7cf62eb8bd",
+      "dyn_left_shifter": "58b2675f8ac771a8e8f840232c162cc4a0ce8ab416e76e6cf66cc76730e2ace7"
+    }
+  },
+  "source_sha256": {
+    "rtl/lod_lzd_core.sv": "2c5f501f4bee6c70a67099cff299a9ff7f9e0375bc75ada57a73e6addbe432a7",
+    "rtl/dyn_left_shifter.sv": "537bfd27d3145ead9c5f74cc18d287ed83b89e0fd8a3e6ed834b75b55d017fb8",
+    "rtl/dyn_right_shifter.sv": "89514601248f33eef173b113cbed062d2a777ec6f84d1f3b0fc66eacd946ef86",
+    "rtl/posit_parser_comb.sv": "3d619c0ab22e7433aecfc1012de1486caee39d36e89fe472208f07c845806c43",
+    "rtl/posit_parser.sv": "43acff8de2fad8592811dacc2cefc7ae658ff56e967a3062bbce5ce56e521329",
+    "SPEC_Posit_MAC_IP.md": "59a2bd63a55307f611ad3ce1c1225ec9074b01de7c8260e998523b23e056d781",
+    "Digital_Design_Guidelines.md": "71e24384c5018e3d8a8614e44c1c6845a22dee017b80ddf6477a807492316af6"
+  },
+  "script_sha256": "cfc26ad67ecd6a0f16739edd719a20de8b714ab69010a0ccf9f8d585da44c815",
+  "lod": {
+    "cases": 42348,
+    "mismatches": 0,
+    "N": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      16,
+      26,
+      27,
+      29,
+      30,
+      31,
+      32,
+      33,
+      53,
+      54,
+      64
+    ],
+    "exhaustive_input_N": "2..12, both MODEs, S=min and min+1",
+    "larger_N": "directed and seeded samples; not exhaustive"
+  },
+  "shifters": {
+    "cases": 1570320,
+    "mismatches": 0,
+    "N": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      16,
+      26,
+      27,
+      29,
+      30,
+      31,
+      32,
+      33,
+      53,
+      54,
+      64
+    ],
+    "SHIFT_W": "min-1 (at least1), min, min+1; every encoded shift",
+    "data": "all data for N<=8, directed/seeded samples otherwise",
+    "modes": [
+      "left zero fill",
+      "right zero fill",
+      "right fill1",
+      "right original-sign fill"
+    ],
+    "stage_orders": [
+      "ascending",
+      "descending"
+    ],
+    "right_shift_scope": "derived extension of the left-shift proposal; no right-shift reference RTL in the note"
+  },
+  "parser": {
+    "cases": 66184,
+    "corrected_tail_xor_mismatches": 0,
+    "naive_full_vector_drop_in_differences": 66170,
+    "scope": "all raw8/0 and16/1 words; directed/seeded32/2 and32/3 samples; arithmetic field models only",
+    "example_posit8_0x40_tuple_sign_zero_nar_sf_frac": {
+      "current_scan": [
+        0,
+        false,
+        false,
+        0,
+        0
+      ],
+      "corrected_tail_xor": [
+        0,
+        false,
+        false,
+        0,
+        0
+      ],
+      "naive_full_vector": [
+        0,
+        false,
+        false,
+        1,
+        0
+      ]
+    }
+  },
+  "limits": [
+    "No production RTL or DOCX edits",
+    "No HDL compile, RTL simulation or formal equivalence",
+    "Known binary inputs only; no X/Z equivalence claim",
+    "No synthesis, LUT savings or timing measurement",
+    "Large-width inputs are sampled; small-domain exhaustive checks are explicitly labelled"
+  ]
+}

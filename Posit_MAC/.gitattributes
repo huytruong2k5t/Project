@@ -44,3 +44,14 @@ results/align_refactor_20261015/** -text
 rtl/posit_add_align.sv -text
 tb/week10_adder_harness.cpp -text
 tb/adder_verification_top.sv -text
+
+# Isolated normalization survey: preserve measured source/report bytes.
+rtl/posit_add_normalize.sv -text
+rtl/posit_add_normalize_zero.sv -text
+rtl/posit_add_normalize_shared.sv -text
+rtl/normalize_ppa_*.sv -text
+tb/*normalize_refactor*.sv -text
+scripts/*normalize_refactor*.ps1 -text
+scripts/*normalize_refactor*.py -text
+scripts/*normalize_refactor*.sh text eol=lf
+results/normalize_refactor_20261015/** -text

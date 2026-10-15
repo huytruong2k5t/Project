@@ -807,3 +807,43 @@ python3 scripts/audit_align_refactor.py
 Chỉ source copy riêng ở results/integration thay tên candidate thành posit_add_align; core RTL và pipeline thật giữ nguyên. `-CandidateOnly` chỉ tái đo ứng viên khi baseline ba seed đã có và hash boundary/reference còn đúng. Backup source/snapshot,summary/log/raw PPA gọn; binary,work,wave,db,obj/cache tái tạo từ script.
 
 Trong Git backup,raw STA lưu lossless dạng `align.sta.rpt.gz`;local giữ bản .rpt để đọc/audit. Muốn audit toàn checkpoint trên checkout mới,tái chạy các script trên để tạo lại source copy/runtime rồi audit;summary/log gọn đọc được ngay. Byte baseline và hai helper có sẵn được bảo toàn theo .gitattributes để hash tái chạy không đổi vì CRLF/LF; không đổi logic hoặc ghép candidate vào posit_add.
+
+### 8.13. Khảo sát refactor normalization adder — 15/10/2026
+
+Theo ưu tiên đã thống nhất, đo ba biến thể: `before` là posit_add_normalize hiện tại; `zero` bỏ điều kiện !normalized[Q] trong phát hiện zero; `shared` thêm cách viết chung bộ cộng scale với bù hai/carry-in. Hai ứng viên riêng tại rtl/posit_add_normalize_zero.sv và rtl/posit_add_normalize_shared.sv; **không thay production RTL, SPEC v1.15, nguồn L1 hoặc checkpoint Gate3**. I/O, parameter/default, lịch A1/A2/A3, flags và sticky giữ nguyên.
+
+Với carry, hidden sau dịch phải luôn1; không carry và leading_valid1, LOD/dịch trái đưa bit1 lên Q. Vì vậy is_zero_in|!(leading_valid|carry) đủ cho đầu vào nhị phân. Ứng viên chỉ dịch Q bit fraction cần giữ, thay Q+1 bit gồm hidden; LOD vẫn nhận Q+1 bit đầy đủ. Phép chiếu này loại bit hidden không còn dùng và tránh lint unused; không mất bit có trọng số trong frac. TB kiểm invariant hidden của baseline và output đầy đủ bằng oracle tìm bit cao nhất/dịch trực tiếp, không gọi lại LOD/shifter của DUT.
+
+Nhánh shared mở rộng left_shift đúng SF_W, dùng operand=carry?1:~L và cin=!carry; sf=sf_base+operand+cin. Không dùng phép đổi dấu nối tiếp trước adder. Đây là cách diễn đạt RTL để synthesis chia sẻ số học, **không tự chứng minh có đúng một physical adder**. Map cả ba bản đều có11 arithmetic-mode cells; không có bằng chứng rằng baseline trước đó tốn hai carry chain hoàn chỉnh.
+
+**Chức năng:** ModelSim10.1d,11 profile gồm8/0,16/1,32/2,32/3,F2/F3,SF_W35 và hai override scale-width: **2.905.200 vector chung cho cả hai ứng viên,0 mismatch** với baseline/oracle. Kiểm mọi số vị trí dịch,carry,zero và NaR ưu tiên,zero giữ incoming inexact,retained-bit1/sticky0 và retained-bit0/sticky1,raw signed scale biên/wrap và dirty special payload. Có duyệt hết miền magnitude/scale cho F2/SF_W<=8 với metadata phân bố; không gọi là exhaustive mọi tích Descartes hoặc formal HDL equivalence. ModelSim cũ báo vsim-8607 ở replication multiplier0 khi F2 trong baseline và ứng viên; biểu thức được bỏ replication0 như chủ đích,giữ log,không suppress. Strict Verilator5.032 --timing -Wall sạch22/22 leaf và8/8 integration,không latch.
+
+Mỗi ứng viên được ghép trong bản sao source riêng của adder ba tầng, **alignment vẫn là production**, không ghép đồng thời ứng viên align của8.12. Pilot50k/bốn format và trial≥1m ES3/mỗi ứng viên: tổng **2.400.024 completed/2.388 reset-aborted,0 mismatch**. Kiểm toàn unpacked,packed RNE/TRUNC,flags,reset/stall/thứ tự,handshake3 cạnh và3 slot; L1/oracle integer/bit-list độc lập,SoftPosit0.4.1 ở8/0,16/1,32/2; ES3 không dùng oracle SoftPosit ES2. GCC15.2.0. Seed unit20261015+100NB+ES+10000SF_W,xorshift32; harness20261012+100NB+ES,mt19937_64. Không thay regression toàn NF đã freeze.
+
+**PPA:** Quartus13.0sp1,EP4CE30F23C6,LUT4,NB32/ES3/F26/SF_W11,bank input/output giống nhau,clock10ns,seed1/2/3 và slow85 để so sánh.
+
+| Biến thể | LUT4 | FF | Fmax ba seed (MHz) | Fmax trung vị | Đổi so baseline |
+| --- | --- | --- | --- | --- | --- |
+| before | 240 | 100 | 113,47 /115,53 /111,99 | 113,47 | — |
+| zero | 236 | 100 | 113,12 /115,04 /107,99 | 113,12 | LUT−1,67%;Fmax−0,31% |
+| shared | 233 | 100 | 114,50 /109,96 /119,19 | 114,50 | LUT−2,92%;Fmax+0,91% |
+
+Cả9 run đạt setup100MHz; hold đạt cả27 run/corner slow85/slow0/fast0. WNS slow85 trung vị1,187/1,160/1,266ns; raw top10 paths và TNS/corners lưu trong ppa/critical_paths.json. Seed1 critical: before magnitude_q[27]→frac[47],data8,718ns; shared magnitude_q[17]→frac[52],data8,663ns. Endpoint chưa phân giải delay từng tầng; không kết luận riêng adder scale là critical path. Phải khảo sát đầy đủ cone LOD/shifter/canonicalization trước tối ưu tiếp.
+
+**Kết luận:** hai thay đổi giữ chức năng trong phạm vi đã kiểm và tiết kiệm ít LUT. Chưa chứng minh tăng Fmax bền vững: phân bố ba seed chồng lấn,worst-seed shared109,96MHz thấp hơn baseline111,99MHz. Giữ hai ứng viên để lựa chọn khi ưu tiên diện tích,**chưa đưa vào baseline chính**. Benchmark riêng không suy Fmax toàn adder/MAC,Xilinx LUT6,board signoff hoặc power. Không có input/output delay và pin assignment board; warnings constant fraction/pin assignments/parallel compilation không có license được giữ,không sửa license hoặc tạo timing exception. W12-05/06 và Gate4 toàn hệ thống còn mở.
+
+Report canonical `results/normalize_refactor_20261015/summary.json`; nguồn,seed/tool/lệnh/hash,log/summary ModelSim,strict lint,integration và9 run PPA giữ để tái chạy. Không tạo file Markdown mới. Từ Posit_MAC:
+
+```cmd
+powershell -NoProfile -File scripts\verify_normalize_refactor_modelsim.ps1
+powershell -NoProfile -File scripts\run_normalize_refactor_ppa.ps1
+```
+
+```bash
+bash scripts/verify_normalize_refactor.sh
+python3 scripts/audit_normalize_refactor.py
+```
+
+Source copy,work,obj/db,wave/binary có thể sinh lại,không backup lên Git; raw STA lưu lossless normalize.sta.rpt.gz trong Git và .rpt ở local. Trên checkout mới,tái chạy trước audit đầy đủ để tạo lại source copy/runtime. Audit giữ hash baseline,so giao diện/canonical flags và đối chiếu report gốc; không dùng summary PASS thay nghiệm thu hệ thống.
+
+Git giữ nguyên byte CRLF của baseline normalization đã đo bằng .gitattributes; đây chỉ là khác biệt newline so với blob LF cũ,không sửa logic hoặc chọn ứng viên làm production. Các file nguồn phụ có sẵn giữ nguyên byte/hash; không ghi đè checkpoint lịch sử.

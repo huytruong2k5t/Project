@@ -1,0 +1,902 @@
+[
+  {
+    "variant": "before",
+    "seed": 1,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": 1.187,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.371,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 2.095,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.338,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 4.992,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.193,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "arithmetic_mode_cells": 11,
+    "top10_setup": [
+      {
+        "slack_ns": 1.187,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[27]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[47]",
+        "clock_skew_ns": -0.09,
+        "data_delay_ns": 8.718
+      },
+      {
+        "slack_ns": 1.188,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[27]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[39]",
+        "clock_skew_ns": -0.09,
+        "data_delay_ns": 8.717
+      },
+      {
+        "slack_ns": 1.196,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[27]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[50]",
+        "clock_skew_ns": -0.094,
+        "data_delay_ns": 8.705
+      },
+      {
+        "slack_ns": 1.2,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[47]",
+        "clock_skew_ns": -0.09,
+        "data_delay_ns": 8.705
+      },
+      {
+        "slack_ns": 1.201,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[39]",
+        "clock_skew_ns": -0.09,
+        "data_delay_ns": 8.704
+      },
+      {
+        "slack_ns": 1.209,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[50]",
+        "clock_skew_ns": -0.094,
+        "data_delay_ns": 8.692
+      },
+      {
+        "slack_ns": 1.248,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[25]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[47]",
+        "clock_skew_ns": -0.09,
+        "data_delay_ns": 8.657
+      },
+      {
+        "slack_ns": 1.249,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[25]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[39]",
+        "clock_skew_ns": -0.09,
+        "data_delay_ns": 8.656
+      },
+      {
+        "slack_ns": 1.257,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[25]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[50]",
+        "clock_skew_ns": -0.094,
+        "data_delay_ns": 8.644
+      },
+      {
+        "slack_ns": 1.273,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[27]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|sf[0]",
+        "clock_skew_ns": -0.07,
+        "data_delay_ns": 8.652
+      }
+    ]
+  },
+  {
+    "variant": "before",
+    "seed": 2,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": 1.344,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.372,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 2.191,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.339,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 5.09,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.194,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "arithmetic_mode_cells": 11,
+    "top10_setup": [
+      {
+        "slack_ns": 1.344,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[34]",
+        "clock_skew_ns": -0.076,
+        "data_delay_ns": 8.575
+      },
+      {
+        "slack_ns": 1.344,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[35]",
+        "clock_skew_ns": -0.076,
+        "data_delay_ns": 8.575
+      },
+      {
+        "slack_ns": 1.355,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[47]",
+        "clock_skew_ns": -0.075,
+        "data_delay_ns": 8.565
+      },
+      {
+        "slack_ns": 1.355,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.072,
+        "data_delay_ns": 8.568
+      },
+      {
+        "slack_ns": 1.357,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[32]",
+        "clock_skew_ns": -0.072,
+        "data_delay_ns": 8.566
+      },
+      {
+        "slack_ns": 1.357,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[36]",
+        "clock_skew_ns": -0.072,
+        "data_delay_ns": 8.566
+      },
+      {
+        "slack_ns": 1.365,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[26]",
+        "clock_skew_ns": -0.076,
+        "data_delay_ns": 8.554
+      },
+      {
+        "slack_ns": 1.38,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[33]",
+        "clock_skew_ns": -0.075,
+        "data_delay_ns": 8.54
+      },
+      {
+        "slack_ns": 1.397,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[48]",
+        "clock_skew_ns": -0.072,
+        "data_delay_ns": 8.526
+      },
+      {
+        "slack_ns": 1.443,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[43]",
+        "clock_skew_ns": -0.062,
+        "data_delay_ns": 8.49
+      }
+    ]
+  },
+  {
+    "variant": "before",
+    "seed": 3,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": 1.071,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.373,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 1.946,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.34,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 5.048,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.195,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "arithmetic_mode_cells": 11,
+    "top10_setup": [
+      {
+        "slack_ns": 1.071,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[24]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[32]",
+        "clock_skew_ns": -0.063,
+        "data_delay_ns": 8.861
+      },
+      {
+        "slack_ns": 1.071,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[24]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[36]",
+        "clock_skew_ns": -0.063,
+        "data_delay_ns": 8.861
+      },
+      {
+        "slack_ns": 1.245,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[24]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[33]",
+        "clock_skew_ns": -0.07,
+        "data_delay_ns": 8.68
+      },
+      {
+        "slack_ns": 1.254,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[25]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[32]",
+        "clock_skew_ns": -0.063,
+        "data_delay_ns": 8.678
+      },
+      {
+        "slack_ns": 1.254,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[25]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[36]",
+        "clock_skew_ns": -0.063,
+        "data_delay_ns": 8.678
+      },
+      {
+        "slack_ns": 1.271,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[24]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|sf[0]",
+        "clock_skew_ns": -0.069,
+        "data_delay_ns": 8.655
+      },
+      {
+        "slack_ns": 1.271,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[24]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|sf[1]",
+        "clock_skew_ns": -0.069,
+        "data_delay_ns": 8.655
+      },
+      {
+        "slack_ns": 1.271,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[24]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|sf[2]",
+        "clock_skew_ns": -0.069,
+        "data_delay_ns": 8.655
+      },
+      {
+        "slack_ns": 1.271,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[24]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|sf[3]",
+        "clock_skew_ns": -0.069,
+        "data_delay_ns": 8.655
+      },
+      {
+        "slack_ns": 1.271,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[24]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|sf[4]",
+        "clock_skew_ns": -0.069,
+        "data_delay_ns": 8.655
+      }
+    ]
+  },
+  {
+    "variant": "zero",
+    "seed": 1,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": 1.16,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.372,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 2.084,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.338,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 4.917,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.194,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "arithmetic_mode_cells": 11,
+    "top10_setup": [
+      {
+        "slack_ns": 1.16,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[13]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[48]",
+        "clock_skew_ns": -0.062,
+        "data_delay_ns": 8.773
+      },
+      {
+        "slack_ns": 1.171,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[11]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[48]",
+        "clock_skew_ns": -0.062,
+        "data_delay_ns": 8.762
+      },
+      {
+        "slack_ns": 1.295,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[7]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[48]",
+        "clock_skew_ns": -0.062,
+        "data_delay_ns": 8.638
+      },
+      {
+        "slack_ns": 1.418,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[6]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[48]",
+        "clock_skew_ns": -0.062,
+        "data_delay_ns": 8.515
+      },
+      {
+        "slack_ns": 1.435,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[10]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[48]",
+        "clock_skew_ns": -0.062,
+        "data_delay_ns": 8.498
+      },
+      {
+        "slack_ns": 1.458,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[12]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[48]",
+        "clock_skew_ns": -0.062,
+        "data_delay_ns": 8.475
+      },
+      {
+        "slack_ns": 1.502,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[13]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[42]",
+        "clock_skew_ns": -0.06,
+        "data_delay_ns": 8.433
+      },
+      {
+        "slack_ns": 1.513,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[11]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[42]",
+        "clock_skew_ns": -0.06,
+        "data_delay_ns": 8.422
+      },
+      {
+        "slack_ns": 1.551,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[13]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[51]",
+        "clock_skew_ns": -0.049,
+        "data_delay_ns": 8.395
+      },
+      {
+        "slack_ns": 1.56,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[13]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[46]",
+        "clock_skew_ns": -0.06,
+        "data_delay_ns": 8.375
+      }
+    ]
+  },
+  {
+    "variant": "zero",
+    "seed": 2,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": 1.307,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.443,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 2.237,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.389,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 4.96,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.24,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "arithmetic_mode_cells": 11,
+    "top10_setup": [
+      {
+        "slack_ns": 1.307,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[6]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[43]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 8.622
+      },
+      {
+        "slack_ns": 1.312,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[7]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[43]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 8.617
+      },
+      {
+        "slack_ns": 1.331,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[43]",
+        "clock_skew_ns": -0.055,
+        "data_delay_ns": 8.609
+      },
+      {
+        "slack_ns": 1.359,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[13]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[43]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 8.57
+      },
+      {
+        "slack_ns": 1.374,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[10]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[43]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 8.555
+      },
+      {
+        "slack_ns": 1.406,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[15]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[51]",
+        "clock_skew_ns": -0.05,
+        "data_delay_ns": 8.539
+      },
+      {
+        "slack_ns": 1.434,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[6]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[51]",
+        "clock_skew_ns": -0.06,
+        "data_delay_ns": 8.501
+      },
+      {
+        "slack_ns": 1.439,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[7]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[51]",
+        "clock_skew_ns": -0.06,
+        "data_delay_ns": 8.496
+      },
+      {
+        "slack_ns": 1.458,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[51]",
+        "clock_skew_ns": -0.049,
+        "data_delay_ns": 8.488
+      },
+      {
+        "slack_ns": 1.474,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[9]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[43]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 8.455
+      }
+    ]
+  },
+  {
+    "variant": "zero",
+    "seed": 3,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": 0.74,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.369,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 1.7,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.335,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 4.606,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.192,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "arithmetic_mode_cells": 11,
+    "top10_setup": [
+      {
+        "slack_ns": 0.74,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[9]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[48]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 9.189
+      },
+      {
+        "slack_ns": 0.822,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[9]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[43]",
+        "clock_skew_ns": -0.091,
+        "data_delay_ns": 9.082
+      },
+      {
+        "slack_ns": 0.864,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[9]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[44]",
+        "clock_skew_ns": -0.091,
+        "data_delay_ns": 9.04
+      },
+      {
+        "slack_ns": 0.968,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[9]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[41]",
+        "clock_skew_ns": -0.091,
+        "data_delay_ns": 8.936
+      },
+      {
+        "slack_ns": 1.059,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[9]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[49]",
+        "clock_skew_ns": -0.091,
+        "data_delay_ns": 8.845
+      },
+      {
+        "slack_ns": 1.079,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[9]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[51]",
+        "clock_skew_ns": -0.092,
+        "data_delay_ns": 8.824
+      },
+      {
+        "slack_ns": 1.103,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[9]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[40]",
+        "clock_skew_ns": -0.091,
+        "data_delay_ns": 8.801
+      },
+      {
+        "slack_ns": 1.137,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[9]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[39]",
+        "clock_skew_ns": -0.092,
+        "data_delay_ns": 8.766
+      },
+      {
+        "slack_ns": 1.175,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[9]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.067,
+        "data_delay_ns": 8.753
+      },
+      {
+        "slack_ns": 1.191,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[48]",
+        "clock_skew_ns": -0.072,
+        "data_delay_ns": 8.732
+      }
+    ]
+  },
+  {
+    "variant": "shared",
+    "seed": 1,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": 1.266,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.372,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 2.204,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.338,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 5.114,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.193,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "arithmetic_mode_cells": 11,
+    "top10_setup": [
+      {
+        "slack_ns": 1.266,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[17]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 8.663
+      },
+      {
+        "slack_ns": 1.366,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[18]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 8.563
+      },
+      {
+        "slack_ns": 1.403,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[15]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 8.526
+      },
+      {
+        "slack_ns": 1.435,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[1]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.064,
+        "data_delay_ns": 8.496
+      },
+      {
+        "slack_ns": 1.605,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[19]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 8.324
+      },
+      {
+        "slack_ns": 1.608,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[16]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 8.321
+      },
+      {
+        "slack_ns": 1.641,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[2]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.064,
+        "data_delay_ns": 8.29
+      },
+      {
+        "slack_ns": 1.688,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[17]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[44]",
+        "clock_skew_ns": -0.066,
+        "data_delay_ns": 8.241
+      },
+      {
+        "slack_ns": 1.729,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[17]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[51]",
+        "clock_skew_ns": -0.069,
+        "data_delay_ns": 8.197
+      },
+      {
+        "slack_ns": 1.748,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[17]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[49]",
+        "clock_skew_ns": -0.068,
+        "data_delay_ns": 8.179
+      }
+    ]
+  },
+  {
+    "variant": "shared",
+    "seed": 2,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": 0.906,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.373,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 1.861,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.339,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 4.825,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.194,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "arithmetic_mode_cells": 11,
+    "top10_setup": [
+      {
+        "slack_ns": 0.906,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[27]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[41]",
+        "clock_skew_ns": -0.06,
+        "data_delay_ns": 9.029
+      },
+      {
+        "slack_ns": 0.985,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[41]",
+        "clock_skew_ns": -0.06,
+        "data_delay_ns": 8.95
+      },
+      {
+        "slack_ns": 0.998,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[29]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[41]",
+        "clock_skew_ns": -0.06,
+        "data_delay_ns": 8.937
+      },
+      {
+        "slack_ns": 1.174,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[27]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[42]",
+        "clock_skew_ns": -0.056,
+        "data_delay_ns": 8.765
+      },
+      {
+        "slack_ns": 1.191,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[4]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[42]",
+        "clock_skew_ns": -0.087,
+        "data_delay_ns": 8.717
+      },
+      {
+        "slack_ns": 1.192,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[4]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[41]",
+        "clock_skew_ns": -0.091,
+        "data_delay_ns": 8.712
+      },
+      {
+        "slack_ns": 1.238,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[1]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[42]",
+        "clock_skew_ns": -0.087,
+        "data_delay_ns": 8.67
+      },
+      {
+        "slack_ns": 1.253,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[26]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[42]",
+        "clock_skew_ns": -0.056,
+        "data_delay_ns": 8.686
+      },
+      {
+        "slack_ns": 1.266,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[29]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[42]",
+        "clock_skew_ns": -0.056,
+        "data_delay_ns": 8.673
+      },
+      {
+        "slack_ns": 1.27,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[3]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[42]",
+        "clock_skew_ns": -0.061,
+        "data_delay_ns": 8.664
+      }
+    ]
+  },
+  {
+    "variant": "shared",
+    "seed": 3,
+    "timing_corners": [
+      {
+        "model": "Slow 1200mV 85C",
+        "setup_wns_ns": 1.61,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.423,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Slow 1200mV 0C",
+        "setup_wns_ns": 2.488,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.373,
+        "hold_tns_ns": 0.0
+      },
+      {
+        "model": "Fast 1200mV 0C",
+        "setup_wns_ns": 5.225,
+        "setup_tns_ns": 0.0,
+        "hold_wns_ns": 0.228,
+        "hold_tns_ns": 0.0
+      }
+    ],
+    "arithmetic_mode_cells": 11,
+    "top10_setup": [
+      {
+        "slack_ns": 1.61,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[18]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.054,
+        "data_delay_ns": 8.331
+      },
+      {
+        "slack_ns": 1.707,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[15]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.054,
+        "data_delay_ns": 8.234
+      },
+      {
+        "slack_ns": 1.728,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[28]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.053,
+        "data_delay_ns": 8.214
+      },
+      {
+        "slack_ns": 1.863,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[17]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.054,
+        "data_delay_ns": 8.078
+      },
+      {
+        "slack_ns": 1.871,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[18]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[41]",
+        "clock_skew_ns": -0.069,
+        "data_delay_ns": 8.055
+      },
+      {
+        "slack_ns": 1.916,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[16]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.054,
+        "data_delay_ns": 8.025
+      },
+      {
+        "slack_ns": 1.968,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[15]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[41]",
+        "clock_skew_ns": -0.069,
+        "data_delay_ns": 7.958
+      },
+      {
+        "slack_ns": 1.971,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[18]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[49]",
+        "clock_skew_ns": -0.069,
+        "data_delay_ns": 7.955
+      },
+      {
+        "slack_ns": 1.984,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[23]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[52]",
+        "clock_skew_ns": -0.053,
+        "data_delay_ns": 7.958
+      },
+      {
+        "slack_ns": 1.987,
+        "startpoint": "normalize_ppa_boundary:u_boundary|magnitude_q[18]",
+        "endpoint": "normalize_ppa_boundary:u_boundary|frac[51]",
+        "clock_skew_ns": -0.059,
+        "data_delay_ns": 7.949
+      }
+    ]
+  }
+]

@@ -45,7 +45,7 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 9 | RTL bộ nhân lặp — Gate2 | ✅ | Multiplier đã nghiệm thu trên16 cấu hình,0 mismatch; lint và coverage đạt phạm vi tuần9. Baseline gốc giữ nghiên cứu phụ |
 | 10 | RTL adder và chốt so sánh NF/F | ✅ | Hoàn tất12/10: comb/pipeline, oracle/lượt lớn0 mismatch; matrix và corpus input đã chốt. R(P_hat)/carry đã xử lý ở tuần11; ma trận cuối/fused/PPA còn mở |
 | 11 | MAC non-fused — Gate3 | ✅ | Hoàn thành14/10: lượt mới10 triệu/0 mismatch,near52,55548%,coverage và ModelSim corner đạt; giữ F pilot,final/F RTL/PPA còn theo các tuần sau |
-| 12 | Oracle/L1 fused và timing sơ bộ NF | processing | W12-01 đã xử lý khi đóng tuần11;OPS và ứng viên align đã kiểm/đo riêng,khảo sát fraction có bảng/biểu đồ. Chưa chọn width/ngưỡng hoặc thay align baseline;F/window/model/STA toàn MAC còn mở. Lịch26/10–01/11,có thể làm sớm |
+| 12 | Oracle/L1 fused và timing sơ bộ NF | processing | W12-01 đã xử lý khi đóng tuần11;OPS và ứng viên align/normalize đã kiểm/đo riêng,khảo sát fraction có bảng/biểu đồ. Chưa chọn width/ngưỡng hoặc thay baseline bằng hai ứng viên;F/window/model/STA toàn MAC còn mở. Lịch26/10–01/11,có thể làm sớm |
 | 13 | RTL fused | không | 02–08/11: triển khai theo L1 đã kiểm, pilot số học/protocol; không mặc định exact |
 | 14 | Regression và accuracy paired NF/F | không | 09–15/11: nghiệm thu đúng riêng từng bản, coverage và corpus chung |
 | 15 | PPA hai bản và bản thảo — Gate4 | không | 16–22/11: cùng điều kiện,≥3 run/config; accuracy/timing/II/tài nguyên và kết luận |
@@ -62,7 +62,7 @@ Mục tiêu: có oracle/L1 fused và hợp đồng đủ bàn giao RTL tuần13,
 | W12-03 | Chốt hợp đồng fused: cùng prepack, width/cut/phần dư có dấu, flags/config/acc_mode và corpus | không |
 | W12-04 | Hiện thực/kiểm L1 F_W, phân biệt sai số cửa sổ và nhân; đóng băng model đạt | không |
 | W12-05 | Đo tài nguyên/timing sơ bộ toàn NF, lưu report và critical path | không |
-| W12-06 | OPS comb refactor đã kiểm/đo; tiếp tục STA toàn NF và đánh giá vị trí MUX/M0 | processing |
+| W12-06 | OPS đã refactor; ứng viên align/normalize đã khảo sát riêng; tiếp tục STA toàn NF và đánh giá pipeline | processing |
 | W12-07 | Audit/bàn giao tuần13, đồng bộ SPEC/PLAN và sao lưu GitHub | không |
 
 W11-COV đã đạt và bảng tạm được gỡ;chi tiết/report giữ tại PLAN8.9. Khi tuần12 hoàn tất, gỡ bảng tạm này và giữ nhật ký/report; chưa đánh dấu fused RTL hoặc Gate4 hoàn thành.
@@ -190,6 +190,7 @@ W11-COV đã đạt và bảng tạm được gỡ;chi tiết/report giữ tại
 | --- | --- | --- | --- |
 | 1 | Khảo sát mức fraction và số vòng | Có bảng/biểu đồ8–26bit trên300.000 cặp,ba phân bố;pilot/UBSan và oracle độc lập đạt. Đã tách sai số cắt đầu vào,FLOOR và giới hạn vòng;chưa chọn ngưỡng/cấu hình,chưa đổi RTL hoặc đo PPA | ✅ |
 | 2 | Thử tối ưu critical path alignment | Ứng viên tách nhánh sf đã kiểm đơn vị/pipeline0 mismatch. Benchmark riêng tăng Fmax trung vị36,93%,LUT4 tăng3,96%,FF giữ nguyên;chưa đạt100MHz. Giữ bản thử riêng,chưa thay baseline hoặc đo fullMAC | ✅ |
+| 3 | Khảo sát refactor normalization | Hai ứng viên đã kiểm đơn vị/pipeline0 mismatch;giảm4/7LUT4 nhưng chưa chứng minh cải thiện timing bền vững qua3seed. Giữ flags/sticky và RTL chính, lưu bản thử/report;chưa đo fullMAC | ✅ |
 
 ### 4.15. Mẫu cập nhật tiếp theo
 

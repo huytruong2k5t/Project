@@ -1,0 +1,94 @@
+﻿{
+    "status":  "MEASURED",
+    "date":  "2026-10-15",
+    "device":  "EP4CE30F23C6",
+    "clock_ns":  10,
+    "profile":  "NB32/ES3 F26 SF_W11; full raw normalization I/O; identical input/output banks",
+    "source_sha256":  {
+                          "rtl/dyn_left_shifter.sv":  "537bfd27d3145ead9c5f74cc18d287ed83b89e0fd8a3e6ed834b75b55d017fb8",
+                          "rtl/posit_add_normalize.sv":  "f6dc84735c6985d4ed7512a5be3d93abc2def2235ff6023437cc960a0c0f2a29",
+                          "rtl/normalize_ppa_boundary.sv":  "37ca4212a2869a7d34f444284faf9853dc83f68a08f98ce08358d13bf9bb17db",
+                          "rtl/posit_add_normalize_shared.sv":  "281d5508ea9a5fc1ecd65896bd46772d2d8d0c0872d63cce86001a9905df9963",
+                          "rtl/posit_mac.vh":  "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88",
+                          "scripts/run_normalize_refactor_ppa.ps1":  "14176b5ccf84af2da38c4eecf5437b75f481846f39d0cc2b0ddf28a0d05d559b",
+                          "rtl/posit_add_normalize_zero.sv":  "481d33566d04f2aae2a41b755a6b51947e397b6a60369139ef0993065b896c85",
+                          "results/normalize_refactor_20261015/before/posit_add_normalize.sv":  "f6dc84735c6985d4ed7512a5be3d93abc2def2235ff6023437cc960a0c0f2a29",
+                          "rtl/lod_lzd_core.sv":  "2c5f501f4bee6c70a67099cff299a9ff7f9e0375bc75ada57a73e6addbe432a7",
+                          "rtl/normalize_ppa_top.sv":  "6883760805ac8e62bf98ed54c49015263c77c6961bffd1b80cde72f55ecb1f68"
+                      },
+    "rows":  [
+                 {
+                     "variant":  "before",
+                     "seed":  1,
+                     "LUT4":  240,
+                     "registers":  100,
+                     "fmax_MHz":  113.47,
+                     "setup_wns_ns":  1.187
+                 },
+                 {
+                     "variant":  "before",
+                     "seed":  2,
+                     "LUT4":  240,
+                     "registers":  100,
+                     "fmax_MHz":  115.53,
+                     "setup_wns_ns":  1.344
+                 },
+                 {
+                     "variant":  "before",
+                     "seed":  3,
+                     "LUT4":  240,
+                     "registers":  100,
+                     "fmax_MHz":  111.99,
+                     "setup_wns_ns":  1.071
+                 },
+                 {
+                     "variant":  "zero",
+                     "seed":  1,
+                     "LUT4":  236,
+                     "registers":  100,
+                     "fmax_MHz":  113.12,
+                     "setup_wns_ns":  1.16
+                 },
+                 {
+                     "variant":  "zero",
+                     "seed":  2,
+                     "LUT4":  236,
+                     "registers":  100,
+                     "fmax_MHz":  115.04,
+                     "setup_wns_ns":  1.307
+                 },
+                 {
+                     "variant":  "zero",
+                     "seed":  3,
+                     "LUT4":  236,
+                     "registers":  100,
+                     "fmax_MHz":  107.99,
+                     "setup_wns_ns":  0.74
+                 },
+                 {
+                     "variant":  "shared",
+                     "seed":  1,
+                     "LUT4":  233,
+                     "registers":  100,
+                     "fmax_MHz":  114.5,
+                     "setup_wns_ns":  1.266
+                 },
+                 {
+                     "variant":  "shared",
+                     "seed":  2,
+                     "LUT4":  233,
+                     "registers":  100,
+                     "fmax_MHz":  109.96,
+                     "setup_wns_ns":  0.906
+                 },
+                 {
+                     "variant":  "shared",
+                     "seed":  3,
+                     "LUT4":  233,
+                     "registers":  100,
+                     "fmax_MHz":  119.19,
+                     "setup_wns_ns":  1.61
+                 }
+             ],
+    "limits":  "Standalone normalization OOC physical LUT4 benchmark, not full adder/MAC or Xilinx LUT6. Register-register STA; no external I/O delays, board signoff or power claim."
+}

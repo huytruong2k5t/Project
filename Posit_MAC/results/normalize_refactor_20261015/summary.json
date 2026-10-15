@@ -1,0 +1,368 @@
+{
+  "status": "PASS_ISOLATED_SURVEY",
+  "date": "2026-10-15",
+  "production_replaced": false,
+  "interface": "same parameters/defaults/ports; candidate module names differ",
+  "unit_vectors": 2905200,
+  "unit_candidates": 2,
+  "unit_mismatches": 0,
+  "strict_lint_leaf_profiles": 22,
+  "strict_lint_integration_profiles": 8,
+  "inferred_latches": 0,
+  "integration_completed": 2400024,
+  "integration_reset_aborts": 2388,
+  "integration_mismatches": 0,
+  "integration": [
+    {
+      "variant": "zero",
+      "stage": "pilot",
+      "NB": 8,
+      "ES": 0,
+      "seed": 20261812,
+      "accepted": 50054,
+      "completed": 50002,
+      "reset_aborts": 52,
+      "output_stalls": 18672,
+      "input_stalls": 12987,
+      "reset_busy": 18,
+      "reset_output_stall": 4,
+      "long_stalls": 1898,
+      "max_slots": 3,
+      "independent_mode_checks": 100108,
+      "L0_RNE_checks": 50054,
+      "mismatches": 0
+    },
+    {
+      "variant": "zero",
+      "stage": "pilot",
+      "NB": 16,
+      "ES": 1,
+      "seed": 20262613,
+      "accepted": 50053,
+      "completed": 50003,
+      "reset_aborts": 50,
+      "output_stalls": 18715,
+      "input_stalls": 12860,
+      "reset_busy": 18,
+      "reset_output_stall": 5,
+      "long_stalls": 1898,
+      "max_slots": 3,
+      "independent_mode_checks": 100106,
+      "L0_RNE_checks": 50053,
+      "mismatches": 0
+    },
+    {
+      "variant": "zero",
+      "stage": "pilot",
+      "NB": 32,
+      "ES": 2,
+      "seed": 20264214,
+      "accepted": 50053,
+      "completed": 50003,
+      "reset_aborts": 50,
+      "output_stalls": 18705,
+      "input_stalls": 12876,
+      "reset_busy": 17,
+      "reset_output_stall": 5,
+      "long_stalls": 1892,
+      "max_slots": 3,
+      "independent_mode_checks": 100106,
+      "L0_RNE_checks": 50053,
+      "mismatches": 0
+    },
+    {
+      "variant": "zero",
+      "stage": "pilot",
+      "NB": 32,
+      "ES": 3,
+      "seed": 20264215,
+      "accepted": 50053,
+      "completed": 50002,
+      "reset_aborts": 51,
+      "output_stalls": 18543,
+      "input_stalls": 12836,
+      "reset_busy": 18,
+      "reset_output_stall": 2,
+      "long_stalls": 1900,
+      "max_slots": 3,
+      "independent_mode_checks": 100106,
+      "L0_RNE_checks": 0,
+      "mismatches": 0
+    },
+    {
+      "variant": "zero",
+      "stage": "trial",
+      "NB": 32,
+      "ES": 3,
+      "seed": 20264215,
+      "accepted": 1000993,
+      "completed": 1000002,
+      "reset_aborts": 991,
+      "output_stalls": 368594,
+      "input_stalls": 254412,
+      "reset_busy": 368,
+      "reset_output_stall": 86,
+      "long_stalls": 36751,
+      "max_slots": 3,
+      "independent_mode_checks": 2001986,
+      "L0_RNE_checks": 0,
+      "mismatches": 0
+    },
+    {
+      "variant": "shared",
+      "stage": "pilot",
+      "NB": 8,
+      "ES": 0,
+      "seed": 20261812,
+      "accepted": 50054,
+      "completed": 50002,
+      "reset_aborts": 52,
+      "output_stalls": 18672,
+      "input_stalls": 12987,
+      "reset_busy": 18,
+      "reset_output_stall": 4,
+      "long_stalls": 1898,
+      "max_slots": 3,
+      "independent_mode_checks": 100108,
+      "L0_RNE_checks": 50054,
+      "mismatches": 0
+    },
+    {
+      "variant": "shared",
+      "stage": "pilot",
+      "NB": 16,
+      "ES": 1,
+      "seed": 20262613,
+      "accepted": 50053,
+      "completed": 50003,
+      "reset_aborts": 50,
+      "output_stalls": 18715,
+      "input_stalls": 12860,
+      "reset_busy": 18,
+      "reset_output_stall": 5,
+      "long_stalls": 1898,
+      "max_slots": 3,
+      "independent_mode_checks": 100106,
+      "L0_RNE_checks": 50053,
+      "mismatches": 0
+    },
+    {
+      "variant": "shared",
+      "stage": "pilot",
+      "NB": 32,
+      "ES": 2,
+      "seed": 20264214,
+      "accepted": 50053,
+      "completed": 50003,
+      "reset_aborts": 50,
+      "output_stalls": 18705,
+      "input_stalls": 12876,
+      "reset_busy": 17,
+      "reset_output_stall": 5,
+      "long_stalls": 1892,
+      "max_slots": 3,
+      "independent_mode_checks": 100106,
+      "L0_RNE_checks": 50053,
+      "mismatches": 0
+    },
+    {
+      "variant": "shared",
+      "stage": "pilot",
+      "NB": 32,
+      "ES": 3,
+      "seed": 20264215,
+      "accepted": 50053,
+      "completed": 50002,
+      "reset_aborts": 51,
+      "output_stalls": 18543,
+      "input_stalls": 12836,
+      "reset_busy": 18,
+      "reset_output_stall": 2,
+      "long_stalls": 1900,
+      "max_slots": 3,
+      "independent_mode_checks": 100106,
+      "L0_RNE_checks": 0,
+      "mismatches": 0
+    },
+    {
+      "variant": "shared",
+      "stage": "trial",
+      "NB": 32,
+      "ES": 3,
+      "seed": 20264215,
+      "accepted": 1000993,
+      "completed": 1000002,
+      "reset_aborts": 991,
+      "output_stalls": 368594,
+      "input_stalls": 254412,
+      "reset_busy": 368,
+      "reset_output_stall": 86,
+      "long_stalls": 36751,
+      "max_slots": 3,
+      "independent_mode_checks": 2001986,
+      "L0_RNE_checks": 0,
+      "mismatches": 0
+    }
+  ],
+  "benchmark": {
+    "device": "EP4CE30F23C6",
+    "clock_ns": 10,
+    "profile": "NB32/ES3 F26 SF_W11; full raw normalization I/O; identical input/output banks",
+    "comparisons": [
+      {
+        "variant": "before",
+        "lut4": [
+          240
+        ],
+        "registers": [
+          100
+        ],
+        "median_fmax_MHz": 113.47,
+        "fmax_gain_percent": 0.0,
+        "median_setup_wns_ns": 1.187,
+        "meets_100MHz_all_seeds": true,
+        "rows": [
+          {
+            "variant": "before",
+            "seed": 1,
+            "LUT4": 240,
+            "registers": 100,
+            "fmax_MHz": 113.47,
+            "setup_wns_ns": 1.187
+          },
+          {
+            "variant": "before",
+            "seed": 2,
+            "LUT4": 240,
+            "registers": 100,
+            "fmax_MHz": 115.53,
+            "setup_wns_ns": 1.344
+          },
+          {
+            "variant": "before",
+            "seed": 3,
+            "LUT4": 240,
+            "registers": 100,
+            "fmax_MHz": 111.99,
+            "setup_wns_ns": 1.071
+          }
+        ]
+      },
+      {
+        "variant": "zero",
+        "lut4": [
+          236
+        ],
+        "registers": [
+          100
+        ],
+        "median_fmax_MHz": 113.12,
+        "fmax_gain_percent": -0.30845157310301907,
+        "median_setup_wns_ns": 1.16,
+        "meets_100MHz_all_seeds": true,
+        "rows": [
+          {
+            "variant": "zero",
+            "seed": 1,
+            "LUT4": 236,
+            "registers": 100,
+            "fmax_MHz": 113.12,
+            "setup_wns_ns": 1.16
+          },
+          {
+            "variant": "zero",
+            "seed": 2,
+            "LUT4": 236,
+            "registers": 100,
+            "fmax_MHz": 115.04,
+            "setup_wns_ns": 1.307
+          },
+          {
+            "variant": "zero",
+            "seed": 3,
+            "LUT4": 236,
+            "registers": 100,
+            "fmax_MHz": 107.99,
+            "setup_wns_ns": 0.74
+          }
+        ]
+      },
+      {
+        "variant": "shared",
+        "lut4": [
+          233
+        ],
+        "registers": [
+          100
+        ],
+        "median_fmax_MHz": 114.5,
+        "fmax_gain_percent": 0.9077289151317558,
+        "median_setup_wns_ns": 1.266,
+        "meets_100MHz_all_seeds": true,
+        "rows": [
+          {
+            "variant": "shared",
+            "seed": 1,
+            "LUT4": 233,
+            "registers": 100,
+            "fmax_MHz": 114.5,
+            "setup_wns_ns": 1.266
+          },
+          {
+            "variant": "shared",
+            "seed": 2,
+            "LUT4": 233,
+            "registers": 100,
+            "fmax_MHz": 109.96,
+            "setup_wns_ns": 0.906
+          },
+          {
+            "variant": "shared",
+            "seed": 3,
+            "LUT4": 233,
+            "registers": 100,
+            "fmax_MHz": 119.19,
+            "setup_wns_ns": 1.61
+          }
+        ]
+      }
+    ],
+    "hold_all_corners_pass": true
+  },
+  "source_sha256": {
+    "rtl/dyn_left_shifter.sv": "537bfd27d3145ead9c5f74cc18d287ed83b89e0fd8a3e6ed834b75b55d017fb8",
+    "rtl/posit_add_normalize.sv": "f6dc84735c6985d4ed7512a5be3d93abc2def2235ff6023437cc960a0c0f2a29",
+    "scripts/verify_normalize_refactor_modelsim.ps1": "7df601c9698b5350236fa0ffefab8b168d01aede9811dc48914527e7a872be9d",
+    "rtl/posit_add_normalize_shared.sv": "281d5508ea9a5fc1ecd65896bd46772d2d8d0c0872d63cce86001a9905df9963",
+    "tb/normalize_refactor_checker.sv": "efbfe162e486accc24014ef3d03f79853880d313fde2a00de1e061b6ce262f3e",
+    "tb/tb_normalize_refactor.sv": "7a528629da5abe478e2c7acc2529c7df3fe96c72addde4566a96c756e226a38d",
+    "rtl/posit_add_normalize_zero.sv": "481d33566d04f2aae2a41b755a6b51947e397b6a60369139ef0993065b896c85",
+    "rtl/lod_lzd_core.sv": "2c5f501f4bee6c70a67099cff299a9ff7f9e0375bc75ada57a73e6addbe432a7",
+    "rtl/normalize_ppa_boundary.sv": "37ca4212a2869a7d34f444284faf9853dc83f68a08f98ce08358d13bf9bb17db",
+    "rtl/posit_mac.vh": "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88",
+    "scripts/run_normalize_refactor_ppa.ps1": "14176b5ccf84af2da38c4eecf5437b75f481846f39d0cc2b0ddf28a0d05d559b",
+    "results/normalize_refactor_20261015/before/posit_add_normalize.sv": "f6dc84735c6985d4ed7512a5be3d93abc2def2235ff6023437cc960a0c0f2a29",
+    "rtl/normalize_ppa_top.sv": "6883760805ac8e62bf98ed54c49015263c77c6961bffd1b80cde72f55ecb1f68",
+    "scripts/verify_normalize_refactor.sh": "02eb9624b0e3d3ebf4f099b4e4598f4eb359955319a628e2ee2214fd9e8986a6",
+    "scripts/audit_normalize_refactor.py": "bab1d41d09fabb56a3cfca1321e6b86271bbb3d3b887bc69020c973ec0d0921b",
+    "tb/week10_adder_harness.cpp": "0fc3b20386fda150375e76cc1a7b416c3d03ee43d67c438b49b368abe9e6ec95",
+    "tb/week10_add_reference.hpp": "743ad192d18649bd30abc50e0c17873263ff0e90acea4f558a8fb1e87a896234",
+    "tb/adder_verification_top.sv": "2baa086c3d134b1acedd99cc06d0ab06823a08ac2376a57687b4d68ede084e7d"
+  },
+  "limits": [
+    "Known binary input equivalence; no formal exhaustive HDL proof or X/Z behavior guarantee",
+    "Unit magnitude/scale exhaustive only for small F2/SF_W<=8, metadata distributed rather than exhaustive cross-product",
+    "Separate normalize candidates; production alignment and stage boundaries unchanged",
+    "One million ES3 trial and four-format pilots per candidate, not full frozen NF/Gate3 regression",
+    "LUT4 physical leaf benchmark, not whole adder/MAC, Xilinx LUT6 or board/power signoff",
+    "Arithmetic-mode cell count alone does not prove a single physical adder",
+    "ModelSim legacy replication-zero warning on F2 baseline/candidates retained; strict Verilator lint has no warning waiver",
+    "Untimed cycle harness suppresses CK2Q ASSIGNDLY only; separate --timing lint has no waiver"
+  ],
+  "commands": [
+    "powershell -NoProfile -File scripts/verify_normalize_refactor_modelsim.ps1",
+    "bash scripts/verify_normalize_refactor.sh",
+    "powershell -NoProfile -File scripts/run_normalize_refactor_ppa.ps1",
+    "python scripts/audit_normalize_refactor.py"
+  ]
+}

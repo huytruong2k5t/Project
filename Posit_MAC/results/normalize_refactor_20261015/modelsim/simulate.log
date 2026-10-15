@@ -1,0 +1,48 @@
+# vsim -do run.do -l simulate.log -c -wlf local.wlf work.tb_normalize_refactor 
+# Loading sv_std.std
+# Loading work.tb_normalize_refactor
+# Loading work.normalize_refactor_checker
+# Loading work.posit_add_normalize
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# Loading work.posit_add_normalize_zero
+# Loading work.posit_add_normalize_shared
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/normalize_refactor_checker.sv(141): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_add_normalize.sv(84): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_add_normalize_zero.sv(84): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_add_normalize_shared.sv(95): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/normalize_refactor_checker.sv(141): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_add_normalize.sv(84): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_add_normalize_zero.sv(84): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_add_normalize_shared.sv(95): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/normalize_refactor_checker.sv(141): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_add_normalize.sv(84): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_add_normalize_zero.sv(84): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# ** Warning: (vsim-8607) C:/HCMUT/HK261/Do an 2/Posit_MAC/rtl/posit_add_normalize_shared.sv(95): Non-positive replication multiplier inside concat. Replication will be ignored.
+# 
+# do run.do 
+# NORM PASS NB=32 ES=27 SW=35 checks=136016 mismatch=0 shifts=6 zero_clean=8771 zero_prior=8860 nar_zero=52628 carry=4206 retained_only=1273 tail_only=5888
+# NORM PASS NB=5 ES=0 SW=5 checks=140112 mismatch=0 shifts=6 zero_clean=9043 zero_prior=9027 nar_zero=54179 carry=4365 retained_only=1280 tail_only=6152
+# NORM PASS NB=7 ES=1 SW=7 checks=148304 mismatch=0 shifts=7 zero_clean=9513 zero_prior=9588 nar_zero=57338 carry=4128 retained_only=1261 tail_only=6672
+# NORM PASS NB=16 ES=10 SW=17 checks=148304 mismatch=0 shifts=7 zero_clean=9531 zero_prior=9474 nar_zero=57333 carry=4202 retained_only=1232 tail_only=6698
+# NORM PASS NB=6 ES=1 SW=7 checks=152400 mismatch=0 shifts=6 zero_clean=9843 zero_prior=9863 nar_zero=58804 carry=5175 retained_only=1294 tail_only=6951
+# NORM PASS NB=8 ES=0 SW=6 checks=172880 mismatch=0 shifts=9 zero_clean=11093 zero_prior=11053 nar_zero=66345 carry=4096 retained_only=1263 tail_only=8228
+# NORM PASS NB=16 ES=1 SW=8 checks=258896 mismatch=0 shifts=16 zero_clean=16416 zero_prior=16367 nar_zero=98710 carry=4088 retained_only=1300 tail_only=13612
+# NORM PASS NB=32 ES=3 SW=11 checks=430928 mismatch=0 shifts=30 zero_clean=27166 zero_prior=27030 nar_zero=163145 carry=4229 retained_only=1371 tail_only=24354
+# NORM PASS NB=32 ES=3 SW=13 checks=430928 mismatch=0 shifts=30 zero_clean=27154 zero_prior=27298 nar_zero=163177 carry=4158 retained_only=1354 tail_only=24310
+# NORM PASS NB=32 ES=2 SW=10 checks=443216 mismatch=0 shifts=31 zero_clean=27990 zero_prior=27866 nar_zero=167754 carry=4102 retained_only=1326 tail_only=25078
+# NORM PASS NB=32 ES=2 SW=12 checks=443216 mismatch=0 shifts=31 zero_clean=27967 zero_prior=27949 nar_zero=167748 carry=4075 retained_only=1281 tail_only=25068
+# NORM MATRIX PASS profiles=11 candidates=2 mismatch=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_normalize_refactor.sv(25)
+#    Time: 443216 ns  Iteration: 1  Instance: /tb_normalize_refactor

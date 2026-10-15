@@ -1,0 +1,15 @@
+set_global_assignment -name FAMILY "Cyclone IV E"
+set_global_assignment -name DEVICE EP4CE30F23C6
+set_global_assignment -name TOP_LEVEL_ENTITY normalize_ppa_top
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name SDC_FILE normalize.sdc
+set_global_assignment -name SEED 2
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 2
+set_global_assignment -name SEARCH_PATH src
+set_global_assignment -name SYSTEMVERILOG_FILE src/lod_lzd_core.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/dyn_left_shifter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/posit_add_normalize.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/normalize_ppa_boundary.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/normalize_ppa_top.sv
+
+set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"

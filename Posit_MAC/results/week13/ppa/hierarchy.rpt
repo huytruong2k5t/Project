@@ -1,0 +1,45 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Thu Oct 15 19:16:25 2026
+| Host         : MSI running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file hierarchy.rpt
+| Design       : week13_fused_ppa_top
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++--------------------------+----------------+------------+------------+---------+------+-----+--------+--------+------------+
+|         Instance         |     Module     | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
++--------------------------+----------------+------------+------------+---------+------+-----+--------+--------+------------+
+| week13_fused_ppa_top     |          (top) |       1520 |       1520 |       0 |    0 | 815 |      0 |      0 |          0 |
+|   (week13_fused_ppa_top) |          (top) |          0 |          0 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   u_dut                  |    posit_mac_f |       1520 |       1520 |       0 |    0 | 815 |      0 |      0 |          0 |
+|     u_wrapper            |  mac_f_wrapper |       1520 |       1520 |       0 |    0 | 815 |      0 |      0 |          0 |
+|       (u_wrapper)        |  mac_f_wrapper |          2 |          2 |       0 |    0 |  83 |      0 |      0 |          0 |
+|       u_a                |   posit_parser |        239 |        239 |       0 |    0 |  80 |      0 |      0 |          0 |
+|       u_b                | posit_parser_0 |        244 |        244 |       0 |    0 |  80 |      0 |      0 |          0 |
+|       u_c                | posit_parser_1 |        251 |        251 |       0 |    0 |  80 |      0 |      0 |          0 |
+|       u_core             |  mul_iter_core |        249 |        249 |       0 |    0 | 109 |      0 |      0 |          0 |
+|         (u_core)         |  mul_iter_core |          2 |          2 |       0 |    0 |  52 |      0 |      0 |          0 |
+|         u_acc            |      sbm_accum |        113 |        113 |       0 |    0 |  21 |      0 |      0 |          0 |
+|           (u_acc)        |      sbm_accum |         91 |         91 |       0 |    0 |  21 |      0 |      0 |          0 |
+|         u_ctrl           |      iter_ctrl |        135 |        135 |       0 |    0 |  36 |      0 |      0 |          0 |
+|       u_fused            | fused_add_pipe |        448 |        448 |       0 |    0 | 300 |      0 |      0 |          0 |
+|         (u_fused)        | fused_add_pipe |        379 |        379 |       0 |    0 | 300 |      0 |      0 |          0 |
+|       u_pack             |     posit_pack |         91 |         91 |       0 |    0 |  83 |      0 |      0 |          0 |
+|         (u_pack)         |     posit_pack |         61 |         61 |       0 |    0 |  83 |      0 |      0 |          0 |
++--------------------------+----------------+------------+------------+---------+------+-----+--------+--------+------------+
+* Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
+
+

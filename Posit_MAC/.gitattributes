@@ -79,3 +79,17 @@ scripts/*primitive_xilinx*.ps1 -text
 scripts/primitive_xilinx*.tcl -text
 scripts/lint_primitive_xilinx.sh text eol=lf
 results/primitive_xilinx_20261015/** -text
+
+# Fused RTL source/evidence hashes must survive checkout byte-for-byte.
+rtl/posit_mac_f.sv -text
+rtl/mac_f_wrapper.sv -text
+rtl/fused_*.sv -text
+tb/*week13* -text
+scripts/*week13* -text
+results/week13/** -text
+
+# Shared RTL/L1/reference headers are inputs of the W13 snapshot manifests.
+rtl/*.sv -text
+rtl/posit_mac.vh -text
+l1/include/*.hpp -text
+tb/*.hpp -text

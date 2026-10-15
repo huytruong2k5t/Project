@@ -1,0 +1,342 @@
+{
+  "definition": "Raw Verilator instrumented points, aggregate instances by source point; no waiver/exclusion.",
+  "limits": "Line points are not physical source-line percentages; not final AC04 signoff.",
+  "rows": [
+    {
+      "file": "dyn_left_shifter.sv",
+      "kind": "v_toggle",
+      "hit": 63,
+      "total": 63,
+      "percent": 100.0
+    },
+    {
+      "file": "dyn_right_shifter.sv",
+      "kind": "v_toggle",
+      "hit": 101,
+      "total": 125,
+      "percent": 80.8
+    },
+    {
+      "file": "fused_abs_borrow_comb.sv",
+      "kind": "v_toggle",
+      "hit": 131,
+      "total": 131,
+      "percent": 100.0
+    },
+    {
+      "file": "fused_add_pipe.sv",
+      "kind": "v_branch",
+      "hit": 23,
+      "total": 24,
+      "percent": 95.83333333333333
+    },
+    {
+      "file": "fused_add_pipe.sv",
+      "kind": "v_line",
+      "hit": 15,
+      "total": 15,
+      "percent": 100.0
+    },
+    {
+      "file": "fused_add_pipe.sv",
+      "kind": "v_toggle",
+      "hit": 722,
+      "total": 819,
+      "percent": 88.15628815628816
+    },
+    {
+      "file": "fused_align_comb.sv",
+      "kind": "v_toggle",
+      "hit": 125,
+      "total": 131,
+      "percent": 95.41984732824427
+    },
+    {
+      "file": "fused_arith_comb.sv",
+      "kind": "v_toggle",
+      "hit": 122,
+      "total": 127,
+      "percent": 96.06299212598425
+    },
+    {
+      "file": "fused_norm_comb.sv",
+      "kind": "v_toggle",
+      "hit": 126,
+      "total": 149,
+      "percent": 84.56375838926175
+    },
+    {
+      "file": "fused_prepare_comb.sv",
+      "kind": "v_toggle",
+      "hit": 227,
+      "total": 258,
+      "percent": 87.98449612403101
+    },
+    {
+      "file": "iter_ctrl.sv",
+      "kind": "v_branch",
+      "hit": 8,
+      "total": 8,
+      "percent": 100.0
+    },
+    {
+      "file": "iter_ctrl.sv",
+      "kind": "v_line",
+      "hit": 3,
+      "total": 3,
+      "percent": 100.0
+    },
+    {
+      "file": "iter_ctrl.sv",
+      "kind": "v_toggle",
+      "hit": 137,
+      "total": 143,
+      "percent": 95.8041958041958
+    },
+    {
+      "file": "lod_lzd_core.sv",
+      "kind": "v_line",
+      "hit": 2,
+      "total": 2,
+      "percent": 100.0
+    },
+    {
+      "file": "lod_lzd_core.sv",
+      "kind": "v_toggle",
+      "hit": 130,
+      "total": 261,
+      "percent": 49.808429118773944
+    },
+    {
+      "file": "mac_f_wrapper.sv",
+      "kind": "v_branch",
+      "hit": 16,
+      "total": 16,
+      "percent": 100.0
+    },
+    {
+      "file": "mac_f_wrapper.sv",
+      "kind": "v_line",
+      "hit": 5,
+      "total": 6,
+      "percent": 83.33333333333333
+    },
+    {
+      "file": "mac_f_wrapper.sv",
+      "kind": "v_toggle",
+      "hit": 567,
+      "total": 629,
+      "percent": 90.14308426073131
+    },
+    {
+      "file": "mul_iter_core.sv",
+      "kind": "v_branch",
+      "hit": 10,
+      "total": 10,
+      "percent": 100.0
+    },
+    {
+      "file": "mul_iter_core.sv",
+      "kind": "v_line",
+      "hit": 2,
+      "total": 2,
+      "percent": 100.0
+    },
+    {
+      "file": "mul_iter_core.sv",
+      "kind": "v_toggle",
+      "hit": 165,
+      "total": 181,
+      "percent": 91.16022099447514
+    },
+    {
+      "file": "ops_sel_comb.sv",
+      "kind": "v_branch",
+      "hit": 3,
+      "total": 6,
+      "percent": 50.0
+    },
+    {
+      "file": "ops_sel_comb.sv",
+      "kind": "v_line",
+      "hit": 2,
+      "total": 2,
+      "percent": 100.0
+    },
+    {
+      "file": "ops_sel_comb.sv",
+      "kind": "v_toggle",
+      "hit": 195,
+      "total": 312,
+      "percent": 62.5
+    },
+    {
+      "file": "posit_mac_f.sv",
+      "kind": "v_toggle",
+      "hit": 148,
+      "total": 148,
+      "percent": 100.0
+    },
+    {
+      "file": "posit_pack.sv",
+      "kind": "v_branch",
+      "hit": 9,
+      "total": 10,
+      "percent": 90.0
+    },
+    {
+      "file": "posit_pack.sv",
+      "kind": "v_line",
+      "hit": 5,
+      "total": 5,
+      "percent": 100.0
+    },
+    {
+      "file": "posit_pack.sv",
+      "kind": "v_toggle",
+      "hit": 174,
+      "total": 199,
+      "percent": 87.43718592964824
+    },
+    {
+      "file": "posit_pack_finish.sv",
+      "kind": "v_line",
+      "hit": 8,
+      "total": 10,
+      "percent": 80.0
+    },
+    {
+      "file": "posit_pack_finish.sv",
+      "kind": "v_toggle",
+      "hit": 213,
+      "total": 213,
+      "percent": 100.0
+    },
+    {
+      "file": "posit_pack_prepare.sv",
+      "kind": "v_branch",
+      "hit": 4,
+      "total": 4,
+      "percent": 100.0
+    },
+    {
+      "file": "posit_pack_prepare.sv",
+      "kind": "v_line",
+      "hit": 4,
+      "total": 4,
+      "percent": 100.0
+    },
+    {
+      "file": "posit_pack_prepare.sv",
+      "kind": "v_toggle",
+      "hit": 228,
+      "total": 305,
+      "percent": 74.75409836065573
+    },
+    {
+      "file": "posit_parser.sv",
+      "kind": "v_branch",
+      "hit": 14,
+      "total": 16,
+      "percent": 87.5
+    },
+    {
+      "file": "posit_parser.sv",
+      "kind": "v_line",
+      "hit": 6,
+      "total": 6,
+      "percent": 100.0
+    },
+    {
+      "file": "posit_parser.sv",
+      "kind": "v_toggle",
+      "hit": 358,
+      "total": 358,
+      "percent": 100.0
+    },
+    {
+      "file": "sac_step_comb.sv",
+      "kind": "v_branch",
+      "hit": 2,
+      "total": 2,
+      "percent": 100.0
+    },
+    {
+      "file": "sac_step_comb.sv",
+      "kind": "v_line",
+      "hit": 1,
+      "total": 1,
+      "percent": 100.0
+    },
+    {
+      "file": "sac_step_comb.sv",
+      "kind": "v_toggle",
+      "hit": 65,
+      "total": 69,
+      "percent": 94.20289855072464
+    },
+    {
+      "file": "sbm_accum.sv",
+      "kind": "v_branch",
+      "hit": 6,
+      "total": 6,
+      "percent": 100.0
+    },
+    {
+      "file": "sbm_accum.sv",
+      "kind": "v_line",
+      "hit": 2,
+      "total": 2,
+      "percent": 100.0
+    },
+    {
+      "file": "sbm_accum.sv",
+      "kind": "v_toggle",
+      "hit": 77,
+      "total": 92,
+      "percent": 83.69565217391305
+    },
+    {
+      "file": "sbm_accum_comb.sv",
+      "kind": "v_branch",
+      "hit": 4,
+      "total": 4,
+      "percent": 100.0
+    },
+    {
+      "file": "sbm_accum_comb.sv",
+      "kind": "v_line",
+      "hit": 1,
+      "total": 1,
+      "percent": 100.0
+    },
+    {
+      "file": "sbm_accum_comb.sv",
+      "kind": "v_toggle",
+      "hit": 73,
+      "total": 90,
+      "percent": 81.11111111111111
+    },
+    {
+      "file": "sbm_shift_comb.sv",
+      "kind": "v_branch",
+      "hit": 8,
+      "total": 8,
+      "percent": 100.0
+    },
+    {
+      "file": "sbm_shift_comb.sv",
+      "kind": "v_line",
+      "hit": 2,
+      "total": 2,
+      "percent": 100.0
+    },
+    {
+      "file": "sbm_shift_comb.sv",
+      "kind": "v_toggle",
+      "hit": 61,
+      "total": 68,
+      "percent": 89.70588235294117
+    }
+  ]
+}

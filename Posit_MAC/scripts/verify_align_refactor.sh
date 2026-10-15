@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source "$(dirname -- "${BASH_SOURCE[0]}")/rtl_paths.sh"
 set -euo pipefail
 cd "$(dirname "$0")/.."
 project="$PWD"
@@ -10,7 +11,7 @@ printf RUNNING > "$run/lint/status.txt"
 for format in '8 0' '16 1' '32 2' '32 3' '5 0' '6 1' '7 1' '16 10' '32 27'; do
     read -r nb es <<< "$format"
     verilator --lint-only --timing -Wall --top-module posit_add_align_candidate \
-        "-GNB=$nb" "-GES=$es" rtl/posit_add_align_candidate.sv rtl/dyn_right_shifter.sv \
+        "-GNB=$nb" "-GES=$es" rtl/candidates/adder/posit_add_align_candidate.sv rtl/common/dyn_right_shifter.sv \
         > "$run/lint/leaf_${nb}_${es}.log" 2>&1
 done
 printf COMPLETE > "$run/lint/status.txt"
@@ -25,12 +26,12 @@ for format in '8 0' '16 1' '32 2' '32 3'; do
         posit_add_arith posit_add_normalize posit_add posit_pack_prepare posit_pack_finish posit_pack_comb)
     rtl=()
     for module in "${sources[@]}"; do
-        cp -- "rtl/$module.sv" "$folder/src/"
+        cp -- "$(rtl_path "$module")" "$folder/src/"
         rtl+=("src/$module.sv")
     done
     # Candidate substitutes only in the private integration source copy.
     sed 's/module posit_add_align_candidate #(/module posit_add_align #(/' \
-        rtl/posit_add_align_candidate.sv > "$folder/src/posit_add_align.sv"
+        rtl/candidates/adder/posit_add_align_candidate.sv > "$folder/src/posit_add_align.sv"
     rtl+=(src/posit_add_align.sv)
     cp -- rtl/posit_mac.vh tb/adder_verification_top.sv tb/week10_adder_harness.cpp \
         tb/week10_add_reference.hpp l0/softposit_api.h l0/libsoftposit.so "$folder/src/"

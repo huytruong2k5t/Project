@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
-mkdir -p results/week13/tmp
-export TMPDIR="$PWD/results/week13/tmp"
+out="${W13_RESULTS_DIR:-results/week13}"
+[[ "$out" =~ ^results/[a-zA-Z0-9_/-]+$ && "$out" != *..* ]] || exit 2
+mkdir -p "$out/tmp"
+export TMPDIR="$PWD/$out/tmp"
 export VERILATOR_CACHE_REPORT=0
 mapfile -t rtl < scripts/week13_sources.txt
-verilator --version > results/week13/verilator_version.txt
-g++ --version > results/week13/compiler.txt
-verilator --lint-only --timing --assert -Wall --top-module posit_mac_f -Irtl "${rtl[@]}" > results/week13/lint.log 2>&1
+verilator --version > "$out/verilator_version.txt"
+g++ --version > "$out/compiler.txt"
+verilator --lint-only --timing --assert -Wall --top-module posit_mac_f -Irtl "${rtl[@]}" > "$out/lint.log" 2>&1
 printf 'W13 STRICT LINT PASS\n'
-run=results/week13/verilator
+run="$out/verilator"
 mkdir -p "$run/src/rtl" "$run/src/tb" "$run/src/l1/include" "$run/tmp"
 export TMPDIR="$PWD/$run/tmp"
 for f in "${rtl[@]}"; do cp -- "$f" "$run/src/rtl/"; done

@@ -6,11 +6,11 @@ mkdir -p "$run/tmp"
 export TMPDIR="$run/tmp"
 printf RUNNING > "$run/status.txt"
 verilator --version > "$run/version.log"
-sha256sum rtl/ops_sel_comb.sv > "$run/source.sha256"
+sha256sum rtl/multiplier/ops_sel_comb.sv > "$run/source.sha256"
 for full in $(seq 1 27); do
     for narrow in $(seq 1 "$full"); do
         verilator --lint-only --timing -Wall --top-module ops_sel_comb \
-            "-GFRAC_MAX=$full" "-GFRAC_W=$narrow" rtl/ops_sel_comb.sv \
+            "-GFRAC_MAX=$full" "-GFRAC_W=$narrow" rtl/multiplier/ops_sel_comb.sv \
             > "$run/${full}_${narrow}.log" 2>&1
     done
 done
@@ -20,7 +20,7 @@ for full in 1 5 12 26 27; do
         for ops in 0 1; do
             verilator --lint-only --timing -Wall --top-module ops_sel_comb \
                 "-GFRAC_MAX=$full" "-GFRAC_W=$narrow" -GSF_W=2 -GWIDTH_W=8 \
-                "-GEXACT_EN=1'b$exact" "-GOPS_EN=1'b$ops" rtl/ops_sel_comb.sv \
+                "-GEXACT_EN=1'b$exact" "-GOPS_EN=1'b$ops" rtl/multiplier/ops_sel_comb.sv \
                 > "$run/feature_${full}_${exact}_${ops}.log" 2>&1
         done
     done

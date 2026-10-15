@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source "$(dirname -- "${BASH_SOURCE[0]}")/rtl_paths.sh"
 set -euo pipefail
 cd "$(dirname "$0")/.."
 project_dir="$PWD"
@@ -30,7 +31,7 @@ for format in '8 0' '16 1' '32 2' '32 3'; do
     export TMPDIR="$run_dir/tmp"
     rtl=()
     for module in "${sources[@]}"; do
-        cp -- "rtl/$module.sv" "$run_dir/src/"
+        cp -- "$(rtl_path "$module")" "$run_dir/src/"
         rtl+=("src/$module.sv")
     done
     cp -- rtl/posit_mac.vh tb/nf_coverage_harness.cpp tb/nf_coverage_corpus.hpp tb/nf_coverage.vlt tb/week11_model.hpp \

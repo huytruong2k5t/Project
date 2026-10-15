@@ -24,7 +24,7 @@ tb/
 Tất cả các testbench đơn vị đều tích hợp mô hình vàng (Golden Reference Model), tự động so sánh từng chu kỳ và báo cáo số lượng vector đạt được (`0 mismatches`):
 
 ### 1. [`tb_lod_lzd_core.sv`](tb_lod_lzd_core.sv)
-- **Đối tượng**: Kiểm tra module [`lod_lzd_core.sv`](../rtl/lod_lzd_core.sv).
+- **Đối tượng**: Kiểm tra module [`lod_lzd_core.sv`](../rtl/common/lod_lzd_core.sv).
 - **Phạm vi kiểm tra**:
   - Quét cạn (Exhaustive) 256 vector trên $N=8$ cho cả 2 chế độ LOD (`MODE=0`) và LZD (`MODE=1`).
   - N=31: 10.000 vector ngẫu nhiên, 2 ca toàn 0/1, 62 walking-one/zero và 62 ca phân tầng theo vị trí bit đầu; tổng 10.126 vector.
@@ -36,7 +36,7 @@ Tất cả các testbench đơn vị đều tích hợp mô hình vàng (Golden 
 Chạy từ thư mục `Posit_MAC` với Icarus Verilog đã cài:
 
 ```bash
-iverilog -g2012 -s tb_lod_lzd_core -o results/tb_lod_lzd_core.vvp rtl/lod_lzd_core.sv tb/tb_lod_lzd_core.sv
+iverilog -g2012 -s tb_lod_lzd_core -o results/tb_lod_lzd_core.vvp rtl/common/lod_lzd_core.sv tb/tb_lod_lzd_core.sv
 vvp results/tb_lod_lzd_core.vvp > results/lod_lzd.log
 ```
 
@@ -49,7 +49,7 @@ Chạy bằng ModelSim trong PowerShell từ thư mục gốc đồ án (các c�
 ```powershell
 New-Item -ItemType Directory -Force Posit_MAC/results/modelsim_lod_lzd | Out-Null
 vlib Posit_MAC/results/modelsim_lod_lzd/work
-vlog -sv -work Posit_MAC/results/modelsim_lod_lzd/work -l Posit_MAC/results/modelsim_lod_lzd/compile.log Posit_MAC/rtl/lod_lzd_core.sv Posit_MAC/tb/tb_lod_lzd_core.sv
+vlog -sv -work Posit_MAC/results/modelsim_lod_lzd/work -l Posit_MAC/results/modelsim_lod_lzd/compile.log Posit_MAC/rtl/common/lod_lzd_core.sv Posit_MAC/tb/tb_lod_lzd_core.sv
 vsim -c -onfinish exit -lib Posit_MAC/results/modelsim_lod_lzd/work -l Posit_MAC/results/modelsim_lod_lzd/simulation.log tb_lod_lzd_core -do 'run -all; quit -code 1'
 ```
 
@@ -58,7 +58,7 @@ Kiểm tra log có dòng tổng kết PASS và không có `FAIL`, `$fatal` hoặ
   - Kiểm tra tính hợp lệ của cờ `vld`.
 
 ### 2. [`tb_dyn_left_shifter.sv`](tb_dyn_left_shifter.sv)
-- **Đối tượng**: Kiểm tra module [`dyn_left_shifter.sv`](../rtl/dyn_left_shifter.sv).
+- **Đối tượng**: Kiểm tra module [`dyn_left_shifter.sv`](../rtl/common/dyn_left_shifter.sv).
 - **Phạm vi kiểm tra** (60,832 vectors, 100% Pass):
   - **Suite 1**: Quét cạn 4,096 tổ hợp trên $N=8, \text{SHIFT\_W}=4$.
   - **Suite 2**: Kiểm tra biên $N=32, \text{SHIFT\_W}=6$ qua toàn bộ 64 bước dịch ($0 \dots 63$), bao gồm NaR, maxpos, minpos.
@@ -66,7 +66,7 @@ Kiểm tra log có dòng tổng kết PASS và không có `FAIL`, `$fatal` hoặ
   - **Suite 4**: 10,000 vector ngẫu nhiên kiểm tra chịu tải và chống tràn ($b \ge N$).
 
 ### 3. [`tb_dyn_right_shifter.sv`](tb_dyn_right_shifter.sv)
-- **Đối tượng**: Kiểm tra module [`dyn_right_shifter.sv`](../rtl/dyn_right_shifter.sv).
+- **Đối tượng**: Kiểm tra module [`dyn_right_shifter.sv`](../rtl/common/dyn_right_shifter.sv).
 - **Phạm vi kiểm tra** (146,400 vectors, 100% Pass):
   - **Suite 1**: Quét cạn 12,288 tổ hợp trên $N=8$ trên cả 3 chế độ: Dịch logic, Dịch số học, và Điền bit động (`fill_val=1`).
   - **Suite 2**: Kiểm tra biên $N=32$ với các số âm có dấu (bảo toàn sign extension) và số dương qua các bước dịch $0 \dots 63$.

@@ -9,6 +9,7 @@ import json
 import math
 import os
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 import re
 import sys
 
@@ -20,7 +21,7 @@ GROUPS = ["near_one", "balanced_scale", "uniform_bits"]
 
 
 def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
 
 
 def read_rows(path):

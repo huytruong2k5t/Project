@@ -1,5 +1,6 @@
 param([string]$QuartusBin='C:/altera/13.0sp1/quartus/bin64')
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'rtl_paths.ps1')
 $project=Split-Path $PSScriptRoot -Parent
 $run=Join-Path $project 'results/week12/nf_ppa'
 New-Item -ItemType Directory -Force "$run/tmp" | Out-Null
@@ -15,7 +16,7 @@ Set-Content -Encoding ascii "$run/status.txt" RUNNING
 foreach($seed in @(1,2,3)) {
     $folder=Join-Path $run "baseline_seed$seed"
     New-Item -ItemType Directory -Force "$folder/src" | Out-Null
-    foreach($name in $sources) {Copy-Item -LiteralPath "$project/rtl/$name.sv" -Destination "$folder/src/$name.sv"}
+    foreach($name in $sources) {Copy-Item -LiteralPath (Resolve-RtlPath $name) -Destination "$folder/src/$name.sv"}
     # Quartus13 requires explicit generate delimiters accepted implicitly by SV tools.
     # Only the private copy changes; conditions, assignments and port widths are identical.
     $parser=Get-Content -LiteralPath "$folder/src/posit_parser_comb.sv" -Raw
@@ -59,7 +60,7 @@ foreach($seed in @(1,2,3)) {
     Write-Output "W12 NF POST-ROUTE COMPLETE seed=$seed"
 }
 $hashes=@{}
-foreach($name in @($sources|ForEach-Object {"rtl/$_.sv"})+@('rtl/posit_mac.vh','scripts/run_week12_nf_ppa.ps1')) {
+foreach($name in @($sources|ForEach-Object {(Resolve-RtlPath $_).Substring($project.Length+1).Replace('\','/')})+@('rtl/posit_mac.vh','scripts/run_week12_nf_ppa.ps1')) {
     $hashes[$name]=(Get-FileHash -LiteralPath "$project/$name" -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 $hashes | ConvertTo-Json -Depth 4 | Set-Content -Encoding utf8 "$run/source_sha256.json"

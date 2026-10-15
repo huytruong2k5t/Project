@@ -147,7 +147,7 @@ ambiguity = ambiguity.replace("| Core/MAC RTL | Chưa nghiệm thu | Reset bridg
 write(ambiguity_path, ambiguity)
 append_once(ambiguity_path, "## 4. Trạng thái sau RTL paper và core — 09/10/2026", "Paper843 commit/Fig.4 đạt cùng giả định fig3; chưa có bằng chứng mới cho tie/prefix/internal guard hoặc generator gốc, nên không chạy lại TableI. W9-03..05 đã có code/test; Gate2/tuần9 processing. Verilator/lint thiếu và Git checkout không có là hai trở ngại vận hành, không đổi mô hình để né tiêu chí.\n\n"+numerical)
 
-progress_path = root.parent / "doc/TIEN_DO_DO_AN.md"
+progress_path = root / "docs/TIEN_DO_DO_AN.md"
 progress = read(progress_path)
 progress = progress.replace("**Ngày cập nhật:** 08/10/2026", "**Ngày cập nhật:** 09/10/2026")
 progress = progress.replace("Đã chốt giao diện lõi nhân và kiểm OPS/SAC tổ hợp; còn SBM, điều khiển lặp, tích hợp và harness/coverage", "Đã triển khai và kiểm core/multiplier standalone; còn nghiệm thu lớn/lint Gate2 và RTL MAC/Gate3")

@@ -3,8 +3,8 @@ $ErrorActionPreference='Stop'
 $project=Split-Path $PSScriptRoot -Parent
 $run=Join-Path $project 'results/normalize_refactor_20261015/modelsim'
 New-Item -ItemType Directory -Force $run | Out-Null
-$sources=@('rtl/lod_lzd_core.sv','rtl/dyn_left_shifter.sv','rtl/posit_add_normalize.sv',
-    'rtl/posit_add_normalize_zero.sv','rtl/posit_add_normalize_shared.sv',
+$sources=@('rtl/common/lod_lzd_core.sv','rtl/common/dyn_left_shifter.sv','rtl/adder/posit_add_normalize.sv',
+    'rtl/candidates/adder/posit_add_normalize_zero.sv','rtl/candidates/adder/posit_add_normalize_shared.sv',
     'tb/normalize_refactor_checker.sv','tb/tb_normalize_refactor.sv')
 Push-Location $run
 try {

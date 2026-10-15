@@ -5,6 +5,7 @@ import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 
 root = Path(__file__).resolve().parents[1]
 base = root / "results/week9_multiplier"
@@ -77,7 +78,7 @@ report = dict(
     strict_lint_profiles=16,
     structural_coverage="Measured raw line/branch/toggle; no percentage threshold "
                         "is specified for this milestone; unhit points retained",
-    evidence_sha256={str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
+    evidence_sha256={str(path.relative_to(root)): hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
                      for path in evidence_paths},
     remaining=["Gate3 MAC RTL integration", "Final section6.7 large matrix",
                "STA/PPA and CDC signoff", "Original paper provenance/TableI"])

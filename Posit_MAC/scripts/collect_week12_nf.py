@@ -3,6 +3,7 @@ import csv
 import hashlib
 import json
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 import re
 import statistics
 
@@ -18,7 +19,7 @@ def read(path):
 
 
 def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
 
 
 def dump(path,value):

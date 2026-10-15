@@ -1,0 +1,18 @@
+# vsim {+VECTOR_DIR=C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week10_adder\pilot} -do run.do -l simulate_32_2.log -c -wlf simulate_32_2.wlf -gES=2 -gNB=32 work.tb_week10_adder_comb 
+# Loading sv_std.std
+# Loading work.tb_week10_adder_comb
+# Loading work.posit_parser_comb
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# Loading work.posit_add_comb
+# Loading work.posit_add_align
+# Loading work.dyn_right_shifter
+# Loading work.posit_add_arith
+# Loading work.posit_add_normalize
+# Loading work.posit_pack_comb
+# Loading work.posit_pack_prepare
+# Loading work.posit_pack_finish
+# do run.do 
+# W10 COMB PASS NB=32 ES=2 rows=24610 mismatches=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_week10_adder_comb.sv(114)
+#    Time: 49220 ns  Iteration: 0  Instance: /tb_week10_adder_comb

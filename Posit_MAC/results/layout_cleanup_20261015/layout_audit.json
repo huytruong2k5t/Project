@@ -1,0 +1,53 @@
+{
+  "status": "PASS_PATH_ONLY",
+  "moved": 55,
+  "production_modules": 36,
+  "rtl_bytes_unchanged": true,
+  "historic_rtl_hashes_checked": {
+    "week13/summary.json": 24,
+    "primitive_xilinx_20261015/manifest.json": 9
+  },
+  "limits": "This audit proves relocation integrity, not a new numerical or timing signoff.",
+  "verification": {
+    "strict_lint_profiles": 17,
+    "NF": {
+      "completed": 10000,
+      "mismatches": 0,
+      "seed": 20264216
+    },
+    "F": {
+      "completed": 10000,
+      "mismatches": 0,
+      "seed": 20261015
+    },
+    "ModelSim": {
+      "cases": 143976,
+      "mismatches": 0,
+      "profiles": [
+        "8/0",
+        "16/1",
+        "32/2",
+        "32/3"
+      ]
+    },
+    "XSim": {
+      "completed": 8192,
+      "reset_aborts": 24,
+      "mismatches": 0
+    }
+  },
+  "cleanup": {
+    "initial_bytes": 4222652176,
+    "removed_build_bytes": 3876105598,
+    "remaining_bytes": 355802743,
+    "preserved_evidence_hash_check": "PASS",
+    "note": "New smoke evidence added between the two cleanup passes."
+  },
+  "commands": [
+    "bash scripts/verify_rtl_layout.sh",
+    "powershell -NoProfile -File scripts/verify_week10_adder_comb.ps1 -FixtureRun pilot -RunName layout_comb",
+    "powershell -NoProfile -File scripts/run_week13_xilinx.ps1 -Mode simulate -RunRoot results/layout_cleanup_20261015/fused",
+    "powershell -NoProfile -File scripts/cleanup_results.ps1 -Apply",
+    "python scripts/audit_rtl_layout.py"
+  ]
+}

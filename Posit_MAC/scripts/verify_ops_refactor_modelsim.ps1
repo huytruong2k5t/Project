@@ -7,7 +7,7 @@ New-Item -ItemType Directory -Force $model | Out-Null
 $old=Get-Content -LiteralPath (Join-Path $run 'before/ops_sel_comb.sv') -Raw
 $reference=Join-Path $model 'ops_sel_before.sv'
 [IO.File]::WriteAllText($reference,$old.Replace('module ops_sel_comb #(','module ops_sel_before #('),[Text.UTF8Encoding]::new($false))
-$sources=@((Join-Path $project 'rtl/ops_sel_comb.sv'),$reference,
+$sources=@((Join-Path $project 'rtl/multiplier/ops_sel_comb.sv'),$reference,
     (Join-Path $project 'tb/ops_refactor_checker.sv'),(Join-Path $project 'tb/tb_ops_refactor.sv'))
 Push-Location $model
 try {

@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 
 ROOT = Path(__file__).resolve().parents[1]
 RUN = ROOT/'results/week11'
@@ -36,14 +37,14 @@ assert read(RUN/'run_status.txt').strip()=='COMPLETE','Native suite incomplete'
 assert read(RUN/'modelsim/run_status.txt').strip()=='COMPLETE','ModelSim suite incomplete'
 hashes=json.loads(read(RUN/'modelsim/source_sha256.json'))
 for name,digest in hashes.items():
-    assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==digest,('ModelSim source changed',name)
+    assert hashlib.sha256(resolve_source(ROOT/name).read_bytes()).hexdigest()==digest,('ModelSim source changed',name)
 frozen=json.loads(read(ROOT/'results/l1_floor_rne_freeze/summary.json'))
 for name,digest in frozen['source_sha256'].items():
-    assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==digest,('Frozen L1 changed',name)
+    assert hashlib.sha256(resolve_source(ROOT/name).read_bytes()).hexdigest()==digest,('Frozen L1 changed',name)
 fixture_digests={}
 for line in read(RUN/'fixtures.sha256').splitlines():
     digest,name=line.split(maxsplit=1)
-    assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==digest
+    assert hashlib.sha256(resolve_source(ROOT/name).read_bytes()).hexdigest()==digest
     fixture_digests[name]=digest
 
 profiles=[]
@@ -54,7 +55,7 @@ for nb,es in ((8,0),(16,1),(32,2),(32,3)):
     for saved in (folder/'src').rglob('*'):
         if not saved.is_file(): continue
         if saved.parent.name=='l1': live=ROOT/'l1/include'/saved.name
-        elif saved.suffix in ('.sv','.vh'): live=ROOT/'rtl'/saved.name
+        elif saved.suffix in ('.sv','.vh'): live=rtl_source(saved.name)
         elif saved.name.startswith('week'): live=ROOT/'tb'/saved.name
         else: live=ROOT/'l0'/saved.name
         assert saved.read_bytes()==live.read_bytes(),('Native snapshot changed',saved)
@@ -109,7 +110,7 @@ fused=json.loads(read(RUN/'fused_pilot_summary.json'))
 assert fused['checked']==100000 and fused['mismatches']==0
 assert 'FIXTURE 32/3 completed=7128 aborted=72' in read(RUN/'generator_ubsan.log')
 assert 'W11 F PILOT GENERATED checked=100000' in read(RUN/'fused_ubsan.log')
-source_files=[*ROOT.glob('rtl/*nf*.sv'),ROOT/'rtl/round_unpacked_comb.sv',ROOT/'rtl/mul_prepack_norm_comb.sv',
+source_files=[*ROOT.glob('rtl/mac_nf/*nf*.sv'),ROOT/'rtl/packer/round_unpacked_comb.sv',ROOT/'rtl/multiplier/mul_prepack_norm_comb.sv',
               *ROOT.glob('tb/*week11*'),*ROOT.glob('l1/test/*week11*'),*ROOT.glob('scripts/*week11*')]
 report=dict(status='PASS: Gate3 NF prepack-preserving milestone',date='2026-10-13',
             main_profile='32/3 FRAC_W12 FLOOR/RNE OPS0/1 exact/approx n0..8 acc_mode0/1',

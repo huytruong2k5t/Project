@@ -4,7 +4,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $projectPath = Split-Path $PSScriptRoot -Parent
 $resultPath = Join-Path $projectPath 'results/packer_p2_optimization'
-$sources = @('rtl/posit_pack_finish.sv',
+$sources = @('rtl/packer/posit_pack_finish.sv',
     'results/packer_p2_optimization/posit_pack_finish_reference.sv',
     'tb/packer_finish_equivalence_checker.sv',
     'tb/tb_packer_finish_equivalence.sv')

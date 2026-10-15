@@ -3,8 +3,8 @@ $ErrorActionPreference='Stop'
 $project=Split-Path $PSScriptRoot -Parent
 $run=Join-Path $project 'results/align_refactor_20261015/modelsim'
 New-Item -ItemType Directory -Force $run | Out-Null
-$sources=@('rtl/dyn_right_shifter.sv','rtl/posit_add_align.sv',
-    'rtl/posit_add_align_candidate.sv','tb/align_refactor_checker.sv','tb/tb_align_refactor.sv')
+$sources=@('rtl/common/dyn_right_shifter.sv','rtl/adder/posit_add_align.sv',
+    'rtl/candidates/adder/posit_add_align_candidate.sv','tb/align_refactor_checker.sv','tb/tb_align_refactor.sv')
 Push-Location $run
 try {
     if (!$SummarizeOnly) {

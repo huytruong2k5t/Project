@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 
 ROOT = Path(__file__).resolve().parents[1]
 RUN = ROOT / "results/week10_adder"
@@ -41,7 +42,7 @@ for directory in ("verilator", "modelsim_comb_final", "modelsim_pipeline_final",
 
 for directory in ("modelsim_comb_final", "modelsim_pipeline_final", "invalid_params"):
     hashes = json.loads(read(RUN / directory / "source_sha256.json"))
-    assert all(hashlib.sha256((ROOT / n).read_bytes()).hexdigest() == h for n, h in hashes.items()), f"ModelSim sources changed: {directory}"
+    assert all(hashlib.sha256(resolve_source(ROOT / n).read_bytes()).hexdigest() == h for n, h in hashes.items()), f"ModelSim sources changed: {directory}"
 
 for case in range(3):
     rejected = read(RUN / f"invalid_params/case_{case}.log")
@@ -84,7 +85,7 @@ for nb, es in ((8, 0), (16, 1), (32, 2), (32, 3)):
         if saved.parent.name == "l1":
             live = ROOT / "l1/include" / saved.name
         elif saved.suffix in (".sv", ".vh"):
-            live = ROOT / ("tb" if saved.name == "adder_verification_top.sv" else "rtl") / saved.name
+            live = (ROOT/"tb"/saved.name if saved.name == "adder_verification_top.sv" else rtl_source(saved.name))
         elif saved.name in ("week10_adder_harness.cpp", "week10_add_reference.hpp"):
             live = ROOT / "tb" / saved.name
         else:
@@ -101,10 +102,10 @@ assert "W10 GENERATOR PASS" in read(RUN / "generator.log")
 assert "W10 GENERATOR PASS" in read(RUN / "generator_ubsan.log")
 assert "runtime error:" not in read(RUN / "generator_ubsan.log")
 frozen = json.loads((ROOT / "results/l1_floor_rne_freeze/summary.json").read_text())
-assert all(hashlib.sha256((ROOT / n).read_bytes()).hexdigest() == h for n, h in frozen["source_sha256"].items())
+assert all(hashlib.sha256(resolve_source(ROOT / n).read_bytes()).hexdigest() == h for n, h in frozen["source_sha256"].items())
 paired = json.loads((RUN / "paired/manifest.json").read_text())
 assert paired["sha256"] == hashlib.sha256((RUN / "paired/pilot.txt").read_bytes()).hexdigest()
-source_files = [*ROOT.glob("rtl/posit_add*.sv"), *ROOT.glob("tb/*week10*"),
+source_files = [*ROOT.glob("rtl/adder/posit_add*.sv"), *ROOT.glob("tb/*week10*"),
                 ROOT / "tb/adder_verification_top.sv", ROOT / "l1/test/gen_week10_adder.cpp",
                 ROOT / "l1/test/gen_nf_f_corpus.cpp", *ROOT.glob("scripts/*week10*")]
 report = dict(status="PASS: Week10 adder unit milestone and comparison-input contract", date="2026-10-12",

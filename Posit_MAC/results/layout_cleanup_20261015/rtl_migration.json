@@ -1,0 +1,281 @@
+{
+  "date": "2026-10-15",
+  "purpose": "Path-only RTL reorganization; historical results are immutable.",
+  "moves": [
+    {
+      "old": "rtl/align_ppa_boundary.sv",
+      "new": "rtl/benchmarks/align_ppa_boundary.sv",
+      "sha256": "88dd3e715f68e98d83f1e61ed815f7ba8df3a1e2196613b56805d4cfa6a84ee1"
+    },
+    {
+      "old": "rtl/align_ppa_top.sv",
+      "new": "rtl/benchmarks/align_ppa_top.sv",
+      "sha256": "97989888ee9d2b60e191f9fe0ab5fbaac0212a41c1ccc7820e8b239f684fa5a1"
+    },
+    {
+      "old": "rtl/dyn_left_shifter.sv",
+      "new": "rtl/common/dyn_left_shifter.sv",
+      "sha256": "537bfd27d3145ead9c5f74cc18d287ed83b89e0fd8a3e6ed834b75b55d017fb8"
+    },
+    {
+      "old": "rtl/dyn_right_shifter.sv",
+      "new": "rtl/common/dyn_right_shifter.sv",
+      "sha256": "89514601248f33eef173b113cbed062d2a777ec6f84d1f3b0fc66eacd946ef86"
+    },
+    {
+      "old": "rtl/fused_abs_borrow_comb.sv",
+      "new": "rtl/mac_f/fused_abs_borrow_comb.sv",
+      "sha256": "e0567a7fe45a85d1a81258bc145134e5ae4f2ee21b88edd27ca61fe57ee12c3c"
+    },
+    {
+      "old": "rtl/fused_add_pipe.sv",
+      "new": "rtl/mac_f/fused_add_pipe.sv",
+      "sha256": "52db5e30f18ca9dc0d8956a37804e04028dc3839e328446764a4c7a5fff8985a"
+    },
+    {
+      "old": "rtl/fused_align_comb.sv",
+      "new": "rtl/mac_f/fused_align_comb.sv",
+      "sha256": "b2c60ef01ead59a85f44736f0535d7e844fc9c846b4f14e944954b1f66679164"
+    },
+    {
+      "old": "rtl/fused_arith_comb.sv",
+      "new": "rtl/mac_f/fused_arith_comb.sv",
+      "sha256": "b41d6eca8a402d33782ef58fc96388fc647589f327634b78849129e3321656a3"
+    },
+    {
+      "old": "rtl/fused_norm_comb.sv",
+      "new": "rtl/mac_f/fused_norm_comb.sv",
+      "sha256": "281ecb19088576cc5f589de5e346b25ae5cd0f0ee732628b00457b46c83908d6"
+    },
+    {
+      "old": "rtl/fused_prepare_comb.sv",
+      "new": "rtl/mac_f/fused_prepare_comb.sv",
+      "sha256": "f8e32c54a0983becd72c5d1a3e46a17859e9a310b8fa5b0d39e4a3fc8c5f33b8"
+    },
+    {
+      "old": "rtl/iter_ctrl.sv",
+      "new": "rtl/multiplier/iter_ctrl.sv",
+      "sha256": "3e9fcae9d9969787e2a11f2df37316b4e101de45990fb75988c11d2a36fd9d18"
+    },
+    {
+      "old": "rtl/lod_lzd_core.sv",
+      "new": "rtl/common/lod_lzd_core.sv",
+      "sha256": "2c5f501f4bee6c70a67099cff299a9ff7f9e0375bc75ada57a73e6addbe432a7"
+    },
+    {
+      "old": "rtl/mac_f_wrapper.sv",
+      "new": "rtl/mac_f/mac_f_wrapper.sv",
+      "sha256": "963586345e0115af23c4a0d40fe13b6e71ed2bcdffba167f7833fa7560a302b4"
+    },
+    {
+      "old": "rtl/mac_nf_wrapper.sv",
+      "new": "rtl/mac_nf/mac_nf_wrapper.sv",
+      "sha256": "0dc05a19d096835748ee8c5c1d5d0a740f030c21cb6d4597672695c64bf4ac9a"
+    },
+    {
+      "old": "rtl/mul_iter_core.sv",
+      "new": "rtl/multiplier/mul_iter_core.sv",
+      "sha256": "a15a44a6659e002a4491eae1e7fe1eed5886f2477482e2ec4042e976c269f5a8"
+    },
+    {
+      "old": "rtl/mul_iter_wrapper.sv",
+      "new": "rtl/multiplier/mul_iter_wrapper.sv",
+      "sha256": "83ff2e2f0772f0e47d6501077d35f7bad84754d7c907f40453694e00176166b5"
+    },
+    {
+      "old": "rtl/mul_norm_comb.sv",
+      "new": "rtl/multiplier/mul_norm_comb.sv",
+      "sha256": "d69618b016fc512f45f8cad93eb79d419996f375ae93db3cf87e9c47998c87a1"
+    },
+    {
+      "old": "rtl/mul_prepack_norm_comb.sv",
+      "new": "rtl/multiplier/mul_prepack_norm_comb.sv",
+      "sha256": "7d1af9a74ad05e1cb76fefbbaf9477526914a4c37174b0c989f494d2e653e9b7"
+    },
+    {
+      "old": "rtl/normalize_ppa_boundary.sv",
+      "new": "rtl/benchmarks/normalize_ppa_boundary.sv",
+      "sha256": "37ca4212a2869a7d34f444284faf9853dc83f68a08f98ce08358d13bf9bb17db"
+    },
+    {
+      "old": "rtl/normalize_ppa_top.sv",
+      "new": "rtl/benchmarks/normalize_ppa_top.sv",
+      "sha256": "6883760805ac8e62bf98ed54c49015263c77c6961bffd1b80cde72f55ecb1f68"
+    },
+    {
+      "old": "rtl/ops_compare_top.sv",
+      "new": "rtl/benchmarks/ops_compare_top.sv",
+      "sha256": "55d5d026f563317316a941fc9d7632fb65ce9d05b0f78aa276ba948db669b4dd"
+    },
+    {
+      "old": "rtl/ops_ppa_boundary.sv",
+      "new": "rtl/benchmarks/ops_ppa_boundary.sv",
+      "sha256": "1a92866261e1448c81cb52dd642d3c9ef6dc87b2627c400dcb033c109c4b38d8"
+    },
+    {
+      "old": "rtl/ops_ppa_top.sv",
+      "new": "rtl/benchmarks/ops_ppa_top.sv",
+      "sha256": "cc649ff5ff311c33de28532c20d7c7b12d91f8c313d017387c303a9c53623243"
+    },
+    {
+      "old": "rtl/ops_sel_comb.sv",
+      "new": "rtl/multiplier/ops_sel_comb.sv",
+      "sha256": "4b168cf0fb121ed9e72af64d76a34f18d1851840e1c7f83be31340b500934e3e"
+    },
+    {
+      "old": "rtl/packer_ppa_boundary.sv",
+      "new": "rtl/benchmarks/packer_ppa_boundary.sv",
+      "sha256": "5ded004dcb03c5cb44dcb09bee9046bfd8a51c38019777d8dd876ff02ff6ca01"
+    },
+    {
+      "old": "rtl/packer_ppa_top.sv",
+      "new": "rtl/benchmarks/packer_ppa_top.sv",
+      "sha256": "f6a967fafb3c3e713e5459e87ce4d5d97e7a330de65e986b5ade99ef7c96625a"
+    },
+    {
+      "old": "rtl/paper_mul_iter.sv",
+      "new": "rtl/research/paper/paper_mul_iter.sv",
+      "sha256": "20bfdf07c3e28e8548385e89fed5268a778f6b8ccd0fe019272bf9ace41c2879"
+    },
+    {
+      "old": "rtl/paper_mul_wrapper.sv",
+      "new": "rtl/research/paper/paper_mul_wrapper.sv",
+      "sha256": "2697f7f558eb3e0350e117e3ae88b45b96f1c6cc8ed59392c95099fc0bb9db3d"
+    },
+    {
+      "old": "rtl/paper_norm_comb.sv",
+      "new": "rtl/research/paper/paper_norm_comb.sv",
+      "sha256": "642cae1b51d753bc9fe9bd5ba71bb6cd5acfc2c9e2aedaa2ee621f076e94318b"
+    },
+    {
+      "old": "rtl/paper_ops_comb.sv",
+      "new": "rtl/research/paper/paper_ops_comb.sv",
+      "sha256": "6eff1ab77a4d95b578f4f18a29d42e244664d5e45640fc0e0d975010a83b9a0e"
+    },
+    {
+      "old": "rtl/paper_step_comb.sv",
+      "new": "rtl/research/paper/paper_step_comb.sv",
+      "sha256": "2d6542329784fd9422676e5a20d3cb42a74bb2af89f63e08f03631d8e5e826ff"
+    },
+    {
+      "old": "rtl/posit_add.sv",
+      "new": "rtl/adder/posit_add.sv",
+      "sha256": "1b0d2dd3a1d684616f61598be3a7f35158ed37b7826aed8d8aa2e69a54ffc8de"
+    },
+    {
+      "old": "rtl/posit_add_align.sv",
+      "new": "rtl/adder/posit_add_align.sv",
+      "sha256": "b6d8506eeb9ec4c72c2c17050e6be93e2d0457e34103f9611e3c129794e5465c"
+    },
+    {
+      "old": "rtl/posit_add_align_candidate.sv",
+      "new": "rtl/candidates/adder/posit_add_align_candidate.sv",
+      "sha256": "3d37b0d68d8000ceca77bff3e25c101e4ec4c0a40ad64bdbf79b9e491180fa20"
+    },
+    {
+      "old": "rtl/posit_add_arith.sv",
+      "new": "rtl/adder/posit_add_arith.sv",
+      "sha256": "58ff5e589c86cd65a1c9982b0c91c6ff8b29585b2221dcc3dde850c16d86f8e2"
+    },
+    {
+      "old": "rtl/posit_add_comb.sv",
+      "new": "rtl/adder/posit_add_comb.sv",
+      "sha256": "8ca7d8d86cca51d05c54448637fab88327079fe847649b3bdce4d38d90f7da6f"
+    },
+    {
+      "old": "rtl/posit_add_normalize.sv",
+      "new": "rtl/adder/posit_add_normalize.sv",
+      "sha256": "f6dc84735c6985d4ed7512a5be3d93abc2def2235ff6023437cc960a0c0f2a29"
+    },
+    {
+      "old": "rtl/posit_add_normalize_shared.sv",
+      "new": "rtl/candidates/adder/posit_add_normalize_shared.sv",
+      "sha256": "281d5508ea9a5fc1ecd65896bd46772d2d8d0c0872d63cce86001a9905df9963"
+    },
+    {
+      "old": "rtl/posit_add_normalize_zero.sv",
+      "new": "rtl/candidates/adder/posit_add_normalize_zero.sv",
+      "sha256": "481d33566d04f2aae2a41b755a6b51947e397b6a60369139ef0993065b896c85"
+    },
+    {
+      "old": "rtl/posit_mac_f.sv",
+      "new": "rtl/mac_f/posit_mac_f.sv",
+      "sha256": "284f4bce0bea076882d8fe613e9893c57c4998179a45978b1ea0b61f891bbae0"
+    },
+    {
+      "old": "rtl/posit_mac_nf.sv",
+      "new": "rtl/mac_nf/posit_mac_nf.sv",
+      "sha256": "72eb98146d83e7675b721c58c183216be15709caa2a1590a8e7bf10daba0cf66"
+    },
+    {
+      "old": "rtl/posit_mul_iter.sv",
+      "new": "rtl/multiplier/posit_mul_iter.sv",
+      "sha256": "6643283e58450d2305007052e243871c637310a594e2fbf55b3cba35b6fcb647"
+    },
+    {
+      "old": "rtl/posit_pack.sv",
+      "new": "rtl/packer/posit_pack.sv",
+      "sha256": "eb97ee2f9b93ebc3e51cba0f9506ae8f8efaeab0ca6fca71e0043e138aad27fe"
+    },
+    {
+      "old": "rtl/posit_pack_comb.sv",
+      "new": "rtl/packer/posit_pack_comb.sv",
+      "sha256": "d602169aa5fa8ce5dae29de89c69722ec0d6729f396fbd26e18788f15d811346"
+    },
+    {
+      "old": "rtl/posit_pack_finish.sv",
+      "new": "rtl/packer/posit_pack_finish.sv",
+      "sha256": "bf3a4dc17e3a9542cd5ef77215467aebb9fbc31c1c23b1f52124148d3b9dff5d"
+    },
+    {
+      "old": "rtl/posit_pack_prepare.sv",
+      "new": "rtl/packer/posit_pack_prepare.sv",
+      "sha256": "21a544e78c3577e95c82aa38363f9006870c3103e678befa55be28ca5ea37328"
+    },
+    {
+      "old": "rtl/posit_parser.sv",
+      "new": "rtl/parser/posit_parser.sv",
+      "sha256": "43acff8de2fad8592811dacc2cefc7ae658ff56e967a3062bbce5ce56e521329"
+    },
+    {
+      "old": "rtl/posit_parser_comb.sv",
+      "new": "rtl/parser/posit_parser_comb.sv",
+      "sha256": "3d619c0ab22e7433aecfc1012de1486caee39d36e89fe472208f07c845806c43"
+    },
+    {
+      "old": "rtl/primitive_ppa_boundary.sv",
+      "new": "rtl/benchmarks/primitive_ppa_boundary.sv",
+      "sha256": "56f6c82333d1af942318c01d940114bdc070e4f7ec4e3e95192e1b9c4b4bccea"
+    },
+    {
+      "old": "rtl/primitive_ppa_top.sv",
+      "new": "rtl/benchmarks/primitive_ppa_top.sv",
+      "sha256": "4c3c462b79aa6d8054ca9819526e8b1ff5c9efdda09bf8b98649c01604722151"
+    },
+    {
+      "old": "rtl/round_unpacked_comb.sv",
+      "new": "rtl/packer/round_unpacked_comb.sv",
+      "sha256": "b1594ddbca6e4c6d1ef2daed7bf6b3b29d985b0923d02cd3a0d6a483d2700c06"
+    },
+    {
+      "old": "rtl/sac_step_comb.sv",
+      "new": "rtl/multiplier/sac_step_comb.sv",
+      "sha256": "ff01ec40baeb1c35026d82957bf33db21fba98a0d2f292ebd7b5aac554834b72"
+    },
+    {
+      "old": "rtl/sbm_accum.sv",
+      "new": "rtl/multiplier/sbm_accum.sv",
+      "sha256": "a8f9e4017513e5aa4d43cea1ebd16bd0e1d4fb61869cfb4dea20ac4b8e12940c"
+    },
+    {
+      "old": "rtl/sbm_accum_comb.sv",
+      "new": "rtl/multiplier/sbm_accum_comb.sv",
+      "sha256": "1c23cc558198e6eaa8274483c3ff35c97df35c2639b15e4fb9b6054d1314d7ef"
+    },
+    {
+      "old": "rtl/sbm_shift_comb.sv",
+      "new": "rtl/multiplier/sbm_shift_comb.sv",
+      "sha256": "e0fa8e48853748af065e6ca7d84bb2040e1e4981e3b58f9ed49ee0ccb290c5a8"
+    }
+  ]
+}

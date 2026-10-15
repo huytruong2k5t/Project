@@ -5,6 +5,7 @@ import json
 import math
 import re
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "results/paper_journal2024/measurement"
@@ -90,7 +91,7 @@ files = [
 files += [str(path.relative_to(ROOT)).replace("\\", "/")
           for path in OUT.rglob("*")
           if path.is_file() and "tmp" not in path.parts and path.name != "summary.json"]
-hashes = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in files}
+hashes = {name: hashlib.sha256(resolve_source(ROOT / name).read_bytes()).hexdigest() for name in files}
 report = {
     "date": "2026-10-09",
     "source_doi": "10.1109/TVLSI.2024.3354726",

@@ -12,10 +12,10 @@ try {
     Run-Tool (Join-Path $projectPath 'l1/gen_week9_core.exe') @('.') 'generator.log'
     Run-Tool (Join-Path $ModelSimBin 'vsim.exe') @('-version') 'version.log'
     if(!(Test-Path work)) {Run-Tool (Join-Path $ModelSimBin 'vlib.exe') @('work') 'library.log'}
-    $sources=@('../../../rtl/lod_lzd_core.sv','../../../rtl/dyn_left_shifter.sv',
-        '../../../rtl/sac_step_comb.sv','../../../rtl/sbm_shift_comb.sv',
-        '../../../rtl/sbm_accum_comb.sv','../../../rtl/iter_ctrl.sv',
-        '../../../rtl/sbm_accum.sv','../../../rtl/mul_iter_core.sv',
+    $sources=@('../../../rtl/common/lod_lzd_core.sv','../../../rtl/common/dyn_left_shifter.sv',
+        '../../../rtl/multiplier/sac_step_comb.sv','../../../rtl/multiplier/sbm_shift_comb.sv',
+        '../../../rtl/multiplier/sbm_accum_comb.sv','../../../rtl/multiplier/iter_ctrl.sv',
+        '../../../rtl/multiplier/sbm_accum.sv','../../../rtl/multiplier/mul_iter_core.sv',
         '../../../tb/core_checker.sv','../../../tb/tb_week9_core.sv')
     Run-Tool (Join-Path $ModelSimBin 'vlog.exe') (@('-sv','-timescale','1ns/1ps','+incdir+../../../rtl','-work','work')+$sources+@('-l','compile.log')) 'compile_console.log'
     @('onerror {quit -code 1}','onbreak {quit -code 1}','run -all','quit -code 0') | Set-Content -Encoding ascii run.do

@@ -1,5 +1,6 @@
 param([string]$QuartusTool='C:/altera/13.0sp1/quartus/bin64/quartus_sh.exe',[switch]$CandidateOnly)
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'rtl_paths.ps1')
 $project=Split-Path $PSScriptRoot -Parent
 $run=Join-Path $project 'results/align_refactor_20261015/ppa'
 New-Item -ItemType Directory -Force $run | Out-Null
@@ -10,7 +11,7 @@ if($CandidateOnly) {
     $previous=Get-Content -LiteralPath (Join-Path $run 'summary.json') -Raw | ConvertFrom-Json
     $rows=@($previous.rows | Where-Object {$_.variant -eq 'before'})
     if($rows.Count -ne 3) {throw 'Missing completed reference seeds'}
-    foreach($key in @('rtl/posit_add_align.sv','rtl/dyn_right_shifter.sv','rtl/align_ppa_boundary.sv','rtl/align_ppa_top.sv','rtl/posit_mac.vh')) {
+    foreach($key in @('rtl/adder/posit_add_align.sv','rtl/common/dyn_right_shifter.sv','rtl/benchmarks/align_ppa_boundary.sv','rtl/benchmarks/align_ppa_top.sv','rtl/posit_mac.vh')) {
         $actual=(Get-FileHash -LiteralPath (Join-Path $project $key) -Algorithm SHA256).Hash.ToLowerInvariant()
         if($actual -ne $previous.source_sha256.$key) {throw "Reference benchmark source changed: $key"}
     }
@@ -21,12 +22,12 @@ foreach($variant in @('before','candidate')) {
         $folder=Join-Path $run "${variant}_seed${seed}"
         $src=Join-Path $folder 'src'
         New-Item -ItemType Directory -Force $src | Out-Null
-        $source=if($variant -eq 'before') {Join-Path $project 'results/align_refactor_20261015/before/posit_add_align.sv'} else {Join-Path $project 'rtl/posit_add_align_candidate.sv'}
+        $source=if($variant -eq 'before') {Join-Path $project 'results/align_refactor_20261015/before/posit_add_align.sv'} else {Join-Path $project 'rtl/candidates/adder/posit_add_align_candidate.sv'}
         $text=Get-Content -LiteralPath $source -Raw
         $text=$text.Replace('module posit_add_align_candidate #(','module posit_add_align #(')
         [IO.File]::WriteAllText((Join-Path $src 'posit_add_align.sv'),$text,[Text.UTF8Encoding]::new($false))
         foreach($name in @('dyn_right_shifter.sv','align_ppa_boundary.sv','align_ppa_top.sv','posit_mac.vh')) {
-            Copy-Item -LiteralPath (Join-Path $project "rtl/$name") -Destination (Join-Path $src $name)
+            Copy-Item -LiteralPath (Resolve-RtlPath $name) -Destination (Join-Path $src $name)
         }
         'QUARTUS_VERSION = "13.0"','PROJECT_REVISION = "align"' | Set-Content -Encoding ascii (Join-Path $folder 'align.qpf')
         $qsf=@('set_global_assignment -name FAMILY "Cyclone IV E"',
@@ -63,8 +64,8 @@ foreach($variant in @('before','candidate')) {
     }
 }
 $hashes=@{}
-foreach($name in @('rtl/posit_add_align.sv','rtl/posit_add_align_candidate.sv','rtl/dyn_right_shifter.sv',
-    'rtl/align_ppa_boundary.sv','rtl/align_ppa_top.sv','rtl/posit_mac.vh',
+foreach($name in @('rtl/adder/posit_add_align.sv','rtl/candidates/adder/posit_add_align_candidate.sv','rtl/common/dyn_right_shifter.sv',
+    'rtl/benchmarks/align_ppa_boundary.sv','rtl/benchmarks/align_ppa_top.sv','rtl/posit_mac.vh',
     'results/align_refactor_20261015/before/posit_add_align.sv','scripts/run_align_refactor_ppa.ps1')) {
     $hashes[$name]=(Get-FileHash -LiteralPath (Join-Path $project $name) -Algorithm SHA256).Hash.ToLowerInvariant()
 }

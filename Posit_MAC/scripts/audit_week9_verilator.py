@@ -6,6 +6,7 @@ import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 
 root = Path(__file__).resolve().parents[1]
 run = sys.argv[1] if len(sys.argv) >= 2 else "final_pilot"
@@ -37,7 +38,7 @@ for model in reference["profiles"]:
         if not source.is_file(): continue
         if source.parent.name == "l1": live = root / "l1/include" / source.name
         elif source.name in {"softposit_api.h", "libsoftposit.so"}: live = root / "l0" / source.name
-        else: live = root / ("tb" if source.suffix in {".cpp", ".hpp"} else "rtl") / source.name
+        else: live = (root/"tb"/source.name if source.suffix in {".cpp", ".hpp"} else rtl_source(source.name))
         assert source.read_bytes() == live.read_bytes(), (profile, "source changed")
         snapshots[str(source.relative_to(folder / "src"))] = hashlib.sha256(source.read_bytes()).hexdigest()
     build = (folder / "build.log").read_text()

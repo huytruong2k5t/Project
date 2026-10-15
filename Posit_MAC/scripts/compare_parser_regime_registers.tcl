@@ -10,13 +10,13 @@ foreach es {2 3} {
     foreach variant {before after} {
         create_project -in_memory -part $part
         set_property include_dirs [list "$project_root/rtl"] [current_fileset]
-        read_verilog -sv "$project_root/rtl/lod_lzd_core.sv"
-        read_verilog -sv "$project_root/rtl/dyn_left_shifter.sv"
+        read_verilog -sv "$project_root/rtl/common/lod_lzd_core.sv"
+        read_verilog -sv "$project_root/rtl/common/dyn_left_shifter.sv"
 
         if {$variant eq "before"} {
             read_verilog -sv before/posit_parser.sv
         } else {
-            read_verilog -sv "$project_root/rtl/posit_parser.sv"
+            read_verilog -sv "$project_root/rtl/parser/posit_parser.sv"
         }
 
         synth_design -top posit_parser -part $part -mode out_of_context \

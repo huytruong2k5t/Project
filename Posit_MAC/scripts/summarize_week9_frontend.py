@@ -43,7 +43,7 @@ summary.update(
               "./l1/gen_week9_frontend_ubsan results/week9_frontend/ubsan",
               "./scripts/verify_week9_frontend_modelsim.ps1", "python scripts/summarize_week9_frontend.py"],
     unverified=["SBM/normalize RTL", "Sequential core/reset/drain", "Integrated multiplier/handshake/Gate2", "Verilator lint/STA/PPA", "Original paper RTL"])
-source_names = ["rtl/ops_sel_comb.sv", "rtl/sac_step_comb.sv", "rtl/lod_lzd_core.sv", "rtl/dyn_left_shifter.sv",
+source_names = ["rtl/multiplier/ops_sel_comb.sv", "rtl/multiplier/sac_step_comb.sv", "rtl/common/lod_lzd_core.sv", "rtl/common/dyn_left_shifter.sv",
                 "tb/ops_frontend_checker.sv", "tb/sac_frontend_checker.sv", "tb/tb_week9_frontend.sv",
                 "l1/test/gen_week9_frontend.cpp", "l1/include/ops_sel.hpp", "l1/include/sac.hpp", "l1/Makefile",
                 "l1/gen_week9_frontend", "l1/gen_week9_frontend.exe", "l1/gen_week9_frontend_ubsan",

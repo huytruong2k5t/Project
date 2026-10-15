@@ -3,6 +3,7 @@ import csv
 import hashlib
 import json
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 from datetime import datetime, timezone, timedelta
 
 root = Path(__file__).resolve().parents[1]
@@ -71,12 +72,12 @@ if len(coverage) != 16:
 
 files = []
 for directory in ("rtl", "tb", "scripts", "l1/test"):
-    files.extend(path for path in (root / directory).glob("*") if path.is_file()
+    files.extend(path for path in (root / directory).rglob("*") if path.is_file()
                  and path.suffix in (".sv", ".vh", ".cpp", ".py", ".ps1", ".sh"))
 files.extend(root / path for path in ("SPEC_Posit_MAC_IP.md", "l1/PLAN.md", "l1/Makefile", "Makefile"))
 source_hashes = {str(path.relative_to(root)).replace("\\", "/"):
-                 hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
-fixture_hashes = {path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+                 hashlib.sha256(resolve_source(path).read_bytes()).hexdigest() for path in files}
+fixture_hashes = {path.name: hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
                   for path in (root / "results/week9_multiplier/acceptance_corpus").glob("mul_*.txt")}
 git_status_path = result / "git_backup_status.json"
 git_status = json.loads(git_status_path.read_text(encoding="utf-8")) if git_status_path.exists() else {

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source "$(dirname -- "${BASH_SOURCE[0]}")/rtl_paths.sh"
 set -euo pipefail
 cd "$(dirname "$0")/.."
 project_dir="$PWD"
@@ -18,7 +19,7 @@ for format in '8 0' '16 1' '32 2' '32 3'; do
     export TMPDIR="$run_dir/tmp"
     rtl=()
     for module in "${sources[@]}"; do
-        cp -- "rtl/$module.sv" "$run_dir/src/"
+        cp -- "$(rtl_path "$module")" "$run_dir/src/"
         rtl+=("src/$module.sv")
     done
     cp -- rtl/posit_mac.vh tb/adder_verification_top.sv tb/week10_adder_harness.cpp tb/week10_add_reference.hpp l0/softposit_api.h l0/libsoftposit.so "$run_dir/src/"

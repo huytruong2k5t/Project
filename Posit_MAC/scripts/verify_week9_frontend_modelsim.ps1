@@ -15,8 +15,8 @@ try {
     if((Get-Content -Raw generator.log) -notmatch 'WEEK9 GENERATOR PASS') {throw 'Generator marker missing'}
     Run-Tool (Join-Path $ModelSimBin 'vsim.exe') @('-version') 'version.log'
     if(!(Test-Path 'work')) {Run-Tool (Join-Path $ModelSimBin 'vlib.exe') @('work') 'library.log'}
-    $sources=@('../../../rtl/lod_lzd_core.sv','../../../rtl/dyn_left_shifter.sv',
-        '../../../rtl/ops_sel_comb.sv','../../../rtl/sac_step_comb.sv',
+    $sources=@('../../../rtl/common/lod_lzd_core.sv','../../../rtl/common/dyn_left_shifter.sv',
+        '../../../rtl/multiplier/ops_sel_comb.sv','../../../rtl/multiplier/sac_step_comb.sv',
         '../../../tb/ops_frontend_checker.sv','../../../tb/sac_frontend_checker.sv',
         '../../../tb/tb_week9_frontend.sv')
     Run-Tool (Join-Path $ModelSimBin 'vlog.exe') (@('-sv','-work','work')+$sources+@('-l','compile.log')) 'compile_console.log'
@@ -44,8 +44,8 @@ try {
         scope='combinational OPS/SAC only; no pipeline, Gate2 or original-paper-baseline acceptance';
         command='scripts/verify_week9_frontend_modelsim.ps1'} |
         ConvertTo-Json -Depth 5 | Set-Content summary.json
-    $names=@('rtl/lod_lzd_core.sv','rtl/dyn_left_shifter.sv','rtl/ops_sel_comb.sv',
-        'rtl/sac_step_comb.sv','tb/ops_frontend_checker.sv','tb/sac_frontend_checker.sv',
+    $names=@('rtl/common/lod_lzd_core.sv','rtl/common/dyn_left_shifter.sv','rtl/multiplier/ops_sel_comb.sv',
+        'rtl/multiplier/sac_step_comb.sv','tb/ops_frontend_checker.sv','tb/sac_frontend_checker.sv',
         'tb/tb_week9_frontend.sv','l1/include/ops_sel.hpp','l1/include/sac.hpp',
         'l1/test/gen_week9_frontend.cpp','l1/gen_week9_frontend.exe',
         'scripts/verify_week9_frontend_modelsim.ps1')

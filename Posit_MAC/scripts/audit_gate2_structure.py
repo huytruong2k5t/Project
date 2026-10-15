@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 
 root = Path(__file__).resolve().parents[1]
 run = root / "results/week9_multiplier/verilator/gate2_stratified"
@@ -36,7 +37,7 @@ for profile in summary["profiles"]:
     metrics = {kind: dict(hit=hit[kind], total=totals[kind],
                          percent=100 * hit[kind] / totals[kind]) for kind in totals}
     profiles.append(dict(profile=profile["profile"], metrics=metrics,
-                         coverage_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+                         coverage_sha256=hashlib.sha256(resolve_source(path).read_bytes()).hexdigest(),
                          corner_coverage_sha256=hashlib.sha256(corner_path.read_bytes()).hexdigest(),
                          unhit_points=missing))
 report = dict(status="MEASURED; no coverage points excluded", profiles=profiles,

@@ -10,8 +10,8 @@ Các kịch bản này mô phỏng độc lập phần cứng ở cấp độ bi
 
 | File Kịch bản | Module Kiểm chứng | Số lượng Vector đã xác nhận | Cách chạy |
 |:---|:---|:---:|:---|
-| [`verify_dyn_left_shifter.py`](verify_dyn_left_shifter.py) | [`dyn_left_shifter.sv`](../rtl/dyn_left_shifter.sv) | **60,832 vectors (100% Pass)** | `python scripts/verify_dyn_left_shifter.py` |
-| [`verify_dyn_right_shifter.py`](verify_dyn_right_shifter.py) | [`dyn_right_shifter.sv`](../rtl/dyn_right_shifter.sv) | **146,400 vectors (100% Pass)** | `python scripts/verify_dyn_right_shifter.py` |
+| [`verify_dyn_left_shifter.py`](verify_dyn_left_shifter.py) | [`dyn_left_shifter.sv`](../rtl/common/dyn_left_shifter.sv) | **60,832 vectors (100% Pass)** | `python scripts/verify_dyn_left_shifter.py` |
+| [`verify_dyn_right_shifter.py`](verify_dyn_right_shifter.py) | [`dyn_right_shifter.sv`](../rtl/common/dyn_right_shifter.sv) | **146,400 vectors (100% Pass)** | `python scripts/verify_dyn_right_shifter.py` |
 
 ---
 
@@ -77,3 +77,21 @@ Reference cổng Fig5 độc lập khớp L1 trên3.940.352 trường hợp; Mod
 Pilot journal2024 dùng Posit32 ES2/Q12/PT2 tuyệt đối, oracle SoftPosit0.4.1; n đếm tổng số hạng. Self-test600.127 đối chiếu/lượt đạt0 mismatch, smoke Linux/Windows MATCH và UBSan đạt. Hai phân bố địa phương10M mỗi loại chưa khớp Fig9: rawPosit n2 Err<0,1%=8,954950%, cột nguồn khoảng53–57%. Cận OPS lý tưởng trong cùng hợp đồng chỉ9,667460%. TableVI khớp output n2 nhưng còn dư; lời văn nói t2=0 bất nhất với bảng. Không kết luận số liệu2021/2024 sai; không đổi n/cut/seed để ép bảng, không chạy full200M hoặc RTL ES2. Baseline gốc/tuần4 và Gate2 vẫn processing. Chi tiết tại README L1 §25, kết quả/compiler/seed/lệnh/hash tại results/paper_journal2024/measurement/summary.json.
 
 Lệnh: make -C l1 test_journal2024_measurement test_journal2024_measurement.exe test_journal2024_measurement_ubsan; chạy hai pilot theo README L1 §25 rồi python scripts/audit_journal2024_measurement.py. Exit0 chỉ là hoàn tất bộ đo; đọc measurement_status/original_baseline_accepted để biết nghiệm thu nguồn.
+
+
+## Bảo trì đường dẫn và dung lượng — 15/10/2026
+
+- Kiểm di chuyển RTL giữ nguyên byte: `python scripts/audit_rtl_layout.py`.
+- Kiểm syntax/lint và smoke NF/F từ WSL: `bash scripts/verify_rtl_layout.sh`.
+- Xem trước dữ liệu có thể dọn: `powershell -NoProfile -File scripts/cleanup_results.ps1`.
+- Thực hiện dọn: `powershell -NoProfile -File scripts/cleanup_results.ps1 -Apply`.
+
+Cleanup chỉ xóa `obj_dir`, `obj_fast`, `work`, `db`, `incremental_db`, `xsim.dir`, `.Xil`, `tmp`, `__pycache__` bên trong results.
+Giữ báo cáo CSV/JSON, hình, raw coverage, log, phiên bản/seed/lệnh/hash, snapshot nguồn và fixture.
+Sau cleanup phải build lại thư viện/binary trước mô phỏng; các script verify thực hiện bước này.
+Không xóa `output_files` vì chứa báo cáo PPA cần giữ. Script mặc định chỉ xem trước và từ chối reparse point.
+
+Để chạy F vào thư mục riêng, tránh ghi đè bằng chứng W13:
+`W13_RESULTS_DIR=results/my_run bash scripts/verify_week13_fused.sh 10000 smoke line`.
+Runner Xilinx nhận `-RunRoot results/my_run`; mô phỏng cần fixture `results/my_run/verilator/pilot.vectors`
+(sinh bằng runner Verilator với prefix `pilot` và ít nhất 8192 giao dịch).

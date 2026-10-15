@@ -16,8 +16,8 @@ try {
     Run-Tool (Join-Path $projectPath 'l1/test_paper_contract_audit.exe') @('.') 'generator.log'
     Run-Tool (Join-Path $ModelSimBin 'vsim.exe') @('-version') 'version.log'
     if (!(Test-Path work)) { Run-Tool (Join-Path $ModelSimBin 'vlib.exe') @('work') 'library.log' }
-    $sources = @('rtl/dyn_right_shifter.sv', 'rtl/posit_pack_prepare.sv',
-        'rtl/posit_pack_finish.sv', 'rtl/posit_pack_comb.sv', 'tb/tb_paper_fig5_pack.sv')
+    $sources = @('rtl/common/dyn_right_shifter.sv', 'rtl/packer/posit_pack_prepare.sv',
+        'rtl/packer/posit_pack_finish.sv', 'rtl/packer/posit_pack_comb.sv', 'tb/tb_paper_fig5_pack.sv')
     $hashes = @{}
     foreach ($source in $sources) {
         $hashes[$source] = (Get-FileHash (Join-Path $projectPath $source) -Algorithm SHA256).Hash

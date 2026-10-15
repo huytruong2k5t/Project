@@ -39,7 +39,7 @@ heading = "### 11.5 Top paper tự hồi tiếp — 09/10/2026"
 if heading not in spec:
     spec = spec.replace("## 12. Báo cáo và bảo vệ", heading+"\n\n"+short+"\n## 12. Báo cáo và bảo vệ", 1)
     spec_path.write_text(spec, encoding="utf-8")
-progress = root.parent / "doc/TIEN_DO_DO_AN.md"
+progress = root / "docs/TIEN_DO_DO_AN.md"
 text = progress.read_text(encoding="utf-8-sig")
 text = text.replace("Trace phân biệt và Fig.4 khớp profile tái dựng; chưa có bằng chứng mới để chốt baseline gốc hoặc đổi kết quả TableI",
                     "Ghép top paper tự chạy từ A/B; kiểm từng vòng và kết quả đạt0 mismatch, giữ nguyên trace/Fig.4. Baseline gốc/TableI còn processing")

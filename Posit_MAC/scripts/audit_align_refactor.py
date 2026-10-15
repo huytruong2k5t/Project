@@ -2,6 +2,7 @@
 import hashlib
 import json
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 import re
 import statistics
 
@@ -14,7 +15,7 @@ def read(path):
 
 
 def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
 
 
 def load(path):
@@ -36,8 +37,8 @@ def interface(path):
     return re.sub(r'\s+', '', re.sub(r'//[^\n]*', '', s))
 
 
-before = ROOT/'rtl/posit_add_align.sv'
-candidate = ROOT/'rtl/posit_add_align_candidate.sv'
+before = ROOT/'rtl/adder/posit_add_align.sv'
+candidate = ROOT/'rtl/candidates/adder/posit_add_align_candidate.sv'
 assert sha(before) == sha(RUN/'before/posit_add_align.sv'), 'Production leaf changed'
 assert interface(before) == interface(candidate), 'Ports/parameters/defaults changed'
 assert read(candidate).split('    dyn_right_shifter #(',1)[1] == read(before).split('    dyn_right_shifter #(',1)[1].replace('End of posit_add_align.sv','End of posit_add_align_candidate.sv'), 'Shifter or special/output logic changed'
@@ -83,7 +84,7 @@ for row in ppa['rows']:
     selected=read(before if row['variant']=='before' else candidate)
     assert read(folder/'src/posit_add_align.sv')==selected.replace('module posit_add_align_candidate #(','module posit_add_align #(')
     for name in ['dyn_right_shifter.sv','align_ppa_boundary.sv','align_ppa_top.sv','posit_mac.vh']:
-        assert sha(folder/'src'/name)==sha(ROOT/'rtl'/name)
+        assert sha(folder/'src'/name)==sha(rtl_source(name))
     fit=read(folder/'output_files/align.fit.summary')
     report=read(folder/'output_files/align.sta.rpt')
     assert int(re.search(r'Total combinational functions\s*:\s*([\d,]+)',fit)[1].replace(',',''))==row['LUT4']

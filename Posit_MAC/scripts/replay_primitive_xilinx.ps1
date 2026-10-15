@@ -7,22 +7,23 @@ param(
     [string]$Python = 'C:\Users\This PC\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
 )
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'rtl_paths.ps1')
 $root = Split-Path $PSScriptRoot -Parent
 $study = Join-Path $root 'results/primitive_xilinx_20261015'
 $manifest = Get-Content -LiteralPath (Join-Path $study 'manifest.json') -Raw | ConvertFrom-Json
 foreach ($entry in $manifest.sources.PSObject.Properties) {
-    $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $root $entry.Name)).Hash.ToLowerInvariant()
+    $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath (Resolve-SourcePath $entry.Name)).Hash.ToLowerInvariant()
     if ($actual -ne $entry.Value) {
         throw "Frozen source changed: $($entry.Name). Use a new study directory for new RTL/constraints; do not overwrite this checkpoint."
     }
 }
 # The implementation consumes these private snapshots, not the current RTL path.
 foreach ($variant in @('baseline','candidate')) {
-    $sourceDir = if ($variant -eq 'baseline') { 'rtl' } else { 'rtl/candidates/primitives' }
+    $sourceDir = if ($variant -eq 'baseline') { 'rtl/common' } else { 'rtl/candidates/primitives' }
     foreach ($name in @('dyn_left_shifter.sv','dyn_right_shifter.sv','lod_lzd_core.sv',
                         'primitive_ppa_top.sv','primitive_ppa_boundary.sv','posit_mac.vh')) {
         $directory = if ($name -like 'primitive_ppa*' -or $name -eq 'posit_mac.vh') { 'rtl' } else { $sourceDir }
-        $expected = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $root "$directory/$name")).Hash
+        $expected = (Get-FileHash -Algorithm SHA256 -LiteralPath (Resolve-SourcePath "$directory/$name")).Hash
         $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $study "source/$variant/$name")).Hash
         if ($actual -ne $expected) { throw "Implementation snapshot changed: $variant/$name" }
     }
@@ -32,7 +33,7 @@ $summaryPath = Join-Path $study 'summary.json'
 if (Test-Path -LiteralPath $summaryPath) {
     $summary = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
     foreach ($entry in $summary.report_sha256.PSObject.Properties) {
-        $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $root $entry.Name)).Hash.ToLowerInvariant()
+        $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath (Resolve-SourcePath $entry.Name)).Hash.ToLowerInvariant()
         if ($actual -ne $entry.Value) { throw "Retained report changed: $($entry.Name)" }
     }
 }

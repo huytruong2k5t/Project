@@ -1,5 +1,6 @@
 """Audit source-bound W13 evidence; no simulation, no edits to frozen W12."""
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 from collections import defaultdict
 import gzip
 import hashlib
@@ -11,7 +12,7 @@ OUT = ROOT / 'results/week13'
 
 
 def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
 
 
 def require(value, message):
@@ -28,7 +29,7 @@ def snapshot(run):
         digest, name = line.split(maxsplit=1)
         src = run / name
         require(sha(src) == digest, f'snapshot modified: {src}')
-        canonical = ROOT / name.removeprefix('src/')
+        canonical = resolve_source(ROOT / name.removeprefix('src/'))
         require(canonical.is_file() and sha(canonical) == digest,
                 f'canonical source differs: {canonical}')
 

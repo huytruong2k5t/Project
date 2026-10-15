@@ -2,6 +2,7 @@
 import hashlib
 import json
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 import re
 import statistics
 
@@ -14,7 +15,7 @@ def read(path):
 
 
 def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
 
 
 def load(path):
@@ -38,10 +39,10 @@ def interface(path):
     return re.sub(r'\s+', '', re.sub(r'//[^\n]*', '', text))
 
 
-before = ROOT/'rtl/posit_add_normalize.sv'
+before = ROOT/'rtl/adder/posit_add_normalize.sv'
 assert sha(before) == sha(RUN/'before/posit_add_normalize.sv'), 'Production leaf changed'
 for variant in ['zero', 'shared']:
-    candidate = ROOT/f'rtl/posit_add_normalize_{variant}.sv'
+    candidate = ROOT/f'rtl/candidates/adder/posit_add_normalize_{variant}.sv'
     assert interface(before) == interface(candidate), 'Parameter or port change'
     # Special canonicalization and all metadata logic stay identical.
     assert read(candidate).split('        sticky = alignment_tail', 1)[1].split('endmodule')[0] == read(before).split('        sticky = alignment_tail', 1)[1].split('endmodule')[0]
@@ -65,13 +66,13 @@ assert all(not re.search(r'%Warning|%Error', read(p)) for p in leaf_logs)
 assert read(RUN/'integration/status.txt').strip() == 'COMPLETE'
 integration = []
 for variant in ['zero', 'shared']:
-    candidate = ROOT/f'rtl/posit_add_normalize_{variant}.sv'
+    candidate = ROOT/f'rtl/candidates/adder/posit_add_normalize_{variant}.sv'
     for nb, es in [(8, 0), (16, 1), (32, 2), (32, 3)]:
         folder = RUN/'integration'/variant/f'{nb}_{es}'
         assert not re.search(r'%Warning|%Error', read(folder/'lint.log'))
         copied = read(folder/'src/posit_add_normalize.sv')
         assert copied == read(candidate).replace('module posit_add_normalize_'+variant+' #(', 'module posit_add_normalize #(')
-        assert sha(folder/'src/posit_add_align.sv') == sha(ROOT/'rtl/posit_add_align.sv'), 'Alignment was also substituted'
+        assert sha(folder/'src/posit_add_align.sv') == sha(ROOT/'rtl/adder/posit_add_align.sv'), 'Alignment was also substituted'
         for line in read(folder/'source.sha256').splitlines():
             digest, name = line.split(maxsplit=1)
             assert sha(folder/name) == digest, ('Integration source changed', variant, nb, es, name)
@@ -92,13 +93,13 @@ check_sources(ppa['source_sha256'])
 paths = []
 for row in ppa['rows']:
     folder = RUN/'ppa'/f"{row['variant']}_seed{row['seed']}"
-    selected = before if row['variant'] == 'before' else ROOT/f"rtl/posit_add_normalize_{row['variant']}.sv"
+    selected = before if row['variant'] == 'before' else ROOT/f"rtl/candidates/adder/posit_add_normalize_{row['variant']}.sv"
     text = read(selected)
     if row['variant'] != 'before':
         text = text.replace('module posit_add_normalize_'+row['variant']+' #(', 'module posit_add_normalize #(')
     assert read(folder/'src/posit_add_normalize.sv') == text
     for name in ['lod_lzd_core.sv', 'dyn_left_shifter.sv', 'normalize_ppa_boundary.sv', 'normalize_ppa_top.sv', 'posit_mac.vh']:
-        assert sha(folder/'src'/name) == sha(ROOT/'rtl'/name)
+        assert sha(folder/'src'/name) == sha(rtl_source(name))
     fit = read(folder/'output_files/normalize.fit.summary')
     report = read(folder/'output_files/normalize.sta.rpt')
     mapping = read(folder/'output_files/normalize.map.rpt')

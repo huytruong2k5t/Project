@@ -12,7 +12,7 @@ results/nf_coverage_20261014/** -text
 results/nf_corners_20261014/** -text
 
 # OPS refactor checkpoint and rebuildable products.
-rtl/ops_sel_comb.sv -text
+rtl/multiplier/ops_sel_comb.sv -text
 rtl/ops_ppa_*.sv -text
 tb/*ops_refactor*.sv -text
 scripts/*ops_refactor*.py -text
@@ -33,7 +33,7 @@ results/fraction_survey_20261015/** -text
 tb/week10_add_reference.hpp -text
 
 # Isolated alignment candidate and measured checkpoint.
-rtl/posit_add_align_candidate.sv -text
+rtl/candidates/adder/posit_add_align_candidate.sv -text
 rtl/align_ppa_*.sv -text
 tb/*align_refactor*.sv -text
 scripts/*align_refactor*.ps1 -text
@@ -41,14 +41,14 @@ scripts/*align_refactor*.py -text
 scripts/*align_refactor*.sh text eol=lf
 results/align_refactor_20261015/** -text
 # Preserve the already measured baseline/helper bytes; logic is unchanged.
-rtl/posit_add_align.sv -text
+rtl/adder/posit_add_align.sv -text
 tb/week10_adder_harness.cpp -text
 tb/adder_verification_top.sv -text
 
 # Isolated normalization survey: preserve measured source/report bytes.
-rtl/posit_add_normalize.sv -text
-rtl/posit_add_normalize_zero.sv -text
-rtl/posit_add_normalize_shared.sv -text
+rtl/adder/posit_add_normalize.sv -text
+rtl/candidates/adder/posit_add_normalize_zero.sv -text
+rtl/candidates/adder/posit_add_normalize_shared.sv -text
 rtl/normalize_ppa_*.sv -text
 tb/*normalize_refactor*.sv -text
 scripts/*normalize_refactor*.ps1 -text
@@ -81,8 +81,8 @@ scripts/lint_primitive_xilinx.sh text eol=lf
 results/primitive_xilinx_20261015/** -text
 
 # Fused RTL source/evidence hashes must survive checkout byte-for-byte.
-rtl/posit_mac_f.sv -text
-rtl/mac_f_wrapper.sv -text
+rtl/mac_f/posit_mac_f.sv -text
+rtl/mac_f/mac_f_wrapper.sv -text
 rtl/fused_*.sv -text
 tb/*week13* -text
 scripts/*week13* -text
@@ -93,3 +93,9 @@ rtl/*.sv -text
 rtl/posit_mac.vh -text
 l1/include/*.hpp -text
 tb/*.hpp -text
+
+# Organized RTL keeps original bytes; all shell runners use LF.
+rtl/**/*.sv -text
+scripts/*.sh text eol=lf
+scripts/rtl_paths.* -text
+results/layout_cleanup_20261015/** -text

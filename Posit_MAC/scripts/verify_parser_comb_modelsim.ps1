@@ -15,8 +15,8 @@ try {
     if((Get-Content -Raw generator.log) -notmatch 'GENERATOR PASS total=2465812') {throw 'Generator acceptance marker missing'}
     Run-Tool (Join-Path $ModelSimBin 'vsim.exe') @('-version') 'version.log'
     if(!(Test-Path 'work')) {Run-Tool (Join-Path $ModelSimBin 'vlib.exe') @('work') 'library.log'}
-    $sources=@('../../rtl/lod_lzd_core.sv','../../rtl/dyn_left_shifter.sv',
-        '../../rtl/posit_parser_comb.sv','../../tb/tb_posit_parser_comb.sv')
+    $sources=@('../../rtl/common/lod_lzd_core.sv','../../rtl/common/dyn_left_shifter.sv',
+        '../../rtl/parser/posit_parser_comb.sv','../../tb/tb_posit_parser_comb.sv')
     Run-Tool (Join-Path $ModelSimBin 'vlog.exe') (@('-sv','-work','work')+$sources+@('-l','compile.log')) 'compile_console.log'
     @('onerror {quit -code 1}','onbreak {quit -code 1}','run -all','quit -code 0') | Set-Content -Encoding ascii run.do
     Run-Tool (Join-Path $ModelSimBin 'vsim.exe') @('-c','work.tb_posit_parser_comb','-l','simulate.log','-do','run.do') 'simulate_console.log'
@@ -33,10 +33,10 @@ try {
         softposit='not linked: pure parser field comparison';suites=$suites;
         simulator=(Get-Content -Raw version.log).Trim();
         generatorCommand='l1/gen_parser_vectors.exe results/parser_comb';
-        compileCommand='vlog -sv -work work ../../rtl/lod_lzd_core.sv ../../rtl/dyn_left_shifter.sv ../../rtl/posit_parser_comb.sv ../../tb/tb_posit_parser_comb.sv -l compile.log';
+        compileCommand='vlog -sv -work work ../../rtl/common/lod_lzd_core.sv ../../rtl/common/dyn_left_shifter.sv ../../rtl/parser/posit_parser_comb.sv ../../tb/tb_posit_parser_comb.sv -l compile.log';
         simulationCommand='vsim -c work.tb_posit_parser_comb -l simulate.log -do run.do'} |
         ConvertTo-Json -Depth 5 | Set-Content summary.json
-    $names=@('rtl/lod_lzd_core.sv','rtl/dyn_left_shifter.sv','rtl/posit_parser_comb.sv',
+    $names=@('rtl/common/lod_lzd_core.sv','rtl/common/dyn_left_shifter.sv','rtl/parser/posit_parser_comb.sv',
         'tb/tb_posit_parser_comb.sv','l1/include/posit_parser.hpp','l1/include/posit_types.hpp',
         'l1/test/gen_parser_vectors.cpp','l1/gen_parser_vectors.exe','scripts/verify_parser_comb_modelsim.ps1')
     $names | ForEach-Object {(Get-FileHash -LiteralPath (Join-Path $projectPath $_) -Algorithm SHA256).Hash.ToLowerInvariant()+'  '+$_} | Set-Content sources.sha256

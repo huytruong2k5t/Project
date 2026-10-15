@@ -17,10 +17,10 @@ try {
     Run-Tool (Join-Path $projectPath 'l1/gen_paper_top.exe') @('../../paper_discriminators/linux/vectors.csv', '.') 'generator.log'
     Run-Tool (Join-Path $ModelSimBin 'vsim.exe') @('-version') 'version.log'
     if (!(Test-Path work)) { Run-Tool (Join-Path $ModelSimBin 'vlib.exe') @('work') 'library.log' }
-    $sources = @('rtl/lod_lzd_core.sv', 'rtl/dyn_left_shifter.sv', 'rtl/dyn_right_shifter.sv',
-        'rtl/posit_parser_comb.sv', 'rtl/posit_pack_prepare.sv', 'rtl/posit_pack_finish.sv',
-        'rtl/posit_pack_comb.sv', 'rtl/paper_ops_comb.sv', 'rtl/paper_step_comb.sv',
-        'rtl/paper_norm_comb.sv', 'rtl/paper_mul_wrapper.sv', 'rtl/paper_mul_iter.sv',
+    $sources = @('rtl/common/lod_lzd_core.sv', 'rtl/common/dyn_left_shifter.sv', 'rtl/common/dyn_right_shifter.sv',
+        'rtl/parser/posit_parser_comb.sv', 'rtl/packer/posit_pack_prepare.sv', 'rtl/packer/posit_pack_finish.sv',
+        'rtl/packer/posit_pack_comb.sv', 'rtl/research/paper/paper_ops_comb.sv', 'rtl/research/paper/paper_step_comb.sv',
+        'rtl/research/paper/paper_norm_comb.sv', 'rtl/research/paper/paper_mul_wrapper.sv', 'rtl/research/paper/paper_mul_iter.sv',
         'tb/tb_paper_mul_iter.sv')
     $sourceHashes = @{}
     foreach ($source in $sources) {

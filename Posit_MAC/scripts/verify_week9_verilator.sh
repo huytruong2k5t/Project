@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source "$(dirname -- "${BASH_SOURCE[0]}")/rtl_paths.sh"
 # Run only when Verilator is already available. Never installs tools.
 set -euo pipefail
 project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -45,7 +46,7 @@ for format in '8 0' '16 1' '32 2' '32 3'; do
             # Generated makefiles must use relative, space-free source paths.
             # Keep every snapshot/build product inside the project run directory.
             for source in "${sources[@]}"; do
-                cp -- "$project_dir/rtl/$source.sv" "$run_dir/src/"
+                cp -- "$(rtl_path "$source")" "$run_dir/src/"
             done
             cp -- "$project_dir/rtl/posit_mac.vh" "$run_dir/src/"
             cp -- "$project_dir/tb/week9_multiplier_harness.cpp" "$run_dir/src/"

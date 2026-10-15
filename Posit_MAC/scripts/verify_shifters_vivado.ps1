@@ -22,7 +22,7 @@ if($LicenseFile) {
 Push-Location $resultPath
 try {
     Run-VivadoTool 'xsim' @('-version') 'version.log'
-    Run-VivadoTool 'xvlog' @('--sv','../../rtl/dyn_left_shifter.sv','../../rtl/dyn_right_shifter.sv',
+    Run-VivadoTool 'xvlog' @('--sv','../../rtl/common/dyn_left_shifter.sv','../../rtl/common/dyn_right_shifter.sv',
         '../../tb/tb_dyn_left_shifter.sv','../../tb/tb_dyn_right_shifter.sv',
         '../../tb/tb_dyn_shifter_parameters.sv','-log','compile.log') 'compile_console.log'
     $results = @()

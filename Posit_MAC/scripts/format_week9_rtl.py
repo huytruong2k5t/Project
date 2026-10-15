@@ -3,6 +3,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 
 root = Path(__file__).resolve().parents[1]
 names = ("sbm_shift_comb", "sbm_accum_comb", "mul_norm_comb", "iter_ctrl",
@@ -11,7 +12,7 @@ names = ("sbm_shift_comb", "sbm_accum_comb", "mul_norm_comb", "iter_ctrl",
 proof = []
 updates = []
 for name in names:
-    path = root / "rtl" / f"{name}.sv"
+    path = rtl_source(f"{name}.sv")
     old_raw = path.read_bytes()
     old = old_raw.decode("utf-8")
     lines = []

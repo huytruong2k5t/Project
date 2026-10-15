@@ -3,6 +3,7 @@ import copy
 import hashlib
 import json
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 import re
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -15,7 +16,7 @@ def read(path):
 
 
 def load(path):return json.loads(read(path))
-def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def sha(path):return hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
 def dump(path,value):path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
 
@@ -109,11 +110,11 @@ for name,digest in frozen['source_sha256'].items():assert sha(ROOT/name)==digest
 current_nf=load(ROOT/'results/ops_refactor_20261014/summary.json')
 assert current_nf['nf_completed']>=10000000 and current_nf['nf_mismatches']==0
 assert current_nf['new_near_percent']>=30 and current_nf['modelsim_nf_completed']>0
-assert sha(ROOT/'rtl/ops_sel_comb.sv')==current_nf['source_after']
+assert sha(ROOT/'rtl/multiplier/ops_sel_comb.sv')==current_nf['source_after']
 for line in read(ROOT/'results/ops_refactor_20261014/nf/32_3/source.sha256').splitlines():
     digest,name=line.split(maxsplit=1)
     if Path(name).suffix in ['.sv','.vh']:
-        live=ROOT/'rtl'/Path(name).name
+        live=rtl_source(Path(name).name)
         assert sha(live)==digest,('Production NF changed',live)
 # Later RTL files do not extend this dated software-only acceptance checkpoint.
 contract=load(RUN/'contract.json');handoff=load(RUN/'handoff.json')

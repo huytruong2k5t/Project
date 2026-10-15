@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 
 // Execute from Posit_MAC. All generated files stay inside the project.
 const root = process.cwd();
-await fs.access(path.join(root, 'rtl/ops_sel_comb.sv'));
+await fs.access(path.join(root, 'rtl/multiplier/ops_sel_comb.sv'));
 const skill = process.env.PRESENTATION_SKILL_DIR || 'C:/Users/This PC/.codex/plugins/cache/openai-primary-runtime/presentations/26.1013.11914/skills/presentations';
 const runtimeModules = process.env.RUNTIME_NODE_MODULES || 'C:/Users/This PC/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules';
 const python = process.env.RUNTIME_PYTHON || 'C:/Users/This PC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe';
@@ -170,7 +170,7 @@ function table(slide, values, x,y,w,h, widths, tint = C.regLight, fontSize=24) {
   text(s,'Chốt dấu và sf_A + sf_B tại launch. Sau core_done, chuyển acc sang normalize / round.',48,573,1125,70,24,C.muted);
   sourceNotes(s,
     'OPS là Operand Selector. Hai nhánh tổ hợp masked popcount và chuẩn bị ứng viên X/Y chạy song song, rồi choose_b điều khiển một tầng swap gồm hai MUX bus. Bit ẩn chỉ chèn trong các ứng viên Y trước swap. SAC là Shift Amount Calculator. SBM là Shift-Based Multiplier. S là lượng dịch tích lũy, khác scale factor sf của Posit. Sơ đồ tổng rút gọn R0 thành bank context gồm y_q, mode/sign/sf và state SAC. R0 nằm sau toàn bộ OPS, không thêm một tầng pipeline. R1 nằm trong iter_ctrl, R2 là t2_term và token trong mul_iter_core, L3 là acc trong sbm_accum. Các thanh ghi cùng clock. Y đi thẳng tới shifter và giữ ổn định cho toàn giao dịch. Core xử lý một giao dịch và giải phóng khi release_result. Công thức là trên mantissa/lưới FLOOR, dấu và sf được ghép sau core. ACC_W32/3=54 với EXACT_EN=1, dù payload approx chỉ16 bit.',
-    ['rtl/ops_sel_comb.sv','rtl/iter_ctrl.sv','rtl/mul_iter_core.sv','rtl/sbm_shift_comb.sv','rtl/sbm_accum.sv','SPEC_Posit_MAC_IP.md']);
+    ['rtl/multiplier/ops_sel_comb.sv','rtl/multiplier/iter_ctrl.sv','rtl/multiplier/mul_iter_core.sv','rtl/multiplier/sbm_shift_comb.sv','rtl/multiplier/sbm_accum.sv','SPEC_Posit_MAC_IP.md']);
 }
 
 // 2. Refactored OPS: the count and data lanes share inputs, not each other.
@@ -226,13 +226,13 @@ function table(slide, values, x,y,w,h, widths, tint = C.regLight, fontSize=24) {
   text(s,'input_cut = mode & OR(A[13:0] OR B[13:0])',48,674,1070,29,22,C.muted);
   sourceNotes(s,
     'Profile: FRAC_MAX=26, FRAC_W=12, CUT_W=14, SF_W=11, WIDTH_W=5.\n\nHai nhánh chạy song song từ cùng frac_A/B. Nhánh điều khiển giữ nguyên 12 bit cao [25:14], AND từng bit thấp [13:0] với !cfg_mode rồi đếm bằng hai cây cộng cân bằng. Không căn phải trước popcount. PAD_N=32 gồm 26 lá dữ liệu và 6 lá zero. Hai count 5 bit. choose_b = OPS_EN && (cfg_ops == 2\'d1) && (count_B < count_A). cfg_ops=0 giữ A. cfg_ops=1 chọn B chỉ khi B ít bit 1 hơn. Hòa giữ A.\n\nNhánh dữ liệu độc lập choose_b. Exact: X_A=frac_A, X_B=frac_B, Y_A={1\'b1,frac_A}, Y_B={1\'b1,frac_B}. Approx: X_i={14\'b0,frac_i[25:14]}, Y_i={14\'b0,1\'b1,frac_i[25:14]}. Chèn hidden trong Y trước swap, ở bit12 trong approx và bit26 trong exact. X có 26 bit, không hidden. Y có 27 bit.\n\nSwap là một tầng gồm hai MUX song song: x_frac=choose_b?X_B:X_A; y_mant=choose_b?Y_A:Y_B. Nhãn 0/1 trên dây là giá trị choose_b chọn ứng viên đó. Hai MUX không mắc nối tiếp. Dây xanh lá liên tục là dữ liệu, dây xanh lam đứt là điều khiển chọn. Điểm chấm là nối nhánh. Đầu ra OPS được bank R0 chốt ở L0 như slide tổng, không thêm FF bên trong OPS.\n\nMetadata cũng tính song song: sign_o=s_A^s_B; sf_o=sf_A+sf_B trên 11 bit signed; active_width=cfg_mode?12:26; input_cut=cfg_mode & (|(frac_A[13:0]|frac_B[13:0])). Trường hợp FRAC_W==FRAC_MAX dùng generate no-cut: input_cut=0. cfg_error=(cfg_ops>1)||(!OPS_EN&&cfg_ops!=0)||(!EXACT_EN&&!cfg_mode). Khi lỗi, bốn ứng viên và metadata được zero trước swap, swapped=0. Mạng cfg_error/zero-gating được gộp trong khối chuẩn bị để giữ sơ đồ rõ. cfg_mode và cfg_ops là các ngõ cấu hình dùng chung cho những khối được ghi nhãn. Chỉ áp dụng datapath finite đã parse, wrapper xử lý Zero/NaR.',
-    ['rtl/ops_sel_comb.sv','rtl/mac_nf_wrapper.sv','SPEC_Posit_MAC_IP.md']);
+    ['rtl/multiplier/ops_sel_comb.sv','rtl/mac_nf/mac_nf_wrapper.sv','SPEC_Posit_MAC_IP.md']);
 }
 
 // Slides 3–7 are preserved from r3, including editable SAC/SBM diagrams, tables and notes.
 
-const sources = ['rtl/ops_sel_comb.sv','rtl/sac_step_comb.sv','rtl/iter_ctrl.sv','rtl/mul_iter_core.sv',
-  'rtl/sbm_shift_comb.sv','rtl/sbm_accum_comb.sv','rtl/sbm_accum.sv','SPEC_Posit_MAC_IP.md'];
+const sources = ['rtl/multiplier/ops_sel_comb.sv','rtl/multiplier/sac_step_comb.sv','rtl/multiplier/iter_ctrl.sv','rtl/multiplier/mul_iter_core.sv',
+  'rtl/multiplier/sbm_shift_comb.sv','rtl/multiplier/sbm_accum_comb.sv','rtl/multiplier/sbm_accum.sv','SPEC_Posit_MAC_IP.md'];
 const sourceHashes = Object.fromEntries(await Promise.all(sources.map(async f => [f,createHash('sha256').update(await fs.readFile(path.join(root,f))).digest('hex')])));
 const candidate = path.join(build,`candidate_${revision}.pptx`);
 const finalPath = path.join(output,`DATAPATH_OPS_SAC_SBM_${revision}.pptx`);

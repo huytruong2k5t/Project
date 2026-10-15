@@ -6,9 +6,9 @@ $ErrorActionPreference = 'Stop'
 $projectPath = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $resultPath = Join-Path $projectPath 'results/packer_ppa'
 $rtlNames = @(
-    'rtl/posit_mac.vh', 'rtl/dyn_right_shifter.sv',
-    'rtl/posit_pack_prepare.sv', 'rtl/posit_pack_finish.sv',
-    'rtl/posit_pack.sv', 'rtl/packer_ppa_boundary.sv', 'rtl/packer_ppa_top.sv'
+    'rtl/posit_mac.vh', 'rtl/common/dyn_right_shifter.sv',
+    'rtl/packer/posit_pack_prepare.sv', 'rtl/packer/posit_pack_finish.sv',
+    'rtl/packer/posit_pack.sv', 'rtl/benchmarks/packer_ppa_boundary.sv', 'rtl/benchmarks/packer_ppa_top.sv'
 )
 New-Item -ItemType Directory -Force $resultPath | Out-Null
 # Quartus13 requires an explicit generate around this module-level branch.
@@ -17,7 +17,7 @@ $compatPath = Join-Path $resultPath 'compat'
 New-Item -ItemType Directory -Force $compatPath | Out-Null
 $compatShifter = Join-Path $compatPath 'dyn_right_shifter.sv'
 if (!$CollectExisting) {
-    $raw = Get-Content -Raw (Join-Path $projectPath 'rtl/dyn_right_shifter.sv')
+    $raw = Get-Content -Raw (Join-Path $projectPath 'rtl/common/dyn_right_shifter.sv')
     $export = $raw.Replace('    if (N == 1) begin : g_single_bit',
         "    generate`n    if (N == 1) begin : g_single_bit")
     $export = $export.Replace('endmodule', "    endgenerate`nendmodule")
@@ -56,7 +56,7 @@ foreach ($mode in @('RNE', 'TRUNC')) {
                 ('set_global_assignment -name SEARCH_PATH "' + (Join-Path $projectPath 'rtl').Replace('\', '/') + '"')
             )
             $qsf += $rtlNames | Where-Object { $_ -like '*.sv' } | ForEach-Object {
-                $source = if ($_ -eq 'rtl/dyn_right_shifter.sv') { $compatShifter } else {
+                $source = if ($_ -eq 'rtl/common/dyn_right_shifter.sv') { $compatShifter } else {
                     Join-Path $projectPath $_
                 }
                 'set_global_assignment -name SYSTEMVERILOG_FILE "' +

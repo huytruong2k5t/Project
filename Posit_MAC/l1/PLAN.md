@@ -331,7 +331,7 @@ README mục20 và `results/paper_discriminators/summary.json` chứa36 ô/count
 
 Đã chốt bundle context/token/accumulator, độ rộng và lịch drain trong SPEC §5.5-A. M0 chính là bank chốt context tại L0, không chốt OPS rồi thêm một bank context ngầm. cfg_n đếm fraction; exact không bị N_MAX giới hạn. init_only chỉ nạp Y; last commit tại accumulator mới phát done. SPEC §5.7 làm rõ FLOOR normalize trên Q(FRAC_W), không giữ bit rơi thành guard mới do thanh ghi có padding G/R.
 
-Đã triển khai `rtl/ops_sel_comb.sv` và `rtl/sac_step_comb.sv`: OPS cắt trước cây popcount cân bằng, tie-A và kiểm cấu hình; SAC dùng LOD/shifter đã kiểm, hỗ trợ W_X=1, dịch bằng chiều rộng và kiểm S không wrap. Hai khối chỉ có logic tổ hợp; chưa phải M0/SAC pipeline hoặc multiplier hoàn chỉnh.
+Đã triển khai `rtl/multiplier/ops_sel_comb.sv` và `rtl/multiplier/sac_step_comb.sv`: OPS cắt trước cây popcount cân bằng, tie-A và kiểm cấu hình; SAC dùng LOD/shifter đã kiểm, hỗ trợ W_X=1, dịch bằng chiều rộng và kiểm S không wrap. Hai khối chỉ có logic tổ hợp; chưa phải M0/SAC pipeline hoặc multiplier hoàn chỉnh.
 
 ModelSim kiểm159.820 vector OPS (feature bật/tắt) và167.620 trạng thái SAC ở độ rộng1/5/12/26/27,0 mismatch. W_X<=12 vét cạn fx và toàn miền scale biểu diễn; OPS width1/5 vét cạn cặp/mode/policy, width12/26/27 có directed +50.000 random mỗi width. Generator đối chiếu L1 với oracle đếm/quét bit độc lập, Linux/Windows/UBSan PASS và fixture khớp. Seed20261008; compile/mô phỏng cuối không warning. Log/compiler/seed/lệnh/hash ở `results/week9_frontend/summary.json`. Chưa có Verilator lint, STA/PPA hoặc handshake core từ mốc này.
 
@@ -512,7 +512,7 @@ Windows chạy l1/test_prepack_product.exe; audit còn cần log Linux/Windows, 
 
 Fused profile chính32/3,FRAC_W12,OPS1,FLOOR/RNE,n0..8 là MUST ở SPEC v1.8§6.7; ≥10^7 vector/n/bản cho nghiệm thu cuối, giữ các yêu cầu cũ. Exact fused/F32/2 là MAY; width/cut/residual và latency F còn phải khóa sau oracle tuần12.
 
-Checklist thực thi W10-01..07 và lịch12–18/10 đặt tại doc/TIEN_DO_DO_AN.md mục3.1, cập nhật theo bằng chứng. Khi cả tuần10 được nghiệm thu, gỡ mục3.1 khỏi tiến độ, giữ hàng tổng kết tuần10, nhật ký/ngày và đường dẫn report; sau đó thay bằng kế hoạch tuần11 khi bắt đầu. Không tự gỡ vì hết ngày dự kiến. Mục8 giữ lịch tổng thể và SPEC giữ hợp đồng lâu dài.
+Checklist thực thi W10-01..07 và lịch12–18/10 đặt tại docs/TIEN_DO_DO_AN.md mục3.1, cập nhật theo bằng chứng. Khi cả tuần10 được nghiệm thu, gỡ mục3.1 khỏi tiến độ, giữ hàng tổng kết tuần10, nhật ký/ngày và đường dẫn report; sau đó thay bằng kế hoạch tuần11 khi bắt đầu. Không tự gỡ vì hết ngày dự kiến. Mục8 giữ lịch tổng thể và SPEC giữ hợp đồng lâu dài.
 
 ### 8.3. Bàn giao W10-01 — 12/10/2026
 
@@ -774,7 +774,7 @@ Vẽ chart bằng Python cómatplotlib/numpy:`python scripts/summarize_fraction_
 
 ### 8.12. Thử refactor alignment adder — 15/10/2026
 
-Theo yêu cầu sinh viên, đã tạo `rtl/posit_add_align_candidate.sv` để thử hai hiệu sf signed chạy song song, tính abs(delta) từ sf trực tiếp,không chờ so sánh fraction hoặc MUX chọn sf lớn/nhỏ. Chọn dữ liệu vẫn dùng so sánh sf/fraction trực tiếp. Giữ mask,shifter,jam,clamp F+2 và toàn bộ logic ngoại lệ/output của bản hiện tại;NaR ưu tiên Zero. Cast từng toán hạng trước phép trừ; hằng clamp viết `delta_t'(F)+delta_t'(2)` để sạch lint khi SF_W35. Parameter/default/ports giữ nguyên ngoài tên module ứng viên. **Không thay `posit_add_align.sv`,không thêm bank/latency hoặc thay L1/SPEC normative.** Snapshot baseline tại results/align_refactor_20261015/before; bản đo đầu trước sửa cast lưu ở ppa_r1,số đo ba seed ứng viên giữ nguyên sau sửa cast.
+Theo yêu cầu sinh viên, đã tạo `rtl/candidates/adder/posit_add_align_candidate.sv` để thử hai hiệu sf signed chạy song song, tính abs(delta) từ sf trực tiếp,không chờ so sánh fraction hoặc MUX chọn sf lớn/nhỏ. Chọn dữ liệu vẫn dùng so sánh sf/fraction trực tiếp. Giữ mask,shifter,jam,clamp F+2 và toàn bộ logic ngoại lệ/output của bản hiện tại;NaR ưu tiên Zero. Cast từng toán hạng trước phép trừ; hằng clamp viết `delta_t'(F)+delta_t'(2)` để sạch lint khi SF_W35. Parameter/default/ports giữ nguyên ngoài tên module ứng viên. **Không thay `posit_add_align.sv`,không thêm bank/latency hoặc thay L1/SPEC normative.** Snapshot baseline tại results/align_refactor_20261015/before; bản đo đầu trước sửa cast lưu ở ppa_r1,số đo ba seed ứng viên giữ nguyên sau sửa cast.
 
 **Kiểm chức năng:** ModelSim10.1d kiểm823.872 trường hợp/11 cấu hình,0 mismatch giữa baseline,candidate và oracle alignment số nguyên độc lập. Gồm bốn format nghiệm thu,F2/F3,F5 vét cạn fraction ở delta biên,SF_W tăng và SF_W35,raw signed min/max,tie A,delta0/F+2/F+3,flags32 giá trị và payload special bẩn. Đã kiểm tổ hợp haiZero với NaR/flags_in[4] trả is_zero0. Không tuyên bố formal hoặc vét cạn toàn input. Strict Verilator5.032 --timing -Wall:9 leaf+4 integrated profiles sạch,không latch. Harness chu kỳ --no-timing chỉ bỏ ASSIGNDLY của CK2Q; không waiver lint định thời.
 
@@ -812,7 +812,7 @@ Trong Git backup,raw STA lưu lossless dạng `align.sta.rpt.gz`;local giữ b�
 
 ### 8.13. Khảo sát refactor normalization adder — 15/10/2026
 
-Theo ưu tiên đã thống nhất, đo ba biến thể: `before` là posit_add_normalize hiện tại; `zero` bỏ điều kiện !normalized[Q] trong phát hiện zero; `shared` thêm cách viết chung bộ cộng scale với bù hai/carry-in. Hai ứng viên riêng tại rtl/posit_add_normalize_zero.sv và rtl/posit_add_normalize_shared.sv; **không thay production RTL, SPEC v1.15, nguồn L1 hoặc checkpoint Gate3**. I/O, parameter/default, lịch A1/A2/A3, flags và sticky giữ nguyên.
+Theo ưu tiên đã thống nhất, đo ba biến thể: `before` là posit_add_normalize hiện tại; `zero` bỏ điều kiện !normalized[Q] trong phát hiện zero; `shared` thêm cách viết chung bộ cộng scale với bù hai/carry-in. Hai ứng viên riêng tại rtl/candidates/adder/posit_add_normalize_zero.sv và rtl/candidates/adder/posit_add_normalize_shared.sv; **không thay production RTL, SPEC v1.15, nguồn L1 hoặc checkpoint Gate3**. I/O, parameter/default, lịch A1/A2/A3, flags và sticky giữ nguyên.
 
 Với carry, hidden sau dịch phải luôn1; không carry và leading_valid1, LOD/dịch trái đưa bit1 lên Q. Vì vậy is_zero_in|!(leading_valid|carry) đủ cho đầu vào nhị phân. Ứng viên chỉ dịch Q bit fraction cần giữ, thay Q+1 bit gồm hidden; LOD vẫn nhận Q+1 bit đầy đủ. Phép chiếu này loại bit hidden không còn dùng và tránh lint unused; không mất bit có trọng số trong frac. TB kiểm invariant hidden của baseline và output đầy đủ bằng oracle tìm bit cao nhất/dịch trực tiếp, không gọi lại LOD/shifter của DUT.
 
@@ -1239,3 +1239,11 @@ Baseline left12/A100T có f_STA334,11–371,06MHz, chênh11,06% theo max/min−1
 Tái chạy từ Posit_MAC: `powershell -NoProfile -File scripts/verify_primitive_xilinx.ps1`; WSL: `bash scripts/lint_primitive_xilinx.sh` từ đúng thư mục dự án; lần lượt `powershell -NoProfile -File scripts/run_primitive_xilinx_ppa.ps1 -Part xc7a35tcpg236-1` và `-Part xc7a100tcsg324-1`; cuối cùng `python scripts/collect_primitive_xilinx.py`. Các runner đặt runtime/tmp/work/log trong dự án và không nạp profile WSL. Chỉ đọc/chạy tool hệ thống; không thay cài đặt, registry, license hoặc home.
 
 Khi dùng lại checkpoint đã lưu, vào bằng `powershell -NoProfile -File scripts/replay_primitive_xilinx.ps1 -Mode check` để kiểm hash nguồn/snapshot/report và thu thập lại số liệu. `-Mode verify` chạy lại XSim; `-Mode resume -Part <part>` tiếp tục các lượt PPA chưa xong, không có nghĩa tự chạy P&R mới cho các dòng đã có. Entry này kiểm nguồn trước khi gọi các helper phía trên. Không dùng lại thư mục kết quả/checkpoint hiện tại cho RTL hoặc constraints mới; phải tạo study mới và khóa manifest mới. Không gọi helper chuẩn bị để ghi đè snapshot rồi dùng lại DCP của study cũ.
+
+
+### Bảo trì cấu trúc RTL/kết quả — 15/10/2026
+
+RTL được phân nhóm tại `rtl/README.md`, manifest build chính `rtl/production.f`; tên module/I/O/parameter và nội dung RTL giữ nguyên.
+Runner WSL/ModelSim/Vivado dùng đường dẫn mới và resolver cho danh sách theo tên. Đây là bảo trì dự án, không đổi hợp đồng NF/F hay trạng thái Gate.
+Kết quả đo cũ giữ nguyên; bản đồ di chuyển/hash và kiểm smoke riêng tại `results/layout_cleanup_20261015`.
+Build/cache đã dọn; xem `scripts/README.md` để tái build hoặc dọn định kỳ. Không chạy lại regression 10M hoặc PPA chỉ vì đổi thư mục.

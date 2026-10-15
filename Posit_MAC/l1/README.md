@@ -287,7 +287,7 @@ Log: `results/paper_table1_200m.log`, `paper_table1_sensitivity.log`, `paper_tab
 
 ### 6.3 Đo phần cứng riêng OPS
 
-`rtl/ops_compare_top.sv` có hai policy trên cùng ranh giới register; min-popcount dùng cây cộng cân bằng. `tb/tb_ops_compare.sv` kiểm 116.384 cặp bằng ModelSim 10.1d: toàn bộ 128x128 cặp prefix và 100.000 cặp fraction 12 bit (xorshift32, seed 314159). Cả hai policy đạt, kể cả reset/tie.
+`rtl/benchmarks/ops_compare_top.sv` có hai policy trên cùng ranh giới register; min-popcount dùng cây cộng cân bằng. `tb/tb_ops_compare.sv` kiểm 116.384 cặp bằng ModelSim 10.1d: toàn bộ 128x128 cặp prefix và 100.000 cặp fraction 12 bit (xorshift32, seed 314159). Cả hai policy đạt, kể cả reset/tie.
 
 Quartus II 13.0.1 Web Edition, Cyclone IV E **EP4CE22F17C6**, clock 10 ns, seed 1/2/3, model Slow 1200mV 85C:
 

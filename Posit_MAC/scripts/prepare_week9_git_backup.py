@@ -54,7 +54,10 @@ for line in rules.splitlines():
     if line and line not in existing.splitlines():
         existing += "\n" + line
 ignore_path.write_text(existing.rstrip()+"\n", encoding="utf-8")
-copy(root.parent / "doc/TIEN_DO_DO_AN.md", checkout / "doc/TIEN_DO_DO_AN.md")
+progress = root / "docs/TIEN_DO_DO_AN.md"
+if not progress.is_file():
+    progress = root.parent / "doc/TIEN_DO_DO_AN.md"
+copy(progress, checkout / "doc/TIEN_DO_DO_AN.md")
 manifest_path = root / "results/week9_implementation/backup_snapshot_manifest.json"
 manifest_path.write_text(json.dumps({"checkout": checkout.as_posix(), "files_updated": copied,
                                   "scope": "source and small verification evidence; no fixtures/binaries/secrets/config"},

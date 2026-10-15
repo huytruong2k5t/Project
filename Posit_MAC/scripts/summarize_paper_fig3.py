@@ -6,6 +6,7 @@ import json
 import re
 from decimal import Decimal
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "results" / "paper_fig3"
@@ -145,7 +146,7 @@ files = [ROOT / name for name in (
     "l1/test_paper_fig3.exe", "l1/test_paper_fig3", "l1/test_paper_fig3_ubsan",
     "l1/test_paper_table1.exe", "scripts/summarize_paper_fig3.py")]
 files += [path for path in OUT.iterdir() if path.is_file() and path.name != "summary.json"]
-metadata["sha256"] = {path.relative_to(ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+metadata["sha256"] = {path.relative_to(ROOT).as_posix(): hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
                       for path in files}
 (OUT / "summary.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
 print("FIG3 SUMMARY PASS:15 rows,36 historical control cells,12 comparisons,5 pilots; baseline NOT_REPRODUCED")

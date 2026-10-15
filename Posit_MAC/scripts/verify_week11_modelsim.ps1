@@ -1,5 +1,6 @@
 param([string]$ModelSimBin='C:\altera\13.0sp1\modelsim_ase\win32aloem')
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'rtl_paths.ps1')
 $projectRoot=Split-Path $PSScriptRoot -Parent
 $resultRoot=Join-Path $projectRoot 'results/week11/modelsim'
 $fixtureRoot=Join-Path $projectRoot 'results/week11/fixtures'
@@ -9,7 +10,7 @@ $names=@('lod_lzd_core','dyn_left_shifter','dyn_right_shifter','posit_parser','p
     'mul_iter_core','mul_prepack_norm_comb','posit_pack_prepare','posit_pack_finish',
     'posit_pack_comb','round_unpacked_comb','posit_add_align','posit_add_arith',
     'posit_add_normalize','posit_add','posit_pack','mac_nf_wrapper','posit_mac_nf')
-$sources=@($names | ForEach-Object {Join-Path $projectRoot "rtl/$_.sv"})
+$sources=@($names | ForEach-Object {Resolve-RtlPath $_})
 $sources+=Join-Path $projectRoot 'tb/tb_week11_mac.sv'
 Push-Location $resultRoot
 try {

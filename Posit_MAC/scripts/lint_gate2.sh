@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source "$(dirname -- "${BASH_SOURCE[0]}")/rtl_paths.sh"
 # Strict lint for the normative multiplier. Research/PPA tops have separate scope.
 set -euo pipefail
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
@@ -9,7 +10,7 @@ sources=(lod_lzd_core dyn_left_shifter dyn_right_shifter posit_parser ops_sel_co
     sac_step_comb sbm_shift_comb sbm_accum_comb iter_ctrl sbm_accum mul_iter_core
     mul_norm_comb posit_pack_prepare posit_pack_finish posit_pack mul_iter_wrapper posit_mul_iter)
 rtl=()
-for source in "${sources[@]}"; do rtl+=("rtl/$source.sv"); done
+for source in "${sources[@]}"; do rtl+=("$(rtl_path "$source")"); done
 sha256sum "${rtl[@]}" rtl/posit_mac.vh > results/week9_implementation/lint_gate2/source.sha256
 for format in '8 0' '16 1' '32 2' '32 3'; do
     read -r nb es <<< "$format"

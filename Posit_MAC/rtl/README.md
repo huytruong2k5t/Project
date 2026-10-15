@@ -1,5 +1,45 @@
 # Thư mục Mã nguồn RTL (`rtl/`)
 
+## Bản đồ RTL hiện hành — 15/10/2026
+
+Đọc mục này trước; các mục có ngày bên dưới là lịch sử triển khai, không phải danh sách file hiện hành.
+Tổ chức lại chỉ đổi vị trí file, giữ nguyên byte mã nguồn, tên module, parameter, I/O và hành vi.
+
+| Thư mục | Nội dung |
+| --- | --- |
+| `common/` | LOD/LZD, dịch trái và dịch phải dùng chung |
+| `parser/` | Parser tổ hợp và pipeline |
+| `packer/` | Packer P1/P2, tổ hợp và round_unpacked |
+| `multiplier/` | OPS, SAC, SBM dịch/tích lũy, controller, core và top nhân |
+| `adder/` | Bộ cộng NF: align → arithmetic → normalize, comb/pipeline |
+| `mac_nf/` | Top `posit_mac_nf` và wrapper |
+| `mac_f/` | Top `posit_mac_f`, wrapper và pipeline F1–F5 |
+| `research/paper/` | Nhánh tái dựng paper độc lập với hợp đồng NF/F |
+| `candidates/adder/` | Các phương án thử alignment/normalization, chưa thay bản chính |
+| `candidates/primitives/` | Các phương án thử shifter/LOD; trùng tên module với bản chính |
+| `benchmarks/` | Wrapper đo PPA/so sánh, không ghép vào IP sản phẩm |
+| `posit_mac.vh` | Header dùng chung, giữ tại gốc để `-Irtl`/`+incdir+rtl` không đổi |
+| `production.f` | Danh sách 36 module chính, không gồm nghiên cứu/candidate/benchmark |
+
+**Không dùng glob đệ quy toàn bộ `rtl` để compile:** candidate primitive trùng tên module với production.
+Từ gốc Posit_MAC, dùng file list chính hoặc các runner đã có:
+
+```bash
+verilator --lint-only --timing --assert -Wall -Irtl --top-module posit_mac_f -f rtl/production.f
+bash scripts/verify_rtl_layout.sh
+```
+
+Các runner chọn module động dùng `scripts/rtl_paths.{sh,ps1,py}` và bản đồ `rtl_paths.json`/`rtl_paths.tsv`.
+Thêm module mới phải cập nhật file list và bản đồ nếu runner chọn theo tên.
+Kiểm tính nhất quán bằng `python scripts/audit_rtl_layout.py`.
+
+Kết quả cũ giữ nguyên đường dẫn/hash tại thời điểm đo. Bản đồ di chuyển và hash nằm ở
+`results/layout_cleanup_20261015/rtl_migration.json`; script trước di chuyển lưu trong
+`scripts_before_layout.zip` tại cùng thư mục. Không sửa hash lịch sử để hợp thức hóa một lượt chạy mới.
+Audit lịch sử có kiểm binary hoặc hash script vẫn cần phục hồi/build đúng checkpoint;
+không coi audit không chạy được sau cleanup là một lần kiểm mới thất bại về số học.
+
+
 **Hợp đồng tích hợp cập nhật 08/10/2026 — SPEC v1.5:** RTL baseline v0/v1 giữ profile L1 normative: cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; paper_source_config/predictor7-bit là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n), last chỉ hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng09/10; Gate2 processing, MAC RTL chưa nghiệm thu. Chi tiết và trạng thái tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md). Bước tiếp theo: đóng Gate2 tuần9 theo PLAN L1 mục7; chồng lấn sau baseline.
 
 Thư mục này chứa toàn bộ mã nguồn thiết kế phần cứng SystemVerilog cho lõi IP Posit MAC xấp xỉ và lặp, tuân thủ nghiêm ngặt chuẩn thiết kế [Digital Design Guidelines](../Digital_Design_Guidelines.md) và đặc tả [SPEC_Posit_MAC_IP.md](../SPEC_Posit_MAC_IP.md).
@@ -28,21 +68,21 @@ Thư mục này chứa toàn bộ mã nguồn thiết kế phần cứng SystemV
 | Tên Module / File | Mô tả chức năng & Kiến trúc phần cứng | Tham số chính | Trạng thái |
 |:---|:---|:---|:---:|
 | [`posit_mac.vh`](posit_mac.vh) | Header định nghĩa các hằng số, tham số cấu hình mặc định và macro phần cứng (`CK2Q`). | - | **Hoàn thành** |
-| [`lod_lzd_core.sv`](lod_lzd_core.sv) | Bộ dò tìm và đếm số 1 / số 0 đầu chuỗi (LOD/LZD) sử dụng cấu trúc **Cây nhị phân phẳng (Flat Binary Tree)**, tối ưu $O(\log_2 N)$ tầng MUX trên LUT6 FPGA. | `N=32`, `MODE=0/1`, `S=$clog2(N)` | **Hoàn thành (100% Pass)** |
-| [`dyn_left_shifter.sv`](dyn_left_shifter.sv) | Bộ dịch trái động logarit đa tầng ($S = \lceil \log_2 N \rceil$ tầng MUX), dịch $2^i$ bằng pure wiring, tích hợp cơ chế bảo vệ chống tràn ($b \ge N \implies \text{out} = 0$). | `N=32`, `SHIFT_W=$clog2(N)` | **Hoàn thành (100% Pass)** |
-| [`dyn_right_shifter.sv`](dyn_right_shifter.sv) | Bộ dịch phải động logarit đa tầng, hỗ trợ dịch logic (`ARITH=0`), dịch số học (`ARITH=1`), và điền bit động (`fill_val`), bảo vệ chống tràn ($b \ge N \implies \text{out} = \{N\{fill\}\}$). | `N=32`, `SHIFT_W=$clog2(N)`, `ARITH=0/1` | **Hoàn thành (100% Pass)** |
-| [`posit_parser_comb.sv`](posit_parser_comb.sv) | Parser tổ hợp: bù hai → LOD/LZD song song → chọn cnt/Rgm → dịch payload → tách sf/fraction, chặn Zero/NaR. | `NB, ES, FRAC_MAX, SF_W` | ModelSim đạt trong bốn format nghiệm thu; chưa có pipeline |
+| [`lod_lzd_core.sv`](common/lod_lzd_core.sv) | Bộ dò tìm và đếm số 1 / số 0 đầu chuỗi (LOD/LZD) sử dụng cấu trúc **Cây nhị phân phẳng (Flat Binary Tree)**, tối ưu $O(\log_2 N)$ tầng MUX trên LUT6 FPGA. | `N=32`, `MODE=0/1`, `S=$clog2(N)` | **Hoàn thành (100% Pass)** |
+| [`dyn_left_shifter.sv`](common/dyn_left_shifter.sv) | Bộ dịch trái động logarit đa tầng ($S = \lceil \log_2 N \rceil$ tầng MUX), dịch $2^i$ bằng pure wiring, tích hợp cơ chế bảo vệ chống tràn ($b \ge N \implies \text{out} = 0$). | `N=32`, `SHIFT_W=$clog2(N)` | **Hoàn thành (100% Pass)** |
+| [`dyn_right_shifter.sv`](common/dyn_right_shifter.sv) | Bộ dịch phải động logarit đa tầng, hỗ trợ dịch logic (`ARITH=0`), dịch số học (`ARITH=1`), và điền bit động (`fill_val`), bảo vệ chống tràn ($b \ge N \implies \text{out} = \{N\{fill\}\}$). | `N=32`, `SHIFT_W=$clog2(N)`, `ARITH=0/1` | **Hoàn thành (100% Pass)** |
+| [`posit_parser_comb.sv`](parser/posit_parser_comb.sv) | Parser tổ hợp: bù hai → LOD/LZD song song → chọn cnt/Rgm → dịch payload → tách sf/fraction, chặn Zero/NaR. | `NB, ES, FRAC_MAX, SF_W` | ModelSim đạt trong bốn format nghiệm thu; chưa có pipeline |
 
 ### B. Các Module Datapath Theo Kiến trúc §5 (Pipeline Architecture)
 
 | Tên Module | Vai trò trong Datapath (§5 SPEC) | Tầng Pipeline & Chu kỳ | Kế hoạch |
 |:---|:---|:---:|:---:|
-| [`posit_parser.sv`](posit_parser.sv) | Parser elastic hai tầng; dấu/cờ, count và payload cùng stall. Reset có hai FF đồng bộ nhả reset. | Tầng P, hai slot, II=1 khi không stall | Tuần 7; xem nghiệm thu mục5 |
-| [`posit_pack.sv`](posit_pack.sv) | Bộ đóng gói và làm tròn RNE FloPoCo (10 bước, có tiền kẹp $sf$) hoặc cắt cụt TRUNC sang Posit bitstring. | TRUNC H=1; RNE H=2: P1 mã hóa/dịch/G-R-S, P2 RNE/carry/dấu (§5.9-D); cần STA | Tuần 8 |
+| [`posit_parser.sv`](parser/posit_parser.sv) | Parser elastic hai tầng; dấu/cờ, count và payload cùng stall. Reset có hai FF đồng bộ nhả reset. | Tầng P, hai slot, II=1 khi không stall | Tuần 7; xem nghiệm thu mục5 |
+| [`posit_pack.sv`](packer/posit_pack.sv) | Bộ đóng gói và làm tròn RNE FloPoCo (10 bước, có tiền kẹp $sf$) hoặc cắt cụt TRUNC sang Posit bitstring. | TRUNC H=1; RNE H=2: P1 mã hóa/dịch/G-R-S, P2 RNE/carry/dấu (§5.9-D); cần STA | Tuần 8 |
 | Context M0 trong `mul_iter_core` | Chốt OPS và config nguyên tử tại launch; giữ metadata đến retire. | Một bank M0, không thêm bank OPS trước context | Đã triển khai/kiểm core09/10; chưa đóng Gate2 |
-| [`ops_sel_comb.sv`](ops_sel_comb.sv) | OPS normative tổ hợp; cắt fraction trước min-popcount, hòa chọn A, dấu/sf và input_cut. | Chưa có FF; bank M0 là context core theo §5.5-A | Tuần9: kiểm tổ hợp đạt; wrapper tuần tự còn triển khai |
+| [`ops_sel_comb.sv`](multiplier/ops_sel_comb.sv) | OPS normative tổ hợp; cắt fraction trước min-popcount, hòa chọn A, dấu/sf và input_cut. | Chưa có FF; bank M0 là context core theo §5.5-A | Tuần9: kiểm tổ hợp đạt; wrapper tuần tự còn triển khai |
 | `sac.sv` | Shift Amount Calculator: đếm số 0 đầu bằng LZD, tính $sa$, tích lũy tổng dịch $S$, và dịch loại bit 1 của $fx$. | Tầng M1..Mn (Lặp $n$) | Tuần 9 |
-| [`sac_step_comb.sv`](sac_step_comb.sv) | Một bước fraction: LOD MODE0 đếm zero đầu, sa=clz+1, fx_next/scale_next và exhausted/state_error. | Chưa có FF; controller sở hữu token/count | Tuần9: kiểm tổ hợp đạt; core chưa tích hợp |
+| [`sac_step_comb.sv`](multiplier/sac_step_comb.sv) | Một bước fraction: LOD MODE0 đếm zero đầu, sa=clz+1, fx_next/scale_next và exhausted/state_error. | Chưa có FF; controller sở hữu token/count | Tuần9: kiểm tổ hợp đạt; core chưa tích hợp |
 | `sbm.sv` | Shift-Based Multiplier: Shifter $1.f_Y \gg S$ và Accumulator tích lũy duy trì bit `sticky_acc`. | Tầng Shifter/Accum | Tuần 9 |
 | `mul_norm.sv` | Chuẩn hóa tích ($\text{acc} \ge 2.0$), dịch phải 1 bit và tăng scale factor: $sf = sf + 1$. | Tầng MN (1 chu kỳ) | Tuần 9 |
 | `posit_add.sv` | Bộ cộng/trừ 2 số Posit unpacked: A1 (Align kẹp cứng $\le 29$), A2 (Add/Sub), A3 (LZC Normalize). | Tầng A1–A3 (3 chu kỳ) | Tuần 10 |
@@ -55,7 +95,7 @@ Thư mục này chứa toàn bộ mã nguồn thiết kế phần cứng SystemV
 
 - **Kiểm tra cú pháp & Linting**:
   ```bash
-  verilator --lint-only -Wall -Irtl rtl/<module_name>.sv
+  verilator --lint-only --timing -Wall -Irtl --top-module posit_mac_f -f rtl/production.f
   ```
 - **Chạy Testbench đơn vị tương ứng**: Xem hướng dẫn chi tiết tại [`tb/README.md`](../tb/README.md).
 

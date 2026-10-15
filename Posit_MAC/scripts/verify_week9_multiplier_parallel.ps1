@@ -2,6 +2,7 @@ param([string]$ModelSimBin='C:\altera\13.0sp1\modelsim_ase\win32aloem',
       [string]$FixtureRun='final_pilot',[string]$RunName='parallel_pilot',
       [ValidateRange(1,12)][int]$Jobs=8)
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'rtl_paths.ps1')
 if($FixtureRun -notmatch '^[a-z0-9_-]+$' -or $RunName -notmatch '^[a-z0-9_-]+$') {throw 'Invalid run names'}
 $projectPath=Split-Path $PSScriptRoot -Parent
 $fixturePath=Join-Path $projectPath "results/week9_multiplier/$FixtureRun"
@@ -19,7 +20,7 @@ try {
     $sources=@('lod_lzd_core','dyn_left_shifter','dyn_right_shifter','posit_parser',
         'ops_sel_comb','sac_step_comb','sbm_shift_comb','sbm_accum_comb','iter_ctrl','sbm_accum',
         'mul_iter_core','mul_norm_comb','posit_pack_prepare','posit_pack_finish','posit_pack',
-        'mul_iter_wrapper','posit_mul_iter') | ForEach-Object {"../../../rtl/$_.sv"}
+        'mul_iter_wrapper','posit_mul_iter') | ForEach-Object {Resolve-RtlPath $_}
     $sources+=@('../../../tb/multiplier_checker.sv','../../../tb/tb_week9_multiplier_single.sv')
     $sourceHashes=@{}
     foreach($source in $sources) {$sourceHashes[$source]=(Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLower()}

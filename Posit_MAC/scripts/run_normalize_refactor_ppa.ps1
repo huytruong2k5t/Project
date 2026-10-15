@@ -1,5 +1,6 @@
 param([string]$QuartusTool='C:/altera/13.0sp1/quartus/bin64/quartus_sh.exe')
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'rtl_paths.ps1')
 $project=Split-Path $PSScriptRoot -Parent
 $run=Join-Path $project 'results/normalize_refactor_20261015/ppa'
 New-Item -ItemType Directory -Force $run | Out-Null
@@ -11,12 +12,12 @@ foreach($variant in @('before','zero','shared')) {
         $folder=Join-Path $run "${variant}_seed${seed}"
         $src=Join-Path $folder 'src'
         New-Item -ItemType Directory -Force $src | Out-Null
-        $source=if($variant -eq 'before') {'results/normalize_refactor_20261015/before/posit_add_normalize.sv'} else {"rtl/posit_add_normalize_${variant}.sv"}
+        $source=if($variant -eq 'before') {'results/normalize_refactor_20261015/before/posit_add_normalize.sv'} else {"rtl/candidates/adder/posit_add_normalize_${variant}.sv"}
         $code=Get-Content -LiteralPath (Join-Path $project $source) -Raw
         if($variant -ne 'before') {$code=$code.Replace("module posit_add_normalize_${variant} #(",'module posit_add_normalize #(')}
         [IO.File]::WriteAllText((Join-Path $src 'posit_add_normalize.sv'),$code,[Text.UTF8Encoding]::new($false))
         foreach($name in @('lod_lzd_core.sv','dyn_left_shifter.sv','normalize_ppa_boundary.sv','normalize_ppa_top.sv','posit_mac.vh')) {
-            Copy-Item -LiteralPath (Join-Path $project "rtl/$name") -Destination (Join-Path $src $name)
+            Copy-Item -LiteralPath (Resolve-RtlPath $name) -Destination (Join-Path $src $name)
         }
         'QUARTUS_VERSION = "13.0"','PROJECT_REVISION = "normalize"' | Set-Content -Encoding ascii (Join-Path $folder 'normalize.qpf')
         $qsf=@('set_global_assignment -name FAMILY "Cyclone IV E"',
@@ -55,8 +56,8 @@ foreach($variant in @('before','zero','shared')) {
     }
 }
 $hashes=@{}
-foreach($name in @('rtl/posit_add_normalize.sv','rtl/posit_add_normalize_zero.sv','rtl/posit_add_normalize_shared.sv',
-    'rtl/lod_lzd_core.sv','rtl/dyn_left_shifter.sv','rtl/normalize_ppa_boundary.sv','rtl/normalize_ppa_top.sv','rtl/posit_mac.vh',
+foreach($name in @('rtl/adder/posit_add_normalize.sv','rtl/candidates/adder/posit_add_normalize_zero.sv','rtl/candidates/adder/posit_add_normalize_shared.sv',
+    'rtl/common/lod_lzd_core.sv','rtl/common/dyn_left_shifter.sv','rtl/benchmarks/normalize_ppa_boundary.sv','rtl/benchmarks/normalize_ppa_top.sv','rtl/posit_mac.vh',
     'results/normalize_refactor_20261015/before/posit_add_normalize.sv','scripts/run_normalize_refactor_ppa.ps1')) {
     $hashes[$name]=(Get-FileHash -LiteralPath (Join-Path $project $name) -Algorithm SHA256).Hash.ToLowerInvariant()
 }

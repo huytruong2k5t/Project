@@ -2,6 +2,7 @@ param([string]$ModelSimBin='C:\altera\13.0sp1\modelsim_ase\win32aloem',
       [long]$PerProfile=2000,[string]$RunName='pilot',
       [ValidateSet('uniform_bits','stratified')][string]$Sampling='uniform_bits')
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'rtl_paths.ps1')
 if($RunName -notmatch '^[a-z0-9_-]+$' -or $PerProfile -lt 100) {throw 'Invalid run arguments'}
 $projectPath=Split-Path $PSScriptRoot -Parent
 $resultPath=Join-Path $projectPath "results/week9_multiplier/$RunName"
@@ -20,7 +21,7 @@ try {
     $sources=@('lod_lzd_core','dyn_left_shifter','dyn_right_shifter','posit_parser',
         'ops_sel_comb','sac_step_comb','sbm_shift_comb','sbm_accum_comb','iter_ctrl','sbm_accum',
         'mul_iter_core','mul_norm_comb','posit_pack_prepare','posit_pack_finish','posit_pack',
-        'mul_iter_wrapper','posit_mul_iter') | ForEach-Object {"../../../rtl/$_.sv"}
+        'mul_iter_wrapper','posit_mul_iter') | ForEach-Object {Resolve-RtlPath $_}
     $sources+=@('../../../tb/multiplier_checker.sv','../../../tb/tb_week9_multiplier.sv')
     Run-Tool (Join-Path $ModelSimBin 'vlog.exe') (@('-sv','-timescale','1ns/1ps','+incdir+../../../rtl','-work','work')+$sources+@('-l','compile.log')) 'compile_console.log'
     @('onerror {quit -code 1}','onbreak {quit -code 1}','run -all','quit -code 0') | Set-Content -Encoding ascii run.do

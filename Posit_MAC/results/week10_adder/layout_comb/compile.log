@@ -1,0 +1,17 @@
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+C:\altera\13.0sp1\modelsim_ase\win32aloem\vlog.exe -sv -timescale 1ns/1ps +incdir+C:\HCMUT\HK261\Do an 2\Posit_MAC/rtl -work work C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\common\lod_lzd_core.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\common\dyn_left_shifter.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\common\dyn_right_shifter.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\parser\posit_parser_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\adder\posit_add_align.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\adder\posit_add_arith.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\adder\posit_add_normalize.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\adder\posit_add_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\packer\posit_pack_prepare.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\packer\posit_pack_finish.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\rtl\packer\posit_pack_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\tb\tb_week10_adder_comb.sv -l compile.log 
+-- Compiling module lod_lzd_core
+-- Compiling module dyn_left_shifter
+-- Compiling module dyn_right_shifter
+-- Compiling module posit_parser_comb
+-- Compiling module posit_add_align
+-- Compiling module posit_add_arith
+-- Compiling module posit_add_normalize
+-- Compiling module posit_add_comb
+-- Compiling module posit_pack_prepare
+-- Compiling module posit_pack_finish
+-- Compiling module posit_pack_comb
+-- Compiling module tb_week10_adder_comb
+
+Top level modules:
+	tb_week10_adder_comb

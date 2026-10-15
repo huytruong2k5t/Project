@@ -4,6 +4,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 
 root = Path(__file__).resolve().parents[1]
 result = root / "results/l1_floor_rne_freeze"
@@ -35,7 +36,7 @@ sources += [root / path for path in ("l1/Makefile", "l1/test/test_prepack_produc
                                    "tb/week9_exact_reference.hpp", "scripts/audit_l1_floor_rne.py")]
 sources += sorted((root / "l1/src").glob("*.*"))
 sources += sorted((root / "l1/include").glob("*.h"))
-hashes = {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
+hashes = {str(path.relative_to(root)): hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
           for path in sources if path.is_file()}
 assert all(arg == "--refreeze" for arg in sys.argv[1:]), "usage: audit_l1_floor_rne.py [--refreeze]"
 existing = result / "summary.json"

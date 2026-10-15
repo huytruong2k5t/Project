@@ -1,0 +1,22 @@
+{
+  "mode": "APPLIED",
+  "date": "2026-10-16T00:47:15.7868385+07:00",
+  "before_bytes": 361896715,
+  "reclaim_bytes": 6311099,
+  "retained_bytes": 355585616,
+  "removed_files": 176,
+  "retained_files": 7157,
+  "targets": [
+    "results/layout_cleanup_20261015/tmp",
+    "results/week10_adder/layout_comb/work",
+    "results/layout_cleanup_20261015/nf/tmp",
+    "results/layout_cleanup_20261015/fused/tmp",
+    "results/layout_cleanup_20261015/nf/obj_dir",
+    "results/layout_cleanup_20261015/fused/simulate/tmp",
+    "results/layout_cleanup_20261015/fused/verilator/tmp",
+    "results/layout_cleanup_20261015/fused/simulate/xsim.dir",
+    "results/layout_cleanup_20261015/fused/verilator/obj_fast"
+  ],
+  "policy": "Only disposable build/cache directories; source/evidence/fixtures remain byte-identical.",
+  "retained_hash_check": "PASS"
+}

@@ -47,7 +47,7 @@ if heading not in spec:
 else:
     spec = spec.replace(heading+"\n\n"+body, heading+"\n\n"+short,1)
 spec_path.write_text(spec,encoding="utf-8")
-progress = root.parent / "doc/TIEN_DO_DO_AN.md"
+progress = root / "docs/TIEN_DO_DO_AN.md"
 text = progress.read_text(encoding="utf-8-sig")
 row = "| 4 | Rà soát baseline theo nguồn | Phân biệt SAC/cách đếm vòng giữa các nguồn; kiểm packer Fig5 độc lập đạt0 mismatch. Audit hoàn thành, baseline gốc vẫn processing | ✅ |\n"
 if row not in text:

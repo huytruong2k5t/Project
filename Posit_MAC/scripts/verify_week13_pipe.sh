@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
+source "$(dirname -- "${BASH_SOURCE[0]}")/rtl_paths.sh"
 set -euo pipefail
 cd "$(dirname "$0")/.."
-run=results/week13/pipe
+run="${W13_RESULTS_DIR:-results/week13}/pipe"
+[[ "$run" =~ ^results/[a-zA-Z0-9_/-]+$ && "$run" != *..* ]] || exit 2
 mkdir -p "$run/src/rtl" "$run/src/tb" "$run/src/l1/include" "$run/tmp"
 export TMPDIR="$PWD/$run/tmp"
-for n in lod_lzd_core fused_prepare_comb fused_align_comb fused_arith_comb fused_abs_borrow_comb fused_norm_comb fused_add_pipe; do cp "rtl/$n.sv" "$run/src/rtl/"; done
+for n in lod_lzd_core fused_prepare_comb fused_align_comb fused_arith_comb fused_abs_borrow_comb fused_norm_comb fused_add_pipe; do cp "$(rtl_path "$n")" "$run/src/rtl/"; done
 cp rtl/posit_mac.vh "$run/src/rtl/"
 cp tb/week13_pipe_harness.cpp tb/week12_fused_reference.hpp "$run/src/tb/"
 cp l1/include/*.hpp "$run/src/l1/include/"

@@ -1,5 +1,6 @@
 """Fail closed on incomplete comparisons; retain measured timing and scope."""
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 import csv
 import hashlib
 import json
@@ -11,7 +12,7 @@ OUT = ROOT / "results/primitive_xilinx_20261015"
 
 
 def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
 
 
 def extract(pattern, content, cast=float):
@@ -25,13 +26,13 @@ def main():
     manifest = json.loads((OUT / "manifest.json").read_text(encoding="utf-8-sig"))
     for name, expected in manifest["sources"].items():
         assert sha(ROOT / name) == expected, f"Source changed: {name}"
-    for variant, directory in (("baseline", "rtl"), ("candidate", "rtl/candidates/primitives")):
+    for variant, directory in (("baseline", "rtl/common"), ("candidate", "rtl/candidates/primitives")):
         for module in ("dyn_left_shifter", "dyn_right_shifter", "lod_lzd_core"):
             assert (OUT/"source"/variant/f"{module}.sv").read_bytes() == (ROOT/directory/f"{module}.sv").read_bytes()
         for file in ("primitive_ppa_top.sv", "primitive_ppa_boundary.sv", "posit_mac.vh"):
-            assert (OUT/"source"/variant/file).read_bytes() == (ROOT/"rtl"/file).read_bytes()
+            assert (OUT/"source"/variant/file).read_bytes() == (rtl_source(file)).read_bytes()
     for module in ("dyn_left_shifter", "dyn_right_shifter", "lod_lzd_core"):
-        expected = (ROOT/"rtl"/f"{module}.sv").read_text().replace(
+        expected = (rtl_source(f"{module}.sv")).read_text().replace(
             f"module {module} #(", f"module {module}_reference #(")
         assert (OUT/"reference"/f"{module}_reference.sv").read_text() == expected
     freeze = json.loads((ROOT / "results/week12/nf_ppa/summary.json").read_text(encoding="utf-8-sig"))
@@ -40,7 +41,7 @@ def main():
     interfaces = {}
     for module in ("dyn_left_shifter", "dyn_right_shifter", "lod_lzd_core"):
         headers = []
-        for directory in ("rtl", "rtl/candidates/primitives"):
+        for directory in ("rtl/common", "rtl/candidates/primitives"):
             content = (ROOT/directory/f"{module}.sv").read_text()
             header = re.search(r"module\s+\w+\s*#\((.*?)\);", content, re.S).group(1)
             headers.append(re.sub(r"\s+", "", re.sub(r"//[^\n]*", "", header)))

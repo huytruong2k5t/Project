@@ -1,8 +1,9 @@
-param([ValidateSet('simulate','ppa')][string]$Mode='simulate')
+param([ValidateSet('simulate','ppa')][string]$Mode='simulate',
+      [ValidatePattern('^results/[a-zA-Z0-9_/-]+$')][string]$RunRoot='results/week13')
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
 $bin='C:/AMDDesignTools/2026.1/Vivado/bin'
-$run=Join-Path $root "results/week13/$Mode"
+$run=Join-Path $root "$RunRoot/$Mode"
 New-Item -ItemType Directory -Force $run | Out-Null
 foreach($name in @('tmp','appdata','localappdata')) {New-Item -ItemType Directory -Force (Join-Path $run $name) | Out-Null}
 $env:TEMP=Join-Path $run 'tmp'

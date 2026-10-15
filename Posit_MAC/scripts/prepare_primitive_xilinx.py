@@ -1,5 +1,6 @@
 """Freeze input snapshots and generate parameterized, independent RTL checks."""
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 import hashlib
 import json
 import shutil
@@ -25,24 +26,24 @@ def main():
         "cases": [{"kind": k, "n": n} for n in (12, 26, 32) for k in (0, 1, 2)],
         "kind": {"0": "left", "1": "right_custom_fill", "2": "lod_mode0"}}
     for name in NAMES:
-        for directory in ("rtl", "rtl/candidates/primitives"):
+        for directory in ("rtl/common", "rtl/candidates/primitives"):
             path = ROOT / directory / f"{name}.sv"
-            manifest["sources"][path.relative_to(ROOT).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
-        original = (ROOT / "rtl" / f"{name}.sv").read_text()
+            manifest["sources"][path.relative_to(ROOT).as_posix()] = hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
+        original = (rtl_source(f"{name}.sv")).read_text()
         reference = original.replace(f"module {name} #(", f"module {name}_reference #(")
         (OUT / "reference" / f"{name}_reference.sv").write_text(reference, newline="\n")
     for path in [ROOT / "scripts" / p for p in (
         "prepare_primitive_xilinx.py", "verify_primitive_xilinx.ps1", "primitive_xilinx_ppa.tcl",
         "run_primitive_xilinx_ppa.ps1", "lint_primitive_xilinx.sh")]+[
             ROOT / "tb/primitive_lod_check.sv", ROOT / "tb/primitive_shift_check.sv"]:
-        manifest["sources"][path.relative_to(ROOT).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
-    for variant, directory in (("baseline", "rtl"), ("candidate", "rtl/candidates/primitives")):
+        manifest["sources"][path.relative_to(ROOT).as_posix()] = hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
+    for variant, directory in (("baseline", "rtl/common"), ("candidate", "rtl/candidates/primitives")):
         snapshot = OUT / "source" / variant
         snapshot.mkdir(parents=True, exist_ok=True)
         for name in NAMES:
             shutil.copyfile(ROOT / directory / f"{name}.sv", snapshot / f"{name}.sv")
         for name in ("primitive_ppa_top.sv", "primitive_ppa_boundary.sv", "posit_mac.vh"):
-            source = ROOT / "rtl" / name
+            source = rtl_source(name)
             shutil.copyfile(source, snapshot / name)
             manifest["sources"][source.relative_to(ROOT).as_posix()] = hashlib.sha256(source.read_bytes()).hexdigest()
     widths = (1, 2, 3, 5, 8, 12, 26, 27, 29, 31, 32, 33, 64)

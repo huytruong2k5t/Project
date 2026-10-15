@@ -14,7 +14,7 @@ def header(path):
     return re.sub(r'\s+','',re.sub(r'//[^\n]*','',source))
 
 old=RUN/'before/ops_sel_comb.sv'
-new=ROOT/'rtl/ops_sel_comb.sv'
+new=ROOT/'rtl/multiplier/ops_sel_comb.sv'
 assert header(old)==header(new), 'Public parameters or ports changed'
 original=json.loads(nf.read(ROOT/'results/nf_coverage_20261014/completion.json'))
 assert nf.sha(old)==original['core']['source_sha256']['rtl/ops_sel_comb.sv'], 'Incorrect reference RTL'

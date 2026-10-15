@@ -5,6 +5,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 
 ROOT = Path(__file__).resolve().parents[1]
 RUN = ROOT / 'results/ops_refactor_20261014/nf'
@@ -16,13 +17,13 @@ def read(path):
     return raw.decode('utf-16') if raw.startswith(b'\xff\xfe') else raw.decode('utf-8-sig')
 
 def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
 
 def dump(path, obj):
     path.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
 
 def source_paths():
-    paths = list((ROOT / 'rtl').glob('*.sv'))
+    paths = list((ROOT / 'rtl').rglob('*.sv'))
     paths += [ROOT / 'rtl/posit_mac.vh']
     paths += list((ROOT / 'l1/include').glob('*.hpp'))
     paths += [ROOT / ('tb/' + name) for name in (
@@ -44,7 +45,7 @@ def check_snapshot(folder):
         if saved.parent.name == 'l1':
             live = ROOT / 'l1/include' / saved.name
         elif saved.suffix in ('.sv', '.vh'):
-            live = ROOT / 'rtl' / saved.name
+            live = rtl_source(saved.name)
         elif saved.suffix in ('.cpp', '.hpp', '.vlt'):
             live = ROOT / 'tb' / saved.name
         else:

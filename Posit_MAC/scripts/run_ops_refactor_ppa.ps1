@@ -10,7 +10,7 @@ foreach($variant in @('before','after')) {
     foreach($seed in @(1,2,3)) {
         $folder=Join-Path $run "${variant}_seed${seed}"
         New-Item -ItemType Directory -Force $folder | Out-Null
-        $source=if($variant -eq 'before') {Join-Path $project 'results/ops_refactor_20261014/before/ops_sel_comb.sv'} else {Join-Path $project 'rtl/ops_sel_comb.sv'}
+        $source=if($variant -eq 'before') {Join-Path $project 'results/ops_refactor_20261014/before/ops_sel_comb.sv'} else {Join-Path $project 'rtl/multiplier/ops_sel_comb.sv'}
         'QUARTUS_VERSION = "13.0"','PROJECT_REVISION = "ops"' | Set-Content -Encoding ascii (Join-Path $folder 'ops.qpf')
         $qsf=@('set_global_assignment -name FAMILY "Cyclone IV E"',
             'set_global_assignment -name DEVICE EP4CE30F23C6',
@@ -19,7 +19,7 @@ foreach($variant in @('before','after')) {
             'set_global_assignment -name SDC_FILE ops.sdc',
             "set_global_assignment -name SEED $seed",
             'set_global_assignment -name NUM_PARALLEL_PROCESSORS 2')
-        foreach($file in @($source,(Join-Path $project 'rtl/ops_ppa_boundary.sv'),(Join-Path $project 'rtl/ops_ppa_top.sv'))) {
+        foreach($file in @($source,(Join-Path $project 'rtl/benchmarks/ops_ppa_boundary.sv'),(Join-Path $project 'rtl/benchmarks/ops_ppa_top.sv'))) {
             $qsf+='set_global_assignment -name SYSTEMVERILOG_FILE "'+$file.Replace('\','/')+'"'
         }
         $qsf+='set_global_assignment -name SEARCH_PATH "'+(Join-Path $project 'rtl').Replace('\','/')+'"'
@@ -46,7 +46,7 @@ foreach($variant in @('before','after')) {
     }
 }
 $hashes=@{}
-foreach($name in @('rtl/ops_sel_comb.sv','rtl/ops_ppa_boundary.sv','rtl/ops_ppa_top.sv',
+foreach($name in @('rtl/multiplier/ops_sel_comb.sv','rtl/benchmarks/ops_ppa_boundary.sv','rtl/benchmarks/ops_ppa_top.sv',
     'results/ops_refactor_20261014/before/ops_sel_comb.sv','scripts/run_ops_refactor_ppa.ps1')) {
     $hashes[$name]=(Get-FileHash -LiteralPath (Join-Path $project $name) -Algorithm SHA256).Hash.ToLowerInvariant()
 }

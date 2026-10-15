@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source "$(dirname -- "${BASH_SOURCE[0]}")/rtl_paths.sh"
 set -euo pipefail
 cd "$(dirname "$0")/.."
 project="$PWD"
@@ -11,15 +12,15 @@ for variant in zero shared; do
     for format in '8 0' '16 1' '32 2' '32 3' '5 0' '6 1' '7 1' '16 10' '32 27'; do
         read -r nb es <<< "$format"
         verilator --lint-only --timing -Wall --top-module "posit_add_normalize_$variant" \
-            "-GNB=$nb" "-GES=$es" "rtl/posit_add_normalize_$variant.sv" \
-            rtl/lod_lzd_core.sv rtl/dyn_left_shifter.sv \
+            "-GNB=$nb" "-GES=$es" "rtl/candidates/adder/posit_add_normalize_$variant.sv" \
+            rtl/common/lod_lzd_core.sv rtl/common/dyn_left_shifter.sv \
             > "$run/lint/${variant}_${nb}_${es}.log" 2>&1
     done
     for format in '32 3 13' '32 2 12'; do
         read -r nb es sw <<< "$format"
         verilator --lint-only --timing -Wall --top-module "posit_add_normalize_$variant" \
-            "-GNB=$nb" "-GES=$es" "-GSF_W=$sw" "rtl/posit_add_normalize_$variant.sv" \
-            rtl/lod_lzd_core.sv rtl/dyn_left_shifter.sv \
+            "-GNB=$nb" "-GES=$es" "-GSF_W=$sw" "rtl/candidates/adder/posit_add_normalize_$variant.sv" \
+            rtl/common/lod_lzd_core.sv rtl/common/dyn_left_shifter.sv \
             > "$run/lint/${variant}_${nb}_${es}_${sw}.log" 2>&1
     done
 done
@@ -36,12 +37,12 @@ for variant in zero shared; do
             posit_add_align posit_add_arith posit_add posit_pack_prepare posit_pack_finish posit_pack_comb)
         rtl=()
         for module in "${sources[@]}"; do
-            cp -- "rtl/$module.sv" "$folder/src/"
+            cp -- "$(rtl_path "$module")" "$folder/src/"
             rtl+=("src/$module.sv")
         done
         # Only normalization is substituted; alignment and pipeline stay production RTL.
         sed "s/module posit_add_normalize_$variant #(/module posit_add_normalize #(/" \
-            "rtl/posit_add_normalize_$variant.sv" > "$folder/src/posit_add_normalize.sv"
+            "rtl/candidates/adder/posit_add_normalize_$variant.sv" > "$folder/src/posit_add_normalize.sv"
         rtl+=(src/posit_add_normalize.sv)
         cp -- rtl/posit_mac.vh tb/adder_verification_top.sv tb/week10_adder_harness.cpp \
             tb/week10_add_reference.hpp l0/softposit_api.h l0/libsoftposit.so "$folder/src/"

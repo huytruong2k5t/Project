@@ -13,7 +13,7 @@ Push-Location $resultPath
 try {
     Run-ModelSimTool 'vsim' @('-version') 'version.log'
     if(!(Test-Path 'work')) {Run-ModelSimTool 'vlib' @('work') 'library.log'}
-    Run-ModelSimTool 'vlog' @('-sv','-work','work','../../rtl/dyn_left_shifter.sv','../../rtl/dyn_right_shifter.sv',
+    Run-ModelSimTool 'vlog' @('-sv','-work','work','../../rtl/common/dyn_left_shifter.sv','../../rtl/common/dyn_right_shifter.sv',
         '../../tb/tb_dyn_left_shifter.sv','../../tb/tb_dyn_right_shifter.sv',
         '../../tb/tb_dyn_shifter_parameters.sv','-l','compile.log') 'compile_console.log'
     # Use a macro so onerror/onbreak apply to commands inside it.
@@ -31,7 +31,7 @@ try {
         $results+=[pscustomobject]@{top=$top;seed=$Seed;comparisons=$comparisons;status='PASS'}
     }
     $results | ConvertTo-Json | Set-Content 'summary.json'
-    $sourceNames=@('rtl/dyn_left_shifter.sv','rtl/dyn_right_shifter.sv','tb/tb_dyn_left_shifter.sv',
+    $sourceNames=@('rtl/common/dyn_left_shifter.sv','rtl/common/dyn_right_shifter.sv','tb/tb_dyn_left_shifter.sv',
         'tb/tb_dyn_right_shifter.sv','tb/tb_dyn_shifter_parameters.sv','scripts/verify_shifters_modelsim.ps1')
     $sourceNames | ForEach-Object {(Get-FileHash -LiteralPath (Join-Path $projectPath $_) -Algorithm SHA256).Hash.ToLowerInvariant()+'  '+$_} |
         Set-Content 'sources.sha256'

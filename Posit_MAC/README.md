@@ -22,6 +22,9 @@
 
 ## 2. Cấu trúc Thư mục Dự án
 
+RTL đã phân nhóm theo chức năng; xem [bản đồ RTL](rtl/README.md). Danh sách build chính: `rtl/production.f`. Không compile chung các candidate trùng tên module.
+
+
 ```text
 Posit_MAC/
 ├── README.md               # Giới thiệu tổng quan toàn bộ dự án
@@ -46,9 +49,9 @@ Posit_MAC/
 
 - ✅ **Quy chuẩn & Đặc tả**: Hoàn thành tài liệu [SPEC](SPEC_Posit_MAC_IP.md), [Design Guidelines](Digital_Design_Guidelines.md), và [Ambiguity Log](docs/ambiguity.md).
 - ✅ **Khối Cơ sở RTL (100% Verified)**:
-  - [`rtl/lod_lzd_core.sv`](rtl/lod_lzd_core.sv): Cây nhị phân phẳng dò Lead One / Lead Zero.
-  - [`rtl/dyn_left_shifter.sv`](rtl/dyn_left_shifter.sv): Bộ dịch trái logarit đa tầng kèm chống tràn ($b \ge N$).
-  - [`rtl/dyn_right_shifter.sv`](rtl/dyn_right_shifter.sv): Bộ dịch phải logarit đa tầng hỗ trợ dịch logic/arithmetic/custom fill kèm chống tràn.
+  - [`rtl/common/lod_lzd_core.sv`](rtl/common/lod_lzd_core.sv): Cây nhị phân phẳng dò Lead One / Lead Zero.
+  - [`rtl/common/dyn_left_shifter.sv`](rtl/common/dyn_left_shifter.sv): Bộ dịch trái logarit đa tầng kèm chống tràn ($b \ge N$).
+  - [`rtl/common/dyn_right_shifter.sv`](rtl/common/dyn_right_shifter.sv): Bộ dịch phải logarit đa tầng hỗ trợ dịch logic/arithmetic/custom fill kèm chống tràn.
 - ✅ **Môi trường Testbench Đơn vị**:
   - [`tb/tb_lod_lzd_core.sv`](tb/tb_lod_lzd_core.sv) (Pass 100%).
   - [`tb/tb_dyn_left_shifter.sv`](tb/tb_dyn_left_shifter.sv) (Pass 100% trên 60,832 vectors).

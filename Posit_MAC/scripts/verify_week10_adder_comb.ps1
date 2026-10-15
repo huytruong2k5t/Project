@@ -4,6 +4,7 @@ param(
     [ValidatePattern('^[a-z0-9_-]+$')][string]$RunName = 'modelsim_comb'
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'rtl_paths.ps1')
 $projectRoot = Split-Path $PSScriptRoot -Parent
 $resultRoot = Join-Path $projectRoot "results/week10_adder/$RunName"
 $fixtureRoot = [IO.Path]::GetFullPath((Join-Path $projectRoot "results/week10_adder/$FixtureRun"))
@@ -12,7 +13,7 @@ New-Item -ItemType Directory -Path $resultRoot -Force | Out-Null
 $sourceNames = @('lod_lzd_core','dyn_left_shifter','dyn_right_shifter','posit_parser_comb',
     'posit_add_align','posit_add_arith','posit_add_normalize','posit_add_comb',
     'posit_pack_prepare','posit_pack_finish','posit_pack_comb')
-$sources = @($sourceNames | ForEach-Object { Join-Path $projectRoot "rtl/$_.sv" })
+$sources = @($sourceNames | ForEach-Object { Resolve-RtlPath $_ })
 $sources += Join-Path $projectRoot 'tb/tb_week10_adder_comb.sv'
 Push-Location $resultRoot
 try {

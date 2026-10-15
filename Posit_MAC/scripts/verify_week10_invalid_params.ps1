@@ -1,5 +1,6 @@
 param([string]$ModelSimBin = 'C:\altera\13.0sp1\modelsim_ase\win32aloem')
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'rtl_paths.ps1')
 $root=Split-Path $PSScriptRoot -Parent
 $run=Join-Path $root 'results/week10_adder/invalid_params'
 New-Item -ItemType Directory -Force $run | Out-Null
@@ -8,7 +9,7 @@ try {
     Set-Content -Encoding ascii run_status.txt RUNNING
     & (Join-Path $ModelSimBin 'vlib.exe') work | Set-Content library.log
     if($LASTEXITCODE) {throw 'vlib failed'}
-    $sources=@('lod_lzd_core','dyn_left_shifter','dyn_right_shifter','posit_add_align','posit_add_arith','posit_add_normalize','posit_add_comb') | ForEach-Object {Join-Path $root "rtl/$_.sv"}
+    $sources=@('lod_lzd_core','dyn_left_shifter','dyn_right_shifter','posit_add_align','posit_add_arith','posit_add_normalize','posit_add_comb') | ForEach-Object {Resolve-RtlPath $_}
     $sources+=Join-Path $root 'tb/tb_week10_invalid_params.sv'
     $sourceHashes = @{}
     foreach ($source in $sources) {

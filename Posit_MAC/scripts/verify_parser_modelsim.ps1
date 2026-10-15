@@ -9,9 +9,9 @@ $resultPath = Join-Path $projectPath 'results/parser_pipeline'
 $fixturePath = Join-Path $projectPath 'results/parser_comb'
 $sourceNames = @(
     'rtl/posit_mac.vh',
-    'rtl/lod_lzd_core.sv',
-    'rtl/dyn_left_shifter.sv',
-    'rtl/posit_parser.sv',
+    'rtl/common/lod_lzd_core.sv',
+    'rtl/common/dyn_left_shifter.sv',
+    'rtl/parser/posit_parser.sv',
     'tb/parser_pipeline_checker.sv',
     'tb/tb_posit_parser.sv'
 )
@@ -67,9 +67,9 @@ try {
 
         $arguments = @(
             '-sv', '-timescale', '1ns/1ps', '+incdir+../../rtl', '-work', 'work',
-            '../../rtl/lod_lzd_core.sv',
-            '../../rtl/dyn_left_shifter.sv',
-            '../../rtl/posit_parser.sv',
+            '../../rtl/common/lod_lzd_core.sv',
+            '../../rtl/common/dyn_left_shifter.sv',
+            '../../rtl/parser/posit_parser.sv',
             '../../tb/parser_pipeline_checker.sv',
             '../../tb/tb_posit_parser.sv',
             '-l', 'compile.log'
@@ -136,7 +136,7 @@ try {
         oracle = 'accepted parser_comb L1/independent field fixtures'
         simulator = (Get-Content -Raw version.log).Trim()
         suites = $suites
-        compileCommand = 'vlog -sv -timescale 1ns/1ps +incdir+../../rtl -work work ../../rtl/lod_lzd_core.sv ../../rtl/dyn_left_shifter.sv ../../rtl/posit_parser.sv ../../tb/parser_pipeline_checker.sv ../../tb/tb_posit_parser.sv -l compile.log'
+        compileCommand = 'vlog -sv -timescale 1ns/1ps +incdir+../../rtl -work work ../../rtl/common/lod_lzd_core.sv ../../rtl/common/dyn_left_shifter.sv ../../rtl/parser/posit_parser.sv ../../tb/parser_pipeline_checker.sv ../../tb/tb_posit_parser.sv -l compile.log'
         simulationCommand = 'vsim -c work.tb_posit_parser -l simulate.log -do run.do'
     } | ConvertTo-Json -Depth 5 | Set-Content 'summary.json'
 

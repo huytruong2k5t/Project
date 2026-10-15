@@ -7,7 +7,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $outputRoot = Join-Path $projectRoot 'results/ops_ppa'
-$source = (Join-Path $projectRoot 'rtl/ops_compare_top.sv').Replace('\','/')
+$source = (Join-Path $projectRoot 'rtl/benchmarks/ops_compare_top.sv').Replace('\','/')
 $tb = (Join-Path $projectRoot 'tb/tb_ops_compare.sv').Replace('\','/')
 New-Item -ItemType Directory -Force -Path $outputRoot | Out-Null
 if (-not $SkipSimulation) {

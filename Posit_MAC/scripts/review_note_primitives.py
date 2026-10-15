@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+from rtl_paths import rtl_source, resolve_source
 import platform
 import random
 from xml.etree import ElementTree as ET
@@ -23,7 +24,7 @@ M_NS = "http://schemas.openxmlformats.org/officeDocument/2006/math"
 
 
 def sha(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(resolve_source(path).read_bytes()).hexdigest()
 
 
 def note_metadata(path: Path) -> dict:
@@ -217,8 +218,8 @@ def main() -> None:
     out = args.out.resolve()
     if not out.is_relative_to(ROOT):
         raise ValueError("Keep review output inside Posit_MAC")
-    source_names = ["rtl/lod_lzd_core.sv", "rtl/dyn_left_shifter.sv", "rtl/dyn_right_shifter.sv",
-                    "rtl/posit_parser_comb.sv", "rtl/posit_parser.sv", "SPEC_Posit_MAC_IP.md",
+    source_names = ["rtl/common/lod_lzd_core.sv", "rtl/common/dyn_left_shifter.sv", "rtl/common/dyn_right_shifter.sv",
+                    "rtl/parser/posit_parser_comb.sv", "rtl/parser/posit_parser.sv", "SPEC_Posit_MAC_IP.md",
                     "Digital_Design_Guidelines.md"]
     sources = {name: sha(ROOT / name) for name in source_names}
     note = note_metadata(args.note)

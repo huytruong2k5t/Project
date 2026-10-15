@@ -12,8 +12,8 @@ try {
     Run-Tool (Join-Path $projectPath 'l1/gen_week9_arithmetic.exe') @('.') 'generator.log'
     Run-Tool (Join-Path $ModelSimBin 'vsim.exe') @('-version') 'version.log'
     if(!(Test-Path work)) {Run-Tool (Join-Path $ModelSimBin 'vlib.exe') @('work') 'library.log'}
-    $sources=@('../../../rtl/sbm_shift_comb.sv','../../../rtl/sbm_accum_comb.sv',
-        '../../../rtl/mul_norm_comb.sv','../../../tb/arithmetic_checker.sv',
+    $sources=@('../../../rtl/multiplier/sbm_shift_comb.sv','../../../rtl/multiplier/sbm_accum_comb.sv',
+        '../../../rtl/multiplier/mul_norm_comb.sv','../../../tb/arithmetic_checker.sv',
         '../../../tb/tb_week9_arithmetic.sv')
     Run-Tool (Join-Path $ModelSimBin 'vlog.exe') (@('-sv','-work','work')+$sources+@('-l','compile.log')) 'compile_console.log'
     @('onerror {quit -code 1}','onbreak {quit -code 1}','run -all','quit -code 0') | Set-Content -Encoding ascii run.do

@@ -53,7 +53,7 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 
 ## 3.1. Bàn giao tuần13
 
-Checklist tuần12 đã nghiệm thu và gỡ;giữ nhật ký/report tại PLAN8.14 và results/week12/summary.json. Tuần13 triển khai RTL fused theo W12-F-1: align/residual → add/sub/borrow → normalize/packer → top/protocol → pilot/regression → STA/audit. Chi tiết PLAN8.15;chưa bắt đầu RTL F.
+Checklist tuần12 đã nghiệm thu và gỡ; giữ nhật ký/report tại PLAN8.14 và results/week12/summary.json. Đã đủ cơ sở bắt đầu RTL fused W12-F-1 (32/3, FW12, W32/Q29, FLOOR/RNE, approximate-only). PLAN§8.15 cập nhật15/10 có W13-01..07: khóa mapping prepack/giao diện/lịch cạnh → F1/F2 align/residual → F3/F4 add/sub/borrow → F5/packer → top/protocol → pilot/regression → STA/audit/backup. Dự kiến7–10 ngày làm việc, có thể bắt đầu sớm; không chờ NF tối ưu Fmax xong. Chưa viết RTL F hoặc chạy kiểm mới; final per-n tuần14 và Gate4 giữ nguyên.
 
 Kế hoạch tối ưu tại [PLAN§8.16](../Posit_MAC/l1/PLAN.md#816-kế-hoạch-tối-ưu-timinglut-trước-khi-sửa-rtl--bản-xem-xét-15102026) đã bổ sung thực thi leaf Xilinx ở §8.16.9. XSim117 cấu hình/7.275.184 đối chiếu đạt0 mismatch,strict lint197 lượt đạt;108 lượt P&R A35T/A100T hoàn tất. R2R đạt200MHz;31 lượt còn lỗi tại cổng OOC, chưa board signoff. Refactor chưa có lợi ích timing đồng nhất; giữ RTL chính, ứng viên và bảng đánh đổi riêng. Zynq7020 chưa có trong danh sách part bản cài. Cặp LOD/shifter và mọi tích hợp lớn chưa triển khai; không đổi fraction12 hoặc hợp đồng fused.
 
@@ -186,6 +186,7 @@ Kế hoạch tối ưu tại [PLAN§8.16](../Posit_MAC/l1/PLAN.md#816-kế-hoạ
 | 6 | Lập kế hoạch tối ưu timing/LUT trước refactor | Bổ sung PLAN§8.16 và thứ tự thử SAC: dịch cố định trước → gộp cộng scale → exhausted song song cùng controller; giữ bit-exact và đo từng bước. Đã cập nhật kế hoạch theo góp ý; chưa sửa RTL hoặc chạy lại regression/PPA | ✅ |
 | 7 | Rà soát ghi chú và ưu tiên khối cơ sở | Đọc Note.docx, đối chiếu mã và kiểm các đẳng thức số học; xác định cách sửa count của parser và giới hạn các ước lượng LUT. Cập nhật thứ tự shifter/LOD trước SAC và khối lớn; chưa sửa RTL hoặc đo PPA mới | ✅ |
 | 8 | Khảo sát primitive trên Xilinx | XSim7.275.184 đối chiếu/0 mismatch,lint197 lượt và108 P&R hoàn tất. R2R đạt200MHz;refactor có đánh đổi theo width/part,chưa thắng đồng nhất;giữ RTL chính. I/O OOC chưa closure,không suy tần số MAC/kit. Bảng/snapshot tại PLAN§8.16.9 | ✅ |
+| 9 | Cụ thể hóa kế hoạch RTL fused | Đối chiếu SPEC/guideline/L1 và bằng chứng tuần12; chốt phạm vi bản đầu, kế hoạch F1–F5 và W13-01..07, tiêu chí số học/protocol/STA. Đã đủ điều kiện bắt đầu; chưa sửa RTL hoặc chạy kiểm mới | ✅ |
 
 ### 4.15. Mẫu cập nhật tiếp theo
 

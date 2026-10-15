@@ -931,11 +931,71 @@ python scripts\audit_week12.py
 
 Audit đầy đủ cần sinh lạibin/corpus/source copy trên checkout mới. Backup chỉsource,manifest/hash,JSON/CSV/trace/log và raw reports nén lossless;không exe,ELF,SO,SOF,wave,obj/db/fixtures/cache. Không tạo Markdown mới. Receipt results/week12/backup.json chỉ được tạo sau push thành công;khi có receipt,summary mới đóngW12-07.
 
-### 8.15. Kế hoạch triển khai tuần13 sau W12-F-1
+### 8.15. Kế hoạch thiết kế RTL fused — cập nhật 15/10/2026
 
-Chưa bắt đầu RTL F. Thứ tự: W13-01 chốt ports/cạnh/fixture từmodel frozen → W13-02 F1/F2 vàlost-mask song song → W13-03 F3/F4 vàsigned borrow/special → W13-04 F5/packer → W13-05 top reset/stall/order/acc_mode → W13-06 pilot rồi≥10^7 soRTL/L1 vàcoverage theoSPEC → W13-07 STA/audit/backup. Lịch gốc02–08/11,có thể làm sớm theo yêu cầu. Final per-n/matrix tuần14 giữ nguyên,không dùng≥10^7 tích hợp đầu để giảm final.
+**Đã đủ điều kiện bắt đầu RTL theo W12-F-1.** G-F-L1 đã đạt: 2.208.768 ca/nền tảng Linux, Windows, UBSan, 0 mismatch; oracle/contract/source được khóa trong results/week12. Đây là bằng chứng model, chưa phải RTL F. Phiên này chỉ cụ thể hóa kế hoạch, chưa sửa RTL hoặc chạy mô phỏng/P&R mới. Không cần chờ tối ưu Fmax NF đến giới hạn mới triển khai F.
 
-Mỗi module mộtfile,cổng mỗi dòng,named mapping,cast/width tường minh,no latch,always_ff/load-enable/CK2Q;structural top,reset/valid/context theoSPEC. Fused dựa modelW32,không dùng clampF+2 củaadderNF để giả làmF. Đề xuất tối ưuNF ở8.14 chờ sinh viên chọn để tạo candidate vàđo;chưa tự sửa baseline hoặc hứa đạt100MHz. Final accuracy/PPA/Gate4 và hạn trước05/12 không thay đổi.
+#### 8.15.1. Phạm vi bản đầu và điều kiện bắt đầu
+
+- Top mới `posit_mac_f`, structural, cùng các trường giao dịch của `posit_mac_nf`; không thêm nhánh FUSED vào top NF đã nghiệm thu.
+- Profile bắt buộc đầu tiên: NB32/ES3, FRAC_W12, ACC_WIN32/Q29, EXACT_EN0, OPS_EN1, FLOOR/RNE, cfg_n0..8; cfg_ops0/1. Ghi ES=3 tường minh, không lấy default ES2 của module dùng chung làm profile chính.
+- Kết quả là fused trên **P_hat xấp xỉ**: cộng P_hat+C_eff rồi RNE một lần; không tuyên bố exact A×B+C hoặc quire. acc_mode vẫn làm tròn và lưu Posit sau từng giao dịch.
+- Giữ cận Q>=max(F,FRAC_W+1)+3; residual sign/nonzero nằm ngoài W32. Không mở thêm format/window/exact khi chưa có oracle, elaboration guard và kiểm tương ứng. Với32/2, F27 đòi Q>=30 nên W32 hiện tại không tự được hỗ trợ; phải bàn giao riêng nếu mở rộng.
+- Reuse production parser, OPS, mul_iter_core/SAC/SBM và packer đã kiểm. Các ứng viên primitive/align/normalize chưa được promote không tự đi vào F. Shared refactor sau này phải áp tương ứng NF/F hoặc báo riêng ảnh hưởng.
+- Chỉ lấy raw prepack từ multiplier, giữ carry, scale và các cờ mất mát; không lấy product_frac_q hoặc tích đã round/pack của NF. W13-01 phải đối chiếu cách chuyển acc/sticky_acc/numerical_tail/input_cut/approx_cut thành record prepack với SPEC§11.9 và trace L1; không đồng nhất metadata loss với numerical sticky.
+
+Nguồn chuẩn đọc trước khi viết: SPEC§5.12/§11.9/§11.14, Digital_Design_Guidelines.md, results/week12/{contract,handoff,freeze,summary}.json, l1/include/posit_fused_window.hpp và tb/week12_fused_reference.hpp. Giữ nguyên các file evidence frozen, không sửa số đếm/hashes để phù hợp mã mới.
+
+#### 8.15.2. Datapath và ranh giới pipeline dự kiến
+
+Luồng chính: parser A/B và parser C_eff song song → OPS/core tạo P_hat → F1 → F2 → F3 → F4 → F5 → packer P1/P2 → d/flags. C_eff/config được giữ cùng transaction trong khi multiplier chạy. Không có product pack/parse ở giữa multiplier và F1.
+
+| Tầng | Công việc và dữ liệu chốt | Điểm cần giữ đúng / chú ý timing |
+| --- | --- | --- |
+| F1 — chuẩn bị | Chuẩn hóa P bằng fixed slice theo carry, tạo seed P/C, e_P, anchor, delta rộng và shift; chốt dấu, specials, flags | Seed và nhánh scale chạy song song khi độc lập; anchor dùng e_P sau carry. Không cắt thêm precision trước cộng |
+| F2 — căn chỉnh | Dịch phải magnitude toán hạng nhỏ; lost-bit reduction chạy song song với shifter; chốt hai retained operands và residual sign/nonzero | Large shift trả retained0 và tail theo toàn magnitude; kiểm tại0,1,3,4,Q,W-1,W và lớn hơnW. Không tái dùng clampF+2 của adder NF |
+| F3 — cộng/trừ | Tạo tổng retained có dấu W32, giữ anchor/residual/context | Cast/độ rộng tường minh, có assertion overflow theo miền hợp lệ. Chọn kiến trúc add/sub sau khi đối chiếu trace; không dự đoán LUT từ số toán tử SV |
+| F4 — magnitude/borrow | ABS của retained sum; nếu residual ngược dấu tổng thì giảm magnitude đúng1 đơn vị lưới và giữ positive tail | Zero+tail là lỗi invariant, không âm thầm trả0; exact cancellation có sign0. ABS→decrement có thể thành critical path, chỉ gộp sau khi có kiểm tương đương |
+| F5 — chuẩn hóa | LOD, dịch magnitude, sf_final=anchor+msb(mag)-Q; adapter W32→F_IN53, flags/sticky | Hidden ở vị trí30, 30 fraction bit nối23 zero; residual là tail dưới G/R theo cận W12. Theo dõi LOD→shift→adapter và scale path |
+| P1/P2 — đóng gói | Reuse posit_pack RNE hai tầng, round và saturation cuối; giữ d/flags khi stall | Đây là lần round Posit duy nhất của FMA; không kế thừa cờ saturation tích NF |
+
+Tên leaf dự kiến (chốt chính thức ở W13-01): `fused_prepare_comb`, `fused_align_comb`, `fused_arith_comb`, `fused_abs_borrow_comb`, `fused_norm_comb`; pipeline/valid bank trong `fused_add_pipe`, context/accumulator trong `mac_f_wrapper`, top chỉ instance. Mỗi module một file; tên dự kiến không có nghĩa RTL đã tồn tại.
+
+Ngân sách SPEC hiện hành: q=max(1,t), t là số vòng fraction thực tế; H_handshake=q+12, L_valid=q+11, II tối thiểu=q+13 khi không stall và top giữ một giao dịch. n0/t1: valid sauE12, handshakeE13, nhận mới sớm nhấtE14. W13-01 phải lập bảng cạnh E0 đến retire cho normal/special/early-stop; nếu cần bubble/bank khác thì cập nhật SPEC và scoreboard trước khi gọi đó là latency đã đạt. Không ép pipeline F giống NF chỉ để số tầng bằng nhau.
+
+#### 8.15.3. Các công việc theo thứ tự và tiêu chí nghiệm thu
+
+| Mã | Công việc / đầu ra cần bàn giao | Điều kiện qua bước | Trạng thái |
+| --- | --- | --- | --- |
+| W13-01 | Khóa bảng port/parameter/width, mapping raw core→prepack, bảng cạnh và context, assertion; chốt source list riêng F, fixture/trace từ model frozen | Review khớp SPEC và guideline; giải quyết mapping metadata/special/latency trước viết arithmetic; source/seed/corpus hashes được lưu | không |
+| W13-02 | Viết F1/F2 tổ hợp rồi bank tương ứng; unit TB so anchor, seeds, delta, aligned operands, residual | 0 mismatch theo trace độc lập; đầy đủ carry P, zero anchor, hai thứ tự scale, dấu/large shift và boundary Q/W; lint sạch/no latch | không |
+| W13-03 | Viết F3/F4, signed retained sum và ABS/borrow | 0 mismatch tổng, sign, magnitude/tail; same/opposite sign, exact/near cancellation, hai chiều residual; assertions overflow/zero+tail/deep cancellation đạt | không |
+| W13-04 | Viết F5 và ghép packer P1/P2 | 0 mismatch d/flags với F_W/full-grid reference; kiểm tie even/odd, G/R/S, max/min, zero giữ inexact và NaR10000; C=0 giữ R(P_hat) | không |
+| W13-05 | Ghép posit_mac_f, capture A/B/C/config, valid/ready, reset, own accumulator | Pilot 0 mismatch; không mất/lặp/sai thứ tự; output ổn định khi stall; reset hủy pending; commit một lần; cfg không hợp lệ không được accept | không |
+| W13-06 | Chạy pilot cố định trước, rồi lượt main >=10^7 giao dịch completed và coverage theo SPEC | 0 mismatch bits/flags/state và stage trace trên subset; ghi accepted/completed/reset-abort riêng; đủ bins/cross, không thay ngưỡng; final per-n tuần14 vẫn bắt buộc | không |
+| W13-07 | Vivado STA/PPA ban đầu trên Xilinx, rà guideline/CDC/RDC, audit và freeze nguồn/bằng chứng, commit/push | Báo setup/hold/constraints/critical path từng stage, tài nguyên và latency/II; tách chưa đạt khỏi đã đạt; backup thành công mới xác nhận lưu GitHub | không |
+
+Đây là kế hoạch kiểm khi triển khai được yêu cầu, không phải lệnh chạy ngay trong phiên lập plan. Ước lượng 7–10 ngày làm việc sau khi bắt đầu: 1 ngày W13-01, 2–3 ngày W13-02/03, 1–2 ngày W13-04, 1–2 ngày W13-05, 2 ngày W13-06/07 tùy runtime/lỗi. Mốc gốc02–08/11 là mục tiêu bàn giao; nên bắt đầu sớm để không chiếm đệm tuần14. Hạn hồ sơ29/11 và đệm30/11–04/12 giữ nguyên.
+
+#### 8.15.4. Control, verification và quy tắc guideline
+
+- Top chỉ nhận một transaction khi idle và config hợp lệ: cfg_mode=1, cfg_n<=8, cfg_ops thuộc0/1, acc_clr chỉ cùng acc_mode. Request exact phải bị từ chối trước handshake. Thay input/config khi busy không được ảnh hưởng context đã nhận.
+- C_eff lấy từ c hoặc accumulator F riêng; acc_clr áp tại request accepted. Chốt policy commit giống bàn giao: khi kết quả hợp lệ xuất hiện lần đầu, cập nhật accumulator nếu acc_mode và bật committed; output stall không commit lặp. Không nhận transaction mới trước retire; reset xóa state và flush valid.
+- Các bank F dùng valid/ready/load-enable, payload/special/flags giữ cùng nhau. Dùng reset bridge và deassert đồng bộ theo hierarchy đã kiểm; không reset nối tiếp tùy ý làm lệch startup. Assertions kiểm stable-under-stall, no-output-after-reset, commit-count, order và latency không stall.
+- Một module/file; port mỗi dòng, named mapping, không nhét logic expression vào port, signed cast và slice rõ; always_comb gán đầy đủ, always_ff/nonblocking/CK2Q, không gated clock LUT hoặc latch. Testbench có timescale; strict lint theo profile, không dùng waiver rộng để đóng lỗi width.
+- Oracle RTL trực tiếp là F_W frozen, oracle độc lập full-grid kiểm kết quả/trace; ES3 không dùng SoftPosit32/2. So cả retained/residual/borrow để định vị lỗi trước pack; final bits giống nhau chưa đủ kiểm đường borrow.
+- Pilot đề xuất tối thiểu100.000 completed profile chính, bổ sung corner/protocol riêng trên ModelSim/XSim; lượt lớn dùng harness Verilator trong WSL khi được chạy. Với --no-timing chỉ kết luận chu kỳ, kiểm CK2Q/reset waveform riêng ở event simulator. Ghi tool/compiler, options, seed cố định, hashes nguồn/corpus và số so sánh thực tế.
+- Coverage đích vẫn theo SPEC, gồm near>=30%, regime/sign/run/iteration/n, delta/carry/tail/borrow, flags, reset/stall/acc_mode; AC04 cuối line>=95%, branch>=90%, toggle>=85%. W13 main không thay yêu cầu nghiệm thu tuần14 >=10^7 vector/n/bản và matrix cuối.
+
+#### 8.15.5. Timing và so sánh công bằng với NF
+
+Ưu tiên có bản F đúng chức năng rồi đo critical path thực tế; tránh đưa nhiều refactor chưa nghiệm thu vào lần tích hợp đầu. Theo dõi F1 scale/anchor, F2 shift/tail, F3 add/sub, F4 ABS/borrow, F5 LOD/shift và P1/P2. Khi có đường chậm, đề xuất riêng thay đổi logic hoặc bank cùng tác động FF/latency/II trước khi sửa; không hứa F sẽ có Fmax cao hơn NF.
+
+Đo mới bằng Vivado trên xc7a35tcpg236-1 và xc7a100tcsg324-1 theo phạm vi phần cứng hiện có, cùng clock/I/O constraints và chiến lược implementation cho NF/F. Không chạy thêm Altera. Số200MHz của primitive không phải số toàn MAC. OOC chưa có pin/board constraints thì không gọi là board signoff; báo F_STA estimate tách khỏi tần số thực sự đạt setup/hold.
+
+Chuẩn bị comparator NF approximate-only EXACT_EN0 đã kiểm/freeze, cùng NB32/ES3, FW12, OPS_EN1 và n; NF EXACT_EN1 cũ lưu historical. Dùng cùng ngân sách tối ưu, báo shared changes và thay đổi riêng mỗi kiến trúc. Báo ít nhất Fmax/clock đạt, LUT/FF/DSP/BRAM, latency, II, throughput=f_clk/II và sai số paired; pipeline có thể khác số tầng. Acc_mode dùng state riêng đúng từng mô hình, không ép NF/F có cùng C_eff sau khi chuỗi đã phân kỳ.
+
+**Các phần còn mở cần ghi rõ:** RTL F chưa tồn tại; mapping raw prepack/chu kỳ/top ports cần khóa W13-01; exact F và format phụ ngoài32/3 không thuộc bản đầu; chưa có đo timing F hoặc toàn NF trên Xilinx, paired accuracy/PPA/Gate4 chưa đạt. Các điểm này không chặn bắt đầu W13-01/RTL theo hợp đồng đã kiểm, nhưng phải giải quyết đúng bước trước khi nghiệm thu.
 
 ### 8.16. Kế hoạch tối ưu timing/LUT trước khi sửa RTL — bản xem xét 15/10/2026
 

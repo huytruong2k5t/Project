@@ -65,3 +65,7 @@ scripts/*week12*.tcl -text
 scripts/*week12*.ps1 -text
 scripts/*week12*.sh text eol=lf
 results/week12/** -text
+
+# Preserve the byte hashes recorded by the read-only Word note review.
+scripts/review_note_primitives.py -text
+results/note_review_20261015/** -text

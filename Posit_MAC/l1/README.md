@@ -996,3 +996,11 @@ Nguồn RTL/L1 frozen và checkpoint13/10 giữ nguyên; bổ sung verification/
 ## 32. OPS refactor bit-exact — 14/10/2026
 
 ops_sel_comb tách masked-popcount và data alignment/hidden song song,trước một tầng swap cuối. Parameter/ports,hidden-X/Y,M0/latency và L1 giữ nguyên. ModelSim matrix1.334.048 checks/0 mismatch,398 lint sạch và NFmain10M/0 mismatch;ModelSim NF28.512 completed0 mismatch. Benchmarkcùng6run3seed/bản,F26/FW12/SW11,Quartus13/EP4CE30F23C6:216→196LUT4,151FF giữ nguyên,median108,08→112,01MHz. Đây làOPS riêng,không Fmax MAC hoặc LUT6. Canonicalresults/ops_refactor_20261014/summary.json;SPECv1.15§5.4/11.13 và PLAN8.10 có lệnh/scope. Source-bound lịch sử giữ nguyên,dùng snapshot cũ để audit lịch sử; dùng checkpoint mới cho RTL hiện hành. Fused/final matrix/toàn MAC timing/PPA còn mở.
+
+## 33. Oracle/L1 fused W32 và timing NF — 15/10/2026
+
+W12-F-1 đã chốt trong SPECv1.16§5.12/11.14 và PLAN8.14: l1/include/posit_fused_window.hpp cung cấp FusedWindow/FusedWindowAccumulator,main32/3 FW12 W32/Q29,FLOOR/RNE,n0..8,OPS0/1. Anchor theo tích đã normalize;giữ sign/nonzero residual và sửa borrow khi ngược dấu. Exact request bị từ chối. Model/state/flags khớp full-grid oracle độc lập2.208.768 ca/nền tảng Linux/Windows/UBSan,0 mismatch;near52,55300693%,256cross min4128,61run/polarity min26161. Oracle p8 exhaustive2^24 vàsmoke100k p16/1,p32/2 soSoftPosit FMA đạt. Python kiểm138 trace đầy đủ;source/corpus freeze tại results/week12/freeze.json.
+
+F_W/F_ref0 khác trên suite không biến P_hat xấp xỉ thành A×B exact. Final accuracy ứng dụng,RTL F/reset/stall/protocol,ma trận final vàpairedPPA còn mở. Full NF post-route Quartus13/CycloneIV3926LUT4/823FF,median45,07MHz trên3seed,chưa setup100MHz;đường chínhnorm→pack/parse. Đề xuất pipeline/LUT có report thật,chưa áp vào baseline. NF EXACT_EN1 không so trực tiếp với futureF EXACT_EN0 trước khi comparator NF matched được kiểm/freeze.
+
+Lệnh tái chạy và kế hoạch tuần13 tại PLAN8.14–8.15. Đọc summary.json để biết trạng thái backup;receipt backup.json chỉ tạo sau push thành công. Không tạo Markdown mới;bin/corpus/db có thể tái sinh,giữ report gọn. Các mục có ngày trước đây nói F chỉ pilot/timing chưa đo là checkpoint lịch sử,không ghi đè kết quả cũ.

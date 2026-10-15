@@ -1,0 +1,24 @@
+{
+  "revision":"W12-F-1",
+  "status":"PROPOSED_RTL_HANDOFF_AFTER_L1_ACCEPTANCE",
+  "top_name":"posit_mac_f (new structural top; not implemented)",
+  "profile":{"NB":32,"ES":3,"FRAC_W":12,"ACC_WIN":32,"EXACT_EN":0,"OPS_EN":1,"N_MAX":8,"rounding":"RNE","term_cut":"FLOOR"},
+  "top_ports":"Same transaction fields as posit_mac_nf: clk,rst_n,in_valid/in_ready,a/b/c,acc_mode,acc_clr,cfg_mode,cfg_n,cfg_ops,out_valid/out_ready,d,flags. No FUSED=1 switch in the existing NF top.",
+  "reject_before_accept":"cfg_mode=0/exact, n>8, cfg_ops2/3, or acc_clr&&!acc_mode; do not silently approximate an exact request",
+  "arithmetic":"P_hat and C_eff from W12-F-1 contract; W32 Q29, sign/nonzero residual outside retained word; no product pack before addition",
+  "stages":[
+    {"stage":"F1","work":"Normalize P by fixed carry-dependent slices; prepare W32 P/C seeds, select anchor, compute signed wide delta and clamped shift","keep":"seeds,signs,anchor,shift,which_smaller,specials,flags,valid"},
+    {"stage":"F2","work":"Right-align smaller seed; compute lost-bit reduction in parallel; retain residual sign/nonzero","keep":"aligned P/C,signs,anchor,residual sign/nonzero,specials,flags,valid"},
+    {"stage":"F3","work":"Signed retained addition/subtraction, without product rounding","keep":"signed retained sum W32,anchor,residual sign/nonzero,specials,flags,valid"},
+    {"stage":"F4","work":"Take magnitude, convert opposing residual with a conditional one-grid-unit borrow, assert zero+tail unreachable","keep":"positive magnitude,sign,anchor,positive numerical tail,specials,flags,valid"},
+    {"stage":"F5","work":"LOD/normalize and scale update; RNE-preserving fraction/sticky adapter under the W12 precision bound","keep":"unpacked sign/sf/frac/sticky,specials,flags,valid"},
+    {"stage":"P1/P2","work":"Existing final RNE packer stages; only final Posit rounding","keep":"result/flags until retire"}
+  ],
+  "latency_proposal":{"q":"max(1,actual_fraction_iterations)","H_handshake":"q+12","L_valid":"q+11","II_single_transaction_min":"q+13","n0_or_t1_example":"H=13, valid after E12, earliest handshake E13, next accept E14","status":"budget for week13 implementation, not a measured RTL result; revise SPEC if retiming changes it"},
+  "control":"One owned A/B/C/config context until output retire; same reset bridge and leaf synchronous release convention as NF. Five elastic F slots, data/flags advance with valid; reset flushes pending. Accumulator commits rounded output once even under output stall; next context waits for retire.",
+  "adapter_detail":"For W32 normalize the retained31-bit magnitude to hidden position30 and pad the30 fraction bits with23 zeros for F_IN53. Positive residual is a nonzero tail descriptor, not an exact fraction value. The precision bound ensures it lies below final G/R even after the allowed one-bit left normalization; do not claim the padded representation reproduces the full dyadic residual.",
+  "guideline":"One module per file, structural top, named ports/one per line, explicit signed widths, always_comb defaults/no latches, always_ff/load enable/CK2Q, no LUT-gated clocks",
+  "week13_order":["W13-01 lock ports/stage schedule and oracle fixtures from frozen L1","W13-02 F1/F2 alignment + signed tail unit tests","W13-03 F3/F4 add/sub, borrow and specials","W13-04 F5 + final packer adapter","W13-05 integrate top, reset/stall/order/acc_mode","W13-06 pilots before >=10^7 accepted RTL comparisons and coverage per plan","W13-07 STA/candidate review, audit and backup"],
+  "fair_comparison":"Final NF/F PPA must use matched EXACT_EN/OPS/FRAC_W/part/constraints. Current full NF EXACT_EN=1 is preliminary only. An approximate-only NF variant needs its own verification/freeze before paired PPA; shared core optimizations must be applied to both or reported separately.",
+  "remaining":"No F RTL, formal/CDC/RDC signoff, final per-n regression, application accuracy, or paired NF/F PPA accepted here. NF100MHz setup is still failing."
+}

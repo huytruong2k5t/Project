@@ -3,7 +3,7 @@
 **Ngày cập nhật:** 15/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.15](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
+**Tài liệu chi tiết:** [SPEC v1.16](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -15,18 +15,18 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 
 Đã hoàn thành nền tảng L0, Gate1 của L1 và bộ cộng tuần5. Bộ nhân lặp L1 đã được kiểm chứng; profile source từng đạt ngưỡng TableI nhưng không khớp output ví dụ gốc. Baseline gốc bài báo chưa xác định; giữ nghiên cứu phụ. Mục tiêu chính chuyển sang MAC non-fused làm baseline nội bộ và fused làm biến thể so sánh.
 
-MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser tuần7, packer tuần8 và chuỗi parser→packer đã kiểm chứng đạt ở cấp khối. Gate1/Gate1B/Gate2 multiplier✅; NF đã hoàn thành Gate3 tuần11 về số học/protocol và coverage phân bố bằng lượt mới10 triệu/0 mismatch,near52,55548%. Gate4,fused và ma trận cuối còn mở. Đã khảo sát PPA riêng cho OPS và packer; chưa có PPA toàn hệ thống, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode sau tối ưu P2.
+MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser/packer và Gate2 multiplier đạt;NF/Gate3 tuần11 đạt với10 triệu/0 mismatch. Tuần12 đã có oracle và L1 fused W32/flags/state,main phân tầng2.208.768 ca mỗi nền tảng Linux/Windows/UBSan0 mismatch. Toàn NF post-route sơ bộ đạtmedian45,07MHz trênCycloneIV,chưa setup100MHz. RTL fused,ma trận cuối,paired accuracy/PPA và Gate4 còn mở;tuần12 chờ sao lưu cuối phiên.
 
 ## 2. Công việc còn lại và ưu tiên
 
 | Mốc lớn | Trạng thái | Phần cần hoàn thiện |
 | --- | --- | --- |
-| Baseline nội bộ và so sánh NF/F | processing | Đã chốt hướng: non-fused làm đối chứng, fused là mục tiêu chính; cần hoàn thiện RTL, oracle, accuracy và PPA. Baseline paper giữ nghiên cứu phụ |
+| Baseline nội bộ và so sánh NF/F | processing | NF và oracle/L1 fused đã đạt;tiếp theo RTL fused,accuracy và paired PPA. Baseline paper giữ nghiên cứu phụ |
 | MAC L1 — Gate1B | ✅ | MAC v0/v1, tích lũy và API đã triển khai, kiểm chứng đạt |
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder và Gate3 NF tuần11 đạt; còn ma trận final,coverage cuối và fused |
-| PPA, mở rộng và hồ sơ — Gate4 | không | Đo toàn hệ thống, đối chiếu baseline; thực hiện mở rộng đã chọn, báo cáo và demo |
+| PPA, mở rộng và hồ sơ — Gate4 | processing | Đã đo sơ bộ toàn NF và có đường critical path;chưa đạt100MHz,còn tối ưu/đo matched NF/F,accuracy và hồ sơ cuối |
 
-**Thứ tự tiếp theo:** xem khảo sát mức bit fraction và số vòng trước khi chọn cấu hình → hoàn thiện oracle/L1 fused độc lập → chốt hợp đồng F → RTL fused → paired regression/accuracy → PPA → báo cáo. Khảo sát số học ban đầu đã có bảng/biểu đồ ở PLAN8.11,chưa chọn ngưỡng/width hoặc đổi baseline. NF/Gate3 tuần11 đã đạt,chi tiết PLAN8.9; kế hoạch tuần12 tại PLAN8.8. Hoàn tất chính29/11, đệm30/11–04/12 trước05/12/2026; chi tiết tại PLAN L1 mục8 và SPEC§11.8.
+**Thứ tự tiếp theo:** triển khai RTL fused theo model/contract W12-F-1 → pilot/regression/accuracy paired → PPA → báo cáo. Các đề xuất cải thiện timing NF ở PLAN8.14 chờ sinh viên lựa chọn để thử riêng;chưa sửa baseline. Giữ fraction nhân12 bit;ACC_WIN32 là cửa sổ cộng fused,không phải lựa chọn fraction mới từ khảo sát8.11. Hạn chính29/11,đệm30/11–04/12 trước05/12/2026 giữ nguyên. Bàn giao tuần13 tại PLAN8.15.
 
 ## 3. Tiến độ theo tuần
 
@@ -45,7 +45,7 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 9 | RTL bộ nhân lặp — Gate2 | ✅ | Multiplier đã nghiệm thu trên16 cấu hình,0 mismatch; lint và coverage đạt phạm vi tuần9. Baseline gốc giữ nghiên cứu phụ |
 | 10 | RTL adder và chốt so sánh NF/F | ✅ | Hoàn tất12/10: comb/pipeline, oracle/lượt lớn0 mismatch; matrix và corpus input đã chốt. R(P_hat)/carry đã xử lý ở tuần11; ma trận cuối/fused/PPA còn mở |
 | 11 | MAC non-fused — Gate3 | ✅ | Hoàn thành14/10: lượt mới10 triệu/0 mismatch,near52,55548%,coverage và ModelSim corner đạt; giữ F pilot,final/F RTL/PPA còn theo các tuần sau |
-| 12 | Oracle/L1 fused và timing sơ bộ NF | processing | W12-01 đã xử lý khi đóng tuần11;OPS và ứng viên align/normalize đã kiểm/đo riêng,khảo sát fraction có bảng/biểu đồ. Chưa chọn width/ngưỡng hoặc thay baseline bằng hai ứng viên;F/window/model/STA toàn MAC còn mở. Lịch26/10–01/11,có thể làm sớm |
+| 12 | Oracle/L1 fused và timing sơ bộ NF | processing | Kỹ thuật đạt15/10:G-F-L1/W32,oracle/main phân tầng0 mismatch;toànNF median45,07MHz/chưa100MHz. Đã có đề xuất pipeline và bàn giao F;chờ sao lưu cuối phiên |
 | 13 | RTL fused | không | 02–08/11: triển khai theo L1 đã kiểm, pilot số học/protocol; không mặc định exact |
 | 14 | Regression và accuracy paired NF/F | không | 09–15/11: nghiệm thu đúng riêng từng bản, coverage và corpus chung |
 | 15 | PPA hai bản và bản thảo — Gate4 | không | 16–22/11: cùng điều kiện,≥3 run/config; accuracy/timing/II/tài nguyên và kết luận |
@@ -53,17 +53,17 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 
 ## 3.1. Kế hoạch tuần12
 
-Mục tiêu: có oracle/L1 fused và hợp đồng đủ bàn giao RTL tuần13, NF coverage đã đạt ở W12-01 và tiếp tục xác định đường timing cần tối ưu. Lịch gốc26/10–01/11/2026, có thể thực hiện sớm theo thứ tự; chi tiết/tiêu chí tại PLAN L1§8.8. W12-01 đã hoàn thành trong phiên đóng tuần11;W12-06 mới có khảo sát OPS comb,các mục F và STA toàn MAC chưa triển khai.
+Tuần12 đã đạt phần kỹ thuật khi thực hiện sớm15/10;checklist còn chờ sao lưu để đóng và gỡ. Chi tiết/report tại PLAN8.14 và results/week12/summary.json. F RTL là công việc tuần13;100MHz toàn NF chưa đạt.
 
 | Mốc | Công việc chính | Trạng thái |
 | --- | --- | --- |
 | W12-01 | Coverage NF: near≥30%,counters/corner,lượt mới0 mismatch và audit | ✅ — đóng cùng tuần11 |
-| W12-02 | Oracle full-sum độc lập; kiểm exact p8 và smoke SoftPosit p16/p32 ES2, kiểm F_ref32/3 | không |
-| W12-03 | Chốt hợp đồng fused: cùng prepack, width/cut/phần dư có dấu, flags/config/acc_mode và corpus | không |
-| W12-04 | Hiện thực/kiểm L1 F_W, phân biệt sai số cửa sổ và nhân; đóng băng model đạt | không |
-| W12-05 | Đo tài nguyên/timing sơ bộ toàn NF, lưu report và critical path | không |
-| W12-06 | OPS đã refactor; ứng viên align/normalize đã khảo sát riêng; tiếp tục STA toàn NF và đánh giá pipeline | processing |
-| W12-07 | Audit/bàn giao tuần13, đồng bộ SPEC/PLAN và sao lưu GitHub | không |
+| W12-02 | Oracle full-sum độc lập;exact p8 exhaustive và smoke FMA16/32 ES2,F_ref32/3 | ✅ |
+| W12-03 | Hợp đồng post-prepack,W32/Q29,residual có dấu,flags/state/corpus | ✅ |
+| W12-04 | L1 F_W,main phân tầng Linux/Windows/UBSan và freeze | ✅ |
+| W12-05 | Post-route toàn NF3seed,report tài nguyên/timing thật | ✅ — 100MHz chưa đạt |
+| W12-06 | Đánh giá9 nhóm stage và bàn giao5 đề xuất pipeline/LUT | ✅ — chưa áp vào RTL |
+| W12-07 | Audit/bàn giao tuần13,đồng bộ tài liệu và sao lưu GitHub | processing — chờ sao lưu |
 
 W11-COV đã đạt và bảng tạm được gỡ;chi tiết/report giữ tại PLAN8.9. Khi tuần12 hoàn tất, gỡ bảng tạm này và giữ nhật ký/report; chưa đánh dấu fused RTL hoặc Gate4 hoàn thành.
 
@@ -191,6 +191,8 @@ W11-COV đã đạt và bảng tạm được gỡ;chi tiết/report giữ tại
 | 1 | Khảo sát mức fraction và số vòng | Có bảng/biểu đồ8–26bit trên300.000 cặp,ba phân bố;pilot/UBSan và oracle độc lập đạt. Đã tách sai số cắt đầu vào,FLOOR và giới hạn vòng;chưa chọn ngưỡng/cấu hình,chưa đổi RTL hoặc đo PPA | ✅ |
 | 2 | Thử tối ưu critical path alignment | Ứng viên tách nhánh sf đã kiểm đơn vị/pipeline0 mismatch. Benchmark riêng tăng Fmax trung vị36,93%,LUT4 tăng3,96%,FF giữ nguyên;chưa đạt100MHz. Giữ bản thử riêng,chưa thay baseline hoặc đo fullMAC | ✅ |
 | 3 | Khảo sát refactor normalization | Hai ứng viên đã kiểm đơn vị/pipeline0 mismatch;giảm4/7LUT4 nhưng chưa chứng minh cải thiện timing bền vững qua3seed. Giữ flags/sticky và RTL chính, lưu bản thử/report;chưa đo fullMAC | ✅ |
+| 4 | Oracle và L1 fused — tuần12 | Chốt W32/flags/state;oracle p8 exhaustive và main phân tầng2.208.768 ca/nền tảng đạt0 mismatch. Giữ fraction12,RTL F và accuracy cuối còn ở tuần13–14 | ✅ |
+| 5 | Timing toàn NF và bàn giao tuần12 | Đo post-route3seed,median45,07MHz/chưa100MHz;có5 đề xuất tối ưu và plan RTL F. Audit kỹ thuật đạt,chờ sao lưu cuối phiên | processing |
 
 ### 4.15. Mẫu cập nhật tiếp theo
 

@@ -1,0 +1,3557 @@
+{
+  "status": "MEASURED_POST_ROUTE",
+  "device": "EP4CE30F23C6",
+  "tool": "Quartus13.0sp1/TimeQuest",
+  "profile": "original NF32/3 FW12 N_MAX8 EXACT_EN=OPS_EN=1 FLOOR/RNE",
+  "clock_ns": 10,
+  "input_delay_max_min_ns": [
+    0.5,
+    0.1
+  ],
+  "output_delay_max_min_ns": [
+    0.5,
+    0.1
+  ],
+  "interface_budget": "Provisional single-clock budget, not board timing signoff",
+  "median_fmax_MHz": 45.07,
+  "meets_100MHz": false,
+  "unconstrained_setup_hold": 0,
+  "inferred_latches": 0,
+  "hold_recovery_removal_all_corners_pass": true,
+  "source_sha256": {
+    "scripts/run_week12_nf_ppa.ps1": "a4179c10350b40e982d13d33deda302166e17f4b2b1996a9ce1dedd41f89e8f2",
+    "rtl/mac_nf_wrapper.sv": "0dc05a19d096835748ee8c5c1d5d0a740f030c21cb6d4597672695c64bf4ac9a",
+    "rtl/sbm_accum_comb.sv": "1c23cc558198e6eaa8274483c3ff35c97df35c2639b15e4fb9b6054d1314d7ef",
+    "rtl/posit_mac.vh": "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88",
+    "rtl/round_unpacked_comb.sv": "b1594ddbca6e4c6d1ef2daed7bf6b3b29d985b0923d02cd3a0d6a483d2700c06",
+    "rtl/posit_pack_comb.sv": "d602169aa5fa8ce5dae29de89c69722ec0d6729f396fbd26e18788f15d811346",
+    "rtl/lod_lzd_core.sv": "2c5f501f4bee6c70a67099cff299a9ff7f9e0375bc75ada57a73e6addbe432a7",
+    "rtl/posit_parser_comb.sv": "3d619c0ab22e7433aecfc1012de1486caee39d36e89fe472208f07c845806c43",
+    "rtl/sbm_accum.sv": "a8f9e4017513e5aa4d43cea1ebd16bd0e1d4fb61869cfb4dea20ac4b8e12940c",
+    "rtl/mul_iter_core.sv": "a15a44a6659e002a4491eae1e7fe1eed5886f2477482e2ec4042e976c269f5a8",
+    "rtl/posit_pack.sv": "eb97ee2f9b93ebc3e51cba0f9506ae8f8efaeab0ca6fca71e0043e138aad27fe",
+    "rtl/dyn_left_shifter.sv": "537bfd27d3145ead9c5f74cc18d287ed83b89e0fd8a3e6ed834b75b55d017fb8",
+    "rtl/ops_sel_comb.sv": "4b168cf0fb121ed9e72af64d76a34f18d1851840e1c7f83be31340b500934e3e",
+    "rtl/posit_pack_prepare.sv": "21a544e78c3577e95c82aa38363f9006870c3103e678befa55be28ca5ea37328",
+    "rtl/mul_prepack_norm_comb.sv": "7d1af9a74ad05e1cb76fefbbaf9477526914a4c37174b0c989f494d2e653e9b7",
+    "rtl/sac_step_comb.sv": "ff01ec40baeb1c35026d82957bf33db21fba98a0d2f292ebd7b5aac554834b72",
+    "rtl/sbm_shift_comb.sv": "e0fa8e48853748af065e6ca7d84bb2040e1e4981e3b58f9ed49ee0ccb290c5a8",
+    "rtl/posit_mac_nf.sv": "72eb98146d83e7675b721c58c183216be15709caa2a1590a8e7bf10daba0cf66",
+    "rtl/posit_add_normalize.sv": "f6dc84735c6985d4ed7512a5be3d93abc2def2235ff6023437cc960a0c0f2a29",
+    "rtl/posit_parser.sv": "43acff8de2fad8592811dacc2cefc7ae658ff56e967a3062bbce5ce56e521329",
+    "rtl/posit_add.sv": "1b0d2dd3a1d684616f61598be3a7f35158ed37b7826aed8d8aa2e69a54ffc8de",
+    "rtl/iter_ctrl.sv": "3e9fcae9d9969787e2a11f2df37316b4e101de45990fb75988c11d2a36fd9d18",
+    "rtl/posit_add_align.sv": "b6d8506eeb9ec4c72c2c17050e6be93e2d0457e34103f9611e3c129794e5465c",
+    "rtl/dyn_right_shifter.sv": "89514601248f33eef173b113cbed062d2a777ec6f84d1f3b0fc66eacd946ef86",
+    "rtl/posit_add_arith.sv": "58ff5e589c86cd65a1c9982b0c91c6ff8b29585b2221dcc3dde850c16d86f8e2",
+    "rtl/posit_pack_finish.sv": "bf3a4dc17e3a9542cd5ef77215467aebb9fbc31c1c23b1f52124148d3b9dff5d"
+  },
+  "rows": [
+    {
+      "seed": 1,
+      "LUT4": 3926,
+      "FF": 823,
+      "DSP_9x9": 0,
+      "memory_bits": 0,
+      "arithmetic_mode_LE": 442,
+      "fmax_MHz": 47.1,
+      "corners": [
+        {
+          "corner": "Slow 1200mV 85C",
+          "setup_wns_ns": -11.233,
+          "setup_tns_ns": -661.414,
+          "hold_wns_ns": 0.355,
+          "hold_tns_ns": 0.0,
+          "recovery_wns_ns": 6.618,
+          "recovery_tns_ns": 0.0,
+          "removal_wns_ns": 1.287,
+          "removal_tns_ns": 0.0
+        },
+        {
+          "corner": "Slow 1200mV 0C",
+          "setup_wns_ns": -8.948,
+          "setup_tns_ns": -437.549,
+          "hold_wns_ns": 0.309,
+          "hold_tns_ns": 0.0,
+          "recovery_wns_ns": 7.015,
+          "recovery_tns_ns": 0.0,
+          "removal_wns_ns": 1.168,
+          "removal_tns_ns": 0.0
+        },
+        {
+          "corner": "Fast 1200mV 0C",
+          "setup_wns_ns": -2.207,
+          "setup_tns_ns": -59.169,
+          "hold_wns_ns": 0.185,
+          "hold_tns_ns": 0.0,
+          "recovery_wns_ns": 7.981,
+          "recovery_tns_ns": 0.0,
+          "removal_wns_ns": 0.7,
+          "removal_tns_ns": 0.0
+        }
+      ],
+      "critical": {
+        "top10": [
+          {
+            "wns_ns": -11.233,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[23]",
+            "clock_skew_ns": 0.249,
+            "data_delay_ns": 21.477
+          },
+          {
+            "wns_ns": -11.205,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[23]",
+            "clock_skew_ns": 0.249,
+            "data_delay_ns": 21.449
+          },
+          {
+            "wns_ns": -11.182,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[23]",
+            "clock_skew_ns": 0.249,
+            "data_delay_ns": 21.426
+          },
+          {
+            "wns_ns": -11.151,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[23]",
+            "clock_skew_ns": 0.249,
+            "data_delay_ns": 21.395
+          },
+          {
+            "wns_ns": -11.145,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[21]",
+            "clock_skew_ns": 0.258,
+            "data_delay_ns": 21.398
+          },
+          {
+            "wns_ns": -11.143,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[23]",
+            "clock_skew_ns": 0.249,
+            "data_delay_ns": 21.387
+          },
+          {
+            "wns_ns": -11.123,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[23]",
+            "clock_skew_ns": 0.249,
+            "data_delay_ns": 21.367
+          },
+          {
+            "wns_ns": -11.119,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[23]",
+            "clock_skew_ns": 0.249,
+            "data_delay_ns": 21.363
+          },
+          {
+            "wns_ns": -11.117,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[21]",
+            "clock_skew_ns": 0.258,
+            "data_delay_ns": 21.37
+          },
+          {
+            "wns_ns": -11.115,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[23]",
+            "clock_skew_ns": 0.249,
+            "data_delay_ns": 21.359
+          }
+        ],
+        "logic_levels": 63,
+        "routing_ns": 11.609,
+        "logic_ns": 9.669,
+        "clock_to_q_ns": 0.199,
+        "max_data_fanout": 187,
+        "data_nodes": [
+          {
+            "increment_ns": 0.199,
+            "type": "uTco",
+            "fanout": 1,
+            "node": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "CELL",
+            "fanout": 42,
+            "node": "u_wrapper|u_core|u_acc|acc[53]|q"
+          },
+          {
+            "increment_ns": 0.77,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Mux0~0|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 51,
+            "node": "u_wrapper|u_norm|Mux0~0|combout"
+          },
+          {
+            "increment_ns": 0.44,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~0|datab"
+          },
+          {
+            "increment_ns": 0.305,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~0|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~2|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~2|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~4|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~4|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~6|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~6|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~8|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~8|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~10|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~10|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~12|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~12|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~14|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~14|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~16|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~16|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~18|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~18|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~20|cin"
+          },
+          {
+            "increment_ns": 0.437,
+            "type": "CELL",
+            "fanout": 187,
+            "node": "u_wrapper|u_norm|Add0~20|combout"
+          },
+          {
+            "increment_ns": 0.797,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][35]~154|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][35]~154|combout"
+          },
+          {
+            "increment_ns": 0.239,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][35]~158|datab"
+          },
+          {
+            "increment_ns": 0.369,
+            "type": "CELL",
+            "fanout": 4,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][35]~158|combout"
+          },
+          {
+            "increment_ns": 0.237,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[3][31]~250|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[3][31]~250|combout"
+          },
+          {
+            "increment_ns": 0.673,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[3][31]~253|dataa"
+          },
+          {
+            "increment_ns": 0.367,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[3][31]~253|combout"
+          },
+          {
+            "increment_ns": 0.225,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[4][23]~342|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[4][23]~342|combout"
+          },
+          {
+            "increment_ns": 0.587,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[5][7]~374|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[5][7]~374|combout"
+          },
+          {
+            "increment_ns": 0.243,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~30|dataa"
+          },
+          {
+            "increment_ns": 0.371,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~30|combout"
+          },
+          {
+            "increment_ns": 0.173,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~31|datad"
+          },
+          {
+            "increment_ns": 0.13,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~31|combout"
+          },
+          {
+            "increment_ns": 0.172,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~35|datad"
+          },
+          {
+            "increment_ns": 0.13,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~35|combout"
+          },
+          {
+            "increment_ns": 0.172,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~36|datac"
+          },
+          {
+            "increment_ns": 0.243,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~36|combout"
+          },
+          {
+            "increment_ns": 0.195,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|signed_increment|datad"
+          },
+          {
+            "increment_ns": 0.13,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|signed_increment|combout"
+          },
+          {
+            "increment_ns": 0.342,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[0]~0|dataa"
+          },
+          {
+            "increment_ns": 0.405,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[0]~0|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[1]~2|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[1]~2|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[2]~4|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[2]~4|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[3]~6|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[3]~6|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[4]~8|cin"
+          },
+          {
+            "increment_ns": 0.374,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[4]~8|combout"
+          },
+          {
+            "increment_ns": 0.535,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux27~0|datac"
+          },
+          {
+            "increment_ns": 0.241,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux27~0|combout"
+          },
+          {
+            "increment_ns": 0.2,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux27~1|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 4,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux27~1|combout"
+          },
+          {
+            "increment_ns": 0.694,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~8|dataa"
+          },
+          {
+            "increment_ns": 0.436,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~8|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~10|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~10|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~12|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~12|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~14|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~14|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~16|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~16|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~18|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~18|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~20|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~20|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~22|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~22|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~24|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~24|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~26|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~26|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~28|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~28|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~30|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~30|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~32|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~32|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~34|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~34|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~36|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~36|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~38|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~38|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~40|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~40|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~42|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~42|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~44|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~44|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~46|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~46|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~48|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~48|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~50|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~50|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~52|cin"
+          },
+          {
+            "increment_ns": 0.374,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~52|combout"
+          },
+          {
+            "increment_ns": 0.639,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~78|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 11,
+            "node": "u_wrapper|u_round|u_parse|Add0~78|combout"
+          },
+          {
+            "increment_ns": 0.696,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|lod|tree_vld[2][7]~9|datad"
+          },
+          {
+            "increment_ns": 0.129,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|lod|tree_vld[2][7]~9|combout"
+          },
+          {
+            "increment_ns": 0.604,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|lod|tree_vld[3][3]|datac"
+          },
+          {
+            "increment_ns": 0.228,
+            "type": "CELL",
+            "fanout": 3,
+            "node": "u_wrapper|u_round|u_parse|lod|tree_vld[3][3]|combout"
+          },
+          {
+            "increment_ns": 0.231,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[0]~36|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[0]~36|combout"
+          },
+          {
+            "increment_ns": 0.847,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[0]~37|dataa"
+          },
+          {
+            "increment_ns": 0.347,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[0]~37|combout"
+          },
+          {
+            "increment_ns": 0.197,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[0]~45|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 37,
+            "node": "u_wrapper|u_round|u_parse|cnt[0]~45|combout"
+          },
+          {
+            "increment_ns": 0.991,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[2][11]~44|datab"
+          },
+          {
+            "increment_ns": 0.311,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[2][11]~44|combout"
+          },
+          {
+            "increment_ns": 0.247,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[3][15]~80|datab"
+          },
+          {
+            "increment_ns": 0.342,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[3][15]~80|combout"
+          },
+          {
+            "increment_ns": 0.265,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[23]~13|dataa"
+          },
+          {
+            "increment_ns": 0.367,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[23]~13|combout"
+          },
+          {
+            "increment_ns": 0.198,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[23]~14|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[23]~14|combout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|product_frac_q[23]|d"
+          },
+          {
+            "increment_ns": 0.091,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "mac_nf_wrapper:u_wrapper|product_frac_q[23]"
+          }
+        ]
+      },
+      "hierarchy": [
+        {
+          "hierarchy": "|posit_mac_nf",
+          "LUT4": 3926,
+          "FF": 823,
+          "logic_cells": 4002
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper",
+          "LUT4": 3925,
+          "FF": 823,
+          "logic_cells": 4001
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core",
+          "LUT4": 849,
+          "FF": 209,
+          "logic_cells": 872
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl",
+          "LUT4": 375,
+          "FF": 53,
+          "logic_cells": 376
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx",
+          "LUT4": 50,
+          "FF": 0,
+          "logic_cells": 50
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|dyn_left_shifter:u_shift",
+          "LUT4": 21,
+          "FF": 0,
+          "logic_cells": 21
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|lod_lzd_core:g_detector.u_lod",
+          "LUT4": 15,
+          "FF": 0,
+          "logic_cells": 15
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact",
+          "LUT4": 108,
+          "FF": 0,
+          "logic_cells": 108
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|dyn_left_shifter:u_shift",
+          "LUT4": 70,
+          "FF": 0,
+          "logic_cells": 70
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|lod_lzd_core:g_detector.u_lod",
+          "LUT4": 24,
+          "FF": 0,
+          "logic_cells": 24
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc",
+          "LUT4": 110,
+          "FF": 57,
+          "logic_cells": 111
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|sbm_accum_comb:u_add",
+          "LUT4": 55,
+          "FF": 0,
+          "logic_cells": 55
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_shift_comb:u_shift",
+          "LUT4": 300,
+          "FF": 0,
+          "logic_cells": 300
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_prepack_norm_comb:u_norm",
+          "LUT4": 109,
+          "FF": 0,
+          "logic_cells": 109
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|ops_sel_comb:u_ops",
+          "LUT4": 142,
+          "FF": 0,
+          "logic_cells": 142
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add",
+          "LUT4": 686,
+          "FF": 173,
+          "logic_cells": 718
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_align:u_align",
+          "LUT4": 376,
+          "FF": 0,
+          "logic_cells": 376
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_align:u_align|dyn_right_shifter:u_align_shift",
+          "LUT4": 89,
+          "FF": 0,
+          "logic_cells": 89
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_arith:u_arith",
+          "LUT4": 33,
+          "FF": 0,
+          "logic_cells": 33
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_normalize:u_normalize",
+          "LUT4": 204,
+          "FF": 0,
+          "logic_cells": 204
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_normalize:u_normalize|dyn_left_shifter:u_left_shift",
+          "LUT4": 89,
+          "FF": 0,
+          "logic_cells": 89
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_normalize:u_normalize|lod_lzd_core:u_lod",
+          "LUT4": 36,
+          "FF": 0,
+          "logic_cells": 36
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack",
+          "LUT4": 390,
+          "FF": 82,
+          "logic_cells": 392
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_finish:g_rne.u_finish",
+          "LUT4": 130,
+          "FF": 0,
+          "logic_cells": 130
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare",
+          "LUT4": 249,
+          "FF": 0,
+          "logic_cells": 249
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift",
+          "LUT4": 122,
+          "FF": 0,
+          "logic_cells": 122
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a",
+          "LUT4": 261,
+          "FF": 78,
+          "logic_cells": 264
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a|dyn_left_shifter:u_align_payload",
+          "LUT4": 78,
+          "FF": 0,
+          "logic_cells": 78
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lod",
+          "LUT4": 11,
+          "FF": 0,
+          "logic_cells": 11
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lzd",
+          "LUT4": 20,
+          "FF": 0,
+          "logic_cells": 20
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b",
+          "LUT4": 256,
+          "FF": 76,
+          "logic_cells": 260
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b|dyn_left_shifter:u_align_payload",
+          "LUT4": 78,
+          "FF": 0,
+          "logic_cells": 78
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lod",
+          "LUT4": 10,
+          "FF": 0,
+          "logic_cells": 10
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lzd",
+          "LUT4": 20,
+          "FF": 0,
+          "logic_cells": 20
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c",
+          "LUT4": 263,
+          "FF": 76,
+          "logic_cells": 266
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c|dyn_left_shifter:u_align_payload",
+          "LUT4": 79,
+          "FF": 0,
+          "logic_cells": 79
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c|lod_lzd_core:u_lod",
+          "LUT4": 11,
+          "FF": 0,
+          "logic_cells": 11
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c|lod_lzd_core:u_lzd",
+          "LUT4": 22,
+          "FF": 0,
+          "logic_cells": 22
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round",
+          "LUT4": 889,
+          "FF": 0,
+          "logic_cells": 889
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack",
+          "LUT4": 596,
+          "FF": 0,
+          "logic_cells": 596
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack|posit_pack_finish:u_finish",
+          "LUT4": 141,
+          "FF": 0,
+          "logic_cells": 141
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack|posit_pack_prepare:u_prepare",
+          "LUT4": 455,
+          "FF": 0,
+          "logic_cells": 455
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift",
+          "LUT4": 296,
+          "FF": 0,
+          "logic_cells": 296
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse",
+          "LUT4": 293,
+          "FF": 0,
+          "logic_cells": 293
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse|dyn_left_shifter:align_payload",
+          "LUT4": 84,
+          "FF": 0,
+          "logic_cells": 84
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse|lod_lzd_core:lod",
+          "LUT4": 14,
+          "FF": 0,
+          "logic_cells": 14
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse|lod_lzd_core:lzd",
+          "LUT4": 22,
+          "FF": 0,
+          "logic_cells": 22
+        }
+      ],
+      "max_fanout": 833
+    },
+    {
+      "seed": 2,
+      "LUT4": 3926,
+      "FF": 823,
+      "DSP_9x9": 0,
+      "memory_bits": 0,
+      "arithmetic_mode_LE": 442,
+      "fmax_MHz": 45.07,
+      "corners": [
+        {
+          "corner": "Slow 1200mV 85C",
+          "setup_wns_ns": -12.186,
+          "setup_tns_ns": -675.229,
+          "hold_wns_ns": 0.355,
+          "hold_tns_ns": 0.0,
+          "recovery_wns_ns": 5.826,
+          "recovery_tns_ns": 0.0,
+          "removal_wns_ns": 0.916,
+          "removal_tns_ns": 0.0
+        },
+        {
+          "corner": "Slow 1200mV 0C",
+          "setup_wns_ns": -9.915,
+          "setup_tns_ns": -476.812,
+          "hold_wns_ns": 0.31,
+          "hold_tns_ns": 0.0,
+          "recovery_wns_ns": 6.24,
+          "recovery_tns_ns": 0.0,
+          "removal_wns_ns": 0.827,
+          "removal_tns_ns": 0.0
+        },
+        {
+          "corner": "Fast 1200mV 0C",
+          "setup_wns_ns": -2.854,
+          "setup_tns_ns": -80.422,
+          "hold_wns_ns": 0.185,
+          "hold_tns_ns": 0.0,
+          "recovery_wns_ns": 7.491,
+          "recovery_tns_ns": 0.0,
+          "removal_wns_ns": 0.5,
+          "removal_tns_ns": 0.0
+        }
+      ],
+      "critical": {
+        "top10": [
+          {
+            "wns_ns": -12.186,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[20]",
+            "clock_skew_ns": 0.228,
+            "data_delay_ns": 22.409
+          },
+          {
+            "wns_ns": -12.17,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[20]",
+            "clock_skew_ns": 0.228,
+            "data_delay_ns": 22.393
+          },
+          {
+            "wns_ns": -12.163,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[20]",
+            "clock_skew_ns": 0.228,
+            "data_delay_ns": 22.386
+          },
+          {
+            "wns_ns": -12.161,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[20]",
+            "clock_skew_ns": 0.228,
+            "data_delay_ns": 22.384
+          },
+          {
+            "wns_ns": -12.132,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[20]",
+            "clock_skew_ns": 0.228,
+            "data_delay_ns": 22.355
+          },
+          {
+            "wns_ns": -12.123,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[20]",
+            "clock_skew_ns": 0.228,
+            "data_delay_ns": 22.346
+          },
+          {
+            "wns_ns": -12.119,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[15]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[20]",
+            "clock_skew_ns": 0.23,
+            "data_delay_ns": 22.344
+          },
+          {
+            "wns_ns": -12.116,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[20]",
+            "clock_skew_ns": 0.228,
+            "data_delay_ns": 22.339
+          },
+          {
+            "wns_ns": -12.111,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[20]",
+            "clock_skew_ns": 0.228,
+            "data_delay_ns": 22.334
+          },
+          {
+            "wns_ns": -12.109,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[20]",
+            "clock_skew_ns": 0.228,
+            "data_delay_ns": 22.332
+          }
+        ],
+        "logic_levels": 60,
+        "routing_ns": 12.924,
+        "logic_ns": 9.286,
+        "clock_to_q_ns": 0.199,
+        "max_data_fanout": 187,
+        "data_nodes": [
+          {
+            "increment_ns": 0.199,
+            "type": "uTco",
+            "fanout": 1,
+            "node": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "CELL",
+            "fanout": 42,
+            "node": "u_wrapper|u_core|u_acc|acc[53]|q"
+          },
+          {
+            "increment_ns": 0.566,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Mux0~0|dataa"
+          },
+          {
+            "increment_ns": 0.367,
+            "type": "CELL",
+            "fanout": 51,
+            "node": "u_wrapper|u_norm|Mux0~0|combout"
+          },
+          {
+            "increment_ns": 0.468,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~0|datab"
+          },
+          {
+            "increment_ns": 0.305,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~0|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~2|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~2|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~4|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~4|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~6|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~6|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~8|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~8|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~10|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~10|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~12|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~12|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~14|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~14|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~16|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~16|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~18|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~18|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~20|cin"
+          },
+          {
+            "increment_ns": 0.437,
+            "type": "CELL",
+            "fanout": 187,
+            "node": "u_wrapper|u_norm|Add0~20|combout"
+          },
+          {
+            "increment_ns": 0.51,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][26]~170|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 10,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][26]~170|combout"
+          },
+          {
+            "increment_ns": 0.933,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][31]~221|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][31]~221|combout"
+          },
+          {
+            "increment_ns": 0.199,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][31]~222|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 4,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][31]~222|combout"
+          },
+          {
+            "increment_ns": 0.245,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[3][29]~226|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 3,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[3][29]~226|combout"
+          },
+          {
+            "increment_ns": 0.928,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[4][21]~276|datac"
+          },
+          {
+            "increment_ns": 0.241,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[4][21]~276|combout"
+          },
+          {
+            "increment_ns": 0.832,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~38|datad"
+          },
+          {
+            "increment_ns": 0.129,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~38|combout"
+          },
+          {
+            "increment_ns": 0.173,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~16|datad"
+          },
+          {
+            "increment_ns": 0.13,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~16|combout"
+          },
+          {
+            "increment_ns": 0.629,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~17|datad"
+          },
+          {
+            "increment_ns": 0.13,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~17|combout"
+          },
+          {
+            "increment_ns": 0.201,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~36|dataa"
+          },
+          {
+            "increment_ns": 0.341,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~36|combout"
+          },
+          {
+            "increment_ns": 0.195,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|signed_increment|datad"
+          },
+          {
+            "increment_ns": 0.13,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|signed_increment|combout"
+          },
+          {
+            "increment_ns": 0.572,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[0]~0|datab"
+          },
+          {
+            "increment_ns": 0.41,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[0]~0|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[1]~2|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[1]~2|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[2]~4|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[2]~4|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[3]~6|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[3]~6|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[4]~8|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[4]~8|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[5]~10|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[5]~10|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[6]~12|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[6]~12|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[7]~14|cin"
+          },
+          {
+            "increment_ns": 0.455,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[7]~14|combout"
+          },
+          {
+            "increment_ns": 0.833,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux24~0|datad"
+          },
+          {
+            "increment_ns": 0.13,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux24~0|combout"
+          },
+          {
+            "increment_ns": 0.175,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux24~1|datad"
+          },
+          {
+            "increment_ns": 0.13,
+            "type": "CELL",
+            "fanout": 4,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux24~1|combout"
+          },
+          {
+            "increment_ns": 0.65,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~14|dataa"
+          },
+          {
+            "increment_ns": 0.405,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~14|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~16|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~16|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~18|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~18|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~20|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~20|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~22|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~22|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~24|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~24|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~26|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~26|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~28|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~28|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~30|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~30|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~32|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~32|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~34|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~34|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~36|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~36|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~38|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~38|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~40|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~40|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~42|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~42|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~44|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~44|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~46|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~46|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~48|cin"
+          },
+          {
+            "increment_ns": 0.455,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~48|combout"
+          },
+          {
+            "increment_ns": 0.58,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~74|datac"
+          },
+          {
+            "increment_ns": 0.241,
+            "type": "CELL",
+            "fanout": 8,
+            "node": "u_wrapper|u_round|u_parse|Add0~74|combout"
+          },
+          {
+            "increment_ns": 0.646,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~24|datad"
+          },
+          {
+            "increment_ns": 0.12,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~24|combout"
+          },
+          {
+            "increment_ns": 0.855,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~25|datab"
+          },
+          {
+            "increment_ns": 0.305,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~25|combout"
+          },
+          {
+            "increment_ns": 0.237,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~26|datab"
+          },
+          {
+            "increment_ns": 0.285,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~26|combout"
+          },
+          {
+            "increment_ns": 0.198,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~56|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 30,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~56|combout"
+          },
+          {
+            "increment_ns": 0.85,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[2][4]~57|dataa"
+          },
+          {
+            "increment_ns": 0.367,
+            "type": "CELL",
+            "fanout": 3,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[2][4]~57|combout"
+          },
+          {
+            "increment_ns": 0.258,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[2][4]~58|datab"
+          },
+          {
+            "increment_ns": 0.369,
+            "type": "CELL",
+            "fanout": 3,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[2][4]~58|combout"
+          },
+          {
+            "increment_ns": 0.28,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[3][4]~59|dataa"
+          },
+          {
+            "increment_ns": 0.349,
+            "type": "CELL",
+            "fanout": 3,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[3][4]~59|combout"
+          },
+          {
+            "increment_ns": 0.705,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[20]~22|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[20]~22|combout"
+          },
+          {
+            "increment_ns": 0.206,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[20]~23|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[20]~23|combout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|product_frac_q[20]|d"
+          },
+          {
+            "increment_ns": 0.091,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "mac_nf_wrapper:u_wrapper|product_frac_q[20]"
+          }
+        ]
+      },
+      "hierarchy": [
+        {
+          "hierarchy": "|posit_mac_nf",
+          "LUT4": 3926,
+          "FF": 823,
+          "logic_cells": 3991
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper",
+          "LUT4": 3925,
+          "FF": 823,
+          "logic_cells": 3990
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core",
+          "LUT4": 848,
+          "FF": 209,
+          "logic_cells": 863
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl",
+          "LUT4": 375,
+          "FF": 53,
+          "logic_cells": 377
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx",
+          "LUT4": 50,
+          "FF": 0,
+          "logic_cells": 50
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|dyn_left_shifter:u_shift",
+          "LUT4": 21,
+          "FF": 0,
+          "logic_cells": 21
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|lod_lzd_core:g_detector.u_lod",
+          "LUT4": 15,
+          "FF": 0,
+          "logic_cells": 15
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact",
+          "LUT4": 108,
+          "FF": 0,
+          "logic_cells": 108
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|dyn_left_shifter:u_shift",
+          "LUT4": 70,
+          "FF": 0,
+          "logic_cells": 70
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|lod_lzd_core:g_detector.u_lod",
+          "LUT4": 24,
+          "FF": 0,
+          "logic_cells": 24
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc",
+          "LUT4": 110,
+          "FF": 57,
+          "logic_cells": 111
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|sbm_accum_comb:u_add",
+          "LUT4": 55,
+          "FF": 0,
+          "logic_cells": 55
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_shift_comb:u_shift",
+          "LUT4": 300,
+          "FF": 0,
+          "logic_cells": 300
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_prepack_norm_comb:u_norm",
+          "LUT4": 109,
+          "FF": 0,
+          "logic_cells": 109
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|ops_sel_comb:u_ops",
+          "LUT4": 142,
+          "FF": 0,
+          "logic_cells": 142
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add",
+          "LUT4": 685,
+          "FF": 173,
+          "logic_cells": 717
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_align:u_align",
+          "LUT4": 376,
+          "FF": 0,
+          "logic_cells": 376
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_align:u_align|dyn_right_shifter:u_align_shift",
+          "LUT4": 89,
+          "FF": 0,
+          "logic_cells": 89
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_arith:u_arith",
+          "LUT4": 33,
+          "FF": 0,
+          "logic_cells": 33
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_normalize:u_normalize",
+          "LUT4": 204,
+          "FF": 0,
+          "logic_cells": 204
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_normalize:u_normalize|dyn_left_shifter:u_left_shift",
+          "LUT4": 89,
+          "FF": 0,
+          "logic_cells": 89
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_normalize:u_normalize|lod_lzd_core:u_lod",
+          "LUT4": 36,
+          "FF": 0,
+          "logic_cells": 36
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack",
+          "LUT4": 390,
+          "FF": 82,
+          "logic_cells": 394
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_finish:g_rne.u_finish",
+          "LUT4": 130,
+          "FF": 0,
+          "logic_cells": 130
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare",
+          "LUT4": 249,
+          "FF": 0,
+          "logic_cells": 249
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift",
+          "LUT4": 122,
+          "FF": 0,
+          "logic_cells": 122
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a",
+          "LUT4": 260,
+          "FF": 78,
+          "logic_cells": 263
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a|dyn_left_shifter:u_align_payload",
+          "LUT4": 78,
+          "FF": 0,
+          "logic_cells": 78
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lod",
+          "LUT4": 11,
+          "FF": 0,
+          "logic_cells": 11
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lzd",
+          "LUT4": 20,
+          "FF": 0,
+          "logic_cells": 20
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b",
+          "LUT4": 256,
+          "FF": 76,
+          "logic_cells": 258
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b|dyn_left_shifter:u_align_payload",
+          "LUT4": 78,
+          "FF": 0,
+          "logic_cells": 78
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lod",
+          "LUT4": 10,
+          "FF": 0,
+          "logic_cells": 10
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lzd",
+          "LUT4": 20,
+          "FF": 0,
+          "logic_cells": 20
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c",
+          "LUT4": 261,
+          "FF": 76,
+          "logic_cells": 265
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c|dyn_left_shifter:u_align_payload",
+          "LUT4": 79,
+          "FF": 0,
+          "logic_cells": 79
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c|lod_lzd_core:u_lod",
+          "LUT4": 11,
+          "FF": 0,
+          "logic_cells": 11
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c|lod_lzd_core:u_lzd",
+          "LUT4": 22,
+          "FF": 0,
+          "logic_cells": 22
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round",
+          "LUT4": 889,
+          "FF": 0,
+          "logic_cells": 889
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack",
+          "LUT4": 596,
+          "FF": 0,
+          "logic_cells": 596
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack|posit_pack_finish:u_finish",
+          "LUT4": 141,
+          "FF": 0,
+          "logic_cells": 141
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack|posit_pack_prepare:u_prepare",
+          "LUT4": 455,
+          "FF": 0,
+          "logic_cells": 455
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift",
+          "LUT4": 296,
+          "FF": 0,
+          "logic_cells": 296
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse",
+          "LUT4": 293,
+          "FF": 0,
+          "logic_cells": 293
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse|dyn_left_shifter:align_payload",
+          "LUT4": 84,
+          "FF": 0,
+          "logic_cells": 84
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse|lod_lzd_core:lod",
+          "LUT4": 14,
+          "FF": 0,
+          "logic_cells": 14
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse|lod_lzd_core:lzd",
+          "LUT4": 22,
+          "FF": 0,
+          "logic_cells": 22
+        }
+      ],
+      "max_fanout": 833
+    },
+    {
+      "seed": 3,
+      "LUT4": 3926,
+      "FF": 823,
+      "DSP_9x9": 0,
+      "memory_bits": 0,
+      "arithmetic_mode_LE": 442,
+      "fmax_MHz": 44.65,
+      "corners": [
+        {
+          "corner": "Slow 1200mV 85C",
+          "setup_wns_ns": -12.395,
+          "setup_tns_ns": -637.305,
+          "hold_wns_ns": 0.355,
+          "hold_tns_ns": 0.0,
+          "recovery_wns_ns": 5.901,
+          "recovery_tns_ns": 0.0,
+          "removal_wns_ns": 1.291,
+          "removal_tns_ns": 0.0
+        },
+        {
+          "corner": "Slow 1200mV 0C",
+          "setup_wns_ns": -10.032,
+          "setup_tns_ns": -449.381,
+          "hold_wns_ns": 0.31,
+          "hold_tns_ns": 0.0,
+          "recovery_wns_ns": 6.373,
+          "recovery_tns_ns": 0.0,
+          "removal_wns_ns": 1.168,
+          "removal_tns_ns": 0.0
+        },
+        {
+          "corner": "Fast 1200mV 0C",
+          "setup_wns_ns": -2.867,
+          "setup_tns_ns": -82.445,
+          "hold_wns_ns": 0.186,
+          "hold_tns_ns": 0.0,
+          "recovery_wns_ns": 7.524,
+          "recovery_tns_ns": 0.0,
+          "removal_wns_ns": 0.696,
+          "removal_tns_ns": 0.0
+        }
+      ],
+      "critical": {
+        "top10": [
+          {
+            "wns_ns": -12.395,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[24]",
+            "clock_skew_ns": 0.242,
+            "data_delay_ns": 22.632
+          },
+          {
+            "wns_ns": -12.365,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[24]",
+            "clock_skew_ns": 0.242,
+            "data_delay_ns": 22.602
+          },
+          {
+            "wns_ns": -12.34,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[15]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[24]",
+            "clock_skew_ns": 0.245,
+            "data_delay_ns": 22.58
+          },
+          {
+            "wns_ns": -12.337,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[11]",
+            "clock_skew_ns": 0.269,
+            "data_delay_ns": 22.601
+          },
+          {
+            "wns_ns": -12.325,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[24]",
+            "clock_skew_ns": 0.242,
+            "data_delay_ns": 22.562
+          },
+          {
+            "wns_ns": -12.31,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[15]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[24]",
+            "clock_skew_ns": 0.245,
+            "data_delay_ns": 22.55
+          },
+          {
+            "wns_ns": -12.307,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[11]",
+            "clock_skew_ns": 0.269,
+            "data_delay_ns": 22.571
+          },
+          {
+            "wns_ns": -12.305,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|norm_sf_q[0]",
+            "clock_skew_ns": 0.234,
+            "data_delay_ns": 22.534
+          },
+          {
+            "wns_ns": -12.292,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[24]",
+            "clock_skew_ns": 0.242,
+            "data_delay_ns": 22.529
+          },
+          {
+            "wns_ns": -12.291,
+            "startpoint": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]",
+            "endpoint": "mac_nf_wrapper:u_wrapper|product_frac_q[18]",
+            "clock_skew_ns": 0.232,
+            "data_delay_ns": 22.518
+          }
+        ],
+        "logic_levels": 60,
+        "routing_ns": 12.917,
+        "logic_ns": 9.516,
+        "clock_to_q_ns": 0.199,
+        "max_data_fanout": 187,
+        "data_nodes": [
+          {
+            "increment_ns": 0.199,
+            "type": "uTco",
+            "fanout": 1,
+            "node": "mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|acc[53]"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "CELL",
+            "fanout": 42,
+            "node": "u_wrapper|u_core|u_acc|acc[53]|q"
+          },
+          {
+            "increment_ns": 0.686,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Mux0~0|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 51,
+            "node": "u_wrapper|u_norm|Mux0~0|combout"
+          },
+          {
+            "increment_ns": 0.643,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~0|dataa"
+          },
+          {
+            "increment_ns": 0.301,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~0|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~2|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~2|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~4|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~4|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~6|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~6|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~8|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~8|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~10|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~10|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~12|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~12|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~14|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~14|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~16|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~16|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_norm|Add0~18|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~18|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_norm|Add0~20|cin"
+          },
+          {
+            "increment_ns": 0.437,
+            "type": "CELL",
+            "fanout": 187,
+            "node": "u_wrapper|u_norm|Add0~20|combout"
+          },
+          {
+            "increment_ns": 0.836,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][26]~170|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 10,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][26]~170|combout"
+          },
+          {
+            "increment_ns": 0.662,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][38]~187|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][38]~187|combout"
+          },
+          {
+            "increment_ns": 0.358,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][38]~188|datac"
+          },
+          {
+            "increment_ns": 0.241,
+            "type": "CELL",
+            "fanout": 3,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[1][38]~188|combout"
+          },
+          {
+            "increment_ns": 0.705,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[3][32]~194|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|u_payload_shift|g_multi_bit.stage[3][32]~194|combout"
+          },
+          {
+            "increment_ns": 0.911,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|sticky_bit~22|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|sticky_bit~22|combout"
+          },
+          {
+            "increment_ns": 0.204,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|sticky_bit~24|datac"
+          },
+          {
+            "increment_ns": 0.241,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_prepare|sticky_bit~24|combout"
+          },
+          {
+            "increment_ns": 0.409,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~17|datab"
+          },
+          {
+            "increment_ns": 0.336,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~17|combout"
+          },
+          {
+            "increment_ns": 0.197,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~36|datab"
+          },
+          {
+            "increment_ns": 0.342,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|round_up~36|combout"
+          },
+          {
+            "increment_ns": 0.196,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|signed_increment|datad"
+          },
+          {
+            "increment_ns": 0.13,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|signed_increment|combout"
+          },
+          {
+            "increment_ns": 0.632,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[0]~0|datab"
+          },
+          {
+            "increment_ns": 0.41,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[0]~0|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[1]~2|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[1]~2|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[2]~4|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[2]~4|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[3]~6|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[3]~6|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[4]~8|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[4]~8|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[5]~10|cin"
+          },
+          {
+            "increment_ns": 0.455,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|rounded_signed[5]~10|combout"
+          },
+          {
+            "increment_ns": 0.781,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux26~0|datad"
+          },
+          {
+            "increment_ns": 0.13,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux26~0|combout"
+          },
+          {
+            "increment_ns": 0.173,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux26~1|datad"
+          },
+          {
+            "increment_ns": 0.13,
+            "type": "CELL",
+            "fanout": 4,
+            "node": "u_wrapper|u_round|u_pack|u_finish|Mux26~1|combout"
+          },
+          {
+            "increment_ns": 0.704,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~10|datab"
+          },
+          {
+            "increment_ns": 0.41,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~10|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~12|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~12|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~14|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~14|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~16|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~16|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~18|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~18|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~20|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~20|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~22|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~22|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~24|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~24|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~26|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~26|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~28|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~28|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~30|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~30|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~32|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~32|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~34|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~34|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~36|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~36|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~38|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~38|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~40|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~40|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~42|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~42|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~44|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~44|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~46|cin"
+          },
+          {
+            "increment_ns": 0.058,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~46|cout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|Add0~48|cin"
+          },
+          {
+            "increment_ns": 0.437,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~48|combout"
+          },
+          {
+            "increment_ns": 0.645,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|Add0~74|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 8,
+            "node": "u_wrapper|u_round|u_parse|Add0~74|combout"
+          },
+          {
+            "increment_ns": 0.408,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|lod|tree_vld[3][3]~4|dataa"
+          },
+          {
+            "increment_ns": 0.349,
+            "type": "CELL",
+            "fanout": 5,
+            "node": "u_wrapper|u_round|u_parse|lod|tree_vld[3][3]~4|combout"
+          },
+          {
+            "increment_ns": 0.707,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~25|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~25|combout"
+          },
+          {
+            "increment_ns": 0.652,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~26|dataa"
+          },
+          {
+            "increment_ns": 0.319,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~26|combout"
+          },
+          {
+            "increment_ns": 0.201,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~56|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 30,
+            "node": "u_wrapper|u_round|u_parse|cnt[1]~56|combout"
+          },
+          {
+            "increment_ns": 0.705,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[2][12]~43|datac"
+          },
+          {
+            "increment_ns": 0.241,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[2][12]~43|combout"
+          },
+          {
+            "increment_ns": 0.629,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[2][12]~63|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[2][12]~63|combout"
+          },
+          {
+            "increment_ns": 0.259,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[3][16]~74|datab"
+          },
+          {
+            "increment_ns": 0.342,
+            "type": "CELL",
+            "fanout": 2,
+            "node": "u_wrapper|u_round|u_parse|align_payload|g_multi_bit.stage[3][16]~74|combout"
+          },
+          {
+            "increment_ns": 0.215,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[24]~8|datac"
+          },
+          {
+            "increment_ns": 0.242,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[24]~8|combout"
+          },
+          {
+            "increment_ns": 0.2,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[24]~9|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[24]~9|combout"
+          },
+          {
+            "increment_ns": 0.199,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[24]~10|datad"
+          },
+          {
+            "increment_ns": 0.11,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "u_wrapper|u_round|u_parse|frac[24]~10|combout"
+          },
+          {
+            "increment_ns": 0.0,
+            "type": "IC",
+            "fanout": 1,
+            "node": "u_wrapper|product_frac_q[24]|d"
+          },
+          {
+            "increment_ns": 0.091,
+            "type": "CELL",
+            "fanout": 1,
+            "node": "mac_nf_wrapper:u_wrapper|product_frac_q[24]"
+          }
+        ]
+      },
+      "hierarchy": [
+        {
+          "hierarchy": "|posit_mac_nf",
+          "LUT4": 3926,
+          "FF": 823,
+          "logic_cells": 4005
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper",
+          "LUT4": 3925,
+          "FF": 823,
+          "logic_cells": 4004
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core",
+          "LUT4": 849,
+          "FF": 209,
+          "logic_cells": 866
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl",
+          "LUT4": 376,
+          "FF": 53,
+          "logic_cells": 377
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx",
+          "LUT4": 50,
+          "FF": 0,
+          "logic_cells": 50
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|dyn_left_shifter:u_shift",
+          "LUT4": 21,
+          "FF": 0,
+          "logic_cells": 21
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_approx|lod_lzd_core:g_detector.u_lod",
+          "LUT4": 15,
+          "FF": 0,
+          "logic_cells": 15
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact",
+          "LUT4": 108,
+          "FF": 0,
+          "logic_cells": 108
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|dyn_left_shifter:u_shift",
+          "LUT4": 70,
+          "FF": 0,
+          "logic_cells": 70
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|iter_ctrl:u_ctrl|sac_step_comb:u_exact|lod_lzd_core:g_detector.u_lod",
+          "LUT4": 24,
+          "FF": 0,
+          "logic_cells": 24
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc",
+          "LUT4": 110,
+          "FF": 57,
+          "logic_cells": 111
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_accum:u_acc|sbm_accum_comb:u_add",
+          "LUT4": 55,
+          "FF": 0,
+          "logic_cells": 55
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_iter_core:u_core|sbm_shift_comb:u_shift",
+          "LUT4": 300,
+          "FF": 0,
+          "logic_cells": 300
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|mul_prepack_norm_comb:u_norm",
+          "LUT4": 109,
+          "FF": 0,
+          "logic_cells": 109
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|ops_sel_comb:u_ops",
+          "LUT4": 142,
+          "FF": 0,
+          "logic_cells": 142
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add",
+          "LUT4": 685,
+          "FF": 173,
+          "logic_cells": 722
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_align:u_align",
+          "LUT4": 376,
+          "FF": 0,
+          "logic_cells": 376
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_align:u_align|dyn_right_shifter:u_align_shift",
+          "LUT4": 89,
+          "FF": 0,
+          "logic_cells": 89
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_arith:u_arith",
+          "LUT4": 33,
+          "FF": 0,
+          "logic_cells": 33
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_normalize:u_normalize",
+          "LUT4": 204,
+          "FF": 0,
+          "logic_cells": 204
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_normalize:u_normalize|dyn_left_shifter:u_left_shift",
+          "LUT4": 89,
+          "FF": 0,
+          "logic_cells": 89
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_add:u_add|posit_add_normalize:u_normalize|lod_lzd_core:u_lod",
+          "LUT4": 36,
+          "FF": 0,
+          "logic_cells": 36
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack",
+          "LUT4": 390,
+          "FF": 82,
+          "logic_cells": 392
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_finish:g_rne.u_finish",
+          "LUT4": 130,
+          "FF": 0,
+          "logic_cells": 130
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare",
+          "LUT4": 249,
+          "FF": 0,
+          "logic_cells": 249
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_pack:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift",
+          "LUT4": 122,
+          "FF": 0,
+          "logic_cells": 122
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a",
+          "LUT4": 261,
+          "FF": 78,
+          "logic_cells": 265
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a|dyn_left_shifter:u_align_payload",
+          "LUT4": 78,
+          "FF": 0,
+          "logic_cells": 78
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lod",
+          "LUT4": 11,
+          "FF": 0,
+          "logic_cells": 11
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_a|lod_lzd_core:u_lzd",
+          "LUT4": 20,
+          "FF": 0,
+          "logic_cells": 20
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b",
+          "LUT4": 256,
+          "FF": 76,
+          "logic_cells": 261
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b|dyn_left_shifter:u_align_payload",
+          "LUT4": 78,
+          "FF": 0,
+          "logic_cells": 78
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lod",
+          "LUT4": 10,
+          "FF": 0,
+          "logic_cells": 10
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_b|lod_lzd_core:u_lzd",
+          "LUT4": 20,
+          "FF": 0,
+          "logic_cells": 20
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c",
+          "LUT4": 261,
+          "FF": 76,
+          "logic_cells": 266
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c|dyn_left_shifter:u_align_payload",
+          "LUT4": 79,
+          "FF": 0,
+          "logic_cells": 79
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c|lod_lzd_core:u_lod",
+          "LUT4": 11,
+          "FF": 0,
+          "logic_cells": 11
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|posit_parser:u_c|lod_lzd_core:u_lzd",
+          "LUT4": 22,
+          "FF": 0,
+          "logic_cells": 22
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round",
+          "LUT4": 889,
+          "FF": 0,
+          "logic_cells": 889
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack",
+          "LUT4": 596,
+          "FF": 0,
+          "logic_cells": 596
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack|posit_pack_finish:u_finish",
+          "LUT4": 141,
+          "FF": 0,
+          "logic_cells": 141
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack|posit_pack_prepare:u_prepare",
+          "LUT4": 455,
+          "FF": 0,
+          "logic_cells": 455
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_pack_comb:u_pack|posit_pack_prepare:u_prepare|dyn_right_shifter:u_payload_shift",
+          "LUT4": 296,
+          "FF": 0,
+          "logic_cells": 296
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse",
+          "LUT4": 293,
+          "FF": 0,
+          "logic_cells": 293
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse|dyn_left_shifter:align_payload",
+          "LUT4": 84,
+          "FF": 0,
+          "logic_cells": 84
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse|lod_lzd_core:lod",
+          "LUT4": 14,
+          "FF": 0,
+          "logic_cells": 14
+        },
+        {
+          "hierarchy": "|posit_mac_nf|mac_nf_wrapper:u_wrapper|round_unpacked_comb:u_round|posit_parser_comb:u_parse|lod_lzd_core:lzd",
+          "LUT4": 22,
+          "FF": 0,
+          "logic_cells": 22
+        }
+      ],
+      "max_fanout": 833
+    }
+  ],
+  "limits": [
+    "This is full NF post-route on Intel LUT4; no D0/Virtex UltraScale+ or board/power claim",
+    "Clock10ns target fails setup; milestone accepts a truthful preliminary measurement, not timing closure",
+    "Private parser copy only adds explicit generate delimiters for Quartus13; production source unchanged",
+    "ASYNC_REG attributes are ignored by Quartus13; this STA/RTL reset review is not CDC/RDC/MTBF signoff",
+    "Intel arithmetic-mode LE count is reported; it is not a Xilinx CARRY8 primitive count",
+    "No false-path or multicycle exceptions; no F RTL or paired PPA acceptance"
+  ]
+}

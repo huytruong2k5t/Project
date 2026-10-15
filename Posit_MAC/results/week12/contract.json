@@ -1,0 +1,21 @@
+{
+  "revision": "W12-F-1",
+  "date": "2026-10-15",
+  "status": "LOCKED_BEFORE_WINDOW_PILOT",
+  "profile": {"NB":32,"ES":3,"FRAC_W":12,"OPS_EN":true,"EXACT_EN":false,"n":[0,1,2,3,4,5,6,7,8],"ops":[0,1],"term_policy":"FLOOR","final_rounding":"RNE"},
+  "topology": "Add C_eff once after the multiplier emits its unchanged prepack P_hat; no stream reordering and no intermediate product pack/saturation",
+  "prepack_value": "(-1)^sign * magnitude * 2^(scale-fractional_bits); q=FRAC_W; finite normalized-product magnitude in [2^q,2^(q+2))",
+  "windows": [32,48,64,96],
+  "window_layout": "W total signed retained bits; Q=W-3 fraction bits, two magnitude integer bits and one sign bit. Residual sign/nonzero and other metadata are additional wires/registers, outside W.",
+  "anchor": "max(sf_P_normalized,sf_C) ignoring zero operands; sf_P_normalized=scale+msb(magnitude)-q",
+  "alignment": "Scale each magnitude to 2^(anchor-Q); floor each magnitude only once. Largest operand fits exactly. At most the smaller operand has a discarded dyadic residual.",
+  "residual": "Track sign and nonzero of the single discarded operand. Add/subtract retained magnitudes. If residual opposes nonzero retained sum, decrement abs(retained sum) by one grid unit and retain positive tail. This is borrow conversion of Z-delta to (Z-1)+(1-delta), not an unconditional jam or a per-term correction.",
+  "zero_tail": "retained_sum=0 with residual_nonzero is forbidden by the admitted precision bound; assert/fail if observed, never silently output zero. Exact cancellation has no residual.",
+  "precision_bound": "Admit only Q>=max(F,FRAC_W+1)+3. A cut implies delta_sf>=4; opposite-sign loss can normalize left by at most one bit. At least two retained bits below the largest output fraction remain. Main profile admits all four windows; exact-product requests are rejected.",
+  "flags": "NaR priority flags=10000; sat_max/min only from final fused sum; inexact is input/term/iteration metadata OR numerical final loss; approx_cut only omitted multiplier iterations. Zero preserves prior finite loss metadata. No product saturation flags inherited from NF.",
+  "state": "C_eff=c in standalone; acc_clr selects zero on accepted acc_mode transaction; otherwise C_eff=own F accumulator. Commit rounded F output once; reset clears it and cancels pending. NF and F maintain separate states for paired sequences.",
+  "selection_before_run": "Select the smallest admitted W with zero bits/flags/slice/tail mismatches against full-grid reference on the fixed >=100000 pilot per W, and the precision bound satisfied. Otherwise leave selection open and report counterexamples; do not change seeds or thresholds.",
+  "acceptance": {"pilot_per_window":100000,"selected_main_cases":1000000,"minimum_per_n":100000,"minimum_near_fraction":0.30,"near_definition":"finite nonzero P_hat and C_eff, opposite signs, abs(delta_sf)<=4; count before and after alignment","platforms":["Linux","Windows","Linux UBSan"],"mismatch_limit":0},
+  "corpus": {"seed_base":20261014,"rng":"std::mt19937_64","n":"serial%9","ops":"(serial/9)%2","standalone_or_acc":"acc_mode iff serial%4==3; acc_clr iff acc_mode and serial%97==3","classes":"serial%20: zero A=0, NaR A=1, NaR C=2, C=0 at3, zero B=4, cancellation/adjacent opposite packed P at5..16, unbiased raw otherwise; corners and synthetic boundary cases are additional","thresholds_locked":true},
+  "limits": ["This is fused RNE of approximate P_hat, not exact A*B+C", "No F RTL or hardware latency accepted in week12", "Fraction survey thresholds and new multiplier precision remain unselected", "FMA oracle exact p8/16/32 ES2 checks do not imply SoftPosit supports ES3"]
+}

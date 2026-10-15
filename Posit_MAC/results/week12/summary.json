@@ -1,0 +1,100 @@
+{
+  "status": "PASS_TECHNICAL_PENDING_BACKUP",
+  "date": "2026-10-15",
+  "milestones": {
+    "W12-01": "complete within plan scope",
+    "W12-02": "complete within plan scope",
+    "W12-03": "complete within plan scope",
+    "W12-04": "complete within plan scope",
+    "W12-05": "complete within plan scope",
+    "W12-06": "complete within plan scope",
+    "W12-07": "technical handoff passed; final Git backup pending"
+  },
+  "backup": null,
+  "unchanged_NF_RTL": true,
+  "legacy_L1_unchanged": true,
+  "oracle": {
+    "status": "PASS",
+    "seed_base": 20261014,
+    "p8_checked": 16777216,
+    "p8_exhaustive": true,
+    "p16_softposit_fma": 100000,
+    "p32_es2_softposit_fma": 100000,
+    "p32_es3_prepack_fullsum": 100000,
+    "zeros": 24995,
+    "NF_F_differences": 12,
+    "mismatches": 0
+  },
+  "selected_window": 32,
+  "window_pilots": [
+    {
+      "W": 32,
+      "cases": 100000,
+      "mismatches": 0
+    },
+    {
+      "W": 48,
+      "cases": 100000,
+      "mismatches": 0
+    },
+    {
+      "W": 64,
+      "cases": 100000,
+      "mismatches": 0
+    },
+    {
+      "W": 96,
+      "cases": 100000,
+      "mismatches": 0
+    }
+  ],
+  "initial_model_cases": 1000000,
+  "selected_model_cases": 2208768,
+  "platforms": [
+    "Linux",
+    "Windows",
+    "Linux UBSan"
+  ],
+  "mismatches": 0,
+  "near_fraction": 0.5255300692512749,
+  "min_regime_sign_cross": 4128,
+  "min_run_polarity": 26161,
+  "accuracy_separation": {
+    "status": "PASS_ARITHMETIC_SEPARATION_ONLY",
+    "cases": 2208768,
+    "window_F_W_F_ref_bit_differences": 0,
+    "product_approx_F_ref_vs_Ideal_same_F_Ceff_bit_differences": 1377327,
+    "standalone_common_inputs": 1944575,
+    "standalone_F_vs_Ideal_bit_differences": 1371818,
+    "standalone_NF_vs_Ideal_bit_differences": 1371903,
+    "acc_sequence_steps": 264193,
+    "acc_sequence_F_vs_own_Ideal_bit_differences": 33484,
+    "acc_sequence_NF_vs_own_Ideal_bit_differences": 45408,
+    "limits": "Bit differences are not relative-error percentages. Final mean/P99/ULP, applications and RTL paired regression remain week14."
+  },
+  "NF_post_route_median_fmax_MHz": 45.07,
+  "NF_meets_100MHz": false,
+  "next": "Week13 F RTL using frozen W32 model; review five timing/LUT proposals before any NF retiming",
+  "limits": [
+    "Fused correctness is for the approximate P_hat, not exact original A*B+C",
+    "Same-input bit differences are not mean/P99/relative-error accuracy; targeted cancellation corpus is not application distribution",
+    "F RTL/reset/stall timing and final per-n/AC02/AC04 remain unimplemented/unrun",
+    "Full NF setup100MHz fails on the measured CycloneIV; pipeline ideas are proposals only",
+    "Current NF EXACT_EN1 PPA cannot be compared fairly against future F approximate-only without a validated matched NF configuration",
+    "No TableI rerun, author RTL baseline, board/power or Gate4 claim"
+  ],
+  "commands": [
+    "bash scripts/verify_week12_oracle.sh",
+    "bash scripts/verify_week12_window.sh",
+    "powershell -NoProfile -File scripts/verify_week12_windows.ps1",
+    "bash scripts/verify_week12_coverage.sh",
+    "powershell -NoProfile -File scripts/verify_week12_coverage_windows.ps1",
+    "bash scripts/verify_week12_accuracy.sh",
+    "./results/week12/accuracy/test_accuracy results/week12/coverage/fixtures/main.bin 2208768 results/week12/coverage/accuracy.json",
+    "bash scripts/verify_week12_trace.sh",
+    "powershell -NoProfile -File scripts/run_week12_nf_ppa.ps1",
+    "powershell -NoProfile -File scripts/survey_week12_nf_stages.ps1",
+    "python scripts/collect_week12_nf.py",
+    "python scripts/audit_week12.py"
+  ]
+}

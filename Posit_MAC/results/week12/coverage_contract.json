@@ -1,0 +1,17 @@
+{
+  "revision":"W12-COV-1",
+  "locked_before_generation":true,
+  "seed":20261014,
+  "rng":"std::mt19937_64",
+  "records":2208768,
+  "stratified_records":1056768,
+  "stratified_design":"256 raw A/B regime-group/sign crosses x4128; alternate both regime polarities. Finite A/B, no corner override in this block.",
+  "near_records":1152000,
+  "near_design":"Bounded-scale mantissas opposite P_hat with delta0..4; every fourth record may target independently generated full-sum accumulator state, otherwise standalone. No DUT state injection.",
+  "n":"serial%9",
+  "ops":"(serial/9)%2",
+  "reset":"before every4093th transaction",
+  "selection":"W32 from unchanged W12-F-1 pilot selection; this supplements coverage and does not retune window, fraction, seed, or cut policy",
+  "requirements":{"cross_count":256,"minimum_each_cross":4000,"finite_run_polarity_count":61,"minimum_each_run_polarity":10000,"minimum_each_n":100000,"near_fraction":0.30,"delta_bins":[0,1,2,3,4],"near_split":["standalone","acc_mode"],"mismatches":0},
+  "scope":"L1 F window/state and structural input coverage, not RTL protocol/coverage or application accuracy"
+}

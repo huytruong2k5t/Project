@@ -55,3 +55,13 @@ scripts/*normalize_refactor*.ps1 -text
 scripts/*normalize_refactor*.py -text
 scripts/*normalize_refactor*.sh text eol=lf
 results/normalize_refactor_20261015/** -text
+
+# Week12 model/oracle contract and compact source-bound evidence.
+l1/include/posit_fused_window.hpp -text
+l1/test/*week12* -text
+tb/week12* -text
+scripts/*week12*.py -text
+scripts/*week12*.tcl -text
+scripts/*week12*.ps1 -text
+scripts/*week12*.sh text eol=lf
+results/week12/** -text

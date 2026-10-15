@@ -1,0 +1,86 @@
+Info: *******************************************************************
+Info: Running Quartus II 64-Bit TimeQuest Timing Analyzer
+    Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+    Info: Copyright (C) 1991-2013 Altera Corporation. All rights reserved.
+    Info: Your use of Altera Corporation's design tools, logic functions 
+    Info: and other software and tools, and its AMPP partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Altera Program License 
+    Info: Subscription Agreement, Altera MegaCore Function License 
+    Info: Agreement, or other applicable license agreement, including, 
+    Info: without limitation, that your use is for the sole purpose of 
+    Info: programming logic devices manufactured by Altera and sold by 
+    Info: Altera or its authorized distributors.  Please refer to the 
+    Info: applicable agreement for further details.
+    Info: Processing started: Thu Oct 15 12:44:03 2026
+Info: Command: quartus_sta -t "C:\HCMUT\HK261\Do an 2\Posit_MAC\scripts\detail_week12_nf.tcl"
+Warning (20028): Parallel compilation is not licensed and has been disabled
+Info (21076): High junction temperature operating condition is not set. Assuming a default value of '85'.
+Info (21076): Low junction temperature operating condition is not set. Assuming a default value of '0'.
+Info (332104): Reading SDC File: 'nf.sdc'
+Info (332151): Clock uncertainty is not calculated until you update the timing netlist.
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in TimeQuest to see clock uncertainties.
+Info (332115): Report Timing: Found 10 setup paths (10 violated).  Worst case slack is -0.052
+    Info (332115): -from [get_registers {*p2_frac_q* *p2_sf_q* *p2_s_q*}]
+    Info (332115): -to [get_registers {*u_ctrl*fx_q* *u_core*y_q*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {stage_ops.rpt}
+Info (332115): Report Timing: Found 10 setup paths (10 violated).  Worst case slack is -2.427
+    Info (332115): -from [get_registers {*u_ctrl*fx_q* *u_ctrl*scale_q*}]
+    Info (332115): -to [get_registers {*u_ctrl*fx_q* *u_ctrl*scale_q*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {stage_sac.rpt}
+Info (332115): Report Timing: Found 10 setup paths (0 violated).  Worst case slack is 2.536
+    Info (332115): -to [get_registers {*u_acc*acc*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {stage_accumulator.rpt}
+Info (332115): Report Timing: Found 10 setup paths (10 violated).  Worst case slack is -12.395
+    Info (332115): -to [get_registers {*product_frac_q* *norm_sf_q*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {stage_norm_round.rpt}
+Info (332115): Report Timing: Found 10 setup paths (10 violated).  Worst case slack is -7.410
+    Info (332115): -to [get_registers {*u_add*a1_q*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {stage_add_align.rpt}
+Info (332115): Report Timing: Found 10 setup paths (0 violated).  Worst case slack is 4.717
+    Info (332115): -to [get_registers {*u_add*a2_q*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {stage_add_arith.rpt}
+Info (332115): Report Timing: Found 10 setup paths (10 violated).  Worst case slack is -0.911
+    Info (332115): -to [get_registers {*u_add|frac* *u_add|sf*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {stage_add_normalize.rpt}
+Info (332115): Report Timing: Found 10 setup paths (1 violated).  Worst case slack is -0.195
+    Info (332115): -to [get_registers {*u_pack*p1_*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {stage_pack_p1.rpt}
+Info (332115): Report Timing: Found 10 setup paths (0 violated).  Worst case slack is 4.341
+    Info (332115): -to [get_registers {*valid* *busy_q* *committed_q*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {stage_control.rpt}
+Info (23030): Evaluation of Tcl script C:\HCMUT\HK261\Do an 2\Posit_MAC\scripts\detail_week12_nf.tcl was successful
+Info: Quartus II 64-Bit TimeQuest Timing Analyzer was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 4603 megabytes
+    Info: Processing ended: Thu Oct 15 12:44:05 2026
+    Info: Elapsed time: 00:00:02
+    Info: Total CPU time (on all processors): 00:00:01

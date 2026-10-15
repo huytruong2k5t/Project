@@ -215,3 +215,11 @@ Nguồn RTL/L1 frozen và checkpoint13/10 giữ nguyên; bổ sung verification/
 ## 17. OPS refactor bit-exact — 14/10/2026
 
 ops_sel_comb tách masked-popcount và data alignment/hidden song song,trước một tầng swap cuối. Parameter/ports,hidden-X/Y,M0/latency và L1 giữ nguyên. ModelSim matrix1.334.048 checks/0 mismatch,398 lint sạch và NFmain10M/0 mismatch;ModelSim NF28.512 completed0 mismatch. Benchmarkcùng6run3seed/bản,F26/FW12/SW11,Quartus13/EP4CE30F23C6:216→196LUT4,151FF giữ nguyên,median108,08→112,01MHz. Đây làOPS riêng,không Fmax MAC hoặc LUT6. Canonicalresults/ops_refactor_20261014/summary.json;SPECv1.15§5.4/11.13 và PLAN8.10 có lệnh/scope. Source-bound lịch sử giữ nguyên,dùng snapshot cũ để audit lịch sử; dùng checkpoint mới cho RTL hiện hành. Fused/final matrix/toàn MAC timing/PPA còn mở.
+
+## 18. Timing sơ bộ toàn NF và bàn giao F — 15/10/2026
+
+Toàn posit_mac_nf32/3,FW12,EXACT_EN=OPS_EN=1 đã post-route Quartus13.0sp1/EP4CE30F23C6 trên3seed:3926LUT4/823FF,DSP0/memory0,median45,07MHz;setup100MHz chưa đạt. Đường chính từacc qua mul_prepack_norm_comb vàround_unpacked(pack/parse) tới product_frac_q. Córeport riêng9 nhóm stage,logic/routing/fanout vàI/O constraints giả định0,5/0,1ns;không đường setup/hold unconstrained. Không phải timingboard hoặc PPA so paper trênLUT6.
+
+Source canonical RTL không đổi. Bản copy parser choQuartus13 chỉ thêm generate/endgenerate;audit so tokens xác nhận logic giữ nguyên. ASYNC_REG bịQuartus13 bỏ qua,còn review CDC/RDC riêng. Đề xuất constant slices/norm–round pipeline,A1align,A2/A3retiming vàSACfeedback tại PLAN8.14/results/week12/pipeline_recommendations.json,chưa áp dụng hoặc thay baseline.
+
+L1 F_W32/flags/state đã đóng G-F-L1 với oracle độc lập,nguồn tại l1/include/posit_fused_window.hpp;không có RTL F trong phiên tuần12. Hợp đồng W12-F-1 vàpipeline dự kiếnF1..F5 ởSPECv1.16§5.12/11.14,handoff.json. Tuần13 thực hiệnRTL theo model frozen trước pilot/regression. Runners/hash/timing tại results/week12/summary.json vàPLAN8.14–8.15;final NF/F matrix,accuracy/PPA vàGate4 còn mở.

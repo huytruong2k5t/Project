@@ -604,7 +604,7 @@ Giữ nguyên AC01/AC02/AC04 final và timeline hạn05/12. Tối ưu pipeline N
 
 ### 8.8. Kế hoạch thực thi tuần12 — lập ngày14/10/2026
 
-**Mục tiêu:** có L1 fused và oracle độc lập đủ để bàn giao RTL tuần13, xác định critical path NF và ranh giới pipeline cần khảo sát. W12-01 đã được hoàn thành trong phiên đóng tuần11 (§8.9); W12-02..07 chưa bắt đầu.
+**Mục tiêu:** có L1 fused và oracle độc lập đủ để bàn giao RTL tuần13,xác định critical path NF và ranh giới pipeline. W12-01 đóng cùng tuần11;thực hiện sớm15/10,W12-02..06 đã đạt phạm vi kỹ thuật,W12-07 chờ sao lưu cuối phiên. Kết quả và giới hạn tại §8.14.
 
 Lịch gốc là **26/10–01/11/2026**. Có thể thực hiện sớm khi sinh viên yêu cầu bắt đầu; khi đó dùng thứ tự Ngày1–7 bên dưới, ghi ngày chạy thật vào nhật ký. Giữ hạn hồ sơ29/11 và đệm30/11–04/12 trước05/12. Không gỡ mục W11-COV hoặc đánh dấu tuần11 hoàn thành chỉ vì đã sang tuần12.
 
@@ -613,12 +613,12 @@ Lịch gốc là **26/10–01/11/2026**. Có thể thực hiện sớm khi sinh 
 | Mốc | Việc thực hiện | Điều kiện đạt / bằng chứng cần lưu | Trạng thái |
 | --- | --- | --- | --- |
 | W12-01 | Bổ sung suite coverage NF theo W11-COV | Pilot rồi lượt mới ≥10^7 completed/0 mismatch; near-cancellation≥30%, đủ counters/corner/coverage theo phạm vi Gate3; audit/hash checkpoint mới | ✅ — đóng trong tuần11,§8.9 |
-| W12-02 | Hoàn thiện oracle full-sum và kiểm độc lập | Exact p8 self-test2^24 triples/0 mismatch; p16/1,p32/2 smoke≥100k/format so SoftPosit FMA; F_ref32/3 cùng P_hat so integer/rational độc lập/0 mismatch | không |
-| W12-03 | Khóa hợp đồng F và corpus trước model cửa sổ | Prepack, C_eff, sign/scale/Q, các điểm cut/residual, flags/config/acc_mode, topology và tiêu chí chọn W được quy định; danh mục test và seed cố định trước chạy | không |
-| W12-04 | Hiện thực, kiểm và đóng băng L1 F_W | Pilot≥100k/profile trước lượt ≥10^6/profile được chọn; phân bố rõ n0..8, near≥30% và corners; F_W khớp oracle cùng policy0 mismatch, báo riêng khác biệt với F_ref/Ideal; Linux/Windows/UBSan và audit đạt | không |
-| W12-05 | Đo tài nguyên/timing sơ bộ toàn NF | Part/tool/constraints hợp lệ, raw report LUT/FF/CARRY/DSP/BRAM, WNS/TNS/hold và top đường dài; ghi rõ synthesis-only hay post-route, thiếu công cụ/report là blocker | không |
-| W12-06 | Đánh giá ranh giới pipeline dựa trên timing | So đường OPS, SAC, norm/pack/parse và ready/control; đề xuất có FF/latency/II. Chuyển hai MUX chỉ khi có căn cứ; bản RTL ứng viên nếu có phải kiểm lại trước thay baseline | processing — OPS comb đã kiểm/đo; STA toàn NF còn mở |
-| W12-07 | Bàn giao tuần12 và kế hoạch RTL F tuần13 | Audit nguồn/corpus/log, freeze L1 F/contract/cấu hình, xác định stage/latency/handshake cần triển khai; đồng bộ SPEC/PLAN/tiến độ và commit/push, ghi rõ mọi mốc còn thiếu | không |
+| W12-02 | Hoàn thiện oracle full-sum và kiểm độc lập | Exact p8 self-test2^24 triples/0 mismatch; p16/1,p32/2 smoke≥100k/format so SoftPosit FMA; F_ref32/3 cùng P_hat so integer/rational độc lập/0 mismatch | ✅ — oracle/linux.json,§8.14 |
+| W12-03 | Khóa hợp đồng F và corpus trước model cửa sổ | Prepack, C_eff, sign/scale/Q, các điểm cut/residual, flags/config/acc_mode, topology và tiêu chí chọn W được quy định; danh mục test và seed cố định trước chạy | ✅ — W12-F-1,W32/Q29 |
+| W12-04 | Hiện thực, kiểm và đóng băng L1 F_W | Pilot≥100k/profile trước lượt ≥10^6/profile được chọn; phân bố rõ n0..8, near≥30% và corners; F_W khớp oracle cùng policy0 mismatch, báo riêng khác biệt với F_ref/Ideal; Linux/Windows/UBSan và audit đạt | ✅ — main2.208.768/nền tảng,0 mismatch |
+| W12-05 | Đo tài nguyên/timing sơ bộ toàn NF | Part/tool/constraints hợp lệ, raw report LUT/FF/CARRY/DSP/BRAM, WNS/TNS/hold và top đường dài; ghi rõ synthesis-only hay post-route, thiếu công cụ/report là blocker | ✅ — post-route3seed;100MHz chưa đạt |
+| W12-06 | Đánh giá ranh giới pipeline dựa trên timing | So đường OPS, SAC, norm/pack/parse và ready/control; đề xuất có FF/latency/II. Chuyển hai MUX chỉ khi có căn cứ; bản RTL ứng viên nếu có phải kiểm lại trước thay baseline | ✅ — bàn giao5 đề xuất,chưa sửa RTL |
+| W12-07 | Bàn giao tuần12 và kế hoạch RTL F tuần13 | Audit nguồn/corpus/log, freeze L1 F/contract/cấu hình, xác định stage/latency/handshake cần triển khai; đồng bộ SPEC/PLAN/tiến độ và commit/push, ghi rõ mọi mốc còn thiếu | processing — kỹ thuật đạt,chờ sao lưu cuối phiên |
 
 #### W12-01: đóng coverage NF trong một checkpoint mới (đã đạt ở §8.9)
 
@@ -847,3 +847,90 @@ python3 scripts/audit_normalize_refactor.py
 Source copy,work,obj/db,wave/binary có thể sinh lại,không backup lên Git; raw STA lưu lossless normalize.sta.rpt.gz trong Git và .rpt ở local. Trên checkout mới,tái chạy trước audit đầy đủ để tạo lại source copy/runtime. Audit giữ hash baseline,so giao diện/canonical flags và đối chiếu report gốc; không dùng summary PASS thay nghiệm thu hệ thống.
 
 Git giữ nguyên byte CRLF của baseline normalization đã đo bằng .gitattributes; đây chỉ là khác biệt newline so với blob LF cũ,không sửa logic hoặc chọn ứng viên làm production. Các file nguồn phụ có sẵn giữ nguyên byte/hash; không ghi đè checkpoint lịch sử.
+
+### 8.14. Nghiệm thu kỹ thuật tuần12 và bàn giao F — 15/10/2026
+
+**W12-01..06 ✅; G-F-L1 ✅; W12-07 chờ sao lưu cuối phiên.** Canonical results/week12/summary.json;model/corpus/contract tại freeze.json. NF/Gate3 và legacy L1/RTL giữ nguyên byte/hash;không thêm RTL F hoặc ghép ứng viên align/normalize vào baseline. Thực hiện sớm theo yêu cầu,lịch gốc26/10–01/11 và hạn trước05/12 giữ nguyên.
+
+**W12-02:** Oracle full-grid integer,raw decoder/serial encoder độc lập,không gọi L1 parser/packer. Exhaustive16.777.216 triples p8 so SoftPosit0.4.1 FMA;smoke100k mỗi format p16/1,p32/2 và100k32/3 cùng prepack so limb full-sum cũ,tất cả0 mismatch. Windows/UBSan smoke100k cũng đạt. ES3 không dùng SoftPosit ES2 làm oracle. GCC15.2.0 Linux,GCC13-win32 cross compiler;source/library/binary hashes,lệnh và seed20261014 lưu cùng report.
+
+**W12-03:** W12-F-1 khóa trước pilot,seed20261014 và quy tắc chọn smallest admitted zero-difference window. F cộng C_eff sau prepack,FLOOR/RNE,FW12,OPS0/1,n0..8;exact request bị từ chối. Giữ P_hat đầu vào và chưa chọn fraction mới từ khảo sát8.11. Anchor theo tích đã normalize e_P=scale+msb(M)-q;không dùng sf_A+sf_B khi tích có carry.
+
+W32 gồm1 sign,2 integer magnitude,29 fraction;residual sign/nonzero và flags riêng,không nằm trong32. Cận Q≥max(F,FW+1)+3 bảo đảm toán hạng lớn fit chính xác,chỉ toán hạng nhỏ có một residualδ. Nếu ngược dấu retained sum,đổi |Z|−δ thành (|Z|−1)+(1−δ),không jam dương tùy tiện. Tail chỉ xuất hiện khi Δsf≥4,nên không có zero-retained/tail≠0 hoặc normalize trái sâu lúc có tail. F_W32 round đúng P_hat+C_eff trong miền đã kiểm;P_hat vẫn xấp xỉ A×B. Sat_max/min chỉ từ tổng cuối;zero giữ metadata inexact;approx_cut chỉ iteration bỏ. acc_mode có state F riêng,commit một lần mỗi transaction,C_raw bị bỏ khi dùng accumulator. Đây là model giao dịch,không phải kiểm CK2Q/stall RTL F.
+
+**W12-04:** Bốn pilot100k ởW32/48/64/96 đều0 khác F_ref;chọnW32 theo luật đã khóa. Lượt đầu1m Linux/Windows/UBSan0 mismatch. Bổ sung suite để đạt đầy đủ phân tầng SPEC§6.3: **2.208.768 ca/nền tảng Linux,Windows,UBSan;0 mismatch** bits/flags,retained magnitude/tail và own accumulator. Corpus35.340.288byte,Windows/Linux sinh lại byte-exact,SHA256 `87f17cbf5d5c0a88098738b9afc0d50835880f60e19017401da3ee2a2943ab3d`.
+
+| Chỉ tiêu main bổ sung | Kết quả |
+| --- | --- |
+| Near trước/sau cut | 1.160.774/2.208.768=52,55300693% |
+| Regime-group/dấu | 256/256,min4128 mỗi cross |
+| Run/polarity hữu hạn | 61/61,min26161 operands |
+| n0..8 | min245418 mỗi n |
+| Δsf0..4 | đủ từng bin,standalone/acc_mode,trước và sau cut |
+| Popcount/iteration | đủ6 nhóm popcount và9 mức iteration0..8 |
+| Borrow/tail | 454079/994659 |
+| Reset/acc_clr/acc transactions | 540/2724/264193 |
+
+Thêm6402 corner/lượt trong suite đầu,tie even/odd,range,metadata/special và6 invalid requests không đổi state;Python signed integers kiểm138 trace đầy đủ/0 mismatch. Audit có4 negative guards,từ chối mismatch/thiếu cross/near/n. Corpus phân tầng có coverage_contract.json khóa trước sinh/chạy;không dò seed hoặc hạ ngưỡng. Report cũ1m giữ riêng,không trộn mẫu số.
+
+Tách sai số: F_W/F_ref0 khác;F_ref/Ideal tại cùng F_Ceff khác1.377.327 bit-result. Đây là số ca khác mã,không phải phần trăm sai số tương đối. NF/F/Ideal dùng state riêng ởacc_mode. Corpus cố ý đánh near-cancellation bằng F reference,không dùng để khẳng định accuracy ứng dụng;mean/P99/ULP/NMSE và paired RTL tuần14 còn mở. Report coverage/accuracy.json.
+
+**W12-05:** Nguyên bản toàn NF32/3,FW12,EXACT_EN=OPS_EN=1,Quartus13.0sp1/TimeQuest,EP4CE30F23C6. Parser trong source copy riêng chỉ thêm generate/endgenerate vì Quartus13 không nhận implicit generate;audit bỏ delimiter rồi so tokens với production. Không sửa canonical RTL. Clock10ns,I/O budget max0,5/min0,1ns cho input/output,derive_clock_uncertainty;không false-path/multicycle. Budget I/O là giả định khảo sát,chưa board signoff.
+
+| Chỉ tiêu toàn NF post-route | Kết quả |
+| --- | --- |
+| LUT4/FF | 3926/823,mọi seed |
+| Arithmetic-mode LE | 442,đã nằm trong tài nguyên LE;không phải CARRY8 |
+| DSP/memory | 0/0 |
+| Fmax seed1/2/3 | 47,10 /45,07 /44,65MHz;median45,07MHz |
+| Setup100MHz | **Chưa đạt**,WNS slow85−11,233/−12,186/−12,395ns |
+| Hold/recovery/removal | Đạt mọi corner/run đã báo |
+| Unconstrained setup/hold | 0 port/clock/path theo report |
+
+Raw full timing có10paths/run và9 nhóm stage/run,logic/routing/fanout,resource hierarchy;collector collect_week12_nf.py FAIL nếu thiếu report/parse lỗi. Số đo từ mô hình chip sau place-route,không đo board. Quartus13 bỏ qua ASYNC_REG;reset release fanout833,còn review CDC/RDC/MTBF. Không so trực tiếp MHz/LUT4 này với paper trên UltraScale+.
+
+**W12-06 — đề xuất,chưa áp dụng:**
+
+| Ưu tiên | Bằng chứng seed1 | Hướng thử và tác động |
+| --- | --- | --- |
+| 1 | acc→norm→pack/parse→product_frac_q:data21,477ns,WNS−11,233ns,63levels;logic9,669/routing11,609ns | Đổi variable destination index trong mul_prepack_norm_comb thành fixed slices/carry MUX trước,không thêm FF/latency. Sau đó đo để chọn bank norm/packed value nếu cần tách pipeline |
+| 2 | A1align:data17,203ns,WNS−7,642ns | Đo align candidate8.12 trong toàn NF;nếu chưa đủ,tách SF/swap khỏi shift/jam. Candidate comb không đổiH;thêm tầng đổiH/II và tăng bank/context |
+| 3 | A2arith WNS+5,031ns;A3norm−2,216ns | Cân nhắc LOD sau cộng ởA2,chốt count/valid choA3:khoảng5+1FF,có thể giữH_ADD3;phải đo vì A2 dài hơn |
+| 4 | SAC feedback:data12,314ns,WNS−2,383ns | Shift theo clz rồi dịch1 cố định,tínhsa/scale song song;khảo sát remaining-scale budget để rút state_error. Không tùy tiện pipeline hồi tiếp vì thay term interval/II |
+| 5 | OPS WNS−0,382ns,control+3,899ns | Chuyển swap sauM0 chỉ khi tổng thể có lợi;SAC đang chậm nên không mặc định chuyển MUX sẽ tăngFmax |
+
+Với FIN=2F+1,fixed slices có thể chuẩn bị exact-no-carry `{acc[2F-1:0],1'b0}`,exact-carry `acc[2F:0]`;approx-no-carry `{acc[FW+1:2],zeros(FIN-FW)}`,approx-carry `{acc[FW+2:2],zeros(FIN-FW-1)}`. Carry từ acc[2F+1] hoặcacc[FW+3],sf_norm=sf+carry. Đây là phương án chưa viết RTL;cần generate guard EXACT_EN/width và kiểm raw/special/carry. u_norm109LUT4,u_round889LUT4 ở hierarchy seed1 là mức đang dùng,không phải số chắc chắn tiết kiệm.
+
+Bank packed trung gian cần ít nhất32data+5flags+valid=38FF payload/control,+1cycle;chưa tính điều khiển/reset. Có thể cần bank normalized nếu norm+pack vẫn dài. Dùng nguyên pack2+parser2 có latency khác cách chia comb một bank;phải đo và sửa SPEC/lịch. Shared core optimizations áp cho cảNF/F hoặc báo riêng,không gán toàn lợi ích tối ưu RTL cho fusion.
+
+**W12-07:** bàn giaoF1(anchor/seeds/delta),F2(align/tail),F3(signed add/sub),F4(abs/borrow),F5(normalize/SF/adapter),packerP1/P2;ngân sách H=q+12,valid=q+11,II≥q+13 với q=max(1,t). ChưaF RTL hoặc timingF,có thể điều chỉnh sau pilot/STA tuần13. Top một giao dịch giữcontext,reset bridge/leaf2FF,valid/ready vàflags đi cùng data;accumulator commit một lần,giữ output tới retire. Ports/stages tại handoff.json. ExactF chưa hỗ trợ;futureNF comparator approximate-only cần test/freeze vì số đo NF hiệnEXACT_EN1 khácF EXACT_EN0.
+
+Tái lập từ Posit_MAC,WSL bash --noprofile --norc,runtime đã cài,temporary/bin trong results/week12:
+
+Trên checkout mới,build L0 bằng `make -C l0 all` trước oracle để tái tạo libsoftposit.so/softposit.dll từ source đã có;không đưa thư viện binary vào Git. Có thể khác byte binary khi compiler/build khác,phải ghi hash/version mới và kiểm lại,không sửa hash checkpoint lịch sử.
+
+```bash
+bash scripts/verify_week12_oracle.sh
+bash scripts/verify_week12_window.sh
+bash scripts/verify_week12_coverage.sh
+bash scripts/verify_week12_accuracy.sh
+./results/week12/accuracy/test_accuracy results/week12/coverage/fixtures/main.bin 2208768 results/week12/coverage/accuracy.json
+bash scripts/verify_week12_trace.sh
+```
+
+```cmd
+powershell -NoProfile -File scripts\verify_week12_windows.ps1
+powershell -NoProfile -File scripts\verify_week12_coverage_windows.ps1
+powershell -NoProfile -File scripts\run_week12_nf_ppa.ps1
+powershell -NoProfile -File scripts\survey_week12_nf_stages.ps1
+python scripts\collect_week12_nf.py
+python scripts\audit_week12.py
+```
+
+Audit đầy đủ cần sinh lạibin/corpus/source copy trên checkout mới. Backup chỉsource,manifest/hash,JSON/CSV/trace/log và raw reports nén lossless;không exe,ELF,SO,SOF,wave,obj/db/fixtures/cache. Không tạo Markdown mới. Receipt results/week12/backup.json chỉ được tạo sau push thành công;khi có receipt,summary mới đóngW12-07.
+
+### 8.15. Kế hoạch triển khai tuần13 sau W12-F-1
+
+Chưa bắt đầu RTL F. Thứ tự: W13-01 chốt ports/cạnh/fixture từmodel frozen → W13-02 F1/F2 vàlost-mask song song → W13-03 F3/F4 vàsigned borrow/special → W13-04 F5/packer → W13-05 top reset/stall/order/acc_mode → W13-06 pilot rồi≥10^7 soRTL/L1 vàcoverage theoSPEC → W13-07 STA/audit/backup. Lịch gốc02–08/11,có thể làm sớm theo yêu cầu. Final per-n/matrix tuần14 giữ nguyên,không dùng≥10^7 tích hợp đầu để giảm final.
+
+Mỗi module mộtfile,cổng mỗi dòng,named mapping,cast/width tường minh,no latch,always_ff/load-enable/CK2Q;structural top,reset/valid/context theoSPEC. Fused dựa modelW32,không dùng clampF+2 củaadderNF để giả làmF. Đề xuất tối ưuNF ở8.14 chờ sinh viên chọn để tạo candidate vàđo;chưa tự sửa baseline hoặc hứa đạt100MHz. Final accuracy/PPA/Gate4 và hạn trước05/12 không thay đổi.

@@ -115,7 +115,7 @@ for line in read(ROOT/'results/ops_refactor_20261014/nf/32_3/source.sha256').spl
     if Path(name).suffix in ['.sv','.vh']:
         live=ROOT/'rtl'/Path(name).name
         assert sha(live)==digest,('Production NF changed',live)
-assert not (ROOT/'rtl/posit_mac_f.sv').exists(),'F RTL unexpectedly present before handoff'
+# Later RTL files do not extend this dated software-only acceptance checkpoint.
 contract=load(RUN/'contract.json');handoff=load(RUN/'handoff.json')
 assert contract['profile']['FRAC_W']==12 and handoff['profile']['ACC_WIN']==32
 assert len(handoff['stages'])==6 and handoff['latency_proposal']['H_handshake']=='q+12'

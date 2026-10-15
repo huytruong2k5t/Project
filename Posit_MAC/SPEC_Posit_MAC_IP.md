@@ -1423,7 +1423,7 @@ Canonical results/ops_refactor_20261014/summary.json; raw timing/top10 ở ppa/c
 
 ### 11.14. Hoàn thành tuần12 — oracle/L1 F và timing NF,15/10/2026
 
-**W12-01..06 đạt phạm vi kỹ thuật; G-F-L1 ✅; W12-07 chờ sao lưu cuối phiên.** Không có thay đổi logic RTL NF hoặc legacy L1; freeze mới chỉ cho model/corpus/contract F. Các ghi chép trước đây nói F_W/oracle/flags/state chưa chốt là trạng thái lịch sử,được cập nhật bằng mục này. Canonical results/week12/{summary,freeze}.json; chi tiết PLAN8.14.
+**W12-01..07 đạt phạm vi kế hoạch; G-F-L1 ✅;đã sao lưu GitHub.** Không có thay đổi logic RTL NF hoặc legacy L1; freeze mới chỉ cho model/corpus/contract F. Các ghi chép trước đây nói F_W/oracle/flags/state chưa chốt là trạng thái lịch sử,được cập nhật bằng mục này. Canonical results/week12/{summary,freeze}.json; chi tiết PLAN8.14.
 
 Oracle số nguyên full-grid decode/encode độc lập: posit8 exhaustive2^24=16.777.216 bộ ba so SoftPosit FMA; p16/1,p32/2 mỗi format100k smoke; F_ref32/3 cùng prepack100k so full-sum limb cũ. Tất cả0 mismatch; Windows/UBSan smoke cũng đạt. SoftPosit0.4.1/hash thư viện,compiler Linux GCC15.2.0,Windows GCC13-win32,lệnh và seed20261014 lưu cùng kết quả. ES3 không dùng SoftPosit ES2 làm oracle.
 

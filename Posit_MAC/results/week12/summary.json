@@ -1,5 +1,5 @@
 {
-  "status": "PASS_TECHNICAL_PENDING_BACKUP",
+  "status": "PASS_WEEK12_SCOPE",
   "date": "2026-10-15",
   "milestones": {
     "W12-01": "complete within plan scope",
@@ -8,9 +8,16 @@
     "W12-04": "complete within plan scope",
     "W12-05": "complete within plan scope",
     "W12-06": "complete within plan scope",
-    "W12-07": "technical handoff passed; final Git backup pending"
+    "W12-07": "complete within plan scope"
   },
-  "backup": null,
+  "backup": {
+    "push_success": true,
+    "date": "2026-10-15",
+    "commit": "7c4cb06922eeddeb057758f8ff407ce4012835dd",
+    "branch": "main",
+    "repository": "https://github.com/huytruong2k5t/Project",
+    "verification": "git push origin main exit0; origin/main equals the recorded commit; compact source/evidence backed up before closing W12-07"
+  },
   "unchanged_NF_RTL": true,
   "legacy_L1_unchanged": true,
   "oracle": {

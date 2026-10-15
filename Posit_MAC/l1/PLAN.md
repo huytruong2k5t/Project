@@ -604,7 +604,7 @@ Giữ nguyên AC01/AC02/AC04 final và timeline hạn05/12. Tối ưu pipeline N
 
 ### 8.8. Kế hoạch thực thi tuần12 — lập ngày14/10/2026
 
-**Mục tiêu:** có L1 fused và oracle độc lập đủ để bàn giao RTL tuần13,xác định critical path NF và ranh giới pipeline. W12-01 đóng cùng tuần11;thực hiện sớm15/10,W12-02..06 đã đạt phạm vi kỹ thuật,W12-07 chờ sao lưu cuối phiên. Kết quả và giới hạn tại §8.14.
+**Mục tiêu:** có L1 fused và oracle độc lập đủ để bàn giao RTL tuần13,xác định critical path NF và ranh giới pipeline. W12-01 đóng cùng tuần11;thực hiện sớm15/10,W12-02..07 đã đạt và có bằng chứng sao lưu GitHub. Kết quả và giới hạn tại §8.14.
 
 Lịch gốc là **26/10–01/11/2026**. Có thể thực hiện sớm khi sinh viên yêu cầu bắt đầu; khi đó dùng thứ tự Ngày1–7 bên dưới, ghi ngày chạy thật vào nhật ký. Giữ hạn hồ sơ29/11 và đệm30/11–04/12 trước05/12. Không gỡ mục W11-COV hoặc đánh dấu tuần11 hoàn thành chỉ vì đã sang tuần12.
 
@@ -618,7 +618,7 @@ Lịch gốc là **26/10–01/11/2026**. Có thể thực hiện sớm khi sinh 
 | W12-04 | Hiện thực, kiểm và đóng băng L1 F_W | Pilot≥100k/profile trước lượt ≥10^6/profile được chọn; phân bố rõ n0..8, near≥30% và corners; F_W khớp oracle cùng policy0 mismatch, báo riêng khác biệt với F_ref/Ideal; Linux/Windows/UBSan và audit đạt | ✅ — main2.208.768/nền tảng,0 mismatch |
 | W12-05 | Đo tài nguyên/timing sơ bộ toàn NF | Part/tool/constraints hợp lệ, raw report LUT/FF/CARRY/DSP/BRAM, WNS/TNS/hold và top đường dài; ghi rõ synthesis-only hay post-route, thiếu công cụ/report là blocker | ✅ — post-route3seed;100MHz chưa đạt |
 | W12-06 | Đánh giá ranh giới pipeline dựa trên timing | So đường OPS, SAC, norm/pack/parse và ready/control; đề xuất có FF/latency/II. Chuyển hai MUX chỉ khi có căn cứ; bản RTL ứng viên nếu có phải kiểm lại trước thay baseline | ✅ — bàn giao5 đề xuất,chưa sửa RTL |
-| W12-07 | Bàn giao tuần12 và kế hoạch RTL F tuần13 | Audit nguồn/corpus/log, freeze L1 F/contract/cấu hình, xác định stage/latency/handshake cần triển khai; đồng bộ SPEC/PLAN/tiến độ và commit/push, ghi rõ mọi mốc còn thiếu | processing — kỹ thuật đạt,chờ sao lưu cuối phiên |
+| W12-07 | Bàn giao tuần12 và kế hoạch RTL F tuần13 | Audit nguồn/corpus/log, freeze L1 F/contract/cấu hình, xác định stage/latency/handshake cần triển khai; đồng bộ SPEC/PLAN/tiến độ và commit/push, ghi rõ mọi mốc còn thiếu | ✅ — audit/bàn giao và sao lưu đã đạt |
 
 #### W12-01: đóng coverage NF trong một checkpoint mới (đã đạt ở §8.9)
 
@@ -850,7 +850,7 @@ Git giữ nguyên byte CRLF của baseline normalization đã đo bằng .gitatt
 
 ### 8.14. Nghiệm thu kỹ thuật tuần12 và bàn giao F — 15/10/2026
 
-**W12-01..06 ✅; G-F-L1 ✅; W12-07 chờ sao lưu cuối phiên.** Canonical results/week12/summary.json;model/corpus/contract tại freeze.json. NF/Gate3 và legacy L1/RTL giữ nguyên byte/hash;không thêm RTL F hoặc ghép ứng viên align/normalize vào baseline. Thực hiện sớm theo yêu cầu,lịch gốc26/10–01/11 và hạn trước05/12 giữ nguyên.
+**W12-01..07 ✅; G-F-L1 ✅;đã sao lưu GitHub.** Canonical results/week12/summary.json;model/corpus/contract tại freeze.json. NF/Gate3 và legacy L1/RTL giữ nguyên byte/hash;không thêm RTL F hoặc ghép ứng viên align/normalize vào baseline. Thực hiện sớm theo yêu cầu,lịch gốc26/10–01/11 và hạn trước05/12 giữ nguyên.
 
 **W12-02:** Oracle full-grid integer,raw decoder/serial encoder độc lập,không gọi L1 parser/packer. Exhaustive16.777.216 triples p8 so SoftPosit0.4.1 FMA;smoke100k mỗi format p16/1,p32/2 và100k32/3 cùng prepack so limb full-sum cũ,tất cả0 mismatch. Windows/UBSan smoke100k cũng đạt. ES3 không dùng SoftPosit ES2 làm oracle. GCC15.2.0 Linux,GCC13-win32 cross compiler;source/library/binary hashes,lệnh và seed20261014 lưu cùng report.
 

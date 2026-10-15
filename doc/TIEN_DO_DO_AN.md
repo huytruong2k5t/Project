@@ -183,7 +183,7 @@ Kế hoạch tối ưu chi tiết tại [PLAN§8.16](../Posit_MAC/l1/PLAN.md#816
 | 3 | Khảo sát refactor normalization | Hai ứng viên đã kiểm đơn vị/pipeline0 mismatch;giảm4/7LUT4 nhưng chưa chứng minh cải thiện timing bền vững qua3seed. Giữ flags/sticky và RTL chính, lưu bản thử/report;chưa đo fullMAC | ✅ |
 | 4 | Oracle và L1 fused — tuần12 | Chốt W32/flags/state;oracle p8 exhaustive và main phân tầng2.208.768 ca/nền tảng đạt0 mismatch. Giữ fraction12,RTL F và accuracy cuối còn ở tuần13–14 | ✅ |
 | 5 | Timing toàn NF và bàn giao tuần12 | Đo post-route3seed,median45,07MHz/chưa100MHz;có5 đề xuất tối ưu và plan RTL F. Audit và sao lưu đạt;đã bàn giao tuần13 | ✅ |
-| 6 | Lập kế hoạch tối ưu timing/LUT trước refactor | Bổ sung PLAN§8.16 với thứ tự thử, điều kiện thêm pipeline, kiểm từng ứng viên và đánh đổi FF/latency/II. Đã hoàn thành bản kế hoạch để xem xét; phần triển khai chưa bắt đầu | ✅ |
+| 6 | Lập kế hoạch tối ưu timing/LUT trước refactor | Bổ sung PLAN§8.16 và thứ tự thử SAC: dịch cố định trước → gộp cộng scale → exhausted song song cùng controller; giữ bit-exact và đo từng bước. Đã cập nhật kế hoạch theo góp ý; chưa sửa RTL hoặc chạy lại regression/PPA | ✅ |
 
 ### 4.15. Mẫu cập nhật tiếp theo
 

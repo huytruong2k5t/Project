@@ -980,7 +980,7 @@ Tất cả các dòng dưới có trạng thái **chưa thực hiện trong đ�
 | OPT-02 | Ghép riêng `posit_add_align_candidate` đã kiểm ở §8.12 vào source copy của NF; nhánh delta chạy song song với so sánh fraction, lost-mask chạy song song barrel shift | Whole-NF pilot và PPA; xác định lợi ích timing với chi phí LUT. Mức +16LUT4 của leaf không được dùng làm chi phí toàn MAC |
 | OPT-03 | Nếu đường tích vẫn quá dài: khảo sát bank tại đầu ra packed-value; nếu norm+pack còn chậm, cân nhắc tách chuẩn hóa và/hoặc dùng các tầng RNE P1/P2 đã có trước parser | Bảng delay từng đoạn, số bank/FF/context, latency/II mới; chọn số tầng tối thiểu đạt mục tiêu đang xét |
 | OPT-04 | Cân bằng A2/A3: tính LOD từ `magnitude_d` sau phép cộng ở A2, chốt count/valid cùng magnitude; A3 nhận sẵn điều khiển dịch và cập nhật scale | Giữ H_ADD3 nếu cả A2/A3 đều đạt; khoảng5 bit count+1valid là ước lượng cho32/3, tài nguyên thực phải tổng hợp |
-| OPT-05 | Rút SAC: dịch theo clz rồi dịch1 cố định; tính sa/scale song song. Chỉ khảo sát remaining-scale budget nếu STA còn chỉ ra state_error gating là nút thắt | Giữ từng term, scale, fx_next, exhausted/state_error và số vòng; không thêm tầng hồi tiếp trong phương án đầu |
+| OPT-05 | Thử tuần tự SAC-A: dịch cố định1 bit trước, barrel shift theo leading_count sau → SAC-B: gộp scale+leading_count+1 → SAC-C: phát hiện exhausted song song và nối vào controller. Chi tiết bên dưới | Giữ từng term, scale, fx_next, exhausted/state_error, token và số vòng; đo riêng từng bước, không thêm tầng hồi tiếp |
 | OPT-06 | Khảo sát tiết kiệm LUT có chọn lọc: ghép riêng bản `zero` hoặc `shared` của normalization đã kiểm ở §8.13; kiểm mapper của phép cộng/trừ A2 trước cân nhắc chia sẻ carry chain | Chọn theo PPA toàn hệ thống; không mặc định cách viết một adder sẽ sinh một carry chain hoặc tăng Fmax |
 | OPT-07 | Chọn tổ hợp ứng viên có lợi, kiểm tương tác và chạy regression tích hợp chính thức; cập nhật SPEC/lịch, freeze và backup sau khi có bằng chứng | 0 mismatch, protocol/coverage đạt phạm vi áp dụng, ≥3 P&R run/config; ghi rõ phần final còn thiếu |
 | OPT-08 | Bàn giao thay đổi dùng chung cho RTL F tuần13; chuẩn bị comparator NF approximate-only đã kiểm riêng trước paired PPA | NF/F cùng precision, OPS, feature policy, part/tool/constraints; tách lợi ích fusion khỏi lợi ích refactor |
@@ -1000,7 +1000,27 @@ Việc viết lại `round_unpacked` trực tiếp để tránh pack→parse là
 
 **OPT-04/06 — giới hạn:** bản normalization hiện giữ inexact đầu vào khi kết quả0; giữ riêng ý nghĩa retained bit và sticky. Không xóa flags/sticky hoặc thay zero rule để làm số liệu LUT đẹp hơn. Tương đương với dữ liệu nhị phân hợp lệ và không-X trên output sau reset cần kiểm riêng; không tuyên bố đã chứng minh mọi tổ hợp X/Z.
 
-**OPT-05 — giới hạn:** giữ cả hành vi scale không hợp lệ, fx=0 và `sa=W_X`; kiểm exact26/27-bit và approximate12-bit riêng. Pipeline trong feedback chỉ mở như thay đổi kiến trúc sau khi có lịch term/first/last mới, vì có thể giảm throughput dù tăng MHz.
+**OPT-05 — thứ tự được sinh viên chọn để bổ sung vào kế hoạch, chưa triển khai RTL:**
+
+| Bước | Phương án thử | Điều kiện giữ đúng chức năng / điểm cần đo |
+| --- | --- | --- |
+| SAC-A | Dịch trái cố định1 bit ở nhánh dữ liệu trước, sau đó barrel shift theo `leading_count`; LOD vẫn đếm trên `fx` ban đầu | Trong W_X bit, `(fx<<1)<<leading_count` bằng `fx<<(leading_count+1)`. Không đưa dữ liệu đã dịch vào LOD. Port `sa` vẫn trả clz+1 khi term_valid; giữ state khi lỗi. W_X=1 có generate riêng, tránh dải bit âm |
+| SAC-B | Trên ứng viên A, tính trực tiếp `scale_sum = scale_extended + count_extended + 1`, hướng tới dùng carry-in=1 của cùng chuỗi cộng | Mở rộng cả hai toán hạng và hằng1 lên S_W+1 bit trước cộng để giữ carry. Không lấy kết quả đã wrap để kiểm lỗi. Viết ba số hạng trong RTL chưa chứng minh chỉ có một physical adder; kiểm netlist, tài nguyên và STA |
+| SAC-C | Trên ứng viên A+B, phát hiện `single_one` từ fx song song với LOD/shifter; tạo exhausted tương đương rồi dùng trong `iter_ctrl` | Không bỏ qualification theo lỗi. Kiểm controller dùng đúng cờ theo exact/approx cho last và approx_cut, đồng thời giữ nhánh n0/init_only |
+
+Hợp đồng cờ ở SAC-C: `exhausted = !leading_valid || (term_valid && single_one)`.
+
+Mỗi bước so với snapshot trước đó và baseline gốc: A, A+B, A+B+C. Nếu B hoặc C không có lợi thì giữ ứng viên trước đó và báo đánh đổi; không bắt buộc ghép cả ba vào bản cuối. Các bước này đều là refactor tổ hợp/control, mục tiêu giữ nguyên giao diện, FF, latency, lịch token và II; mọi mức thay đổi tài nguyên/timing phải đo thực tế.
+
+**Lưu ý bắt buộc với SAC-C:** `iter_ctrl` hiện nối hai output exhausted vào `unused_exhausted_exact/approx`, rồi tự kiểm `fx_next=='0'` cho is_last và `fx_next!='0'` cho approx_cut. Chỉ sửa cờ trong leaf có thể bị synthesis loại bỏ và không cải thiện controller. Cần chọn exhausted theo mode và chứng minh cờ đó tương đương phép kiểm zero của fx_next đang được chọn, gồm cả trạng thái lỗi. Khi thay nhánh điều khiển phải giữ count/limit, launch nạp fx mới, first từ count0, đường t1_first/t2_first, n0/init_only và xả hai tầng sau last; không phát core_done ngay khi SAC exhausted.
+
+Không tách qualification lỗi khỏi output exhausted chỉ để rút đường điều khiển. Ví dụ W_X8, fx=00100000, scale7: sa3 làm scale_sum10 vượt8, nên term_valid0, fx_next giữ00100000 và exhausted0; single_one riêng lẻ bằng1 sẽ làm sai hành vi. Với fx0, exhausted vẫn bằng1 và các output state giữ nguyên, kể cả khi scale đầu vào không hợp lệ.
+
+Phát hiện single_one có thể thử bằng cây phát hiện có ít nhất hai bit1 hoặc biểu thức kiểm `fx & (fx-1)` kèm kiểm nonzero. Phương án sau tạo thêm phép trừ, không mặc định ít LUT hoặc nhanh hơn. Tận dụng cây valid của LOD chỉ khi có thể giữ hợp đồng module dùng chung; không tự mở rộng I/O của lod_lzd_core để ghép ứng viên. Báo cả nhánh fx feedback và nhánh last/approx_cut; không chỉ đo cổng exhausted của leaf.
+
+**Kiểm riêng OPT-05:** W_X1/5/12/26/27 và width nhỏ khả thi để vét cạn; S_W tối thiểu và tăng; fx0, từng one-hot ở mọi vị trí, nhiều bit1, sa=W_X, scale0/W_X-1/W_X và vượt giới hạn. So toàn bộ term_valid/sa/scale_next/fx_next/exhausted/state_error, không chỉ tích cuối. Sau đó kiểm core exact/approx, n0..8/early-stop, first/last/init_only/approx_cut, số token, drain và reset/stall tích hợp. Chỉ qua T1/T2 mới đo PPA theo T3; lượt xác nhận tổ hợp theo T4.
+
+Giữ cả hành vi scale không hợp lệ, fx=0 và `sa=W_X`; kiểm exact26/27-bit và approximate12-bit riêng. Chỉ khảo sát remaining-scale budget nếu sau A/B/C, STA vẫn chỉ ra state_error gating là nút thắt. Pipeline trong feedback là thay đổi kiến trúc khác, chỉ mở sau khi có lịch term/first/last mới, vì có thể giảm throughput dù tăng MHz.
 
 OPS/MUX relocation và reset fanout là nhánh sau: chỉ chuyển swap khi cone OPS thực sự giới hạn toàn top. Không sửa reset contract hoặc thêm timing exception để che đường dữ liệu. Mọi thay đổi synchronizer/CE phải review theo đúng vendor và giữ quy tắc reset của SPEC/guideline.
 

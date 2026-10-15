@@ -1,0 +1,30 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Thu Oct 15 16:26:38 2026
+| Host         : MSI running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file {C:/HCMUT/HK261/Do an 2/Posit_MAC/results/primitive_xilinx_20261015/xc7a35tcpg236-1/candidate_n26_k2/explore/hierarchy.rpt}
+| Design       : primitive_ppa_top
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Routed
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++-----------------------+--------+------------+------------+---------+------+-----+--------+--------+------------+
+|        Instance       | Module | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
++-----------------------+--------+------------+------------+---------+------+-----+--------+--------+------------+
+| primitive_ppa_top     |  (top) |         24 |         24 |       0 |    0 |  32 |      0 |      0 |          0 |
+|   (primitive_ppa_top) |  (top) |          0 |          0 |       0 |    0 |   0 |      0 |      0 |          0 |
++-----------------------+--------+------------+------------+---------+------+-----+--------+--------+------------+
+* Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
+
+

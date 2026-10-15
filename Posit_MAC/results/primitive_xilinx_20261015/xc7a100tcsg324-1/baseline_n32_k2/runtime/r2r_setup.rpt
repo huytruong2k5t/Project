@@ -1,0 +1,305 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Thu Oct 15 17:06:06 2026
+| Host         : MSI running 64-bit major release  (build 9200)
+| Command      : report_timing -from [all_registers] -to [all_registers] -delay_type max -max_paths 5 -path_type full_clock_expanded -file {C:/HCMUT/HK261/Do an 2/Posit_MAC/results/primitive_xilinx_20261015/xc7a100tcsg324-1/baseline_n32_k2/runtime/r2r_setup.rpt}
+| Design       : primitive_ppa_top
+| Device       : 7a100t-csg324
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+| Design State : Routed
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             0.938ns  (required time - arrival time)
+  Source:                 u_boundary/data_q_reg[15]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            u_boundary/result_reg[0]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.977ns  (logic 1.240ns (31.178%)  route 2.737ns (68.822%))
+  Logic Levels:           4  (LUT4=2 LUT5=2)
+  Clock Path Skew:        -0.026ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 7.704 - 5.000 ) 
+    Source Clock Delay      (SCD):    2.887ns
+    Clock Pessimism Removal (CPR):    0.157ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.973     0.973    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.096     1.069 r  u_clk_bufg/O
+                         net (fo=38, routed)          1.818     2.887    u_boundary/CLK
+    SLICE_X14Y39         FDRE                                         r  u_boundary/data_q_reg[15]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X14Y39         FDRE (Prop_fdre_C_Q)         0.518     3.405 f  u_boundary/data_q_reg[15]/Q
+                         net (fo=3, routed)           0.812     4.217    u_boundary/data_q[15]
+    SLICE_X14Y39         LUT4 (Prop_lut4_I3_O)        0.146     4.363 f  u_boundary/result[5]_i_7/O
+                         net (fo=4, routed)           0.513     4.877    u_boundary/g_lod.u_dut/p_3_in
+    SLICE_X14Y39         LUT5 (Prop_lut5_I0_O)        0.328     5.205 f  u_boundary/result[5]_i_3/O
+                         net (fo=6, routed)           0.686     5.890    u_boundary/g_lod.u_dut/p_13_in
+    SLICE_X13Y39         LUT4 (Prop_lut4_I2_O)        0.124     6.014 r  u_boundary/result[0]_i_2/O
+                         net (fo=1, routed)           0.726     6.741    u_boundary/result[0]_i_2_n_0
+    SLICE_X14Y38         LUT5 (Prop_lut5_I1_O)        0.124     6.865 r  u_boundary/result[0]_i_1/O
+                         net (fo=1, routed)           0.000     6.865    u_boundary/result_d[0]
+    SLICE_X14Y38         FDRE                                         r  u_boundary/result_reg[0]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  <hidden>
+                                                      0.000     5.000 r  clk
+                         net (fo=0)                   0.924     5.924    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     6.015 r  u_clk_bufg/O
+                         net (fo=38, routed)          1.689     7.704    u_boundary/CLK
+    SLICE_X14Y38         FDRE                                         r  u_boundary/result_reg[0]/C
+                         clock pessimism              0.157     7.861    <hidden>
+                         clock uncertainty           -0.135     7.726    <hidden>
+    SLICE_X14Y38         FDRE (Setup_fdre_C_D)        0.077     7.803    u_boundary/result_reg[0]
+  -------------------------------------------------------------------
+                         required time                          7.803    <hidden>
+                         arrival time                          -6.865    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.938    <hidden>
+
+Slack (MET) :             1.124ns  (required time - arrival time)
+  Source:                 u_boundary/data_q_reg[29]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            u_boundary/result_reg[1]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.797ns  (logic 1.182ns (31.126%)  route 2.615ns (68.874%))
+  Logic Levels:           4  (LUT4=1 LUT5=1 LUT6=2)
+  Clock Path Skew:        -0.024ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 7.704 - 5.000 ) 
+    Source Clock Delay      (SCD):    2.885ns
+    Clock Pessimism Removal (CPR):    0.157ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.973     0.973    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.096     1.069 r  u_clk_bufg/O
+                         net (fo=38, routed)          1.816     2.885    u_boundary/CLK
+    SLICE_X15Y37         FDRE                                         r  u_boundary/data_q_reg[29]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X15Y37         FDRE (Prop_fdre_C_Q)         0.456     3.341 r  u_boundary/data_q_reg[29]/Q
+                         net (fo=3, routed)           0.667     4.008    u_boundary/data_q[29]
+    SLICE_X15Y37         LUT4 (Prop_lut4_I1_O)        0.152     4.160 r  u_boundary/result[2]_i_3/O
+                         net (fo=4, routed)           0.482     4.643    u_boundary/g_lod.u_dut/p_7_in
+    SLICE_X15Y37         LUT5 (Prop_lut5_I0_O)        0.326     4.969 r  u_boundary/result[3]_i_2/O
+                         net (fo=5, routed)           0.666     5.635    u_boundary/g_lod.u_dut/p_10_in
+    SLICE_X15Y37         LUT6 (Prop_lut6_I5_O)        0.124     5.759 r  u_boundary/result[1]_i_3/O
+                         net (fo=1, routed)           0.800     6.559    u_boundary/result[1]_i_3_n_0
+    SLICE_X14Y38         LUT6 (Prop_lut6_I1_O)        0.124     6.683 r  u_boundary/result[1]_i_1/O
+                         net (fo=1, routed)           0.000     6.683    u_boundary/result_d[1]
+    SLICE_X14Y38         FDRE                                         r  u_boundary/result_reg[1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  <hidden>
+                                                      0.000     5.000 r  clk
+                         net (fo=0)                   0.924     5.924    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     6.015 r  u_clk_bufg/O
+                         net (fo=38, routed)          1.689     7.704    u_boundary/CLK
+    SLICE_X14Y38         FDRE                                         r  u_boundary/result_reg[1]/C
+                         clock pessimism              0.157     7.861    <hidden>
+                         clock uncertainty           -0.135     7.726    <hidden>
+    SLICE_X14Y38         FDRE (Setup_fdre_C_D)        0.081     7.807    u_boundary/result_reg[1]
+  -------------------------------------------------------------------
+                         required time                          7.807    <hidden>
+                         arrival time                          -6.683    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  1.124    <hidden>
+
+Slack (MET) :             1.168ns  (required time - arrival time)
+  Source:                 u_boundary/data_q_reg[15]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            u_boundary/result_reg[4]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.789ns  (logic 1.266ns (33.415%)  route 2.523ns (66.585%))
+  Logic Levels:           4  (LUT2=1 LUT4=1 LUT5=2)
+  Clock Path Skew:        -0.026ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 7.704 - 5.000 ) 
+    Source Clock Delay      (SCD):    2.887ns
+    Clock Pessimism Removal (CPR):    0.157ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.973     0.973    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.096     1.069 r  u_clk_bufg/O
+                         net (fo=38, routed)          1.818     2.887    u_boundary/CLK
+    SLICE_X14Y39         FDRE                                         r  u_boundary/data_q_reg[15]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X14Y39         FDRE (Prop_fdre_C_Q)         0.518     3.405 r  u_boundary/data_q_reg[15]/Q
+                         net (fo=3, routed)           0.812     4.217    u_boundary/data_q[15]
+    SLICE_X14Y39         LUT4 (Prop_lut4_I3_O)        0.146     4.363 r  u_boundary/result[5]_i_7/O
+                         net (fo=4, routed)           0.513     4.877    u_boundary/g_lod.u_dut/p_3_in
+    SLICE_X14Y39         LUT5 (Prop_lut5_I0_O)        0.328     5.205 r  u_boundary/result[5]_i_3/O
+                         net (fo=6, routed)           0.471     5.676    u_boundary/g_lod.u_dut/p_13_in
+    SLICE_X14Y38         LUT5 (Prop_lut5_I3_O)        0.124     5.800 r  u_boundary/result[5]_i_1/O
+                         net (fo=6, routed)           0.726     6.526    u_boundary/result_d[5]
+    SLICE_X14Y38         LUT2 (Prop_lut2_I0_O)        0.150     6.676 r  u_boundary/result[4]_i_1/O
+                         net (fo=1, routed)           0.000     6.676    u_boundary/result_d[4]
+    SLICE_X14Y38         FDRE                                         r  u_boundary/result_reg[4]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  <hidden>
+                                                      0.000     5.000 r  clk
+                         net (fo=0)                   0.924     5.924    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     6.015 r  u_clk_bufg/O
+                         net (fo=38, routed)          1.689     7.704    u_boundary/CLK
+    SLICE_X14Y38         FDRE                                         r  u_boundary/result_reg[4]/C
+                         clock pessimism              0.157     7.861    <hidden>
+                         clock uncertainty           -0.135     7.726    <hidden>
+    SLICE_X14Y38         FDRE (Setup_fdre_C_D)        0.118     7.844    u_boundary/result_reg[4]
+  -------------------------------------------------------------------
+                         required time                          7.844    <hidden>
+                         arrival time                          -6.676    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  1.168    <hidden>
+
+Slack (MET) :             1.352ns  (required time - arrival time)
+  Source:                 u_boundary/data_q_reg[15]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            u_boundary/result_reg[2]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.516ns  (logic 1.240ns (35.267%)  route 2.276ns (64.733%))
+  Logic Levels:           4  (LUT4=2 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.026ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 7.704 - 5.000 ) 
+    Source Clock Delay      (SCD):    2.887ns
+    Clock Pessimism Removal (CPR):    0.157ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.973     0.973    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.096     1.069 r  u_clk_bufg/O
+                         net (fo=38, routed)          1.818     2.887    u_boundary/CLK
+    SLICE_X14Y39         FDRE                                         r  u_boundary/data_q_reg[15]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X14Y39         FDRE (Prop_fdre_C_Q)         0.518     3.405 r  u_boundary/data_q_reg[15]/Q
+                         net (fo=3, routed)           0.812     4.217    u_boundary/data_q[15]
+    SLICE_X14Y39         LUT4 (Prop_lut4_I3_O)        0.146     4.363 r  u_boundary/result[5]_i_7/O
+                         net (fo=4, routed)           0.513     4.877    u_boundary/g_lod.u_dut/p_3_in
+    SLICE_X14Y39         LUT5 (Prop_lut5_I0_O)        0.328     5.205 r  u_boundary/result[5]_i_3/O
+                         net (fo=6, routed)           0.467     5.672    u_boundary/g_lod.u_dut/p_13_in
+    SLICE_X14Y38         LUT4 (Prop_lut4_I3_O)        0.124     5.796 r  u_boundary/result[2]_i_2/O
+                         net (fo=1, routed)           0.483     6.279    u_boundary/result[2]_i_2_n_0
+    SLICE_X15Y38         LUT6 (Prop_lut6_I1_O)        0.124     6.403 r  u_boundary/result[2]_i_1/O
+                         net (fo=1, routed)           0.000     6.403    u_boundary/result_d[2]
+    SLICE_X15Y38         FDRE                                         r  u_boundary/result_reg[2]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  <hidden>
+                                                      0.000     5.000 r  clk
+                         net (fo=0)                   0.924     5.924    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     6.015 r  u_clk_bufg/O
+                         net (fo=38, routed)          1.689     7.704    u_boundary/CLK
+    SLICE_X15Y38         FDRE                                         r  u_boundary/result_reg[2]/C
+                         clock pessimism              0.157     7.861    <hidden>
+                         clock uncertainty           -0.135     7.726    <hidden>
+    SLICE_X15Y38         FDRE (Setup_fdre_C_D)        0.029     7.755    u_boundary/result_reg[2]
+  -------------------------------------------------------------------
+                         required time                          7.755    <hidden>
+                         arrival time                          -6.403    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  1.352    <hidden>
+
+Slack (MET) :             1.488ns  (required time - arrival time)
+  Source:                 u_boundary/data_q_reg[15]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            u_boundary/result_reg[5]/D
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.338ns  (logic 1.116ns (33.433%)  route 2.222ns (66.567%))
+  Logic Levels:           3  (LUT4=1 LUT5=2)
+  Clock Path Skew:        -0.026ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 7.704 - 5.000 ) 
+    Source Clock Delay      (SCD):    2.887ns
+    Clock Pessimism Removal (CPR):    0.157ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.973     0.973    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.096     1.069 r  u_clk_bufg/O
+                         net (fo=38, routed)          1.818     2.887    u_boundary/CLK
+    SLICE_X14Y39         FDRE                                         r  u_boundary/data_q_reg[15]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X14Y39         FDRE (Prop_fdre_C_Q)         0.518     3.405 r  u_boundary/data_q_reg[15]/Q
+                         net (fo=3, routed)           0.812     4.217    u_boundary/data_q[15]
+    SLICE_X14Y39         LUT4 (Prop_lut4_I3_O)        0.146     4.363 r  u_boundary/result[5]_i_7/O
+                         net (fo=4, routed)           0.513     4.877    u_boundary/g_lod.u_dut/p_3_in
+    SLICE_X14Y39         LUT5 (Prop_lut5_I0_O)        0.328     5.205 r  u_boundary/result[5]_i_3/O
+                         net (fo=6, routed)           0.471     5.676    u_boundary/g_lod.u_dut/p_13_in
+    SLICE_X14Y38         LUT5 (Prop_lut5_I3_O)        0.124     5.800 r  u_boundary/result[5]_i_1/O
+                         net (fo=6, routed)           0.425     6.225    u_boundary/result_d[5]
+    SLICE_X14Y38         FDRE                                         r  u_boundary/result_reg[5]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  <hidden>
+                                                      0.000     5.000 r  clk
+                         net (fo=0)                   0.924     5.924    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     6.015 r  u_clk_bufg/O
+                         net (fo=38, routed)          1.689     7.704    u_boundary/CLK
+    SLICE_X14Y38         FDRE                                         r  u_boundary/result_reg[5]/C
+                         clock pessimism              0.157     7.861    <hidden>
+                         clock uncertainty           -0.135     7.726    <hidden>
+    SLICE_X14Y38         FDRE (Setup_fdre_C_D)       -0.013     7.713    u_boundary/result_reg[5]
+  -------------------------------------------------------------------
+                         required time                          7.713    <hidden>
+                         arrival time                          -6.225    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  1.488    <hidden>
+
+
+
+

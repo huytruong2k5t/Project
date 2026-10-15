@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.16 — 2026-10-15 — Chốt L1 fused W32 và khảo sát timing toàn NF |
+| Phiên bản | v1.17 — 2026-10-15 — Chuyển phép đo mới sang Xilinx; kiểm primitive riêng trước khối lớn |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -33,6 +33,7 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.14 | 2026-10-14 | Bổ sung corpus/counters/probe NF: main10M/0 mismatch,near52,55548%,run/polarity và packer bins đạt; ModelSim corner82.944/0 mismatch. Đóng Gate3 tuần11,giữ checkpoint cũ và các yêu cầu final/F/PPA còn mở. |
 | v1.15 | 2026-10-14 | Tách masked-popcount/data candidates và hidden trước swap; interface/M0 giữ nguyên. Matrix1,334M và NF10M0 mismatch;398 lint sạch;OPS216→196LUT4,median108,08→112,01MHz trên3seed/cấu hình. Giữ source-bound checkpoints cũ và giới hạn PPA toàn MAC. |
 | v1.16 | 2026-10-15 | Chốt F post-prepack W32/Q29 với residual có dấu/borrow,flags/state và L1 đã kiểm. Oracle p8 exhaustive/FMA smoke; main phân tầng2.208.768 trên Linux/Windows/UBSan0 mismatch. Toàn NF post-route median45,07MHz trên CycloneIV,chưa đạt100MHz; bàn giao pipeline F dự kiến,giữ nguyên RTL NF và các ứng viên riêng. |
+| v1.17 | 2026-10-15 | Theo lựa chọn sinh viên, phép đo PPA mới dùng Vivado/Xilinx D2; giữ các số đo CycloneIV làm lịch sử. Thử riêng shifter/LOD trước SAC/parser/MAC; giữ giao diện, parameter và tổ hợp. A35T/A100T có sẵn, Zynq7020 chưa được cài. Phân biệt R2R của benchmark, ước lượng Fmax từ STA và kiểm trên board. Không đổi hợp đồng số học/pipeline NF/F. |
 
 **Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Profile hiện thực và giới hạn bằng chứng được tóm tắt tại §1.6/§11.10–§11.14. Nhật ký có ngày ở phụ lục là lịch sử, không ghi đè hợp đồng hiện hành hoặc tự mở rộng một mốc PASS thành toàn bộ AC.
 
@@ -53,7 +54,7 @@ Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham
 - **Hai bản bắt buộc:** MAC v1 non-fused làm baseline nội bộ và MAC v2 fused profile §11.8; hoàn thành NF/Gate3 trước, hoàn thành fused trước nghiệm thu đề tài. Exact fused và cấu hình F phụ là MAY.
 - Ba tầng đối chiếu L0 SoftPosit, L1 mô hình thuật toán và Ideal; RTL là thiết kế được kiểm chứng (§6.1).
 - Testbench tự động, coverage, hồi quy, thống kê sai số (Error Rate, MSE, max error).
-- Tổng hợp/P&R Vivado theo **chính sách bậc thang thiết bị (§7.6)**: Ưu tiên UltraScale+ D0 (`xcvu9p`) hoặc D1 (miễn phí), có đường đối chiếu tỉ lệ trên 7-Series D2 (`xc7a100t`) và luồng mã nguồn mở D3/D4; so sánh công bằng giữa NF/F; FP32/FP16 MAC là đối chứng bổ sung.
+- Tổng hợp/P&R Vivado theo **chính sách bậc thang thiết bị (§7.6)**: nền tảng hiện hành từ15/10 là Artix-7 D2 (`xc7a35t`/`xc7a100t`); D0 (`xcvu9p`) dành cho đối chiếu cùng device bài báo khi có điều kiện, D1/D3/D4 là phương án bổ sung. So sánh công bằng giữa NF/F; FP32/FP16 MAC là đối chứng bổ sung.
 - **Chiến lược phân kỳ hiện thực (Staged Implementation Strategy)**:
   - *Giai đoạn 1 (Baseline - Hoàn thành trước Gate 3)*: Hoàn thiện lõi MAC **đơn lẻ cô lập**; exact/RNE khớp L0, approx khớp L1. Bắt tay, giữ đầu ra khi bị chặn và xử lý Zero/NaR đúng là bắt buộc từ giai đoạn này.
   - *Giai đoạn 2 (Advanced Optimization - Tích hợp sau Gate 3)*: Khảo sát chồng lấn giao dịch (mục tiêu $\text{II} \approx n$), bypass Zero/NaR với Order FIFO khi cần giữ thứ tự, Output Skid Buffer và tối ưu Clock Enable (CE). Early-stop khi fraction hết bit 1 đã có trong baseline; không coi đây là chức năng chưa triển khai.
@@ -1152,11 +1153,17 @@ Chọn part mà phiên bản Vivado và license hiện có hỗ trợ; ghi kết
 | --- | --- | --- | --- | --- |
 | D0 | Vivado + xcvu9p | Phiên bản/license và constraints đã chốt | LUT/FF/fmax đo tại device này | Đối chiếu mốc công bố [P],không tự gọi tái hiện khi chưa có RTL/config tác giả |
 | D1 | Vivado + UltraScale+ được bản cài/license hỗ trợ | Xác nhận theo part | LUT/FF/CARRY8, timing đo riêng | Chỉ so tỉ lệ đo cùng nền tảng |
-| D2 | Vivado + 7-series (Artix-7 `xc7a100t`, Zynq-7000 `xc7z020`) | Xác nhận part trong bản đã cài | LUT6/CARRY4; timing phải đo riêng | Chỉ so tỉ lệ |
+| D2 | Vivado + 7-series (Artix-7 `xc7a35t`/`xc7a100t`, Zynq-7000 `xc7z020`) | Xác nhận part trong bản đã cài | LUT6/CARRY4; timing phải đo riêng | Chỉ so tỉ lệ |
 | D3 | Yosys `synth_xilinx` (không cần Vivado; chọn family theo phiên bản Yosys) + số tầng LUT trên đường dài nhất (`ltp`) | Mã nguồn mở | LUT/FF/CARRY, độ sâu logic làm đại lượng thay cho fmax | Bằng chứng chéo, chỉ tỉ lệ |
 | D4 | Yosys + OpenROAD (EXT-A), Nangate45 hoặc SKY130HD | Mã nguồn mở | Diện tích µm², WNS, fmax, công suất ước tính | Không so số của [P]; so xu hướng và tỉ lệ |
 
 **Quy tắc để kết quả vẫn có giá trị**
+
+**Lựa chọn hiện hành 15/10/2026:** sinh viên yêu cầu chuyển các phép đo mới sang Xilinx, bắt đầu bằng hai dynamic shifter và LOD/LZD riêng lẻ; chưa ghép SAC/parser/MAC. Vivado2026.1 build6511674 đã nhận license synthesis/implementation và các part `xc7a35tcpg236-1` (Basys3), `xc7a100tcsg324-1` (ArtyA7-100T/NexysA7-100T). `get_parts *7z020*` trả rỗng; chưa đo PYNQ-Z2/Zynq7020. Không cần cài board-file cho benchmark theo part. Tài liệu part: [Basys3](https://digilent.com/shop/basys-3-amd-artix-7-fpga-trainer-board-recommended-for-introductory-users/), [ArtyA7](https://digilent.com/shop/arty-a7-100t-artix-7-fpga-development-board/).
+
+Ứng viên primitive giữ riêng tại `rtl/candidates/primitives/`, không đưa đồng thời với bản cùng tên trong `rtl/` vào một source list. Snapshot và điều kiện đo nằm ở `results/primitive_xilinx_20261015/manifest.json`; so N12/26/32, right custom-fill và LOD MODE0; ARITH1/MODE1 kiểm chức năng riêng, chưa suy PPA. Benchmark OOC có input/output bank giống nhau, BUFG, clock5ns/uncertainty0,1ns, ba cặp place/route `Default/Default`, `Explore/Explore`, `RuntimeOptimized/Default`, cùng chính sách DSP0/BRAM0. Bank đo không sở hữu valid/state nên ghi đè mỗi cạnh, không có reset/protocol; primitive vẫn thuần tổ hợp, không thay latency giao dịch NF/F.
+
+Số LUT chính lấy **Slice LUTs vật lý** từ `report_utilization`, không dùng tổng số logical LUT cells vì hai cell có thể dùng chung O5/O6. Kiểm setup/hold R2R sau route ở clock thử; `1000/(T−slack)` chỉ là **ước lượng STA** tại clock đó, không gọi là Fmax đã sweep/đạt trên kit. I/O delays của benchmark là ngân sách tổng hợp giả định; cổng OOC chưa có `HD.PARTPIN_LOCS`, không phải timing/bitstream của board. Giữ các báo cáo CycloneIV trước đây làm lịch sử; không so trực tiếp LUT4 với Slice LUTs hoặc quy Fmax leaf thành Fmax MAC. Hai part hiện có cùng Artix7/speed−1, chưa đáp ứng bằng chứng độc lập khác family. Kết quả/giới hạn nghiệm thu cụ thể tại PLAN§8.16.9.
 
 1. **Cùng điều kiện.** Mọi thiết kế được so sánh (posit, PACoGen, FP32, FP16) dùng cùng công cụ, phiên bản, thiết bị, ràng buộc, chế độ out-of-context, không DSP.
 2. **Báo cáo tỉ lệ** `R_LUT = LUT_đề_tài / LUT_baseline`, `R_FF`, `R_fmax = fmax_đề_tài / fmax_baseline`. Mốc của [P] với PACoGen: `R_LUT = 698/1247 = 0.56`, `R_fmax = 575/380 = 1.51`.

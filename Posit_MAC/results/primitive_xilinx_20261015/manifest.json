@@ -1,0 +1,101 @@
+{
+  "seed": 20261015,
+  "sources": {
+    "rtl/dyn_left_shifter.sv": "537bfd27d3145ead9c5f74cc18d287ed83b89e0fd8a3e6ed834b75b55d017fb8",
+    "rtl/candidates/primitives/dyn_left_shifter.sv": "a71fe2ca98286154c48979a04b877ecbafec7c2c4d0a5966c720439d2b526c37",
+    "rtl/dyn_right_shifter.sv": "89514601248f33eef173b113cbed062d2a777ec6f84d1f3b0fc66eacd946ef86",
+    "rtl/candidates/primitives/dyn_right_shifter.sv": "1026a7d03a8316438ecdb5fdf6019a8cfec1d6c4700fee8c35732744fe8852f8",
+    "rtl/lod_lzd_core.sv": "2c5f501f4bee6c70a67099cff299a9ff7f9e0375bc75ada57a73e6addbe432a7",
+    "rtl/candidates/primitives/lod_lzd_core.sv": "abeabd6cec021a48b00648438996b97f86ed508dd127940cf3ff45cfca8a6596",
+    "scripts/prepare_primitive_xilinx.py": "e412df332b0576c643ba56aa54d10be9e3a14cf1ee11a14e58eeb775bd643946",
+    "scripts/verify_primitive_xilinx.ps1": "096d762b1cea67496f8ca119fb2cd04c70d0f16322cd918fa44a7a71a1b69801",
+    "scripts/primitive_xilinx_ppa.tcl": "cd50ffed3df4b1ae815f3eb01c9ed2dc4f1f0a1f156344bc4ade40815ff4d5e9",
+    "scripts/run_primitive_xilinx_ppa.ps1": "1d0f34d281f3c9fe7b669c14bdf50de27bc14dd9bcd26aebc75960f22e5d4192",
+    "scripts/lint_primitive_xilinx.sh": "66338cb42961b20e4458b24b4a66a815607c9813250cc226862eee17de358c1e",
+    "tb/primitive_lod_check.sv": "4b202eec5c84425818ce7f2b9af0f66949a74027eb93d6e0ccec33f9fe5fdfdf",
+    "tb/primitive_shift_check.sv": "33a0763c0edf432bdf8f5676f2e9b0d3b86bd141202a5da6e44a7a2732d51374",
+    "rtl/primitive_ppa_top.sv": "4c3c462b79aa6d8054ca9819526e8b1ff5c9efdda09bf8b98649c01604722151",
+    "rtl/primitive_ppa_boundary.sv": "56f6c82333d1af942318c01d940114bdc070e4f7ec4e3e95192e1b9c4b4bccea",
+    "rtl/posit_mac.vh": "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88"
+  },
+  "parts": [
+    "xc7a35tcpg236-1",
+    "xc7a100tcsg324-1"
+  ],
+  "unavailable_part": "xc7z020clg400-1",
+  "period_ns": 5.0,
+  "uncertainty_ns": 0.1,
+  "synthetic_io_delays_ns": {
+    "input_min": 2.5,
+    "input_max": 2.5,
+    "output_min": 0.0,
+    "output_max": 0.5
+  },
+  "strategies": [
+    "default",
+    "explore",
+    "runtime"
+  ],
+  "strategy_commands": {
+    "default": [
+      "Default",
+      "Default"
+    ],
+    "explore": [
+      "Explore",
+      "Explore"
+    ],
+    "runtime": [
+      "RuntimeOptimized",
+      "Default"
+    ]
+  },
+  "measurement": "OOC input/output banks, R2R; not on-board measurement",
+  "cases": [
+    {
+      "kind": 0,
+      "n": 12
+    },
+    {
+      "kind": 1,
+      "n": 12
+    },
+    {
+      "kind": 2,
+      "n": 12
+    },
+    {
+      "kind": 0,
+      "n": 26
+    },
+    {
+      "kind": 1,
+      "n": 26
+    },
+    {
+      "kind": 2,
+      "n": 26
+    },
+    {
+      "kind": 0,
+      "n": 32
+    },
+    {
+      "kind": 1,
+      "n": 32
+    },
+    {
+      "kind": 2,
+      "n": 32
+    }
+  ],
+  "kind": {
+    "0": "left",
+    "1": "right_custom_fill",
+    "2": "lod_mode0"
+  },
+  "test_configs": {
+    "shifter": 37,
+    "lod": 80
+  }
+}

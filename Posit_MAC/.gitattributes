@@ -69,3 +69,13 @@ results/week12/** -text
 # Preserve the byte hashes recorded by the read-only Word note review.
 scripts/review_note_primitives.py -text
 results/note_review_20261015/** -text
+
+# Primitive Xilinx snapshots/evidence are byte-hashed; preserve source bytes.
+rtl/candidates/primitives/*.sv -text
+rtl/primitive_ppa*.sv -text
+tb/primitive_*_check.sv -text
+scripts/*primitive_xilinx*.py -text
+scripts/*primitive_xilinx*.ps1 -text
+scripts/primitive_xilinx*.tcl -text
+scripts/lint_primitive_xilinx.sh text eol=lf
+results/primitive_xilinx_20261015/** -text

@@ -939,9 +939,9 @@ Mỗi module mộtfile,cổng mỗi dòng,named mapping,cast/width tường minh
 
 ### 8.16. Kế hoạch tối ưu timing/LUT trước khi sửa RTL — bản xem xét 15/10/2026
 
-**Trạng thái: DRAFT — chỉ lập kế hoạch.** Sinh viên xem xét, chỉnh sửa và lựa chọn phạm vi trước khi triển khai. Phiên lập kế hoạch không sửa `.sv`, L1, script kiểm chứng, constraints hoặc các báo cáo nghiệm thu; không chạy lại mô phỏng, synthesis hay P&R.
+**Trạng thái cập nhật 15/10: đã cho phép triển khai riêng BASE-01/02 và chuyển phép đo mới sang Vivado/Xilinx.** Các phần SAC/parser/MAC/pipeline lớn vẫn là kế hoạch xem xét. Phần mô tả phiên lập kế hoạch/rà Note ở dưới giữ ý nghĩa lịch sử; thực thi primitive và bằng chứng mới tập trung tại §8.16.9.
 
-Phạm vi là IP MAC NF hiện tại và phần dùng chung với F dự kiến tuần13. Kit FPGA, AXI/DMA và AI accelerator là bước tích hợp tiếp theo sau khi chọn phần cứng; chưa đưa vào đường bắt buộc của đợt tối ưu này. Các hợp đồng số học và tiêu chí nghiệm thu vẫn lấy từ SPEC v1.16 và Digital_Design_Guidelines.md.
+Phạm vi là IP MAC NF hiện tại và phần dùng chung với F dự kiến tuần13. Kit FPGA, AXI/DMA và AI accelerator là bước tích hợp tiếp theo sau khi chọn phần cứng; chưa đưa vào đường bắt buộc của đợt tối ưu này. Các hợp đồng số học và tiêu chí nghiệm thu lấy từ SPEC v1.17 (giữ số học v1.16) và Digital_Design_Guidelines.md; bước được phép triển khai hiện tại giới hạn ở leaf§8.16.9.
 
 #### 8.16.1. Mục tiêu và những điều giữ cố định
 
@@ -971,7 +971,7 @@ Các delay là số đo seed1 để định hướng, không phải dự đoán 
 
 #### 8.16.3. Các bước thực hiện được đề xuất
 
-Các bước RTL/PPA dưới đây **chưa thực hiện trong đợt tối ưu này**. Rà soát Note.docx và kiểm đẳng thức số học tại §8.16.8 chỉ là bằng chứng đánh giá đề xuất, không phải kiểm RTL. Theo yêu cầu mới, tối ưu khối cơ sở trước rồi mới ghép SAC/parser và các khối lớn. Những thử nghiệm đơn vị đã có ở §8.12/8.13 được dùng làm đầu vào, không đổi thành bằng chứng toàn MAC.
+BASE-01/02 được triển khai riêng theo yêu cầu mới; trạng thái tại §8.16.9. Các bước tích hợp còn lại **chưa thực hiện trong đợt tối ưu này**. Rà soát Note.docx và kiểm đẳng thức số học tại §8.16.8 chỉ là bằng chứng đánh giá đề xuất, không phải kiểm RTL. Theo yêu cầu mới, tối ưu khối cơ sở trước rồi mới ghép SAC/parser và các khối lớn. Những thử nghiệm đơn vị đã có ở §8.12/8.13 được dùng làm đầu vào, không đổi thành bằng chứng toàn MAC.
 
 | ID | Công việc và phương án | Kết quả cần có để xem xét bước tiếp |
 | --- | --- | --- |
@@ -1034,7 +1034,7 @@ OPS/MUX relocation và reset fanout là nhánh sau: chỉ chuyển swap khi cone
 | T0 — source/lint | So diff với snapshot; strict Verilator `--timing -Wall`, các tuple/parameter chịu ảnh hưởng; xem latch/width/signedness | Không lỗi lint chưa giải quyết, không latch; chỉ có thay đổi dự định |
 | T1 — leaf | Baseline/candidate/oracle độc lập; directed trước random, exhaustive miền nhỏ khả thi; giữ seed cố định trước chạy | 0 mismatch trên mọi output, gồm flags và trạng thái lỗi được công bố |
 | T2 — pipeline/top pilot | Native tối thiểu20k completed mỗi tuple8/0,16/1,32/2,32/3 đang hỗ trợ; trial32/3 ≥100k. ModelSim replay/corner với CK2Q và4-state | Reset/startup, busy/stall, stable output, thứ tự, flags, acc_clr/acc_mode và lịch cạnh đúng; aborted không tính completed |
-| T3 — PPA khảo sát | BASE-01/02 đo leaf, BASE-03 đo cặp LOD→shifter cùng bank trước; sau đó ứng viên tích hợp đo whole-NF cùng điều kiện. Seed1 để xem cone/chi phí, đủ1/2/3 cho ứng viên được giữ | Report đủ, parse thiếu phải FAIL; ghi số đo kể cả seed bất lợi; benchmark leaf không thay whole-NF |
+| T3 — PPA khảo sát | BASE-01/02 đo leaf, BASE-03 đo cặp LOD→shifter cùng bank trước; sau đó ứng viên tích hợp đo whole-NF cùng điều kiện. Vivado dùng ≥3 chiến lược được tool hỗ trợ, matched trước/sau; không giả định có tùy chọn seed như Quartus | Report đủ, parse thiếu phải FAIL; ghi cả run bất lợi; benchmark leaf không thay whole-NF |
 | T4 — xác nhận tổ hợp | Ứng viên kết hợp sau khi chọn: replay corpus NF phân tầng10M của checkpoint hiện hành với runner/lịch cập nhật; đủ ModelSim corner và coverage liên quan | 0 mismatch, coverage không suy giảm thiếu giải thích, freeze nguồn/corpus/commands; không gọi là đã thay toàn ma trận final |
 
 Exact ở8/0,16/1,32/2 dùng SoftPosit đúng format khi áp dụng;32/3 dùng integer/rational oracle độc lập. NF và F so L1 riêng; bit-exact trước/sau đối chiếu theo transaction ID nếu retiming, không ép output cùng chu kỳ khi latency được phép đổi.
@@ -1045,10 +1045,10 @@ T4 là kiểm an toàn sau refactor, **không hạ AC01/AC02/AC04 hoặc SPEC§6
 
 #### 8.16.5. Quy tắc đo và lựa chọn
 
-1. Giữ nền tảng Cyclone IV của tuần12 để đo tác động refactor trước. Đổi sang kit Artix-7/Zynq thì tạo baseline mới cùng part/tool/constraints cho cả hai bản; số LUT4 và LUT6 không quy đổi trực tiếp. Chưa chọn kit hoặc pinout nên chưa có board signoff.
+1. Theo lựa chọn mới của sinh viên15/10, chỉ dùng Vivado/Xilinx cho các phép đo mới. Tạo baseline Artix-7 mới cùng part/tool/constraints cho cả hai bản; giữ CycloneIV tuần12 làm lịch sử, không chạy thêm Quartus/Altera. LUT4 và Slice LUTs không quy đổi trực tiếp. Chưa có pinout/board signoff; Zynq7020 hiện chưa được cài.
 2. Dùng snapshot baseline hiện có khi hash/runner/constraints còn phù hợp; runner mới phải ghi thư mục kết quả riêng như `results/nf_optimization/<candidate>/`, không ghi đè `results/week12/nf_ppa` hoặc report lịch sử. Không sửa nguồn/constraints trong lúc run.
-3. Khóa clock mục tiêu10ns, ngân sách I/O khảo sát max0,5/min0,1ns và derive_clock_uncertainty như tuần12 để so trước/sau. Không bỏ exact logic, đổi width/OPS, thêm false-path/multicycle, đổi seed hoặc hạ clock riêng cho ứng viên nhằm tạo lợi thế.
-4. Báo LUT/FF/arithmetic-mode LE/DSP/memory, WNS/TNS setup/hold/recovery/removal, unconstrained paths, top paths theo stage, fanout và min/median/max ba seed. Arithmetic-mode LE không cộng thêm như một loại LUT độc lập; Xilinx dùng tên tài nguyên tương ứng.
+3. Khóa riêng constraints của đợt Xilinx tại §8.16.9/manifest trước đo ứng viên; mốc10ns và derive_clock_uncertainty trước đây thuộc Quartus tuần12, không áp lẫn vào Vivado. Không bỏ exact logic, đổi width/OPS, thêm false-path/multicycle, đổi chiến lược hoặc hạ clock riêng cho ứng viên nhằm tạo lợi thế.
+4. Báo tài nguyên theo vendor, WNS/TNS setup/hold/recovery/removal, unconstrained paths, top paths theo stage, fanout và min/median/max ≥3 run/chiến lược matched. Xilinx dùng Slice LUTs/FF/CARRY4/DSP/BRAM; arithmetic-mode LE của Quartus cũ không cộng thêm như một loại LUT độc lập. Primitive/measurement bank không có reset thì recovery/removal ghi không áp dụng.
 5. Fmax từ timing model là khảo sát. Sau khi chọn tần số vận hành phải P&R/xác nhận setup và hold với constraints của tần số đó; không chỉ lấy nghịch đảo data delay hoặc Fmax báo cáo ở run đang fail10ns rồi gọi đã closure.
 6. Với `f_run_Hz` tính bằng Hz, đánh giá `throughput_ops_s=f_run_Hz/II`, `latency_ns=10^9*L_handshake/f_run_Hz` và throughput/LUT ở n2/4/8, dùng số vòng thực tế q và không stall; báo riêng workload có early-stop. Không dùng cfg_n thay q hoặc lấy II của leaf adder làm II của MAC.
 7. Với NF baseline một giao dịch, ngân sách hiện hành là `L_valid=q+10`, `L_handshake=q+11`, `II_min=q+12`. Nếu chỉ thêm d tầng nối tiếp và giữ controller thì ngân sách dự kiến tăng d cho cả ba đại lượng; phải kiểm theo cạnh, reset và stall trước ghi thành kết quả. Retiming A2/A3 cố gắng d=0. Thay feedback SAC cần lập lịch riêng, không áp máy móc công thức này.
@@ -1083,10 +1083,10 @@ Các lựa chọn còn mở để sinh viên chỉnh trước triển khai:
 | --- | --- | --- |
 | Thứ tự | Shifters → LOD/LZD → cặp LOD/shifter → SAC-A/B/C → các khối lớn theo STA | Có thêm parser XOR, radix4, OPT-06 hoặc direct round_unpacked hay không |
 | Ưu tiên đánh đổi | Đúng chức năng trước; ưu tiên timing/throughput, hạn chế bank/context dư | Ngân sách tăng FF/LUT và latency tối đa chấp nhận |
-| Thiết bị / tần số | Giữ Cyclone IV cho vòng so refactor; khảo sát10ns, sau đó chốt target theo part thực | Kit cuối và mục tiêu được GVHD thống nhất; chưa mặc định100MHz hay250MHz là ngưỡng nghiệm thu |
+| Thiết bị / tần số | Đã chọn Vivado/Xilinx D2; A35T và A100T có sẵn. Đợt leaf khảo sát5ns/200MHz, chưa đặt mục tiêu toàn MAC | Kit cuối và mục tiêu được GVHD thống nhất; PYNQ-Z2 chưa đo do thiếu device support, chưa có board signoff |
 | Thời điểm freeze | Sau kiểm tổ hợp, trước lượt final tuần14 | Chọn cấu hình có bằng chứng; không tự thay baseline ngay khi pilot đạt |
 
-Sau khi sinh viên sửa/chọn kế hoạch mới bắt đầu OPT-00. Phiên này chỉ cập nhật PLAN và tiến độ, kiểm diff và sao lưu tài liệu; không có kết quả chức năng/PPA mới.
+Phiên lập kế hoạch ban đầu chỉ cập nhật PLAN và tiến độ. Yêu cầu tiếp theo đã cho phép bắt đầu OPT-00/BASE-01/02 trong phạm vi leaf tại §8.16.9; các lựa chọn tích hợp lớn chưa được tự động chốt.
 
 #### 8.16.8. Rà soát Note.docx và chuyển sang tối ưu khối cơ sở — 15/10/2026
 
@@ -1120,3 +1120,43 @@ Chưa compile mã tham khảo, chưa RTL simulation/formal/XZ equivalence, synth
 Theo thứ tự mới, BASE-01 là điểm bắt đầu triển khai được đề xuất: left shifter riêng, sau đó right shifter riêng; BASE-02 LOD/LZD tiếp theo, rồi đo cặp ở BASE-03. Mỗi leaf giữ I/O/parameter, không thêm clock hoặc stage. Sau khi đủ T0/T1 và benchmark leaf mới ghép SAC/parser, sau đó whole-NF; không chạy ngay toàn bộ regression cuối cho mỗi thay đổi nhỏ.
 
 Tái chạy phần đánh giá bằng Python3 chuẩn, đọc đúng Note.docx trong doc; phiên này dùng Python bundled của workspace. Lệnh từ Posit_MAC: `python scripts/review_note_primitives.py --note ../doc/Note.docx`. Không tạo thêm Markdown, không sửa Word hoặc RTL trong phiên rà soát.
+
+#### 8.16.9. Thực thi primitive trên Vivado/Xilinx — 15/10/2026
+
+Sinh viên đã chọn bỏ Altera cho các phép đo mới, bắt đầu riêng shifters và LOD/LZD. BASE-01/02 dùng ứng viên độc lập trong `rtl/candidates/primitives/`; RTL sản xuất của NF, SAC, parser, SBM và các khối lớn giữ nguyên. Chưa triển khai BASE-03 hoặc các OPT tích hợp. Hai part đo là `xc7a35tcpg236-1` (Basys3) và `xc7a100tcsg324-1` (Arty/NexysA7-100T), cùng Artix7/speed−1. Bản cài trả rỗng cho `get_parts *7z020*`, nên PYNQ-Z2 chưa có số đo; không tự cài device support hoặc sửa license. Vivado2026.1 build6511674 nhận license synthesis/implementation; XSim hiện chạy được.
+
+**Cách refactor:**
+
+- Left/right bỏ comparator kiểm `b[S-1:0]>=N`. Với bit nhị phân, mỗi tầng là phép dịch theo hằng; tổng số bit dịch bằng phần thấp của b. Khi tổng này≥N, cascade tự cho toàn0 ở left hoặc toàn fill ở right. Vẫn giữ guard OR phần b cao ngoài cascade; right giữ cả custom fill và ARITH. N1/SHIFT_W ngắn có generate riêng.
+- LOD/LZD tạo K0 cho subtree không hợp lệ ngay trong cây bằng `~vld_hi & vld_lo` ở bit vị trí mới. Các bit thấp chọn từ subtree tương ứng; bit cao chưa dùng gán0. Vì subtree vô hiệu đã có K0, root không cần MUX che K cuối; không chỉ xóa MUX của bản cũ. Giữ padding phía thấp, cả MODE và S override.
+- Không thêm clock, bank hoặc stage trong DUT, không thay cổng/parameter. I/O đã có tên K/S/MODE được giữ để tương thích; không đổi tên vì guideline quy ước chữ thường.
+
+**Kiểm chức năng đã đạt:** XSim2026.1, seed20261015,117 cấu hình và7.275.184 lượt đối chiếu,0 mismatch. Shifter37 cấu hình N1/2/3/5/8/12/26/27/29/31/32/33/64, SHIFT_W nhỏ/bằng/lớn, mọi mã shift và cả fill0/fill1/sign; N≤8 vét cạn input. LOD80 cấu hình N2..12/26/27/29/31/32/33/53/54/64,MODE0/1,S tối thiểu/tăng1; N≤12 vét cạn, width lớn10k random kèm zero/ones/one-hot/one-cold. Baseline và candidate cùng được so với oracle scan tuyến tính hoặc ánh xạ từng output bit. Output dùng kiểm4-state để bắt X trên input nhị phân đã biết; không tuyên bố tương đương mọi tổ hợp X/Z. Strict Verilator5.032 `--timing -Wall`:197 lần gọi đạt, không warning/error, không waive lint ứng viên.
+
+**Hợp đồng đo:** snapshot/hash `results/primitive_xilinx_20261015/manifest.json`, N12/26/32, ba leaf left/right custom-fill/LOD MODE0; ARITH1/MODE1 chưa đo PPA. Cùng structural top/BUFG và input/output bank, clock5ns/uncertainty0,1ns; ngân sách I/O giả định input min=max2,5ns,output max0,5/min0ns. Smoke đầu dùng min0,5ns có hold ở cổng OOC; đã khóa ngân sách mới trước mọi phép đo ứng viên. Không thêm timing exception; R2R luôn single-cycle. Ba cặp place/route là `Default/Default`, `Explore/Explore`, `RuntimeOptimized/Default`,108 lượt cho cả hai part. Help chung còn liệt kê AggressiveExplore nhưng placement Artix7 từ chối; lần lỗi lưu riêng, không tính thành kết quả hoặc thành chiến lược đã đạt.
+
+**Giới hạn diễn giải:** lấy Slice LUTs vật lý từ utilization, không cộng số logical LUT cells có thể ghép O5/O6. Tần số200MHz chỉ được xác nhận cho R2R khi cả setup và hold tại5ns đạt. `1000/(5−slack)` là ước lượng STA trên netlist đã route, chưa là Fmax được sweep hoặc clock đo trên kit; I/O OOC chưa có PARTPIN_LOCS, không có board signoff. Benchmark không sở hữu protocol/reset state; FF ở bank ghi đè mỗi cạnh. Không suy throughput/latency MAC hoặc thay trạng thái Gate3/Gate4. Chiến lược có thể cho cùng placement ở thiết kế nhỏ; không coi ba kết quả giống nhau là ba seed ngẫu nhiên độc lập.
+
+**Đã hoàn tất khảo sát BASE-01/02:**108/108 lượt sau route, collector và entry replay kiểm lại đạt. Cả108 đường R2R đại diện setup/hold đạt ở5ns/200MHz; worst setup slack+0,736ns, worst hold slack+0,032ns. Không latch, routing error hoặc endpoint nội bộ thiếu ràng buộc; DSP/BRAM/CARRY4 đều0. Cả25 file RTL sản xuất giữ nguyên hash. Có31/108 run còn vi phạm setup/hold **tại cổng I/O OOC**, worst−0,017ns; không tuyên bố toàn benchmark hoặc board đã closure. Recovery/removal không áp dụng vì DUT/bank đo không có reset.
+
+**Bảng dưới dùng trung vị ba chiến lược**, đơn vị Slice LUTs vật lý và MHz. `f_STA` là `1000/(5−R2R_setup_slack)`, **ước lượng từ STA**, không phải tần số đã sweep/đạt trên kit. Số cũ→ứng viên; FF giữ nguyên ở từng cấu hình. Đầy đủ min/median/max, delay logic/routing, flags độ dao động và source/report hash tại `results/primitive_xilinx_20261015/{summary.json,comparison.csv}`; raw reports giữ riêng từng run.
+
+| N | Leaf | A35T LUT cũ→mới | A35T f_STA cũ→mới | A100T LUT cũ→mới | A100T f_STA cũ→mới |
+| --- | --- | --- | --- | --- | --- |
+| 12 | Left | 22→20 | 337,15→302,11 | 22→20 | 371,06→301,57 |
+| 12 | Right/custom-fill | 21→23 | 321,54→340,83 | 21→23 | 348,68→351,99 |
+| 12 | LOD/MODE0 | 9→9 | 312,21→312,21 | 9→9 | 312,01→312,01 |
+| 26 | Left | 58→56 | 263,09→272,33 | 58→56 | 259,07→263,85 |
+| 26 | Right/custom-fill | 67→67 | 262,95→249,19 | 67→67 | 272,55→258,87 |
+| 26 | LOD/MODE0 | 21→24 | 273,15→261,16 | 21→23 | 263,64→270,86 |
+| 32 | Left | 70→70 | 256,94→256,94 | 70→70 | 254,65→254,65 |
+| 32 | Right/custom-fill | 84→84 | 268,38→268,38 | 84→84 | 259,40→259,40 |
+| 32 | LOD/MODE0 | 26→29 | 242,78→234,52 | 26→29 | 243,43→262,74 |
+
+**Lựa chọn sau khảo sát:** giữ bản đang dùng, chưa promote ứng viên vào NF/SAC/parser. Left26 giảm2LUT (−3,45%), median f_STA tăng3,51%/1,85% nhưng lợi ích nhỏ so dao động chiến lược, đặc biệt A100T; chưa gọi là cải thiện timing đáng kể/bền vững. Left12 giảm2LUT nhưng chậm hơn10,39%/18,73%. Right12 nhanh hơn6,00%/0,95% với giá tăng2LUT; Right26 không giảm LUT và chậm khoảng5% ở cả hai part. LOD12 và shifters32 trùng kết quả; LOD26/32 tăng LUT, timing phụ thuộc part. LOD32 giảm4→3 tầng logic nhưng A35T vẫn chậm hơn3,40%; A100T tăng7,93% với3LUT thêm. Không chỉ dựa số tầng/MUX trong RTL để kết luận.
+
+Baseline left12/A100T có f_STA334,11–371,06MHz, chênh11,06% theo max/min−1; đã đánh dấu dao động>10%, không dùng371,06 như một giá trị ổn định. Những chiến lược cho cùng placement không được coi là seed ngẫu nhiên độc lập. Chưa đo PPA ARITH1/MODE1, chưa chạy board/bitstream hoặc cặp LOD→shifter. Bước xem xét tiếp theo vẫn là BASE-03/biến thể thứ tự stage hoặc radix4 riêng, trước khi quyết định tích hợp; không tự mở SAC/MAC trong phiên này. Nguồn/log ở `results/primitive_xilinx_20261015/`, không ghi đè report tuần12.
+
+Tái chạy từ Posit_MAC: `powershell -NoProfile -File scripts/verify_primitive_xilinx.ps1`; WSL: `bash scripts/lint_primitive_xilinx.sh` từ đúng thư mục dự án; lần lượt `powershell -NoProfile -File scripts/run_primitive_xilinx_ppa.ps1 -Part xc7a35tcpg236-1` và `-Part xc7a100tcsg324-1`; cuối cùng `python scripts/collect_primitive_xilinx.py`. Các runner đặt runtime/tmp/work/log trong dự án và không nạp profile WSL. Chỉ đọc/chạy tool hệ thống; không thay cài đặt, registry, license hoặc home.
+
+Khi dùng lại checkpoint đã lưu, vào bằng `powershell -NoProfile -File scripts/replay_primitive_xilinx.ps1 -Mode check` để kiểm hash nguồn/snapshot/report và thu thập lại số liệu. `-Mode verify` chạy lại XSim; `-Mode resume -Part <part>` tiếp tục các lượt PPA chưa xong, không có nghĩa tự chạy P&R mới cho các dòng đã có. Entry này kiểm nguồn trước khi gọi các helper phía trên. Không dùng lại thư mục kết quả/checkpoint hiện tại cho RTL hoặc constraints mới; phải tạo study mới và khóa manifest mới. Không gọi helper chuẩn bị để ghi đè snapshot rồi dùng lại DCP của study cũ.

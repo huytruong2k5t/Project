@@ -1067,7 +1067,7 @@ BASE-01/02 được triển khai riêng theo yêu cầu mới; trạng thái t�
 | OPT-07 | Chọn tổ hợp ứng viên có lợi, kiểm tương tác và chạy regression tích hợp chính thức; cập nhật SPEC/lịch, freeze và backup sau khi có bằng chứng | 0 mismatch, protocol/coverage đạt phạm vi áp dụng, ≥3 P&R run/config; ghi rõ phần final còn thiếu |
 | OPT-08 | Bàn giao thay đổi dùng chung cho RTL F tuần13; chuẩn bị comparator NF approximate-only đã kiểm riêng trước paired PPA | NF/F cùng precision, OPS, feature policy, part/tool/constraints; tách lợi ích fusion khỏi lợi ích refactor |
 
-**Thứ tự hiện hành sau góp ý Note.docx:** OPT-00 → BASE-01 → BASE-02 → BASE-03 → OPT-05 (SAC-A/B/C đã chọn) → OPT-01 → OPT-02 → đọc lại STA → chọn OPT-03/04 theo đường dài hiện tại → OPT-07 → OPT-08. Nhánh parser XOR một detector ở §8.16.8 chỉ thử sau các leaf, riêng với SAC để tách tác động. OPT-06, đổi thứ tự stage/radix4 và parser XOR là nhánh lựa chọn, không chặn RTL F nếu lợi ích nhỏ. Nút thắt toàn NF vẫn là norm/pack/parse của §8.16.2; không coi nghiệm thu leaf là đã xử lý nút thắt đó.
+**Thứ tự hiện hành sau góp ý Note.docx:** OPT-00 → BASE-01 → BASE-02 → BASE-03 → OPT-05 (SAC-A/B/C đã chọn) → OPT-01 → OPT-02 → đọc lại STA → chọn OPT-03/04 theo đường dài hiện tại → OPT-07 → OPT-08. Cập nhật16/10: sau khi đóng leaf§8.18, sinh viên chọn parser XOR một detector§8.19 trước SAC, đo riêng để tách tác động. OPT-06, đổi thứ tự stage/radix4 và parser XOR là nhánh lựa chọn, không chặn RTL F nếu lợi ích nhỏ. Nút thắt toàn NF vẫn là norm/pack/parse của §8.16.2; không coi nghiệm thu leaf là đã xử lý nút thắt đó.
 
 **OPT-01 — điều kiện về parameter:** các lát bit ở §8.14 chỉ minh họa trường hợp `F_IN=2F+1`. Cần giữ đúng mapping khi override `F_IN`, `ACC_W`, `SF_W` trong miền công bố; dùng generate/ánh xạ từng bit tại elaboration để tránh dải âm, replication âm và out-of-range. Với `EXACT_EN=0`, không tham chiếu nhánh exact không tồn tại. Không rút width, bỏ carry hay coi hai bit padding của FLOOR là numerical sticky. Kiểm cả carry/no-carry, zero/NaR payload và scale signed biên.
 
@@ -1150,7 +1150,7 @@ Tính từ khi sinh viên chọn phạm vi, có thể làm sớm trong tuần13;
 | Chặng | Thời lượng dự kiến | Điểm kiểm soát |
 | --- | --- | --- |
 | A — OPT-00 và BASE-01/02/03 | 1–2 ngày | Leaf shifter/LOD và cặp LOD→shifter trước; giữ nguyên latency |
-| B — OPT-05; parser XOR nếu chọn | 1–2 ngày | SAC-A/B/C theo thứ tự đã chọn; thử riêng parser, không ghép đồng thời để suy lợi ích |
+| B — parser XOR đã chọn16/10, rồi OPT-05 | 1–2 ngày | SAC-A/B/C theo thứ tự đã chọn; thử riêng parser, không ghép đồng thời để suy lợi ích |
 | C — OPT-01/02 rồi pipeline/retiming theo STA | 1–3 ngày | Chỉ đi khối lớn sau kiểm leaf; báo FF/latency/II trước chọn tổ hợp |
 | D — OPT-07, bàn giao OPT-08 | 1–2 ngày | Regression tích hợp, matched PPA, freeze/backup và bàn giao RTL F |
 
@@ -1160,7 +1160,7 @@ Các lựa chọn còn mở để sinh viên chỉnh trước triển khai:
 
 | Nội dung | Đề xuất ban đầu | Chưa chốt |
 | --- | --- | --- |
-| Thứ tự | Shifters → LOD/LZD → cặp LOD/shifter → SAC-A/B/C → các khối lớn theo STA | Có thêm parser XOR, radix4, OPT-06 hoặc direct round_unpacked hay không |
+| Thứ tự | Shifters → LOD/LZD → cặp LOD/shifter → SAC-A/B/C → các khối lớn theo STA | Parser XOR đã chọn16/10; còn radix4, OPT-06 hoặc direct round_unpacked |
 | Ưu tiên đánh đổi | Đúng chức năng trước; ưu tiên timing/throughput, hạn chế bank/context dư | Ngân sách tăng FF/LUT và latency tối đa chấp nhận |
 | Thiết bị / tần số | Đã chọn Vivado/Xilinx D2; A35T và A100T có sẵn. Đợt leaf khảo sát5ns/200MHz, chưa đặt mục tiêu toàn MAC | Kit cuối và mục tiêu được GVHD thống nhất; PYNQ-Z2 chưa đo do thiếu device support, chưa có board signoff |
 | Thời điểm freeze | Sau kiểm tổ hợp, trước lượt final tuần14 | Chọn cấu hình có bằng chứng; không tự thay baseline ngay khi pilot đạt |
@@ -1180,7 +1180,7 @@ Phiên lập kế hoạch ban đầu chỉ cập nhật PLAN và tiến độ. Y
 | Thay loop padding bằng nối vector | Đúng với parameter hợp lệ, dễ đọc | Loop hiện tại unroll thành wiring, không phải dịch tuần tự theo clock. Không mặc định có lợi ích LUT/timing |
 | Đảo thứ tự stage shifter | Tương đương số học khi giữ fill và guard; là ứng viên đo riêng | K MSB vẫn chờ cây valid phía dưới, không phải chỉ một cổng tính từ input. Các bit thấp chỉ bị xóa khi select dịch lớn bằng1, không luôn là hằng0. Cần arrival time sau mapping/route |
 | Radix4 / ghép hai MUX2 thành MUX4 trong LUT6 | Có thể phù hợp 7-series/UltraScale+; tùy tool và part | Không cam kết mỗi hai stage luôn thành một LUT6 hoặc delay giảm một nửa. Nền tảng tuần12 là LUT4 CycloneIV; phải đo riêng khi chuyển FPGA |
-| Parser dùng XOR và một detector | Ý tưởng khả thi sau khi sửa điểm bắt đầu đếm | Giữ r riêng; XOR `magnitude[NB-3:0]` với r, đếm NB-2 bit sau FRB. Nếu không match thì cnt=NB-2. Không đưa count từ vector NB-1 bit gồm FRB vào logic cnt/k/payload hiện tại |
+| Parser dùng XOR và một detector | Đã được sinh viên chọn thực hiện16/10; kết quả tại §8.19 | Giữ r riêng; XOR `magnitude[NB-3:0]` với r, đếm NB-2 bit sau FRB. Nếu không match thì cnt=NB-2. Không đưa count từ vector NB-1 bit gồm FRB vào logic cnt/k/payload hiện tại |
 
 **Sửa lệch một bit của parser:** parser hiện dùng cnt=m-1 khi có terminator, không dùng m. Ví dụ posit8/0 `0x40` là1: cnt0, k0, sf0. Đếm cả FRB theo XOR rồi đưa count1 vào công thức cũ sẽ thành k1/sf1, tức2. Cách XOR đúng là giữ cùng miền đếm sau FRB; nếu chọn đếm cả FRB thì phải thiết kế lại chuyển đổi count và xử lý no-terminator, không thay trực tiếp một dây. Khi hiện thực phải đồng bộ comb/pipeline và SPEC§5.2, giữ cnt/r/payload bank và hai tầng elastic đã kiểm.
 
@@ -1292,3 +1292,25 @@ KIND3/4 của benchmark dùng shifter SW+1. KIND3 bit thêm bằng0 và được
 Build/cache/DCP/wave không đưa vào Git; giữ snapshot/checker, report/CSV, raw coverage, lệnh/seed/tool/hash trong gói nhỏ có thể restore. Không chạy TableI, không tự tăng trạng thái Gate4 hoặc nghiệm thu tuần14; PLAN§8.17 vẫn dành cho W14.
 
 **Trạng thái toàn study:** hoàn tất510 lượt place/route,114 netlist/1.140.000 checks/0 mismatch; collector --final COMPLETE. Build/cache mới đã dọn có kiểm hash dữ liệu giữ lại; nguồn/report được nén để backup. Trạng thái canonical tại results/primitive_v2_20261016/summary.json. Commit/push thực hiện cuối phiên, không suy số toàn MAC hoặc thay Gate.
+
+### 8.19. Parser dùng một detector qua XOR — 16/10/2026
+
+Theo lựa chọn mới của sinh viên, ưu tiên giảm diện tích parser và chấp nhận đánh đổi timing P1. Triển khai sau khi đóng khảo sát primitive§8.18, độc lập với SAC/retiming khối lớn. Cả `rtl/parser/posit_parser_comb.sv` và `posit_parser.sv` dùng một `lod_lzd_core` MODE0,N=NB-2; `terminator_bits=magnitude[NB-3:0] ^ {(NB-2){r}}`. Giữ FRB ngoài miền đếm, no-terminator→cnt=NB-2 và payload từ magnitude gốc. Giữ nguyên I/O/parameter, signed scale, hai tầng elastic, lịch E0/E1/E2, reset và II1; không giảm precision hoặc thay L1.
+
+Kiểm chức năng bằng Verilator5.032 --timing/CK2Q: tổ hợp2.465.812 và pipeline2.465.812 lượt,0 mismatch; exhaustive raw8/0,16/1, phân tầng32/2,32/3. GeneratorL1 được so với decoder tuần tự độc lập,seed20261005; min19.672 mẫu/polarity/run và39.344/group/sign ở từng format32. Pipeline kiểm reset rỗng/một/hai slot, hủy3 giao dịch/profile, stall dài/full, bubbles, simultaneous push/pop, thứ tự và latency. Chín tuple/width biên có52.992 lượt; independent scan và so chu kỳ với bản dual-detector đóng băng, gồm32/28,SF_W36;32/3,SF_W9 và32/2,SF_W40. Không tuyên bố vét cạn toàn miền tham số.
+
+Strict lint parser16 profile sạch; integration17 profile sạch. NF32/2,NF32/3 và F32/3 mỗi bản10.000 giao dịch0 mismatch; F có59.340 đối chiếu stage. Đây là regression cục bộ/smoke cho checkpoint refactor, không chạy lại ma trận final10M hoặc coi như đã đo Fmax toàn MAC. Không chạy TableI.
+
+Bằng chứng tại `results/parser_xor_20261016`: source/baseline và source/xor, fixture/source SHA, seed/tool/compiler/commands và summary.json. PPA đã hoàn thành24 lượt: hai Artix7,ES2/3,Default/Explore/RuntimeOptimized, cùng input bank34FF và clock5ns/uncertainty0,1ns. Không lấy số input-to-register của thử nghiệm OOC không có bank (`ppa_unbanked_rejected`) để kết luận. R2R từ input bank đến P1 và toàn benchmark báo riêng; file p2.rpt/p2_slack.txt của driver thực chất chứa toàn R2R, không phải phép đo tách riêng P2. OOC chưa có HD.CLK_SRC, nên không phải board/clock-tree signoff; ba directive không phải ba random seed.
+
+
+**Kết luận nghiệm thu refactor parser:** giữ bản XOR một detector làm nguồn hiện hành theo ưu tiên diện tích của sinh viên. Median LUT225→205 (−8,89%) ở cả bốn part/profile; FF114 gồm34FF input bank, không tăng. Từng cặp cùng strategy đều giảm LUT (8,89–12,79%). Không thay I/O/parameter hoặc bất kỳ bank/handshake/reset nào; collector kiểm đồng nhất header, bank/control và source SHA.
+
+| Part | NB/ES | Median LUT cũ → XOR | FF benchmark | P1 STA MHz cũ → XOR | Thay đổi |
+| --- | --- | --- | --- | --- | --- |
+| xc7a35tcpg236-1 | 32/2 | 225 → 205 | 114 → 114 | 157.33 → 156.57 | -0.49% |
+| xc7a35tcpg236-1 | 32/3 | 225 → 205 | 114 → 114 | 152.44 → 164.53 | +7.93% |
+| xc7a100tcsg324-1 | 32/2 | 225 → 205 | 114 → 114 | 164.02 → 156.84 | -4.38% |
+| xc7a100tcsg324-1 | 32/3 | 225 → 205 | 114 → 114 | 164.96 → 155.71 | -5.61% |
+
+MHz là ước lượng1000/(5ns−R2R slack), đã bao gồm yêu cầu setup/clock uncertainty/skew của benchmark; không phải nghịch đảo riêng datapath delay. Cả24 lượt có latches0/unrouted0; P1 hold dương. Setup ở5ns vẫn âm, chưa đóng200MHz. Toàn R2R có cùng đường dài nhất P1 trong24 lượt; không gán file p2 thành timing riêng tầng2. Không đo lại full NF/F PPA, power hoặc CDC/RDC; không chuyển PASS chức năng lịch sử thành bằng chứng final cho source mới. Các bước tiếp của SAC/khối lớn và paired NF/F vẫn theo§8.16/8.17.

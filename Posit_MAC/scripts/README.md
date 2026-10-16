@@ -129,3 +129,26 @@ LAYOUT_RESULTS_DIR=results/my_current_smoke LAYOUT_NF_ES_LIST="2 3" bash --nopro
 Lint primitive kiểm các snapshot đã khóa, không ghi lại hash baseline lịch sử bằng nguồn common mới. Smoke thứ hai dùng nguồn common hiện tại, kiểm NF32 ES2/ES3 và F32 ES3; không phải full10M hoặc STA toàn MAC.
 
 Các phase đã đo: lod/lod_mixed/shift/chain/chain_extra/packer/confirm/release/adoption. Helper chuẩn bị và case list trong study lưu quy trình xây dựng ban đầu; không gọi để ghi đè snapshot sau đo. `review_primitive_v2.py` đối chiếu cùng chiến lược, không tự promote. `verify_primitive_v2_netlists.py` và runner PowerShell cùng tên kiểm chức năng/latency các netlist Default của checkpoint gốc bằng XSim, không SDF. Số MHz là ước lượng R2R từ slack ở period5ns, không phải Fmax sweep/board; ba chiến lược không phải ba random seed.
+
+## Parser XOR — kiểm và đo lại checkpoint 16/10/2026
+
+Hai parser hiện dùng một detector. Bản trước/sau và dependency được giữ tại `results/parser_xor_20261016/source`; PPA dùng đúng nguồn đóng băng, không lấy nguồn thay đổi sau này. Nếu clone chưa có report gốc, chạy `python scripts/archive_parser_xor.py restore` để phục hồi từ evidence.zip; helper kiểm SHA và từ chối ghi đè file khác nội dung.
+
+Trong WSL, tại thư mục Posit_MAC:
+
+```bash
+PARSER_XOR_RESULTS_DIR=results/parser_xor_replay bash --noprofile --norc scripts/verify_parser_xor.sh
+LAYOUT_RESULTS_DIR=results/parser_xor_integration_replay LAYOUT_NF_ES_LIST="2 3" bash --noprofile --norc scripts/verify_rtl_layout.sh
+```
+
+Runner đầu kiểm nguồn parser hiện tại bằng fixture L1 + decoder độc lập; test parameter so chu kỳ với baseline dual-detector đã đóng băng. Nó dùng --timing và CURDIR=. để Make xử lý đúng đường dẫn có khoảng trắng. SoftPosit không được liên kết cho phép so field parser; NF/F dùng oracle của harness tích hợp hiện có.
+
+PowerShell tại thư mục Posit_MAC:
+
+```powershell
+./scripts/run_parser_xor_ppa.ps1 -Part xc7a35tcpg236-1 -RunRoot results/parser_xor_ppa_replay
+./scripts/run_parser_xor_ppa.ps1 -Part xc7a100tcsg324-1 -RunRoot results/parser_xor_ppa_replay
+python scripts/collect_parser_xor.py
+```
+
+PPA runner từ chối output đã có metrics; chọn RunRoot mới để tránh ghi đè. Đo32/2 và32/3, ba directive Default/Explore/RuntimeOptimized, input bank34FF, period5ns, uncertainty0,1ns; không có thay đổi latency của production. `p1.rpt` là R2R input bank→parser; `p2.rpt`/`p2_slack.txt` trong driver hiện chứa toàn R2R, không riêng tầng P2. HD.CLK_SRC chưa khóa; số STA không phải Fmax board hoặc toàn MAC. Collector mặc định audit kết quả checkpoint gốc; dữ liệu tái chạy nằm ở RunRoot đã chọn. Regression source hash lịch sử không tự chuyển sang checkpoint mới.

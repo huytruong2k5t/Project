@@ -1,0 +1,23 @@
+{
+  "policy": "Only deterministic fixtures generated in this session; source, generator, seed and vector hashes retained",
+  "bytes": 58571343.0,
+  "removed": [
+    {
+      "name": "parser_16_1.txt",
+      "bytes": 1140620,
+      "sha256": "9313cebcc6f625c74c7275e7ea7db2eaaf717f597723bfc117db96a92d042cea"
+    },
+    {
+      "name": "parser_32_2.txt",
+      "bytes": 28563528,
+      "sha256": "cac0e5d407624970ba94f6e6ab67ff50b9eed5fd9f75bec6b82632a15eda13e2"
+    },
+    {
+      "name": "parser_32_3.txt",
+      "bytes": 28867195,
+      "sha256": "e254e0859b8b1932ea60facb0365282754e977e9017af50e2f184970f743bd1d"
+    }
+  ],
+  "regenerate": "g++ -O2 -std=c++17 -Il1/include l1/test/gen_parser_vectors.cpp -o results/parser_xor_20261016/gen_parser_vectors; results/parser_xor_20261016/gen_parser_vectors results/parser_xor_20261016/parser_comb",
+  "status": "PASS"
+}

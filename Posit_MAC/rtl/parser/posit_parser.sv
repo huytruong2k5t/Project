@@ -5,13 +5,14 @@
 // Project       : Posit MAC IP
 // Creation Date : 2026-10-05
 // Description   : Two-stage elastic Posit parser.
-//                 P1: magnitude, regime detectors and selected count.
+//                 P1: magnitude, XOR-normalized tail and one regime detector.
 //                 P2: signed regime, payload alignment and field extraction.
 //                 reset_n asserts asynchronously and releases through two FFs.
 //-----------------------------------------------------------------------------
 // $Source: $
 // $Revision: 1.1 $
 // $Log: 2026-10-06: register cnt/FRB, reconstruct regime in P2 (Fig.5a). $
+//       2026-10-16: share one LOD using XOR tail; preserve both elastic stages.
 
 `include "posit_mac.vh"
 
@@ -50,10 +51,9 @@ module posit_parser #(
     wire [NB-3:0] regime_tail;
     wire [NB-4:0] payload_seed;
     wire first_regime_bit;
-    wire [CNT_W-1:0] lod_count;
-    wire [CNT_W-1:0] lzd_count;
-    wire lod_valid;
-    wire lzd_valid;
+    wire [NB-3:0] terminator_bits;
+    wire [CNT_W-1:0] terminator_count;
+    wire terminator_valid;
 
     logic [CNT_W-1:0] cnt_d;
     wire s_d;
@@ -123,39 +123,24 @@ module posit_parser #(
     assign regime_tail      = magnitude[NB-3:0];
     assign payload_seed     = magnitude[NB-4:0];
 
+    // Search only AFTER the first regime bit: a 1 marks a terminator.
+    // r=0 keeps the tail; r=1 inverts it to turn the first zero into a one.
+    // The payload path uses the original magnitude, never terminator_bits.
+    assign terminator_bits = regime_tail ^ {(NB-2){first_regime_bit}};
+
     lod_lzd_core #(
         .N    (NB - 2),
         .MODE (0),
         .S    (CNT_W)
-    ) u_lod (
-        .in  (regime_tail),
-        .K   (lod_count),
-        .vld (lod_valid)
-    );
-
-    lod_lzd_core #(
-        .N    (NB - 2),
-        .MODE (1),
-        .S    (CNT_W)
-    ) u_lzd (
-        .in  (regime_tail),
-        .K   (lzd_count),
-        .vld (lzd_valid)
+    ) u_regime_detector (
+        .in  (terminator_bits),
+        .K   (terminator_count),
+        .vld (terminator_valid)
     );
 
     always_comb begin
-        // Invalid selected detector means the entire tail matches the regime.
-        cnt_d = MAX_COUNT;
-
-        if (first_regime_bit) begin
-            if (lzd_valid) begin
-                cnt_d = lzd_count;
-            end
-        end else begin
-            if (lod_valid) begin
-                cnt_d = lod_count;
-            end
-        end
+        // No terminator: saturate to NB-2, not the detector's invalid K=0.
+        cnt_d = terminator_valid ? terminator_count : MAX_COUNT;
     end
 
     // Empty slots may refill; occupied slots advance only if the next is ready.

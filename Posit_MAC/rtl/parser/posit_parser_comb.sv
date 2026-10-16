@@ -6,6 +6,7 @@
 // Description   : Combinational Posit decoder, SPEC 5.2 / Norris-Kim Fig.5(a).
 // No clock, pipeline, rounding or approximate input truncation.
 // Contract: NB>=4, NB<=32, 0<=ES<=NB-4; canonical Zero/NaR outputs.
+// $Log: 2026-10-16: XOR-normalized tail shares one LOD; no interface change.
 //-----------------------------------------------------------------------------
 module posit_parser_comb #(
     parameter int NB=32,
@@ -31,8 +32,10 @@ module posit_parser_comb #(
     typedef logic signed [SF_W-1:0] sf_value_t;
     wire [NB-1:0] magnitude;
     wire r;
-    wire [CNT_W-1:0] lod_count,lzd_count,cnt;
-    wire lod_valid,lzd_valid;
+    wire [NB-3:0] terminator_bits;
+    wire [CNT_W-1:0] terminator_count;
+    wire [CNT_W-1:0] cnt;
+    wire terminator_valid;
     wire signed [REG_W-1:0] regime;
     wire [NB-4:0] payload;
     wire signed [SF_W-1:0] finite_sf;
@@ -41,13 +44,22 @@ module posit_parser_comb #(
     assign is_nar=(p=={1'b1,{(NB-1){1'b0}}});
     assign magnitude=s?(~p+{{(NB-1){1'b0}},1'b1}):p;
     assign r=magnitude[NB-2];
-    // Detector positions count repeated regime bits AFTER the first regime bit.
-    lod_lzd_core #(.N(NB-2),.MODE(0),.S(CNT_W)) lod(
-        .in(magnitude[NB-3:0]),.K(lod_count),.vld(lod_valid));
-    lod_lzd_core #(.N(NB-2),.MODE(1),.S(CNT_W)) lzd(
-        .in(magnitude[NB-3:0]),.K(lzd_count),.vld(lzd_valid));
-    assign cnt=r?(lzd_valid?lzd_count:MAX_COUNT):
-                 (lod_valid?lod_count:MAX_COUNT);
+    // Exclude the first regime bit; XOR maps either terminator polarity to 1.
+    // Keep the original magnitude on the exponent/fraction payload path.
+    assign terminator_bits = magnitude[NB-3:0] ^ {(NB-2){r}};
+
+    lod_lzd_core #(
+        .N    (NB - 2),
+        .MODE (0),
+        .S    (CNT_W)
+    ) u_regime_detector (
+        .in  (terminator_bits),
+        .K   (terminator_count),
+        .vld (terminator_valid)
+    );
+
+    // The detector returns K=0 on invalid; parser no-terminator means NB-2.
+    assign cnt = terminator_valid ? terminator_count : MAX_COUNT;
     // r=1: k=cnt; r=0: k=~{0,cnt}=-(cnt+1).
     assign regime=~({1'b0,cnt}^{REG_W{r}});
     // Drop sign, FRB and one more bit BEFORE the variable shift.

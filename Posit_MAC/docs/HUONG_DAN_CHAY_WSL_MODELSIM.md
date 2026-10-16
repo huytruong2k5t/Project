@@ -388,3 +388,14 @@ powershell -NoProfile -File scripts/run_primitive_v2_ppa.ps1 -FrozenSources -Pha
 Bỏ `-PlanOnly` mới chạy Vivado; đổi Part sang `xc7a100tcsg324-1` để đo part còn lại. Không gọi `prepare_primitive_v2.py` trên nguồn đã promote; nó cố ý khóa snapshot baseline cũ. Chạy lại cùng RunRoot chỉ tiếp tục ID chưa xong, không phải đo mới từ đầu. Muốn đo mới dùng tên RunRoot mới; không xóa report cũ.
 
 Smoke tích hợp nguồn hiện tại từ WSL: `LAYOUT_RESULTS_DIR=results/my_current_smoke LAYOUT_NF_ES_LIST="2 3" bash --noprofile --norc scripts/verify_rtl_layout.sh`. Số primitive/chuỗi không đại diện Fmax toàn MAC hoặc tần số kit.
+
+### Parser một detector XOR — 16/10/2026
+
+Mở WSL tại thư mục Posit_MAC và chạy vào thư mục kết quả mới:
+
+```bash
+PARSER_XOR_RESULTS_DIR=results/parser_xor_replay bash --noprofile --norc scripts/verify_parser_xor.sh
+LAYOUT_RESULTS_DIR=results/parser_xor_integration_replay LAYOUT_NF_ES_LIST="2 3" bash --noprofile --norc scripts/verify_rtl_layout.sh
+```
+
+Nếu clone từ GitHub, dùng `python scripts/archive_parser_xor.py restore` tại Posit_MAC để phục hồi báo cáo gốc từ evidence.zip khi cần. Fixtures lớn được generator sinh lại; seed/hash và phiên bản compiler có trong bằng chứng. Runner parser đã dùng CURDIR=. để tránh lỗi Make do khoảng trắng trong đường dẫn. Lệnh đo Vivado trên hai Artix7, điều kiện đối chứng và cách đọc số liệu tại scripts/README.md, mục Parser XOR. Không chạy runner vào thư mục bằng chứng đã đóng băng.

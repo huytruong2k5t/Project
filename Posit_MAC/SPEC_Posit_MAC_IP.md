@@ -245,7 +245,7 @@ Phạm vi NF đã kiểm: bốn tuple ở §2.2,F=NB-3-ES>=2,FRAC_W=min(F,12),N_
 | `ACC_WIN` | 32 ở profile F32/3,FW12 | W32 gồm1 bit dấu,2 bit nguyên magnitude và Q29 bit fraction,miền có dấu[-4,4) theo anchor đã chuẩn hóa. Residual sign/nonzero và flags nằm ngoài W. Chỉ profile approx đã kiểm; không dùng32 bit để tuyên bố FMA exact từ A×B hoặc hỗ trợ mọi NB/ES |
 | `ROUND_MODE` | `"RNE"` | Quy ước làm tròn tại Packer/round_unpacked: `"RNE"` theo FloPoCo/SoftPosit; `"TRUNC"` cắt cụt theo [P] |
 | `ROUND_SCHEME` | 0 | Cơ chế xử lý bit khi dịch phải trong bộ nhân lặp SBM theo [15]: `0: FLOOR` (cắt bỏ hoàn toàn bit rơi ra ngoài); `1: STICKY_ACC` (gom bit rơi vào cờ `sticky_acc`) |
-| `PIPE_PARSE` | 2 | Số tầng pipeline của parser. Mặc định 2 khớp Fig. 5(a), có hai hạng thanh ghi: sau mux LOD/LZD và sau bộ dịch |
+| `PIPE_PARSE` | 2 | Số tầng pipeline của parser. Hai hạng thanh ghi: sau XOR + detector/count và sau bộ dịch; ranh giới dữ liệu giữ như Fig. 5(a) |
 | `PIPE_PACK` | 1 nếu ROUND_MODE="TRUNC", 2 nếu "RNE" | Baseline TRUNC một hạng; RNE hai hạng elastic: P1 mã hóa/dịch/G-R-S, P2 làm tròn/carry/dấu theo §5.9-D. Timing cần xác nhận STA |
 | `SF_W` | tính | Độ rộng Scale Factor theo §2.3: `$clog2(4×SF_MAX + 4) + 1` |
 
@@ -336,6 +336,8 @@ Parser dùng cổng reset cục bộ `reset_n` theo Digital Design Guidelines: a
 
 **Quy ước đếm chu kỳ:** gọi cạnh nhận đầu vào là E0. P1 chốt tại E0, P2 chốt và `out_valid` lên sau E1; handshake đầu ra sớm nhất tại E2. Vì vậy có hai hạng thanh ghi, khoảng cách input/output handshake không stall là hai chu kỳ, còn từ cạnh nhận đầu vào đến cạnh bắt đầu valid là một chu kỳ. `II=1` khi không stall. Quy ước này làm rõ mục tiêu hai tầng ở §5.1; không cộng một tầng chỉ để làm số chu kỳ từ E0 đến valid bằng 2. Khi ghép MAC phải dùng lịch cạnh thực tế thay vì cộng latency theo hai quy ước khác nhau.
 
+**Hiện thực parser tiết kiệm diện tích — 16/10/2026:** cả tổ hợp và pipeline chia sẻ một detector LOD sau XOR theo `r`, thay cho hai cây LOD/LZD và MUX chọn count. Đây là chia sẻ tổ hợp, không dùng luân phiên theo clock và không thêm tầng. Chỉ XOR tail sau FRB; payload seed luôn lấy từ magnitude gốc. Giữ `cnt=NB-2` khi không có terminator, canonical Zero/NaR, scale signed, enable/reset và lịch cạnh ở trên. Sinh viên chấp nhận đánh đổi timing P1 để ưu tiên diện tích; mức giảm LUT và thay đổi STA phải đo theo PLAN§8.19, không mặc định giảm một nửa parser. Kiểm 0/1 và smoke mới có bằng chứng riêng; các checkpoint NF/F trước đó vẫn gắn với hash nguồn cũ. Phiên bản hợp đồng số học vẫn v1.18 vì không đổi giao diện hoặc ngữ nghĩa.
+
 Thuật toán Parser (theo Fig. 5a của [P], tối ưu bỏ bước cộng +1 trong lượng dịch):
 
 1. `s = p[NB-1]`; `t1 = s ? (~p + 1) : p` (XOR + bộ cộng bù hai, như [P] Fig. 5a).
@@ -343,11 +345,11 @@ Thuật toán Parser (theo Fig. 5a của [P], tối ưu bỏ bước cộng +1 t
      - Số 0: `is_zero = (p == {NB{1'b0}})`
      - NaR (Not-a-Real): `is_nar = (p[NB-1] == 1'b1) && (p[NB-2:0] == {(NB-1){1'b0}})`
 2. `r = t1[NB-2]`                               // bit regime đầu
-3. `cnt = ` số bit liên tiếp giống `r` trong `t1[NB-3:0]`   // LOD nếu r=0, LZD nếu r=1,
-                                                      // cả hai chạy song song, mux theo r
+3. `terminator_bits = t1[NB-3:0] ^ {(NB-2){r}}`; dùng duy nhất một `lod_lzd_core`, `MODE=0`, `N=NB-2`.
+   `cnt = terminator_valid ? terminator_count : NB-2`      // đếm sau FRB; r=0 tìm 1, r=1 tìm 0 qua XOR
                                                       // cnt ∈ [0, NB-2], rộng $clog2(NB-1) bit
                                                       // nếu cả chuỗi giống nhau (không có bit kết thúc): cnt = NB-2
-                                                      // vld=0 của detector được chọn: thay K=0 bằng cnt=NB-2
+                                                      // vld=0 của detector: thay K=0 bằng cnt=NB-2
 4. `Rgm = ~({1'b0, cnt} ^ {($clog2(NB-1)+1){r}})`    // XNOR, Rgm rộng $clog2(NB-1)+1 bit, bù hai
                                                       // r=1: k = cnt;  r=0: k = ~cnt = -(cnt+1) = -m
 5. `t2 = t1[NB-4:0] << cnt`                           // vector NB-3 bit như t1[28:0] trong Fig. 5(a)

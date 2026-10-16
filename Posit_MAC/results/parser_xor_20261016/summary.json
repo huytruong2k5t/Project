@@ -1,0 +1,378 @@
+{
+  "status": "PASS",
+  "date": "2026-10-16",
+  "mismatch": 0,
+  "comb_checks": 2465812,
+  "pipeline_checks": 2465812,
+  "comb_suites": [
+    [
+      8,
+      0,
+      256
+    ],
+    [
+      16,
+      1,
+      65536
+    ],
+    [
+      32,
+      2,
+      1200010
+    ],
+    [
+      32,
+      3,
+      1200010
+    ]
+  ],
+  "pipeline_suites": [
+    [
+      8,
+      0,
+      256,
+      3,
+      3,
+      40,
+      42,
+      254,
+      46,
+      256
+    ],
+    [
+      16,
+      1,
+      65536,
+      3,
+      3,
+      25336,
+      26357,
+      51867,
+      21830,
+      510
+    ],
+    [
+      32,
+      3,
+      1200010,
+      3,
+      3,
+      459823,
+      480452,
+      949815,
+      400633,
+      510
+    ],
+    [
+      32,
+      2,
+      1200010,
+      3,
+      3,
+      460816,
+      481535,
+      950259,
+      400049,
+      510
+    ]
+  ],
+  "param_checks": 52992,
+  "param_suites": [
+    [
+      4,
+      0,
+      5,
+      272,
+      147,
+      141,
+      109
+    ],
+    [
+      5,
+      1,
+      6,
+      288,
+      125,
+      119,
+      147
+    ],
+    [
+      7,
+      0,
+      6,
+      384,
+      188,
+      182,
+      180
+    ],
+    [
+      9,
+      5,
+      11,
+      768,
+      332,
+      326,
+      420
+    ],
+    [
+      17,
+      13,
+      20,
+      10256,
+      3239,
+      3236,
+      5775
+    ],
+    [
+      31,
+      27,
+      35,
+      10256,
+      3213,
+      3209,
+      5651
+    ],
+    [
+      32,
+      28,
+      36,
+      10256,
+      3252,
+      3246,
+      5689
+    ],
+    [
+      32,
+      3,
+      9,
+      10256,
+      3212,
+      3207,
+      5703
+    ],
+    [
+      32,
+      2,
+      40,
+      10256,
+      3225,
+      3220,
+      5685
+    ]
+  ],
+  "strict_lint_profiles": 16,
+  "integration_strict_lint_profiles": 17,
+  "integration": {
+    "nf_es2": {
+      "es": 2,
+      "completed": 10000,
+      "reset_aborts": 79,
+      "mismatch": 0
+    },
+    "nf_es3": {
+      "es": 3,
+      "completed": 10000,
+      "reset_aborts": 77,
+      "mismatch": 0
+    },
+    "fused": {
+      "nb": 32,
+      "es": 3,
+      "completed": 10000,
+      "mismatch": 0,
+      "stage_checks": 59340
+    }
+  },
+  "ppa_runs": 24,
+  "comparison": [
+    {
+      "part": "xc7a100tcsg324-1",
+      "es": 2,
+      "strategies": 3,
+      "baseline": {
+        "lut": 225,
+        "ff": 114,
+        "p1_sta_mhz": 164.01508938822374,
+        "global_r2r_sta_mhz": 164.01508938822374,
+        "p1_delay_ns": 5.977
+      },
+      "xor": {
+        "lut": 205,
+        "ff": 114,
+        "p1_sta_mhz": 156.83814303638647,
+        "global_r2r_sta_mhz": 156.83814303638647,
+        "p1_delay_ns": 6.221
+      },
+      "lut_change_pct": -8.888888888888891,
+      "p1_sta_change_pct": -4.375784190715182,
+      "paired_strategies": [
+        {
+          "strategy": "default",
+          "lut_change_pct": -8.888888888888891,
+          "p1_sta_change_pct": -7.201999687548821
+        },
+        {
+          "strategy": "explore",
+          "lut_change_pct": -8.888888888888891,
+          "p1_sta_change_pct": -4.375784190715182
+        },
+        {
+          "strategy": "runtime",
+          "lut_change_pct": -12.5,
+          "p1_sta_change_pct": 1.4689265536723006
+        }
+      ]
+    },
+    {
+      "part": "xc7a100tcsg324-1",
+      "es": 3,
+      "strategies": 3,
+      "baseline": {
+        "lut": 225,
+        "ff": 114,
+        "p1_sta_mhz": 164.9620587264929,
+        "global_r2r_sta_mhz": 164.9620587264929,
+        "p1_delay_ns": 5.991
+      },
+      "xor": {
+        "lut": 205,
+        "ff": 114,
+        "p1_sta_mhz": 155.71473061351605,
+        "global_r2r_sta_mhz": 155.71473061351605,
+        "p1_delay_ns": 6.27
+      },
+      "lut_change_pct": -8.888888888888891,
+      "p1_sta_change_pct": -5.605730302086565,
+      "paired_strategies": [
+        {
+          "strategy": "default",
+          "lut_change_pct": -8.888888888888891,
+          "p1_sta_change_pct": -6.378378378378368
+        },
+        {
+          "strategy": "explore",
+          "lut_change_pct": -8.888888888888891,
+          "p1_sta_change_pct": -0.23497818059752262
+        },
+        {
+          "strategy": "runtime",
+          "lut_change_pct": -12.785388127853881,
+          "p1_sta_change_pct": 0.26471504204297336
+        }
+      ]
+    },
+    {
+      "part": "xc7a35tcpg236-1",
+      "es": 2,
+      "strategies": 3,
+      "baseline": {
+        "lut": 225,
+        "ff": 114,
+        "p1_sta_mhz": 157.33165512901195,
+        "global_r2r_sta_mhz": 157.33165512901195,
+        "p1_delay_ns": 6.2780000000000005
+      },
+      "xor": {
+        "lut": 205,
+        "ff": 114,
+        "p1_sta_mhz": 156.56802880851728,
+        "global_r2r_sta_mhz": 156.56802880851728,
+        "p1_delay_ns": 6.284
+      },
+      "lut_change_pct": -8.888888888888891,
+      "p1_sta_change_pct": -0.48536088930640764,
+      "paired_strategies": [
+        {
+          "strategy": "default",
+          "lut_change_pct": -8.888888888888891,
+          "p1_sta_change_pct": -7.397518454531182
+        },
+        {
+          "strategy": "explore",
+          "lut_change_pct": -8.888888888888891,
+          "p1_sta_change_pct": 0.17222483168934932
+        },
+        {
+          "strategy": "runtime",
+          "lut_change_pct": -12.727272727272732,
+          "p1_sta_change_pct": -2.230426088294102
+        }
+      ]
+    },
+    {
+      "part": "xc7a35tcpg236-1",
+      "es": 3,
+      "strategies": 3,
+      "baseline": {
+        "lut": 225,
+        "ff": 114,
+        "p1_sta_mhz": 152.4390243902439,
+        "global_r2r_sta_mhz": 152.4390243902439,
+        "p1_delay_ns": 6.4399999999999995
+      },
+      "xor": {
+        "lut": 205,
+        "ff": 114,
+        "p1_sta_mhz": 164.52780519907864,
+        "global_r2r_sta_mhz": 164.52780519907864,
+        "p1_delay_ns": 5.925
+      },
+      "lut_change_pct": -8.888888888888891,
+      "p1_sta_change_pct": 7.930240210595585,
+      "paired_strategies": [
+        {
+          "strategy": "default",
+          "lut_change_pct": -8.888888888888891,
+          "p1_sta_change_pct": 7.930240210595585
+        },
+        {
+          "strategy": "explore",
+          "lut_change_pct": -8.888888888888891,
+          "p1_sta_change_pct": 5.272787757817676
+        },
+        {
+          "strategy": "runtime",
+          "lut_change_pct": -12.442396313364057,
+          "p1_sta_change_pct": 7.993730407523514
+        }
+      ]
+    }
+  ],
+  "simulator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)",
+  "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+  "seeds": {
+    "fixtures": 20261005,
+    "params": "20261016 + NB*100 + ES + SF_W",
+    "pipeline": "20261005 + NB*17 + ES"
+  },
+  "oracle": "Parser fixtures: L1 plus independent sequential field scan; edge parameters: independent SV scan and cycle equality to frozen dual-detector pipeline. SoftPosit is not linked for field tests; integration uses existing NF/F oracle harnesses.",
+  "limits": "Binary-input simulation, not formal equivalence. Three implementation directives, not random seeds. Registered input boundary adds 34 benchmark FF; same constraints/part/source dependencies. P1 STA estimate=1000/(5ns-slack); no board/full-MAC Fmax, power, CDC/RDC signoff or final large NF/F matrix claim.",
+  "commands": [
+    "bash --noprofile --norc scripts/verify_parser_xor.sh",
+    "LAYOUT_RESULTS_DIR=results/parser_xor_20261016/integration LAYOUT_NF_ES_LIST=\"2 3\" bash --noprofile --norc scripts/verify_rtl_layout.sh",
+    "powershell -NoProfile -File scripts/run_parser_xor_ppa.ps1 -Part <part>",
+    "python scripts/collect_parser_xor.py"
+  ],
+  "input_sha256": {
+    "results/parser_xor_20261016/source/baseline/dyn_left_shifter.sv": "537bfd27d3145ead9c5f74cc18d287ed83b89e0fd8a3e6ed834b75b55d017fb8",
+    "results/parser_xor_20261016/source/baseline/lod_lzd_core.sv": "13bea3038ece40ca3d77f5fbb2e4e45d082590fddad1fee40746af94b06bd62d",
+    "results/parser_xor_20261016/source/baseline/posit_mac.vh": "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88",
+    "results/parser_xor_20261016/source/baseline/posit_parser.sv": "43acff8de2fad8592811dacc2cefc7ae658ff56e967a3062bbce5ce56e521329",
+    "results/parser_xor_20261016/source/baseline/posit_parser_comb.sv": "3d619c0ab22e7433aecfc1012de1486caee39d36e89fe472208f07c845806c43",
+    "results/parser_xor_20261016/source/runner/verify_parser_xor_run.sh": "4337c92bfa391ca65d2fb457e04a2316f81328ce14a217ad018700dc59f0f64d",
+    "results/parser_xor_20261016/source/xor/dyn_left_shifter.sv": "537bfd27d3145ead9c5f74cc18d287ed83b89e0fd8a3e6ed834b75b55d017fb8",
+    "results/parser_xor_20261016/source/xor/lod_lzd_core.sv": "13bea3038ece40ca3d77f5fbb2e4e45d082590fddad1fee40746af94b06bd62d",
+    "results/parser_xor_20261016/source/xor/posit_mac.vh": "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88",
+    "results/parser_xor_20261016/source/xor/posit_parser.sv": "b648908974d703b099b517ccff67d940533ccc698fa5bce33bd609137f9c29d7",
+    "results/parser_xor_20261016/source/xor/posit_parser_comb.sv": "92e6c24e3bd7e044f99b0ac1dddf7f7d62b69b814e2938ec2fdad71dc0c1af9d",
+    "scripts/archive_parser_xor.py": "50edcf515bd9b721c9b77c0537b9161e04ae6b7115d4ce7a7268be20d7a43e64",
+    "scripts/collect_parser_xor.py": "b25fab0b41b55c858f554fd507b3150e56b53ae6ad5623fcc0b6317d5df7f9bc",
+    "scripts/package_parser_xor.py": "d51b9c1f7a4696c5080d3dee886aafcf17f01a716a520f18b0a79f81ba3e8892",
+    "scripts/parser_xor_ppa.tcl": "28f55a26950bb7971f6f75ded8d5fa8e5e52069eb06c44c04e2bf5e56095efd3",
+    "scripts/run_parser_xor_ppa.ps1": "ca3aa2efb508ee65a4fc383644d344820ec2bccfad431aca055117191e9b9a6c",
+    "scripts/verify_parser_xor.sh": "df40e34450faacbd20f0ae8b2b91ac57737845855d643dc72997539955e71a90",
+    "tb/parser_xor_param_checker.sv": "c519cbc6d1d2f5cd07b064f5e56a05d95a47d6bc73fd001a387e40960be2243e",
+    "tb/parser_xor_ppa_top.sv": "1146a99c05dcd69d394d457cc9a3bd5551811b341dd47019f67394e984e1af78",
+    "tb/tb_parser_xor_params.sv": "17a93145ad8215539764d56cd9f6614c2469c2929c85fe1b350171ef1a6df789"
+  }
+}

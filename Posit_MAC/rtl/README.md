@@ -71,7 +71,7 @@ Thư mục này chứa toàn bộ mã nguồn thiết kế phần cứng SystemV
 | [`lod_lzd_core.sv`](common/lod_lzd_core.sv) | Bộ dò tìm và đếm số 1 / số 0 đầu chuỗi (LOD/LZD) sử dụng cấu trúc **Cây nhị phân phẳng (Flat Binary Tree)**, tối ưu $O(\log_2 N)$ tầng MUX trên LUT6 FPGA. | `N=32`, `MODE=0/1`, `S=$clog2(N)` | **Hoàn thành (100% Pass)** |
 | [`dyn_left_shifter.sv`](common/dyn_left_shifter.sv) | Bộ dịch trái động logarit đa tầng ($S = \lceil \log_2 N \rceil$ tầng MUX), dịch $2^i$ bằng pure wiring, tích hợp cơ chế bảo vệ chống tràn ($b \ge N \implies \text{out} = 0$). | `N=32`, `SHIFT_W=$clog2(N)` | **Hoàn thành (100% Pass)** |
 | [`dyn_right_shifter.sv`](common/dyn_right_shifter.sv) | Bộ dịch phải động logarit đa tầng, hỗ trợ dịch logic (`ARITH=0`), dịch số học (`ARITH=1`), và điền bit động (`fill_val`), bảo vệ chống tràn ($b \ge N \implies \text{out} = \{N\{fill\}\}$). | `N=32`, `SHIFT_W=$clog2(N)`, `ARITH=0/1` | **Hoàn thành (100% Pass)** |
-| [`posit_parser_comb.sv`](parser/posit_parser_comb.sv) | Parser tổ hợp: bù hai → LOD/LZD song song → chọn cnt/Rgm → dịch payload → tách sf/fraction, chặn Zero/NaR. | `NB, ES, FRAC_MAX, SF_W` | ModelSim đạt trong bốn format nghiệm thu; chưa có pipeline |
+| [`posit_parser_comb.sv`](parser/posit_parser_comb.sv) | Parser tổ hợp: bù hai → XOR tail theo FRB → một LOD/count → Rgm/dịch payload → tách sf/fraction, chặn Zero/NaR. | `NB, ES, FRAC_MAX, SF_W` | Checkpoint XOR: Verilator bốn format đạt; tổ hợp không có clock. ModelSim trước đây thuộc bản dual-detector |
 
 ### B. Các Module Datapath Theo Kiến trúc §5 (Pipeline Architecture)
 
@@ -113,7 +113,7 @@ Vivado 2026.1 `xvlog --sv` đã compile RTL/testbench đạt (`vivado_compile.lo
 
 Nghiệm thu 05/10/2026: **2.465.812 fixture, 0 mismatch** trên ModelSim10.1d: posit8 ES0/posit16 ES1 vét cạn và posit32 ES2/ES3 phân tầng. Ngoài stream có các giao dịch directed kiểm reset/stall; ba lần reset mỗi format, gồm hủy một/hai slot. Không mở rộng kết luận sang các format chưa chạy hoặc MAC tích hợp.
 
-`posit_parser.sv` dùng cùng hợp đồng dữ liệu với parser tổ hợp. P1: bù hai → LOD/LZD → mux count → thanh ghi cnt/FRB và payload/metadata. P2: tạo regime từ cnt/FRB song song với dịch payload → tách trường/ghép sf → thanh ghi đầu ra. Hai tầng có enable riêng; `p2_ready = !p2_valid_q || out_ready`, `p1_ready = !p1_valid_q || p2_ready`. Sức chứa là hai giao dịch; khi đầy và đầu ra bị chặn thì `in_ready=0`.
+`posit_parser.sv` dùng cùng hợp đồng dữ liệu với parser tổ hợp. P1: bù hai → XOR tail theo FRB → một LOD/count → thanh ghi cnt/FRB và payload/metadata. P2: tạo regime từ cnt/FRB song song với dịch payload → tách trường/ghép sf → thanh ghi đầu ra. Hai tầng có enable riêng; `p2_ready = !p2_valid_q || out_ready`, `p1_ready = !p1_valid_q || p2_ready`. Sức chứa là hai giao dịch; khi đầy và đầu ra bị chặn thì `in_ready=0`.
 
 Theo Guidelines, reset cục bộ là `reset_n` tích cực thấp, assert bất đồng bộ, deassert đồng bộ qua `meta_sync1/meta_sync2` có thuộc tính `ASYNC_REG`. Reset flush hai slot và xóa dấu/cờ/dữ liệu; chỉ nhận giao dịch sau khi synchronizer nhả reset. Startup hai cạnh được tách khỏi latency dữ liệu. Không gated clock, không latch, không thêm delay trong logic tổ hợp; các FF dùng macro `CK2Q` trong header chung. Cổng nối theo tên, mỗi module một file và các khai báo/nhánh được tách dòng để debug.
 
@@ -270,3 +270,10 @@ L1 F_W32/flags/state đã đóng G-F-L1 với oracle độc lập,nguồn tại 
 `candidates/primitives_v2/` chứa các nguồn thay thế cùng tên module để đo riêng: `group4`, `group4_mixed` cho LOD/LZD; `reverse`, `radix4`, `native` cho shifter. Mỗi lượt chỉ biên dịch đúng một triển khai cho một tên module. Các file này không nằm trong `production.f`.
 
 `common/lod_lzd_core.sv` đã chọn nhóm4 riêng MODE0,N31/32,S=clog2N; các cấu hình khác vẫn dùng cây nhị phân. Hai shifter `common/` giữ nguyên byte: các bản thử chưa giữ được lợi ích timing qua cả hai Artix7 và các kiểu fill/width liên quan. Quyết định và hash nguồn ở `adoption.json`; đã kiểm tích hợp NF32 ES2/ES3 và F32 ES3, mỗi bản10.000 giao dịch/0 mismatch. Các nguồn `selected` còn gồm native12 chỉ là bản thử, không phải toàn bộ nguồn production. Snapshot/hash/báo cáo tại `results/primitive_v2_20261016`; lệnh tại `scripts/README.md`, phân tích tại PLAN L1 §8.18. Không thêm latency hoặc đổi giao diện số học trong khảo sát này.
+
+## Parser một detector — 16/10/2026
+
+Hai module parser tổ hợp/pipeline dùng XOR tail với FRB rồi một LOD MODE0,N=NB-2. Payload giữ magnitude gốc; no-terminator→cnt=NB-2. I/O/parameter, hai tầng elastic và lịch handshake giữ nguyên. Với posit32 detector N30 vẫn dùng nhánh binary của common/lod_lzd_core. Bản dual-detector trước sửa được giữ tại results/parser_xor_20261016/source/baseline, không nằm trong production.f. Kết quả kiểm và đánh đổi LUT/STA tại PLAN§8.19.
+
+
+Đợt parser XOR đã hoàn thành24 P&R A35T/A100T,32/2 và32/3: median225→205LUT, FF không đổi; STA tăng/giảm tùy part/profile (PLAN§8.19).4.984.616 lượt parser/parameter đạt0 mismatch và NF ES2/ES3/F smoke mỗi bản10.000 đạt; không thay ma trận final hoặc PPA toàn MAC.

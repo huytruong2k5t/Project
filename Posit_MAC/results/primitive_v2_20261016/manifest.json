@@ -1,0 +1,569 @@
+{
+  "date": "2026-10-16",
+  "seed": 20261016,
+  "sources": {
+    "rtl/common/lod_lzd_core.sv": "2c5f501f4bee6c70a67099cff299a9ff7f9e0375bc75ada57a73e6addbe432a7",
+    "rtl/common/dyn_left_shifter.sv": "537bfd27d3145ead9c5f74cc18d287ed83b89e0fd8a3e6ed834b75b55d017fb8",
+    "rtl/common/dyn_right_shifter.sv": "89514601248f33eef173b113cbed062d2a777ec6f84d1f3b0fc66eacd946ef86",
+    "rtl/candidates/primitives_v2/group4/lod_lzd_core.sv": "d457a7d4d9fdf354d762e3f16ba111113295dd03c2ae490c579e462df31c458b",
+    "rtl/candidates/primitives_v2/reverse/dyn_left_shifter.sv": "ab52c56bf23275258fd832e8786f0245c7f13ea815f4f36e1ac4a8d25dc38669",
+    "rtl/candidates/primitives_v2/reverse/dyn_right_shifter.sv": "12b116c18fcd78985208f3f9f409b56b25568b3965707d0b1075d0da87810c7e",
+    "rtl/candidates/primitives_v2/radix4/dyn_left_shifter.sv": "257a6a82f7e6a6c01da55c2a96563626d631f5f93514f7ccbb4ace35e97507c7",
+    "rtl/candidates/primitives_v2/radix4/dyn_right_shifter.sv": "9afca4a865ae7a9535f08c44bc3a9472df2a6f5a7a3484b57be6131a6d84b8f3",
+    "rtl/candidates/primitives_v2/native/dyn_left_shifter.sv": "dd231f90ad36c7d339963d6527f14908ae33b83f42ec92fd6b89fd2f0a1c94c8",
+    "rtl/candidates/primitives_v2/native/dyn_right_shifter.sv": "34988da234f4e750c4b272389f357b485befbf936b5a2f9eaf27057b6d00dcc3"
+  },
+  "cases": [
+    {
+      "variant": "baseline",
+      "n": 12,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "group4",
+      "n": 12,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "baseline",
+      "n": 26,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "group4",
+      "n": 26,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "baseline",
+      "n": 27,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "group4",
+      "n": 27,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "baseline",
+      "n": 30,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "group4",
+      "n": 30,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "baseline",
+      "n": 31,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "group4",
+      "n": 31,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "baseline",
+      "n": 32,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "group4",
+      "n": 32,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "baseline",
+      "n": 12,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "reverse",
+      "n": 12,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "radix4",
+      "n": 12,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "native",
+      "n": 12,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "baseline",
+      "n": 26,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "reverse",
+      "n": 26,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "radix4",
+      "n": 26,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "native",
+      "n": 26,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "baseline",
+      "n": 29,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "reverse",
+      "n": 29,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "radix4",
+      "n": 29,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "native",
+      "n": 29,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "baseline",
+      "n": 31,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "reverse",
+      "n": 31,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "radix4",
+      "n": 31,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "native",
+      "n": 31,
+      "kind": 0,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "baseline",
+      "n": 12,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "reverse",
+      "n": 12,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "radix4",
+      "n": 12,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "native",
+      "n": 12,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "baseline",
+      "n": 12,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "reverse",
+      "n": 12,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "radix4",
+      "n": 12,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "native",
+      "n": 12,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "baseline",
+      "n": 31,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "reverse",
+      "n": 31,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "radix4",
+      "n": 31,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "native",
+      "n": 31,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "baseline",
+      "n": 31,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "reverse",
+      "n": 31,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "radix4",
+      "n": 31,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "native",
+      "n": 31,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "baseline",
+      "n": 32,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "reverse",
+      "n": 32,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "radix4",
+      "n": 32,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "native",
+      "n": 32,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "baseline",
+      "n": 32,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "reverse",
+      "n": 32,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "radix4",
+      "n": 32,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "native",
+      "n": 32,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "baseline",
+      "n": 59,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "reverse",
+      "n": 59,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "radix4",
+      "n": 59,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "native",
+      "n": 59,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "baseline",
+      "n": 59,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "reverse",
+      "n": 59,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "radix4",
+      "n": 59,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "native",
+      "n": 59,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "baseline",
+      "n": 60,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "reverse",
+      "n": 60,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "radix4",
+      "n": 60,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "native",
+      "n": 60,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0
+    },
+    {
+      "variant": "baseline",
+      "n": 60,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "reverse",
+      "n": 60,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "radix4",
+      "n": 60,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    },
+    {
+      "variant": "native",
+      "n": 60,
+      "kind": 1,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1
+    }
+  ],
+  "parts": [
+    "xc7a35tcpg236-1",
+    "xc7a100tcsg324-1"
+  ],
+  "period_ns": 5.0,
+  "selection": "No production replacement without bit-exact and matched post-route evidence; no target tuning.",
+  "scope": "Known binary inputs; combinational latency unchanged; no board/Fmax sweep signoff."
+}

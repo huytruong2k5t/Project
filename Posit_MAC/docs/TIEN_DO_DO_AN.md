@@ -3,7 +3,7 @@
 **Ngày cập nhật:** 16/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.16](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md).
+**Tài liệu chi tiết:** [SPEC v1.18](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -15,18 +15,19 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 
 Đã hoàn thành nền tảng L0, Gate1 của L1 và bộ cộng tuần5. Bộ nhân lặp L1 đã được kiểm chứng; profile source từng đạt ngưỡng TableI nhưng không khớp output ví dụ gốc. Baseline gốc bài báo chưa xác định; giữ nghiên cứu phụ. Mục tiêu chính chuyển sang MAC non-fused làm baseline nội bộ và fused làm biến thể so sánh.
 
-MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser/packer và Gate2 multiplier đạt;NF/Gate3 tuần11 đạt với10 triệu/0 mismatch. Tuần12 đã có oracle và L1 fused W32/flags/state,main phân tầng2.208.768 ca mỗi nền tảng Linux/Windows/UBSan0 mismatch. Toàn NF post-route sơ bộ đạtmedian45,07MHz trênCycloneIV,chưa setup100MHz. RTL fused,ma trận cuối,paired accuracy/PPA và Gate4 còn mở;tuần12 đã hoàn thành và sao lưu GitHub.
+MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser/packer và Gate2 multiplier đạt;NF/Gate3 tuần11 đạt với10 triệu/0 mismatch. Tuần12 đã có oracle và L1 fused W32/flags/state,main phân tầng2.208.768 ca mỗi nền tảng Linux/Windows/UBSan0 mismatch. Toàn NF post-route sơ bộ đạtmedian45,07MHz trênCycloneIV,chưa setup100MHz. RTL fused profile chính tuần13 đã kiểm10 triệu/0 mismatch và STA A35T100MHz R2R đạt; ma trận cuối, paired accuracy/PPA và Gate4 còn mở.
 
 ## 2. Công việc còn lại và ưu tiên
 
 | Mốc lớn | Trạng thái | Phần cần hoàn thiện |
 | --- | --- | --- |
-| Baseline nội bộ và so sánh NF/F | processing | NF và oracle/L1 fused đã đạt;tiếp theo RTL fused,accuracy và paired PPA. Baseline paper giữ nghiên cứu phụ |
+| Baseline nội bộ và so sánh NF/F | processing | RTL NF/F profile chính đã kiểm; còn accuracy, final per-n và paired PPA. Baseline paper giữ nghiên cứu phụ |
 | MAC L1 — Gate1B | ✅ | MAC v0/v1, tích lũy và API đã triển khai, kiểm chứng đạt |
-| RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder và Gate3 NF tuần11 đạt; còn ma trận final,coverage cuối và fused |
-| PPA, mở rộng và hồ sơ — Gate4 | processing | Đã đo sơ bộ toàn NF và có đường critical path;chưa đạt100MHz,còn tối ưu/đo matched NF/F,accuracy và hồ sơ cuối |
+| RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder, NF tuần11 và F profile chính đã kiểm; còn ma trận final và coverage cuối NF/F |
+| PPA, mở rộng và hồ sơ — Gate4 | processing | NF CycloneIV45,07MHz là lịch sử; F A35T100MHz R2R đạt. Còn đo matched NF/F, accuracy và hồ sơ cuối |
 
-**Thứ tự tiếp theo:** chọn ứng viên khối cơ sở theo số đo Vivado/Xilinx tại PLAN§8.16.9: shifters → LOD/LZD → cặp LOD/shifter, sau đó mới SAC và khối lớn theo STA. Theo lựa chọn15/10, không dùng Altera cho phép đo mới; số NF45,07MHz trên CycloneIV giữ ý nghĩa lịch sử. Đã có ứng viên leaf và kiểm HDL/lint đạt; chưa ghép vào NF/SAC/parser. Không bắt buộc thử mọi nhánh làm lùi RTL F. Giữ fraction nhân12 bit;ACC_WIN32 là cửa sổ cộng fused,không phải lựa chọn fraction mới từ khảo sát8.11. Hạn chính29/11,đệm30/11–04/12 trước05/12/2026 giữ nguyên. Bàn giao tuần13 tại PLAN8.15.
+**Thứ tự tiếp theo:** đóng khảo sát primitive Xilinx tại PLAN§8.18, sau đó tối ưu SAC và khối lớn theo STA. Đã promote LOD nhóm4 riêng MODE0,N31/32; parser N30 và hai shifter giữ bản gốc. Không suy Fmax toàn MAC từ benchmark leaf/chuỗi. Theo lựa chọn15/10, phép đo mới dùng Xilinx; số CycloneIV giữ ý nghĩa lịch sử. Giữ fraction nhân12 bit; ACC_WIN32 là cửa sổ cộng fused. Hạn chính29/11, đệm30/11–04/12 trước05/12/2026 giữ nguyên; W14 tại mục3.2/PLAN§8.17.
+
 
 ## 3. Tiến độ theo tuần
 
@@ -249,6 +250,7 @@ Tuần14 chỉ được đánh dấu `✅` khi TC-W14-01..05 và TC-W14-08 đề
 | --- | --- | --- | --- |
 | 1 | Phân loại RTL và cập nhật đường dẫn | 55 file giữ nguyên byte; tách common/parser/packer/multiplier/adder/NF/F, paper, candidate và benchmark. Có file list production và bản đồ thư mục; runner WSL/ModelSim/Vivado dùng đường dẫn mới. Lint 17 profile sạch; smoke NF/F mỗi bản10.000, ModelSim143.976 và XSim8.192 đều0 mismatch | ✅ |
 | 2 | Dọn dữ liệu kiểm chứng | Xóa build/cache có thể tái tạo, thu hồi khoảng3,9GB; giữ báo cáo, thống kê, biểu đồ, coverage, seed/lệnh/hash, snapshot nguồn và fixture. Có script dry-run/apply và kiểm hash dữ liệu giữ lại; không thay trạng thái nghiệm thu số học/PPA | ✅ |
+| 3 | Tối ưu ba primitive dùng chung NF/F | Đã promote LOD nhóm4 riêng MODE0,N31/32; hai shifter giữ gốc theo timing chéo. Unit21.576.912/0 mismatch,524 lint,510 P&R và114 netlist đạt; smoke NF ES2/ES3/F mỗi bản10.000 đạt. Không suy Fmax toàn MAC | ✅ |
 
 ### 4.16. Mẫu cập nhật tiếp theo
 

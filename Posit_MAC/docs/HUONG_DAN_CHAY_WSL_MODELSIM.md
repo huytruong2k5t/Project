@@ -369,3 +369,22 @@ Giữ source, seed, compiler/simulator version, lệnh, summary, log PASS/FAIL, 
 Log/core counts không thay nghiệm thu tích hợp. Chỉ đánh dấu tiến độ hoàn thành theo phạm vi thực sự đã kiểm. Bước tiếp theo sau Gate2: RTL adder tuần10 → MAC v1/Gate3 tuần11 → regression cuối và PPA.
 
 Repository sao lưu: `https://github.com/huytruong2k5t/Project`. Checkout Git hiện dùng nằm riêng ở `Posit_MAC/scratch/github_week9_backup`; không chạy `git init` thêm tại gốc dữ liệu dự án. Chỉ commit nguồn/tài liệu/bằng chứng gọn, không đưa DLL/binary, wave, cache hoặc vector lớn vào Git.
+
+
+## Checkpoint primitive Xilinx v2 — 16/10/2026
+
+Nguồn chính chỉ đổi LOD MODE0,N31/32,S mặc định; hai shifter giữ gốc. Các lệnh cũ tham chiếu hash trước refactor có thể từ chối nguồn hiện tại; đó là kiểm checkpoint lịch sử, không phải bằng chứng sai chức năng. Chi tiết/các phase và giới hạn ở PLAN L1 §8.18, lệnh đầy đủ trong `scripts/README.md`.
+
+Nếu clone GitHub chỉ có gói bằng chứng, từ WSL trong Posit_MAC chạy `python3 scripts/archive_primitive_v2.py restore`, sau đó `python3 scripts/collect_primitive_v2.py --final`. Restore không ghi đè nội dung khác và không cài công cụ.
+
+Từ Windows CMD tại Posit_MAC, kiểm lại bản đã chọn mà giữ nguyên log gốc:
+
+```bat
+powershell -NoProfile -File scripts/verify_primitive_v2.ps1 -FrozenSources -Variants lod_only -RunRoot results/my_primitive_replay
+powershell -NoProfile -File scripts/run_primitive_v2_ppa.ps1 -FrozenSources -Phase adoption -Part xc7a35tcpg236-1 -RunRoot results/my_primitive_ppa -PlanOnly
+powershell -NoProfile -File scripts/run_primitive_v2_ppa.ps1 -FrozenSources -Phase adoption -Part xc7a35tcpg236-1 -RunRoot results/my_primitive_ppa
+```
+
+Bỏ `-PlanOnly` mới chạy Vivado; đổi Part sang `xc7a100tcsg324-1` để đo part còn lại. Không gọi `prepare_primitive_v2.py` trên nguồn đã promote; nó cố ý khóa snapshot baseline cũ. Chạy lại cùng RunRoot chỉ tiếp tục ID chưa xong, không phải đo mới từ đầu. Muốn đo mới dùng tên RunRoot mới; không xóa report cũ.
+
+Smoke tích hợp nguồn hiện tại từ WSL: `LAYOUT_RESULTS_DIR=results/my_current_smoke LAYOUT_NF_ES_LIST="2 3" bash --noprofile --norc scripts/verify_rtl_layout.sh`. Số primitive/chuỗi không đại diện Fmax toàn MAC hoặc tần số kit.

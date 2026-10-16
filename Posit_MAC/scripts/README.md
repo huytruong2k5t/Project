@@ -95,3 +95,37 @@ Không xóa `output_files` vì chứa báo cáo PPA cần giữ. Script mặc đ
 `W13_RESULTS_DIR=results/my_run bash scripts/verify_week13_fused.sh 10000 smoke line`.
 Runner Xilinx nhận `-RunRoot results/my_run`; mô phỏng cần fixture `results/my_run/verilator/pilot.vectors`
 (sinh bằng runner Verilator với prefix `pilot` và ít nhất 8192 giao dịch).
+
+
+## Khảo sát primitive v2 — 16/10/2026
+
+Quyết định production: chỉ LOD MODE0,N31/32,S mặc định dùng nhóm4; hai shifter giữ gốc. Các bản thử ở `rtl/candidates/primitives_v2/` không nằm trong `production.f`. Chi tiết tại PLAN L1 §8.18 và `results/primitive_v2_20261016/adoption.json`.
+
+Audit checkpoint hiện có (Python3; khi clone chỉ có archive thì restore trước):
+
+```text
+python scripts/archive_primitive_v2.py restore
+python scripts/collect_primitive_v2.py --final
+python scripts/archive_primitive_v2.py check
+```
+
+Archive giữ nguyên bằng chứng gốc. Restore từ chối ghi đè file local khác nội dung. Không dùng `prepare_primitive_v2.py` sau promote: nó cố ý từ chối canonical baseline đã đổi. Để kiểm lại từ snapshot gốc và ghi log mới ở thư mục riêng, từ PowerShell tại Posit_MAC:
+
+```powershell
+./scripts/verify_primitive_v2.ps1 -FrozenSources -Variants lod_only -RunRoot results/my_primitive_replay
+./scripts/run_primitive_v2_ppa.ps1 -FrozenSources -Phase adoption -Part xc7a35tcpg236-1 -RunRoot results/my_primitive_ppa -PlanOnly
+./scripts/run_primitive_v2_ppa.ps1 -FrozenSources -Phase adoption -Part xc7a35tcpg236-1 -RunRoot results/my_primitive_ppa
+```
+
+Dùng cùng lệnh PPA với `-Part xc7a100tcsg324-1` để đối chiếu part còn lại. `-PlanOnly` chỉ kiểm đầu vào và hiển thị đường dẫn, không đo. Runner tiếp tục các ID còn thiếu trong RunRoot; ID đã có không được đo lại. Muốn đo mới dùng RunRoot mới, không xóa hoặc sửa bằng chứng đóng băng. Collector mặc định audit checkpoint gốc; báo cáo đo mới nằm tại RunRoot/part/phase/metrics.csv và các report tương ứng.
+
+Trong WSL tại đúng thư mục dự án:
+
+```bash
+bash --noprofile --norc scripts/lint_primitive_v2.sh
+LAYOUT_RESULTS_DIR=results/my_current_smoke LAYOUT_NF_ES_LIST="2 3" bash --noprofile --norc scripts/verify_rtl_layout.sh
+```
+
+Lint primitive kiểm các snapshot đã khóa, không ghi lại hash baseline lịch sử bằng nguồn common mới. Smoke thứ hai dùng nguồn common hiện tại, kiểm NF32 ES2/ES3 và F32 ES3; không phải full10M hoặc STA toàn MAC.
+
+Các phase đã đo: lod/lod_mixed/shift/chain/chain_extra/packer/confirm/release/adoption. Helper chuẩn bị và case list trong study lưu quy trình xây dựng ban đầu; không gọi để ghi đè snapshot sau đo. `review_primitive_v2.py` đối chiếu cùng chiến lược, không tự promote. `verify_primitive_v2_netlists.py` và runner PowerShell cùng tên kiểm chức năng/latency các netlist Default của checkpoint gốc bằng XSim, không SDF. Số MHz là ước lượng R2R từ slack ở period5ns, không phải Fmax sweep/board; ba chiến lược không phải ba random seed.

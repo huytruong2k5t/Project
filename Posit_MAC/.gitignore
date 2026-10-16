@@ -175,3 +175,12 @@ results/week12/**/*.sof
 results/layout_cleanup_20261015/**/src/
 results/layout_cleanup_20261015/**/obj_dir/
 results/layout_cleanup_20261015/**/obj_fast/
+results/primitive_v2_20261016/**/appdata/
+results/primitive_v2_20261016/**/localappdata/
+
+# Primitive replay roots: runtime/cache/wave files are regenerable.
+results/**/appdata/
+results/**/localappdata/
+results/**/tmp/
+*.wdb
+*.wlf

@@ -1,0 +1,83 @@
+// Functional post-route check: verifies the unchanged two-bank boundary latency.
+`timescale 1ns/1ps
+module tb_primitive_v2_netlist;
+    localparam int N = @N@;
+    localparam int KIND = @KIND@;
+    localparam int MODE = @MODE@;
+    localparam int ARITH = @ARITH@;
+    localparam int FILL_KIND = @FILL@;
+    localparam int SHIFT_W = @SW@;
+    localparam int RESULT_W = (KIND == 2) ? SHIFT_W+1
+                            : (KIND >= 3) ? N+SHIFT_W+1 : N;
+    logic clk = 0;
+    logic [N-1:0] data = '0;
+    logic [SHIFT_W-1:0] amount = '0;
+    logic fill_val = 0;
+    wire [RESULT_W-1:0] result;
+    logic [RESULT_W-1:0] previous;
+    logic [63:0] rng = 64'd20261016;
+    bit have_previous = 0;
+    int checks = 0;
+    always #5 clk = ~clk;
+    primitive_v2_top u_dut (.clk(clk), .data(data), .amount(amount), .fill_val(fill_val), .result(result));
+
+    function automatic logic [RESULT_W-1:0] oracle;
+        logic [N-1:0] shifted;
+        logic [SHIFT_W-1:0] count;
+        logic found;
+        logic pad;
+        int sh;
+        int src;
+        found = 0;
+        count = '0;
+        for (int i=0;i<N;i++) begin
+            if (!found && data[N-1-i] == (MODE != 1)) begin
+                found = 1;
+                count = SHIFT_W'(i);
+            end
+        end
+        if (KIND == 2) return RESULT_W'({found,count});
+        sh = (KIND >= 3) ? int'(count) + ((KIND == 4) ? 1 : 0) : int'(amount);
+        pad = ARITH ? data[N-1] : ((FILL_KIND == 0) ? 1'b0 : fill_val);
+        for (int j=0;j<N;j++) begin
+            src = (KIND == 1) ? j+sh : j-sh;
+            shifted[j] = (src>=0 && src<N) ? data[src] : ((KIND == 1) ? pad : 1'b0);
+        end
+        if (KIND >= 3) return RESULT_W'({found,count,shifted});
+        return RESULT_W'(shifted);
+    endfunction
+
+    initial begin
+        // Xilinx glbl asserts GSR for the first 100 ns.
+        #200;
+        for (int p=0;p<10000;p++) begin
+            @(negedge clk);
+            rng = rng ^ (rng << 13);
+            rng = rng ^ (rng >> 7);
+            rng = rng ^ (rng << 17);
+            case (p % 8)
+                0: data = '0;
+                1: data = '1;
+                2: data = N'(64'h1 << (p % N));
+                3: data = ~N'(64'h1 << (p % N));
+                default: data = N'(rng);
+            endcase
+            amount = SHIFT_W'(p);
+            fill_val = rng[63];
+            @(posedge clk);
+            #2;
+            if (have_previous) begin
+                if (result !== previous) $fatal(1,"NETLIST_FAIL p=%0d result=%h expected=%h",p,result,previous);
+                checks++;
+            end
+            previous = oracle();
+            have_previous = 1;
+        end
+        @(posedge clk);
+        #2;
+        if (result !== previous) $fatal(1,"NETLIST_FAIL drain");
+        checks++;
+        $display("NETLIST_PASS checks=%0d mismatch=0 seed=20261016",checks);
+        $finish;
+    end
+endmodule

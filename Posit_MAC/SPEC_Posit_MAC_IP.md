@@ -1687,3 +1687,10 @@ Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.jso
 
 Đường dẫn hiện hành phân nhóm theo `rtl/README.md` và `rtl/production.f`; thư mục `research`, `candidates`, `benchmarks` tách khỏi file list production.
 Đợt di chuyển không đổi phiên bản hợp đồng v1.18, nội dung RTL, giao diện hoặc lịch pipeline. Hash và số đo trong báo cáo cũ vẫn tham chiếu checkpoint gốc; bản đồ đường dẫn/hash ở `results/layout_cleanup_20261015/rtl_migration.json`.
+
+
+### Ghi chú hiện thực primitive — 16/10/2026
+
+`rtl/common/lod_lzd_core.sv` dùng cây chọn nhóm4 khi MODE=0,N=31 hoặc32,S=clog2(N); mọi cấu hình khác giữ cây nhị phân gốc. Đây là lựa chọn hiện thực đã kiểm bit-exact, không thay quy ước K/vld, parameter/ports, latency, precision hoặc hợp đồng số học v1.18. MODE1 và parser posit32 N30 vẫn dùng cây gốc. Hai dynamic shifter giữ nguyên sau khi khảo sát timing/LUT trên A35T và A100T; không chọn bản giảm LUT nếu đánh đổi timing không phù hợp.
+
+Bằng chứng nguồn và tổ hợp LOD–shifter ở `results/primitive_v2_20261016/adoption.json`, chi tiết PLAN§8.18. Kiểm tích hợp NF32 ES2/ES3 và F32 ES3 mỗi bản10.000 giao dịch đạt0 mismatch; đây là smoke cho checkpoint hiện thực mới, không thay ma trận nghiệm thu cuối hoặc số đo Fmax toàn MAC. Checkpoint số học và hash nguồn cũ giữ nguyên ý nghĩa lịch sử; không sửa các báo cáo cũ để khớp nguồn mới. Mục11.16 dành cho nghiệm thu tuần14 theo kế hoạch hiện hành.

@@ -263,3 +263,10 @@ Toàn posit_mac_nf32/3,FW12,EXACT_EN=OPS_EN=1 đã post-route Quartus13.0sp1/EP4
 Source canonical RTL không đổi. Bản copy parser choQuartus13 chỉ thêm generate/endgenerate;audit so tokens xác nhận logic giữ nguyên. ASYNC_REG bịQuartus13 bỏ qua,còn review CDC/RDC riêng. Đề xuất constant slices/norm–round pipeline,A1align,A2/A3retiming vàSACfeedback tại PLAN8.14/results/week12/pipeline_recommendations.json,chưa áp dụng hoặc thay baseline.
 
 L1 F_W32/flags/state đã đóng G-F-L1 với oracle độc lập,nguồn tại l1/include/posit_fused_window.hpp;không có RTL F trong phiên tuần12. Hợp đồng W12-F-1 vàpipeline dự kiếnF1..F5 ởSPECv1.16§5.12/11.14,handoff.json. Tuần13 thực hiệnRTL theo model frozen trước pilot/regression. Runners/hash/timing tại results/week12/summary.json vàPLAN8.14–8.15;final NF/F matrix,accuracy/PPA vàGate4 còn mở.
+
+
+## Khảo sát primitive v2 — 16/10/2026
+
+`candidates/primitives_v2/` chứa các nguồn thay thế cùng tên module để đo riêng: `group4`, `group4_mixed` cho LOD/LZD; `reverse`, `radix4`, `native` cho shifter. Mỗi lượt chỉ biên dịch đúng một triển khai cho một tên module. Các file này không nằm trong `production.f`.
+
+`common/lod_lzd_core.sv` đã chọn nhóm4 riêng MODE0,N31/32,S=clog2N; các cấu hình khác vẫn dùng cây nhị phân. Hai shifter `common/` giữ nguyên byte: các bản thử chưa giữ được lợi ích timing qua cả hai Artix7 và các kiểu fill/width liên quan. Quyết định và hash nguồn ở `adoption.json`; đã kiểm tích hợp NF32 ES2/ES3 và F32 ES3, mỗi bản10.000 giao dịch/0 mismatch. Các nguồn `selected` còn gồm native12 chỉ là bản thử, không phải toàn bộ nguồn production. Snapshot/hash/báo cáo tại `results/primitive_v2_20261016`; lệnh tại `scripts/README.md`, phân tích tại PLAN L1 §8.18. Không thêm latency hoặc đổi giao diện số học trong khảo sát này.

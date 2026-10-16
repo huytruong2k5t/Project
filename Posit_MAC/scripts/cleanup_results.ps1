@@ -1,4 +1,8 @@
-param([switch]$Apply)
+param([switch]$Apply,
+      [ValidatePattern('^results/[a-zA-Z0-9_/-]+$')]
+      [string]$ReportRoot = ('results/cleanup_' + (Get-Date -Format yyyyMMdd_HHmmss)),
+      [ValidatePattern('^results(/[a-zA-Z0-9_/-]+)?$')]
+      [string]$ScopeRoot = 'results')
 $ErrorActionPreference = 'Stop'
 $project = [IO.Path]::GetFullPath((Split-Path $PSScriptRoot -Parent))
 $results = [IO.Path]::GetFullPath((Join-Path $project 'results'))
@@ -6,7 +10,9 @@ $prefix = $results + [IO.Path]::DirectorySeparatorChar
 # Only disposable tool databases. Keep source snapshots, fixtures, raw coverage,
 # CSV/JSON, plots, logs, timing reports, seeds and hash manifests.
 $disposable = @('obj_dir','obj_fast','work','db','incremental_db','xsim.dir','.Xil','tmp','__pycache__')
-$all = @(Get-ChildItem -LiteralPath $results -Recurse -Force)
+$scan = [IO.Path]::GetFullPath((Join-Path $project $ScopeRoot))
+if ($scan -ne $results -and !$scan.StartsWith($prefix,[StringComparison]::OrdinalIgnoreCase)) {throw 'Cleanup scope outside results'}
+$all = @(Get-ChildItem -LiteralPath $scan -Recurse -Force)
 if (@($all | Where-Object { $_.Attributes -band [IO.FileAttributes]::ReparsePoint }).Count) {
     throw 'Reparse point inside results: review manually before cleanup.'
 }
@@ -25,6 +31,7 @@ foreach ($file in @($all | Where-Object { !$_.PSIsContainer })) {
 }
 $report = [ordered]@{
     mode = $(if ($Apply) {'APPLIED'} else {'DRY_RUN'})
+    scope = $ScopeRoot
     date = (Get-Date -Format o)
     before_bytes = [long](($removed + $kept | Measure-Object Length -Sum).Sum)
     reclaim_bytes = [long](($removed | Measure-Object Length -Sum).Sum)
@@ -35,7 +42,8 @@ $report = [ordered]@{
     policy = 'Only disposable build/cache directories; source/evidence/fixtures remain byte-identical.'
 }
 if (!$Apply) { $report | ConvertTo-Json -Depth 5; return }
-$out = Join-Path $results 'layout_cleanup_20261015'
+$out = [IO.Path]::GetFullPath((Join-Path $project $ReportRoot))
+if (!$out.StartsWith($prefix,[StringComparison]::OrdinalIgnoreCase)) {throw 'Report directory outside results'}
 New-Item -ItemType Directory -Force $out | Out-Null
 $protected = @($kept | Where-Object {
     # These two generated receipts are replaced after verification below.

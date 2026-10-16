@@ -1247,3 +1247,48 @@ RTL được phân nhóm tại `rtl/README.md`, manifest build chính `rtl/produ
 Runner WSL/ModelSim/Vivado dùng đường dẫn mới và resolver cho danh sách theo tên. Đây là bảo trì dự án, không đổi hợp đồng NF/F hay trạng thái Gate.
 Kết quả đo cũ giữ nguyên; bản đồ di chuyển/hash và kiểm smoke riêng tại `results/layout_cleanup_20261015`.
 Build/cache đã dọn; xem `scripts/README.md` để tái build hoặc dọn định kỳ. Không chạy lại regression 10M hoặc PPA chỉ vì đổi thư mục.
+
+### 8.17. Tuần14 — mục dành cho nghiệm thu cuối
+
+Kế hoạch đã lập tại `docs/TIEN_DO_DO_AN.md` §3.2; chưa thực thi W14 trong phiên tối ưu primitive. Nhật ký/lệnh W14 sẽ ghi tại đây khi bắt đầu, tránh lẫn với khảo sát §8.18.
+
+### 8.18. Khảo sát và chọn primitive v2 — 16/10/2026
+
+Theo thứ tự đã thống nhất: khóa baseline → thử LOD/LZD nhóm4 → shifter đảo tầng/radix4/native → đo leaf và chuỗi trên hai Xilinx → chỉ promote phần có lợi, kiểm lại tích hợp. Giữ nguyên tên module, parameter, I/O và latency; không sửa SAC, parser, SBM, controller hoặc số học NF/F.
+
+**Quyết định production:** `rtl/common/lod_lzd_core.sv` dùng nhóm4 chỉ khi MODE0,N31/32,S=clog2N; mọi cấu hình khác giữ cây nhị phân. Hai shifter `common/` giữ nguyên byte so với checkpoint8f9d884. Tổ hợp được nghiệm thu là `source/lod_only`; nguồn `selected` còn native12 là bản thử, không được copy toàn bộ sang production. Quyết định/hash ở `results/primitive_v2_20261016/adoption.json`.
+
+LOD31 được chọn theo chuỗi normalization: ≥5% gain ở cả hai part, không có chiến lược chậm hơn, LUT tăng≤10%. Riêng leaf31 A35T chỉ+3,83%, không gọi là thắng ngưỡng leaf5%. Native left12 giảm22→19LUT nhưng leaf A100T chậm khoảng14%; native left31 giảm khoảng1,56% ở A100T. Các right shifter chưa giữ được lợi ích timing qua fill/width/part; đặc biệt packer thực tế trên A35T nhanh hơn các bản thử. Đây là kết luận trong các kiến trúc đã đo, không khẳng định tối ưu toàn cục.
+
+**Kiểm chức năng và công cụ:** XSim2026.1, seed20261016; bảy bộ nguồn×138 cấu hình, mỗi bộ3.082.416 checks, tổng21.576.912/0 mismatch. Exhaustive nhỏ/all shift codes, zero/ones/one-hot/one-cold và directed/random ở width lớn; N1 shifter, MODE0/1, S override, SHIFT_W nhỏ/bằng/lớn, fill0/custom/sign và overshift. Counts lặp corpus giữa các bộ nguồn, không phải số vector ngẫu nhiên độc lập. Verilator5.032 strict lint524 lượt sạch, không waive; hash đầu vào lint đã lưu. Lượt đầu500-pattern43.510.464/0 mismatch có nguồn/log riêng tại source_initial.zip/verification_initial, không cộng với suite cuối để gọi là vector độc lập.
+
+**Điều kiện đo:** Vivado2026.1 build6511674, xc7a35tcpg236-1 và xc7a100tcsg324-1. Chu kỳ5ns, uncertainty0,1ns, OOC input min=max2,5ns, output max0,5/min0ns, hai bank khai báo giống nhau. Default sàng lọc, sau đó Default/Explore/Runtime xác nhận; đây là chiến lược, không phải ba random seed. F_STA=1000/(5−slack_R2R), chưa sweep Fmax, chưa đo kit/power. Dòng chuỗi vẫn có slack âm tại200MHz; không gọi là closure200MHz hoặc Fmax toàn MAC.
+
+| Part | Cấu hình MODE0 | LUT vật lý trung vị | FF bank đo | F_STA trung vị MHz | Tăng |
+| --- | --- | --- | --- | --- | --- |
+| A35T | LOD31 | 25→26 | 37→37 | 249.50→259.07 | +3.83% |
+| A35T | LOD32 | 26→26 | 38→38 | 242.78→277.47 | +14.29% |
+| A35T | LOD31→left31 | 120→123 | 68→67 | 162.26→178.00 | +9.70% |
+| A100T | LOD31 | 25→26 | 37→37 | 249.75→280.50 | +12.31% |
+| A100T | LOD32 | 26→26 | 38→38 | 243.43→277.24 | +13.89% |
+| A100T | LOD31→left31 | 120→123 | 68→67 | 168.49→177.37 | +5.27% |
+
+LUT/FF là từ report utilization sau route. Primitive tổ hợp không có FF nội bộ; implementation có thể gộp/nhân bản FF ở bank đo. Kiểm netlist chức năng sau route đối chiếu oracle và latency hai bank, không SDF. Bản LOD-only có12 netlist/120.000 checks đạt0 mismatch; tổng netlist của toàn study xem summary.json, chỉ báo hoàn tất khi đủ matrix. Đã kiểm nguồn ghép chính xác trước promote, không suy từ phép cộng các điểm thắng leaf.
+
+| Instance posit32 | Độ rộng primitive | Phạm vi kết luận |
+| --- | --- | --- |
+| Parser | LOD/LZD30; left29,SW5 | Giữ nguyên; không lấy gain N31/N32 thay số đo N30 |
+| SAC | Fraction12 hoặc exact26/27; SW=clog2(N+1) | Không sửa hoặc đo toàn SAC/scale/exhausted/control |
+| Add alignment | Right32(ES2)/31(ES3),fill0 | Không suy từ bản fill động |
+| Add normalization | LOD+left31(ES2)/30(ES3) | Bản31 hưởng LOD mới, bản30 giữ gốc |
+| Packer | Right60(ES2)/59(ES3),SW5,fill động | Phase riêng; kết quả SW6 không đại diện packer |
+
+KIND3/4 của benchmark dùng shifter SW+1. KIND3 bit thêm bằng0 và được tối ưu; KIND4 chỉ là chuỗi trừu tượng. `selected` chỉ bật native12 khi SW4, nên KIND4 N12/SW5 đi qua fallback; không dùng số này để nghiệm thu native12 trong SAC thật. Group4_mixed dùng pad lũy thừa2/root nhị phân cũng đã thử; không sửa benchmark, seed hoặc ngưỡng giữa lượt đo để ép kết quả.
+
+**Tích hợp sau promote:** nguồn common thực tế khớp hash snapshot được chọn;17 lint profile sạch. NF32 ES2 và ES3 mỗi bản10.000 completed (79/77 reset-aborted), F32 ES3 10.000 completed, tất cả0 mismatch. Compiler/tool/seed/source+binary hashes và counters ở integration/summary.json; NF seed20261013+100×32+ES, F seed20261015. Không thay ma trận10M đã nghiệm thu hoặc báo cáo source freeze cũ; đây là checkpoint hiện thực mới và smoke phù hợp với primitive bit-exact. Có kiểm thêm replay vào RunRoot riêng để tránh ghi đè bằng chứng.
+
+**Tái lập:** hướng dẫn hiện hành tại scripts/README.md và docs/HUONG_DAN_CHAY_WSL_MODELSIM.md. Archive được kiểm SHA và có lệnh restore không ghi đè nội dung khác. Sau promote dùng `-FrozenSources` để replay snapshot cũ; không chạy preparer baseline lên common mới. Ví dụ: `scripts/verify_primitive_v2.ps1 -Variants lod_only -FrozenSources -RunRoot results/my_replay`; PPA `scripts/run_primitive_v2_ppa.ps1 -Phase adoption -Part <part> -FrozenSources -RunRoot results/my_ppa` (thêm -PlanOnly để preflight). Mỗi RunRoot mới đo lại, cùng RunRoot chỉ tiếp tục ID còn thiếu. Collector mặc định audit checkpoint gốc, không tự thu thập số đo RunRoot khác.
+
+Build/cache/DCP/wave không đưa vào Git; giữ snapshot/checker, report/CSV, raw coverage, lệnh/seed/tool/hash trong gói nhỏ có thể restore. Không chạy TableI, không tự tăng trạng thái Gate4 hoặc nghiệm thu tuần14; PLAN§8.17 vẫn dành cho W14.
+
+**Trạng thái toàn study:** hoàn tất510 lượt place/route,114 netlist/1.140.000 checks/0 mismatch; collector --final COMPLETE. Build/cache mới đã dọn có kiểm hash dữ liệu giữ lại; nguồn/report được nén để backup. Trạng thái canonical tại results/primitive_v2_20261016/summary.json. Commit/push thực hiện cuối phiên, không suy số toàn MAC hoặc thay Gate.

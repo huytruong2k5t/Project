@@ -1,0 +1,361 @@
+{
+  "status": "PROMOTED",
+  "date": "2026-10-16",
+  "source_sha256": {
+    "rtl/common/lod_lzd_core.sv": "13bea3038ece40ca3d77f5fbb2e4e45d082590fddad1fee40746af94b06bd62d",
+    "rtl/common/dyn_left_shifter.sv": "537bfd27d3145ead9c5f74cc18d287ed83b89e0fd8a3e6ed834b75b55d017fb8",
+    "rtl/common/dyn_right_shifter.sv": "89514601248f33eef173b113cbed062d2a777ec6f84d1f3b0fc66eacd946ef86"
+  },
+  "changed": [
+    "rtl/common/lod_lzd_core.sv"
+  ],
+  "selection": "Group4 only MODE0,N31/N32,S=clog2N; original binary fallback for all other configurations. No interface/parameter/pipeline change.",
+  "retained": {
+    "dyn_left_shifter": "Original; native/descending alternatives had cross-part timing regressions.",
+    "dyn_right_shifter": "Original; no robust timing gain across zero/custom fill and real packer SW5."
+  },
+  "qualification": "Both parts: three matched implementation strategies, positive leaf timing, N32 >=5% median matched gain, N31 normalization chain >=5% median matched gain, no matched-strategy slowdown and <=10% LUT growth. N31 A35 leaf-only gain is3.83%, not a standalone >=5% material win.",
+  "verification": {
+    "unit": {
+      "tool": "Vivado XSim 2026.1",
+      "variant": "lod_only",
+      "mismatch": 0,
+      "status": "PASS",
+      "scope": "Binary exhaustive small widths, all shift encodings, directed/random large widths; no X/Z equivalence claim",
+      "seed": 20261016,
+      "configurations": 138,
+      "checks": 3082416
+    },
+    "strict_lint_invocations": 524,
+    "post_route_adoption_netlists": 12,
+    "post_route_checks": 120000,
+    "mismatch": 0
+  },
+  "integration_status": "PASS",
+  "measurements": [
+    {
+      "part": "xc7a35tcpg236-1",
+      "variant": "lod_only",
+      "n": 31,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1,
+      "shift_w": 5,
+      "median_matched_gain_pct": 3.83419689119171,
+      "min_matched_gain_pct": 3.83419689119171,
+      "median_lut_change_pct": 4.0000000000000036,
+      "max_lut_change_pct": 4.0000000000000036,
+      "hold_min": 0.22,
+      "pairs": [
+        {
+          "strategy": "default",
+          "sta_gain_pct": 3.83419689119171,
+          "lut_change_pct": 4.0000000000000036,
+          "baseline_lut": 25,
+          "candidate_lut": 26,
+          "baseline_ff": 37,
+          "candidate_ff": 37,
+          "baseline_slack": 0.992,
+          "candidate_slack": 1.14,
+          "hold": 0.22
+        },
+        {
+          "strategy": "explore",
+          "sta_gain_pct": 3.83419689119171,
+          "lut_change_pct": 4.0000000000000036,
+          "baseline_lut": 25,
+          "candidate_lut": 26,
+          "baseline_ff": 37,
+          "candidate_ff": 37,
+          "baseline_slack": 0.992,
+          "candidate_slack": 1.14,
+          "hold": 0.22
+        },
+        {
+          "strategy": "runtime",
+          "sta_gain_pct": 9.355106559645732,
+          "lut_change_pct": 4.0000000000000036,
+          "baseline_lut": 25,
+          "candidate_lut": 26,
+          "baseline_ff": 37,
+          "candidate_ff": 37,
+          "baseline_slack": 1.049,
+          "candidate_slack": 1.387,
+          "hold": 0.226
+        }
+      ]
+    },
+    {
+      "part": "xc7a35tcpg236-1",
+      "variant": "lod_only",
+      "n": 32,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1,
+      "shift_w": 5,
+      "median_matched_gain_pct": 14.289678135405094,
+      "min_matched_gain_pct": 13.096559378468363,
+      "median_lut_change_pct": 0.0,
+      "max_lut_change_pct": 0.0,
+      "hold_min": 0.316,
+      "pairs": [
+        {
+          "strategy": "default",
+          "sta_gain_pct": 14.289678135405094,
+          "lut_change_pct": 0.0,
+          "baseline_lut": 26,
+          "candidate_lut": 26,
+          "baseline_ff": 38,
+          "candidate_ff": 38,
+          "baseline_slack": 0.881,
+          "candidate_slack": 1.396,
+          "hold": 0.316
+        },
+        {
+          "strategy": "explore",
+          "sta_gain_pct": 14.289678135405094,
+          "lut_change_pct": 0.0,
+          "baseline_lut": 26,
+          "candidate_lut": 26,
+          "baseline_ff": 38,
+          "candidate_ff": 38,
+          "baseline_slack": 0.881,
+          "candidate_slack": 1.396,
+          "hold": 0.316
+        },
+        {
+          "strategy": "runtime",
+          "sta_gain_pct": 13.096559378468363,
+          "lut_change_pct": 0.0,
+          "baseline_lut": 26,
+          "candidate_lut": 26,
+          "baseline_ff": 38,
+          "candidate_ff": 38,
+          "baseline_slack": 0.924,
+          "candidate_slack": 1.396,
+          "hold": 0.316
+        }
+      ]
+    },
+    {
+      "part": "xc7a35tcpg236-1",
+      "variant": "lod_only",
+      "n": 31,
+      "kind": 3,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0,
+      "shift_w": 5,
+      "median_matched_gain_pct": 9.700961196155223,
+      "min_matched_gain_pct": 5.957517424493863,
+      "median_lut_change_pct": 2.499999999999991,
+      "max_lut_change_pct": 9.523809523809534,
+      "hold_min": 0.347,
+      "pairs": [
+        {
+          "strategy": "default",
+          "sta_gain_pct": 9.700961196155223,
+          "lut_change_pct": 2.499999999999991,
+          "baseline_lut": 120,
+          "candidate_lut": 123,
+          "baseline_ff": 68,
+          "candidate_ff": 67,
+          "baseline_slack": -1.163,
+          "candidate_slack": -0.618,
+          "hold": 0.473
+        },
+        {
+          "strategy": "explore",
+          "sta_gain_pct": 13.14031180400892,
+          "lut_change_pct": 2.499999999999991,
+          "baseline_lut": 120,
+          "candidate_lut": 123,
+          "baseline_ff": 68,
+          "candidate_ff": 67,
+          "baseline_slack": -1.096,
+          "candidate_slack": -0.388,
+          "hold": 0.465
+        },
+        {
+          "strategy": "runtime",
+          "sta_gain_pct": 5.957517424493863,
+          "lut_change_pct": 9.523809523809534,
+          "baseline_lut": 105,
+          "candidate_lut": 115,
+          "baseline_ff": 68,
+          "candidate_ff": 67,
+          "baseline_slack": -1.385,
+          "candidate_slack": -1.026,
+          "hold": 0.347
+        }
+      ]
+    },
+    {
+      "part": "xc7a100tcsg324-1",
+      "variant": "lod_only",
+      "n": 31,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1,
+      "shift_w": 5,
+      "median_matched_gain_pct": 12.314165497896212,
+      "min_matched_gain_pct": 12.314165497896212,
+      "median_lut_change_pct": 4.0000000000000036,
+      "max_lut_change_pct": 4.0000000000000036,
+      "hold_min": 0.075,
+      "pairs": [
+        {
+          "strategy": "default",
+          "sta_gain_pct": 12.314165497896212,
+          "lut_change_pct": 4.0000000000000036,
+          "baseline_lut": 25,
+          "candidate_lut": 26,
+          "baseline_ff": 37,
+          "candidate_ff": 37,
+          "baseline_slack": 0.996,
+          "candidate_slack": 1.435,
+          "hold": 0.075
+        },
+        {
+          "strategy": "explore",
+          "sta_gain_pct": 12.314165497896212,
+          "lut_change_pct": 4.0000000000000036,
+          "baseline_lut": 25,
+          "candidate_lut": 26,
+          "baseline_ff": 37,
+          "candidate_ff": 37,
+          "baseline_slack": 0.996,
+          "candidate_slack": 1.435,
+          "hold": 0.075
+        },
+        {
+          "strategy": "runtime",
+          "sta_gain_pct": 24.051749485445484,
+          "lut_change_pct": 4.0000000000000036,
+          "baseline_lut": 25,
+          "candidate_lut": 26,
+          "baseline_ff": 37,
+          "candidate_ff": 37,
+          "baseline_slack": 0.781,
+          "candidate_slack": 1.599,
+          "hold": 0.224
+        }
+      ]
+    },
+    {
+      "part": "xc7a100tcsg324-1",
+      "variant": "lod_only",
+      "n": 32,
+      "kind": 2,
+      "mode": 0,
+      "arith": 0,
+      "fill": 1,
+      "shift_w": 5,
+      "median_matched_gain_pct": 13.88965899639587,
+      "min_matched_gain_pct": 6.196078431372554,
+      "median_lut_change_pct": 0.0,
+      "max_lut_change_pct": 0.0,
+      "hold_min": 0.282,
+      "pairs": [
+        {
+          "strategy": "default",
+          "sta_gain_pct": 13.88965899639587,
+          "lut_change_pct": 0.0,
+          "baseline_lut": 26,
+          "candidate_lut": 26,
+          "baseline_ff": 38,
+          "candidate_ff": 38,
+          "baseline_slack": 0.892,
+          "candidate_slack": 1.393,
+          "hold": 0.338
+        },
+        {
+          "strategy": "explore",
+          "sta_gain_pct": 13.88965899639587,
+          "lut_change_pct": 0.0,
+          "baseline_lut": 26,
+          "candidate_lut": 26,
+          "baseline_ff": 38,
+          "candidate_ff": 38,
+          "baseline_slack": 0.892,
+          "candidate_slack": 1.393,
+          "hold": 0.338
+        },
+        {
+          "strategy": "runtime",
+          "sta_gain_pct": 6.196078431372554,
+          "lut_change_pct": 0.0,
+          "baseline_lut": 26,
+          "candidate_lut": 26,
+          "baseline_ff": 38,
+          "candidate_ff": 38,
+          "baseline_slack": 0.938,
+          "candidate_slack": 1.175,
+          "hold": 0.282
+        }
+      ]
+    },
+    {
+      "part": "xc7a100tcsg324-1",
+      "variant": "lod_only",
+      "n": 31,
+      "kind": 3,
+      "mode": 0,
+      "arith": 0,
+      "fill": 0,
+      "shift_w": 5,
+      "median_matched_gain_pct": 5.933311539718855,
+      "min_matched_gain_pct": 5.267825470024845,
+      "median_lut_change_pct": 2.499999999999991,
+      "max_lut_change_pct": 2.499999999999991,
+      "hold_min": 0.222,
+      "pairs": [
+        {
+          "strategy": "default",
+          "sta_gain_pct": 5.267825470024845,
+          "lut_change_pct": 2.499999999999991,
+          "baseline_lut": 120,
+          "candidate_lut": 123,
+          "baseline_ff": 68,
+          "candidate_ff": 67,
+          "baseline_slack": -0.935,
+          "candidate_slack": -0.638,
+          "hold": 0.317
+        },
+        {
+          "strategy": "explore",
+          "sta_gain_pct": 6.414262084175704,
+          "lut_change_pct": 2.499999999999991,
+          "baseline_lut": 120,
+          "candidate_lut": 123,
+          "baseline_ff": 68,
+          "candidate_ff": 67,
+          "baseline_slack": -0.79,
+          "candidate_slack": -0.441,
+          "hold": 0.371
+        },
+        {
+          "strategy": "runtime",
+          "sta_gain_pct": 5.933311539718855,
+          "lut_change_pct": 0.0,
+          "baseline_lut": 113,
+          "candidate_lut": 113,
+          "baseline_ff": 68,
+          "candidate_ff": 67,
+          "baseline_slack": -1.481,
+          "candidate_slack": -1.118,
+          "hold": 0.222
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "STA estimates and abstract LOD-shift chains, not full-MAC Fmax or board signoff.",
+    "Do not infer native12 SAC timing from the SW+1 benchmark: selected native12 activates only SW4.",
+    "L1 arithmetic and previously frozen numerical checkpoints unchanged; current implementation source hash is a new checkpoint."
+  ],
+  "integration_evidence": "results/primitive_v2_20261016/integration/summary.json"
+}

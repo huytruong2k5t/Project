@@ -1,0 +1,14 @@
+{
+  "status": "PROVISIONAL_NOT_PROMOTED",
+  "sources": {
+    "lod_lzd_core": "13bea3038ece40ca3d77f5fbb2e4e45d082590fddad1fee40746af94b06bd62d",
+    "dyn_left_shifter": "f3c8c98671bb06fa2d68ba5a522c848e7178e1c9691f4f05effd8f1734ac3129",
+    "dyn_right_shifter": "89514601248f33eef173b113cbed062d2a777ec6f84d1f3b0fc66eacd946ef86"
+  },
+  "selection": {
+    "lod": "MODE=0,N=31 or32,S=clog2N:group4; otherwise original binary tree",
+    "left": "N=12,SHIFT_W=4:native; otherwise original cascade",
+    "right": "original; no uniform timing win across fill/width/part"
+  },
+  "requirement": "Pass selected-source oracle/lint, matched release PPA and complete cross-part review before copying to common."
+}

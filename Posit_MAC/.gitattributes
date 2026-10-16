@@ -99,3 +99,8 @@ rtl/**/*.sv -text
 scripts/*.sh text eol=lf
 scripts/rtl_paths.* -text
 results/layout_cleanup_20261015/** -text
+rtl/candidates/primitives_v2/**/*.sv -text
+scripts/*primitive_v2* -text
+scripts/lint_primitive_v2.sh text eol=lf
+tb/primitive_v2*.sv -text
+results/primitive_v2_20261016/** -text

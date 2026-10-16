@@ -152,3 +152,36 @@ python scripts/collect_parser_xor.py
 ```
 
 PPA runner từ chối output đã có metrics; chọn RunRoot mới để tránh ghi đè. Đo32/2 và32/3, ba directive Default/Explore/RuntimeOptimized, input bank34FF, period5ns, uncertainty0,1ns; không có thay đổi latency của production. `p1.rpt` là R2R input bank→parser; `p2.rpt`/`p2_slack.txt` trong driver hiện chứa toàn R2R, không riêng tầng P2. HD.CLK_SRC chưa khóa; số STA không phải Fmax board hoặc toàn MAC. Collector mặc định audit kết quả checkpoint gốc; dữ liệu tái chạy nằm ở RunRoot đã chọn. Regression source hash lịch sử không tự chuyển sang checkpoint mới.
+
+## OPT-01 prepack normalization — checkpoint16/10/2026
+
+Thử refactor riêng `mul_prepack_norm_comb`, lưu tại `rtl/candidates/multiplier/mul_prepack_norm_comb.sv`: bốn ứng viên nối bit hằng exact/approx × carry/no-carry, chọn ở cuối; scale cộng carry trên SF_W bit. Không thêm bank hoặc đổi lịch NF, không sửa pack/parse/SAC/adder. Baseline tại `results/prepack_refactor_20261016/source/baseline` là toàn production sau parser XOR; candidate thay đúng một module. Nguồn/hash/fixture/corpus/công cụ và số đo trước/sau tại thư mục study, kết luận tại PLAN§8.20.
+
+Trên clone mới, phục hồi evidence trước để có fixtures và reports gốc:
+
+```powershell
+python scripts/audit_prepack_refactor.py restore
+python scripts/audit_prepack_refactor.py collect
+```
+
+Trong WSL tại thư mục Posit_MAC, chọn thư mục mới cho mỗi lần replay:
+
+```bash
+export PREPACK_RESULTS_DIR=results/prepack_replay
+bash --noprofile --norc scripts/verify_prepack_refactor.sh
+bash --noprofile --norc scripts/verify_prepack_nf.sh
+```
+
+Lệnh đầu lint70 cấu hình và so RTL cũ/mới với oracle mask/shift. Lệnh thứ hai kiểm pilot bốn format (20k/20k/20k/100k), sau đó10M NF32/3 bằng corpus/oracle đã dùng cho Gate3; không phải final mỗi n NF/F. Resume chỉ tái dùng pilot khi SHA của snapshot khớp. Main NF EXACT_EN1 được lint nghiêm ngặt; EXACT_EN0 kiểm riêng ở leaf. Cảnh báo whole NF32/2 EXACT_EN0 của sbm_shift đã tồn tại ở baseline, giữ ngoài nghiệm thu profile mới.
+
+PowerShell, sau khi nguồn replay đã được chuẩn bị bằng lệnh WSL đầu:
+
+```powershell
+./scripts/verify_prepack_modelsim.ps1 -RunRoot results/prepack_replay
+./scripts/run_prepack_refactor_ppa.ps1 -Part xc7a35tcpg236-1 -RunRoot results/prepack_ppa_replay
+./scripts/run_prepack_refactor_ppa.ps1 -Part xc7a100tcsg324-1 -RunRoot results/prepack_ppa_replay
+```
+
+ModelSim10.1d dùng bản sao LOD với typedef cast unsigned cùng width để tương thích cú pháp; unit LOD41.024 checks trước corner NF82.944 ca. Không sửa production LOD. PPA runner đo snapshot baseline/candidate gốc đã khóa, không đo nguồn live đã sửa sau này; RunRoot chỉ đổi nơi ghi kết quả và từ chối ghi đè metrics đã có. Toàn NF32/3,FW12,EXACT_EN=OPS_EN1; clock10ns,uncertainty0,1ns, cùng BUFG và I/O budget, ba directive matched. Reports gồm toàn R2R và norm_round riêng; số MHz từ slack là ước lượng STA OOC, không phải board Fmax hoặc paired NF/F. Collector audit checkpoint gốc; kết quả replay nằm trong RunRoot mới.
+
+Kết luận OPT-01: candidate đạt bit-exact nhưng không được chọn thay production do median STA không cải thiện nhất quán; production giữ baseline. Các runner ở trên tái hiện thí nghiệm candidate đã đo, không tự promote hoặc chạy bước pipeline tiếp theo.

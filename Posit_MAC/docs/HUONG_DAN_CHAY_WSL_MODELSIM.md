@@ -399,3 +399,23 @@ LAYOUT_RESULTS_DIR=results/parser_xor_integration_replay LAYOUT_NF_ES_LIST="2 3"
 ```
 
 Nếu clone từ GitHub, dùng `python scripts/archive_parser_xor.py restore` tại Posit_MAC để phục hồi báo cáo gốc từ evidence.zip khi cần. Fixtures lớn được generator sinh lại; seed/hash và phiên bản compiler có trong bằng chứng. Runner parser đã dùng CURDIR=. để tránh lỗi Make do khoảng trắng trong đường dẫn. Lệnh đo Vivado trên hai Artix7, điều kiện đối chứng và cách đọc số liệu tại scripts/README.md, mục Parser XOR. Không chạy runner vào thư mục bằng chứng đã đóng băng.
+
+### Refactor prepack OPT-01 và STA trước/sau — 16/10/2026
+
+Trong WSL tại Posit_MAC, dùng kết quả mới để giữ bằng chứng gốc:
+
+```bash
+export PREPACK_RESULTS_DIR=results/prepack_replay
+bash --noprofile --norc scripts/verify_prepack_refactor.sh
+bash --noprofile --norc scripts/verify_prepack_nf.sh
+```
+
+Lệnh thứ hai chạy pilot rồi10 triệu giao dịch NF32/3; giữ nguyên pipeline. Trên clone từ GitHub, chạy `python scripts/audit_prepack_refactor.py restore` ở PowerShell trước để lấy dữ liệu từ evidence.zip; helper kiểm SHA và từ chối ghi đè file khác nội dung. Sau bước chuẩn bị nguồn WSL, có thể chạy corner ModelSim và PPA trong PowerShell:
+
+```powershell
+./scripts/verify_prepack_modelsim.ps1 -RunRoot results/prepack_replay
+./scripts/run_prepack_refactor_ppa.ps1 -Part xc7a35tcpg236-1 -RunRoot results/prepack_ppa_replay
+./scripts/run_prepack_refactor_ppa.ps1 -Part xc7a100tcsg324-1 -RunRoot results/prepack_ppa_replay
+```
+
+PPA dùng nguồn checkpoint đóng băng ở study gốc; không lấy nguồn live hoặc tự chạy bước pipeline tiếp theo. Chi tiết constraints, oracle, tương thích ModelSim và giới hạn STA tại scripts/README.md mục OPT-01 và PLAN§8.20. Không gọi lại script prepare/verify vào thư mục bằng chứng đã đóng băng.

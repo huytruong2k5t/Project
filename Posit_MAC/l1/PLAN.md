@@ -1050,7 +1050,7 @@ Các delay là số đo seed1 để định hướng, không phải dự đoán 
 
 #### 8.16.3. Các bước thực hiện được đề xuất
 
-BASE-01/02 được triển khai riêng theo yêu cầu mới; trạng thái tại §8.16.9. Các bước tích hợp còn lại **chưa thực hiện trong đợt tối ưu này**. Rà soát Note.docx và kiểm đẳng thức số học tại §8.16.8 chỉ là bằng chứng đánh giá đề xuất, không phải kiểm RTL. Theo yêu cầu mới, tối ưu khối cơ sở trước rồi mới ghép SAC/parser và các khối lớn. Những thử nghiệm đơn vị đã có ở §8.12/8.13 được dùng làm đầu vào, không đổi thành bằng chứng toàn MAC.
+BASE-01/02 đã được khảo sát, kết quả chọn primitive tại§8.18. OPT-01 đã thử và đo§8.20, giữ production cũ vì chưa có lợi ích timing nhất quán; các bước OPT-02/03/04/05 chưa thực hiện trong đợt này. Rà soát Note.docx và kiểm đẳng thức số học tại §8.16.8 chỉ là bằng chứng đánh giá đề xuất, không phải kiểm RTL. Theo yêu cầu mới, tối ưu khối cơ sở trước rồi mới ghép SAC/parser và các khối lớn. Những thử nghiệm đơn vị đã có ở §8.12/8.13 được dùng làm đầu vào, không đổi thành bằng chứng toàn MAC.
 
 | ID | Công việc và phương án | Kết quả cần có để xem xét bước tiếp |
 | --- | --- | --- |
@@ -1067,7 +1067,7 @@ BASE-01/02 được triển khai riêng theo yêu cầu mới; trạng thái t�
 | OPT-07 | Chọn tổ hợp ứng viên có lợi, kiểm tương tác và chạy regression tích hợp chính thức; cập nhật SPEC/lịch, freeze và backup sau khi có bằng chứng | 0 mismatch, protocol/coverage đạt phạm vi áp dụng, ≥3 P&R run/config; ghi rõ phần final còn thiếu |
 | OPT-08 | Bàn giao thay đổi dùng chung cho RTL F tuần13; chuẩn bị comparator NF approximate-only đã kiểm riêng trước paired PPA | NF/F cùng precision, OPS, feature policy, part/tool/constraints; tách lợi ích fusion khỏi lợi ích refactor |
 
-**Thứ tự hiện hành sau góp ý Note.docx:** OPT-00 → BASE-01 → BASE-02 → BASE-03 → OPT-05 (SAC-A/B/C đã chọn) → OPT-01 → OPT-02 → đọc lại STA → chọn OPT-03/04 theo đường dài hiện tại → OPT-07 → OPT-08. Cập nhật16/10: sau khi đóng leaf§8.18, sinh viên chọn parser XOR một detector§8.19 trước SAC, đo riêng để tách tác động. OPT-06, đổi thứ tự stage/radix4 và parser XOR là nhánh lựa chọn, không chặn RTL F nếu lợi ích nhỏ. Nút thắt toàn NF vẫn là norm/pack/parse của §8.16.2; không coi nghiệm thu leaf là đã xử lý nút thắt đó.
+**Thứ tự hiện hành sau góp ý Note.docx:** OPT-00 → BASE-01 → BASE-02 → BASE-03 → OPT-05 (SAC-A/B/C đã chọn) → OPT-01 → OPT-02 → đọc lại STA → chọn OPT-03/04 theo đường dài hiện tại → OPT-07 → OPT-08. Cập nhật16/10: đã đóng leaf§8.18 và parser XOR§8.19; sau đó sinh viên chọn thử riêng OPT-01§8.20 trước SAC. Theo yêu cầu mới, dừng sau báo cáo STA OPT-01, chưa làm các bước tiếp theo. OPT-06, đổi thứ tự stage/radix4 và parser XOR là nhánh lựa chọn, không chặn RTL F nếu lợi ích nhỏ. Nút thắt toàn NF vẫn là norm/pack/parse của §8.16.2; không coi nghiệm thu leaf là đã xử lý nút thắt đó.
 
 **OPT-01 — điều kiện về parameter:** các lát bit ở §8.14 chỉ minh họa trường hợp `F_IN=2F+1`. Cần giữ đúng mapping khi override `F_IN`, `ACC_W`, `SF_W` trong miền công bố; dùng generate/ánh xạ từng bit tại elaboration để tránh dải âm, replication âm và out-of-range. Với `EXACT_EN=0`, không tham chiếu nhánh exact không tồn tại. Không rút width, bỏ carry hay coi hai bit padding của FLOOR là numerical sticky. Kiểm cả carry/no-carry, zero/NaR payload và scale signed biên.
 
@@ -1314,3 +1314,29 @@ Bằng chứng tại `results/parser_xor_20261016`: source/baseline và source/x
 | xc7a100tcsg324-1 | 32/3 | 225 → 205 | 114 → 114 | 164.96 → 155.71 | -5.61% |
 
 MHz là ước lượng1000/(5ns−R2R slack), đã bao gồm yêu cầu setup/clock uncertainty/skew của benchmark; không phải nghịch đảo riêng datapath delay. Cả24 lượt có latches0/unrouted0; P1 hold dương. Setup ở5ns vẫn âm, chưa đóng200MHz. Toàn R2R có cùng đường dài nhất P1 trong24 lượt; không gán file p2 thành timing riêng tầng2. Không đo lại full NF/F PPA, power hoặc CDC/RDC; không chuyển PASS chức năng lịch sử thành bằng chứng final cho source mới. Các bước tiếp của SAC/khối lớn và paired NF/F vẫn theo§8.16/8.17.
+
+### 8.20. OPT-01 — refactor prepack normalization và đo STA, 16/10/2026
+
+**Phạm vi sinh viên chọn:** chỉ refactor `mul_prepack_norm_comb` và đo lại STA. Không triển khai OPT-02/03, không chèn bank hoặc đổi pipeline, không sửa SAC/adder/packer/parser. Baseline đóng băng sau parser XOR§8.19, ở commit53dd86b. Giữ nguyên mọi module production khác và header; hai variant khác đúng một module.
+
+Thay runtime integer q/hidden_position và ghi bit vào chỉ số đích động bằng bốn ứng viên ánh xạ hằng tại elaboration: exact/approx × carry/no-carry. Với bit output i, exact lấy acc[i+2F−F_IN+carry] nếu nằm dưới hidden; approximate lấy acc[i+FRAC_W−F_IN+carry+2] trong miền tương ứng. Các vị trí ngoài miền là0. Bit carry là acc[2F+1] cho exact hoặc acc[FRAC_W+3] cho approx; scale tăng đúng1 khi carry. Không dịch bỏ bit giá trị, không đổi carry/sticky/metadata hoặc precision. F_IN nhỏ chỉ kiểm tính tương đương mapping cũ, không thêm profile số học mới.
+
+**Kiểm chức năng đã đạt:** strict lint70 cấu hình leaf;1.592.064 đối chiếu baseline/candidate/oracle mask+shift độc lập0 mismatch. Bao gồm exhaustive miền nhỏ, random/directed quanh carry, SF wrap, F_IN rộng/hẹp, ACC_W đệm tới80, EXACT_EN0 hợp lệ mode1 và các width4 format. NF main EXACT_EN1 strict lint4 format sạch; pilot8/0,16/1,32/2 mỗi bản20.000 và32/3 100.000 giao dịch0 mismatch. Replay NF32/3 phân tầng10M có75.379 reset-aborted,0 mismatch; toàn bộ counters trong JSON trùng checkpoint corpus14/10. Đây là T4 của refactor, không thay final per-n NF/F hoặc ký AC04 structural coverage mới.
+
+ModelSim10.1d chạy82.944 ca corner,0 mismatch, CK2Q/4-state. Chỉ bản sao LOD cho simulator thay hai sized-cast POS_W/S bằng typedef unsigned cùng width vì compiler2012 không hỗ trợ cú pháp đó;41.024 kiểm LOD/LZD của bản sao đạt0 mismatch. Production LOD/parser và toàn RTL F giữ nguyên. Cảnh báo pre-existing ở whole NF32/2 EXACT_EN0 (`sbm_shift_comb.y_mant[27:16]` unused) được tái hiện cả baseline/candidate; không sửa ngoài scope và không nghiệm thu thêm profile feature-disable này. Leaf EXACT_EN0 vẫn được kiểm riêng trong miền hợp lệ.
+
+**STA đã hoàn thành12 lượt:** NF32/3,FRAC_W12,EXACT_EN=OPS_EN1; hai part A35T/A100T, ba directive Default/Explore/RuntimeOptimized matched trước/sau. Clock10ns, uncertainty0,1ns; inputmin=max2,5ns,outputmax0,5/min0; wrapper chỉ thêm BUFG giống nhau, không thêm data bank hoặc exception dữ liệu. Báo cả toàn R2R và cone norm_round, tài nguyên, endpoint, setup/hold/recovery/removal và I/O/unconstrained/methodology từ report. Không so trực tiếp số LUT4/MHz CycloneIV cũ với Slice LUTs/MHz Xilinx để quy lợi ích cho OPT-01; không suy NF/F paired PPA từ profile NF có exact.
+
+Nguồn, SHA, seed, công cụ/lệnh, corpus reference và dữ liệu tại `results/prepack_refactor_20261016`. Kết thúc sau báo cáo OPT-01 và backup; các bước tiếp theo chờ yêu cầu mới của sinh viên.
+
+
+**Kết luận OPT-01:** ứng viên bit-exact nhưng chưa có lợi ích STA nhất quán; giữ production bản cũ và lưu RTL mới tại `rtl/candidates/multiplier/mul_prepack_norm_comb.sv` (không thuộc production.f). Toàn bộ36 module production sau phiên giống baseline đầu phiên; riêng candidate ở thư mục thử nghiệm. Không gọi là tối ưu timing đã đạt hoặc đóng100MHz.
+
+| Part | Median LUT trước → candidate | FF trước → candidate | Median MHz STA trước → candidate | ΔMHz | R2R đạt100MHz |
+| --- | --- | --- | --- | --- | --- |
+| xc7a35tcpg236-1 | 2464 → 2464 | 847 → 847 | 52.31 → 52.15 | -0.31% | 0/3 ở cả hai bản |
+| xc7a100tcsg324-1 | 2458 → 2453 | 847 → 847 | 53.69 → 52.38 | -2.45% | 0/3 ở cả hai bản |
+
+12/12 lượt latches0/unrouted0, hold R2R dương; setup100MHz vẫn âm. Toàn R2R và nhóm norm_round cùng có đường dài nhất trong các lượt này. Nhánh đi từ acc/sf_o của core qua normalize và round_unpacked(pack/parse) tới product_frac_q hoặc norm_sf_q. Routing còn chiếm phần lớn delay (ví dụ candidate Default A35:13,161/19,076ns), nên cách viết nối bit hằng chưa giải quyết được đường tổ hợp chung này. Không coi việc giảm mức logic của một lượt riêng (32→27) là cải thiện toàn MAC khi median/part chưa ủng hộ. Đây là giới hạn đo của OPT-01, không tự chuyển sang tách pipeline.
+
+Runners tái lập bằng source frozen và output mới; báo cáo/corner/source/corpus được nén ở evidence.zip, có SHA và helper restore an toàn. Version/seed/commands trong summary.json; raw line coverage giữ lại, chưa tái ký structural AC04 hoặc final per-n. Dừng tại đây theo yêu cầu sinh viên; chỉ backup phiên, không triển khai thêm bước thiết kế.

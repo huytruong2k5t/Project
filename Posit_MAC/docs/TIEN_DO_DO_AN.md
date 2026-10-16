@@ -26,7 +26,7 @@ MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser/packer và Gate2 multip
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder, NF tuần11 và F profile chính đã kiểm; còn ma trận final và coverage cuối NF/F |
 | PPA, mở rộng và hồ sơ — Gate4 | processing | NF CycloneIV45,07MHz là lịch sử; F A35T100MHz R2R đạt. Còn đo matched NF/F, accuracy và hồ sơ cuối |
 
-**Thứ tự tiếp theo:** primitive Xilinx§8.18 và parser một detector§8.19 đã hoàn tất phạm vi refactor; tiếp SAC và khối lớn theo STA. LOD nhóm4 riêng MODE0,N31/32; parser dùng XOR và một LOD N=NB-2, hai shifter giữ gốc. Không suy Fmax toàn MAC từ benchmark leaf/chuỗi. Theo lựa chọn15/10, phép đo mới dùng Xilinx; số CycloneIV giữ ý nghĩa lịch sử. Giữ fraction nhân12 bit; ACC_WIN32 là cửa sổ cộng fused. Hạn chính29/11, đệm30/11–04/12 trước05/12/2026 giữ nguyên; W14 tại mục3.2/PLAN§8.17.
+**Trạng thái tối ưu:** primitive Xilinx§8.18 và parser một detector§8.19 đã hoàn tất. OPT-01§8.20 đã thử và đo, giữ normalizer production cũ vì không có lợi ích STA nhất quán; dừng trước các bước tiếp theo theo yêu cầu sinh viên. LOD nhóm4 riêng MODE0,N31/32; parser dùng XOR và một LOD N=NB-2, hai shifter giữ gốc. Không suy Fmax toàn MAC từ benchmark leaf/chuỗi. Theo lựa chọn15/10, phép đo mới dùng Xilinx; số CycloneIV giữ ý nghĩa lịch sử. Giữ fraction nhân12 bit; ACC_WIN32 là cửa sổ cộng fused. Hạn chính29/11, đệm30/11–04/12 trước05/12/2026 giữ nguyên; W14 tại mục3.2/PLAN§8.17.
 
 
 ## 3. Tiến độ theo tuần
@@ -251,8 +251,8 @@ Tuần14 chỉ được đánh dấu `✅` khi TC-W14-01..05 và TC-W14-08 đề
 | 1 | Phân loại RTL và cập nhật đường dẫn | 55 file giữ nguyên byte; tách common/parser/packer/multiplier/adder/NF/F, paper, candidate và benchmark. Có file list production và bản đồ thư mục; runner WSL/ModelSim/Vivado dùng đường dẫn mới. Lint 17 profile sạch; smoke NF/F mỗi bản10.000, ModelSim143.976 và XSim8.192 đều0 mismatch | ✅ |
 | 2 | Dọn dữ liệu kiểm chứng | Xóa build/cache có thể tái tạo, thu hồi khoảng3,9GB; giữ báo cáo, thống kê, biểu đồ, coverage, seed/lệnh/hash, snapshot nguồn và fixture. Có script dry-run/apply và kiểm hash dữ liệu giữ lại; không thay trạng thái nghiệm thu số học/PPA | ✅ |
 | 3 | Tối ưu ba primitive dùng chung NF/F | Đã promote LOD nhóm4 riêng MODE0,N31/32; hai shifter giữ gốc theo timing chéo. Unit21.576.912/0 mismatch,524 lint,510 P&R và114 netlist đạt; smoke NF ES2/ES3/F mỗi bản10.000 đạt. Không suy Fmax toàn MAC | ✅ |
-
 | 4 | Parser dùng một detector để giảm diện tích | Cả comb/pipeline dùng XOR tail + một LOD; giữ giao diện và hai tầng. Kiểm4.984.616 lượt parser/biên tham số0 mismatch,33 strict lint và NF ES2/ES3/F mỗi bản10.000 đạt.24 P&R: median225→205LUT (−8,89%),FF không đổi; timing thay đổi theo part/profile. SPEC/PLAN đồng bộ; chưa đo lại full MAC hoặc đóng200MHz | ✅ |
+| 5 | Khảo sát refactor prepack và STA toàn NF | Candidate mapping hằng đạt1.592.064 leaf,10M NF và82.944 ModelSim corner0 mismatch;12 P&R cho median STA−0,31% A35T/−2,45% A100T, FF không đổi. Giữ production cũ, lưu candidate/bằng chứng; chưa đạt100MHz và chưa tách pipeline hoặc làm bước tiếp | ✅ |
 
 ### 4.16. Mẫu cập nhật tiếp theo
 

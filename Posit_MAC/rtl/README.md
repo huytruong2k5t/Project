@@ -277,3 +277,9 @@ Hai module parser tổ hợp/pipeline dùng XOR tail với FRB rồi một LOD M
 
 
 Đợt parser XOR đã hoàn thành24 P&R A35T/A100T,32/2 và32/3: median225→205LUT, FF không đổi; STA tăng/giảm tùy part/profile (PLAN§8.19).4.984.616 lượt parser/parameter đạt0 mismatch và NF ES2/ES3/F smoke mỗi bản10.000 đạt; không thay ma trận final hoặc PPA toàn MAC.
+
+## Prepack normalization OPT-01 — 16/10/2026
+
+`candidates/multiplier/mul_prepack_norm_comb.sv` là ứng viên tạo fraction bằng nối bit hằng cho bốn trường hợp exact/approx và carry/no-carry, thay runtime integer/chỉ số đích động. Chỉ dùng MUX chọn ứng viên và cập nhật SF theo carry; I/O/parameter và mọi bank/handshake giữ nguyên. FLOOR bỏ hai padding vật lý, giữ bit giá trị dưới hidden khi carry. EXACT_EN0 không sinh cone exact, chỉ cfg_mode1 thuộc miền hợp lệ. Các kiểm width override không bổ sung profile precision mới; main NF vẫn F_IN=2F+1. Bản trước/sau, chức năng và STA tại results/prepack_refactor_20261016 và PLAN§8.20; các bước OPT-02/03 chưa thực hiện.
+
+Ứng viên prepack đã qua1.592.064 kiểm leaf, NF main10M và ModelSim82.944 corner0 mismatch;12 P&R cho median MHz giảm0,31% A35T và2,45% A100T, FF không đổi. Vì chưa có lợi ích timing nhất quán, `multiplier/mul_prepack_norm_comb.sv` giữ nguyên baseline; candidate không nằm trong production.f. Không thay pipeline hoặc làm OPT-02/03.

@@ -545,6 +545,8 @@ Ngõ vào hai bộ ba unpacked `(s, sf, m)` với `m = 1.f` rộng `W = FRAC_MAX
 
 F, F_OUT, SF_W là kích thước suy từ NB/ES theo công thức hiện hành; ghi đè sai phải bị chặn lúc elaboration. Module tổ hợp posit_add_comb dùng cùng cổng số học (không clk/reset/valid/ready); pipeline posit_add và comb phải cho cùng output. Mỗi module một file, named ports, mỗi cổng một dòng, always_comb có default, bank dùng always_ff/enable/CK2Q theo guideline. Không tạo stub RTL chưa có chức năng để gọi là triển khai.
 
+**Khảo sát hiện thực OPT-02b ngày17/10:** candidate A1 giữ nguyên hợp đồng bên dưới (signed delta, tie, clamp/jam và specials), không đổi I/O hoặc H_ADD3. Không thêm C-prefix register hoặc thuộc tính fanout. Leaf/NF kiểm bit-exact và một lượt A35T đạt100MHz; chưa promote production, không thay AC/Gate4. Bằng chứng PLAN§8.23 và results/opt02b_20261017.
+
 #### B. Độ rộng, alignment và adapter packer
 
 Q=F+3; x=unsigned({1,a_frac})<<3, y=unsigned({1,b_frac})<<3 sau chọn lớn theo(sf,m); tie độ lớn giữ A. Word sum/carry rộng Q+2=F+5; magnitude đã normalize rộng Q+1=F+4. Khôi phục hidden và zero-extend vào ADD_W trước khi dịch trái3; không dịch trong biểu thức hẹp F+1 bit làm mất MSB. Delta scale được tính bằng sign-extension rộng SF_W+1 rồi chuyển unsigned sau bảo đảm d>=0; không wrap subtraction trước clamp.

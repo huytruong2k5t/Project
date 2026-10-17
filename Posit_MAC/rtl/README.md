@@ -288,3 +288,8 @@ Hai module parser tổ hợp/pipeline dùng XOR tail với FRB rồi một LOD M
 ## NF product pipeline OPT-03 — 17/10/2026
 
 Top NF dùng normalize+product packer RNE P1 → P2 → parser tổ hợp/product bank → adder3 → final packer2. Giữ bit-exact R(P_hat), flags và C_eff; product numerical sticky=0. L_valid=q+12, handshake=q+13, II_min=q+14 (thêm2 chu kỳ), q=max(1,t thực tế). Reset/stall/commit giữ một transaction; không thêm FIFO. Fused và standalone multiplier không đổi. Production prepack normalization giữ bản gốc; không ghép candidate OPT-01. Kết quả và hạn chế: PLAN§8.21, SPEC§11.16, results/opt03_20261017/summary.json.
+
+
+## A1 OPT-02b candidate — 17/10/2026
+
+`candidates/adder/opt02b/posit_add_align.sv` dùng dual signed delta/clamp, sf-only shifter, equal-sf bypass và prefix-OR jam lookup. Cùng module name/I/O/parameter và zero added stages; chỉ thay thế file production trong source list private, không compile hai module cùng tên. Production A1 giữ nguyên; candidate đã qua leaf880.656 và NF10M/0 mismatch,406+4 strict lint, ModelSim tích hợp. Một run A35T100MHz đạt WNS+0,251ns/hold+0,047ns với2516LUT/930FF; cần matched>=3 run trước promote. Xem PLAN§8.23.

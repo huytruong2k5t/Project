@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+study=results/opt02b_20261017
+out="${OPT02B_RESULTS_DIR:-$study}"
+[[ "$out" =~ ^results/[a-zA-Z0-9_/-]+$ && "$out" != *..* ]] || exit 2
+[[ ! -e "$out/lint/status.txt" ]] || { echo 'Preserve prior output'; exit 2; }
+mkdir -p "$out/lint"
+verilator --version > "$out/lint/version.txt"
+g++ --version > "$out/lint/compiler.txt"
+for nb in $(seq 5 32); do
+    for es in $(seq 0 $((nb-5))); do
+        verilator --lint-only --timing -Wall --top-module posit_add_align \
+            -GNB="$nb" -GES="$es" "$study/source/candidate/posit_add_align.sv" \
+            "$study/source/baseline/dyn_right_shifter.sv" > "$out/lint/${nb}_${es}.log" 2>&1
+    done
+done
+echo COMPLETE > "$out/lint/status.txt"
+echo OPT02B_LEAF_LINT_406_PASS
+for format in '8 0' '16 1' '32 2' '32 3'; do
+    read -r nb es <<< "$format"
+    fw=$((nb-3-es<12?nb-3-es:12))
+    run="$out/nf/${nb}_${es}"
+    [[ ! -e "$run/pilot.log" ]] || exit 2
+    mkdir -p "$run/src/l1" "$run/tmp"
+    cp "$study"/source/candidate/* "$run/src/"
+    cp tb/nf_coverage_harness.cpp tb/nf_coverage_corpus.hpp tb/nf_coverage.vlt tb/week11_model.hpp \
+       tb/week10_add_reference.hpp tb/week9_exact_reference.hpp l0/softposit_api.h l0/libsoftposit.so "$run/src/"
+    cp l1/include/*.hpp "$run/src/l1/"
+    (
+        cd "$run"
+        export TMPDIR="$PWD/tmp"
+        export LD_LIBRARY_PATH="$PWD/src${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+        sha256sum src/*sv src/*.vh src/*.cpp src/*.hpp src/*.h src/*.vlt src/*.so src/l1/*.hpp > source.sha256
+        verilator --lint-only --timing -Wall --top-module posit_mac_nf -Isrc \
+            -GNB="$nb" -GES="$es" -GFRAC_W="$fw" src/*.sv > lint.log 2>&1
+        verilator --cc --exe --no-timing --coverage-line -Wall -Wno-fatal --top-module posit_mac_nf \
+            -Isrc -GNB="$nb" -GES="$es" -GFRAC_W="$fw" --Mdir obj_fast \
+            -CFLAGS "-O3 -std=c++17 -I../src/l1 -I../src -DPROFILE_NB=$nb -DPROFILE_ES=$es" \
+            -LDFLAGS '-L../src -lsoftposit' src/nf_coverage.vlt src/*.sv src/nf_coverage_harness.cpp > build.log 2>&1
+        make -C obj_fast -f Vposit_mac_nf.mk CURDIR=. -j4 >> build.log 2>&1
+        sha256sum obj_fast/Vposit_mac_nf > binary.sha256
+        ./obj_fast/Vposit_mac_nf 20000 pilot > pilot.log
+        tail -n 1 pilot.log
+    )
+done
+echo COMPLETE > "$out/pilot_status.txt"
+(
+    cd "$out/nf/32_3"
+    export LD_LIBRARY_PATH="$PWD/src${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    ./obj_fast/Vposit_mac_nf 10000000 acceptance > acceptance.log
+    tail -n 1 acceptance.log
+)
+echo COMPLETE > "$out/large_status.txt"

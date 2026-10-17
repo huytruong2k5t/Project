@@ -1388,3 +1388,29 @@ Toàn MAC: WNS R2R−2,887ns,hold+0,056ns,2462LUT/930FF,ước lượng STA77,60
 **Giới hạn runner:** P&R và cả5 nhóm báo cáo yêu cầu đã xuất đầy đủ. Sau đó, truy vấn phụ ngoài phạm vi tới bank A3 của packer tổng dùng sai tên `a3_q` (RTL thực dùng các output register riêng), làm batch exit1. Không chạy lại P&R. Collector chỉ nghiệm thu PASS_REQUESTED_SCOPE, ghi nguyên lỗi phụ trong summary; giữ driver thực thi và log gốc. Script canonical đã bỏ truy vấn phụ để tránh lặp lại lỗi; không tuyên bố toàn batch cũ exit0. Không có lỗi sửa RTL hoặc kiểm chức năng trong phiên này.
 
 Lệnh đã chạy: PowerShell `./scripts/run_single_a35_packer_sta.ps1`; kiểm lại bằng `python scripts/collect_single_a35_packer.py`. Runner từ chối output đã tồn tại, không tự chạy thêm lượt. Dữ liệu gọn trong evidence.zip + archive_manifest.json, stages.csv và summary.json; giữ raw report quan trọng. Nhật ký Git sao lưu gồm nguồn/script/bằng chứng/tài liệu, không binary, checkpoint hoặc cache.
+
+### 8.23. OPT-02b — A1 tổ hợp với SF-only shifter và prefix OR, 17/10/2026
+
+Theo đề xuất sinh viên, thử candidate riêng `rtl/candidates/adder/opt02b/posit_add_align.sv` với cùng tên module/I/O/parameter như production. Hai hiệu signed mở rộng SF_W+1 và clamp tính song song. Chọn seed trước shifter chỉ theo dấu hiệu scale; cùng sf bypass shifter, chọn small fraction bằng comparator ở MUX cuối. Tạo prefix lo_or bằng reduction trên lát bit cố định, không chuỗi OR nối tiếp; lookup jam[s]=lo_or[s+1] là wiring cố định, không thêm adder cho chỉ số. Chỉ dịch upper bits; bit0 lấy từ jam lookup. Không mask động, không phép trừ tạo mask. Giữ nhánh delta>F+2 trả y=1/tail=1, tie chọn A và ưu tiên NaR/Zero/flags. Không thêm thanh ghi, C prefix register, max_fanout hoặc đổi latency/II. Candidate không thuộc production.f; không compile đồng thời với module production cùng tên.
+
+**Chức năng:** ModelSim10.1d leaf baseline/candidate/integer oracle đạt **880,656/0 mismatch**,11 profile gồm4 format và F2..27, SF_W đến35/override. Directed mọi vị trí one-hot và shift0..F+3, hai chiều sf, cả dấu, equal fraction, dirty special, signed extrema; F<=5 có exhaustive fraction/delta như checker. Seed20261017+100*NB+ES+10000*SF_W. Không gọi là formal hoặc exhaustive mọi cặp fraction32-bit/XZ.
+
+Verilator5.032/GCC15.2.0: **406 strict leaf lint**,4 strict whole-NF lint sạch; native4 pilot20k và main32/3 **10.000.000 completed/85.316 reset-aborted,0 mismatch**,seed20264217. Toàn bộ JSON counters/cycle/bin khớp checkpoint OPT-03, xác nhận cùng stream vì latency và điều khiển không đổi. ES3 dùng oracle integer/dyadic độc lập; exact ES0/1/2 còn so SoftPosit đúng format. ModelSim NF82.944 corner+28.512 protocol completed/288 abort,0 mismatch,giữ CK2Q/reset/stall/context/commit. Native no-timing chỉ bỏ CK2Q; strict lint vẫn timing. Bản khởi đầu có cảnh báo cast hằng F+2 khi SF_W>32; đã đổi thành delta_t'(F)+delta_t'(2) và chạy lại toàn bộ nghiệm thu trên bản cuối. Log pre_cast_fix giữ riêng, không cộng vào tổng.
+
+**PPA:** một candidate P&R A35T xc7a35tcpg236-1 Default, Vivado2026.1 build6511674, toàn NF32/3 FW12 EXACT_EN=OPS_EN1. Cùng source baseline37file,BUFG wrapper,source order và chuỗi lệnh synth/constraints/opt/place/route trước report với lượt single_a35_packer_20261017. Clock10ns/uncertainty0,1ns,inputmin=max2,5ns,outputmax0,5/min0; không exception mới. Chỉ thay file A1 trong snapshot private; production giữ nguyên.
+
+| Chỉ tiêu | Baseline Default | OPT-02b Default |
+| --- | --- | --- |
+| A1 setup slack ns | −2,887 | +0.674 |
+| A1 data delay / logic levels | 12,749ns /19 | 9.189ns /12 |
+| Toàn MAC R2R setup slack ns | −2,887 | +0.251 |
+| Toàn MAC R2R hold slack ns | +0,056 | +0.047 |
+| STA MHz ước lượng | 77.60 | 102.57 (+32.19%) |
+| LUT / FF / CARRY4 | 2462 /930 /99 | 2516 /930 /94 |
+| DSP / BRAM | 0 /0 | 0 /0 |
+
+P1 setup+0.528ns,P2+3.765ns,parse/product+0.434ns,accumulator+3.318ns. Slack của các đoạn không đổi RTL vẫn thay đổi do placement/routing; không quy toàn bộ chênh lệch này cho thay thuật toán của chúng. A1 còn12 logic levels, không xác nhận ước lượng8–9. Critical mới: `u_dut/u_wrapper/u_core/u_ctrl/fx_q_reg[4]/C` → `u_dut/u_wrapper/u_core/u_ctrl/emitting_q_reg/D`, phía SAC/controller; routing chiếm80.17% delay đường này.
+
+**Kết luận phạm vi:** candidate đạt setup/hold100MHz trong một OOC run; LUT tăng54 (+2,19%),FF không đổi,CARRY4 giảm5. Giữ candidate để review, **chưa promote production** vì chưa có>=3 matched run/cross-part xác nhận theo kế hoạch. Không gọi là board signoff, Gate4 hoặc paired NF/F PPA; no new final AC04/per-n. Không ghép C precompute hoặc đổi P1/P2.
+
+Lệnh đã chạy: `scripts/verify_opt02b_leaf.ps1`, WSL `bash --noprofile --norc scripts/verify_opt02b.sh`, `scripts/verify_opt02b_modelsim.ps1`, `scripts/run_opt02b_a35_ppa.ps1`; sau đó `python scripts/audit_opt02b.py collect`. Nguồn/driver/seed/compiler/hash/counter/report lưu results/opt02b_20261017; archive gọn và manifest SHA. `audit_opt02b.py restore` khôi phục raw bằng chứng khi clone, collect kiểm checkpoint đã lưu. Runner chặn ghi đè bằng chứng đã có; không chạy lại prepare vào snapshot đã khóa. Giữ dữ liệu lịch sử trước đó và cập nhật tiến độ theo mốc thử nghiệm, không đánh dấu toàn Gate4.

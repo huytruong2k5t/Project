@@ -131,3 +131,20 @@ syn/constraints/*.xdc -text
 syn/run_a35t.tcl -text
 scripts/run_a35t_sta.ps1 -text
 results/a35t_c1_constraints_20261017/** -text
+
+# OPT8.25 measured source/evidence bytes must survive checkout unchanged.
+rtl/candidates/multiplier/opt05/** -text
+rtl/candidates/mac_nf/opt09/** -text
+rtl/candidates/packer/opt10a/** -text
+scripts/*opt05* -text
+scripts/*opt09* -text
+scripts/*opt10a* -text
+scripts/*optcombo* -text
+scripts/*opt825* -text
+tb/*opt05* -text
+tb/*opt09* -text
+tb/*opt10a* -text
+results/opt05_20261017/** -text
+results/opt09_20261018/** -text
+results/opt10a_20261018/** -text
+results/optcombo_20261018/** -text

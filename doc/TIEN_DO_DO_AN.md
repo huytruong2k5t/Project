@@ -1,6 +1,6 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 17/10/2026 (giờ Việt Nam)  
+**Ngày cập nhật:** 18/10/2026 (giờ Việt Nam)
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
 **Tài liệu chi tiết:** [SPEC v1.19](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md), [Optimization](Optimization.md).
@@ -117,14 +117,14 @@ Tuần14 chỉ được đánh dấu `✅` khi TC-W14-01..05 và TC-W14-08 đề
 
 **Phạm vi thiết bị:** chỉ A35T xc7a35tcpg236-1 cho các lần kiểm chứng timing/synthesis/P&R tiếp theo, gồm paired NF/F tuần15. Không chạy A100T; giữ số đo A100T cũ như lịch sử.
 
-Đây là hàng đợi để sinh viên xem xét, chưa có lệnh chạy mới. Ưu tiên hiện hành theo Optimization mục8.25; giữ latency/II và tách candidate khỏi production. Các bước có điều kiện không tự thành hạng mục bắt buộc khi STA không còn chỉ ra nhu cầu.
+Đã bắt đầu triển khai theo yêu cầu sinh viên17–18/10, bằng chứng tại Optimization8.28. Giữ latency/II và tách candidate khỏi production. Các bước có điều kiện không tự thành hạng mục bắt buộc khi STA không còn chỉ ra nhu cầu.
 
 | ID / nhóm | Việc chưa hoàn thiện | Trạng thái | Điều kiện / tham chiếu |
 | --- | --- | --- | --- |
 | OPT-00 / OPT-02b | Khóa mốc tham chiếu và xác nhận candidate trước promote | processing | Đã có bit-exact và Default A35T; còn matched đa chiến lược chỉ trên A35T xc7a35tcpg236-1, không đếm Default lặp là seed độc lập |
-| OPT-05 | SAC-A → SAC-B → SAC-C, so zero/one-hot và nối exhausted vào controller | không | Giữ từng term/flags/state/error/token, Δlatency=ΔII=0; Optimization8.25.3 |
-| OPT-09 | Product P2 lưu magnitude dương sau RNE/clamp, parse trực tiếp | không | Khóa bundle và so parse(pack(u)); không biến NF thành fused; Optimization8.25.4 |
-| OPT-10A | Prefix OR/lookup sticky trong P1 | không | Payload59 ở32/3; giữ G/R/S/specials, kiểm module dùng chung; Optimization8.25.5 |
+| OPT-05 | SAC-A → SAC-B → SAC-C, so zero/one-hot và nối exhausted vào controller | processing | Leaf/oracle/lint và pilot bốn biến thể đạt; đang chọn bằng matched PPA và kiểm tổ hợp; Optimization8.28 |
+| OPT-09 | Product P2 lưu magnitude dương sau RNE/clamp, parse trực tiếp | processing | Round-trip RNE/TRUNC và pilot đạt; Default cải thiện parse/P2, còn nghiệm thu tổ hợp; Optimization8.28 |
+| OPT-10A | Prefix OR/lookup sticky trong P1 | processing | 435 lint và1.298.720 leaf cases, pilot đạt; đang đo STA/tổ hợp; Optimization8.28 |
 | OPT-10B | Chuyển phần sticky/flags P1→P2 nếu vẫn cần | không | Chỉ sau10A/STA mới, báo FF và đường P2 |
 | OPT-11 | Cân bằng jam A1→A2; C-prefix precompute thử riêng nếu chọn | không | Bundle mới/protocol/cancellation; không lấy CE slack làm ngân sách arithmetic; Optimization8.25.6 |
 | OPT-04/06 và các nhánh phụ | A2/A3 LOD, normalization zero/shared, OPS/MUX/control hoặc remaining-scale budget | không | Chỉ mở khi sinh viên chọn và STA mới có căn cứ; không tự ghép vào các bước trên |
@@ -303,7 +303,14 @@ Kế hoạch tối ưu là luồng refactor riêng trước freeze mới; quy t�
 <!-- OPT03_REPORT_END:docs/TIEN_DO_DO_AN.md -->
 
 
-### 4.17. Mẫu cập nhật tiếp theo
+### 4.17. Ngày18/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Khảo sát SAC,product magnitude và sticky theo8.25 | Leaf/pilot/round-trip và tổ hợp NF10M+F10M/0 mismatch; ModelSim NF/F đạt. Matched A35T-C2 ba chiến lược, bảng kết quả ở Optimization8.28. Giữ candidate,chưa promote production hoặc đóng Gate4 | ✅ |
+| 2 | Promote và mục tiêu timing cao hơn | Còn đối chiếu production/OPT-02b trước promote; OPT-10B/11 chỉ mở khi cần. Final per-n/AC04,CDC/RDC và paired PPA NF/F giữ lịch riêng | processing |
+
+### 4.18. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

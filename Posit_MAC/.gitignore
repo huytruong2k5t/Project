@@ -1,4 +1,17 @@
 # Build and Simulation outputs
+# OPT8.25: publish only compact metadata and verified evidence archives.
+/results/opt05_20261017/**
+!/results/opt05_20261017/*.json
+!/results/opt05_20261017/evidence.zip
+/results/opt09_20261018/**
+!/results/opt09_20261018/*.json
+!/results/opt09_20261018/evidence.zip
+/results/opt10a_20261018/**
+!/results/opt10a_20261018/*.json
+!/results/opt10a_20261018/evidence.zip
+/results/optcombo_20261018/**
+!/results/optcombo_20261018/*.json
+!/results/optcombo_20261018/evidence.zip
 obj_dir/
 *.o
 *.a

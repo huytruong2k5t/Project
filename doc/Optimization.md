@@ -21,7 +21,7 @@ Các mã mục cũ `7.x`/`8.x` được giữ để truy vết report và liên 
 | Prepack OPT-01 | Không promote; production normalizer giữ gốc | Mục8.20 |
 | NF OPT-03 | Production dùng product RNE P1/P2 và parse/product bank riêng | Mục8.21 |
 | A1 OPT-02b | Candidate đã kiểm; chưa promote theo tiêu chí đa chiến lược | Mục8.23/8.24 |
-| SAC/packer/parse/A1–A2 tiếp theo | Mới là đề xuất; chưa chạy OPT-05/09/10/11 | Mục8.25 và tiến độ§3.3 |
+| SAC/packer/parse/A1–A2 tiếp theo | Đã khảo sát OPT-05/09/10A và tổ hợp; chưa promote,10B/11 tùy chọn còn mở | Mục8.25/8.28 và tiến độ§3.3 |
 
 Các script report/prepare gắn checkpoint cũ là producer lịch sử, không chạy lại để tái chèn nhật ký vào PLAN hiện hành. Dùng snapshot/README của study khi tái lập; không sửa các script đã khóa hash chỉ để đổi nhãn báo cáo. Collector bảng toàn tầng hiện hành đã được đổi sang vùng báo cáo giới hạn trong tài liệu này.
 
@@ -608,9 +608,9 @@ Partition phủ toàn bộ930 FF, không trùng/thiếu bank; reset được tá
 
 <a id="legacy-8-25"></a>
 
-### 8.25. Đề xuất tối ưu Fmax/tài nguyên giữ latency/II — chờ xem xét, 17/10/2026
+### 8.25. Tối ưu Fmax/tài nguyên giữ latency/II — triển khai từ17/10/2026
 
-**Trạng thái: chỉ lập kế hoạch.** Theo yêu cầu sinh viên, bổ sung ý tưởng sau review văn bản chiến lược bốn bước; chưa sửa RTL, chạy mô phỏng, synthesis/place/route hoặc promote candidate trong mốc này. Các việc dưới đây chỉ thực hiện sau khi sinh viên chọn tiếp tục. Không dùng mục này làm bằng chứng đã đạt timing hoặc hoàn thành Gate4.
+**Trạng thái: processing.** Sinh viên đã yêu cầu triển khai mục8.25 ngày17/10; bằng chứng mới ghi tại8.28. Phần mô tả phương án dưới đây không tự là nghiệm thu timing hoặc Gate4. Giữ candidate tách production đến khi đủ kiểm chứng và matched PPA.
 
 <a id="legacy-8-25-1"></a>
 
@@ -1194,3 +1194,102 @@ Ngoại lệ đã được mô tả là quét clock cao hơn (ví dụ8ns/125MHz
 Sinh viên nói có hai ngoại lệ nhưng mới cung cấp một; ngoại lệ thứ hai để chưa xác định, không tự gán cho profile tích hợp. Runner C2 hiện cố định100MHz, chưa triển khai/chạy sweep hoặc tự chia tỷ lệ input_delay. Mẫu tích hợp được giữ tham khảo, không tự kích hoạt như ngoại lệ thứ hai.
 
 Lần chỉnh này chỉ cập nhật chính sách/file/runner và kiểm cú pháp tĩnh, chưa chạy lại synthesis/STA/P&R hoặc có Fmax mới. Các số đo cũ không đổi; nạp constraint trước synthesis vẫn cần matched mới trước kết luận cải thiện.
+
+### 8.28. Triển khai mục8.25 — 17–18/10/2026
+
+Đang kiểm các candidate riêng; chưa promote production. Nguồn tham chiếu là snapshot OPT-02b, constraint A35T-C2 nạp trước synthesis. Không dùng số timing cũ thay phép đo matched mới. Bằng chứng SAC tại `results/opt05_20261017`; script prepare/verify/run_opt05 lưu phiên bản, seed, hash và lệnh chạy. Candidate canonical ở `rtl/candidates/multiplier/opt05`.
+
+**OPT-09 — hợp đồng bank khảo sát:** product P2 giữ duy nhất mã magnitude đã RNE/clamp rộng NB bit (bit cao chỉ dùng mã NaR), sign1 bit, flags5 và valid1. Zero/NaR nhận diện từ mã magnitude, không thêm hai FF special hoặc lưu signed code song song. Parser nội bộ bỏ bước bù hai, trả sign canonical: Zero0, NaR1, finite theo sign đã chốt. Bank payload dự kiến tăng1 FF so với P2 cũ; báo số thực sau synthesis. P1/P2 ready/CE, hai FF reset release, reset dữ liệu và giữ khi stall theo packer hiện hành; sign chốt cùng magnitude/flags. NF vẫn tính R(P_hat)+C_eff, giữ nguyên top API, precision, flags, số tầng, latency/II và frozen L1. Packer công bố dùng chung không sửa. Module nội bộ mới `posit_product_pack` và `posit_magnitude_parse`; candidate wrapper giữ nguyên I/O/parameter. Nguồn tại `results/opt09_20261018`, so độc lập với cùng mốc OPT-02b; chưa ghép SAC khi chưa chọn bằng STA.
+
+<!-- OPT825_REPORT_START -->
+
+#### 8.28.1. Kết quả kiểm chứng và phép đo đã hoàn tất
+
+SAC: 1,399,460 input cases trên54 cấu hình W_X1..27, S_W tối thiểu và+2; bốn candidate khớp RTL gốc và oracle serial scan độc lập (5,597,840 so sánh candidate/oracle),0 mismatch. ModelSim riêng130.156 ca tại W1/5/12/26/27 cũng đạt. Cả bốn candidate sạch54 strict leaf lint và bốn strict NF lint; tổng320.000 pilot NF/0 mismatch. Bản range-check generate giữ hành vi overflow và bỏ CMPCONST ở W=2^S−1; mã cũ trước sửa giữ riêng, freeze.json là mốc ban đầu, manifest thực chạy khóa bản đã sửa.
+
+Lượt ModelSim54-instance song song đã dừng vì runtime cao, không tính PASS. Lượt native đầu vướng GNU Make không nhận khoảng trắng trong CURDIR; bản v2 dùng make CURDIR=. Không che warning RTL candidate: chỉ build testbench/RTL gốc dùng Wno-fatal, strict lint candidate vẫn không warning/error. ModelSim10.1d dùng typedef unsigned cùng width thay parameter-sized cast trong bản LOD private; F thêm adapter tương tự cho assertion iterations_done. Không sửa source production hoặc tắt assertion. Lỗi compile F đầu giữ riêng, không tính nghiệm thu.
+
+OPT-09: round-trip parse(pack(u)) so trên800,000 chu kỳ/371,020 completed,4 format×RNE/TRUNC,reset/stall/specials/carry/range,0 mismatch;4 pilot tổng80.000 completed/0 mismatch. OPT-10A:435 strict lint tuples NB4..32,ES0..NB−4 ở F_IN tối thiểu; 1,298,720 ca so mọi field P1 với bản gốc,8 tuple gồm ES0,NB không lũy thừa2,FIN tối thiểu/63 và SF sweep/one-hot;4 pilot80.000 completed/0 mismatch. Prefix OR tính từ toàn payload và giữ fill khi offset quá lớn; không chỉ từ fraction.
+
+Tổ hợp khảo sát: SAC A+B+C-tree + OPT-09 + OPT-10A trên mốc OPT-02b. NF4 pilot80.000, main32/3 **10.000.000 completed/85.316 reset-aborted,0 mismatch**. Toàn bộ JSON counters/cycle/coverage khớp checkpoint OPT-02b;72 control bins và256 regime/sign cross không mất. F profile32/3 FW12 W32 approximate-only: pilot100.000 và **main10.000.000 completed/0 mismatch**,59.356.752 stage observations; toàn JSON main khớp checkpoint tuần13. Frozen L1 và production giữ nguyên. ES3 dùng oracle integer/dyadic/full-grid riêng; SoftPosit chỉ cho đúng format hỗ trợ.
+
+ModelSim NF:82.944 corner+28.512 protocol completed/288 reset-aborted,0 mismatch; F8192 completed/24 abort,0 mismatch,CK2Q1ns. Không đổi reset release,stall,order,C/config context,commit,first/last/drain. NF vẫn14 tầng,L_valid=q+12,H=q+13,II=q+14; F13 tầng,q+11/q+12/q+13. Không dùng regression này thay final per-n/AC04/CDC/RDC/Gate4.
+
+#### 8.28.2. Tách tác động từng candidate — Default C2
+
+| Candidate SAC | LUT | FF | CARRY4 | WNS ns | WHS ns | SAC state/token setup ns |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| baseline | 2516 | 930 | 94 | +0.229 | +0.056 | +0.547/+0.601 |
+| a | 2570 | 930 | 94 | +0.215 | +0.055 | +0.679/+0.427 |
+| ab | 2538 | 930 | 94 | +0.277 | +0.058 | +0.873/+0.799 |
+| abc_sub | 2572 | 930 | 104 | +0.380 | +0.056 | +1.014/+1.024 |
+| abc_tree | 2531 | 930 | 94 | +0.177 | +0.054 | +1.011/+1.944 |
+
+C-sub tăng carry/LUT; cây zero/one-hot không thêm carry, cải thiện SAC token rõ hơn nhưng không tự cải thiện WNS toàn MAC khi đường găng chuyển sang P1/A1. Không chọn candidate chỉ dựa tên thuật toán hoặc một bank.
+
+| Candidate độc lập trên OPT-02b | LUT/FF/CARRY4 | WNS/WHS ns | Bank chính trước → sau, setup ns |
+| --- | --- | --- | --- |
+| OPT-09 | 2414/931/86 | +0.317/+0.046 | +0.477 → +1.999 |
+| OPT-10A | 2514/930/94 | +0.409/+0.051 | +0.229 → +1.030 |
+
+OPT-09 thay bank biểu diễn, không thêm bank: P2 tăng từ38 lên39 FF. Magnitude đã round/clamp lưu một lần; không thêm signed code hoặc adder thứ hai. Packer public và parser public giữ nguyên.
+
+#### 8.28.3. Matched toàn NF — A35T-C2, ba chiến lược
+
+**Reference ở đây là candidate OPT-02b, không phải production OPT-03. Chưa promote OPT-02b hoặc tổ hợp vào production.** Cùng part xc7a35tcpg236-1,10ns,input min/max2,500ns,output min0/max0,500ns,uncertainty setup/hold0,100ns; XDC nạp trước synthesis. Không thêm exception hoặc đổi hold budget.
+
+| Chiến lược | Reference LUT/FF/CARRY4 | Reference WNS/WHS ns | Tổ hợp LUT/FF/CARRY4 | Tổ hợp WNS/WHS ns | R2R WNS reference → tổ hợp ns | F_STA reference → tổ hợp MHz |
+| --- | --- | --- | --- | --- | --- | --- |
+| Default | 2516/930/94 | +0.229/+0.056 | 2547/931/86 | +0.730/+0.028 | +0.229 → +0.987 | 102.34 → 110.95 |
+| Explore | 2517/930/94 | +0.440/+0.056 | 2548/931/86 | +0.669/+0.046 | +0.440 → +0.860 | 104.60 → 109.41 |
+| RuntimeOptimized | 2546/930/94 | -0.099/+0.046 | 2587/931/86 | +0.845/+0.039 | -0.099 → +0.988 | 99.02 → 110.96 |
+
+Reference F_STA min/median/max=99.02/102.34/104.60MHz; WNS min/median/max=-0.099/+0.229/+0.440ns.
+
+Tổ hợp F_STA min/median/max=109.41/110.95/110.96MHz; WNS min/median/max=+0.669/+0.730/+0.845ns.
+
+Explore dùng place/route Explore; RuntimeOptimized dùng place RuntimeOptimized và route Default. Đây là ba chiến lược, không gọi là ba seed độc lập. Chỉ đo toàn NF trong đợt này; chưa có matched PPA F hoặc kết luận lợi ích fusion. DSP/BRAM/latch/unrouted/unclassified đều0 ở các run đã audit. TNS/THS và recovery/removal giữ trong timing.rpt; số chi tiết,24 bank D/CE và worst paths ở summary.json/stages.csv, không trộn async reset vào bank data.
+
+Default: WNS toàn bộ budget+0,730ns tại parser valid→in_ready; Internal R2R+0,987ns tại A1. Tổ hợp đạt setup/hold100MHz cả ba chiến lược. Đánh đổi Default so reference:+31LUT,+1FF,−8CARRY4; không kết luận giảm LUT toàn MAC từ việc OPT-09 riêng tiết kiệm102LUT. Median F_STA tăng khoảng8,41%,chưa đạt mục tiêu115–125MHz.
+
+| Bank Default | Reference setup/hold ns | Tổ hợp setup/hold ns |
+| --- | --- | --- |
+| accumulator_feedback | +0.803/+0.076 | +2.609/+0.079 |
+| accumulator_l3 | +3.454/+0.098 | +4.013/+0.028 |
+| adder_a1 | +0.562/+0.118 | +0.987/+0.127 |
+| adder_a2 | +4.507/+0.056 | +5.007/+0.067 |
+| adder_a3 | +1.530/+0.120 | +2.318/+0.125 |
+| c_context | +4.531/+0.067 | +5.202/+0.046 |
+| final_packer_p1 | +1.667/+0.079 | +3.184/+0.131 |
+| final_packer_p2 | +3.707/+0.071 | +4.202/+0.077 |
+| ops_m0_core_context | +1.695/+0.128 | +2.088/+0.108 |
+| parser_a_p1 | +1.651/+0.178 | +1.612/+0.216 |
+| parser_a_p2 | +3.852/+0.066 | +4.151/+0.144 |
+| parser_b_p1 | +1.663/+0.361 | +1.904/+0.158 |
+| parser_b_p2 | +4.149/+0.100 | +3.792/+0.123 |
+| parser_c_p1 | +1.297/+0.232 | +1.895/+0.156 |
+| parser_c_p2 | +4.253/+0.095 | +4.609/+0.072 |
+| product_packer_p1 | +0.229/+0.181 | +1.697/+0.187 |
+| product_packer_p2 | +3.312/+0.119 | +3.967/+0.071 |
+| product_parse_bank | +0.477/+0.103 | +3.208/+0.077 |
+| reset_sync | +7.875/+0.060 | +7.997/+0.060 |
+| sac_state | +0.547/+0.175 | +1.344/+0.149 |
+| sac_token_l1 | +0.601/+0.143 | +2.814/+0.189 |
+| sbm_shift_l2 | +3.857/+0.121 | +3.213/+0.166 |
+| transaction_control | +2.849/+0.162 | +3.642/+0.163 |
+| whole_data | +0.229/+0.056 | +0.987/+0.028 |
+
+F_STA=1000/(10−WNS_R2R),chỉ là ước lượng từ STA tại100MHz; chưa P&R ở clock cao hơn hoặc đo board. OOC không có HD.PARTPIN_LOCS nên timing I/O chỉ theo budget giả định, chưa board/interface signoff. Không suy slack hold thực bằng cách cộng lại uncertainty.
+
+#### 8.28.4. Quyết định và phần còn mở
+
+Giữ tổ hợp như candidate đã kiểm; chưa đổi production.f hoặc SPEC hiện thực production. Việc promote riêng OPT-02b cần matched với production; phép đo ở đây dùng nó làm mốc khảo sát đúng8.25.1. OPT-10B chưa mở vì P1/P2 đã có margin; OPT-11 vẫn là tùy chọn nếu cần mục tiêu cao hơn và phải khóa bundle/FF trước sửa. A1 đang là nút thắt kế tiếp; không lấy CE slack A2 làm ngân sách số học. Mục tiêu115–125MHz chưa được nghiệm thu; không tự tăng tầng/II để đạt con số. Gói kết quả không đóng Gate4 hoặc final ma trận NF/F.
+
+Tái chạy từ Posit_MAC,WSL bash --noprofile --norc: prepare_opt05.py → verify_opt05.sh từng a/ab/abc_sub/abc_tree; verify_opt05_leaf_native.sh tự tạo TB54 cấu hình và verify_opt05_leaf_event.ps1 kiểm ModelSim đại diện (không cần chạy lại matrix ModelSim ban đầu). prepare_opt09.py → verify_opt09_product.sh và verify_opt09.sh; prepare_opt10a.py → verify_opt10a_leaf.sh và verify_opt10a.sh; prepare_optcombo.py → verify_optcombo.sh → verify_optcombo_acceptance.sh; ModelSim dùng verify_optcombo_modelsim.ps1 và verify_optcombo_fused_modelsim.ps1. L0 libsoftposit.so tái build từ source trước native NF trên checkout mới.
+
+PPA Windows: run_opt05_ppa.ps1 -Variant baseline/abc_tree -Strategy Default/Explore/RuntimeOptimized; thêm -StudyRoot results/opt09_20261018 -Variant magnitude hoặc opt10a_20261018/-Variant sticky cho phép đo riêng; tổ hợp dùng -StudyRoot results/optcombo_20261018 -Variant combined với ba strategy. Mọi runner từ chối output cũ; để tái chạy cần study root mới và sửa có chủ đích, không xóa checkpoint đã nghiệm thu. collect_opt825.py audit nguồn/hash/constraint/counters; retain_opt825.py nén và kiểm CRC/SHA trước dọn build caches. Seed NF20264217,F20261015,SAC20261017,product/sticky20261018; Verilator5.032,GCC15.2.0,ModelSim10.1d,Vivado2026.1 build6511674. Nguồn/lệnh/hash và báo cáo raw nằm trong evidence.zip của từng study.
+
+
+Đã nén lossless và kiểm CRC/SHA từng entry trước dọn build caches,giải phóng642,878,086byte (~613.1MiB). Giữ source/lệnh/hash/report/fixture và routed DCP local; không đưa binary,wave,work hoặc cache vào Git. Archive manifest mô tả cả lượt lỗi/interrupted riêng,không cộng vào nghiệm thu.
+
+<!-- OPT825_REPORT_END -->

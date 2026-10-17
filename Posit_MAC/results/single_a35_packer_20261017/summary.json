@@ -1,0 +1,90 @@
+{
+  "status": "PASS_REQUESTED_SCOPE",
+  "part": "xc7a35tcpg236-1",
+  "profile": "NF32/3 FW12 EXACT_EN1 OPS_EN1",
+  "clock_ns": 10.0,
+  "uncertainty_ns": 0.1,
+  "directive": "Default",
+  "phase_counts": {
+    "synth_design": 1,
+    "place_design": 1,
+    "route_design": 1
+  },
+  "RTL_changed": false,
+  "simulation_runs": 0,
+  "stages": [
+    {
+      "group": "whole_mac",
+      "register_count": 930,
+      "setup_slack_ns": -2.887,
+      "hold_slack_ns": 0.056,
+      "data_delay_ns": 12.749,
+      "logic_delay_ns": 5.587,
+      "route_delay_ns": 7.162,
+      "levels": 19,
+      "startpoint": "u_dut/u_wrapper/c_sf_q_reg[2]/C",
+      "endpoint": "u_dut/u_wrapper/u_add/a1_q_reg[y][0]/D"
+    },
+    {
+      "group": "before_product_p1_acc",
+      "register_count": 54,
+      "setup_slack_ns": 3.831,
+      "hold_slack_ns": 0.148,
+      "data_delay_ns": 6.042,
+      "logic_delay_ns": 2.4,
+      "route_delay_ns": 3.642,
+      "levels": 12,
+      "startpoint": "u_dut/u_wrapper/u_core/t2_first_reg/C",
+      "endpoint": "u_dut/u_wrapper/u_core/u_acc/acc_reg[53]/D"
+    },
+    {
+      "group": "product_p1",
+      "register_count": 43,
+      "setup_slack_ns": 0.301,
+      "hold_slack_ns": 0.137,
+      "data_delay_ns": 9.527,
+      "logic_delay_ns": 2.948,
+      "route_delay_ns": 6.579,
+      "levels": 10,
+      "startpoint": "u_dut/u_wrapper/u_core/u_acc/acc_reg[15]/C",
+      "endpoint": "u_dut/u_wrapper/u_product_pack/g_rne.p1_sticky_bit_q_reg/D"
+    },
+    {
+      "group": "after_product_p1_p2",
+      "register_count": 38,
+      "setup_slack_ns": 3.467,
+      "hold_slack_ns": 0.182,
+      "data_delay_ns": 6.391,
+      "logic_delay_ns": 1.492,
+      "route_delay_ns": 4.899,
+      "levels": 6,
+      "startpoint": "u_dut/u_wrapper/u_product_pack/g_rne.p1_mag_trunc_q_reg[25]/C",
+      "endpoint": "u_dut/u_wrapper/u_product_pack/g_rne.d_q_reg[18]/D"
+    },
+    {
+      "group": "product_parse",
+      "register_count": 44,
+      "setup_slack_ns": -0.327,
+      "hold_slack_ns": 0.13,
+      "data_delay_ns": 10.203,
+      "logic_delay_ns": 3.235,
+      "route_delay_ns": 6.968,
+      "levels": 16,
+      "startpoint": "u_dut/u_wrapper/u_product_pack/g_rne.d_q_reg[0]/C",
+      "endpoint": "u_dut/u_wrapper/product_frac_q_reg[23]/D"
+    }
+  ],
+  "resources": {
+    "LUT": 2462,
+    "FF": 930
+  },
+  "sta_estimate_mhz": 77.59757895553659,
+  "auxiliary_report_error": [
+    "Tcl runtime error: Empty target group: before_final_p1_a3 (optional final-packer report, after requested reports)"
+  ],
+  "limitations": [
+    "One OOC whole-MAC P&R run, not a sweep/median or board signoff",
+    "No retiming or new functional verification; RTL bytes match tested OPT-03",
+    "No assumption that positive slack can be transferred unchanged between stages"
+  ]
+}

@@ -260,6 +260,7 @@ Tuần14 chỉ được đánh dấu `✅` khi TC-W14-01..05 và TC-W14-08 đề
 | STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
 | --- | --- | --- | --- |
 | 1 | Tách pipeline RNE tích của NF — OPT-03 | Main10M và ModelSim corner/protocol0 mismatch; reset/latency/II đạt. STA: xc7a35tcpg236-1: 52.31→78.41MHz; xc7a100tcsg324-1: 53.69→79.28MHz; thêm2 chu kỳ và FF, chưa đạt R2R setup100MHz ở tất cả run. SPEC/PLAN đồng bộ; final NF/F và Gate4 còn mở | ✅ |
+| 2 | Đo một lượt toàn NF A35T, kiểm hai tầng kề P1 | ACC/P1/P2 có setup slack +3,831/+0,301/+3,467ns ở100MHz; hold dương. Chỉ một P&R, không sửa RTL/mô phỏng. Toàn MAC còn WNS−2,887ns tại A1; lỗi truy vấn phụ sau đủ báo cáo được ghi rõ trong PLAN8.22 | ✅ |
 <!-- OPT03_REPORT_END:docs/TIEN_DO_DO_AN.md -->
 
 ### 4.17. Mẫu cập nhật tiếp theo

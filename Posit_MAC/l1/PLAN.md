@@ -1367,3 +1367,24 @@ STA MHz=1000/(10−R2R slack), là ước lượng theo constraint của run; ch
 <!-- OPT03_REPORT_END:l1/PLAN.md -->
 
 **Đường còn vướng sau OPT-03:** cả6 run có critical endpoint `u_add/a1_q_reg[y][0]`, từ C_sf/C_frac hoặc product_frac qua align. WNS A1 từ−3,114 đến−2,065ns ở10ns. Cone P2→parse/product bank còn−1,798..−0,241ns; product P1 từ−0,260 đến+0,301ns (không đạt100MHz đồng nhất), product P2 có+2,818..+3,469ns. Ưu tiên đợt sau là thử OPT-02 tại toàn NF rồi đánh giá parse/P1; chưa triển khai thêm trong phiên này. Kiểm dense II có292 lần handshake cặp liên tiếp đạt đúngq+14. Lỗi runner `read_checkpoint` sau Default đã sửa thành `open_checkpoint`; bảo toàn driver/log Default và SHA checkpoint, resume hai directive còn lại từ synthesis, không sửa RTL để xử lý lỗi công cụ.
+
+### 8.22. Một lượt STA A35T: hai tầng kề product P1 — 17/10/2026
+
+Theo yêu cầu sinh viên, chỉ chạy **một synth_design, một place_design Default, một route_design Default** của toàn NF32/3 FW12 EXACT_EN1 OPS_EN1 trên xc7a35tcpg236-1, Vivado2026.1 build6511674. OOC wrapper chỉ BUFG, clock10ns/uncertainty0,1ns; inputmin=max2,5ns,outputmax0,5ns/min0. Không sửa RTL, không mô phỏng hoặc sweep. Toàn36 SV+header giống byte với OPT-03 đã kiểm; source/driver snapshot và SHA tại results/single_a35_packer_20261017.
+
+| Đoạn vào bank | Setup slack ns | Hold slack ns | Data delay ns | Register đích |
+| --- | --- | --- | --- | --- |
+| Trước P1: cộng tích lũy → ACC | +3,831 | +0,148 | 6,042 | 54 |
+| ACC → normalize/encode/GRS → P1 | +0,301 | +0,137 | 9,527 | 43 |
+| Sau P1: RNE/sign → P2, gồm data/flags/valid | +3,467 | +0,182 | 6,391 | 38 |
+| P2 → parse/product bank | −0,327 | +0,130 | 10,203 | 44 |
+
+Worst path trước P1: t2_first_reg→acc_reg[53], qua chọn first và cộng term/acc. P1: acc_reg[15]→p1_sticky_bit_q_reg. P2: p1_mag_trunc_q_reg[25]→d_q_reg[18]. Đây là worst setup của mọi launch register tới từng nhóm đích (bao gồm đường điều khiển tới D/CE nếu có), không dùng slack SAC làm thay thế accumulator hoặc chỉ lấy một cặp bit thuận lợi. Danh sách register, top10 setup/top5 hold từng nhóm giữ trong report.
+
+Hai tầng kề P1 đều có slack dương ở chính lượt A35T này; P1 chỉ dư0,301ns. Có cơ sở khảo sát cân bằng logic, ưu tiên phần sticky/inexact sang P2; không cộng/trừ slack giữa tầng như ngân sách cố định vì routing/CE/FF thay đổi. Chuyển về phía ACC cần giữ raw accumulator và quan hệ hồi tiếp từng term, không chuẩn hóa lại trạng thái mỗi vòng. Chưa chốt retiming hoặc thêm stage.
+
+Toàn MAC: WNS R2R−2,887ns,hold+0,056ns,2462LUT/930FF,ước lượng STA77,60MHz; critical c_sf_q[2]→A1.y[0],chưa đạt100MHz. Một run không thay median OPT-03 hoặc Gate4/board signoff. Phần parse sau P2 vẫn thiếu timing.
+
+**Giới hạn runner:** P&R và cả5 nhóm báo cáo yêu cầu đã xuất đầy đủ. Sau đó, truy vấn phụ ngoài phạm vi tới bank A3 của packer tổng dùng sai tên `a3_q` (RTL thực dùng các output register riêng), làm batch exit1. Không chạy lại P&R. Collector chỉ nghiệm thu PASS_REQUESTED_SCOPE, ghi nguyên lỗi phụ trong summary; giữ driver thực thi và log gốc. Script canonical đã bỏ truy vấn phụ để tránh lặp lại lỗi; không tuyên bố toàn batch cũ exit0. Không có lỗi sửa RTL hoặc kiểm chức năng trong phiên này.
+
+Lệnh đã chạy: PowerShell `./scripts/run_single_a35_packer_sta.ps1`; kiểm lại bằng `python scripts/collect_single_a35_packer.py`. Runner từ chối output đã tồn tại, không tự chạy thêm lượt. Dữ liệu gọn trong evidence.zip + archive_manifest.json, stages.csv và summary.json; giữ raw report quan trọng. Nhật ký Git sao lưu gồm nguồn/script/bằng chứng/tài liệu, không binary, checkpoint hoặc cache.

@@ -195,6 +195,6 @@ Dùng verify_opt03.sh, verify_opt03_modelsim.ps1, verify_opt03_schedule.ps1 và 
 <!-- OPT03_REPORT_END:scripts/README.md -->
 
 
-## Constraint A35T-C1 — luồng mới17/10/2026
+## Constraint A35T-C2 — mặc định100MHz
 
-Phép đo mới dùng run_a35t_sta.ps1 với XDC chung trong syn/constraints, nạp trước synthesis. Mặc định Action validate, Profile ip_ooc: chỉ kiểm elaboration/XDC, không full P&R hoặc mặc định input2,5ns. Integration cần file mẫu đã điền timing thật; runner từ chối placeholder, min/max lỗi, trùng/thiếu port và tool critical warning/error. Xem [syn/README](../syn/README.md). Các runner checkpoint cũ và snapshot giữ nguyên; không dùng collector của run cũ để kết luận điều kiện mới. Chưa có Fmax mới hoặc paired NF/F PPA trong phiên chuẩn hóa.
+run_a35t_sta.ps1 mặc định profile benchmark_100mhz: clock10ns, uncertainty setup/hold0,1ns; input min=max2,5ns và output min0/max0,5ns. Hai XDC trong syn/constraints được nạp trước synthesis. Không tự chạy C1 clock-only hoặc mẫu I/O tích hợp ở mốc100MHz. Ngoại lệ sweep Fmax chỉ thực hiện theo yêu cầu riêng, đọc Internal R2R hoặc dùng budget mới có nhãn/đối chứng matched. Ngoại lệ thứ hai chưa được nêu. Xem [syn/README](../syn/README.md); nguồn và bằng chứng C1 cũ nằm trong archive, không gán cho C2.

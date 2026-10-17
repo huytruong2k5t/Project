@@ -126,7 +126,7 @@ So NF/F cùng P_hat, precision/OPS/n, corpus seed đã khóa và oracle độc l
 
 ## 6. Build, source list và tái lập
 
-**Constraint hiện hành A35T-C1:** [syn/README](../syn/README.md), [clock XDC](../syn/constraints/a35t_clock.xdc), [mẫu I/O](../syn/constraints/a35t_io_template.xdc). Phép đo mới dùng scripts/run_a35t_sta.ps1; XDC đọc trước synthesis. ip_ooc chỉ R2R, không đặt I/O delay; integration yêu cầu timing thật, chưa là board signoff. Script đo cũ chỉ tái lập checkpoint cũ, không dùng mặc định2,5ns cho lượt mới.
+**Constraint hiện hành A35T-C2:** [syn/README](../syn/README.md), [clock XDC](../syn/constraints/a35t_clock.xdc), [I/O benchmark100MHz](../syn/constraints/a35t_benchmark_100mhz.xdc). Ở10ns giữ input min=max2,5ns, output min0/max0,5ns và uncertainty setup/hold0,1ns. Phép đo mới dùng scripts/run_a35t_sta.ps1, nạp XDC trước synthesis. Khi quét cao hơn, báo Internal R2R riêng; chỉ đổi budget theo profile sweep công khai và matched. Chưa xác định ngoại lệ thứ hai, không tự mở. C1 clock-only giữ làm hồ sơ thử trước điều chỉnh.
 
 **Thiết bị khảo sát tiếp theo:** chỉ A35T `xc7a35tcpg236-1` cho mọi phép đo mới, baseline/candidate và paired NF/F. Không chạy A100T; số đo A100T trước17/10 giữ làm lịch sử trong Optimization. Khi runner cũ hỗ trợ nhiều part, chọn tường minh A35T; không sửa snapshot/hash cũ để bỏ bằng chứng.
 

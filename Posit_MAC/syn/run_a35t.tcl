@@ -1,41 +1,11 @@
-# A35T-C1 flow. argv: nf|f, ip_ooc|integration, validate|synth|implement,
-# optional project-relative I/O XDC. No historical driver is modified.
-if {[llength $argv] < 3 || [llength $argv] > 4} {error "Expected variant profile action ?io_xdc?"}
-lassign $argv variant profile action io_xdc
-if {$variant ni {nf f} || $profile ni {ip_ooc integration} ||
+# A35T-C2 flow: nf|f benchmark_100mhz validate|synth|implement.
+# Fixed 10 ns benchmark budget; no historical snapshot is modified.
+if {[llength $argv] != 3} {error "Expected variant benchmark_100mhz action"}
+lassign $argv variant profile action
+if {$variant ni {nf f} || $profile ne "benchmark_100mhz" ||
     $action ni {validate synth implement}} {error "Unsupported flow arguments"}
 set root [file normalize [file join [file dirname [info script]] ..]]
 set part xc7a35tcpg236-1
-set io_groups [dict create]
-if {$profile eq "integration"} {
-    if {$io_xdc eq {} || ![file isfile [file join $root $io_xdc]]} {
-        error "A35T_IO_UNCONFIGURED: provide a configured project-relative I/O XDC"
-    }
-    set f [open [file join $root $io_xdc] r]; set text [read $f]; close $f
-    if {[regexp {@[A-Z_]+@} $text] || ![regexp -line {^# TIMING_REFERENCE: .+} $text]} {
-        error "A35T_IO_UNCONFIGURED: fill all min/max and timing-reference tokens"
-    }
-    foreach line [split $text \n] {
-        set line [string trim $line]
-        if {$line eq {} || [string index $line 0] eq "#"} {continue}
-        if {![regexp {^set_(input|output)_delay -clock clk -(min|max) ([-+0-9.eE]+) \[get_ports \{([^\}]+)\}\]$} $line -> direction bound value patterns]} {
-            error "A35T_IO_INVALID: use the one-command-per-line same-clock template syntax"
-        }
-        if {![string is double -strict $value]} {error "A35T_IO_INVALID: nonnumeric delay"}
-        set key [list $direction $patterns]
-        if {[dict exists $io_groups $key $bound]} {error "A35T_IO_INVALID: duplicate delay"}
-        dict set io_groups $key $bound $value
-    }
-    if {![dict size $io_groups]} {error "A35T_IO_INVALID: no I/O delays"}
-    dict for {key values} $io_groups {
-        if {![dict exists $values min] || ![dict exists $values max] ||
-            [dict get $values max] < [dict get $values min]} {
-            error "A35T_IO_INVALID: independent min/max required, max >= min"
-        }
-    }
-} elseif {$io_xdc ne {}} {
-    error "ip_ooc must not receive integration I/O assumptions"
-}
 set_param general.maxThreads 4
 create_project -in_memory -part $part
 set_property include_dirs [list [file join $root rtl]] [current_fileset]
@@ -54,51 +24,27 @@ if {$variant eq "nf"} {
 }
 # Load constraints BEFORE synthesis, so the synthesis optimizer sees the clock.
 read_xdc [list [file join $root syn constraints a35t_clock.xdc]]
-if {$profile eq "integration"} {
-    read_xdc [list [file join $root $io_xdc]]
-}
+read_xdc [list [file join $root syn constraints a35t_benchmark_100mhz.xdc]]
 if {$action eq "validate"} {
     synth_design -rtl -top $top -part $part
 } else {
     synth_design -top $top -part $part -mode out_of_context -flatten_hierarchy rebuilt
 }
 set clocks [get_clocks]
-if {$profile eq "integration"} {
-    set seen [dict create]
-    dict for {key values} $io_groups {
-        lassign $key direction patterns
-        set ports [get_ports -quiet $patterns]
-        if {![llength $ports]} {error "A35T_IO_INVALID: no matching ports"}
-        foreach port $ports {
-            set name [get_property NAME $port]
-            set wanted [expr {$direction eq "input" ? "IN" : "OUT"}]
-            if {$name eq "clk" || [get_property DIRECTION $port] ne $wanted || [dict exists $seen $name]} {
-                error "A35T_IO_INVALID: duplicate, clock, or wrong direction: $name"
-            }
-            dict set seen $name 1
-        }
-    }
-    foreach port [get_ports -filter {NAME != clk}] {
-        if {![dict exists $seen [get_property NAME $port]]} {error "A35T_IO_INVALID: uncovered port $port"}
-    }
-}
 if {[llength $clocks] != 1 || [get_property NAME $clocks] ne "clk" ||
     abs([get_property PERIOD $clocks] - 10.0) > 0.000001} {error "Clock contract did not load"}
 report_clocks -file clocks.rpt
 write_xdc effective_constraints.xdc
 set f [open scope.txt w]
 puts $f [version]
-puts $f "contract=A35T-C1 part=$part variant=$variant profile=$profile action=$action"
+puts $f "contract=A35T-C2 part=$part variant=$variant profile=$profile action=$action"
 puts $f "clock_period_ns=10 setup_uncertainty_ns=0.100 hold_uncertainty_ns=0.100"
 puts $f "NF=32/3 FW12 EXACT_EN1 OPS_EN1; F=32/3 FW12 W32 EXACT_EN0 OPS_EN1"
 puts $f "No paired NF/F claim: NF EXACT_EN0 comparator still needs separate verification."
-if {$profile eq "ip_ooc"} {
-    puts $f "IO_UNCONSTRAINED_BY_SCOPE: no input/output delays; not board/interface signoff."
-    puts $f "R2R only. Port-to-first-FF/last-FF-to-port paths are NOT covered by R2R closure."
-    puts $f "Wrappers have BUFG only, no added I/O FF banks; do not claim complete input-stage timing."
-} else {
-    puts $f "Integration budgets supplied by $io_xdc; pinout/physical interface require separate review."
-}
+puts $f "BENCHMARK_IO_ASSUMPTIONS: input min=max 2.500 ns; output min=0.000 max=0.500 ns."
+puts $f "Fixed 100 MHz benchmark budget, NOT measured board/interface timing."
+puts $f "Report Internal R2R separately from assumed-budget I/O timing."
+puts $f "Higher-frequency sweeps need a separate declared contract; no automatic I/O scaling."
 close $f
 if {$action eq "validate"} {
     set f [open status.txt w]; puts $f VALIDATED; close $f

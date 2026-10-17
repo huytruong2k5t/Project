@@ -140,7 +140,7 @@ Kế hoạch tối ưu là luồng refactor riêng trước freeze mới; quy t�
 | Baseline paper | Provenance RTL/LUT đầy đủ, tie/prefix126–127, width/cut/normalize, generator/seed và trace tác giả chưa xác minh | processing | Nghiên cứu phụ; chỉ mở khi có nguồn hoặc yêu cầu riêng, không dò tham số để ép TableI |
 | Paired NF/F | Final per-n, AC04, accuracy cùng corpus, comparator NF EXACT_EN0 và PPA matched | không | Thực hiện theo W14-01..08 và tuần15; không hạ ngưỡng để giữ lịch |
 | Tái lập/luồng tự động | Hoàn thiện lint/collector/audit, truy vết testcase và tái build từ nguồn frozen | processing | Tiếp phần tuần1/tuần16; không chạy lại lượt lớn chỉ vì đổi tài liệu |
-| Timing giao tiếp tích hợp | Điền budget I/O theo nguồn/đích và quan hệ clock/data, pinout/IOSTANDARD khi chọn thiết kế tích hợp; C1 ip_ooc không thay bước này | không | syn/README; chưa có thông số thật thì không chạy integration |
+| Timing giao tiếp tích hợp | Điền budget I/O theo nguồn/đích và quan hệ clock/data, pinout/IOSTANDARD khi chọn thiết kế tích hợp; budget benchmark100MHz không thay timing thực tế | không | syn/README; chưa có thông số thật thì không chạy integration |
 | Hồ sơ/board/demo | Constraints phần cứng thực tế nếu chọn kit, giải trình CDC/RDC, báo cáo/slide/demo và thử tái lập | processing | Tuần15–16, hạn29/11 và đệm tới04/12; OOC chưa là board signoff |
 | Mở rộng tùy chọn | Exact fused rộng, format phụ, TRUNC/JAM F, quire/chồng lấn, ASIC hoặc PPA E/M paper | không | Ngoài profile chính; không tự lên lịch bắt buộc hoặc chặn NF/F |
 
@@ -299,6 +299,7 @@ Kế hoạch tối ưu là luồng refactor riêng trước freeze mới; quy t�
 | 5 | Sắp xếp tài liệu kiến trúc và tối ưu | PLAN giữ build/thuật toán baseline/NF/F; chuyển tối ưu và bằng chứng sang doc/Optimization.md, gỡ checklist hoàn thành, gom việc mở vào mục3.1–3.4. Không đổi RTL hoặc chạy lại kiểm chứng | ✅ |
 | 6 | Thu hẹp thiết bị khảo sát | Các phép đo tiếp theo chỉ A35T xc7a35tcpg236-1; bỏ yêu cầu A100T/cross-part, giữ dữ liệu lịch sử. Chỉ cập nhật tài liệu, chưa chạy kiểm chứng | ✅ |
 | 7 | Chuẩn hóa constraint A35T-C1 | Tách clock và mẫu I/O, kiểm nạp bằng Vivado; bỏ budget2,5ns khỏi mặc định mới. Không đổi RTL hoặc đo Fmax mới; timing giao tiếp/board còn mở | ✅ |
+| 8 | Giữ nguyên budget benchmark100MHz — C2 | Giữ input2,5/2,5ns và output0/0,5ns; khi sweep báo Internal R2R riêng, chưa mở ngoại lệ thứ hai. Chỉ cập nhật cấu hình, chưa đo lại STA | ✅ |
 <!-- OPT03_REPORT_END:docs/TIEN_DO_DO_AN.md -->
 
 

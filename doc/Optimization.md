@@ -682,7 +682,7 @@ Precompute prefix C tại pair_retire là biến thể độc lập, chỉ dùng
 
 #### 8.25.7. Constraint, kiểm chứng và tiêu chí chọn
 
-- Phép đo tiếp theo dùng hợp đồng A35T-C1 tại mục8.26: A35T xc7a35tcpg236-1, clock10ns và uncertainty setup/hold0,100ns nạp trước synthesis. Profile ip_ooc không giả định I/O delay; integration chỉ khi có budget thật. Không đổi constraint/exception/hold-fix riêng cho candidate. Cần baseline/candidate matched mới trên cùng C1; không trộn WNS lịch sử2,5ns của mục8.24 vào thống kê mới. Không mở A100T.
+- Phép đo tiếp theo dùng A35T-C2 tại mục8.27: ở10ns giữ input min=max2,5ns, output min0/max0,5ns, uncertainty setup/hold0,1ns; nạp XDC trước synthesis. Không đổi riêng constraint/exception/hold-fix cho candidate. Baseline/candidate cần matched cùng luồng C2; không mở A100T. C1 clock-only ở mục8.26 là thử nghiệm đã được điều chỉnh, không còn mặc định100MHz.
 - Hold+0,047ns đã gồm user uncertainty0,100ns, nhưng không đổi nhãn thành slack thực+0,147ns. Giữ margin hiện hành; chưa cần tối ưu hold trước setup khi chưa vi phạm. phys_opt_design -hold_fix là nhánh P&R riêng nếu có nhu cầu thực tế, không bảo đảm nâng slack dương; áp cùng chính sách cho hai bản và báo cả chi phí setup/tài nguyên. Không xóa ASYNC_REG hoặc đổi reset để cải thiện số đo.
 - Qua T0/T1/T2 trước đo: strict lint/latch/width/signedness; baseline/candidate/oracle trên mọi output bị ảnh hưởng; corner/exhaustive miền nhỏ rồi pilot. Module dùng chung phải kiểm các tuple đang hỗ trợ, không chỉ32/3. SAC theo bộ biên §8.16.3; packer/adder theo các corner ở trên. ES3 dùng oracle integer/dyadic độc lập, không dùng SoftPosit ES2 làm oracle ES3.
 - Khi thay ranh giới bank, so scoreboard theo ID và cùng cạnh clock với baseline: latency/II lần này phải giữ nguyên, không chấp nhận dịch output chu kỳ. Kiểm first-valid/handshake/next-accept, reset/startup/abort, stall/full/bubble, output stable, C/config context và accumulator commit đúng một lần. Native cycle và ModelSim CK2Q có phạm vi riêng, không thay thế nhau.
@@ -1181,3 +1181,16 @@ Theo yêu cầu sinh viên, tách clock nội bộ và budget tích hợp thật
 Trong phát triển runner, lượt đầu vướng đường dẫn khoảng trắng ở read_xdc; đã sửa bằng Tcl list. Mẫu XDC đầu dùng dict/foreach khiến Vivado chỉ phát critical warning và bỏ constraint; các lượt này không được nghiệm thu. Bản cuối dùng XDC thuần, preflight ở driver và từ chối critical warning/error; log thử lỗi giữ riêng trong bằng chứng, không cộng vào kiểm tra thành công.
 
 Bằng chứng đã lưu tại results/a35t_c1_constraints_20261017: summary.json và evidence.zip/manifest SHA. Bốn kiểm tra đạt phạm vi: NF clock-only và F clock-only (mỗi lượt0 warning/critical warning/error), tích hợp số giả lập (0 warning/critical warning/error, đủ8 lệnh min/max gồm output min âm), và từ chối mẫu trống như dự kiến. Đối chiếu94 file RTL/L1 giữ nguyên byte. Không có full synthesis/place/route hoặc mô phỏng; elaboration không tạo Fmax mới. Các lượt thử trước sửa được nén riêng intermediate_not_acceptance, không dùng nhãn VALIDATED cũ làm bằng chứng. Nguồn, lệnh và XDC hiệu lực của từng kiểm tra đều có trong archive. Main timing cũ không được tự nâng nhãn sau chuẩn hóa: thời điểm nạp XDC trước synthesis và bỏ I/O budget có thể đổi cả netlist/P&R. Khi đo tiếp phải tạo matched baseline/candidate C1 và kiểm tại clock mục tiêu, chỉ báo closure trong phạm vi đã timing. Các producer lịch sử vẫn dùng điều kiện checkpoint cũ, không sửa source/hash của chúng.
+
+
+<a id="legacy-8-27"></a>
+
+### 8.27. Giữ budget100MHz theo yêu cầu sinh viên — A35T-C2, 17/10/2026
+
+Sau đề xuất C1, sinh viên yêu cầu giữ nguyên bộ constraint ở mọi benchmark10ns: input min/max2,500ns, output min0/max0,500ns, uncertainty setup/hold0,100ns. Đã cập nhật file I/O benchmark riêng và runner mặc định benchmark_100mhz; clock/I/O nạp trước synthesis. Không đổi RTL, pipeline, snapshot hay kết quả cũ. C1 và các kiểm nạp ở mục8.26 là lịch sử, không dùng làm nghiệm thu C2.
+
+Ngoại lệ đã được mô tả là quét clock cao hơn (ví dụ8ns/125MHz): có thể chỉ đọc Internal R2R; nếu giảm input_delay theo tỷ lệ chu kỳ thì phải có profile sweep riêng, cùng điều kiện cho baseline/candidate và báo thay đổi giả định giao tiếp. Ưu tiên R2R riêng, không tự thay budget. I/O setup âm dưới budget2,5ns là chưa đạt budget đó, không tự là âm giả; không suy toàn giao tiếp hoặc board đạt từ kết quả R2R. Đường Parser B P1 ở báo cáo8.24 có data delay8,628ns/clock10ns và chịu cả clock latency/skew; không dùng con số xấp xỉ6,1ns hoặc T-input_delay đơn lẻ để kết luận timing.
+
+Sinh viên nói có hai ngoại lệ nhưng mới cung cấp một; ngoại lệ thứ hai để chưa xác định, không tự gán cho profile tích hợp. Runner C2 hiện cố định100MHz, chưa triển khai/chạy sweep hoặc tự chia tỷ lệ input_delay. Mẫu tích hợp được giữ tham khảo, không tự kích hoạt như ngoại lệ thứ hai.
+
+Lần chỉnh này chỉ cập nhật chính sách/file/runner và kiểm cú pháp tĩnh, chưa chạy lại synthesis/STA/P&R hoặc có Fmax mới. Các số đo cũ không đổi; nạp constraint trước synthesis vẫn cần matched mới trước kết luận cải thiện.

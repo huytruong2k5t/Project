@@ -1050,7 +1050,7 @@ Các delay là số đo seed1 để định hướng, không phải dự đoán 
 
 #### 8.16.3. Các bước thực hiện được đề xuất
 
-BASE-01/02 đã được khảo sát, kết quả chọn primitive tại§8.18. OPT-01 đã thử và đo§8.20, giữ production cũ vì chưa có lợi ích timing nhất quán; các bước OPT-02/03/04/05 chưa thực hiện trong đợt này. Rà soát Note.docx và kiểm đẳng thức số học tại §8.16.8 chỉ là bằng chứng đánh giá đề xuất, không phải kiểm RTL. Theo yêu cầu mới, tối ưu khối cơ sở trước rồi mới ghép SAC/parser và các khối lớn. Những thử nghiệm đơn vị đã có ở §8.12/8.13 được dùng làm đầu vào, không đổi thành bằng chứng toàn MAC.
+BASE-01/02 đã được khảo sát, kết quả chọn primitive tại§8.18. OPT-01 đã thử và đo§8.20, giữ production cũ vì chưa có lợi ích timing nhất quán. Cập nhật17/10: OPT-03 đã vào production (§8.21); OPT-02b đã kiểm/đo nhưng còn là candidate (§8.23/8.24); OPT-04/05 chưa triển khai. Rà soát Note.docx và kiểm đẳng thức số học tại §8.16.8 chỉ là bằng chứng đánh giá đề xuất, không phải kiểm RTL. Những thử nghiệm đơn vị đã có ở §8.12/8.13 được dùng làm đầu vào, không đổi thành bằng chứng toàn MAC. Kế hoạch tiếp theo giữ latency/II được đề xuất tại §8.25, đang chờ sinh viên xem xét trước chạy.
 
 | ID | Công việc và phương án | Kết quả cần có để xem xét bước tiếp |
 | --- | --- | --- |
@@ -1067,7 +1067,7 @@ BASE-01/02 đã được khảo sát, kết quả chọn primitive tại§8.18. 
 | OPT-07 | Chọn tổ hợp ứng viên có lợi, kiểm tương tác và chạy regression tích hợp chính thức; cập nhật SPEC/lịch, freeze và backup sau khi có bằng chứng | 0 mismatch, protocol/coverage đạt phạm vi áp dụng, ≥3 P&R run/config; ghi rõ phần final còn thiếu |
 | OPT-08 | Bàn giao thay đổi dùng chung cho RTL F tuần13; chuẩn bị comparator NF approximate-only đã kiểm riêng trước paired PPA | NF/F cùng precision, OPS, feature policy, part/tool/constraints; tách lợi ích fusion khỏi lợi ích refactor |
 
-**Thứ tự hiện hành sau góp ý Note.docx:** OPT-00 → BASE-01 → BASE-02 → BASE-03 → OPT-05 (SAC-A/B/C đã chọn) → OPT-01 → OPT-02 → đọc lại STA → chọn OPT-03/04 theo đường dài hiện tại → OPT-07 → OPT-08. Cập nhật16/10: đã đóng leaf§8.18 và parser XOR§8.19; sau đó sinh viên chọn thử riêng OPT-01§8.20 trước SAC. Sau báo cáo OPT-01, sinh viên cho phép triển khai OPT-03 ngày17/10; dùng RNE P1/P2 trước parse, xem §8.21. OPT-02/04/05 chưa ghép. OPT-06, đổi thứ tự stage/radix4 và parser XOR là nhánh lựa chọn, không chặn RTL F nếu lợi ích nhỏ. Nút thắt toàn NF vẫn là norm/pack/parse của §8.16.2; không coi nghiệm thu leaf là đã xử lý nút thắt đó.
+**Thứ tự lịch sử sau góp ý Note.docx:** OPT-00 → BASE-01 → BASE-02 → BASE-03 → OPT-05 → OPT-01 → OPT-02 → đọc lại STA → chọn OPT-03/04 → OPT-07 → OPT-08. Thực tế đã đóng leaf§8.18 và parser XOR§8.19; thử OPT-01§8.20 rồi triển khai OPT-03§8.21. OPT-02b hiện là candidate riêng; OPT-04/05 chưa ghép. Điểm xuất phát CycloneIV tại §8.16.2 được giữ làm lịch sử, không dùng để xác định đường găng hiện hành. STA candidate A35T §8.24 hiện chỉ ra SAC/controller, parse tích, product P1 và A1 là các nhóm sát giới hạn nhất; thứ tự đề xuất tiếp theo và điều kiện giữ latency/II ở §8.25. Các nhánh tùy chọn còn lại chỉ mở khi STA mới có căn cứ.
 
 **OPT-01 — điều kiện về parameter:** các lát bit ở §8.14 chỉ minh họa trường hợp `F_IN=2F+1`. Cần giữ đúng mapping khi override `F_IN`, `ACC_W`, `SF_W` trong miền công bố; dùng generate/ánh xạ từng bit tại elaboration để tránh dải âm, replication âm và out-of-range. Với `EXACT_EN=0`, không tham chiếu nhánh exact không tồn tại. Không rút width, bỏ carry hay coi hai bit padding của FLOOR là numerical sticky. Kiểm cả carry/no-carry, zero/NaR payload và scale signed biên.
 
@@ -1449,3 +1449,74 @@ Mỗi hàng lấy worst setup và worst hold của mọi đường được timi
 | Toàn bộ bank dữ liệu/CE | 930 | +0.251 | +0.047 | 9.693 |
 
 Partition phủ toàn bộ930 FF, không trùng/thiếu bank; reset được tách riêng, recovery/removal còn trong timing.rpt. Báo cáo setup/hold từng nhóm giữ top3 đường và danh sách FF. Output port có worst setup+0,345ns (in_ready),hold+1,482ns (d[10]); đây không phải bank pipeline mới. Vivado cảnh báo Route35-198: port OOC chưa có HD.PARTPIN_LOCS; các đường launch từ input port (đặc biệt parser P1) hoặc tới output chỉ là ước lượng với constraint I/O, chưa có routing chân board chính xác. Phải xem startpoint trong CSV; không coi slack I/O này là signoff phần cứng. Đây là OOC STA, không board signoff hoặc paired NF/F. Production A1 chưa áp dụng OPT-02b; không gán bảng candidate này cho production. Giữ routed.dcp local để truy vấn thêm mà không phải P&R lại; checkpoint/cache không push Git. Evidence zip và manifest SHA giữ nguồn, driver, reports và summary gọn tại results/nf_all_stages_20261017. Lệnh: scripts/run_nf_all_stages_sta.ps1; python scripts/collect_nf_all_stages.py.
+
+### 8.25. Đề xuất tối ưu Fmax/tài nguyên giữ latency/II — chờ xem xét, 17/10/2026
+
+**Trạng thái: chỉ lập kế hoạch.** Theo yêu cầu sinh viên, bổ sung ý tưởng sau review văn bản chiến lược bốn bước; chưa sửa RTL, chạy mô phỏng, synthesis/place/route hoặc promote candidate trong mốc này. Các việc dưới đây chỉ thực hiện sau khi sinh viên chọn tiếp tục. Không dùng mục này làm bằng chứng đã đạt timing hoặc hoàn thành Gate4.
+
+#### 8.25.1. Điểm xuất phát và giới hạn
+
+- Production NF là OPT-03, A1 production chưa đổi sang OPT-02b. Candidate OPT-02b đã kiểm bit-exact và đo A35T tại §8.23/8.24. Dùng snapshot candidate làm mốc khảo sát tiếp, đồng thời giữ production/reference và mọi report lịch sử. Việc thử tổ hợp không tự promote OPT-02b.
+- Profile NF khảo sát: NB32/ES3, FRAC_W12, EXACT_EN=OPS_EN1, FLOOR/RNE; kiểm cả runtime exact/approx và OPS0/1 theo hợp đồng. Baseline/candidate phải cùng feature policy. F hiện chỉ hỗ trợ profile approximate W12-F-1, không dùng khác biệt EXACT_EN để suy lợi ích fusion.
+- Giữ 14 tầng datapath NF và 13 tầng F hiện hành. Với q=max(1,t thực tế), NF giữ L_valid=q+12, H=q+13, II_min=q+14; F giữ q+11/q+12/q+13. Giữ early-stop, reset/startup, stall, commit và thứ tự; số chu kỳ không đổi tại từng giao dịch. Không tính các bank context/reset/control thành tầng số học mới.
+- Đợt này không thêm tầng pipeline. Có thể đổi nội dung bank nội bộ khi cân bằng logic, nhưng phải lập hợp đồng bundle trước sửa, ghi chi phí FF và giữ top I/O/parameter. Hợp đồng số học, precision, flags và L1 frozen giữ nguyên. Nếu đổi ranh giới P1/P2 hoặc A1/A2, cập nhật mô tả hiện thực/spec/TB cùng lúc trước nghiệm thu.
+- Mục tiêu115–125MHz chỉ là hướng khảo sát. Không cam kết giảm2,5–3ns, tiết kiệm8 CARRY4+32LUT hoặc đạt slack>2ns trước đo. Báo Fmax ước lượng, tần số thực sự kiểm bằng STA và throughput=f_run/II riêng; chưa có phép đo power thì chỉ kết luận timing/tài nguyên.
+
+#### 8.25.2. Thứ tự và điểm dừng
+
+| Ưu tiên / ID | Việc dự kiến | Điều kiện chuyển bước |
+| --- | --- | --- |
+| 0 — OPT-00 bổ sung | Khóa hash production, OPT-02b và runner/constraints; xác nhận snapshot thực tế dùng cho từng phép so sánh | Phân biệt production, candidate tham chiếu và candidate mới; tái dùng bằng chứng cũ chỉ khi điều kiện còn khớp |
+| 1 — OPT-05 | SAC-A → SAC-B → SAC-C; C so riêng hai cách phát hiện zero/one-hot | Leaf/core/top bit-exact; xem cả fx feedback và đường last/approx_cut; giữ ứng viên trước nếu bước sau không có lợi |
+| 2 — OPT-09 | Product P2 lưu magnitude dương đã RNE/clamp, parser tích nhận magnitude trực tiếp | Định nghĩa bundle magnitude/sign/specials/flags/valid và backpressure; giữ parse(pack(u)), không bỏ làm tròn tích |
+| 3 — OPT-10A | Thay mask/lost reduction của packer bằng prefix OR và lookup hậu tố phù hợp | Thử trong P1 trước, không thêm bank; so đầy đủ G/R/S, specials và flags trên các format hỗ trợ |
+| 3b — OPT-10B, có điều kiện | Cân bằng sticky/flags từ P1 sang P2 nếu 10A chưa đủ và STA mới chỉ ra cần thiết | Liệt kê bit phải chốt, FF tăng và đường P2 mới; không ghép mặc định với10A |
+| 4 — OPT-11, có điều kiện | Cân bằng phần jam/alignment_tail từ A1 sang A2; C-prefix precompute là ứng viên riêng | Chứng minh đúng bundle mới, jam trước add/sub, cancellation và protocol; không ghép cùng precompute khi chưa đo riêng |
+| 5 — OPT-07/08 | Chọn tổ hợp có lợi, regression/freeze và review tác động NF/F | Đủ xác nhận theo §8.16.4/5, chỉ promote khi có bằng chứng; paired NF/F dùng điều kiện tương xứng |
+
+Đọc lại STA toàn top sau mỗi bước đã qua kiểm chức năng; thứ tự sau SAC có thể điều chỉnh theo đường dài mới. Chưa mở OPT-04 A2/A3 hoặc các nhánh khác nếu không có report mới làm căn cứ.
+
+#### 8.25.3. OPT-05 — SAC/controller
+
+SAC-A dịch cố định1 bit trước barrel shifter, LOD nhận fx gốc; giữ sa=clz+1 ở cổng hiện có và generate riêng W_X1. SAC-B mở rộng scale/count/hằng1 lên S_W+1 bit rồi cộng; kiểm carry, state_error và netlist thay vì mặc định biểu thức ba toán hạng sinh một adder. Giữ hành vi không hợp lệ đã nêu ở §8.16.3.
+
+SAC-C so hai phương án: (a) fx&(fx-1) với quy ước zero rõ ràng; (b) cây cân bằng zero/one-hot. Phương án(a) có thể tạo carry chain mới. Với cây(b), mỗi nhóm trả zero và exactly_one; ghép zero=zL&zR, one=(oneL&zR)|(zL&oneR). Dùng single_one=zero|one khi cần nghĩa nhiều nhất một bit1, rồi giữ exhausted=!leading_valid||(term_valid&&single_one).
+
+Controller phải chọn exhausted đúng exact/approx và chứng minh tương đương kiểm zero/nonzero của fx_next đang chọn, cả khi lỗi. Giữ launch, n0/init_only, limit/count, first/last/approx_cut, token drain và core_done; không phát done sớm. Không chỉ đổi cờ leaf đang nối unused. Đo A, A+B và A+B+C riêng; routing hiện chiếm khoảng80% đường SAC nên không dự đoán gain từ logic levels đơn thuần.
+
+#### 8.25.4. OPT-09 — bỏ chuyển đổi dấu thừa tại product P2 → parse
+
+P2 hiện đã gộp RNE và mã hóa dấu trong một carry chain ở posit_pack_finish; chưa có sẵn magnitude dương sau làm tròn để xuất miễn phí. Hướng khảo sát: đường product nội bộ lưu mã magnitude dương đã RNE/clamp và metadata cần thiết, rồi giải mã magnitude trực tiếp thay cho lấy bù hai lại từ packed signed code. Ưu tiên thay biểu diễn của bank hiện có; tránh lưu cả signed code lẫn magnitude hoặc thêm bộ cộng thứ hai chỉ để tạo cổng phụ.
+
+Trước sửa, khóa sơ đồ và bundle thay thế product P2: width/magnitude/sign/Zero/NaR/flags/valid, ready/CE/reset và quy tắc giữ khi stall. Nếu cần module nội bộ riêng thì giữ packer dùng chung và top API; không tự thêm cổng/parameter công bố chưa được kiểm. Không nối raw prepack sang adder NF để tránh pack/parse, vì sẽ thay R(P_hat). F tiếp tục dùng prepack của profile fused.
+
+Kiểm RNE tie-even/odd, carry đổi regime/exponent, hai dấu, zero/NaR, minpos/maxpos, flags và metadata approximate. So output unpacked với parse(pack(u)) và product bank hiện hành; identity của đầu vào Posit không đủ thay kiểm round-trip từ unpacked có G/R/S. Báo chi phí FF/LUT/CARRY4 toàn MAC; số8 CARRY4 trên đường parse cũ là bằng chứng vị trí tối ưu, không phải cam kết tài nguyên tiết kiệm.
+
+#### 8.25.5. OPT-10 — sticky packer và cân bằng P1/P2
+
+NF32/3 hiện F26, F_IN53, PAYLOAD_W=2+ES+F_IN+1=59, không phải82 bit. Phải suy width từ parameter cho các format hỗ trợ. Sticky hiện gồm incoming sticky, bit gốc rơi khi dịch và low shifted bits; offset phụ thuộc sf sau normalize.
+
+10A: suy biểu thức OR của hậu tố payload tương đương, tạo prefix bằng lát bit hằng/cây phù hợp rồi chọn theo offset song song với shifter. Không mặc định prefix chỉ từ frac: bit exponent cũng có thể rơi vào phần bỏ. Giữ regime fill, offset0/cực đại, ES0, guard/round/sticky và ưu tiên special/clamp. Kiểm netlist xem synthesis đã rút gọn mask/OR tới đâu trước kết luận tiết kiệm.
+
+10B chỉ mở nếu cần: chuyển một phần gộp sticky/inexact sang P2, sau khi chốt cụ thể raw bits hoặc partial OR nào đi qua bank. Chốt cả shifted_low có thể tăng nhiều FF; chỉ dời OR cuối có thể giảm rất ít delay. Giữ RNE dùng đúng sticky cùng token, flags[1] đầu vào, NaR/Zero/range overrides và cả RNE2/TRUNC1 nếu sửa module dùng chung. Đo lại cả product packer và final packer, cùng tác động lên F khi dùng chung; không lấy slack+3,765 hoặc+3,310ns làm ngân sách chuyển trực tiếp.
+
+#### 8.25.6. OPT-11 — cân bằng A1/A2
+
+Mốc A1 là OPT-02b, chưa phải production. Có thể chốt upper shifted data và các điều khiển/partial OR cần thiết tại A1, tạo y[0]/alignment_tail ở đầu A2 trước phép cộng/trừ. Trước sửa phải xác định rõ bundle mới và số FF; giữ signed delta/clamp, equal-sf bypass, tie chọn A, y=1 khi clamped, specials và ý nghĩa tail khi cancellation. Leaf A1 hiện có output hoàn chỉnh; nếu đặt lại ranh giới thì dùng cấu trúc pipeline nội bộ có hợp đồng rõ, không âm thầm đổi nghĩa output của leaf dùng chung.
+
+A2 worst setup+5,095ns trong §8.24 là đường điều khiển từ meta_sync2 tới CE, không phải delay riêng của bộ cộng. Cần lấy thêm đường D qua arithmetic từ routed checkpoint và xem mọi đường D/CE sau thay đổi. Không dự đoán chuyển3 mức LUT sẽ đổi slack A1/A2 đúng một lượng cố định.
+
+Precompute prefix C tại pair_retire là biến thể độc lập, chỉ dùng khi đã chứng minh C_eff giữ đúng giao dịch suốt busy. Kiểm acc_mode/acc_clr, reset hủy, stall/retire và chi phí FF; không tính nhiều chu kỳ ổn định của C là multicycle exception. So riêng với biến thể jam retiming trước chọn kết hợp.
+
+#### 8.25.7. Constraint, kiểm chứng và tiêu chí chọn
+
+- Giữ A35T xc7a35tcpg236-1, Vivado2026.1, cùng wrapper/source feature policy;10ns, uncertainty0,100ns, inputmin=max2,500ns/outputmax0,500ns min0 như §8.24. Không đổi exception, uncertainty hoặc hold-fix riêng cho candidate. Nếu khảo sát A100T thì tạo cặp tham chiếu/candidate cùng điều kiện riêng.
+- Hold+0,047ns đã gồm user uncertainty0,100ns, nhưng không đổi nhãn thành slack thực+0,147ns. Giữ margin hiện hành; chưa cần tối ưu hold trước setup khi chưa vi phạm. phys_opt_design -hold_fix là nhánh P&R riêng nếu có nhu cầu thực tế, không bảo đảm nâng slack dương; áp cùng chính sách cho hai bản và báo cả chi phí setup/tài nguyên. Không xóa ASYNC_REG hoặc đổi reset để cải thiện số đo.
+- Qua T0/T1/T2 trước đo: strict lint/latch/width/signedness; baseline/candidate/oracle trên mọi output bị ảnh hưởng; corner/exhaustive miền nhỏ rồi pilot. Module dùng chung phải kiểm các tuple đang hỗ trợ, không chỉ32/3. SAC theo bộ biên §8.16.3; packer/adder theo các corner ở trên. ES3 dùng oracle integer/dyadic độc lập, không dùng SoftPosit ES2 làm oracle ES3.
+- Khi thay ranh giới bank, so scoreboard theo ID và cùng cạnh clock với baseline: latency/II lần này phải giữ nguyên, không chấp nhận dịch output chu kỳ. Kiểm first-valid/handshake/next-accept, reset/startup/abort, stall/full/bubble, output stable, C/config context và accumulator commit đúng một lần. Native cycle và ModelSim CK2Q có phạm vi riêng, không thay thế nhau.
+- T3 khảo sát có thể dùng một cặp Default đã xác nhận nguồn/điều kiện để loại ứng viên không có lợi; ghi rõ chưa đủ promote. Trước freeze, chạy matched >=3 chiến lược P&R theo §8.16.4/5, không đếm hai lần Default cùng cấu hình là hai seed độc lập. Giữ mọi run, min/median/max và resources/route/control paths. T4 tổ hợp chọn cuối cần corpus NF10M/0 mismatch, ModelSim corner/protocol và coverage liên quan; thay đổi ảnh hưởng F thì kiểm F riêng theo profile đã công bố. Chưa thay final per-n/AC04 bằng regression refactor.
+- Báo đủ setup/hold/TNS/THS/recovery/removal, unconstrained/latch/unrouted, LUT/FF/CARRY4/DSP/BRAM và worst paths D/CE của mọi bank. Kiểm lại các nút thắt kế tiếp: parserC P1+1,190ns, feedback+1,239ns, finalP1+1,491ns và output in_ready+0,345ns của mốc cũ. Không coi bốn bước đủ để bảo đảm115–125MHz. Đường I/O OOC chưa có PARTPIN/board routing chỉ là ước lượng; không nới I/O để tuyên bố Fmax hệ thống.
+- Khi chọn tần số cao hơn, phải kiểm tại chính clock period đó; slack dương ở100MHz hoặc phép suy F_STA chưa là closure120MHz. So throughput/latency thời gian thực trên cùng q/workload, n0..8 và early-stop; ghi đánh đổi LUT/FF. Không giảm latency/II bằng thay thuật toán hoặc precision.
+- Mỗi ứng viên có manifest nguồn, công cụ, seed/corpus, lệnh và bằng chứng gọn trong output riêng; giữ report lịch sử, không sửa snapshot đang chạy. Nếu mismatch, protocol lệch, width/latch lỗi hoặc PPA bất lợi thì dừng ứng viên đó, giữ mốc trước và báo căn cứ. Sau chọn tổ hợp mới đồng bộ SPEC/README/tiến độ và xem xét promote; phiên lập kế hoạch này chỉ sửa PLAN.md.
+
+Tài liệu AMD đã đối chiếu khi review: [UG949 — Additional Uncertainty](https://docs.amd.com/r/en-US/ug949-vivado-design-methodology/Additional-Uncertainty), [UG835 — phys_opt_design](https://docs.amd.com/r/2024.2-English/ug835-vivado-tcl-commands/phys_opt_design). Báo cáo RTL/STA local ở §8.23/8.24 là căn cứ chính cho thứ tự khảo sát.

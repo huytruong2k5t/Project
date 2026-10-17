@@ -8,7 +8,7 @@ Sau khi dọn results, chạy runner để build lại thư viện/binary trư�
 Xem trước dữ liệu build có thể xóa bằng `powershell -NoProfile -File scripts/cleanup_results.ps1`;
 thêm `-Apply` để thực hiện dọn. Báo cáo, fixture, snapshot nguồn và coverage được giữ.
 
-Hướng dẫn tổng hợp các luồng đã dùng đến Gate2 tuần9, đối chiếu với Makefile và runner hiện có. Đây là hướng dẫn tái chạy; tạo file này không đồng nghĩa đã chạy lại toàn bộ test. Trạng thái nghiệm thu tại `Posit_MAC/results/week9_implementation/gate2_acceptance.json` và PLAN L1 mục7.11.
+Hướng dẫn tổng hợp các luồng đã dùng đến Gate2 tuần9, đối chiếu với Makefile và runner hiện có. Đây là hướng dẫn tái chạy; tạo file này không đồng nghĩa đã chạy lại toàn bộ test. Trạng thái nghiệm thu tại `Posit_MAC/results/week9_implementation/gate2_acceptance.json` và [hồ sơ Gate2](../../doc/Optimization.md#legacy-7-11).
 
 ## 1. Thư mục, công cụ và cách nhập lệnh
 
@@ -418,7 +418,7 @@ Lệnh thứ hai chạy pilot rồi10 triệu giao dịch NF32/3; giữ nguyên 
 ./scripts/run_prepack_refactor_ppa.ps1 -Part xc7a100tcsg324-1 -RunRoot results/prepack_ppa_replay
 ```
 
-PPA dùng nguồn checkpoint đóng băng ở study gốc; không lấy nguồn live hoặc tự chạy bước pipeline tiếp theo. Chi tiết constraints, oracle, tương thích ModelSim và giới hạn STA tại scripts/README.md mục OPT-01 và PLAN§8.20. Không gọi lại script prepare/verify vào thư mục bằng chứng đã đóng băng.
+PPA dùng nguồn checkpoint đóng băng ở study gốc; không lấy nguồn live hoặc tự chạy bước pipeline tiếp theo. Chi tiết constraints, oracle, tương thích ModelSim và giới hạn STA tại scripts/README.md mục OPT-01 và [Optimization §8.20](../../doc/Optimization.md#legacy-8-20). Không gọi lại script prepare/verify vào thư mục bằng chứng đã đóng băng.
 
 <!-- OPT03_REPORT_START:docs/HUONG_DAN_CHAY_WSL_MODELSIM.md -->
 ## OPT-03 NF product RNE pipeline — 17/10/2026

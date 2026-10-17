@@ -101,17 +101,15 @@ Mỗi hàng lấy worst setup và worst hold của mọi đường được timi
 
 Partition phủ toàn bộ930 FF, không trùng/thiếu bank; reset được tách riêng, recovery/removal còn trong timing.rpt. Báo cáo setup/hold từng nhóm giữ top3 đường và danh sách FF. Output port có worst setup+0,345ns (in_ready),hold+1,482ns (d[10]); đây không phải bank pipeline mới. Vivado cảnh báo Route35-198: port OOC chưa có HD.PARTPIN_LOCS; các đường launch từ input port (đặc biệt parser P1) hoặc tới output chỉ là ước lượng với constraint I/O, chưa có routing chân board chính xác. Phải xem startpoint trong CSV; không coi slack I/O này là signoff phần cứng. Đây là OOC STA, không board signoff hoặc paired NF/F. Production A1 chưa áp dụng OPT-02b; không gán bảng candidate này cho production. Giữ routed.dcp local để truy vấn thêm mà không phải P&R lại; checkpoint/cache không push Git. Evidence zip và manifest SHA giữ nguồn, driver, reports và summary gọn tại results/nf_all_stages_20261017. Lệnh: scripts/run_nf_all_stages_sta.ps1; python scripts/collect_nf_all_stages.py.
 '''
-p = R / 'l1/PLAN.md'
+p = R.parent / 'doc/Optimization.md'
 s = p.read_text(encoding='utf-8')
-marker = '### 8.24.'
-if marker in s: s = s[:s.index(marker)].rstrip() + '\n'
-p.write_text(s.rstrip() + '\n\n' + section, encoding='utf-8')
-p = R / 'docs/TIEN_DO_DO_AN.md'
-s = p.read_text(encoding='utf-8')
-row = '| 4 | Thống kê STA tất cả bank NF OPT-02b | Một lượt A35T100MHz; đủ930 FF/parser/core/adder/2 packer/context/control/reset, setup và hold từng bank có raw report. Không đổi RTL/mô phỏng; bảng candidate riêng tại PLAN8.24, chưa promote/Gate4 | ✅ |\n'
-if row not in s:
-    s = s.replace('<!-- OPT03_REPORT_END:docs/TIEN_DO_DO_AN.md -->', row + '<!-- OPT03_REPORT_END:docs/TIEN_DO_DO_AN.md -->')
-    p.write_text(s, encoding='utf-8')
+start_marker = '<!-- NF_ALL_STAGES_REPORT_START -->'
+end_marker = '<!-- NF_ALL_STAGES_REPORT_END -->'
+assert s.count(start_marker) == s.count(end_marker) == 1, 'Missing bounded report slot'
+start = s.index(start_marker) + len(start_marker)
+end = s.index(end_marker, start)
+# Update this report only; preserve the following optimization plan and progress.
+p.write_text(s[:start] + '\n' + section.strip() + '\n' + s[end:], encoding='utf-8')
 
 # Small proof bundle, with byte hashes; no implementation databases/checkpoints.
 paths = sorted(p for p in O.rglob('*') if p.is_file() and

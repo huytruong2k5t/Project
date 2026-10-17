@@ -129,7 +129,7 @@ Dưới đây là bảng đối chiếu chi tiết toàn bộ 12 ô của Table 
 
 ### BƯỚC 5: KHẢO SÁT BÀI BÁO TVLSI JOURNAL 2024 (FIG. 9 & TABLE VI)
 * **File nguồn:** [test_journal2024_measurement.cpp](file:///c:/HCMUT/HK261/Do%20an%202/Posit_MAC/l1/test/test_journal2024_measurement.cpp).
-* **Chi tiết tài liệu:** [README.md §25](file:///c:/HCMUT/HK261/Do%20an%202/Posit_MAC/l1/README.md#L917-L956), [PLAN.md §7.7](file:///c:/HCMUT/HK261/Do%20an%202/Posit_MAC/l1/PLAN.md#L402-L415).
+* **Chi tiết tài liệu:** [README.md §25](file:///c:/HCMUT/HK261/Do%20an%202/Posit_MAC/l1/README.md#L917-L956), [Optimization §7.7](../../doc/Optimization.md#legacy-7-7).
 
 #### 1. Hiện tượng khoảng cách lớn trên Fig. 9:
 * Khi đo trên dải Posit32 ES2 chuẩn (oracle SoftPosit):

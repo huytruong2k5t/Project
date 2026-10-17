@@ -3,11 +3,11 @@
 **Ngày cập nhật:** 17/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.19](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md).
+**Tài liệu chi tiết:** [SPEC v1.19](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
-File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lại ở mục2, tiến độ tuần ở mục3 và cập nhật theo ngày ở mục4. Lệnh chạy, số vector, seed, tên file và log kỹ thuật lưu trong README/PLAN và thư mục `Posit_MAC/results`.
+File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lại ở mục2, tiến độ tuần ở mục3 và cập nhật theo ngày ở mục4. Chi tiết tối ưu, kiểm chứng/synthesis/STA lưu trong Optimization; PLAN giữ kiến trúc/build. Tiến độ chỉ giữ mốc, công việc còn mở và nhật ký; raw bằng chứng ở results.
 
 **Trạng thái:** `✅` = hoàn thành phạm vi của dòng và có kiểm chứng; `processing` = đã làm một phần hoặc còn thiếu tiêu chí; `không` = chưa thực hiện.
 
@@ -15,18 +15,17 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 
 Đã hoàn thành nền tảng L0, Gate1 của L1 và bộ cộng tuần5. Bộ nhân lặp L1 đã được kiểm chứng; profile source từng đạt ngưỡng TableI nhưng không khớp output ví dụ gốc. Baseline gốc bài báo chưa xác định; giữ nghiên cứu phụ. Mục tiêu chính chuyển sang MAC non-fused làm baseline nội bộ và fused làm biến thể so sánh.
 
-MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser/packer và Gate2 multiplier đạt;NF/Gate3 tuần11 đạt với10 triệu/0 mismatch. Tuần12 đã có oracle và L1 fused W32/flags/state,main phân tầng2.208.768 ca mỗi nền tảng Linux/Windows/UBSan0 mismatch. Toàn NF post-route sơ bộ đạtmedian45,07MHz trênCycloneIV,chưa setup100MHz. RTL fused profile chính tuần13 đã kiểm10 triệu/0 mismatch và STA A35T100MHz R2R đạt; ma trận cuối, paired accuracy/PPA và Gate4 còn mở.
+MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng chứng. L1 fused W32 và RTL F profile chính đã kiểm trong phạm vi công bố. NF production là OPT-03; OPT-02b còn là candidate, chưa promote. Chi tiết số lượt/mismatch, freeze và timing lịch sử chuyển về Optimization; final per-n/AC04, CDC/RDC, paired accuracy/PPA và Gate4 còn mở.
 
 ## 2. Công việc còn lại và ưu tiên
 
 | Mốc lớn | Trạng thái | Phần cần hoàn thiện |
 | --- | --- | --- |
 | Baseline nội bộ và so sánh NF/F | processing | RTL NF/F profile chính đã kiểm; còn accuracy, final per-n và paired PPA. Baseline paper giữ nghiên cứu phụ |
-| MAC L1 — Gate1B | ✅ | MAC v0/v1, tích lũy và API đã triển khai, kiểm chứng đạt |
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder, NF tuần11 và F profile chính đã kiểm; còn ma trận final và coverage cuối NF/F |
-| PPA, mở rộng và hồ sơ — Gate4 | processing | NF CycloneIV45,07MHz là lịch sử; F A35T100MHz R2R đạt. Còn đo matched NF/F, accuracy và hồ sơ cuối |
+| PPA, mở rộng và hồ sơ — Gate4 | processing | NF CycloneIV45,07MHz là lịch sử; F A35T100MHz R2R đạt. Còn đo matched NF/F, accuracy và hồ sơ cuối; số đo riêng xem Optimization |
 
-**Trạng thái tối ưu:** primitive Xilinx§8.18 và parser một detector§8.19 đã hoàn tất. OPT-01§8.20 đã thử và đo, giữ normalizer production cũ vì không có lợi ích STA nhất quán; OPT-03§8.21 đã triển khai17/10: product RNE P1/P2 → parse riêng, chức năng/latency đã kiểm; chưa làm OPT-02/04/05. LOD nhóm4 riêng MODE0,N31/32; parser dùng XOR và một LOD N=NB-2, hai shifter giữ gốc. Không suy Fmax toàn MAC từ benchmark leaf/chuỗi. Theo lựa chọn15/10, phép đo mới dùng Xilinx; số CycloneIV giữ ý nghĩa lịch sử. Giữ fraction nhân12 bit; ACC_WIN32 là cửa sổ cộng fused. Hạn chính29/11, đệm30/11–04/12 trước05/12/2026 giữ nguyên; W14 tại mục3.2/PLAN§8.17.
+**Trạng thái tối ưu:** primitive/parser/OPS và OPT-03 có quyết định tại Optimization; OPT-02b còn chờ xác nhận để promote. SAC và các bước product parse/sticky/A1–A2 mới là đề xuất tại mục3.3. Giữ fraction12/W32, phép đo mới dùng Xilinx; không nới precision/constraint. Hạn chính29/11, đệm30/11–04/12, hoàn thành trước05/12/2026.
 
 
 ## 3. Tiến độ theo tuần
@@ -52,11 +51,14 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 15 | PPA hai bản và bản thảo — Gate4 | không | 16–22/11: cùng điều kiện,≥3 run/config; accuracy/timing/II/tài nguyên và kết luận |
 | 16 | Báo cáo, demo và bảo vệ | processing | 23–29/11: chốt hồ sơ/tái lập/slide/demo; hiện mới có slide các khối. Đệm30/11–04/12 |
 
-## 3.1. Bàn giao tuần13
+## 3.1. Phần còn lại của tuần13
 
-Checklist tuần12 đã nghiệm thu và gỡ; giữ nhật ký/report tại PLAN8.14 và results/week12/summary.json. Đã đủ cơ sở bắt đầu RTL fused W12-F-1 (32/3, FW12, W32/Q29, FLOOR/RNE, approximate-only). PLAN§8.15 cập nhật15/10 có W13-01..07: khóa mapping prepack/giao diện/lịch cạnh → F1/F2 align/residual → F3/F4 add/sub/borrow → F5/packer → top/protocol → pilot/regression → STA/audit/backup. Dự kiến7–10 ngày làm việc, có thể bắt đầu sớm; không chờ NF tối ưu Fmax xong. Đã triển khai RTL F và kiểm main10M/0 mismatch tại PLAN§8.15.6; pipeline/XSim và STA ban đầu đạt. Final per-n tuần14,coverage/signoff và Gate4 giữ nguyên.
+W13-01..05 đã hoàn thành phạm vi bản đầu; checklist chi tiết đã gỡ. Bằng chứng triển khai/kiểm tại Optimization mục8.15.6 và results/week13/summary.json. Chỉ giữ hai hạng mục chưa đủ tiêu chí:
 
-Kế hoạch tối ưu tại [PLAN§8.16](../Posit_MAC/l1/PLAN.md#816-kế-hoạch-tối-ưu-timinglut-trước-khi-sửa-rtl--bản-xem-xét-15102026) đã bổ sung thực thi leaf Xilinx ở §8.16.9. XSim117 cấu hình/7.275.184 đối chiếu đạt0 mismatch,strict lint197 lượt đạt;108 lượt P&R A35T/A100T hoàn tất. R2R đạt200MHz;31 lượt còn lỗi tại cổng OOC, chưa board signoff. Refactor chưa có lợi ích timing đồng nhất; giữ RTL chính, ứng viên và bảng đánh đổi riêng. Zynq7020 chưa có trong danh sách part bản cài. Cặp LOD/shifter và refactor NF lớn chưa triển khai; F được thực hiện riêng theo PLAN§8.15.6; không đổi fraction12 hoặc hợp đồng fused.
+| ID | Phần còn lại | Trạng thái | Liên hệ |
+| --- | --- | --- | --- |
+| W13-06 | Hoàn thiện counters/cross F và coverage toàn hierarchy; không dùng main10M gộp thay final per-n | processing | W14-00/03/04, SPEC§6.6/6.7 |
+| W13-07 | CDC/RDC/reset review, giải trình methodology; matched NF/F và signoff cuối | processing | W14-00/06, tuần15; STA một run chưa thay Gate4 |
 
 ## 3.2. Kế hoạch tuần14 cho Codex — regression, coverage và paired accuracy NF/F
 
@@ -71,7 +73,7 @@ Kế hoạch tối ưu tại [PLAN§8.16](../Posit_MAC/l1/PLAN.md#816-kế-hoạ
 3. **Không hạ ngưỡng** của AC01/AC04/§6.7, và không đổi corpus/seed sau khi đã thấy FAIL. Corpus, seed và matrix phải được khóa bằng hash **trước** khi chạy main.
 4. **Oracle đúng format:** 32/3 dùng oracle integer/full-grid độc lập (`tb/week12_fused_reference.hpp`, oracle NF tuần11). Không dùng SoftPosit ES2 làm chuẩn cho ES3. NF so với `week11::Model`, F so với L1 F_W32.
 5. Mỗi report phải ghi tool/compiler version, seed, lệnh, source hash và số lượng accepted/completed/reset-aborted (tách riêng). Audit phải FAIL nếu thấy RUNNING, thiếu log hoặc hash bị đổi.
-6. Kết quả canonical lưu tại `results/week14/`. Lệnh tái chạy và nhật ký kỹ thuật ghi ở PLAN§8.17 (Codex tạo mục này). File tiến độ chỉ cập nhật mốc.
+6. Kết quả canonical lưu tại `results/week14/`. Khi thực hiện, ghi lệnh/kết quả và giới hạn trong Optimization, không đưa nhật ký trở lại PLAN. File tiến độ cập nhật mốc và trạng thái task.
 
 ### 3.2.2. Thứ tự công việc
 
@@ -85,7 +87,7 @@ Kế hoạch tối ưu tại [PLAN§8.16](../Posit_MAC/l1/PLAN.md#816-kế-hoạ
 | W14-05 | Paired accuracy AC03: pilot 10^5 rồi main ≥10^6 triple/profile cho n2/4/8, sau đó đủ n0..8; metrics theo §6.8 | W14-01 | 1,5 ngày |
 | W14-06 | Comparator NF EXACT_EN0 cho PPA công bằng tuần15: kiểm feature-disable NF EXACT_EN=0 (pilot + 10^7 ở profile chính), freeze | W14-01 | 1 ngày |
 | W14-07 (nếu còn thời gian) | AC02 exact NF: p8 MAC exhaustive 2^24, p32/2 ≥10^8 + corner list, p16 mul/add exhaustive nếu runtime cho phép | W14-02 | chạy nền |
-| W14-08 | Audit tổng, freeze nguồn/bằng chứng, cập nhật SPEC §11.16 và PLAN§8.17, commit/push GitHub | Tất cả | 0,5 ngày |
+| W14-08 | Audit tổng, freeze nguồn/bằng chứng, cập nhật SPEC §11.16, Optimization và tiến độ, commit/push GitHub | Tất cả | 0,5 ngày |
 
 Thứ tự ưu tiên khi thiếu thời gian: W14-03 > W14-02 > W14-05 > W14-04 > W14-06 > W14-00 > W14-07. Hạn chính 29/11 và đệm 30/11–04/12 giữ nguyên.
 
@@ -105,18 +107,46 @@ Thứ tự ưu tiên khi thiếu thời gian: W14-03 > W14-02 > W14-05 > W14-04 
 | TC-W14-05b | W14-05 | Có bảng so sánh NF/F đưa vào báo cáo | ≥10^6 triple/profile ở n2/4/8 (sau đó n0..8): Err%, CorrectRate(0,1/0,5/1/5%), NMSE, MaxErr, percentile, ULP-distance, tỷ lệ thắng/thua/hòa NF vs F, khoảng tin cậy 95%; báo cả kết quả bất lợi cho F |
 | TC-W14-06 | W14-06 | So PPA tuần15 công bằng (cùng EXACT_EN0) | NF EXACT_EN=0: strict lint sạch, pilot + 10^7 ở profile chính có 0 mismatch; request cfg_mode=0 bị từ chối; bản freeze riêng |
 | TC-W14-07 | W14-07 | Exact NF khớp SoftPosit | p8 MAC 2^24 và p32/2 ≥10^8 + corner list: 0 mismatch với `p<N>_add(p<N>_mul)` |
-| TC-W14-08 | W14-08 | Bằng chứng tái lập được | Audit PASS toàn bộ report tuần14; chạy lại pilot từ lệnh trong PLAN§8.17 cho kết quả trùng hash; push GitHub thành công |
+| TC-W14-08 | W14-08 | Bằng chứng tái lập được | Audit PASS toàn bộ report tuần14; chạy lại pilot từ lệnh trong Optimization cho kết quả trùng hash; push GitHub thành công |
 
 ### 3.2.4. Điều kiện hoàn thành tuần14
 
 Tuần14 chỉ được đánh dấu `✅` khi TC-W14-01..05 và TC-W14-08 đều PASS. W14-06 PASS là điều kiện bắt đầu PPA tuần15. TC-W14-00 và TC-W14-07 nếu chưa xong phải ghi `processing` kèm lý do, không gộp vào trạng thái ✅.
+
+## 3.3. Tối ưu còn mở — kế hoạch kỹ thuật ở Optimization
+
+Đây là hàng đợi để sinh viên xem xét, chưa có lệnh chạy mới. Ưu tiên hiện hành theo Optimization mục8.25; giữ latency/II và tách candidate khỏi production. Các bước có điều kiện không tự thành hạng mục bắt buộc khi STA không còn chỉ ra nhu cầu.
+
+| ID / nhóm | Việc chưa hoàn thiện | Trạng thái | Điều kiện / tham chiếu |
+| --- | --- | --- | --- |
+| OPT-00 / OPT-02b | Khóa mốc tham chiếu và xác nhận candidate trước promote | processing | Đã có bit-exact và Default A35T; còn matched đa chiến lược/cross-part theo phạm vi đã chốt, không đếm Default lặp là seed độc lập |
+| OPT-05 | SAC-A → SAC-B → SAC-C, so zero/one-hot và nối exhausted vào controller | không | Giữ từng term/flags/state/error/token, Δlatency=ΔII=0; Optimization8.25.3 |
+| OPT-09 | Product P2 lưu magnitude dương sau RNE/clamp, parse trực tiếp | không | Khóa bundle và so parse(pack(u)); không biến NF thành fused; Optimization8.25.4 |
+| OPT-10A | Prefix OR/lookup sticky trong P1 | không | Payload59 ở32/3; giữ G/R/S/specials, kiểm module dùng chung; Optimization8.25.5 |
+| OPT-10B | Chuyển phần sticky/flags P1→P2 nếu vẫn cần | không | Chỉ sau10A/STA mới, báo FF và đường P2 |
+| OPT-11 | Cân bằng jam A1→A2; C-prefix precompute thử riêng nếu chọn | không | Bundle mới/protocol/cancellation; không lấy CE slack làm ngân sách arithmetic; Optimization8.25.6 |
+| OPT-04/06 và các nhánh phụ | A2/A3 LOD, normalization zero/shared, OPS/MUX/control hoặc remaining-scale budget | không | Chỉ mở khi sinh viên chọn và STA mới có căn cứ; không tự ghép vào các bước trên |
+| Khảo sát fraction | Xem bảng/biểu đồ và chốt tiêu chí lựa chọn nếu muốn đổi precision | processing | Khảo sát đã có, chưa chọn ngưỡng mới; hiện vẫn FW12. Optimization8.11 |
+| OPT-07/08 | Kiểm tổ hợp chọn cuối, freeze/promote và bàn giao dùng chung NF/F | không | Regression/coverage liên quan và PPA matched; không suy paired NF/F từ một run riêng |
+
+Kế hoạch tối ưu là luồng refactor riêng trước freeze mới; quy tắc “không sửa RTL” của tuần14 chỉ áp phiên regression trên nguồn đã khóa. Nếu chọn refactor, phải hoàn tất kiểm/freeze rồi khóa lại matrix/corpus trước final. Chưa tự khởi động tối ưu hoặc W14 trong phiên sắp xếp tài liệu.
+
+## 3.4. Công việc mở khác và giới hạn phạm vi
+
+| Nhóm | Việc còn lại | Trạng thái | Ưu tiên |
+| --- | --- | --- | --- |
+| Baseline paper | Provenance RTL/LUT đầy đủ, tie/prefix126–127, width/cut/normalize, generator/seed và trace tác giả chưa xác minh | processing | Nghiên cứu phụ; chỉ mở khi có nguồn hoặc yêu cầu riêng, không dò tham số để ép TableI |
+| Paired NF/F | Final per-n, AC04, accuracy cùng corpus, comparator NF EXACT_EN0 và PPA matched | không | Thực hiện theo W14-01..08 và tuần15; không hạ ngưỡng để giữ lịch |
+| Tái lập/luồng tự động | Hoàn thiện lint/collector/audit, truy vết testcase và tái build từ nguồn frozen | processing | Tiếp phần tuần1/tuần16; không chạy lại lượt lớn chỉ vì đổi tài liệu |
+| Hồ sơ/board/demo | Constraints phần cứng thực tế nếu chọn kit, giải trình CDC/RDC, báo cáo/slide/demo và thử tái lập | processing | Tuần15–16, hạn29/11 và đệm tới04/12; OOC chưa là board signoff |
+| Mở rộng tùy chọn | Exact fused rộng, format phụ, TRUNC/JAM F, quire/chồng lấn, ASIC hoặc PPA E/M paper | không | Ngoài profile chính; không tự lên lịch bắt buộc hoặc chặn NF/F |
 
 ## 4. Nhật ký theo ngày
 
 ### 4.1. Cách cập nhật
 
 - Mỗi dòng ghi một mốc hoặc nhóm công việc: kết quả chính, trạng thái và phần còn lại. Gộp sửa lỗi, build, test và cập nhật tài liệu vào mốc liên quan.
-- Chỉ thêm dòng khi đạt mốc mới hoặc có thay đổi đáng kể; cập nhật đồng thời bảng tuần. Chi tiết kỹ thuật để trong README/log.
+- Chỉ thêm dòng khi đạt mốc mới hoặc có thay đổi đáng kể; cập nhật đồng thời bảng tuần. Chi tiết tối ưu/kiểm chứng/timing để trong Optimization và raw reports; PLAN chỉ giữ phần xây dựng.
 - Các bảng dưới đã gom từ nhật ký chi tiết trước đây, giữ ngày và diễn biến chính. Kết quả đạt ngưỡng TableI không đồng nghĩa đã xác minh baseline gốc.
 
 ### 4.2. Ngày 03/10/2026
@@ -223,7 +253,7 @@ Tuần14 chỉ được đánh dấu `✅` khi TC-W14-01..05 và TC-W14-08 đề
 | --- | --- | --- | --- |
 | 1 | Rà toàn SPEC và đồng bộ hiện thực | SPEC v1.13 đồng nhất với RTL/model; audit W10/W11 PASS, nguồn và kết quả0 mismatch giữ nguyên. Near-cancellation W11 có cận trên4,20303%,chưa đạt30%; Gate3 đầy đủ processing,đã bổ sung việc coverage | ✅ |
 | 2 | Slide datapath OPS, SAC và SBM | 7 slide nền trắng, sơ đồ tổng và phân rã theo RTL32/3; khối/mũi tên/bảng chỉnh sửa được, có lịch pipeline và ví dụ12 bit. Đã rà nguồn và kiểm bố cục, không đổi trạng thái coverage Gate3 | ✅ |
-| 3 | Lập kế hoạch tuần12 | W12-01..07 ưu tiên coverage NF, oracle/hợp đồng/model fused và timing/pipeline; cập nhật PLAN8.8 và checklist tạm. Chỉ hoàn thành việc lập kế hoạch, chưa chạy hoặc nghiệm thu công việc tuần12 | ✅ |
+| 3 | Lập kế hoạch tuần12 | W12-01..07 ưu tiên coverage NF, oracle/hợp đồng/model fused và timing/pipeline; cập nhật [hồ sơ tuần đã chuyển](../../doc/Optimization.md#legacy-8-14) và checklist tạm. Chỉ hoàn thành việc lập kế hoạch, chưa chạy hoặc nghiệm thu công việc tuần12 | ✅ |
 | 4 | Hoàn tất tuần11 — coverage NF/Gate3 | Main mới10 triệu/0 mismatch,near52,55548%;coverage chức năng/ModelSim corner đạt,nguồn đóng băng và audit PASS. Gỡ W11-COV,đánh dấu W12-01 đạt; final matrix,F_W/F RTL và accuracy/PPA còn mở | ✅ |
 | 5 | Tối ưu OPS và kiểm lại NF | Masked popcount/candidates song song đã kiểm bit-exact,lượt NF10 triệu0 mismatch. OPS riêng giảm9,26%LUT4,medianFmax tăng3,64%;không thêm tầng M0. Timing/PPA toàn MAC còn mở | ✅ |
 | 6 | Đồng bộ slide theo OPS mới | PowerPoint r5 vẽ rõ hai nhánh chạy song song và hai Swap MUX cuối;hidden củaY chuẩn bị trước swap. Giữ hình SAC/SBM,pipeline và ví dụ;đã rà cả7slide,khối/mũi tên/bảng vẫn chỉnh sửa được | ✅ |
@@ -237,9 +267,9 @@ Tuần14 chỉ được đánh dấu `✅` khi TC-W14-01..05 và TC-W14-08 đề
 | 3 | Khảo sát refactor normalization | Hai ứng viên đã kiểm đơn vị/pipeline0 mismatch;giảm4/7LUT4 nhưng chưa chứng minh cải thiện timing bền vững qua3seed. Giữ flags/sticky và RTL chính, lưu bản thử/report;chưa đo fullMAC | ✅ |
 | 4 | Oracle và L1 fused — tuần12 | Chốt W32/flags/state;oracle p8 exhaustive và main phân tầng2.208.768 ca/nền tảng đạt0 mismatch. Giữ fraction12,RTL F và accuracy cuối còn ở tuần13–14 | ✅ |
 | 5 | Timing toàn NF và bàn giao tuần12 | Đo post-route3seed,median45,07MHz/chưa100MHz;có5 đề xuất tối ưu và plan RTL F. Audit và sao lưu đạt;đã bàn giao tuần13 | ✅ |
-| 6 | Lập kế hoạch tối ưu timing/LUT trước refactor | Bổ sung PLAN§8.16 và thứ tự thử SAC: dịch cố định trước → gộp cộng scale → exhausted song song cùng controller; giữ bit-exact và đo từng bước. Đã cập nhật kế hoạch theo góp ý; chưa sửa RTL hoặc chạy lại regression/PPA | ✅ |
+| 6 | Lập kế hoạch tối ưu timing/LUT trước refactor | Bổ sung [Optimization §8.16](../../doc/Optimization.md#legacy-8-16) và thứ tự thử SAC: dịch cố định trước → gộp cộng scale → exhausted song song cùng controller; giữ bit-exact và đo từng bước. Đã cập nhật kế hoạch theo góp ý; chưa sửa RTL hoặc chạy lại regression/PPA | ✅ |
 | 7 | Rà soát ghi chú và ưu tiên khối cơ sở | Đọc Note.docx, đối chiếu mã và kiểm các đẳng thức số học; xác định cách sửa count của parser và giới hạn các ước lượng LUT. Cập nhật thứ tự shifter/LOD trước SAC và khối lớn; chưa sửa RTL hoặc đo PPA mới | ✅ |
-| 8 | Khảo sát primitive trên Xilinx | XSim7.275.184 đối chiếu/0 mismatch,lint197 lượt và108 P&R hoàn tất. R2R đạt200MHz;refactor có đánh đổi theo width/part,chưa thắng đồng nhất;giữ RTL chính. I/O OOC chưa closure,không suy tần số MAC/kit. Bảng/snapshot tại PLAN§8.16.9 | ✅ |
+| 8 | Khảo sát primitive trên Xilinx | XSim7.275.184 đối chiếu/0 mismatch,lint197 lượt và108 P&R hoàn tất. R2R đạt200MHz;refactor có đánh đổi theo width/part,chưa thắng đồng nhất;giữ RTL chính. I/O OOC chưa closure,không suy tần số MAC/kit. Bảng/snapshot tại [Optimization §8.16.9](../../doc/Optimization.md#legacy-8-16-9) | ✅ |
 | 9 | Cụ thể hóa kế hoạch RTL fused | Đối chiếu SPEC/guideline/L1 và bằng chứng tuần12; chốt phạm vi bản đầu, kế hoạch F1–F5 và W13-01..07, tiêu chí số học/protocol/STA. Đã đủ điều kiện bắt đầu; chưa sửa RTL hoặc chạy kiểm mới | ✅ |
 | 10 | Triển khai và kiểm RTL fused | F1–F5/top main10M và pipeline/XSim đạt0 mismatch; strict lint sạch,STA A35T100MHz R2R đạt,1520LUT/815FF. Audit nguồn/kết quả đạt; còn final per-n/coverage/CDC và paired NF/F PPA | ✅ |
 | 11 | Lập kế hoạch tuần14 cho Codex | Mục3.2: W14-00..08 và TC-W14-00a..08 cho final per-n NF/F, AC04, paired accuracy và comparator NF EXACT_EN0. Chỉ lập kế hoạch; chưa chạy hoặc sửa mã | processing |
@@ -259,11 +289,13 @@ Tuần14 chỉ được đánh dấu `✅` khi TC-W14-01..05 và TC-W14-08 đề
 
 | STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
 | --- | --- | --- | --- |
-| 1 | Tách pipeline RNE tích của NF — OPT-03 | Main10M và ModelSim corner/protocol0 mismatch; reset/latency/II đạt. STA: xc7a35tcpg236-1: 52.31→78.41MHz; xc7a100tcsg324-1: 53.69→79.28MHz; thêm2 chu kỳ và FF, chưa đạt R2R setup100MHz ở tất cả run. SPEC/PLAN đồng bộ; final NF/F và Gate4 còn mở | ✅ |
-| 2 | Đo một lượt toàn NF A35T, kiểm hai tầng kề P1 | ACC/P1/P2 có setup slack +3,831/+0,301/+3,467ns ở100MHz; hold dương. Chỉ một P&R, không sửa RTL/mô phỏng. Toàn MAC còn WNS−2,887ns tại A1; lỗi truy vấn phụ sau đủ báo cáo được ghi rõ trong PLAN8.22 | ✅ |
-| 3 | Thử OPT-02b cho A1 align | Leaf880.656,NF10M và ModelSim tích hợp0 mismatch;406+4 lint sạch. Một A35T Default đạt100MHz,WNS+0,251ns; LUT+54,FF giữ930. Lưu candidate, chưa promote/chốt đa run hoặc Gate4 | ✅ |
-| 4 | Thống kê STA tất cả bank NF OPT-02b | Một lượt A35T100MHz; đủ930 FF/parser/core/adder/2 packer/context/control/reset, setup và hold từng bank có raw report. Không đổi RTL/mô phỏng; bảng candidate riêng tại PLAN8.24, chưa promote/Gate4 | ✅ |
+| 1 | Tách pipeline RNE tích của NF — OPT-03 | Đã triển khai và kiểm chức năng/lịch giao dịch; số đo và giới hạn ở Optimization8.21. Final NF/F và Gate4 còn mở | ✅ |
+| 2 | Đo một lượt toàn NF A35T, kiểm hai tầng kề P1 | Đã có báo cáo theo phạm vi đo; lỗi truy vấn phụ và giới hạn được giữ ở Optimization8.22 | ✅ |
+| 3 | Thử OPT-02b cho A1 align | Đã kiểm bit-exact và đo candidate; chưa promote. Xem Optimization8.23 | ✅ |
+| 4 | Thống kê STA tất cả bank NF OPT-02b | Đã thống kê đủ bank của candidate; bảng setup/hold và phạm vi OOC tại Optimization8.24 | ✅ |
+| 5 | Sắp xếp tài liệu kiến trúc và tối ưu | PLAN giữ build/thuật toán baseline/NF/F; chuyển tối ưu và bằng chứng sang doc/Optimization.md, gỡ checklist hoàn thành, gom việc mở vào mục3.1–3.4. Không đổi RTL hoặc chạy lại kiểm chứng | ✅ |
 <!-- OPT03_REPORT_END:docs/TIEN_DO_DO_AN.md -->
+
 
 ### 4.17. Mẫu cập nhật tiếp theo
 

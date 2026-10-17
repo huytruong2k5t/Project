@@ -1,5 +1,7 @@
 # Thư mục Kịch bản Bổ trợ (`scripts/`)
 
+**Tài liệu hiện hành:** [PLAN — kiến trúc/build L1/NF/F](../l1/PLAN.md), [Optimization — tối ưu và kiểm chứng/STA](../../doc/Optimization.md), [tiến độ — việc còn mở](../docs/TIEN_DO_DO_AN.md).
+
 Thư mục này chứa các kịch bản tự động hóa Python và shell script phục vụ kiểm chứng bit-accurate độc lập, tổng hợp PPA và xử lý đồ thị báo cáo đồ án.
 
 ---
@@ -155,7 +157,7 @@ PPA runner từ chối output đã có metrics; chọn RunRoot mới để trán
 
 ## OPT-01 prepack normalization — checkpoint16/10/2026
 
-Thử refactor riêng `mul_prepack_norm_comb`, lưu tại `rtl/candidates/multiplier/mul_prepack_norm_comb.sv`: bốn ứng viên nối bit hằng exact/approx × carry/no-carry, chọn ở cuối; scale cộng carry trên SF_W bit. Không thêm bank hoặc đổi lịch NF, không sửa pack/parse/SAC/adder. Baseline tại `results/prepack_refactor_20261016/source/baseline` là toàn production sau parser XOR; candidate thay đúng một module. Nguồn/hash/fixture/corpus/công cụ và số đo trước/sau tại thư mục study, kết luận tại PLAN§8.20.
+Thử refactor riêng `mul_prepack_norm_comb`, lưu tại `rtl/candidates/multiplier/mul_prepack_norm_comb.sv`: bốn ứng viên nối bit hằng exact/approx × carry/no-carry, chọn ở cuối; scale cộng carry trên SF_W bit. Không thêm bank hoặc đổi lịch NF, không sửa pack/parse/SAC/adder. Baseline tại `results/prepack_refactor_20261016/source/baseline` là toàn production sau parser XOR; candidate thay đúng một module. Nguồn/hash/fixture/corpus/công cụ và số đo trước/sau tại thư mục study, kết luận tại [Optimization §8.20](../../doc/Optimization.md#legacy-8-20).
 
 Trên clone mới, phục hồi evidence trước để có fixtures và reports gốc:
 
@@ -189,5 +191,5 @@ Kết luận OPT-01: candidate đạt bit-exact nhưng không được chọn th
 <!-- OPT03_REPORT_START:scripts/README.md -->
 ## OPT-03 NF product pipeline — 17/10/2026
 
-Dùng verify_opt03.sh, verify_opt03_modelsim.ps1, verify_opt03_schedule.ps1 và run_opt03_ppa.ps1. Native replay đặt OPT03_RESULTS_DIR mới; Windows đặt -RunRoot mới. Sources source/candidate được khóa, giữ baseline_reference và calibration riêng. audit_opt03.py restore/collect kiểm raw bằng chứng. Không chạy lại prepare vào checkpoint đã khóa. Chi tiết lệnh và giới hạn tại PLAN§8.21. Runner OPT-01 dùng harness/testbench cũ đã đóng băng, không dùng lịch OPT-03.
+Dùng verify_opt03.sh, verify_opt03_modelsim.ps1, verify_opt03_schedule.ps1 và run_opt03_ppa.ps1. Native replay đặt OPT03_RESULTS_DIR mới; Windows đặt -RunRoot mới. Sources source/candidate được khóa, giữ baseline_reference và calibration riêng. audit_opt03.py restore/collect kiểm raw bằng chứng. Không chạy lại prepare vào checkpoint đã khóa. Chi tiết lệnh và giới hạn tại [Optimization §8.21](../../doc/Optimization.md#legacy-8-21). Runner OPT-01 dùng harness/testbench cũ đã đóng băng, không dùng lịch OPT-03.
 <!-- OPT03_REPORT_END:scripts/README.md -->

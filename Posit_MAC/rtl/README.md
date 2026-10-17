@@ -1,5 +1,7 @@
 # Thư mục Mã nguồn RTL (`rtl/`)
 
+**Tài liệu hiện hành:** [PLAN — kiến trúc/build L1/NF/F](../l1/PLAN.md), [Optimization — tối ưu và kiểm chứng/STA](../../doc/Optimization.md), [tiến độ — việc còn mở](../docs/TIEN_DO_DO_AN.md).
+
 ## Bản đồ RTL hiện hành — 15/10/2026
 
 Đọc mục này trước; các mục có ngày bên dưới là lịch sử triển khai, không phải danh sách file hiện hành.
@@ -40,7 +42,7 @@ Audit lịch sử có kiểm binary hoặc hash script vẫn cần phục hồi/
 không coi audit không chạy được sau cleanup là một lần kiểm mới thất bại về số học.
 
 
-**Hợp đồng tích hợp cập nhật 08/10/2026 — SPEC v1.5:** RTL baseline v0/v1 giữ profile L1 normative: cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; paper_source_config/predictor7-bit là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n), last chỉ hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng09/10; Gate2 processing, MAC RTL chưa nghiệm thu. Chi tiết và trạng thái tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md). Bước tiếp theo: đóng Gate2 tuần9 theo PLAN L1 mục7; chồng lấn sau baseline.
+**Hợp đồng tích hợp cập nhật 08/10/2026 — SPEC v1.5:** RTL baseline v0/v1 giữ profile L1 normative: cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; paper_source_config/predictor7-bit là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n), last chỉ hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Core/bridge và multiplier standalone đã kiểm lượt lớn/coverage chức năng09/10; Gate2 processing, MAC RTL chưa nghiệm thu. Chi tiết và trạng thái tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md). Bước tiếp theo: đóng Gate2 tuần9 theo [hồ sơ Gate2](../../doc/Optimization.md#legacy-7-11); chồng lấn sau baseline.
 
 Thư mục này chứa toàn bộ mã nguồn thiết kế phần cứng SystemVerilog cho lõi IP Posit MAC xấp xỉ và lặp, tuân thủ nghiêm ngặt chuẩn thiết kế [Digital Design Guidelines](../Digital_Design_Guidelines.md) và đặc tả [SPEC_Posit_MAC_IP.md](../SPEC_Posit_MAC_IP.md).
 
@@ -152,7 +154,7 @@ P2 giữ cùng ports/P1 bundle và latency. Với m=zero_extend(mag_trunc), r=ro
 
 ## 7. Khởi động tuần9 — OPS/SAC tổ hợp — 08/10/2026
 
-Hợp đồng canonical tại SPEC §5.4/§5.5-A/§5.7; lịch thực thi và trạng thái tại PLAN L1 mục7. Profile chính dùng fixed-A/min-popcount và SAC quét bit1; predictor/RND paper có giao diện nghiên cứu riêng. Không dùng `ops_compare_top.sv` khảo sát PPA cũ thay trực tiếp OPS normative.
+Hợp đồng canonical tại SPEC §5.4/§5.5-A/§5.7; lịch thực thi và trạng thái tại [hồ sơ Gate2](../../doc/Optimization.md#legacy-7-11). Profile chính dùng fixed-A/min-popcount và SAC quét bit1; predictor/RND paper có giao diện nghiên cứu riêng. Không dùng `ops_compare_top.sv` khảo sát PPA cũ thay trực tiếp OPS normative.
 
 `ops_sel_comb.sv` nhận fraction parser không hidden; approx cắt xuống FRAC_W trước cây popcount cân bằng. Output x_frac căn phải không hidden, y_mant có hidden ở bit active_width. Tie chọn A, input_cut ghi phần bị bỏ; cfg_error trả bundle0 cho cấu hình bị cấm. Module chỉ nhận trường finite, chưa thực hiện bypass Zero/NaR hoặc M0 register.
 
@@ -224,17 +226,17 @@ Gate2 multiplier **✅** theo mốc tuần9 (10/10/2026):16.815.920 giao dịch 
 
 Coverage chức năng đạt256/256 bin posit32, min4104 mẫu/bin,26241 operands/run/polarity và36 ô config/profile; structural coverage sau ghép corner: line 91.67–96.23%; branch 91.84–94.79%; toggle 73.10–87.33%, giữ các điểm chưa hit. Mốc này không quy định ngưỡng phần trăm structural coverage và không phải coverage100% hoặc signoff vật lý.
 
-Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.json`; hướng dẫn tái lập và giải thích phạm vi tại PLAN L1 mục7.11. Những mục processing trước đây là lịch sử. Ma trận cuối SPEC§6.7, tuần10 adder/tuần11 MAC-Gate3 và PPA/Gate4 còn mở; provenance/TableI giữ processing, không chạy lại TableI trong phiên này.
+Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.json`; hướng dẫn tái lập và giải thích phạm vi tại [hồ sơ Gate2](../../doc/Optimization.md#legacy-7-11). Những mục processing trước đây là lịch sử. Ma trận cuối SPEC§6.7, tuần10 adder/tuần11 MAC-Gate3 và PPA/Gate4 còn mở; provenance/TableI giữ processing, không chạy lại TableI trong phiên này.
 
 
 ## 13. RTL adder — nghiệm thu đơn vị tuần10, 12/10/2026
 
-posit_add_comb và pipeline posit_add dùng chung posit_add_align/arith/normalize. Ba slot, E0 nhận→valid E2→handshake E3,II1 không stall, reset leaf2FF. ModelSim comb143.976, pipeline143.376/600 abort,0 mismatch; Verilator20.000.004 completedES2/ES3, oracle độc lập/flags/unpacked và RNE/TRUNC đạt. Strict lint8/8 sạch; canonical results/week10_adder/summary.json. Raw coverage chưa đạt finalAC04, giữ unhit points; không phải MAC/Gate3, STA hay fused. Source L1 frozen không đổi. Runner/commands tại PLAN8.4; không đưa prepack chưa round vào adder NF.
+posit_add_comb và pipeline posit_add dùng chung posit_add_align/arith/normalize. Ba slot, E0 nhận→valid E2→handshake E3,II1 không stall, reset leaf2FF. ModelSim comb143.976, pipeline143.376/600 abort,0 mismatch; Verilator20.000.004 completedES2/ES3, oracle độc lập/flags/unpacked và RNE/TRUNC đạt. Strict lint8/8 sạch; canonical results/week10_adder/summary.json. Raw coverage chưa đạt finalAC04, giữ unhit points; không phải MAC/Gate3, STA hay fused. Source L1 frozen không đổi. Runner/commands tại [Optimization §8.4](../../doc/Optimization.md#legacy-8-4); không đưa prepack chưa round vào adder NF.
 
 
 ## 14. MAC NF — nghiệm thu Gate3 milestone, 13/10/2026
 
-**Checkpoint W11 lịch sử (trước OPT-03):** posit_mac_nf/mac_nf_wrapper dùng mul_prepack_norm_comb bảo toàn carry và round_unpacked_comb=parse(pack(u)) tổ hợp; legacy L1/RTL freeze giữ nguyên. Approximate NF mới có thể khác legacy; cùng P_hat theo SPEC v1.11§11.10. Gate3 native32/3 10.000.000 completed, ModelSim28.512 completed/288 reset-aborted,0 mismatch; strict lint4/4,72 control bins và256 regime–dấu main. Canonical results/week11/summary.json; baseline_nf_manifest.json/source+binary+fixture hashes, raw coverage/unhit giữ nguyên. L1 fused full-sum pilot100k/Python independent0 mismatch; chưa fused RTL/window/flags/acc_mode, final AC02/AC04/per-n matrix hoặc accuracy/PPA. Commands PLAN8.6; rebuild binaries/fixtures trước audit sau cleanup.
+**Checkpoint W11 lịch sử (trước OPT-03):** posit_mac_nf/mac_nf_wrapper dùng mul_prepack_norm_comb bảo toàn carry và round_unpacked_comb=parse(pack(u)) tổ hợp; legacy L1/RTL freeze giữ nguyên. Approximate NF mới có thể khác legacy; cùng P_hat theo SPEC v1.11§11.10. Gate3 native32/3 10.000.000 completed, ModelSim28.512 completed/288 reset-aborted,0 mismatch; strict lint4/4,72 control bins và256 regime–dấu main. Canonical results/week11/summary.json; baseline_nf_manifest.json/source+binary+fixture hashes, raw coverage/unhit giữ nguyên. L1 fused full-sum pilot100k/Python independent0 mismatch; chưa fused RTL/window/flags/acc_mode, final AC02/AC04/per-n matrix hoặc accuracy/PPA. Commands [Optimization §8.6](../../doc/Optimization.md#legacy-8-6); rebuild binaries/fixtures trước audit sau cleanup.
 
 ## 15. Cập nhật phạm vi nghiệm thu — 14/10/2026
 
@@ -242,27 +244,27 @@ SPEC v1.13 đã được rà toàn bộ theo RTL/model/bằng chứng hiện hà
 
 Gate3 đầy đủ còn **processing**: cận trên near-cancellation ở đầu vào adder NF chỉ420.303/10.000.000=4,20303%, thấp hơn yêu cầu30% của SPEC§6.3. Các bin regime/config đã hit không thay yêu cầu phân bố này. Counters từng run/polarity và packer bins cần được lưu đủ trước signoff; không hạ ngưỡng hoặc sửa report lịch sử.
 
-Checkpoint13/10 và manifest NF đóng băng mốc số học/giao thức, không chứng minh mọi AC đã đạt. Công việc bổ sung tại PLAN§8.7/SPEC§11.11; chứng cứ rà soát ở results/spec_review_20261014/summary.json. F full-sum vẫn là pilot phần mềm; F RTL/window/flags/acc_mode, ma trận final và accuracy/PPA còn mở.
+Checkpoint13/10 và manifest NF đóng băng mốc số học/giao thức, không chứng minh mọi AC đã đạt. Công việc bổ sung tại [Optimization §8.7](../../doc/Optimization.md#legacy-8-7)/SPEC§11.11; chứng cứ rà soát ở results/spec_review_20261014/summary.json. F full-sum vẫn là pilot phần mềm; F RTL/window/flags/acc_mode, ma trận final và accuracy/PPA còn mở.
 
 
 ## 16. Hoàn thành coverage NF/Gate3 — 14/10/2026
 
 Checkpoint mới `results/nf_coverage_20261014/completion.json` đạt main32/3 10.000.000 completed,75.379 reset-aborted,0 mismatch;near-cancellation52,55548% đo trực tiếp tại ngõ vào adder với C_eff.256 cross min30.114,61 run/polarity min199.470 và counters packer/control/popcount/iteration đã đạt. ModelSim fixture mới28.512 completed/288 abort và corner82.944 completed đều0 mismatch;fraction0/ones/AA/55 và exact depth5/12/27/26 đã kiểm.
 
-Nguồn RTL/L1 frozen và checkpoint13/10 giữ nguyên; bổ sung verification/corpus/probe chỉ đọc. Mục cập nhật phạm vi trước đó là lịch sử phát hiện gap,bổ sung mới đã đóng tuần11. Lệnh/seed/hash/tool/audit tại PLAN8.9,SPECv1.14§11.12. Gate3 tuần11 không thay final per-n/exhaustive/AC04,oracle/model/cửa sổ/RTL fused,paired accuracy hoặc STA/CDC/RDC/PPA. W12-01 đạt;ưu tiên W12-02..04 tiếp theo.
+Nguồn RTL/L1 frozen và checkpoint13/10 giữ nguyên; bổ sung verification/corpus/probe chỉ đọc. Mục cập nhật phạm vi trước đó là lịch sử phát hiện gap,bổ sung mới đã đóng tuần11. Lệnh/seed/hash/tool/audit tại [Optimization §8.9](../../doc/Optimization.md#legacy-8-9),SPECv1.14§11.12. Gate3 tuần11 không thay final per-n/exhaustive/AC04,oracle/model/cửa sổ/RTL fused,paired accuracy hoặc STA/CDC/RDC/PPA. W12-01 đạt;ưu tiên W12-02..04 tiếp theo.
 
 
 ## 17. OPS refactor bit-exact — 14/10/2026
 
-ops_sel_comb tách masked-popcount và data alignment/hidden song song,trước một tầng swap cuối. Parameter/ports,hidden-X/Y,M0/latency và L1 giữ nguyên. ModelSim matrix1.334.048 checks/0 mismatch,398 lint sạch và NFmain10M/0 mismatch;ModelSim NF28.512 completed0 mismatch. Benchmarkcùng6run3seed/bản,F26/FW12/SW11,Quartus13/EP4CE30F23C6:216→196LUT4,151FF giữ nguyên,median108,08→112,01MHz. Đây làOPS riêng,không Fmax MAC hoặc LUT6. Canonicalresults/ops_refactor_20261014/summary.json;SPECv1.15§5.4/11.13 và PLAN8.10 có lệnh/scope. Source-bound lịch sử giữ nguyên,dùng snapshot cũ để audit lịch sử; dùng checkpoint mới cho RTL hiện hành. Fused/final matrix/toàn MAC timing/PPA còn mở.
+ops_sel_comb tách masked-popcount và data alignment/hidden song song,trước một tầng swap cuối. Parameter/ports,hidden-X/Y,M0/latency và L1 giữ nguyên. ModelSim matrix1.334.048 checks/0 mismatch,398 lint sạch và NFmain10M/0 mismatch;ModelSim NF28.512 completed0 mismatch. Benchmarkcùng6run3seed/bản,F26/FW12/SW11,Quartus13/EP4CE30F23C6:216→196LUT4,151FF giữ nguyên,median108,08→112,01MHz. Đây làOPS riêng,không Fmax MAC hoặc LUT6. Canonicalresults/ops_refactor_20261014/summary.json;SPECv1.15§5.4/11.13 và [Optimization §8.10](../../doc/Optimization.md#legacy-8-10) có lệnh/scope. Source-bound lịch sử giữ nguyên,dùng snapshot cũ để audit lịch sử; dùng checkpoint mới cho RTL hiện hành. Fused/final matrix/toàn MAC timing/PPA còn mở.
 
 ## 18. Timing sơ bộ toàn NF và bàn giao F — 15/10/2026
 
 Toàn posit_mac_nf32/3,FW12,EXACT_EN=OPS_EN=1 đã post-route Quartus13.0sp1/EP4CE30F23C6 trên3seed:3926LUT4/823FF,DSP0/memory0,median45,07MHz;setup100MHz chưa đạt. Đường chính từacc qua mul_prepack_norm_comb vàround_unpacked(pack/parse) tới product_frac_q. Córeport riêng9 nhóm stage,logic/routing/fanout vàI/O constraints giả định0,5/0,1ns;không đường setup/hold unconstrained. Không phải timingboard hoặc PPA so paper trênLUT6.
 
-Source canonical RTL không đổi. Bản copy parser choQuartus13 chỉ thêm generate/endgenerate;audit so tokens xác nhận logic giữ nguyên. ASYNC_REG bịQuartus13 bỏ qua,còn review CDC/RDC riêng. Đề xuất constant slices/norm–round pipeline,A1align,A2/A3retiming vàSACfeedback tại PLAN8.14/results/week12/pipeline_recommendations.json,chưa áp dụng hoặc thay baseline.
+Source canonical RTL không đổi. Bản copy parser choQuartus13 chỉ thêm generate/endgenerate;audit so tokens xác nhận logic giữ nguyên. ASYNC_REG bịQuartus13 bỏ qua,còn review CDC/RDC riêng. Đề xuất constant slices/norm–round pipeline,A1align,A2/A3retiming vàSACfeedback tại [Optimization §8.14](../../doc/Optimization.md#legacy-8-14)/results/week12/pipeline_recommendations.json,chưa áp dụng hoặc thay baseline.
 
-L1 F_W32/flags/state đã đóng G-F-L1 với oracle độc lập,nguồn tại l1/include/posit_fused_window.hpp;không có RTL F trong phiên tuần12. Hợp đồng W12-F-1 vàpipeline dự kiếnF1..F5 ởSPECv1.16§5.12/11.14,handoff.json. Tuần13 thực hiệnRTL theo model frozen trước pilot/regression. Runners/hash/timing tại results/week12/summary.json vàPLAN8.14–8.15;final NF/F matrix,accuracy/PPA vàGate4 còn mở.
+L1 F_W32/flags/state đã đóng G-F-L1 với oracle độc lập,nguồn tại l1/include/posit_fused_window.hpp;không có RTL F trong phiên tuần12. Hợp đồng W12-F-1 vàpipeline dự kiếnF1..F5 ởSPECv1.16§5.12/11.14,handoff.json. Tuần13 thực hiệnRTL theo model frozen trước pilot/regression. Runners/hash/timing tại results/week12/summary.json và[Optimization §8.14](../../doc/Optimization.md#legacy-8-14) và [PLAN — fused](../l1/PLAN.md#4-l1-và-rtl-fused-w12-f-1);final NF/F matrix,accuracy/PPA vàGate4 còn mở.
 
 
 ## Khảo sát primitive v2 — 16/10/2026
@@ -273,23 +275,23 @@ L1 F_W32/flags/state đã đóng G-F-L1 với oracle độc lập,nguồn tại 
 
 ## Parser một detector — 16/10/2026
 
-Hai module parser tổ hợp/pipeline dùng XOR tail với FRB rồi một LOD MODE0,N=NB-2. Payload giữ magnitude gốc; no-terminator→cnt=NB-2. I/O/parameter, hai tầng elastic và lịch handshake giữ nguyên. Với posit32 detector N30 vẫn dùng nhánh binary của common/lod_lzd_core. Bản dual-detector trước sửa được giữ tại results/parser_xor_20261016/source/baseline, không nằm trong production.f. Kết quả kiểm và đánh đổi LUT/STA tại PLAN§8.19.
+Hai module parser tổ hợp/pipeline dùng XOR tail với FRB rồi một LOD MODE0,N=NB-2. Payload giữ magnitude gốc; no-terminator→cnt=NB-2. I/O/parameter, hai tầng elastic và lịch handshake giữ nguyên. Với posit32 detector N30 vẫn dùng nhánh binary của common/lod_lzd_core. Bản dual-detector trước sửa được giữ tại results/parser_xor_20261016/source/baseline, không nằm trong production.f. Kết quả kiểm và đánh đổi LUT/STA tại [Optimization §8.19](../../doc/Optimization.md#legacy-8-19).
 
 
-Đợt parser XOR đã hoàn thành24 P&R A35T/A100T,32/2 và32/3: median225→205LUT, FF không đổi; STA tăng/giảm tùy part/profile (PLAN§8.19).4.984.616 lượt parser/parameter đạt0 mismatch và NF ES2/ES3/F smoke mỗi bản10.000 đạt; không thay ma trận final hoặc PPA toàn MAC.
+Đợt parser XOR đã hoàn thành24 P&R A35T/A100T,32/2 và32/3: median225→205LUT, FF không đổi; STA tăng/giảm tùy part/profile ([Optimization §8.19](../../doc/Optimization.md#legacy-8-19)).4.984.616 lượt parser/parameter đạt0 mismatch và NF ES2/ES3/F smoke mỗi bản10.000 đạt; không thay ma trận final hoặc PPA toàn MAC.
 
 ## Prepack normalization OPT-01 — 16/10/2026
 
-`candidates/multiplier/mul_prepack_norm_comb.sv` là ứng viên tạo fraction bằng nối bit hằng cho bốn trường hợp exact/approx và carry/no-carry, thay runtime integer/chỉ số đích động. Chỉ dùng MUX chọn ứng viên và cập nhật SF theo carry; I/O/parameter và mọi bank/handshake giữ nguyên. FLOOR bỏ hai padding vật lý, giữ bit giá trị dưới hidden khi carry. EXACT_EN0 không sinh cone exact, chỉ cfg_mode1 thuộc miền hợp lệ. Các kiểm width override không bổ sung profile precision mới; main NF vẫn F_IN=2F+1. Bản trước/sau, chức năng và STA tại results/prepack_refactor_20261016 và PLAN§8.20; các bước OPT-02/03 chưa thực hiện.
+`candidates/multiplier/mul_prepack_norm_comb.sv` là ứng viên tạo fraction bằng nối bit hằng cho bốn trường hợp exact/approx và carry/no-carry, thay runtime integer/chỉ số đích động. Chỉ dùng MUX chọn ứng viên và cập nhật SF theo carry; I/O/parameter và mọi bank/handshake giữ nguyên. FLOOR bỏ hai padding vật lý, giữ bit giá trị dưới hidden khi carry. EXACT_EN0 không sinh cone exact, chỉ cfg_mode1 thuộc miền hợp lệ. Các kiểm width override không bổ sung profile precision mới; main NF vẫn F_IN=2F+1. Bản trước/sau, chức năng và STA tại results/prepack_refactor_20261016 và [Optimization §8.20](../../doc/Optimization.md#legacy-8-20); các bước OPT-02/03 chưa thực hiện.
 
 Ứng viên prepack đã qua1.592.064 kiểm leaf, NF main10M và ModelSim82.944 corner0 mismatch;12 P&R cho median MHz giảm0,31% A35T và2,45% A100T, FF không đổi. Vì chưa có lợi ích timing nhất quán, `multiplier/mul_prepack_norm_comb.sv` giữ nguyên baseline; candidate không nằm trong production.f. Không thay pipeline hoặc làm OPT-02/03.
 
 
 ## NF product pipeline OPT-03 — 17/10/2026
 
-Top NF dùng normalize+product packer RNE P1 → P2 → parser tổ hợp/product bank → adder3 → final packer2. Giữ bit-exact R(P_hat), flags và C_eff; product numerical sticky=0. L_valid=q+12, handshake=q+13, II_min=q+14 (thêm2 chu kỳ), q=max(1,t thực tế). Reset/stall/commit giữ một transaction; không thêm FIFO. Fused và standalone multiplier không đổi. Production prepack normalization giữ bản gốc; không ghép candidate OPT-01. Kết quả và hạn chế: PLAN§8.21, SPEC§11.16, results/opt03_20261017/summary.json.
+Top NF dùng normalize+product packer RNE P1 → P2 → parser tổ hợp/product bank → adder3 → final packer2. Giữ bit-exact R(P_hat), flags và C_eff; product numerical sticky=0. L_valid=q+12, handshake=q+13, II_min=q+14 (thêm2 chu kỳ), q=max(1,t thực tế). Reset/stall/commit giữ một transaction; không thêm FIFO. Fused và standalone multiplier không đổi. Production prepack normalization giữ bản gốc; không ghép candidate OPT-01. Kết quả và hạn chế: [Optimization §8.21](../../doc/Optimization.md#legacy-8-21), SPEC§11.16, results/opt03_20261017/summary.json.
 
 
 ## A1 OPT-02b candidate — 17/10/2026
 
-`candidates/adder/opt02b/posit_add_align.sv` dùng dual signed delta/clamp, sf-only shifter, equal-sf bypass và prefix-OR jam lookup. Cùng module name/I/O/parameter và zero added stages; chỉ thay thế file production trong source list private, không compile hai module cùng tên. Production A1 giữ nguyên; candidate đã qua leaf880.656 và NF10M/0 mismatch,406+4 strict lint, ModelSim tích hợp. Một run A35T100MHz đạt WNS+0,251ns/hold+0,047ns với2516LUT/930FF; cần matched>=3 run trước promote. Xem PLAN§8.23.
+`candidates/adder/opt02b/posit_add_align.sv` dùng dual signed delta/clamp, sf-only shifter, equal-sf bypass và prefix-OR jam lookup. Cùng module name/I/O/parameter và zero added stages; chỉ thay thế file production trong source list private, không compile hai module cùng tên. Production A1 giữ nguyên; candidate đã qua leaf880.656 và NF10M/0 mismatch,406+4 strict lint, ModelSim tích hợp. Một run A35T100MHz đạt WNS+0,251ns/hold+0,047ns với2516LUT/930FF; cần matched>=3 run trước promote. Xem [Optimization §8.23](../../doc/Optimization.md#legacy-8-23).

@@ -682,7 +682,7 @@ Precompute prefix C tại pair_retire là biến thể độc lập, chỉ dùng
 
 #### 8.25.7. Constraint, kiểm chứng và tiêu chí chọn
 
-- Giữ A35T xc7a35tcpg236-1, Vivado2026.1, cùng wrapper/source feature policy;10ns, uncertainty0,100ns, inputmin=max2,500ns/outputmax0,500ns min0 như §8.24. Không đổi exception, uncertainty hoặc hold-fix riêng cho candidate. Chỉ khảo sát A35T; không mở lượt A100T. Baseline/candidate và NF/F cùng part xc7a35tcpg236-1; giữ các báo cáo A100T cũ làm lịch sử.
+- Phép đo tiếp theo dùng hợp đồng A35T-C1 tại mục8.26: A35T xc7a35tcpg236-1, clock10ns và uncertainty setup/hold0,100ns nạp trước synthesis. Profile ip_ooc không giả định I/O delay; integration chỉ khi có budget thật. Không đổi constraint/exception/hold-fix riêng cho candidate. Cần baseline/candidate matched mới trên cùng C1; không trộn WNS lịch sử2,5ns của mục8.24 vào thống kê mới. Không mở A100T.
 - Hold+0,047ns đã gồm user uncertainty0,100ns, nhưng không đổi nhãn thành slack thực+0,147ns. Giữ margin hiện hành; chưa cần tối ưu hold trước setup khi chưa vi phạm. phys_opt_design -hold_fix là nhánh P&R riêng nếu có nhu cầu thực tế, không bảo đảm nâng slack dương; áp cùng chính sách cho hai bản và báo cả chi phí setup/tài nguyên. Không xóa ASYNC_REG hoặc đổi reset để cải thiện số đo.
 - Qua T0/T1/T2 trước đo: strict lint/latch/width/signedness; baseline/candidate/oracle trên mọi output bị ảnh hưởng; corner/exhaustive miền nhỏ rồi pilot. Module dùng chung phải kiểm các tuple đang hỗ trợ, không chỉ32/3. SAC theo bộ biên §8.16.3; packer/adder theo các corner ở trên. ES3 dùng oracle integer/dyadic độc lập, không dùng SoftPosit ES2 làm oracle ES3.
 - Khi thay ranh giới bank, so scoreboard theo ID và cùng cạnh clock với baseline: latency/II lần này phải giữ nguyên, không chấp nhận dịch output chu kỳ. Kiểm first-valid/handshake/next-accept, reset/startup/abort, stall/full/bubble, output stable, C/config context và accumulator commit đúng một lần. Native cycle và ModelSim CK2Q có phạm vi riêng, không thay thế nhau.
@@ -1157,3 +1157,27 @@ RTL được phân nhóm tại `rtl/README.md`, manifest build chính `rtl/produ
 Runner WSL/ModelSim/Vivado dùng đường dẫn mới và resolver cho danh sách theo tên. Đây là bảo trì dự án, không đổi hợp đồng NF/F hay trạng thái Gate.
 Kết quả đo cũ giữ nguyên; bản đồ di chuyển/hash và kiểm smoke riêng tại `results/layout_cleanup_20261015`.
 Build/cache đã dọn; xem `scripts/README.md` để tái build hoặc dọn định kỳ. Không chạy lại regression 10M hoặc PPA chỉ vì đổi thư mục.
+
+
+<a id="legacy-8-26"></a>
+
+### 8.26. Chuẩn hóa constraint A35T-C1 — 17/10/2026
+
+Theo yêu cầu sinh viên, tách clock nội bộ và budget tích hợp thật. Không sửa RTL, mô hình số học, pipeline hoặc báo cáo cũ. Các run min=max input2,5ns và output0/0,5ns giữ nguyên giá trị lịch sử; đó là ngân sách OOC giả định, không phải timing board. Không tăng min để chữa hold hoặc giảm uncertainty để tuyên bố closure.
+
+| Thành phần mới | Nội dung |
+| --- | --- |
+| [a35t_clock.xdc](../Posit_MAC/syn/constraints/a35t_clock.xdc) | Clock10ns, setup uncertainty0,100ns và hold uncertainty0,100ns; không I/O delay/false-path/multicycle |
+| [a35t_io_template.xdc](../Posit_MAC/syn/constraints/a35t_io_template.xdc) | Mẫu system-synchronous theo nhóm data/control; min/max/reference để trống bằng token, không được chạy như thông số board |
+| [run_a35t.tcl](../Posit_MAC/syn/run_a35t.tcl) và [runner](../Posit_MAC/scripts/run_a35t_sta.ps1) | Chỉ A35T; nạp XDC trước synthesis; validate/synth/implement; snapshot/hash/lệnh và output riêng, không ghi đè |
+| [Hướng dẫn constraint](../Posit_MAC/syn/README.md) | Phạm vi R2R/I/O, lệnh chạy và điều kiện tái lập |
+
+**Profile ip_ooc:** chỉ đánh giá R2R D/CE; I/O không có budget và được công khai trong scope/check_timing. Wrapper hiện chỉ BUFG, không input/output FF banks, nên không xác nhận đường port→parser P1 hoặc out_ready→control. Không gọi là timing toàn bộ giao tiếp/board; lỗi unconstrained nội bộ vẫn phải xử lý. Không thêm exception để che đường ngoài phạm vi. NF/F giữ số tầng và lịch giao dịch.
+
+**Profile integration:** chỉ chạy với bản sao I/O XDC đã điền nguồn timing và min/max độc lập từ mạch nguồn/đích, data/clock connection. Mẫu cùng-clock không thay virtual/generated-clock hoặc phase contract nếu giao tiếp khác. Kiểm đủ/trùng/hướng port, min/max và clock. Chưa có budget thực, pinout/IOSTANDARD hoặc board signoff; không dùng số giả lập của testcase làm mặc định.
+
+**Kiểm nạp constraint:** Vivado2026.1 build6511674, Action validate chỉ RTL elaboration (-rtl), không full synthesis/place/route hoặc simulation. Clock-only NF/F nạp clock và hai uncertainty, không I/O delays. Test tích hợp với số giả lập có nhãn TEST_ONLY_NOT_BOARD kiểm cú pháp/phủ port và output min âm; mẫu chưa điền phải bị từ chối. Không có số đo Fmax/LUT/hold mới từ các kiểm tra này. NF trong runner mặc định vẫn EXACT_EN1, F EXACT_EN0; chưa thay nghiệm thu comparator NF EXACT_EN0 hoặc paired PPA.
+
+Trong phát triển runner, lượt đầu vướng đường dẫn khoảng trắng ở read_xdc; đã sửa bằng Tcl list. Mẫu XDC đầu dùng dict/foreach khiến Vivado chỉ phát critical warning và bỏ constraint; các lượt này không được nghiệm thu. Bản cuối dùng XDC thuần, preflight ở driver và từ chối critical warning/error; log thử lỗi giữ riêng trong bằng chứng, không cộng vào kiểm tra thành công.
+
+Bằng chứng đã lưu tại results/a35t_c1_constraints_20261017: summary.json và evidence.zip/manifest SHA. Bốn kiểm tra đạt phạm vi: NF clock-only và F clock-only (mỗi lượt0 warning/critical warning/error), tích hợp số giả lập (0 warning/critical warning/error, đủ8 lệnh min/max gồm output min âm), và từ chối mẫu trống như dự kiến. Đối chiếu94 file RTL/L1 giữ nguyên byte. Không có full synthesis/place/route hoặc mô phỏng; elaboration không tạo Fmax mới. Các lượt thử trước sửa được nén riêng intermediate_not_acceptance, không dùng nhãn VALIDATED cũ làm bằng chứng. Nguồn, lệnh và XDC hiệu lực của từng kiểm tra đều có trong archive. Main timing cũ không được tự nâng nhãn sau chuẩn hóa: thời điểm nạp XDC trước synthesis và bỏ I/O budget có thể đổi cả netlist/P&R. Khi đo tiếp phải tạo matched baseline/candidate C1 và kiểm tại clock mục tiêu, chỉ báo closure trong phạm vi đã timing. Các producer lịch sử vẫn dùng điều kiện checkpoint cũ, không sửa source/hash của chúng.

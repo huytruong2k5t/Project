@@ -193,3 +193,8 @@ Kết luận OPT-01: candidate đạt bit-exact nhưng không được chọn th
 
 Dùng verify_opt03.sh, verify_opt03_modelsim.ps1, verify_opt03_schedule.ps1 và run_opt03_ppa.ps1. Native replay đặt OPT03_RESULTS_DIR mới; Windows đặt -RunRoot mới. Sources source/candidate được khóa, giữ baseline_reference và calibration riêng. audit_opt03.py restore/collect kiểm raw bằng chứng. Không chạy lại prepare vào checkpoint đã khóa. Chi tiết lệnh và giới hạn tại [Optimization §8.21](../../doc/Optimization.md#legacy-8-21). Runner OPT-01 dùng harness/testbench cũ đã đóng băng, không dùng lịch OPT-03.
 <!-- OPT03_REPORT_END:scripts/README.md -->
+
+
+## Constraint A35T-C1 — luồng mới17/10/2026
+
+Phép đo mới dùng run_a35t_sta.ps1 với XDC chung trong syn/constraints, nạp trước synthesis. Mặc định Action validate, Profile ip_ooc: chỉ kiểm elaboration/XDC, không full P&R hoặc mặc định input2,5ns. Integration cần file mẫu đã điền timing thật; runner từ chối placeholder, min/max lỗi, trùng/thiếu port và tool critical warning/error. Xem [syn/README](../syn/README.md). Các runner checkpoint cũ và snapshot giữ nguyên; không dùng collector của run cũ để kết luận điều kiện mới. Chưa có Fmax mới hoặc paired NF/F PPA trong phiên chuẩn hóa.

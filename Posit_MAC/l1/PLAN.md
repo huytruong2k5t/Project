@@ -1414,3 +1414,38 @@ P1 setup+0.528ns,P2+3.765ns,parse/product+0.434ns,accumulator+3.318ns. Slack c�
 **Kết luận phạm vi:** candidate đạt setup/hold100MHz trong một OOC run; LUT tăng54 (+2,19%),FF không đổi,CARRY4 giảm5. Giữ candidate để review, **chưa promote production** vì chưa có>=3 matched run/cross-part xác nhận theo kế hoạch. Không gọi là board signoff, Gate4 hoặc paired NF/F PPA; no new final AC04/per-n. Không ghép C precompute hoặc đổi P1/P2.
 
 Lệnh đã chạy: `scripts/verify_opt02b_leaf.ps1`, WSL `bash --noprofile --norc scripts/verify_opt02b.sh`, `scripts/verify_opt02b_modelsim.ps1`, `scripts/run_opt02b_a35_ppa.ps1`; sau đó `python scripts/audit_opt02b.py collect`. Nguồn/driver/seed/compiler/hash/counter/report lưu results/opt02b_20261017; archive gọn và manifest SHA. `audit_opt02b.py restore` khôi phục raw bằng chứng khi clone, collect kiểm checkpoint đã lưu. Runner chặn ghi đè bằng chứng đã có; không chạy lại prepare vào snapshot đã khóa. Giữ dữ liệu lịch sử trước đó và cập nhật tiến độ theo mốc thử nghiệm, không đánh dấu toàn Gate4.
+
+### 8.24. Bảng STA đủ bank MAC NF candidate OPT-02b — 17/10/2026
+
+Một lượt synth/place/route Default mới trên xc7a35tcpg236-1, Vivado2026.1 build6511674; nguồn37file giống byte checkpoint OPT-02b trước đó. NF32/3, FW12, EXACT_EN=OPS_EN1,100MHz/10ns, uncertainty0,1ns,inputmin=max2,5ns/outputmax0,5ns min0. Không sửa RTL, mô phỏng hoặc promote candidate; đây là đo lại cùng cấu hình, không tính là một directive/seed độc lập để nghiệm thu đa run.
+
+Mỗi hàng lấy worst setup và worst hold của mọi đường được timing vào chân D/CE của bank đích; gồm launch từ register hoặc input port, và control/enable. Hai giá trị có thể thuộc hai đường khác nhau. Không gọi data delay là setup time của FF, không cộng slack các tầng. Các bank context/control/feedback không làm tăng số tầng số học. Parser A/B/C chạy song song; L1/L2/L3 lặp theo term.
+
+| Bank / tầng đích | FF | Setup slack (ns) | Hold slack (ns) | Data delay worst setup (ns) |
+| --- | ---: | ---: | ---: | ---: |
+| Parser A — P1 | 39 | +1.543 | +0.221 | 7.867 |
+| Parser A — P2 | 39 | +4.532 | +0.207 | 5.374 |
+| Parser B — P1 | 39 | +1.395 | +0.178 | 8.628 |
+| Parser B — P2 | 39 | +4.288 | +0.071 | 5.342 |
+| Parser C_eff — P1 | 39 | +1.190 | +0.143 | 8.649 |
+| Parser C_eff — P2 | 39 | +3.181 | +0.135 | 6.234 |
+| OPS → M0/context core | 44 | +2.222 | +0.141 | 7.631 |
+| SAC/controller — state feedback | 43 | +0.251 | +0.068 | 9.693 |
+| SAC/controller → token L1 | 10 | +0.323 | +0.265 | 9.583 |
+| SBM dịch → L2 | 59 | +4.316 | +0.109 | 5.536 |
+| SBM tích lũy → L3 | 57 | +3.318 | +0.078 | 6.246 |
+| Normalize + pack tích — P1 | 43 | +0.528 | +0.117 | 9.326 |
+| Pack tích — P2/RNE | 38 | +3.765 | +0.093 | 6.086 |
+| Parse lại tích → product bank | 44 | +0.434 | +0.068 | 9.413 |
+| Adder — A1 align | 76 | +0.674 | +0.129 | 9.189 |
+| Adder — A2 cộng/trừ | 49 | +5.095 | +0.047 | 4.322 |
+| Adder — A3 normalize | 48 | +1.707 | +0.105 | 7.87 |
+| Packer tổng — P1 | 44 | +1.491 | +0.117 | 8.294 |
+| Packer tổng — P2/RNE | 38 | +3.310 | +0.129 | 6.619 |
+| C/context giữ giao dịch | 40 | +4.576 | +0.054 | 4.839 |
+| Điều khiển transaction | 10 | +2.885 | +0.164 | 7.011 |
+| Accumulator feedback/commit | 32 | +1.239 | +0.125 | 8.101 |
+| Reset bridge/synchronizer | 21 | +7.962 | +0.060 | 0.432 |
+| Toàn bộ bank dữ liệu/CE | 930 | +0.251 | +0.047 | 9.693 |
+
+Partition phủ toàn bộ930 FF, không trùng/thiếu bank; reset được tách riêng, recovery/removal còn trong timing.rpt. Báo cáo setup/hold từng nhóm giữ top3 đường và danh sách FF. Output port có worst setup+0,345ns (in_ready),hold+1,482ns (d[10]); đây không phải bank pipeline mới. Vivado cảnh báo Route35-198: port OOC chưa có HD.PARTPIN_LOCS; các đường launch từ input port (đặc biệt parser P1) hoặc tới output chỉ là ước lượng với constraint I/O, chưa có routing chân board chính xác. Phải xem startpoint trong CSV; không coi slack I/O này là signoff phần cứng. Đây là OOC STA, không board signoff hoặc paired NF/F. Production A1 chưa áp dụng OPT-02b; không gán bảng candidate này cho production. Giữ routed.dcp local để truy vấn thêm mà không phải P&R lại; checkpoint/cache không push Git. Evidence zip và manifest SHA giữ nguồn, driver, reports và summary gọn tại results/nf_all_stages_20261017. Lệnh: scripts/run_nf_all_stages_sta.ps1; python scripts/collect_nf_all_stages.py.

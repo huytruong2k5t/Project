@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.18 — 2026-10-15 — RTL fused W12-F-1 và kiểm chứng profile chính; STA sơ bộ Xilinx |
+| Phiên bản | v1.19 — 2026-10-17 — OPT-03: NF product RNE P1/P2 và parse riêng; số học giữ nguyên |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -35,8 +35,9 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.16 | 2026-10-15 | Chốt F post-prepack W32/Q29 với residual có dấu/borrow,flags/state và L1 đã kiểm. Oracle p8 exhaustive/FMA smoke; main phân tầng2.208.768 trên Linux/Windows/UBSan0 mismatch. Toàn NF post-route median45,07MHz trên CycloneIV,chưa đạt100MHz; bàn giao pipeline F dự kiến,giữ nguyên RTL NF và các ứng viên riêng. |
 | v1.17 | 2026-10-15 | Theo lựa chọn sinh viên, phép đo PPA mới dùng Vivado/Xilinx D2; giữ các số đo CycloneIV làm lịch sử. Thử riêng shifter/LOD trước SAC/parser/MAC; giữ giao diện, parameter và tổ hợp. A35T/A100T có sẵn, Zynq7020 chưa được cài. Phân biệt R2R của benchmark, ước lượng Fmax từ STA và kiểm trên board. Không đổi hợp đồng số học/pipeline NF/F. |
 | v1.18 | 2026-10-15 | Triển khai posit_mac_f 32/3 FW12 W32/Q29, F1–F5 và RNE cuối; 10M giao dịch/0 mismatch với oracle và trace, pipeline đầy/stall/reset và XSim CK2Q đạt. Core approximate thu hẹp12 bit, ABS/borrow một adder. Vivado A35T một run đạt100MHz R2R; giữ final per-n/AC04, CDC/RDC và paired NF/F PPA mở. |
+| v1.19 | 2026-10-17 | NF tách normalize+product P1 → P2 → parse/product bank. L_valid=q+12, H=q+13, II_min=q+14; kiểm chứng/STA riêng tại §11.16. Không đổi L1 hoặc fused. |
 
-**Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Profile hiện thực và giới hạn bằng chứng được tóm tắt tại §1.6/§11.10–§11.15. Nhật ký có ngày ở phụ lục là lịch sử, không ghi đè hợp đồng hiện hành hoặc tự mở rộng một mốc PASS thành toàn bộ AC.
+**Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Profile hiện thực và giới hạn bằng chứng được tóm tắt tại §1.6/§11.10–§11.16. Nhật ký có ngày ở phụ lục là lịch sử, không ghi đè hợp đồng hiện hành hoặc tự mở rộng một mốc PASS thành toàn bộ AC.
 
 ---
 
@@ -301,7 +302,9 @@ Sau nhả reset, startup barrier giữ in_ready=out_valid=0 cho đến khi tất
 | P | `posit_parser` × 3 (A, B, C) | Bù hai theo dấu, LOD/LZD, dịch, tách `(s, sf, frac)` (`PIPE_PARSE = 2`) | 2 |
 | M0 | `ops_sel_comb` + context trong core/wrapper | Chọn X (điều khiển vòng lặp) và Y (bị dịch); cộng `sf`, xor dấu | 1 |
 | M1..Mq+2 | `iter_ctrl`/`sac_step_comb` → `sbm_shift_comb` → `sbm_accum` | Ba tầng SAC → Shifter → Accumulator, token khởi tạo khi n=0; q=max(1,n) | q+2 |
-| MN/R | `mul_prepack_norm_comb` + `round_unpacked_comb` | Bảo toàn prepack, RNE tích; chốt một bank product/context của NF | 1 |
+| MN/P1 | `mul_prepack_norm_comb` + product `posit_pack_prepare` | Chuẩn hóa bảo toàn prepack, mã hóa và G/R/S; chốt P1 | 1 |
+| MP2 | Product `posit_pack_finish` | Quyết định RNE, cộng làm tròn/dấu; chốt packed product và flags | 1 |
+| MR | `posit_parser_comb` | Parse tích đã làm tròn; chốt product unpacked/flags | 1 |
 | A1 | `posit_add` (Stage 1) | So sánh $sf$, hoán đổi toán hạng, tính $\Delta sf$ (kẹp cứng $\le \text{FRAC\_MAX}+2$) và Alignment Shifter | 1 |
 | A2 | `posit_add` (Stage 2) | Cộng/trừ số học mantissa ($m_1 \pm m_2$), xử lý dấu và bit nhớ | 1 |
 | A3 | `posit_add` (Stage 3) | LZC (Leading Zero Counter), Normalization Shifter và cập nhật scale factor | 1 |
@@ -315,12 +318,12 @@ Bảng dưới là **ngân sách H theo lịch mục tiêu**, không phải số
 | --- | --- | --- | --- |
 | Multiplier | parse → OPS → core → norm/pack | q+6 | q+7 |
 | MAC v0 | mul → pack → parse → add → pack | q+12 | q+14 |
-| MAC v1 | core → norm/round_unpacked → add → pack | q+10 | q+11 |
+| MAC v1 | core → norm/product P1 → P2 → parse → add → pack | Chưa hỗ trợ ở top hiện hành | q+13 |
 | MAC v2 (profile chính32/3 đã kiểm) | core prepack → F1..F5 → pack | Chưa hỗ trợ trong profile chính | q+12, kiểm tại §11.15 |
 
-Multiplier gộp chuẩn hóa vào cuối core/packer; v1 thêm một tầng norm/round riêng. Ví dụ MAC v1 RNE, n=2: H=13, L_valid=12 và L_handshake=13 theo lịch không bubble. Lịch NF RNE này đã được kiểm W11 với t thực tế: H=max(1,t)+11,valid=H-1,handshake=H; top chỉ nhận lại ở cạnh sau retire nên II tối thiểuH+1 (§11.10). Các dòng v0/TRUNC là ngân sách kiến trúc chưa có top NF tương ứng. F đã hiện thực topology post-prepack; H=q+12 và valid=q+11 đã kiểm ở profile§11.15. Số n+1 term/drain chỉ thuộc sketch stream cũ.
+Multiplier giữ lịch riêng. NF hiện hành OPT-03 dùng RNE tại cả tích và tổng: H=q+13, L_valid=q+12, L_handshake=q+13, II_min=q+14. Ví dụ t=2: first-valid sau E14, handshake E15, nhận mới sớm nhất E16. q=max(1,t), t là số vòng thực tế kể cả early-stop; special/init-only dùng q=1. Lịch cũ W11 q+10/q+11/q+12 giữ trong bằng chứng lịch sử §11.10, không áp dụng top mới. Các dòng v0/TRUNC là ngân sách chưa có top tương ứng. F giữ H=q+12 và valid=q+11 (§11.15).
 
-**Ngữ nghĩa:** v0/v1 đều làm tròn tích trước khi cộng; v1 thay pack/parse trung gian bằng round_unpacked tương đương (§5.9-C). V2 làm tròn một lần nhưng cửa sổ approx vẫn có sai số cắt/căn chỉnh (§5.12). Chỉ đường exact/RNE đáp ứng các điều kiện độ rộng mới được yêu cầu khớp SoftPosit. Độ trễ bypass được quy định ở §5.3.
+**Ngữ nghĩa:** v0/v1 đều làm tròn tích trước khi cộng; v1 bảo đảm round_unpacked tương đương (§5.9-C); OPT-03 hiện thực pack pipeline rồi parse tổ hợp. V2 làm tròn một lần nhưng cửa sổ approx vẫn có sai số cắt/căn chỉnh (§5.12). Chỉ đường exact/RNE đáp ứng các điều kiện độ rộng mới được yêu cầu khớp SoftPosit. Độ trễ bypass được quy định ở §5.3.
 
 ### 5.2 Parser (`posit_parser`)
 
@@ -497,7 +500,7 @@ Tách hai hợp đồng để không làm thay đổi lịch sử:
 | Legacy `mul_norm.hpp`/`mul_norm_comb` | Lưới q theo mode; khi acc>=2,dịch phải1,bit thấp chuyển sticky,sf tăng1 | Giữ nguyên L1/RTL/freeze và Gate2 legacy; có thể khác R(P_hat) ở approx khi carry |
 | NF so sánh mới `mul_prepack_norm_comb` | Giữ nguyên magnitude M; hidden h=Q hoặc Q+1; sf_norm=scale+(h-Q). Căn các bit dưới hidden vào F_IN, không bỏ bit thấp khi carry | Làm tròn raw P_hat; dùng week11::normalize/dyadic và NF model mới (§11.9/§11.10) |
 
-FLOOR bỏ hai padding0 vật lý trước khi xét M/Q,không bỏ bit có trọng số của M. Exact Q=2F,FLOOR Q=FRAC_W; F_IN=2F+1 đủ giữ fraction sau carry ở bốn format đã kiểm. Adapter mới không làm tròn; round_unpacked_comb/packer thực hiện RNE. Nếu thiết kế tương lai giảm F_IN,phải giữ residual đúng và kiểm lại hợp đồng trước áp dụng.
+FLOOR bỏ hai padding0 vật lý trước khi xét M/Q,không bỏ bit có trọng số của M. Exact Q=2F,FLOOR Q=FRAC_W; F_IN=2F+1 đủ giữ fraction sau carry ở bốn format đã kiểm. Adapter mới không làm tròn; round_unpacked/packer thực hiện RNE. Nếu thiết kế tương lai giảm F_IN,phải giữ residual đúng và kiểm lại hợp đồng trước áp dụng.
 
 **Ứng viên OPT-01 — 16/10/2026:** `rtl/candidates/multiplier/mul_prepack_norm_comb.sv` dùng ánh xạ bit hằng tại elaboration cho exact/approx và carry/no-carry, thay chỉ số đích động/runtime integer. Hai nhánh chuẩn bị fraction độc lập rồi chọn theo carry/mode; `sf_norm=sf+carry_selected` trên đúng SF_W bit. Không thêm FF/cycle, không đổi pack→parse hoặc lịch/context NF. Giữ bit dưới hidden khi carry, bỏ đúng hai padding vật lý của FLOOR và không sinh numerical sticky từ metadata. Guard của ứng viên yêu cầu FRAC_MAX>=1,1<=FRAC_W<=FRAC_MAX,F_IN>=1,SF_W>=1,ACC_W>=FRAC_W+4 và nếu EXACT_EN1 thì ACC_W>=2*FRAC_MAX+2. Khi EXACT_EN0, miền hợp lệ của leaf chỉ có cfg_mode1; parent từ chối cfg_mode0 và không tuyên bố tương đương X/Z hoặc dữ liệu của cấu hình bị từ chối. Kiểm override F_IN chỉ xác nhận mapping legacy, không phê duyệt một profile precision hẹp; NF chính vẫn F_IN=2F+1. Ứng viên đạt kiểm chức năng nhưng không có lợi ích STA nhất quán trên A35T/A100T; production `rtl/multiplier/mul_prepack_norm_comb.sv` giữ nguyên bản trước thử nghiệm. Bằng chứng chức năng/STA trước-sau và giới hạn phạm vi tại PLAN§8.20; không đổi hợp đồng số học v1.18 hoặc pipeline.
 
@@ -706,7 +709,7 @@ Fig.3 của [P] là nguồn tham khảo cấu trúc Parser → OPS → SAC → S
 | First mux trước accumulator | `sbm_accum_comb` | Token đầu chọn y_base thay acc; cộng term nếu không init_only. Token init_only nạp Y đúng một lần |
 | SBM accumulator | `sbm_accum` + `sbm_accum_comb` | Hồi tiếp tổng magnitude; numerical_tail/metadata cut tách khỏi numerical sticky. Trong FLOOR, phần đã cắt không còn thuộc P_hat và không được OR vào GRS của P_hat |
 | Chuẩn hóa tích, không vẽ thành khối riêng trong Fig.3 | NF mới: `mul_prepack_norm_comb`; standalone legacy: `mul_norm_comb` | Khi carry, NF mới tăng sf và đổi vị trí hidden, giữ nguyên grid/bit thấp. Khác đường legacy dịch bỏ một bit; xem §11.9 |
-| Packer của multiplier / làm tròn tích để ghép NF | Standalone: `posit_pack`; NF: `round_unpacked_comb` rồi `posit_add` và `posit_pack` cuối | round_unpacked_comb=parse(pack(u)) tổ hợp, lưu product unpacked vào một bank. Adder và packer tổng là phần mở rộng MAC ngoài Fig.3 |
+| Packer của multiplier / làm tròn tích để ghép NF | Standalone: `posit_pack`; NF: product `posit_pack` P1/P2 → `posit_parser_comb` → `posit_add` → `posit_pack` cuối | Giữ parse(pack(u)) về số học; OPT-03 chốt P1, P2 và product unpacked. Adder và packer tổng là phần mở rộng MAC ngoài Fig.3 |
 
 #### B. Scale factor gộp
 
@@ -776,7 +779,7 @@ Qua việc đối chiếu sâu bản vẽ Fig. 3, đề tài ghi nhận các đi
 | Làm tròn | Fig.5(b) lấy12 fraction bit, đệm0 và mã hóa dấu; nguồn không mô tả tầng RNE G/R/S như đồ án | FLOOR cắt từng term trong SBM; sau đó RNE(P_hat) trước cộng và RNE tổng ở cuối NF. Metadata cut không tham gia GRS của P_hat | Phân biệt ROUND_SCHEME nội bộ và ROUND_MODE đóng gói (§4.1/§5.9). RNE không khôi phục các term đã bị cắt |
 | Width/carry | Fig.3 không công bố đủ width/bit carry/cut để xác nhận RTL nguyên bản; không lấy nhãn fraction12 làm width toàn accumulator | Approx FLOOR32/3: P_hat Q12,14 bit hữu ích; bank vật lý54 bit khi EXACT_EN1 để hỗ trợ exact Q52. Adapter NF giữ cả bit thấp khi carry, không dùng sticky thay trọng số bit đó | Kết quả W11 khác biệt carry là của legacy địa phương so với hợp đồng prepack; không suy thành lỗi RTL paper. Chi tiết/bằng chứng §5.6/§11.9 |
 | Scale | Khối Rgm/Exp adder xử lý regime/exponent | Dùng sf signed và cộng sfA+sfB; carry mantissa tăng sf thêm1 | Tương đương về giá trị; chưa chứng minh giảm LUT hoặc tăng Fmax (§5.10-B) |
-| Pipeline/control | Fig.3 thể hiện Reg/feedback/First nhưng không đủ quy tắc valid/ready/reset/order hoặc số tầng bên trong mọi khối | Parser2 tầng; core SAC→shift→acc; một bank norm/round; adder3 tầng; packer RNE2 tầng. Context một giao dịch, reset bridge, stall và output holding theo §11.10 | L_valid=max(1,t)+10; handshake không stall thêm1; II baseline tối thiểumax(1,t)+12. Không suy số này từ năm Reg của hình; timing/Fmax còn cần STA |
+| Pipeline/control | Fig.3 thể hiện Reg/feedback/First nhưng không đủ quy tắc valid/ready/reset/order hoặc số tầng bên trong mọi khối | Parser2 tầng; core SAC→shift→acc; product P1/P2 và một bank parse/product; adder3 tầng; packer RNE2 tầng. Context một giao dịch, reset bridge, stall và output holding theo §11.10 | L_valid=max(1,t)+12; handshake không stall thêm1; II baseline tối thiểumax(1,t)+14. Không suy số này từ năm Reg của hình; timing/Fmax còn cần STA |
 | Mở rộng MAC | Fig.3 dừng ở tích A×B | NF thêm C_eff, adder, packer tổng và trạng thái acc_mode/acc_clr | NF=R(R(P_hat)+C_eff), F_ref=R(P_hat+C_eff). Fused RTL chưa được nghiệm thu; xem §5.12/§11.10 |
 
 **Cách mô tả phạm vi:** lõi nhân kế thừa cấu trúc dịch–cộng lặp của Fig.3; đồ án chọn hợp đồng số học/OPS/pipeline riêng và mở rộng thành MAC NF. Gate3 chứng minh RTL mới khớp mô hình/oracle của đồ án trong phạm vi đã kiểm, không chứng minh đã có baseline RTL tác giả hoặc tái hiện Table I. So sánh NF/F dùng cùng P_hat, corpus và điều kiện PPA theo §11.8–§11.10; lợi ích về tài nguyên/timing phải đo, không suy từ bảng mapping.
@@ -791,28 +794,28 @@ Khác với bài báo tham chiếu [P] chỉ dừng lại ở phép nhân hai to
 2. **Non-fused:** giữa bộ nhân và Adder dùng hợp đồng round_unpacked ở §5.9-C. Với exact/RNE, v0/v1 phải cho cùng kết quả L0.
 3. **Backpressure:** baseline có thanh ghi đầu ra giữ d/flags. Với core không thể stall, mỗi handshake đầu vào phải đặt trước một slot lưu kết quả và chỉ trả credit khi đầu ra handshake. Số giao dịch chưa trả không vượt sức chứa kết quả đã bảo đảm. Skid buffer 2 phần tử chỉ đủ hấp thụ 2 kết quả, không thay cho lưu trữ của mọi giao dịch đang bay. Registered in_ready phải tính cả giao dịch nhận ở cạnh hiện tại khi quyết định credit tiếp theo.
 4. **Thứ tự:** first/last, tag và metadata đi cùng mọi số hạng; giao dịch sau không được khởi tạo accumulator dùng chung trước khi số hạng cuối của giao dịch trước đã được chốt. Zero/NaR bypass theo §5.3. FIFO, credit và lịch hóa là điều kiện bắt buộc nếu chọn chồng lấn.
-5. **Tích lũy NF hiện tại:** tổng đi qua A1/A2/A3→packer RNE P1/P2; bank P2 chứa kết quả Posit,không có round_unpacked thứ hai sau adder. Wrapper commit accumulator ở cạnh đầu quan sát pack_out_valid&&!committed_q,dù out_ready0,giữ busy tới retire. Với một giao dịch,II_acc như II standalone: tối thiểumax(1,t)+12 không stall; không dùng cận4 để mô tả top đã kiểm. V2 đã chọn cộng C_eff sau prepack; ngân sách một giao dịch §5.12-e là II≥q+13,chưa được RTL kiểm. Không dùng lịch stream cũ hoặc giả định fused luôn ít chu kỳ hơn NF.
+5. **Tích lũy NF hiện tại:** tổng đi qua A1/A2/A3→packer RNE P1/P2; bank P2 chứa kết quả Posit,không có round_unpacked thứ hai sau adder. Wrapper commit accumulator ở cạnh đầu quan sát pack_out_valid&&!committed_q,dù out_ready0,giữ busy tới retire. Với một giao dịch,II_acc như II standalone: tối thiểumax(1,t)+14 không stall; không dùng cận4 để mô tả top đã kiểm. V2 cộng C_eff sau prepack; II_min=q+13 đã kiểm tại §11.15. Không dùng lịch stream cũ hoặc giả định fused luôn ít chu kỳ hơn NF.
 
-#### B. Ngân sách hạng thanh ghi MAC v1 (q+10 hoặc q+11)
+#### B. Lịch NF RNE hiện hành — OPT-03
 
-| Tầng | Tên giai đoạn | Chức năng thực hiện | Chu kỳ |
-| :---: | :--- | :--- | :---: |
-| **T1..T2** | Parse | Giải mã đồng thời $A, B, C$ thành dạng unpacked `(sign, sf, frac)` (`PIPE_PARSE = 2`) | 2 |
-| **T3** | OPS & Init | Chọn $X, Y$, tính $sf_{\text{mul}} = sf_A + sf_B$, nạp dữ liệu vào SAC và Mux First, chốt C_eff/context vào thanh ghi giao dịch | 1 |
-| **T4..T(n+5)** | Iterative Core | Ba tầng token SAC→Shifter→Accumulator của một giao dịch; không chồng lấn transaction | $n + 2$ |
-| **T(n+6)** | Norm & Unpacked Round | Chuẩn hóa tích ($\text{acc} \ge 2$), làm tròn mantissa về lưới Posit qua `round_unpacked`, cắt bỏ bit dư | 1 |
-| **T(n+7)..T(n+9)** | Adder Stages A1..A3 | A1 (Align kẹp cứng), A2 (Add/Sub số học), A3 (LZC Normalize & Update Scale) | 3 |
-| **T(n+10)** hoặc **T(n+10..n+11)** | Packer Stages | Đóng gói chuỗi bitstring Posit: 1 chu kỳ (`PIPE_PACK = 1` với TRUNC) hoặc 2 chu kỳ (`PIPE_PACK = 2` với RNE) | 1 hoặc 2 |
+E0 là cạnh accept. q=max(1,t), t là số vòng fraction thực tế.
 
-Ngân sách H = 2 (Parse) + 1 (OPS) + (q+2) (Core) + 1 (Norm/Round) + 3 (Adder) + PIPE_PACK = q+10 (TRUNC) hoặc q+11 (RNE). Bảng T phía trên minh họa n>=1 và đánh số lần chốt bắt đầu T1=E0; Tj tương ứng E(j-1), không phải Ej. Với n=0 dùng token init_only và q=1. L_valid=H-1, L_handshake=H theo §5.1; số đo RTL có bubble phải báo thêm bubble, không đổi quy ước cạnh để khớp công thức.
+| Cạnh / bank | Công việc / token |
+| --- | --- |
+| E0, E1 | Parser A/B/C_eff P1/P2 |
+| E2 | OPS/core launch; lưu C_eff và context |
+| sau E(q+4) | core_done cùng acc, core_sf/sign/mode và trạng thái cut |
+| E(q+5) | Product P1 chốt kết quả normalize + encode/GRS/flags |
+| E(q+6) | Product P2 chốt packed product sau RNE, flags và valid |
+| E(q+7) | Parse tổ hợp từ P2, chốt product unpacked/flags |
+| E(q+8)..E(q+10) | Adder A1/A2/A3 |
+| E(q+11), E(q+12) | Final packer P1/P2; first-valid sau E(q+12) |
+| E(q+13) | Handshake không stall; commit accumulator nếu chưa commit |
+| E(q+14) | Cạnh accept sớm nhất giao dịch kế tiếp |
 
-| MAC v1 không bypass/stall/bubble | OPS launch | core_done | TRUNC: H / valid / handshake | RNE: H / valid / handshake |
-| --- | --- | --- | --- | --- |
-| n=0, init_only | E2 | sau E5 | 11 / sau E10 / E11 | 12 / sau E11 / E12 |
-| n=1 | E2 | sau E5 | 11 / sau E10 / E11 | 12 / sau E11 / E12 |
-| n=2 (hoặc dừng sớm sau hai token) | E2 | sau E6 | 12 / sau E11 / E12 | 13 / sau E12 / E13 |
+H=2+1+(q+2)+3+3+2=q+13; L_valid=q+12, L_handshake=q+13, II_min=q+14. Tất cả đường special/early-stop đi cùng pipeline; không có bypass rút ngắn lịch. Core_done chỉ phát một chu kỳ; wrapper chỉ nhận giao dịch nếu product packer sẵn sàng, giữ reservation tới retire. Với một transaction, P1/P2 product luôn có credit khi core_done đến. Product P2 giữ data/flags nếu product bank chưa sẵn sàng; product_capture=product_pack_valid && (!norm_valid_q || add_ready). Product bank giữ tới adder handshake, cờ và C_eff không lấy lại từ input ngoài. Reset/startup dùng bridge và reset synchronizer sẵn có của packer; không thêm clock gating hoặc timing exception. Accumulator commit đúng một lần ở cạnh quan sát final valid, kể cả out_ready=0.
 
-NF RNE đã kiểm theo lịch này với t thực tế; TRUNC chỉ là ngân sách chưa hiện thực trong top NF. II không stall có thêm cạnh nhận lại sau retire (§5.1/§11.10); nếu norm/round hoặc packer cần thêm tầng để đạt timing thì cập nhật H và mọi cạnh sau đó, giữ nguyên E0.
+Product numerical sticky luôn0: FLOOR/cut/tail của iterative approximation là flags/status, không được đưa lại làm phần dư số học của P_hat. Normalize/width/F_IN và RNE không đổi. `round_unpacked_comb` vẫn là reference/unit module; top NF không đi qua nó. Standalone multiplier và fused không đổi lịch.
 
 #### C. Tối ưu sau baseline
 
@@ -1123,7 +1126,7 @@ Phép nhân lặp không xuất kết quả mỗi chu kỳ. Khi đánh giá hi�
 
 Số LUT/fmax/latency từ Table III của [P]; phép/giây là tính toán theo giả định trên. Theo giả định này, PACoGen cao hơn khoảng 2.6–3.3 lần về phép/giây/LUT. Không gọi đây là cận worst-case của một hệ thống: thời gian idle hoặc stall tùy ý có thể làm throughput thấp hơn nữa.
 
-NF hiện tại có q=max(1,t), t là số vòng thực tế: first-valid=q+10, handshake không stall=q+11 và II không stall tối thiểu=q+12 vì chỉ nhận giao dịch tiếp ở cạnh sau retire (§11.10). PPA phải dùng II đo của chính top đang tổng hợp; không thế n+6 hoặc II=n vào công thức cho NF.
+NF hiện tại có q=max(1,t), t là số vòng thực tế: first-valid=q+12, handshake không stall=q+13 và II không stall tối thiểu=q+14 vì chỉ nhận giao dịch tiếp ở cạnh sau retire (§11.10). PPA phải dùng II đo của chính top đang tổng hợp; không thế n+6 hoặc II=n vào công thức cho NF.
 
 #### B. Mục tiêu chồng lấn và độ chính xác
 
@@ -1383,7 +1386,7 @@ Checkpoint đóng băng **L1 hiện có và giao diện tích**, không phải L
 
 `posit_mac_nf` là top structural mới; `mac_nf_wrapper` chứa điều khiển một giao dịch, không sửa standalone multiplier đã nghiệm thu. Profile hiện thực RNE/FLOOR, EXACT_EN=OPS_EN=1, NB/ES8/0,16/1,32/2,32/3; FRAC_W=min(F,12), N_MAX8, cfg_ops0/1, approximate n0..8. TRUNC/JAM/fused và feature-disable chưa được nghiệm thu trong top này. Profile so sánh chính32/3 OPS1 giữ cùng P_hat cho NF/F; OPS0 và exact là kiểm bổ trợ.
 
-Luồng thực: parser A/B/C_eff hai tầng → OPS/core → normalize bảo toàn prepack + round_unpacked_comb → thanh ghi product/context → adder A1/A2/A3 → packer RNE P1/P2. round_unpacked_comb dùng pack/parse **tổ hợp**, kiểm đúng parse(pack(u)); không có thanh ghi Posit trung gian như v0. Đây là hiện thực đúng chức năng ban đầu; đường tổ hợp norm/pack/parse dài cần STA trước tuyên bố fmax. Với t=iterations thực tế,q=max(1,t): E0 nhận→L_valid=q+10→L_handshake=q+11 khi out_ready luôn1; early-stop/special dùng t thực tế, không luôn dùng cfg_n. Không có bypass rút ngắn latency. Top không nhận lại tại cạnh retire: II không stall tối thiểuq+12, khác II1 của riêng adder.
+**Checkpoint lịch sử W11; top hiện hành thay bằng OPT-03 §11.16.** Luồng thực: parser A/B/C_eff hai tầng → OPS/core → normalize bảo toàn prepack + round_unpacked_comb → thanh ghi product/context → adder A1/A2/A3 → packer RNE P1/P2. round_unpacked_comb dùng pack/parse **tổ hợp**, kiểm đúng parse(pack(u)); không có thanh ghi Posit trung gian như v0. Đây là hiện thực đúng chức năng ban đầu; đường tổ hợp norm/pack/parse dài cần STA trước tuyên bố fmax. Với t=iterations thực tế,q=max(1,t): E0 nhận→L_valid=q+10→L_handshake=q+11 khi out_ready luôn1; early-stop/special dùng t thực tế, không luôn dùng cfg_n. Không có bypass rút ngắn latency. Top không nhận lại tại cạnh retire: II không stall tối thiểuq+12, khác II1 của riêng adder.
 
 A/B/C_eff/config/acc_mode/acc_clr được nhận cùng handshake. C_eff=c nếu acc_mode0, accumulator nếu acc_mode1, và0 nếu acc_clr1. NaR được lưu ngay trong mã accumulator; parser C_eff suy is_nar, không cần bank acc_nar độc lập có thể lệch dữ liệu. Cổng rst_n đồng bộ đi qua bridge; leaf nhả bằng hai FF; startup gate đợi core_run, ba parser, adder và packer sẵn sàng. Không dùng tên reset top làm lý do bỏ bridge theo guideline.
 
@@ -1488,6 +1491,19 @@ Bàn giao tuần13 theo §5.12-e và results/week12/handoff.json. F approximate-
 **Kịch bản demo mục tiêu:** ví dụ NF/F trên cùng A/B/C,n0/1/2/3/8 và exact; chạy runner smoke của đúng top,hiển thị canonical JSON và PPA đo. make demo/results/summary.md hiện chưa có; không trình bày scaffold như demo hoàn tất.
 
 ---
+
+<!-- OPT03_REPORT_START:SPEC_Posit_MAC_IP.md -->
+### 11.16. NF OPT-03 — pipeline làm tròn tích, 17/10/2026
+
+Hợp đồng hiện hành tại §5.1/§5.11-B: product RNE P1/P2 trước parse/product bank; L_valid=q+12,H=q+13,II_min=q+14. R(P_hat), flags, width và fused giữ nguyên. Chi tiết reset/credit/sticky và cạnh clock tại §5.11-B; kết quả/commands tại PLAN§8.21.
+
+| Part | Median STA MHz trước → sau | Thay đổi | Median LUT trước → sau | FF trước → sau |
+| --- | --- | --- | --- | --- |
+| xc7a35tcpg236-1 | 52.31 → 78.41 | +49.90% | 2464 → 2462 | 847 → 930 |
+| xc7a100tcsg324-1 | 53.69 → 79.28 | +47.66% | 2458 → 2449 | 847 → 930 |
+
+Native main10M/85316 abort,0 mismatch;4 strict lint sạch. ModelSim82.944 corner+28.512 protocol/288 abort và284 reset-age đạt. chưa đạt R2R setup100MHz ở tất cả run; chưa board signoff/final per-n/AC04 hoặc matched NF/F. Baseline reference source-identical được tái dùng và Default được kiểm lại2 part. Không xác nhận baseline gốc paper hoặc chạy Table I.
+<!-- OPT03_REPORT_END:SPEC_Posit_MAC_IP.md -->
 
 ## Phụ lục A. Tóm tắt số liệu của [P] để đối chiếu
 

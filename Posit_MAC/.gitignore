@@ -184,3 +184,10 @@ results/**/localappdata/
 results/**/tmp/
 *.wdb
 *.wlf
+
+# OPT-03 binaries/checkpoints/cache are reproducible, never backup payload.
+results/opt03_20261017/**/obj_fast/
+results/opt03_20261017/**/work/
+results/opt03_20261017/**/*.dcp
+results/opt03_20261017/**/*.so
+results/opt03_replay*/

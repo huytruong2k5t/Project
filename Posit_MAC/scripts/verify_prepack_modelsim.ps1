@@ -21,7 +21,7 @@ $core=$core.Replace('            assign match_bits',"            typedef logic [
 [IO.File]::WriteAllText("$run/compat/lod_lzd_core.sv",$core)
 $sources=@($nfNames | ForEach-Object {if($_ -eq 'lod_lzd_core') {"$run/compat/lod_lzd_core.sv"} else {"$out/source/baseline/$_.sv"}})
 $sources+=Join-Path $out 'source/candidate/mul_prepack_norm_comb.sv'
-$sources+=Join-Path $root 'tb/tb_week11_mac.sv'
+$sources+=Join-Path $root 'results/prepack_refactor_20261016/verification_inputs/tb_week11_mac.sv'
 $fixtures=Join-Path $out 'fixtures'
 if(!(Test-Path $fixtures)) {
     New-Item -ItemType Directory -Force $fixtures | Out-Null

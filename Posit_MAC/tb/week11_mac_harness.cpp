@@ -192,7 +192,7 @@ int main(int argc, char** argv) try {
                 }
                 if (!seen_valid) {
                     const uint64_t latency=cycles-launch_cycle-1;
-                    require(latency==std::max(1u,expected.iterations)+10,"valid latency differs from contract");
+                    require(latency==std::max(1u,expected.iterations)+12,"valid latency differs from contract");
                     first_valid_min=std::min(first_valid_min,latency);
                     first_valid_max=std::max(first_valid_max,latency);
                     if (pending_acc) { accumulator=expected.bits; ++acc_commits; }

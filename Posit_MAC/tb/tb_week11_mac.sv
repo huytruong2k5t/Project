@@ -9,6 +9,8 @@
 module tb_week11_mac;
     parameter int NB = 32;
     parameter int ES = 3;
+    // Historical fixture stores the original q+10 schedule.
+    parameter int EXTRA_PRODUCT_STAGES = 2;
     localparam int FW = (NB-3-ES < 12) ? NB-3-ES : 12;
     logic clk = 1'b0;
     always #5 clk = ~clk;
@@ -139,7 +141,7 @@ module tb_week11_mac;
                         if(wait_cycles>100) $fatal(1,"output deadlock/X");
                     end
                     first_valid_cycle=cycle_count;
-                    if(first_valid_cycle-accepted_cycle != latency_file)
+                    if(first_valid_cycle-accepted_cycle != latency_file+EXTRA_PRODUCT_STAGES)
                         $fatal(1,"latency row%0d observed%0d expected%0d",rows,first_valid_cycle-accepted_cycle,latency_file);
                     if(d !== expected[NB-1:0] || flags !== flags_file[4:0])
                         $fatal(1,"row%0d got%h flags%h expected%h flags%h",rows,d,flags,expected,flags_file);

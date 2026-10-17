@@ -1,9 +1,9 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 16/10/2026 (giờ Việt Nam)  
+**Ngày cập nhật:** 17/10/2026 (giờ Việt Nam)  
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.18](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md).
+**Tài liệu chi tiết:** [SPEC v1.19](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -26,7 +26,7 @@ MAC L1 đã hoàn thành và nghiệm thu Gate1B. Parser/packer và Gate2 multip
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder, NF tuần11 và F profile chính đã kiểm; còn ma trận final và coverage cuối NF/F |
 | PPA, mở rộng và hồ sơ — Gate4 | processing | NF CycloneIV45,07MHz là lịch sử; F A35T100MHz R2R đạt. Còn đo matched NF/F, accuracy và hồ sơ cuối |
 
-**Trạng thái tối ưu:** primitive Xilinx§8.18 và parser một detector§8.19 đã hoàn tất. OPT-01§8.20 đã thử và đo, giữ normalizer production cũ vì không có lợi ích STA nhất quán; dừng trước các bước tiếp theo theo yêu cầu sinh viên. LOD nhóm4 riêng MODE0,N31/32; parser dùng XOR và một LOD N=NB-2, hai shifter giữ gốc. Không suy Fmax toàn MAC từ benchmark leaf/chuỗi. Theo lựa chọn15/10, phép đo mới dùng Xilinx; số CycloneIV giữ ý nghĩa lịch sử. Giữ fraction nhân12 bit; ACC_WIN32 là cửa sổ cộng fused. Hạn chính29/11, đệm30/11–04/12 trước05/12/2026 giữ nguyên; W14 tại mục3.2/PLAN§8.17.
+**Trạng thái tối ưu:** primitive Xilinx§8.18 và parser một detector§8.19 đã hoàn tất. OPT-01§8.20 đã thử và đo, giữ normalizer production cũ vì không có lợi ích STA nhất quán; OPT-03§8.21 đã triển khai17/10: product RNE P1/P2 → parse riêng, chức năng/latency đã kiểm; chưa làm OPT-02/04/05. LOD nhóm4 riêng MODE0,N31/32; parser dùng XOR và một LOD N=NB-2, hai shifter giữ gốc. Không suy Fmax toàn MAC từ benchmark leaf/chuỗi. Theo lựa chọn15/10, phép đo mới dùng Xilinx; số CycloneIV giữ ý nghĩa lịch sử. Giữ fraction nhân12 bit; ACC_WIN32 là cửa sổ cộng fused. Hạn chính29/11, đệm30/11–04/12 trước05/12/2026 giữ nguyên; W14 tại mục3.2/PLAN§8.17.
 
 
 ## 3. Tiến độ theo tuần
@@ -254,7 +254,15 @@ Tuần14 chỉ được đánh dấu `✅` khi TC-W14-01..05 và TC-W14-08 đề
 | 4 | Parser dùng một detector để giảm diện tích | Cả comb/pipeline dùng XOR tail + một LOD; giữ giao diện và hai tầng. Kiểm4.984.616 lượt parser/biên tham số0 mismatch,33 strict lint và NF ES2/ES3/F mỗi bản10.000 đạt.24 P&R: median225→205LUT (−8,89%),FF không đổi; timing thay đổi theo part/profile. SPEC/PLAN đồng bộ; chưa đo lại full MAC hoặc đóng200MHz | ✅ |
 | 5 | Khảo sát refactor prepack và STA toàn NF | Candidate mapping hằng đạt1.592.064 leaf,10M NF và82.944 ModelSim corner0 mismatch;12 P&R cho median STA−0,31% A35T/−2,45% A100T, FF không đổi. Giữ production cũ, lưu candidate/bằng chứng; chưa đạt100MHz và chưa tách pipeline hoặc làm bước tiếp | ✅ |
 
-### 4.16. Mẫu cập nhật tiếp theo
+<!-- OPT03_REPORT_START:docs/TIEN_DO_DO_AN.md -->
+### 4.16. Ngày 17/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Tách pipeline RNE tích của NF — OPT-03 | Main10M và ModelSim corner/protocol0 mismatch; reset/latency/II đạt. STA: xc7a35tcpg236-1: 52.31→78.41MHz; xc7a100tcsg324-1: 53.69→79.28MHz; thêm2 chu kỳ và FF, chưa đạt R2R setup100MHz ở tất cả run. SPEC/PLAN đồng bộ; final NF/F và Gate4 còn mở | ✅ |
+<!-- OPT03_REPORT_END:docs/TIEN_DO_DO_AN.md -->
+
+### 4.17. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

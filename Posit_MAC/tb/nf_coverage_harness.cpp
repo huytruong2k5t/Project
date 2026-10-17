@@ -159,12 +159,12 @@ int main(int argc, char** argv) try {
             }
             if (pending && rt.posit_mac_nf__DOT__u_wrapper__DOT__core_done) {
                 pending_product_pack=pack_bins(
-                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_round__DOT__u_pack__DOT__p1_mag_trunc_d,
-                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_round__DOT__u_pack__DOT__p1_guard_bit_d,
-                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_round__DOT__u_pack__DOT__p1_round_bit_d,
-                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_round__DOT__u_pack__DOT__p1_sticky_bit_d,
-                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_round__DOT__u_pack__DOT__p1_special_sel_d,
-                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_round__DOT__u_pack__DOT__p1_flags_d);
+                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_product_pack__DOT__p1_mag_trunc_d,
+                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_product_pack__DOT__p1_guard_bit_d,
+                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_product_pack__DOT__p1_round_bit_d,
+                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_product_pack__DOT__p1_sticky_bit_d,
+                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_product_pack__DOT__p1_special_sel_d,
+                    rt.posit_mac_nf__DOT__u_wrapper__DOT__u_product_pack__DOT__p1_flags_d);
                 require(!observed_product, "duplicate product token");
                 observed_product=true;
             }
@@ -236,7 +236,7 @@ int main(int argc, char** argv) try {
                 }
                 if (!seen_valid) {
                     const uint64_t latency=cycles-launch_cycle-1;
-                    require(latency==std::max(1u,expected.iterations)+10,"valid latency differs from contract");
+                    require(latency==std::max(1u,expected.iterations)+12,"valid latency differs from contract");
                     first_valid_min=std::min(first_valid_min,latency);
                     first_valid_max=std::max(first_valid_max,latency);
                     if (pending_acc) { accumulator=expected.bits; ++acc_commits; }

@@ -419,3 +419,32 @@ Lệnh thứ hai chạy pilot rồi10 triệu giao dịch NF32/3; giữ nguyên 
 ```
 
 PPA dùng nguồn checkpoint đóng băng ở study gốc; không lấy nguồn live hoặc tự chạy bước pipeline tiếp theo. Chi tiết constraints, oracle, tương thích ModelSim và giới hạn STA tại scripts/README.md mục OPT-01 và PLAN§8.20. Không gọi lại script prepare/verify vào thư mục bằng chứng đã đóng băng.
+
+<!-- OPT03_REPORT_START:docs/HUONG_DAN_CHAY_WSL_MODELSIM.md -->
+## OPT-03 NF product RNE pipeline — 17/10/2026
+
+Mở terminal tại thư mục Posit_MAC. Khôi phục bằng chứng gọn khi clone mới:
+
+```text
+python scripts/audit_opt03.py restore
+python scripts/audit_opt03.py collect
+```
+
+WSL (4 pilot và main32/3 10M):
+
+```bash
+export OPT03_RESULTS_DIR=results/opt03_replay
+bash --noprofile --norc scripts/verify_opt03.sh
+```
+
+Windows PowerShell (từ CMD dùng `powershell -NoProfile -File` trước tên script):
+
+```powershell
+./scripts/verify_opt03_modelsim.ps1 -RunRoot results/opt03_replay
+./scripts/verify_opt03_schedule.ps1 -RunRoot results/opt03_replay
+./scripts/run_opt03_ppa.ps1 -Part xc7a35tcpg236-1 -RunRoot results/opt03_ppa_replay
+./scripts/run_opt03_ppa.ps1 -Part xc7a100tcsg324-1 -RunRoot results/opt03_ppa_replay
+```
+
+ModelSim protocol fixture nằm trong evidence tại protocol_fixtures/; runner không phụ thuộc fixture đã dọn của checkpoint khác. Lịch mới là valid=q+12,handshake=q+13,II_min=q+14. Fixture lịch cũ giữ nguyên số học; testbench cộng đúng2 vào field latency. STA candidate tổng hợp một lần/part, đọc lại checkpoint cho từng directive. Dùng thư mục run mới nếu đã có output; collector mặc định chỉ nghiệm thu checkpoint gốc. Không chạy prepare vào nguồn/bằng chứng đã khóa.
+<!-- OPT03_REPORT_END:docs/HUONG_DAN_CHAY_WSL_MODELSIM.md -->

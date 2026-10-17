@@ -65,6 +65,12 @@ module mac_nf_wrapper #(
     wire signed [SF_W-1:0] product_sf;
     wire [F-1:0] product_frac;
     wire [4:0] product_flags;
+    wire product_pack_ready;
+    wire product_pack_valid;
+    wire product_parse_ready;
+    wire product_capture;
+    wire [NB-1:0] product_packed;
+    wire product_sticky;
     wire [4:0] norm_flags;
     logic [F-1:0] product_frac_q;
     wire add_ready;
@@ -140,7 +146,7 @@ module mac_nf_wrapper #(
                       : {3'b0, (core_cut || approx_cut || numerical_tail), approx_cut};
     assign cfg_valid=(cfg_ops <= 1) && (OPS_EN || cfg_ops==0) &&
                      (cfg_mode || EXACT_EN) && (!cfg_mode || int'(cfg_n) <= N_MAX) && (!acc_clr || acc_mode);
-    assign in_ready=rst_n && meta_sync2 && core_run && pack_ready &&
+    assign in_ready=rst_n && meta_sync2 && core_run && pack_ready && product_pack_ready &&
                     ready_a && ready_b && ready_c && add_ready && !busy_q && cfg_valid;
     assign pair_accept=in_valid && in_ready;
     assign pair_retire=valid_a && valid_b && valid_c && core_ready;
@@ -277,23 +283,46 @@ module mac_nf_wrapper #(
         .sf_norm(sf_norm),
         .frac_norm(frac_norm)
     );
-    round_unpacked_comb #(
+    // OPT-03: norm + P1, P2, then combinational parse into the product bank.
+    // Only one transaction is reserved, so core_done cannot overrun this pipe.
+    // Approximation loss is status, not a numerical sticky for product RNE.
+    assign product_sticky = 1'b0;
+    assign product_parse_ready = !norm_valid_q || add_ready;
+    assign product_capture = product_pack_valid && product_parse_ready;
+
+    posit_pack #(
         .NB(NB),
         .ES(ES),
+        .F_IN(FIN),
         .SF_W(SF_W)
-    ) u_round (
+    ) u_product_pack (
+        .clk(clk),
+        .reset_n(reset_n),
+        .in_valid(core_done),
+        .in_ready(product_pack_ready),
         .sign(core_sign),
         .is_zero(zero_q),
         .is_nar(nar_q),
         .sf(sf_norm),
         .frac(frac_norm),
+        .sticky(product_sticky),
         .flags_in(norm_flags),
-        .sign_o(product_sign),
-        .is_zero_o(product_zero),
-        .is_nar_o(product_nar),
-        .sf_o(product_sf),
-        .frac_o(product_frac),
-        .flags_o(product_flags)
+        .out_valid(product_pack_valid),
+        .out_ready(product_parse_ready),
+        .d(product_packed),
+        .flags(product_flags)
+    );
+    posit_parser_comb #(
+        .NB(NB),
+        .ES(ES),
+        .SF_W(SF_W)
+    ) u_product_parse (
+        .p(product_packed),
+        .s(product_sign),
+        .is_zero(product_zero),
+        .is_nar(product_nar),
+        .sf(product_sf),
+        .frac(product_frac)
     );
     posit_add #(
         .NB(NB),
@@ -393,7 +422,7 @@ module mac_nf_wrapper #(
                 c_frac_q <= `CK2Q frac_c;
             end
             if (norm_valid_q && add_ready) norm_valid_q <= `CK2Q 1'b0;
-            if (core_done) begin
+            if (product_capture) begin
                 norm_valid_q <= `CK2Q 1'b1;
                 norm_sign_q <= `CK2Q product_sign;
                 norm_zero_q <= `CK2Q product_zero;

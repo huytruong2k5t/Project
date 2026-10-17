@@ -185,3 +185,9 @@ PowerShell, sau khi nguồn replay đã được chuẩn bị bằng lệnh WSL 
 ModelSim10.1d dùng bản sao LOD với typedef cast unsigned cùng width để tương thích cú pháp; unit LOD41.024 checks trước corner NF82.944 ca. Không sửa production LOD. PPA runner đo snapshot baseline/candidate gốc đã khóa, không đo nguồn live đã sửa sau này; RunRoot chỉ đổi nơi ghi kết quả và từ chối ghi đè metrics đã có. Toàn NF32/3,FW12,EXACT_EN=OPS_EN1; clock10ns,uncertainty0,1ns, cùng BUFG và I/O budget, ba directive matched. Reports gồm toàn R2R và norm_round riêng; số MHz từ slack là ước lượng STA OOC, không phải board Fmax hoặc paired NF/F. Collector audit checkpoint gốc; kết quả replay nằm trong RunRoot mới.
 
 Kết luận OPT-01: candidate đạt bit-exact nhưng không được chọn thay production do median STA không cải thiện nhất quán; production giữ baseline. Các runner ở trên tái hiện thí nghiệm candidate đã đo, không tự promote hoặc chạy bước pipeline tiếp theo.
+
+<!-- OPT03_REPORT_START:scripts/README.md -->
+## OPT-03 NF product pipeline — 17/10/2026
+
+Dùng verify_opt03.sh, verify_opt03_modelsim.ps1, verify_opt03_schedule.ps1 và run_opt03_ppa.ps1. Native replay đặt OPT03_RESULTS_DIR mới; Windows đặt -RunRoot mới. Sources source/candidate được khóa, giữ baseline_reference và calibration riêng. audit_opt03.py restore/collect kiểm raw bằng chứng. Không chạy lại prepare vào checkpoint đã khóa. Chi tiết lệnh và giới hạn tại PLAN§8.21. Runner OPT-01 dùng harness/testbench cũ đã đóng băng, không dùng lịch OPT-03.
+<!-- OPT03_REPORT_END:scripts/README.md -->

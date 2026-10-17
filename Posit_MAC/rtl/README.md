@@ -86,8 +86,8 @@ Thư mục này chứa toàn bộ mã nguồn thiết kế phần cứng SystemV
 | `sbm.sv` | Shift-Based Multiplier: Shifter $1.f_Y \gg S$ và Accumulator tích lũy duy trì bit `sticky_acc`. | Tầng Shifter/Accum | Tuần 9 |
 | `mul_norm.sv` | Chuẩn hóa tích ($\text{acc} \ge 2.0$), dịch phải 1 bit và tăng scale factor: $sf = sf + 1$. | Tầng MN (1 chu kỳ) | Tuần 9 |
 | `posit_add.sv` | Bộ cộng/trừ 2 số Posit unpacked: A1 (Align kẹp cứng $\le 29$), A2 (Add/Sub), A3 (LZC Normalize). | Tầng A1–A3 (3 chu kỳ) | Tuần 10 |
-| `round_unpacked.sv` | Làm tròn trong miền unpacked cho MAC v1 (tiết kiệm 2 chu kỳ đóng gói/giải mã, bit-exact với SoftPosit non-fused). | Tầng R (1 chu kỳ) | Tuần 11 |
-| `posit_mac_top.sv` | Module đỉnh tích hợp toàn bộ lõi IP Posit MAC, FSM điều khiển luồng, Operand C FIFO, nhánh bypass và Skid Buffer. | Baseline một giao dịch; H=q+10/TRUNC hoặc q+11/RNE mục tiêu | Tuần 11 |
+| `round_unpacked_comb.sv` | Reference tổ hợp parse(pack(u)); top NF hiện dùng product packer P1/P2 rồi parser tổ hợp để tách timing. | Product path3 bank, xem OPT-03 | Đã kiểm17/10 |
+| `posit_mac_nf.sv` / `mac_nf_wrapper.sv` | Top cấu trúc và wrapper một giao dịch, giữ C_eff/context; chưa FIFO/bypass rút ngắn. | RNE: H=q+13, valid=q+12, II_min=q+14 | OPT-03 đã kiểm |
 
 ---
 
@@ -234,7 +234,7 @@ posit_add_comb và pipeline posit_add dùng chung posit_add_align/arith/normaliz
 
 ## 14. MAC NF — nghiệm thu Gate3 milestone, 13/10/2026
 
-posit_mac_nf/mac_nf_wrapper dùng mul_prepack_norm_comb bảo toàn carry và round_unpacked_comb=parse(pack(u)) tổ hợp; legacy L1/RTL freeze giữ nguyên. Approximate NF mới có thể khác legacy; cùng P_hat theo SPEC v1.11§11.10. Gate3 native32/3 10.000.000 completed, ModelSim28.512 completed/288 reset-aborted,0 mismatch; strict lint4/4,72 control bins và256 regime–dấu main. Canonical results/week11/summary.json; baseline_nf_manifest.json/source+binary+fixture hashes, raw coverage/unhit giữ nguyên. L1 fused full-sum pilot100k/Python independent0 mismatch; chưa fused RTL/window/flags/acc_mode, final AC02/AC04/per-n matrix hoặc accuracy/PPA. Commands PLAN8.6; rebuild binaries/fixtures trước audit sau cleanup.
+**Checkpoint W11 lịch sử (trước OPT-03):** posit_mac_nf/mac_nf_wrapper dùng mul_prepack_norm_comb bảo toàn carry và round_unpacked_comb=parse(pack(u)) tổ hợp; legacy L1/RTL freeze giữ nguyên. Approximate NF mới có thể khác legacy; cùng P_hat theo SPEC v1.11§11.10. Gate3 native32/3 10.000.000 completed, ModelSim28.512 completed/288 reset-aborted,0 mismatch; strict lint4/4,72 control bins và256 regime–dấu main. Canonical results/week11/summary.json; baseline_nf_manifest.json/source+binary+fixture hashes, raw coverage/unhit giữ nguyên. L1 fused full-sum pilot100k/Python independent0 mismatch; chưa fused RTL/window/flags/acc_mode, final AC02/AC04/per-n matrix hoặc accuracy/PPA. Commands PLAN8.6; rebuild binaries/fixtures trước audit sau cleanup.
 
 ## 15. Cập nhật phạm vi nghiệm thu — 14/10/2026
 
@@ -283,3 +283,8 @@ Hai module parser tổ hợp/pipeline dùng XOR tail với FRB rồi một LOD M
 `candidates/multiplier/mul_prepack_norm_comb.sv` là ứng viên tạo fraction bằng nối bit hằng cho bốn trường hợp exact/approx và carry/no-carry, thay runtime integer/chỉ số đích động. Chỉ dùng MUX chọn ứng viên và cập nhật SF theo carry; I/O/parameter và mọi bank/handshake giữ nguyên. FLOOR bỏ hai padding vật lý, giữ bit giá trị dưới hidden khi carry. EXACT_EN0 không sinh cone exact, chỉ cfg_mode1 thuộc miền hợp lệ. Các kiểm width override không bổ sung profile precision mới; main NF vẫn F_IN=2F+1. Bản trước/sau, chức năng và STA tại results/prepack_refactor_20261016 và PLAN§8.20; các bước OPT-02/03 chưa thực hiện.
 
 Ứng viên prepack đã qua1.592.064 kiểm leaf, NF main10M và ModelSim82.944 corner0 mismatch;12 P&R cho median MHz giảm0,31% A35T và2,45% A100T, FF không đổi. Vì chưa có lợi ích timing nhất quán, `multiplier/mul_prepack_norm_comb.sv` giữ nguyên baseline; candidate không nằm trong production.f. Không thay pipeline hoặc làm OPT-02/03.
+
+
+## NF product pipeline OPT-03 — 17/10/2026
+
+Top NF dùng normalize+product packer RNE P1 → P2 → parser tổ hợp/product bank → adder3 → final packer2. Giữ bit-exact R(P_hat), flags và C_eff; product numerical sticky=0. L_valid=q+12, handshake=q+13, II_min=q+14 (thêm2 chu kỳ), q=max(1,t thực tế). Reset/stall/commit giữ một transaction; không thêm FIFO. Fused và standalone multiplier không đổi. Production prepack normalization giữ bản gốc; không ghép candidate OPT-01. Kết quả và hạn chế: PLAN§8.21, SPEC§11.16, results/opt03_20261017/summary.json.

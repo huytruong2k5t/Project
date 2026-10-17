@@ -975,7 +975,7 @@ L1 core frozen giữ nguyên; thêm gen_week10_adder.cpp và oracle tb/week10_ad
 
 ## 29. MAC NF prepack-preserving và L1 F pilot — 13/10/2026
 
-posit_mac_nf/mac_nf_wrapper dùng mul_prepack_norm_comb bảo toàn carry và round_unpacked_comb=parse(pack(u)) tổ hợp; legacy L1/RTL freeze giữ nguyên. Approximate NF mới có thể khác legacy; cùng P_hat theo SPEC v1.11§11.10. Gate3 native32/3 10.000.000 completed, ModelSim28.512 completed/288 reset-aborted,0 mismatch; strict lint4/4,72 control bins và256 regime–dấu main. Canonical results/week11/summary.json; baseline_nf_manifest.json/source+binary+fixture hashes, raw coverage/unhit giữ nguyên. L1 fused full-sum pilot100k/Python independent0 mismatch; chưa fused RTL/window/flags/acc_mode, final AC02/AC04/per-n matrix hoặc accuracy/PPA. Commands PLAN8.6; rebuild binaries/fixtures trước audit sau cleanup.
+**Checkpoint W11 lịch sử (trước OPT-03):** posit_mac_nf/mac_nf_wrapper dùng mul_prepack_norm_comb bảo toàn carry và round_unpacked_comb=parse(pack(u)) tổ hợp; legacy L1/RTL freeze giữ nguyên. Approximate NF mới có thể khác legacy; cùng P_hat theo SPEC v1.11§11.10. Gate3 native32/3 10.000.000 completed, ModelSim28.512 completed/288 reset-aborted,0 mismatch; strict lint4/4,72 control bins và256 regime–dấu main. Canonical results/week11/summary.json; baseline_nf_manifest.json/source+binary+fixture hashes, raw coverage/unhit giữ nguyên. L1 fused full-sum pilot100k/Python independent0 mismatch; chưa fused RTL/window/flags/acc_mode, final AC02/AC04/per-n matrix hoặc accuracy/PPA. Commands PLAN8.6; rebuild binaries/fixtures trước audit sau cleanup.
 
 ## 30. Cập nhật phạm vi nghiệm thu — 14/10/2026
 
@@ -1004,3 +1004,8 @@ W12-F-1 đã chốt trong SPECv1.16§5.12/11.14 và PLAN8.14: l1/include/posit_f
 F_W/F_ref0 khác trên suite không biến P_hat xấp xỉ thành A×B exact. Final accuracy ứng dụng,RTL F/reset/stall/protocol,ma trận final vàpairedPPA còn mở. Full NF post-route Quartus13/CycloneIV3926LUT4/823FF,median45,07MHz trên3seed,chưa setup100MHz;đường chínhnorm→pack/parse. Đề xuất pipeline/LUT có report thật,chưa áp vào baseline. NF EXACT_EN1 không so trực tiếp với futureF EXACT_EN0 trước khi comparator NF matched được kiểm/freeze.
 
 Lệnh tái chạy và kế hoạch tuần13 tại PLAN8.14–8.15. Đọc summary.json để biết trạng thái backup;receipt backup.json chỉ tạo sau push thành công. Không tạo Markdown mới;bin/corpus/db có thể tái sinh,giữ report gọn. Các mục có ngày trước đây nói F chỉ pilot/timing chưa đo là checkpoint lịch sử,không ghi đè kết quả cũ.
+
+
+## NF product pipeline OPT-03 — 17/10/2026
+
+Top NF dùng normalize+product packer RNE P1 → P2 → parser tổ hợp/product bank → adder3 → final packer2. Giữ bit-exact R(P_hat), flags và C_eff; product numerical sticky=0. L_valid=q+12, handshake=q+13, II_min=q+14 (thêm2 chu kỳ), q=max(1,t thực tế). Reset/stall/commit giữ một transaction; không thêm FIFO. Fused và standalone multiplier không đổi. Production prepack normalization giữ bản gốc; không ghép candidate OPT-01. Kết quả và hạn chế: PLAN§8.21, SPEC§11.16, results/opt03_20261017/summary.json.

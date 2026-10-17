@@ -19,7 +19,9 @@ for format in '8 0' '16 1' '32 2' '32 3'; do
     mkdir -p "$run/src/l1" "$run/tmp"
     cp "$out"/source/baseline/* "$run/src/"
     cp "$out"/source/candidate/mul_prepack_norm_comb.sv "$run/src/"
-    cp tb/nf_coverage_harness.cpp tb/nf_coverage_corpus.hpp tb/nf_coverage.vlt tb/week11_model.hpp \
+    # Replay the original pipeline schedule/probes, not the live OPT-03 harness.
+    cp results/prepack_refactor_20261016/nf/${nb}_${es}/src/nf_coverage_harness.cpp "$run/src/"
+    cp tb/nf_coverage_corpus.hpp tb/nf_coverage.vlt tb/week11_model.hpp \
        tb/week10_add_reference.hpp tb/week9_exact_reference.hpp l0/softposit_api.h l0/libsoftposit.so "$run/src/"
     cp l1/include/*.hpp "$run/src/l1/"
     (

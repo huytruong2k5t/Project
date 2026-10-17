@@ -110,3 +110,10 @@ results/parser_xor_20261016/** -text
 scripts/*prepack* -text
 tb/*prepack*.sv -text
 results/prepack_refactor_20261016/** -text
+
+# OPT-03 measured pipeline sources, drivers and compact proof.
+scripts/*opt03* -text
+tb/*opt03* -text
+tb/tb_week11_mac.sv -text
+tb/week11_mac_harness.cpp -text
+results/opt03_20261017/** -text

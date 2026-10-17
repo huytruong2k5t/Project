@@ -126,6 +126,8 @@ So NF/F cùng P_hat, precision/OPS/n, corpus seed đã khóa và oracle độc l
 
 ## 6. Build, source list và tái lập
 
+**Thiết bị khảo sát tiếp theo:** chỉ A35T `xc7a35tcpg236-1` cho mọi phép đo mới, baseline/candidate và paired NF/F. Không chạy A100T; số đo A100T trước17/10 giữ làm lịch sử trong Optimization. Khi runner cũ hỗ trợ nhiều part, chọn tường minh A35T; không sửa snapshot/hash cũ để bỏ bằng chứng.
+
 Chạy từ gốc Posit_MAC; WSL dùng bash --noprofile --norc, tmp/build/log trong dự án. Không cài runtime toàn hệ thống hoặc sửa tool/license để tái lập. Đọc hướng dẫn chạy trước khi chọn runner vì nhiều runner từ chối output cũ; không chạy prepare/refreeze vào snapshot đã khóa.
 
 | Mục đích | Build / nguồn / runner hiện có |

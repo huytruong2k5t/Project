@@ -25,7 +25,7 @@ MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng ch�
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder, NF tuần11 và F profile chính đã kiểm; còn ma trận final và coverage cuối NF/F |
 | PPA, mở rộng và hồ sơ — Gate4 | processing | NF CycloneIV45,07MHz là lịch sử; F A35T100MHz R2R đạt. Còn đo matched NF/F, accuracy và hồ sơ cuối; số đo riêng xem Optimization |
 
-**Trạng thái tối ưu:** primitive/parser/OPS và OPT-03 có quyết định tại Optimization; OPT-02b còn chờ xác nhận để promote. SAC và các bước product parse/sticky/A1–A2 mới là đề xuất tại mục3.3. Giữ fraction12/W32, phép đo mới dùng Xilinx; không nới precision/constraint. Hạn chính29/11, đệm30/11–04/12, hoàn thành trước05/12/2026.
+**Trạng thái tối ưu:** primitive/parser/OPS và OPT-03 có quyết định tại Optimization; OPT-02b còn chờ xác nhận để promote. SAC và các bước product parse/sticky/A1–A2 mới là đề xuất tại mục3.3. Giữ fraction12/W32, phép đo mới chỉ A35T xc7a35tcpg236-1; không nới precision/constraint. Hạn chính29/11, đệm30/11–04/12, hoàn thành trước05/12/2026.
 
 
 ## 3. Tiến độ theo tuần
@@ -115,11 +115,13 @@ Tuần14 chỉ được đánh dấu `✅` khi TC-W14-01..05 và TC-W14-08 đề
 
 ## 3.3. Tối ưu còn mở — kế hoạch kỹ thuật ở Optimization
 
+**Phạm vi thiết bị:** chỉ A35T xc7a35tcpg236-1 cho các lần kiểm chứng timing/synthesis/P&R tiếp theo, gồm paired NF/F tuần15. Không chạy A100T; giữ số đo A100T cũ như lịch sử.
+
 Đây là hàng đợi để sinh viên xem xét, chưa có lệnh chạy mới. Ưu tiên hiện hành theo Optimization mục8.25; giữ latency/II và tách candidate khỏi production. Các bước có điều kiện không tự thành hạng mục bắt buộc khi STA không còn chỉ ra nhu cầu.
 
 | ID / nhóm | Việc chưa hoàn thiện | Trạng thái | Điều kiện / tham chiếu |
 | --- | --- | --- | --- |
-| OPT-00 / OPT-02b | Khóa mốc tham chiếu và xác nhận candidate trước promote | processing | Đã có bit-exact và Default A35T; còn matched đa chiến lược/cross-part theo phạm vi đã chốt, không đếm Default lặp là seed độc lập |
+| OPT-00 / OPT-02b | Khóa mốc tham chiếu và xác nhận candidate trước promote | processing | Đã có bit-exact và Default A35T; còn matched đa chiến lược chỉ trên A35T xc7a35tcpg236-1, không đếm Default lặp là seed độc lập |
 | OPT-05 | SAC-A → SAC-B → SAC-C, so zero/one-hot và nối exhausted vào controller | không | Giữ từng term/flags/state/error/token, Δlatency=ΔII=0; Optimization8.25.3 |
 | OPT-09 | Product P2 lưu magnitude dương sau RNE/clamp, parse trực tiếp | không | Khóa bundle và so parse(pack(u)); không biến NF thành fused; Optimization8.25.4 |
 | OPT-10A | Prefix OR/lookup sticky trong P1 | không | Payload59 ở32/3; giữ G/R/S/specials, kiểm module dùng chung; Optimization8.25.5 |
@@ -294,6 +296,7 @@ Kế hoạch tối ưu là luồng refactor riêng trước freeze mới; quy t�
 | 3 | Thử OPT-02b cho A1 align | Đã kiểm bit-exact và đo candidate; chưa promote. Xem Optimization8.23 | ✅ |
 | 4 | Thống kê STA tất cả bank NF OPT-02b | Đã thống kê đủ bank của candidate; bảng setup/hold và phạm vi OOC tại Optimization8.24 | ✅ |
 | 5 | Sắp xếp tài liệu kiến trúc và tối ưu | PLAN giữ build/thuật toán baseline/NF/F; chuyển tối ưu và bằng chứng sang doc/Optimization.md, gỡ checklist hoàn thành, gom việc mở vào mục3.1–3.4. Không đổi RTL hoặc chạy lại kiểm chứng | ✅ |
+| 6 | Thu hẹp thiết bị khảo sát | Các phép đo tiếp theo chỉ A35T xc7a35tcpg236-1; bỏ yêu cầu A100T/cross-part, giữ dữ liệu lịch sử. Chỉ cập nhật tài liệu, chưa chạy kiểm chứng | ✅ |
 <!-- OPT03_REPORT_END:docs/TIEN_DO_DO_AN.md -->
 
 

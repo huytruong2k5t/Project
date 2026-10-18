@@ -30,6 +30,33 @@ def validate(manifest,root=R):
     assert maps==tsv
     for name in names:assert maps['rtl/'+Path(name).name]==name
     for name in (root/'scripts/week13_sources.txt').read_text().splitlines():assert name in names
+    if manifest.get('parent_release')=='POSIT_MAC_RTL_20261018_OPT02C':
+        evidence=manifest['evidence']
+        study=root/evidence['study']
+        for name,key in (('summary.json','summary_sha256'),
+                         ('qualification.json','qualification_sha256'),
+                         ('reference_freeze.json','reference_freeze_sha256')):
+            assert sha(study/name)==evidence[key],f'Release evidence changed: {name}'
+        qualified=json.loads((study/'qualification.json').read_text())
+        assert qualified['summary_sha256']==evidence['summary_sha256']
+        for name,digest in qualified['recommendation']['source_sha256'].items():
+            assert sha(root/name)==digest,f'Production differs from tested OPT12: {name}'
+        variants=json.loads((study/'variants.json').read_text())
+        assert manifest['rtl_sha256']==variants['variants']['negate']
+        recipe=json.loads((root/'syn/opt12_120mhz_release.json').read_text())
+        assert recipe['release_id']==manifest['release_id']
+        assert recipe['part']=='xc7a35tcpg236-1' and recipe['strategy']=='Explore'
+        assert recipe['clock_ns']==8.3
+        assert [recipe[key] for key in ('input_min_ns','input_max_ns','output_min_ns','output_max_ns')]==[2.5,2.5,0,0.5]
+        assert '-period 8.300' in (root/recipe['clock_xdc']).read_text()
+        summary=json.loads((study/'summary.json').read_text())
+        assert {row['top'] for row in recipe['qualified_runs']}=={'nf','f'}
+        for row in recipe['qualified_runs']:
+            assert row in summary['ppa'] and row['full_timing_pass']
+            assert row['variant']=='negate' and row['strategy']=='Explore' and row['clock_ns']==8.3
+        for top in ('nf','f'):
+            run=summary['stress']['negate'][top]
+            assert run['completed']==10000000 and run['mismatches']==0
     return True
 
 

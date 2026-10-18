@@ -1,0 +1,16 @@
+{
+  "status": "PROMOTED_LOCKED_FOR_W14",
+  "release_id": "POSIT_MAC_RTL_20261018_OPT12_120",
+  "release_manifest_sha256": "3df1ce053f92439deef36eb17f26a2fe7140b91a95ed484a519471754ddfa4ec",
+  "parent_manifest_sha256": "b2b4b3957ca6360f1ec5fdff3f257d2d246e57f2a4001de1c496e8dd70a40cf4",
+  "summary_sha256": "89c42539e10f93365a591cf3f800ea39c21114234f4874e9495e22d29ef2c303",
+  "selected_variant": "negate",
+  "strategy": "Explore",
+  "clock_ns": 8.3,
+  "changed_rtl": [
+    "rtl/parser/posit_parser.sv",
+    "rtl/parser/posit_parser_comb.sv"
+  ],
+  "w14_execution": "NOT_STARTED",
+  "new_simulation": "NONE: exact tested bytes promoted"
+}

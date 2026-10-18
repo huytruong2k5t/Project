@@ -23,8 +23,6 @@ module posit_parser_comb #(
 );
     localparam int CNT_W=$clog2(NB-1);
     localparam int REG_W=CNT_W+1;
-    typedef logic [CNT_W-1:0] count_value_t;
-    localparam logic [CNT_W-1:0] MAX_COUNT = count_value_t'(NB-2);
     if(NB<4 || NB>32 || ES<0 || ES>NB-4 || FRAC_MAX!=NB-3-ES || SF_W<REG_W+ES)
         begin : g_invalid
             initial $fatal(1,"posit_parser_comb: unsupported parameters");
@@ -33,33 +31,35 @@ module posit_parser_comb #(
     wire [NB-1:0] magnitude;
     wire r;
     wire [NB-3:0] terminator_bits;
-    wire [CNT_W-1:0] terminator_count;
     wire [CNT_W-1:0] cnt;
-    wire terminator_valid;
+    wire unused_terminator_valid;
+    wire [NB-2:0] detector_in;
     wire signed [REG_W-1:0] regime;
     wire [NB-4:0] payload;
     wire signed [SF_W-1:0] finite_sf;
     assign s=p[NB-1];
     assign is_zero=(p=={NB{1'b0}});
     assign is_nar=(p=={1'b1,{(NB-1){1'b0}}});
-    assign magnitude=s?(~p+{{(NB-1){1'b0}},1'b1}):p;
+    assign magnitude = (p ^ {NB{s}})
+                     + {{(NB-1){1'b0}}, s};
     assign r=magnitude[NB-2];
-    // Exclude the first regime bit; XOR maps either terminator polarity to 1.
+    // Adjacent XOR preserves the first transition for either regime polarity.
     // Keep the original magnitude on the exponent/fraction payload path.
-    assign terminator_bits = magnitude[NB-3:0] ^ {(NB-2){r}};
+    assign terminator_bits = magnitude[NB-3:0] ^ magnitude[NB-2:1];
+
+    // Sentinel supplies the no-terminator count NB-2.
+    assign detector_in = {terminator_bits, 1'b1};
 
     lod_lzd_core #(
-        .N    (NB - 2),
+        .N    (NB - 1),
         .MODE (0),
         .S    (CNT_W)
     ) u_regime_detector (
-        .in  (terminator_bits),
-        .K   (terminator_count),
-        .vld (terminator_valid)
+        .in  (detector_in),
+        .K   (cnt),
+        .vld (unused_terminator_valid)
     );
 
-    // The detector returns K=0 on invalid; parser no-terminator means NB-2.
-    assign cnt = terminator_valid ? terminator_count : MAX_COUNT;
     // r=1: k=cnt; r=0: k=~{0,cnt}=-(cnt+1).
     assign regime=~({1'b0,cnt}^{REG_W{r}});
     // Drop sign, FRB and one more bit BEFORE the variable shift.

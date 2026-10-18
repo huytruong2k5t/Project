@@ -2,9 +2,9 @@
 
 **Cập nhật:** 18/10/2026 — tài liệu kiến trúc, mapping và build; không còn là nhật ký tối ưu hoặc lịch nghiệm thu theo tuần.
 
-RTL production đã khóa tại `rtl/production_freeze.json` (release `POSIT_MAC_RTL_20261018_OPT02C`). Chạy `python scripts/audit_rtl_release.py` trước tuần14. Manifest38 module là đầu vào build; L1/oracle và hợp đồng số học giữ nguyên. Bằng chứng tối ưu/promote tại Optimization8.30,không ghi lại vào PLAN.
+RTL production đã khóa tại `rtl/production_freeze.json` (release `POSIT_MAC_RTL_20261018_OPT12_120`). Chạy `python scripts/audit_rtl_release.py --self-test` trước tuần14. Manifest38 module giữ nguyên; L1/oracle không đổi. Optimization8.31.8 lưu khóa mới.
 
-Workflow18/10: candidate OPT-12 negate đã kiểm10M NF+10M F/0 mismatch và STA120,48MHz với Explore cả hai top (Optimization8.31.7); chờ sinh viên chọn, chưa promote/lock mới hoặc chạy W14. Lock hiện có vẫn là reference100MHz; L1/oracle giữ nguyên.
+Workflow18/10: đã promote OPT-12 negate theo lựa chọn của sinh viên; A35T Explore8,3ns≈120,48MHz NF/F setup/hold đạt. Recipe syn/opt12_120mhz_release.json khóa I/O2,5ns input,0/0,5ns output. 10M NF+10M F/0 mismatch và ModelSim là bằng chứng refactor; W14 final per-n/AC04 chưa chạy. OPT02C100MHz giữ lịch sử riêng.
 
 - [SPEC hiện hành](../SPEC_Posit_MAC_IP.md): nguồn quy định chính về số học, width, flags và giao dịch.
 - [Optimization.md](../../doc/Optimization.md): phương án tối ưu RTL và mọi báo cáo kiểm chứng/synthesis/STA đã chuyển từ PLAN cũ.

@@ -2,25 +2,23 @@
 
 ## Release production đã khóa — 18/10/2026
 
-**Workflow cập nhật18/10:** candidate OPT-12 negate đã qua10M NF+10M F/0 mismatch và
-post-route120,48MHz với Explore cho cả NF/F (Optimization8.31.7). Chờ sinh viên chọn,
-chưa promote/lock mới hoặc chạy W14; release100MHz bên dưới giữ làm reference có hash.
+**Production hiện hành18/10:** đã chọn và promote OPT-12 negate, khóa release
+`POSIT_MAC_RTL_20261018_OPT12_120` (`LOCKED_FOR_W14`),38 module trong `rtl/production.f`.
+A35T `xc7a35tcpg236-1`, Explore,8,3ns≈120,48MHz: NF WNS/WHS +0,227/+0,053ns;
+F +0,093/+0,040ns. Input min=max2,5ns, output min0/max0,5ns, uncertainty0,1ns giữ nguyên.
+Gói OPT-02c/05/09/10A + OPT-12; không đổi I/O, precision, latency hoặc L1/oracle.
+
+Trước build W14: `python scripts/audit_rtl_release.py --self-test`.
+Recipe120MHz: `syn/opt12_120mhz_release.json`, clock `syn/constraints/a35t_clock_120mhz.xdc`;
+XDC100MHz vẫn giữ cho replay lịch sử, không phải clock nghiệm thu120MHz.
+870 profile lint parser, equivalence/decoder,10M NF+10M F đều0 mismatch; ModelSim NF/F đạt.
+Hai file production là đúng byte đã kiểm, không chạy lại regression lớn khi promote.
+Đây là OOC theo profile công bố, chưa board signoff, final per-n/AC04 W14 hoặc paired NF/F PPA.
+Old lock OPT02C giữ trong `results/opt120_20261018/reference_freeze.json` và `reference_source.zip`.
+Chi tiết Optimization8.31.8; trial8.31.7 và các trạng thái chưa promote trước đó là lịch sử.
+Producer lịch sử không dùng để refreeze/ghi đè release mới; W14 chưa thực thi.
 
 
-`POSIT_MAC_RTL_20261018_OPT02C` (`LOCKED_FOR_W14`),38 module trong `rtl/production.f`.
-Gói hiện hành: OPT-02c + OPT-05 abc_tree + OPT-09 + OPT-10A; không đổi hợp đồng số học/latency.
-NF thực hiện R(R(P_hat)+C_eff); F thực hiện R(P_hat+C_eff), với phạm vi/profile ở SPECv1.20.
-Trước khi build/chạy W14, từ gốc Posit_MAC:
-
-```powershell
-python scripts/audit_rtl_release.py --self-test
-```
-
-37 profile strict lint và smoke ModelSim NF/F từ production đã đạt; NF acceptance10M/0 mismatch.
-F10M được kế thừa theo hash nguồn của8.28 và có smoke mới; chưa chạy final per-n W14/Gate4.
-Xem SPEC§11.17, `rtl/production_freeze.json` và Optimization§8.30.
-Các câu “chưa promote” ở hồ sơ có ngày trước18/10 là trạng thái lịch sử.
-Producer/audit kiểm hash checkpoint cũ phải dùng snapshot cũ, không sửa hash lịch sử để nhận PASS.
 
 
 **Tài liệu hiện hành:** [PLAN — kiến trúc/build L1/NF/F](../l1/PLAN.md), [Optimization — tối ưu và kiểm chứng/STA](../../doc/Optimization.md), [tiến độ — việc còn mở](../docs/TIEN_DO_DO_AN.md).

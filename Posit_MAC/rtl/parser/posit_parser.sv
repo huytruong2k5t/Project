@@ -38,8 +38,6 @@ module posit_parser #(
 
     localparam int CNT_W = $clog2(NB - 1);
     localparam int REG_W = CNT_W + 1;
-    typedef logic [CNT_W-1:0] count_value_t;
-    localparam logic [CNT_W-1:0] MAX_COUNT = count_value_t'(NB-2);
 
     // Reset synchronizer: no combinational logic before the first FF.
     (* ASYNC_REG = "TRUE" *) logic meta_sync1;
@@ -48,12 +46,11 @@ module posit_parser #(
     wire reset_b_sync_clk;
 
     wire [NB-1:0] magnitude;
-    wire [NB-3:0] regime_tail;
     wire [NB-4:0] payload_seed;
     wire first_regime_bit;
     wire [NB-3:0] terminator_bits;
-    wire [CNT_W-1:0] terminator_count;
-    wire terminator_valid;
+    wire unused_terminator_valid;
+    wire [NB-2:0] detector_in;
 
     logic [CNT_W-1:0] cnt_d;
     wire s_d;
@@ -115,33 +112,28 @@ module posit_parser #(
     assign is_zero_d = (p == {NB{1'b0}});
     assign is_nar_d  = (p == {1'b1, {(NB-1){1'b0}}});
 
-    assign magnitude = s_d
-                     ? (~p + {{(NB-1){1'b0}}, 1'b1})
-                     : p;
+    assign magnitude = (p ^ {NB{s_d}})
+                     + {{(NB-1){1'b0}}, s_d};
 
     assign first_regime_bit = magnitude[NB-2];
-    assign regime_tail      = magnitude[NB-3:0];
     assign payload_seed     = magnitude[NB-4:0];
 
-    // Search only AFTER the first regime bit: a 1 marks a terminator.
-    // r=0 keeps the tail; r=1 inverts it to turn the first zero into a one.
+    // Adjacent XOR marks transitions; the first one is the terminator.
     // The payload path uses the original magnitude, never terminator_bits.
-    assign terminator_bits = regime_tail ^ {(NB-2){first_regime_bit}};
+    assign terminator_bits = magnitude[NB-3:0] ^ magnitude[NB-2:1];
+
+    // Sentinel supplies the no-terminator count NB-2.
+    assign detector_in = {terminator_bits, 1'b1};
 
     lod_lzd_core #(
-        .N    (NB - 2),
+        .N    (NB - 1),
         .MODE (0),
         .S    (CNT_W)
     ) u_regime_detector (
-        .in  (terminator_bits),
-        .K   (terminator_count),
-        .vld (terminator_valid)
+        .in  (detector_in),
+        .K   (cnt_d),
+        .vld (unused_terminator_valid)
     );
-
-    always_comb begin
-        // No terminator: saturate to NB-2, not the detector's invalid K=0.
-        cnt_d = terminator_valid ? terminator_count : MAX_COUNT;
-    end
 
     // Empty slots may refill; occupied slots advance only if the next is ready.
     assign p2_ready = !p2_valid_q || out_ready;

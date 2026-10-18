@@ -1522,7 +1522,7 @@ NF10M/0 mismatch,ModelSim bốn format và active NF/F replay đạt;F100k smoke
 
 Kiểm khóa trước chạy tuần14: `python scripts/audit_rtl_release.py`. Nếu hash nguồn/model/constraint đổi hoặc test final phát hiện mismatch: dừng,lưu failure,review release mới; không sửa RTL/oracle để hợp thức hóa checkpoint. Defined-clock CDC và reset review trước khóa đã có;review RDC/interface chi tiết W14-01,final per-n,AC04,paired accuracy và Gate4 vẫn mở. Không chạy matrix tuần14 trong đợt promote này.
 
-**Workflow sau thử candidate18/10:** checkpoint OPT02C100MHz giữ hash làm reference; study `results/opt120_20261018` ở TRIAL_COMPLETE_PENDING_USER_SELECTION. OPT-12 negate đã qua10M NF+10M F/0 mismatch, ModelSim và post-route120,48MHz bằng Explore cho NF/F (Optimization8.31.7); các strategy FAIL vẫn công bố. Chưa promote hoặc lock mới; W14 chờ sinh viên chọn và khóa cuối. Hợp đồng số học/I/O/precision/latency của SPEC và L1 không đổi; audit reference PASS không thay nghiệm thu candidate.
+**Workflow khóa120MHz18/10:** theo lựa chọn sinh viên, đã promote đúng byte OPT-12 negate vào production và khóa `POSIT_MAC_RTL_20261018_OPT12_120`. A35T/Explore8,3ns≈120,48MHz, NF WNS/WHS+0,227/+0,053ns, F+0,093/+0,040ns; giữ I/O và uncertainty. Recipe `syn/opt12_120mhz_release.json`, clock120MHz riêng; XDC100MHz và lock OPT02C lưu làm lịch sử. 10M NF+10M F/0 mismatch, ModelSim và hash nguồn tại Optimization8.31.8. Hợp đồng số học/I/O/precision/latency không đổi. W14 final per-n/AC04, paired accuracy/PPA và board signoff chưa hoàn thành.
 
 ## Phụ lục A. Tóm tắt số liệu của [P] để đối chiếu
 

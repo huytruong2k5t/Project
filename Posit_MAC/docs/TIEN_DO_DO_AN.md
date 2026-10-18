@@ -25,7 +25,7 @@ MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng ch�
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder, NF tuần11 và F profile chính đã kiểm; còn ma trận final và coverage cuối NF/F |
 | PPA, mở rộng và hồ sơ — Gate4 | processing | NF CycloneIV45,07MHz là lịch sử; F A35T100MHz R2R đạt. Còn đo matched NF/F, accuracy và hồ sơ cuối; số đo riêng xem Optimization |
 
-**Trạng thái tối ưu:** đã mở lại candidate trên120MHz theo yêu cầu18/10; release POSIT_MAC_RTL_20261018_OPT02C giữ làm reference100MHz, chưa chốt bản cuối mới; OPT-02c/05/09/10A đã promote, xem mục3.3 và Optimization8.30. Giữ fraction12/W32, phép đo mới chỉ A35T xc7a35tcpg236-1; không nới precision/constraint. Hạn chính29/11, đệm30/11–04/12, hoàn thành trước05/12/2026.
+**Trạng thái tối ưu:** đã promote và khóa OPT-12 negate, release `POSIT_MAC_RTL_20261018_OPT12_120`, A35T Explore120,48MHz NF/F setup/hold đạt; OPT02C100MHz giữ lịch sử. Fraction12/W32, L1/oracle/latency và I/O budget giữ nguyên. Xem Optimization8.31.8. Tiếp theo W14-01→W14-12 theo kế hoạch; chưa chạy W14. Hạn chính29/11, đệm30/11–04/12, hoàn thành trước05/12/2026.
 
 
 ## 3. Tiến độ theo tuần
@@ -41,7 +41,6 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 5 | L1 bộ cộng | ✅ | Đã triển khai và kiểm chứng đạt |
 | 6 | L1 MAC — Gate1B | ✅ | MAC v0/v1, tích lũy và API đạt kiểm chứng Linux/Windows |
 | 7 | RTL giải mã và khối cơ sở | ✅ | LOD/LZD, hai shifter và parser tổ hợp/pipeline kiểm chứng đơn vị đạt |
-| 8 | RTL mã hóa và làm tròn | ✅ | Packer tổ hợp/pipeline và parser→packer đạt; PPA đơn vị đã khảo sát, sau tối ưu P2, benchmark đạt setup100MHz ở ba seed mỗi mode |
 | 9 | RTL bộ nhân lặp — Gate2 | ✅ | Multiplier đã nghiệm thu trên16 cấu hình,0 mismatch; lint và coverage đạt phạm vi tuần9. Baseline gốc giữ nghiên cứu phụ |
 | 10 | RTL adder và chốt so sánh NF/F | ✅ | Hoàn tất12/10: comb/pipeline, oracle/lượt lớn0 mismatch; matrix và corpus input đã chốt. R(P_hat)/carry đã xử lý ở tuần11; ma trận cuối/fused/PPA còn mở |
 | 11 | MAC non-fused — Gate3 | ✅ | Hoàn thành14/10: lượt mới10 triệu/0 mismatch,near52,55548%,coverage và ModelSim corner đạt; giữ F pilot,final/F RTL/PPA còn theo các tuần sau |
@@ -129,7 +128,7 @@ Mã W14-01..11 trùng đúng bước1..11 theo thứ tự thực hiện; W14-12 
 - **Được chạy main:** TC-W14-01/02/03,TC-W14-04a/b và TC-W14-05 đều PASS; release lock không đổi. Có RTL đạt timing hoặc10M qualification cũ chưa đủ để bỏ các bước này.
 - **Hoàn thành W14 để bàn giao W15:** W14-01..11 PASS theo từng TC. W14-11 phụ thuộc W14-01..10, không phụ thuộc W14-12 tùy lịch. Nếu thiếu comparator thì giữ W14/bàn giao PPA ở processing, không báo đã sẵn sàng paired PPA.
 - **AC02/toàn SPEC:** W14-12 được hoãn trong lịch tuần14, không được miễn nghĩa vụ AC02. Nếu chưa đạt phải công bố rõ trước nghiệm thu tổng/Gate4 và xử lý theo phạm vi đã được sinh viên chốt; không tự bỏ p16 hoặc giảm count.
-- **Hiện tại18/10:** RTL đã khóa và audit PASS; chưa triển khai/chạy các TC W14 mới, chưa có matrix_freeze hoặc final report W14; việc thực thi đang chờ candidate120+MHz được chọn/khóa. Trạng thái tuần14 giữ `không` cho phần thực thi; kế hoạch đã được sắp lại, chưa phải bằng chứng PASS.
+- **Hiện tại18/10:** release OPT12_120 đã khóa và audit PASS; có thể bắt đầu W14-01. Chưa triển khai/chạy TC W14, chưa có matrix_freeze hoặc final report; không dùng10M refactor thay final per-n/AC04.
 
 ## 3.3. Tối ưu RTL — checkpoint100MHz và candidate120+MHz
 
@@ -161,16 +160,16 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | Tinh chỉnh thêm biên `in_ready` | Giảm logic điều khiển parser-valid/ready tới `in_ready` | **Đóng (Bỏ qua)** | Default8.28: `u_a/p2_valid_q→in_ready`,6 tầng LUT,data5,829ns,slack+0,730ns; wrapper không có `fifo_count_q`. Dừng vì đạt budget100MHz hiện hành,không vì giả định đường chỉ có2 LUT |
 | Khảo sát đổi `FRAC_W` | Đổi độ rộng fraction khỏi mức `FW12` hiện hành | **Đóng cho RTL chính** | Giữ nguyên `FW12` cho RTL NF/F và báo cáo so sánh; bảng khảo sát 8–26 bit tại [Optimization §8.11](../../doc/Optimization.md#legacy-8-11) dùng làm phân tích lựa chọn tham số trong luận văn |
 
-Đợt promote100MHz đã hoàn tất; theo yêu cầu mới, mở study candidate riêng `results/opt120_20261018`. L1/oracle và nguồn reference giữ nguyên; chưa sửa production và chưa phát hành lock mới. Candidate phải kiểm lại trước promote/freeze; chưa chạy W14 hoặc tự rehash lock cũ.
+Đợt100MHz đã lưu lịch sử; study `results/opt120_20261018` đã thử, được sinh viên chọn và promote thành release OPT12_120 riêng. L1/oracle, constraints100MHz và qualification trial giữ nguyên; promotion.json/reference_freeze.json lưu chuyển tiếp. Chưa chạy W14.
 
-### 3.3.3. Candidate trên120MHz — mở lại18/10
+### 3.3.3. Khóa production120MHz — 18/10
 
 | Nhóm | Việc tiếp theo | Trạng thái |
 | --- | --- | --- |
 | Review OPT-12/13/14 | Đã đọc8.31,ghi điều kiện/sai phạm tại8.31.6; mở snapshot candidate bằng reference,không sửa RTL | ✅ |
 | OPT-12 parser | Candidate negate đã qua lint/decoder/cycle-equivalence,pilot và10M NF+10M F/0 mismatch; ModelSim125MHz đạt | ✅ |
 | Timing trên120MHz | Đã post-route8,3ns≈120,48MHz,NF/F có flow PASS; giữ cả hàng FAIL,đặc biệt F Default−0,009ns. Chi tiết8.31.7 | ✅ |
-| Chọn/promote/khóa lại | Chờ sinh viên chọn OPT-12 và flow; chưa promote/lock mới hoặc chạy W14. OPT-13/14 để riêng,chưa triển khai | processing |
+| Chọn/promote/khóa lại | Đã chọn negate/Explore8,3ns và promote đúng byte; khóa OPT12_120, audit PASS, giữ lock100MHz lịch sử. W14 chưa chạy; OPT-13/14 không triển khai | ✅ |
 
 ## 3.4. Công việc mở khác và giới hạn phạm vi (Ưu tiên giai đoạn cuối Tuần 14–16)
 
@@ -355,6 +354,8 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | 6 | Mở lại candidate trên120MHz | Giữ reference100MHz và mở study mới,review OPT-12/13/14 có điều kiện; chưa sửa RTL,chưa chạy STA mới hoặc W14. Chi tiết8.31.6 | ✅ |
 | 7 | Thử OPT-12 trên120MHz | Negate đạt10M NF+10M F/0 mismatch và ModelSim; post-route120,48MHz có flow NF/F PASS. Giảm154LUT NF Default so reference cùng clock; chờ chọn/promote/khóa,không chạy W14 | ✅ |
 
+| 8 | RTL mã hóa và làm tròn | ✅ | Packer tổ hợp/pipeline và parser→packer đạt; PPA đơn vị đã khảo sát, sau tối ưu P2, benchmark đạt setup100MHz ở ba seed mỗi mode |
+
 ### 4.18. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
@@ -362,3 +363,5 @@ Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1
 | STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
 | --- | --- | --- | --- |
 | … | Mốc lớn được thực hiện | Tóm tắt đã đạt gì và còn thiếu gì | ✅ / processing / không |
+
+| 8 | Khóa RTL120MHz trước W14 | Promote đúng hai parser OPT-12 negate; Explore8,3ns NF/F setup/hold đạt; audit và backup. Không chạy lại regression lớn hoặc W14 | ✅ |

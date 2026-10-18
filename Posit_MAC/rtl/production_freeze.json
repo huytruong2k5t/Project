@@ -1,7 +1,7 @@
 {
-  "release_id": "POSIT_MAC_RTL_20261018_OPT02C",
+  "release_id": "POSIT_MAC_RTL_20261018_OPT12_120",
   "status": "LOCKED_FOR_W14",
-  "selected_variant": "candidate",
+  "selected_variant": "OPT12 negate",
   "production_files": [
     "rtl/adder/posit_add.sv",
     "rtl/adder/posit_add_align.sv",
@@ -77,8 +77,8 @@
     "rtl/packer/posit_pack_finish.sv": "bf3a4dc17e3a9542cd5ef77215467aebb9fbc31c1c23b1f52124148d3b9dff5d",
     "rtl/packer/posit_pack_prepare.sv": "4ffc41003b87710a21451d231c2d4e10f2082495ab928934d05919fcdfaa853f",
     "rtl/packer/round_unpacked_comb.sv": "b1594ddbca6e4c6d1ef2daed7bf6b3b29d985b0923d02cd3a0d6a483d2700c06",
-    "rtl/parser/posit_parser.sv": "b648908974d703b099b517ccff67d940533ccc698fa5bce33bd609137f9c29d7",
-    "rtl/parser/posit_parser_comb.sv": "92e6c24e3bd7e044f99b0ac1dddf7f7d62b69b814e2938ec2fdad71dc0c1af9d",
+    "rtl/parser/posit_parser.sv": "56f2fc18624ab1525773c3d558c5cfb5c932ea4289ea09c35dd18365bde5cbf8",
+    "rtl/parser/posit_parser_comb.sv": "35d56fa5d8401f178f1360136dcd674369e8b9c44696e5c76eca675fe0b639f1",
     "rtl/mac_nf/posit_product_pack.sv": "dacba096a66cdff7ebd2598cbf56865ef8a8e0438f62506841530cf910c68ea2",
     "rtl/mac_nf/posit_magnitude_parse.sv": "6bb9ec90b37bdd0c989a8464d5b1ba6fb1dd44c339d3a801c68cde19fb4a686e",
     "rtl/posit_mac.vh": "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88"
@@ -120,7 +120,9 @@
     "scripts/rtl_paths.tsv": "21acf8a782a9bce2c2fc01510e1750f1077a836c456723646ab089af300905ba",
     "scripts/week13_sources.txt": "180ce002bbedadc65a523d3f830c4da176d8bc57a3861cd3b1be6130355c55ed",
     "syn/constraints/a35t_clock.xdc": "946d610e4c97fd1791fc3a14860d0aee4dcf7bee7f9b2e412ace28af5a5c8d5e",
-    "syn/constraints/a35t_benchmark_100mhz.xdc": "a99a9e0c6419d2f7a26db64a8cba9d53650f782ec4842d1cc4a978b2a148fa57"
+    "syn/constraints/a35t_benchmark_100mhz.xdc": "a99a9e0c6419d2f7a26db64a8cba9d53650f782ec4842d1cc4a978b2a148fa57",
+    "syn/constraints/a35t_clock_120mhz.xdc": "e1be4aa3824ef08f057574581da198361bb9ac1f309ffcfb52983a7002709d27",
+    "syn/opt12_120mhz_release.json": "502cf5851aaee3486da3f9a0482548d226a7867dd3eaa30fad92a452fe376386"
   },
   "profiles": {
     "NF": "8/0,16/1,32/2,32/3; FW=min(F,12),N_MAX8,EXACT_EN=OPS_EN1; runtime exact/approx",
@@ -132,29 +134,32 @@
     "q": "max(1,actual iterations)"
   },
   "qualification": {
-    "strict_active_lint_profiles": 37,
+    "parser_strict_lint_profiles": 870,
+    "parser_cycle_checks": 84272,
+    "parser_exhaustive_checks": 66480,
     "nf_main_completed": 10000000,
+    "f_main_completed": 10000000,
     "nf_modelsim_completed": 111456,
-    "nf_modelsim_reset_aborted": 288,
-    "active_nf_smoke_completed": 20000,
-    "active_nf_modelsim_completed": 27864,
-    "active_f_modelsim_completed": 8192,
-    "active_f_modelsim_reset_aborted": 24,
-    "f_smoke_completed": 100000,
-    "f_main_reused_completed": 10000000,
+    "f_modelsim_completed": 8192,
     "mismatches": 0,
-    "NF_PPA": "3 matched A35T-C2 strategies vs production OPT03; 100MHz setup/hold met",
-    "F_PPA": "1 A35T-C2 release check; not paired NF/F PPA"
+    "event_clock_ns": 8.0,
+    "NF_PPA": "A35T Explore 8.3ns: WNS +0.227ns, WHS +0.053ns",
+    "F_PPA": "A35T Explore 8.3ns: WNS +0.093ns, WHS +0.040ns"
   },
   "evidence": {
-    "study": "results/opt02c_20261018",
-    "summary_sha256": "bd8d373afe55f4c8651f165c7d9f60607f12e515e49b7972561b15446266bdc7",
-    "promotion_sha256": "ff57014f9ba956d72713b0e89d3190f14a246a3afd07f7c99de0879e513ecdf6"
+    "study": "results/opt120_20261018",
+    "summary_sha256": "89c42539e10f93365a591cf3f800ea39c21114234f4874e9495e22d29ef2c303",
+    "qualification_sha256": "628a900cef1fd5953d84db362ee45b54035baacdb578a599676cbcc956908ba3",
+    "reference_freeze_sha256": "b2b4b3957ca6360f1ec5fdff3f257d2d246e57f2a4001de1c496e8dd70a40cf4"
   },
   "limits": [
-    "Not W14 final per-n/AC04 acceptance or Gate4.",
-    "OOC budget; no higher-clock P&R or board frequency claim.",
-    "Defined-clock CDC/pre-freeze reset review done; detailed W14-00b RDC/interface review remains.",
-    "Do not change frozen RTL/L1/oracle/constraint to repair a failing W14 test; preserve failure and review a new release."
-  ]
+    "Not W14 final per-n/AC04 acceptance or Gate4; W14 not started.",
+    "120.48MHz OOC qualified only for declared profiles and Explore, not board or maximum Fmax.",
+    "NF EXACT_EN1 and F EXACT_EN0 are not a matched NF/F PPA pair.",
+    "Default F and RuntimeOptimized NF timing failures retained, not waived.",
+    "100MHz XDC retained for historical replay; use explicit 8.3ns release recipe for 120MHz.",
+    "Any frozen RTL/model/build change requires change review and a new qualified release."
+  ],
+  "parent_release": "POSIT_MAC_RTL_20261018_OPT02C",
+  "authorization": "User requested locking the tested 120MHz RTL on 18/10/2026"
 }

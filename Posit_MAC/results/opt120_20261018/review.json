@@ -1,5 +1,5 @@
 {
-  "status": "TRIAL_COMPLETE_PENDING_USER_SELECTION",
+  "status": "PROMOTED_LOCKED_FOR_W14",
   "authorization": "User reopened candidate exploration above120MHz; review8.31 before RTL changes",
   "reference_release_id": "POSIT_MAC_RTL_20261018_OPT02C",
   "reference_manifest_sha256": "b2b4b3957ca6360f1ec5fdff3f257d2d246e57f2a4001de1c496e8dd70a40cf4",
@@ -45,8 +45,8 @@
     "rtl/mac_nf/posit_magnitude_parse.sv": "6bb9ec90b37bdd0c989a8464d5b1ba6fb1dd44c339d3a801c68cde19fb4a686e",
     "rtl/posit_mac.vh": "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88"
   },
-  "candidate_state": "Recommended negate is tested; candidate review alias updated; production untouched",
-  "w14_execution": "ON_HOLD_PENDING_USER_SELECTION_PROMOTION_AND_NEW_FREEZE",
+  "candidate_state": "User selected negate; promoted exact tested bytes to production",
+  "w14_execution": "NOT_STARTED: release locked; next W14-01",
   "scope": "A35T only; bit-exact public I/O/parameters, precision and pipeline schedule unchanged",
   "first_experiment": "OPT12 adjacent-bit XOR + sentinel, separate conditional-negation A/B variant",
   "deferred": [
@@ -76,5 +76,8 @@
   "production_and_frozen_manifest": "Untouched; old lock denotes historical100MHz reference only",
   "recommended_variant": "negate",
   "source_sha256_scope": "Original reference source, not the tested candidate",
-  "qualification": "qualification.json"
+  "qualification": "qualification.json",
+  "trial_qualification_status": "TRIAL_COMPLETE_PENDING_USER_SELECTION (historical)",
+  "promotion": "promotion.json",
+  "active_release": "POSIT_MAC_RTL_20261018_OPT12_120"
 }

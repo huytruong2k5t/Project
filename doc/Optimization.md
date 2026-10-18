@@ -1784,3 +1784,45 @@ Các producer từ chối output root đã có; khi replay cần giữ nguyên b
 restore snapshot vào bản sao workspace trong phạm vi dự án. Không chạy prepare/finalize để ghi đè checkpoint.
 Evidence/nguồn/rpt/CSV/raw counters đóng gói gọn, kiểm CRC/SHA; binary/work/cache/wave không đưa vào Git.
 **Chờ sinh viên chọn candidate trước promote/khóa cuối; W14 vẫn chưa chạy.**
+
+
+#### 8.31.8. Promote và khóa RTL120MHz theo lựa chọn sinh viên — 18/10/2026
+
+**Đã khóa `POSIT_MAC_RTL_20261018_OPT12_120` (`LOCKED_FOR_W14`).** Sinh viên yêu cầu
+chốt ứng viên đạt120MHz trước tuần14. Production thay đúng hai file
+`rtl/parser/posit_parser.sv` và `posit_parser_comb.sv` bằng byte của candidate `negate`
+đã kiểm tại8.31.7. Không sửa RTL khác, parameter, I/O, precision, FF, latency hoặc L1/oracle.
+Header cũ của parser giữ nguyên để byte-identical với bằng chứng; provenance OPT-12 nằm ở manifest này.
+
+| Top/profile đo | Clock/strategy | Setup WNS | Hold WHS | LUT/FF |
+| --- | --- | --- | --- | --- |
+| NF32/3 FW12 EXACT_EN1 OPS_EN1 | 8,3ns / Explore | +0,227ns | +0,053ns | 2424/931 |
+| F32/3 FW12 W32 EXACT_EN0 OPS_EN1 | 8,3ns / Explore | +0,093ns | +0,040ns | 1362/815 |
+
+Tần số công bố120,48MHz là kết quả OOC post-route theo profile/flow trên, không phải
+maximumFmax hoặc board signoff. Các strategy FAIL tại8.31.7 vẫn giữ nguyên.
+NF EXACT_EN1/F EXACT_EN0 chưa tạo cặp PPA công bằng; W15 cần comparator theo plan.
+
+Recipe khóa: `syn/opt12_120mhz_release.json`; clock riêng
+`syn/constraints/a35t_clock_120mhz.xdc`. Input min=max2,5ns, output min0/max0,5ns,
+uncertainty setup/hold0,1ns; đọc XDC trước synthesis, không thêm exception.
+Hai XDC100MHz gốc giữ nguyên để replay lịch sử. Không dùng script100MHz mặc định để
+gọi đó là phép đo120MHz; replay dùng run_opt12_ppa với `-Period 8.300 -Strategy Explore`
+và `-Attempt` mới cho từng `-Top nf`/`-Top f`.
+
+Nguồn38 module+header được đối chiếu toàn bộ hash với snapshot negate đã chạy.
+Kế thừa đúng bằng chứng đã thực thi: parser870 profile lint,84.272 cyclechecks,
+66.480 exhaustive checks; NF10M và F10M đều0 mismatch; ModelSim NF111.456/F8.192
+completed, reset-abort288/24,0 mismatch tại8ns. Không chạy lại regression lớn trong phiên promote.
+Audit mới ràng buộc recipe/clock, summary/qualification, toàn bộ nguồn và L1/build;
+self-test từ chối4/4 mutation. Historical OPT12 audit vẫn kiểm11PPA và3unitvariant,
+không sửa summary hoặc qualification cũ để nhận PASS.
+
+Lock100MHz gốc được lưu nguyên byte ở `results/opt120_20261018/reference_freeze.json`,
+đồng thời vẫn nằm trong `reference_source.zip`. Lock hiện hành ở `rtl/production_freeze.json`;
+receipt chuyển tiếp `results/opt120_20261018/promotion.json` ghi hash hai lock và đúng2file thay đổi.
+
+**Bước kế tiếp: W14-01 rồi tuần tự kế hoạch W14.** Chưa chạy W14-01..12,
+chưa final per-n/AC04/AC02, chưa paired accuracy/PPA hoặc Gate4. Bất kỳ sửa RTL/L1/
+constraint đã khóa nào tiếp theo phải mở change review và release mới, giữ evidence FAIL.
+Các đoạn8.31.6/7 ghi chưa promote là trạng thái lịch sử, không còn là workflow hiện hành.

@@ -4,6 +4,7 @@ import csv
 import hashlib
 import json
 import re
+import zipfile
 from audit_rtl_release import validate
 
 R = Path(__file__).resolve().parents[1]
@@ -63,7 +64,18 @@ def ppa(path):
 
 
 def collect():
-    lock=json.loads(read(R/'rtl/production_freeze.json'));validate(lock)
+    active=json.loads(read(R/'rtl/production_freeze.json'));validate(active)
+    # The trial remains bound to its original reference after explicit promotion.
+    # Do not rewrite historical hashes or pretend the active parser is unchanged.
+    with zipfile.ZipFile(O/'reference_source.zip') as archive:
+        lock=json.loads(archive.read('rtl/production_freeze.json'))
+        for group in ('rtl_sha256','model_sha256','build_contract_sha256'):
+            for name,digest in lock[group].items():
+                assert hashlib.sha256(archive.read(name)).hexdigest()==digest,name
+    if active['release_id']!=lock['release_id']:
+        assert active['parent_release']==lock['release_id']
+        for name,digest in lock['model_sha256'].items():assert sha(R/name)==digest
+        for name,digest in lock['build_contract_sha256'].items():assert sha(R/name)==digest
     variants=json.loads(read(O/'variants.json'))
     for variant,hashes in variants['variants'].items():
         for name,digest in hashes.items():assert sha(O/'source'/variant/name)==digest
@@ -154,7 +166,7 @@ if __name__=='__main__':
         for relative,digest in qualification['recommendation']['source_sha256'].items():
             assert sha(O/'source/candidate'/relative)==digest
             assert sha(R/'rtl/candidates/parser/opt12'/Path(relative).name)==digest
-        print('Qualified trial remains unchanged; no summary rewritten; no RTL lock created')
+        print('Qualified historical trial remains unchanged; no summary or lock rewritten')
     else:
         (O/'summary.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print('OPT12 evidence checked:',len(result['units']),'unit variants,',len(result['ppa']),'PPA runs')

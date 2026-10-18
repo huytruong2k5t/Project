@@ -42,10 +42,11 @@ module iter_ctrl #(
     wire [FRAC_MAX-1:0] fx_next_exact;
     wire [FRAC_W-1:0] fx_approx,fx_next_approx;
     wire [S_W-1:0] scale_exact,scale_approx,unused_sa_exact,unused_sa_approx;
-    wire unused_valid_exact,unused_valid_approx,unused_exhausted_exact,unused_exhausted_approx,error_exact,error_approx;
+    wire unused_valid_exact,unused_valid_approx,exhausted_exact,exhausted_approx,error_exact,error_approx;
     wire [FRAC_MAX-1:0] fx_next;
     wire [S_W-1:0] next_scale;
     wire is_init,is_last;
+    wire exhausted_selected;
     wire [I_W-1:0] next_count;
     localparam logic [I_W-1:0] EXACT_LIMIT=iteration_value_t'(FRAC_MAX);
     assign run_ready=meta_sync2;
@@ -55,7 +56,8 @@ module iter_ctrl #(
     assign state_error=emitting_q && (mode_q ? error_approx : error_exact);
     assign is_init=(fx_q=='0) || (limit_q=='0);
     assign next_count=count_q+1'b1;
-    assign is_last=is_init || (fx_next=='0) || (next_count>=limit_q);
+    assign exhausted_selected = mode_q ? exhausted_approx : exhausted_exact;
+    assign is_last = is_init || exhausted_selected || (next_count >= limit_q);
     sac_step_comb #(
         .W_X(FRAC_MAX),
         .S_W(S_W)) u_exact (
@@ -65,7 +67,7 @@ module iter_ctrl #(
         .sa(unused_sa_exact),
         .scale_next(scale_exact),
         .fx_next(fx_next_exact),
-        .exhausted(unused_exhausted_exact),
+        .exhausted(exhausted_exact),
         .state_error(error_exact)
     );
     sac_step_comb #(
@@ -77,7 +79,7 @@ module iter_ctrl #(
         .sa(unused_sa_approx),
         .scale_next(scale_approx),
         .fx_next(fx_next_approx),
-        .exhausted(unused_exhausted_approx),
+        .exhausted(exhausted_approx),
         .state_error(error_approx)
     );
     always_ff @(posedge clk or negedge reset_n) begin
@@ -119,7 +121,7 @@ module iter_ctrl #(
                 init_only <= `CK2Q is_init;
                 scale <= `CK2Q (is_init ? {S_W{1'b0}} : next_scale);
                 iteration <= `CK2Q (is_init ? {I_W{1'b0}} : next_count);
-                approx_cut <= `CK2Q (is_init ? (fx_q!='0) : (is_last && fx_next!='0));
+                approx_cut <= `CK2Q (is_init ? (fx_q!='0) : (is_last && !exhausted_selected));
                 fx_q <= `CK2Q fx_next;
                 scale_q <= `CK2Q next_scale;
                 count_q <= `CK2Q next_count;

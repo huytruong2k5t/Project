@@ -33,8 +33,11 @@ module sac_step_comb #(
     wire [S_W-1:0] leading_count_extended;
     wire leading_valid;
     wire [W_X-1:0] shifted;
+    wire [W_X-1:0] pre_shifted;
     logic [S_W-1:0] step_amount;
     logic [S_W:0] scale_sum;
+    wire scale_out_of_range;
+    wire single_one;
 
     generate
         if (S_W == K_W) begin : g_count_same_width
@@ -61,20 +64,65 @@ module sac_step_comb #(
         end
     endgenerate
 
+    // Remove the leading one with wiring before the variable shift.
+    // LOD still observes the original fraction, not pre_shifted.
+    generate
+        if (W_X == 1) begin : g_pre_shift_single
+            assign pre_shifted = '0;
+        end else begin : g_pre_shift
+            assign pre_shifted = {fx[W_X-2:0], 1'b0};
+        end
+    endgenerate
+
+    localparam int ONE_LEVELS = $clog2(W_X);
+    localparam int ONE_PAD = 1 << ONE_LEVELS;
+    wire [ONE_PAD-1:0] zero_tree [ONE_LEVELS:0] /* verilator split_var */;
+    wire [ONE_PAD-1:0] one_tree [ONE_LEVELS:0] /* verilator split_var */;
+    generate
+        for (genvar j = 0; j < ONE_PAD; j++) begin : g_one_leaves
+            if (j < W_X) begin : g_used
+                assign zero_tree[0][j] = !fx[j];
+                assign one_tree[0][j] = fx[j];
+            end else begin : g_padding
+                assign zero_tree[0][j] = 1'b1;
+                assign one_tree[0][j] = 1'b0;
+            end
+        end
+        for (genvar l = 0; l < ONE_LEVELS; l++) begin : g_one_levels
+            for (genvar j = 0; j < (ONE_PAD >> (l + 1)); j++) begin : g_nodes
+                assign zero_tree[l+1][j] = zero_tree[l][2*j]
+                                        & zero_tree[l][2*j+1];
+                assign one_tree[l+1][j] = (one_tree[l][2*j] & zero_tree[l][2*j+1])
+                                       | (zero_tree[l][2*j] & one_tree[l][2*j+1]);
+            end
+        end
+    endgenerate
+    assign single_one = zero_tree[ONE_LEVELS][0] | one_tree[ONE_LEVELS][0];
+
+    generate
+        if ({1'b0, {S_W{1'b1}}} > MAX_SCALE) begin : g_scale_range
+            assign scale_out_of_range = ({1'b0, scale} > MAX_SCALE);
+        end else begin : g_scale_always_in_range
+            assign scale_out_of_range = 1'b0;
+        end
+    endgenerate
+
     dyn_left_shifter #(
         .N(W_X),
         .SHIFT_W(S_W)
     ) u_shift (
-        .in(fx),
-        .b(step_amount),
+        .in(pre_shifted),
+        .b(leading_count_extended),
         .out(shifted)
     );
 
     assign step_amount = leading_valid ? leading_count_extended + ONE_STEP : '0;
 
     always_comb begin
-        scale_sum = {1'b0, scale} + {1'b0, step_amount};
-        state_error = ({1'b0, scale} > MAX_SCALE) ||
+        scale_sum = {1'b0, scale}
+                  + {1'b0, leading_count_extended}
+                  + scale_limit_t'(1);
+        state_error = scale_out_of_range ||
                       (leading_valid && (scale_sum > MAX_SCALE));
         term_valid = leading_valid && !state_error;
         sa = '0;
@@ -86,7 +134,7 @@ module sac_step_comb #(
             sa = step_amount;
             scale_next = scale_sum[S_W-1:0];
             fx_next = shifted;
-            exhausted = (shifted == '0);
+            exhausted = single_one;
         end
     end
 endmodule

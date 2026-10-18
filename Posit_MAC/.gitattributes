@@ -148,3 +148,10 @@ results/opt05_20261017/** -text
 results/opt09_20261018/** -text
 results/opt10a_20261018/** -text
 results/optcombo_20261018/** -text
+
+# Locked pre-W14 release: preserve all fingerprinted build-contract bytes.
+rtl/production.f -text
+rtl/production_freeze.json -text
+scripts/*opt02c* -text
+scripts/*rtl_release* -text
+results/opt02c_20261018/** -text

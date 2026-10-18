@@ -34,3 +34,5 @@ rtl/packer/posit_pack_prepare.sv
 rtl/packer/round_unpacked_comb.sv
 rtl/parser/posit_parser.sv
 rtl/parser/posit_parser_comb.sv
+rtl/mac_nf/posit_product_pack.sv
+rtl/mac_nf/posit_magnitude_parse.sv

@@ -1,5 +1,23 @@
 # HƯỚNG DẪN BUILD VÀ KIỂM CHỨNG POSIT MAC — WSL / MODELSIM
 
+## Release production đã khóa — 18/10/2026
+
+`POSIT_MAC_RTL_20261018_OPT02C` (`LOCKED_FOR_W14`),38 module trong `rtl/production.f`.
+Gói hiện hành: OPT-02c + OPT-05 abc_tree + OPT-09 + OPT-10A; không đổi hợp đồng số học/latency.
+NF thực hiện R(R(P_hat)+C_eff); F thực hiện R(P_hat+C_eff), với phạm vi/profile ở SPECv1.20.
+Trước khi build/chạy W14, từ gốc Posit_MAC:
+
+```powershell
+python scripts/audit_rtl_release.py --self-test
+```
+
+37 profile strict lint và smoke ModelSim NF/F từ production đã đạt; NF acceptance10M/0 mismatch.
+F10M được kế thừa theo hash nguồn của8.28 và có smoke mới; chưa chạy final per-n W14/Gate4.
+Xem SPEC§11.17, `rtl/production_freeze.json` và Optimization§8.30.
+Các câu “chưa promote” ở hồ sơ có ngày trước18/10 là trạng thái lịch sử.
+Producer/audit kiểm hash checkpoint cũ phải dùng snapshot cũ, không sửa hash lịch sử để nhận PASS.
+
+
 Cập nhật đường dẫn: 16/10/2026. Đặt cạnh [tiến độ đồ án](TIEN_DO_DO_AN.md).
 
 RTL đã phân nhóm; xem [bản đồ thư mục](../rtl/README.md) và `rtl/production.f`.
@@ -448,3 +466,28 @@ Windows PowerShell (từ CMD dùng `powershell -NoProfile -File` trước tên s
 
 ModelSim protocol fixture nằm trong evidence tại protocol_fixtures/; runner không phụ thuộc fixture đã dọn của checkpoint khác. Lịch mới là valid=q+12,handshake=q+13,II_min=q+14. Fixture lịch cũ giữ nguyên số học; testbench cộng đúng2 vào field latency. STA candidate tổng hợp một lần/part, đọc lại checkpoint cho từng directive. Dùng thư mục run mới nếu đã có output; collector mặc định chỉ nghiệm thu checkpoint gốc. Không chạy prepare vào nguồn/bằng chứng đã khóa.
 <!-- OPT03_REPORT_END:docs/HUONG_DAN_CHAY_WSL_MODELSIM.md -->
+
+
+### Chạy lại trên release đã khóa (không ghi đè checkpoint)
+
+Từ gốc Posit_MAC, kiểm hash trước:
+
+```powershell
+python scripts/audit_rtl_release.py --self-test
+./scripts/verify_rtl_release_modelsim.ps1 -RunRoot results/release_event_replay
+```
+
+Trong WSL tại `/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC`:
+
+```bash
+bash --noprofile --norc scripts/verify_rtl_release.sh results/release_native_replay
+```
+
+Dùng RunRoot mới mỗi lần. Native runner cần Verilator/GCC và libsoftposit.so đã build;
+không cài hay chỉnh hệ thống. ModelSim runner cần fixture corner/protocol của
+opt02b_20261017 và fused/pilot.vectors của opt02c_20261018. Sau clone, giải nén
+`evidence.zip` của từng study vào chính thư mục study, kiểm SHA theo archive_manifest.json
+trước khi replay; nếu thiếu fixture phải sinh lại bằng generator đã lưu và kiểm hash.
+Không suy rằng metadata JSON thay được vector/binary. Archive không chứa executable,
+ModelSim work, wave hoặc DCP; build lại từ source đã lưu. Không chạy prepare/promote/lock
+cũ trên release hiện hành: chúng là producer của checkpoint, không phải lệnh regression W14.

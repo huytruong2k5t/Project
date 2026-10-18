@@ -1,6 +1,8 @@
 # Xây dựng L1, baseline nội bộ và MAC non-fused/fused
 
-**Cập nhật:** 17/10/2026 — tài liệu kiến trúc, mapping và build; không còn là nhật ký tối ưu hoặc lịch nghiệm thu theo tuần.
+**Cập nhật:** 18/10/2026 — tài liệu kiến trúc, mapping và build; không còn là nhật ký tối ưu hoặc lịch nghiệm thu theo tuần.
+
+RTL production đã khóa tại `rtl/production_freeze.json` (release `POSIT_MAC_RTL_20261018_OPT02C`). Chạy `python scripts/audit_rtl_release.py` trước tuần14. Manifest38 module là đầu vào build; L1/oracle và hợp đồng số học giữ nguyên. Bằng chứng tối ưu/promote tại Optimization8.30,không ghi lại vào PLAN.
 
 - [SPEC hiện hành](../SPEC_Posit_MAC_IP.md): nguồn quy định chính về số học, width, flags và giao dịch.
 - [Optimization.md](../../doc/Optimization.md): phương án tối ưu RTL và mọi báo cáo kiểm chứng/synthesis/STA đã chuyển từ PLAN cũ.
@@ -38,7 +40,7 @@ L1 có thể dùng cách căn payload khác RTL nhưng phải cùng giá trị. 
 
 RNE: xử lý special, pre-clamp đúng biên, mã hóa regime/exponent, dịch và tách retained/G/R/S. round_up=G&(LSB|R|S). Kẹp sớm minpos chỉ khi sf<-SF_MAX; tại sf=-SF_MAX vẫn mã hóa/RNE. Áp dấu sau xử lý magnitude theo hợp đồng. TRUNC là profile riêng, không mặc định tái dựng paper.
 
-`round_unpacked` phải tương đương parse(pack(u)) với cùng rounding, specials và metadata; không chỉ cắt fraction theo sf. Đây là phép biến đổi số học trong L1, không cam kết tiết kiệm số chu kỳ RTL. NF production OPT-03 hiện dùng product packer P1/P2 rồi parser tổ hợp và product bank riêng.
+`round_unpacked` phải tương đương parse(pack(u)) với cùng rounding,specials và metadata; không chỉ cắt fraction theo sf. RTL NF giữ ba bank product của lịch OPT-03: `posit_product_pack` RNE P1/P2 lưu magnitude/sign sau clamp,`posit_magnitude_parse` decode rồi product bank riêng. Không bỏ R(P_hat),không thêm latency/II. L1 giữ mô hình cũ vì giá trị/flags không đổi.
 
 ### 2.3. OPS, SAC và SBM
 

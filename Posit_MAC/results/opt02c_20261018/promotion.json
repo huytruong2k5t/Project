@@ -1,0 +1,44 @@
+{
+  "status": "PROMOTED_AND_ACTIVE_CHECKS_PASSED",
+  "selected_variant": "candidate",
+  "updated_modules": [
+    {
+      "path": "rtl/adder/posit_add_align.sv",
+      "previous_sha256": "b6d8506eeb9ec4c72c2c17050e6be93e2d0457e34103f9611e3c129794e5465c",
+      "new_sha256": "b019246c67790b452c0e1a2b7a19be7ccce98abdef3df72f2e48565794db816a"
+    },
+    {
+      "path": "rtl/mac_nf/mac_nf_wrapper.sv",
+      "previous_sha256": "ff26919b433b0c065f66b44dd515a85afed4185acd330d83a3cfad28f2181779",
+      "new_sha256": "8f23237ae9be1329fbce2a79028825fbb7a9ed35447c6a22ae3d67f27283476e"
+    },
+    {
+      "path": "rtl/multiplier/iter_ctrl.sv",
+      "previous_sha256": "3e9fcae9d9969787e2a11f2df37316b4e101de45990fb75988c11d2a36fd9d18",
+      "new_sha256": "e299bca9f011e8b4a11021bf5398d9aca45b3a57a490e8ec09074ea9901bf23c"
+    },
+    {
+      "path": "rtl/multiplier/sac_step_comb.sv",
+      "previous_sha256": "ff01ec40baeb1c35026d82957bf33db21fba98a0d2f292ebd7b5aac554834b72",
+      "new_sha256": "59dffa5e4f387c62a1280d50f26408d3d7427096191f56ece841c5687c7289b3"
+    },
+    {
+      "path": "rtl/packer/posit_pack_prepare.sv",
+      "previous_sha256": "21a544e78c3577e95c82aa38363f9006870c3103e678befa55be28ca5ea37328",
+      "new_sha256": "4ffc41003b87710a21451d231c2d4e10f2082495ab928934d05919fcdfaa853f"
+    },
+    {
+      "path": "rtl/mac_nf/posit_product_pack.sv",
+      "previous_sha256": null,
+      "new_sha256": "dacba096a66cdff7ebd2598cbf56865ef8a8e0438f62506841530cf910c68ea2"
+    },
+    {
+      "path": "rtl/mac_nf/posit_magnitude_parse.sv",
+      "previous_sha256": null,
+      "new_sha256": "6bb9ec90b37bdd0c989a8464d5b1ba6fb1dd44c339d3a801c68cde19fb4a686e"
+    }
+  ],
+  "module_count": 38,
+  "backup": "source/production plus reference_production.f in this study",
+  "authorization": "user requested optimize and lock RTL before W14"
+}

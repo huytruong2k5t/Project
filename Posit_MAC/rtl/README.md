@@ -1,5 +1,23 @@
 # Thư mục Mã nguồn RTL (`rtl/`)
 
+## Release production đã khóa — 18/10/2026
+
+`POSIT_MAC_RTL_20261018_OPT02C` (`LOCKED_FOR_W14`),38 module trong `rtl/production.f`.
+Gói hiện hành: OPT-02c + OPT-05 abc_tree + OPT-09 + OPT-10A; không đổi hợp đồng số học/latency.
+NF thực hiện R(R(P_hat)+C_eff); F thực hiện R(P_hat+C_eff), với phạm vi/profile ở SPECv1.20.
+Trước khi build/chạy W14, từ gốc Posit_MAC:
+
+```powershell
+python scripts/audit_rtl_release.py --self-test
+```
+
+37 profile strict lint và smoke ModelSim NF/F từ production đã đạt; NF acceptance10M/0 mismatch.
+F10M được kế thừa theo hash nguồn của8.28 và có smoke mới; chưa chạy final per-n W14/Gate4.
+Xem SPEC§11.17, `rtl/production_freeze.json` và Optimization§8.30.
+Các câu “chưa promote” ở hồ sơ có ngày trước18/10 là trạng thái lịch sử.
+Producer/audit kiểm hash checkpoint cũ phải dùng snapshot cũ, không sửa hash lịch sử để nhận PASS.
+
+
 **Tài liệu hiện hành:** [PLAN — kiến trúc/build L1/NF/F](../l1/PLAN.md), [Optimization — tối ưu và kiểm chứng/STA](../../doc/Optimization.md), [tiến độ — việc còn mở](../docs/TIEN_DO_DO_AN.md).
 
 ## Bản đồ RTL hiện hành — 15/10/2026
@@ -14,26 +32,26 @@ Tổ chức lại chỉ đổi vị trí file, giữ nguyên byte mã nguồn, t
 | `packer/` | Packer P1/P2, tổ hợp và round_unpacked |
 | `multiplier/` | OPS, SAC, SBM dịch/tích lũy, controller, core và top nhân |
 | `adder/` | Bộ cộng NF: align → arithmetic → normalize, comb/pipeline |
-| `mac_nf/` | Top `posit_mac_nf` và wrapper |
+| `mac_nf/` | Top `posit_mac_nf`, wrapper, product pack và magnitude parser |
 | `mac_f/` | Top `posit_mac_f`, wrapper và pipeline F1–F5 |
 | `research/paper/` | Nhánh tái dựng paper độc lập với hợp đồng NF/F |
-| `candidates/adder/` | Các phương án thử alignment/normalization, chưa thay bản chính |
+| `candidates/adder/` | Snapshot alignment/normalization; OPT-02c đã promote, các bản khác giữ nghiên cứu |
 | `candidates/primitives/` | Các phương án thử shifter/LOD; trùng tên module với bản chính |
 | `benchmarks/` | Wrapper đo PPA/so sánh, không ghép vào IP sản phẩm |
 | `posit_mac.vh` | Header dùng chung, giữ tại gốc để `-Irtl`/`+incdir+rtl` không đổi |
-| `production.f` | Danh sách 36 module chính, không gồm nghiên cứu/candidate/benchmark |
+| `production.f` | Danh sách 38 module chính, không gồm nghiên cứu/candidate/benchmark |
 
 **Không dùng glob đệ quy toàn bộ `rtl` để compile:** candidate primitive trùng tên module với production.
 Từ gốc Posit_MAC, dùng file list chính hoặc các runner đã có:
 
 ```bash
 verilator --lint-only --timing --assert -Wall -Irtl --top-module posit_mac_f -f rtl/production.f
-bash scripts/verify_rtl_layout.sh
+python3 scripts/audit_rtl_release.py --self-test
 ```
 
 Các runner chọn module động dùng `scripts/rtl_paths.{sh,ps1,py}` và bản đồ `rtl_paths.json`/`rtl_paths.tsv`.
 Thêm module mới phải cập nhật file list và bản đồ nếu runner chọn theo tên.
-Kiểm tính nhất quán bằng `python scripts/audit_rtl_layout.py`.
+Kiểm release hiện hành bằng `python scripts/audit_rtl_release.py`; audit_rtl_layout.py gắn hash layout cũ chỉ chạy với checkpoint15/10 tương ứng.
 
 Kết quả cũ giữ nguyên đường dẫn/hash tại thời điểm đo. Bản đồ di chuyển và hash nằm ở
 `results/layout_cleanup_20261015/rtl_migration.json`; script trước di chuyển lưu trong

@@ -3,7 +3,7 @@
 **Ngày cập nhật:** 18/10/2026 (giờ Việt Nam)
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.19](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md), [Optimization](Optimization.md).
+**Tài liệu chi tiết:** [SPEC v1.20](../Posit_MAC/SPEC_Posit_MAC_IP.md), [PLAN L1](../Posit_MAC/l1/PLAN.md), [README L1](../Posit_MAC/l1/README.md), [Optimization](Optimization.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](../Posit_MAC/docs/HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -15,7 +15,7 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 
 Đã hoàn thành nền tảng L0, Gate1 của L1 và bộ cộng tuần5. Bộ nhân lặp L1 đã được kiểm chứng; profile source từng đạt ngưỡng TableI nhưng không khớp output ví dụ gốc. Baseline gốc bài báo chưa xác định; giữ nghiên cứu phụ. Mục tiêu chính chuyển sang MAC non-fused làm baseline nội bộ và fused làm biến thể so sánh.
 
-MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng chứng. L1 fused W32 và RTL F profile chính đã kiểm trong phạm vi công bố. NF production là OPT-03; OPT-02b còn là candidate, chưa promote. Chi tiết số lượt/mismatch, freeze và timing lịch sử chuyển về Optimization; final per-n/AC04, CDC/RDC, paired accuracy/PPA và Gate4 còn mở.
+MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng chứng. L1 fused W32 và RTL F profile chính đã kiểm trong phạm vi công bố. NF production giữ lịch OPT-03, đã promote OPT-02c/05/09/10A và khóa38 module ngày18/10. Chi tiết số lượt/mismatch, freeze và timing lịch sử chuyển về Optimization; final per-n/AC04, CDC/RDC, paired accuracy/PPA và Gate4 còn mở.
 
 ## 2. Công việc còn lại và ưu tiên
 
@@ -25,7 +25,7 @@ MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng ch�
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder, NF tuần11 và F profile chính đã kiểm; còn ma trận final và coverage cuối NF/F |
 | PPA, mở rộng và hồ sơ — Gate4 | processing | NF CycloneIV45,07MHz là lịch sử; F A35T100MHz R2R đạt. Còn đo matched NF/F, accuracy và hồ sơ cuối; số đo riêng xem Optimization |
 
-**Trạng thái tối ưu:** primitive/parser/OPS và OPT-03 có quyết định tại Optimization; OPT-02b còn chờ xác nhận để promote. SAC và các bước product parse/sticky/A1–A2 mới là đề xuất tại mục3.3. Giữ fraction12/W32, phép đo mới chỉ A35T xc7a35tcpg236-1; không nới precision/constraint. Hạn chính29/11, đệm30/11–04/12, hoàn thành trước05/12/2026.
+**Trạng thái tối ưu:** production đã khóa release POSIT_MAC_RTL_20261018_OPT02C; OPT-02c/05/09/10A đã promote, xem mục3.3 và Optimization8.30. Giữ fraction12/W32, phép đo mới chỉ A35T xc7a35tcpg236-1; không nới precision/constraint. Hạn chính29/11, đệm30/11–04/12, hoàn thành trước05/12/2026.
 
 
 ## 3. Tiến độ theo tuần
@@ -113,36 +113,49 @@ Thứ tự ưu tiên khi thiếu thời gian: W14-03 > W14-02 > W14-05 > W14-04 
 
 Tuần14 chỉ được đánh dấu `✅` khi TC-W14-01..05 và TC-W14-08 đều PASS. W14-06 PASS là điều kiện bắt đầu PPA tuần15. TC-W14-00 và TC-W14-07 nếu chưa xong phải ghi `processing` kèm lý do, không gộp vào trạng thái ✅.
 
-## 3.3. Tối ưu còn mở — kế hoạch kỹ thuật ở Optimization
+## 3.3. Tối ưu RTL — hạng mục ưu tiên thực hiện và hạng mục đã đóng sau §8.28/8.29
 
-**Phạm vi thiết bị:** chỉ A35T xc7a35tcpg236-1 cho các lần kiểm chứng timing/synthesis/P&R tiếp theo, gồm paired NF/F tuần15. Không chạy A100T; giữ số đo A100T cũ như lịch sử.
+**Phạm vi thiết bị:** chỉ A35T `xc7a35tcpg236-1` (`A35T-C2`) cho các lần kiểm chứng timing/synthesis/P&R tiếp theo, gồm paired NF/F tuần15. Không chạy A100T; giữ số đo A100T cũ như lịch sử.
 
-Đã bắt đầu triển khai theo yêu cầu sinh viên17–18/10, bằng chứng tại Optimization8.28. Giữ latency/II và tách candidate khỏi production. Các bước có điều kiện không tự thành hạng mục bắt buộc khi STA không còn chỉ ra nhu cầu.
+Release **`POSIT_MAC_RTL_20261018_OPT02C` đã LOCKED_FOR_W14**: production38 module,
+L1/oracle/constraint không đổi; NF10M/0 mismatch, F10M kế thừa theo hash và smoke mới đạt.
+Candidate đạt100MHz cả3 strategy A35T-C2; median R2R F_STA114,40MHz (ước lượng STA, không phải đo kit).
+Chi tiết và giới hạn: [Optimization §8.30](Optimization.md#legacy-8-30).
 
-| ID / nhóm | Việc chưa hoàn thiện | Trạng thái | Điều kiện / tham chiếu |
+### 3.3.1. Mốc tối ưu và khóa RTL đã hoàn tất trước W14
+
+| ID / nhóm | Mốc chính | Trạng thái | Bằng chứng |
 | --- | --- | --- | --- |
-| OPT-00 / OPT-02b | Khóa mốc tham chiếu và xác nhận candidate trước promote | processing | Đã có bit-exact và Default A35T; còn matched đa chiến lược chỉ trên A35T xc7a35tcpg236-1, không đếm Default lặp là seed độc lập |
-| OPT-05 | SAC-A → SAC-B → SAC-C, so zero/one-hot và nối exhausted vào controller | processing | Leaf/oracle/lint và pilot bốn biến thể đạt; đang chọn bằng matched PPA và kiểm tổ hợp; Optimization8.28 |
-| OPT-09 | Product P2 lưu magnitude dương sau RNE/clamp, parse trực tiếp | processing | Round-trip RNE/TRUNC và pilot đạt; Default cải thiện parse/P2, còn nghiệm thu tổ hợp; Optimization8.28 |
-| OPT-10A | Prefix OR/lookup sticky trong P1 | processing | 435 lint và1.298.720 leaf cases, pilot đạt; đang đo STA/tổ hợp; Optimization8.28 |
-| OPT-10B | Chuyển phần sticky/flags P1→P2 nếu vẫn cần | không | Chỉ sau10A/STA mới, báo FF và đường P2 |
-| OPT-11 | Cân bằng jam A1→A2; C-prefix precompute thử riêng nếu chọn | không | Bundle mới/protocol/cancellation; không lấy CE slack làm ngân sách arithmetic; Optimization8.25.6 |
-| OPT-04/06 và các nhánh phụ | A2/A3 LOD, normalization zero/shared, OPS/MUX/control hoặc remaining-scale budget | không | Chỉ mở khi sinh viên chọn và STA mới có căn cứ; không tự ghép vào các bước trên |
-| Khảo sát fraction | Xem bảng/biểu đồ và chốt tiêu chí lựa chọn nếu muốn đổi precision | processing | Khảo sát đã có, chưa chọn ngưỡng mới; hiện vẫn FW12. Optimization8.11 |
-| OPT-07/08 | Kiểm tổ hợp chọn cuối, freeze/promote và bàn giao dùng chung NF/F | không | Regression/coverage liên quan và PPA matched; không suy paired NF/F từ một run riêng |
+| OPT-05 / OPT-09 / OPT-10A | SAC abc_tree, magnitude P2/parse, prefix sticky | ✅ | Đã promote cùng gói; không đổi lịch pipeline |
+| OPT-02c | A1 parallel shift/jam/tail, clamp bit-check,0 FF thêm | ✅ | Leaf11 profile/0 mismatch;406 lint; NF10M/0 mismatch |
+| OPT-00 / OPT-02b / OPT-02c | Đối chiếu production cũ/reference/candidate,3 strategy cùng A35T-C2 | ✅ | Candidate WNS+0,894/+0,894/+1,011ns; hold dương; bảng §8.30 |
+| OPT-07 / OPT-08 | Promote38 module và khóa hash RTL/L1/build/constraint | ✅ | production_freeze.json;37 strict lint; ModelSim NF/F; audit release PASS |
 
-Kế hoạch tối ưu là luồng refactor riêng trước freeze mới; quy tắc “không sửa RTL” của tuần14 chỉ áp phiên regression trên nguồn đã khóa. Nếu chọn refactor, phải hoàn tất kiểm/freeze rồi khóa lại matrix/corpus trước final. Chưa tự khởi động tối ưu hoặc W14 trong phiên sắp xếp tài liệu.
+### 3.3.2. Các hạng mục ĐÓNG / KHÔNG CẦN TỐI ƯU NỮA (Dừng để bảo toàn lịch Tuần 14–15)
 
-## 3.4. Công việc mở khác và giới hạn phạm vi
-
-| Nhóm | Việc còn lại | Trạng thái | Ưu tiên |
+| ID / nhóm | Nội dung trước đây | Quyết định | Lý do kỹ thuật (theo STA mục 8.28.3 & 8.29.3) |
 | --- | --- | --- | --- |
-| Baseline paper | Provenance RTL/LUT đầy đủ, tie/prefix126–127, width/cut/normalize, generator/seed và trace tác giả chưa xác minh | processing | Nghiên cứu phụ; chỉ mở khi có nguồn hoặc yêu cầu riêng, không dò tham số để ép TableI |
-| Paired NF/F | Final per-n, AC04, accuracy cùng corpus, comparator NF EXACT_EN0 và PPA matched | không | Thực hiện theo W14-01..08 và tuần15; không hạ ngưỡng để giữ lịch |
-| Tái lập/luồng tự động | Hoàn thiện lint/collector/audit, truy vết testcase và tái build từ nguồn frozen | processing | Tiếp phần tuần1/tuần16; không chạy lại lượt lớn chỉ vì đổi tài liệu |
-| Timing giao tiếp tích hợp | Điền budget I/O theo nguồn/đích và quan hệ clock/data, pinout/IOSTANDARD khi chọn thiết kế tích hợp; budget benchmark100MHz không thay timing thực tế | không | syn/README; chưa có thông số thật thì không chạy integration |
-| Hồ sơ/board/demo | Constraints phần cứng thực tế nếu chọn kit, giải trình CDC/RDC, báo cáo/slide/demo và thử tái lập | processing | Tuần15–16, hạn29/11 và đệm tới04/12; OOC chưa là board signoff |
-| Mở rộng tùy chọn | Exact fused rộng, format phụ, TRUNC/JAM F, quire/chồng lấn, ASIC hoặc PPA E/M paper | không | Ngoài profile chính; không tự lên lịch bắt buộc hoặc chặn NF/F |
+| OPT-10B | Chuyển phần sticky/flags từ P1 sang P2 | **Đóng (Bỏ qua)** | `OPT-10A` đã kéo `product_packer_p1` lên `+1.697 ns` và `final_packer_p1` lên `+3.184 ns`; không cần tốn thêm FF ở biên P1/P2 |
+| OPT-11 (`C-prefix precompute`) | Tính trước prefix-OR cho toán hạng `C` tại `pair_retire` | **Đóng (Bỏ qua)** | Top critical paths của `adder_a1` xuất phát từ `norm_sf_q` (scale factor tích) qua `diff_ab/ba`, không xuất phát từ `c_frac_q`; thêm ~30 FF không giảm delay đường găng |
+| OPT-11 (`A1→A2 jam retiming`) | Dời MUX `jam_bit`/`alignment_tail` sang đầu tầng A2 | **Tạm đóng (Dự phòng)** | Thay thế bằng `OPT-02c` (0 FF, sửa nội bộ A1). Chỉ mở lại nếu sau `OPT-02c` vẫn cần thêm biên độ cho mục tiêu tần số cao hơn |
+| OPT-04 & OPT-06 | Cân bằng lại A2/A3 LOD; sửa `zero`/`shared` ở `posit_add_norm` | **Đóng (Bỏ qua)** | `adder_a2` (`+5.007 ns`) và `adder_a3` (`+2.318 ns`) đã rất rộng; thử nghiệm trước chỉ giảm 4–7 LUT và không cải thiện Fmax toàn cục |
+| Direct `round_unpacked` & `Remaining-scale` SAC | Bỏ qua pack→parse ở tích NF; đếm lùi scale còn lại trong SAC | **Đóng (Bỏ qua)** | Rủi ro lệch số học cao trong khi `OPT-09` (`+3.208 ns`) và `OPT-05 abc_tree` (`+1.344 / +2.814 ns`) đã giải quyết gọn nhẹ cả hai vùng |
+| Tinh chỉnh thêm biên `in_ready` | Giảm logic điều khiển parser-valid/ready tới `in_ready` | **Đóng (Bỏ qua)** | Default8.28: `u_a/p2_valid_q→in_ready`,6 tầng LUT,data5,829ns,slack+0,730ns; wrapper không có `fifo_count_q`. Dừng vì đạt budget100MHz hiện hành,không vì giả định đường chỉ có2 LUT |
+| Khảo sát đổi `FRAC_W` | Đổi độ rộng fraction khỏi mức `FW12` hiện hành | **Đóng cho RTL chính** | Giữ nguyên `FW12` cho RTL NF/F và báo cáo so sánh; bảng khảo sát 8–26 bit tại [Optimization §8.11](Optimization.md#legacy-8-11) dùng làm phân tích lựa chọn tham số trong luận văn |
+
+Tối ưu và promote đã hoàn tất. Quy tắc **không sửa RTL/L1/constraint đã khóa** có hiệu lực từ release18/10; W14 chạy trên hash này. Nếu có lỗi phải review và phát hành release mới, không tự rehash để vượt gate.
+
+## 3.4. Công việc mở khác và giới hạn phạm vi (Ưu tiên giai đoạn cuối Tuần 14–16)
+
+| Nhóm | Việc còn lại | Trạng thái | Ưu tiên & Hướng xử lý |
+| --- | --- | --- | --- |
+| **1. Khóa RTL & Chạy Tuần 14 (`Paired NF/F`)** | RTL đã promote/khóa tại §8.30; tiếp theo khóa `matrix_freeze.json`, chạy final per-n AC01 NF/F, coverage AC04, paired accuracy AC03 và comparator `NF EXACT_EN=0` | processing | **Ưu tiên số 1 (Trọng tâm hiện tại):** Thực hiện ngay theo kế hoạch `W14-00..08` (mục 3.2) trên release đã khóa; chưa chạy final matrix |
+| **2. PPA đối xứng NF/F — Gate 4 (Tuần 15)** | Đo matched PPA giữa `NF` (`EXACT_EN=1` & `EXACT_EN=0`) và `F` trên cùng `A35T-C2` (≥3 chiến lược/cấu hình), lập bảng tổng hợp Accuracy – Timing – II – Resource | không | **Ưu tiên số 2:** Thực hiện ngay sau `W14-06`; dùng trực tiếp luồng runner `A35T-C2` đã chuẩn hóa |
+| **3. Hồ sơ / Báo cáo / Slide bảo vệ (Tuần 16)** | Tổng hợp bằng chứng CDC/RDC đã kiểm ở `W14-00b`, hoàn thiện luận văn, biểu đồ Pareto, slide và demo | processing | **Ưu tiên số 3:** Hạn chính29/11,đệm30/11–04/12. Kiểm CDC/RDC/reset thuộc ưu tiên1 trước matrix final,không dời kiểm kỹ thuật sang tuần16; công khai phạm vi OOC chưa board signoff |
+| **4. Tái lập / Luồng tự động** | Duy trì collector/audit và kiểm tra hash nguồn frozen cho `results/week14` và `results/week15` | processing | **Ưu tiên duy trì:** Chỉ phục vụ nghiệm thu W14/W15; không chạy lại các lượt lịch sử chỉ vì cập nhật tài liệu |
+| **5. Timing giao tiếp tích hợp ngoại vi** | Điền budget I/O thực tế và pinout/IOSTANDARD nếu ghép vào hệ thống SoC/board cụ thể | **Đóng / Ngoài phạm vi bắt buộc** | Giữ mẫu `a35t_io_template.xdc` làm tài liệu bàn giao IP (`syn/README.md`); đánh giá lõi IP dùng chuẩn `A35T-C2` |
+| **6. Provenance Baseline Paper gốc (2024)** | Xác minh phần dư provenance LUT/width/tie-breaking/seed gốc của tác giả bài báo | **Đóng (Giữ nghiên cứu phụ)** | Đã có đủ bằng chứng phân tích tại Optimization; không dò thêm tham số để ép khớp Table I |
+| **7. Mở rộng tùy chọn ngoài đề cương chính** | Exact fused rộng, format phụ ngoài ma trận §6.7, TRUNC/JAM F, quire hoặc ASIC synthesis | **Đóng (Không thực hiện)** | Ngoài profile chính; dừng hoàn toàn để tập trung 100% cho nghiệm thu NF/F và viết báo cáo |
 
 ## 4. Nhật ký theo ngày
 
@@ -308,7 +321,8 @@ Kế hoạch tối ưu là luồng refactor riêng trước freeze mới; quy t�
 | STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
 | --- | --- | --- | --- |
 | 1 | Khảo sát SAC,product magnitude và sticky theo8.25 | Leaf/pilot/round-trip và tổ hợp NF10M+F10M/0 mismatch; ModelSim NF/F đạt. Matched A35T-C2 ba chiến lược, bảng kết quả ở Optimization8.28. Giữ candidate,chưa promote production hoặc đóng Gate4 | ✅ |
-| 2 | Promote và mục tiêu timing cao hơn | Còn đối chiếu production/OPT-02b trước promote; OPT-10B/11 chỉ mở khi cần. Final per-n/AC04,CDC/RDC và paired PPA NF/F giữ lịch riêng | processing |
+| 2 | Đặc tả OPT-02c cho A1 và sàng lọc mục3.3/3.4 | Bổ sung Optimization8.29 (`OPT-02c`: tách `clamp` khỏi `shift_amount`, bit-check `>` F+2, tra `jam/tail` song song trong A1, 0 FF); đóng các nhánh tối ưu dư thừa (`OPT-10B`, `C-prefix`, `OPT-04/06`), chỉ giữ `OPT-02c` và promote `OPT-07/08` trước W14 | ✅ |
+| 3 | Tối ưu, promote và khóa RTL trước W14 | OPT-02c+05+09+10A đã vào production38 module; NF10M/0 mismatch, F10M kế thừa theo hash và smoke mới;37 strict lint/ModelSim NF/F đạt. A35T100MHz setup/hold đạt3 strategy. Release POSIT_MAC_RTL_20261018_OPT02C đã khóa; W14 final và Gate4 chưa chạy | ✅ |
 
 ### 4.18. Mẫu cập nhật tiếp theo
 

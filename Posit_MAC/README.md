@@ -1,5 +1,23 @@
 # ĐỒ ÁN CHUYÊN NGÀNH — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP (FPGA & ASIC)
 
+## Release production đã khóa — 18/10/2026
+
+`POSIT_MAC_RTL_20261018_OPT02C` (`LOCKED_FOR_W14`),38 module trong `rtl/production.f`.
+Gói hiện hành: OPT-02c + OPT-05 abc_tree + OPT-09 + OPT-10A; không đổi hợp đồng số học/latency.
+NF thực hiện R(R(P_hat)+C_eff); F thực hiện R(P_hat+C_eff), với phạm vi/profile ở SPECv1.20.
+Trước khi build/chạy W14, từ gốc Posit_MAC:
+
+```powershell
+python scripts/audit_rtl_release.py --self-test
+```
+
+37 profile strict lint và smoke ModelSim NF/F từ production đã đạt; NF acceptance10M/0 mismatch.
+F10M được kế thừa theo hash nguồn của8.28 và có smoke mới; chưa chạy final per-n W14/Gate4.
+Xem SPEC§11.17, `rtl/production_freeze.json` và Optimization§8.30.
+Các câu “chưa promote” ở hồ sơ có ngày trước18/10 là trạng thái lịch sử.
+Producer/audit kiểm hash checkpoint cũ phải dùng snapshot cũ, không sửa hash lịch sử để nhận PASS.
+
+
 > **Dự án**: Thiết kế và kiểm chứng lõi IP Posit MAC xấp xỉ, lặp (Approximate & Iterative Posit MAC) trên FPGA, có mở rộng ASIC  
 > **Sinh viên thực hiện**: Đan Huy  
 > **Học kỳ**: HK261 — Trường Đại học Bách Khoa - ĐHQG TP.HCM (HCMUT)  
@@ -13,10 +31,10 @@
 
 Đồ án tập trung nghiên cứu, thiết kế phần cứng và kiểm chứng toàn diện lõi IP **Posit Multiply-Accumulate (MAC)** ($D = A \times B + C$) với các đóng góp cốt lõi:
 1. **Kiến trúc Nhân Lặp & Xấp xỉ (Iterative & Approximate Multiplier)**: Dựa trên bài báo tham chiếu [P] (*Norris & Kim, ISCAS 2021*), thực hiện phép nhân mantissa bằng chuỗi các phép dịch-cộng lặp (SAC $\rightarrow$ Shifter $\rightarrow$ Accumulator) với số vòng lặp $n$ có thể cấu hình linh hoạt lúc chạy, Bài báo báo cáo giảm44% LUT và tăng51% fmax ở điều kiện của tác giả; đề tài chưa đo PPA toàn MAC để xác nhận các tỷ lệ này.
-2. **Khối Posit MAC Hoàn chỉnh (Đóng góp C1)**: Mở rộng bộ nhân của [P] thành lõi MAC thông suốt thông qua bộ cộng Posit Adder phân tầng 3 chu kỳ và kỹ thuật làm tròn trong miền unpacked (`round_unpacked`), loại bỏ khâu pack/parse trung gian với ngân sách giảm2 hạng ở TRUNC hoặc3 hạng ở RNE so với v0; số đo latency/II RTL chưa nghiệm thu. MAC L1 exact/RNE đã đối chuẩn non-fused ở các format hỗ trợ; ES3 dùng oracle riêng. Quy ước cạnh và profile baseline theo SPEC v1.4 §5.1/§5.5.
-3. **Mạch Kẹp cứng & Dịch Logarit Đa tầng**: Tối ưu hóa triệt để các bộ dịch cân bằng số mũ (Alignment Shifter) và chuẩn hóa bằng kỹ thuật kẹp cứng $\le \text{FRAC\_MAX} + 2$, giới hạn độ rộng mạng dịch; lợi ích LUT và critical path toàn khối cần xác nhận bằng tổng hợp/STA.
+2. **Hai kiến trúc MAC so sánh nội bộ**: NF làm tròn tích rồi cộng, D=R(R(P_hat)+C_eff); fused cộng P_hat với C_eff trong cửa sổ W32 trước RNE cuối. NF hiện dùng product pack P1/P2 và magnitude parse riêng; không còn tuyên bố loại bỏ pack/parse trung gian. Lịch NF14 tầng và F13 tầng theo SPECv1.20; final per-n/AC04 và paired accuracy/PPA còn mở.
+3. **Tối ưu các khối tổ hợp**: Masked OPS, SAC abc_tree, A1 parallel shift/jam và prefix sticky giữ bit-exact, không tăng latency so lịch OPT-03. Gói NF đạt setup/hold100MHz trên A35T-C2 qua3 strategy, với đánh đổi LUT/FF được ghi tại Optimization8.30.
 4. **Môi trường Kiểm chứng 3 Tầng**: Golden Model độc lập SoftPosit (L0), C++ Algorithmic Model (L1), và RTL SystemVerilog với phương pháp lấy mẫu phân tầng (Stratified Sampling).
-5. **Chính sách Bậc thang PPA Khách quan (§7.6)**: 5 bậc đánh giá từ Vivado Enterprise (D0), Vivado Free Standard 16nm UltraScale+ (D1), 7-Series (D2), Yosys (D3), đến OpenROAD ASIC (D4).
+5. **PPA có điều kiện so sánh thống nhất**: Các lượt đo tiếp theo chỉ dùng Vivado/A35T-C2, cùng nguồn, XDC và strategy cho các biến thể. Số liệu CycloneIV/A100T giữ làm lịch sử; chưa có paired NF/F PPA cuối hoặc đo tần số board.
 
 ---
 
@@ -28,7 +46,7 @@ RTL đã phân nhóm theo chức năng; xem [bản đồ RTL](rtl/README.md). Da
 ```text
 Posit_MAC/
 ├── README.md               # Giới thiệu tổng quan toàn bộ dự án
-├── SPEC_Posit_MAC_IP.md    # Tài liệu đặc tả kỹ thuật chi tiết nhất (v1.5)
+├── SPEC_Posit_MAC_IP.md    # Tài liệu đặc tả kỹ thuật chi tiết nhất (v1.20)
 ├── Digital_Design_Guidelines.md # Quy chuẩn thiết kế RTL số chuẩn công nghiệp
 ├── Makefile                # Kịch bản điều khiển luồng (lint, sim, syn, regress)
 ├── docs/                   # Tài liệu chi tiết, nhật ký quyết định (ambiguity.md)

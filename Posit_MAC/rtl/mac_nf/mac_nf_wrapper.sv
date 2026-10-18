@@ -69,7 +69,8 @@ module mac_nf_wrapper #(
     wire product_pack_valid;
     wire product_parse_ready;
     wire product_capture;
-    wire [NB-1:0] product_packed;
+    wire [NB-1:0] product_magnitude;
+    wire product_sign_encoded;
     wire product_sticky;
     wire [4:0] norm_flags;
     logic [F-1:0] product_frac_q;
@@ -290,7 +291,7 @@ module mac_nf_wrapper #(
     assign product_parse_ready = !norm_valid_q || add_ready;
     assign product_capture = product_pack_valid && product_parse_ready;
 
-    posit_pack #(
+    posit_product_pack #(
         .NB(NB),
         .ES(ES),
         .F_IN(FIN),
@@ -309,15 +310,17 @@ module mac_nf_wrapper #(
         .flags_in(norm_flags),
         .out_valid(product_pack_valid),
         .out_ready(product_parse_ready),
-        .d(product_packed),
+        .d(product_magnitude),
+        .sign_o(product_sign_encoded),
         .flags(product_flags)
     );
-    posit_parser_comb #(
+    posit_magnitude_parse #(
         .NB(NB),
         .ES(ES),
         .SF_W(SF_W)
     ) u_product_parse (
-        .p(product_packed),
+        .p(product_magnitude),
+        .sign_i(product_sign_encoded),
         .s(product_sign),
         .is_zero(product_zero),
         .is_nar(product_nar),

@@ -6,7 +6,7 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.19 — 2026-10-17 — OPT-03: NF product RNE P1/P2 và parse riêng; số học giữ nguyên |
+| Phiên bản | v1.20 — 2026-10-18 — khóa RTL OPT-02c/05/09/10A trước tuần14; số học và latency/II giữ nguyên |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
@@ -36,6 +36,7 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.17 | 2026-10-15 | Theo lựa chọn sinh viên, phép đo PPA mới dùng Vivado/Xilinx D2; giữ các số đo CycloneIV làm lịch sử. Thử riêng shifter/LOD trước SAC/parser/MAC; giữ giao diện, parameter và tổ hợp. A35T/A100T có sẵn, Zynq7020 chưa được cài. Phân biệt R2R của benchmark, ước lượng Fmax từ STA và kiểm trên board. Không đổi hợp đồng số học/pipeline NF/F. |
 | v1.18 | 2026-10-15 | Triển khai posit_mac_f 32/3 FW12 W32/Q29, F1–F5 và RNE cuối; 10M giao dịch/0 mismatch với oracle và trace, pipeline đầy/stall/reset và XSim CK2Q đạt. Core approximate thu hẹp12 bit, ABS/borrow một adder. Vivado A35T một run đạt100MHz R2R; giữ final per-n/AC04, CDC/RDC và paired NF/F PPA mở. |
 | v1.19 | 2026-10-17 | NF tách normalize+product P1 → P2 → parse/product bank. L_valid=q+12, H=q+13, II_min=q+14; kiểm chứng/STA riêng tại §11.16. Không đổi L1 hoặc fused. |
+| v1.20 | 2026-10-18 | Promote OPT-02c, SAC abc_tree, product magnitude P2 và sticky prefix;38 module trong production.f. Khóa source/model/build bằng production_freeze.json; không đổi public I/O/parameter, precision, flags hoặc lịch NF/F. Đây là đầu vào tuần14, chưa nghiệm thu final/Gate4. |
 
 **Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Profile hiện thực và giới hạn bằng chứng được tóm tắt tại §1.6/§11.10–§11.16. Nhật ký có ngày ở phụ lục là lịch sử, không ghi đè hợp đồng hiện hành hoặc tự mở rộng một mốc PASS thành toàn bộ AC.
 
@@ -303,9 +304,9 @@ Sau nhả reset, startup barrier giữ in_ready=out_valid=0 cho đến khi tất
 | M0 | `ops_sel_comb` + context trong core/wrapper | Chọn X (điều khiển vòng lặp) và Y (bị dịch); cộng `sf`, xor dấu | 1 |
 | M1..Mq+2 | `iter_ctrl`/`sac_step_comb` → `sbm_shift_comb` → `sbm_accum` | Ba tầng SAC → Shifter → Accumulator, token khởi tạo khi n=0; q=max(1,n) | q+2 |
 | MN/P1 | `mul_prepack_norm_comb` + product `posit_pack_prepare` | Chuẩn hóa bảo toàn prepack, mã hóa và G/R/S; chốt P1 | 1 |
-| MP2 | Product `posit_pack_finish` | Quyết định RNE, cộng làm tròn/dấu; chốt packed product và flags | 1 |
-| MR | `posit_parser_comb` | Parse tích đã làm tròn; chốt product unpacked/flags | 1 |
-| A1 | `posit_add` (Stage 1) | So sánh $sf$, hoán đổi toán hạng, tính $\Delta sf$ (kẹp cứng $\le \text{FRAC\_MAX}+2$) và Alignment Shifter | 1 |
+| MP2 | `posit_product_pack` / `posit_pack_finish(sign=0)` | RNE/clamp; chốt mã magnitude NB bit,sign1,flags5 và valid; không lưu thêm signed code | 1 |
+| MR | `posit_magnitude_parse` | Decode magnitude đã RNE,canonical Zero/NaR/sign; chốt product unpacked/flags,giữ parse(pack(u)) | 1 |
+| A1 | `posit_add` (Stage 1) | So sf,hoán đổi,dịch/jam; nếu Δsf>FRAC_MAX+2 ghi đè y=1/tail=1. OPT-02c không đặt clamp trên đường shift-control | 1 |
 | A2 | `posit_add` (Stage 2) | Cộng/trừ số học mantissa ($m_1 \pm m_2$), xử lý dấu và bit nhớ | 1 |
 | A3 | `posit_add` (Stage 3) | LZC (Leading Zero Counter), Normalization Shifter và cập nhật scale factor | 1 |
 | K | `posit_pack` | Chèn regime, dịch, làm tròn RNE, bù hai (`PIPE_PACK = 1 hoặc 2 tùy ROUND_MODE`) | 1 hoặc 2 |
@@ -711,7 +712,7 @@ Fig.3 của [P] là nguồn tham khảo cấu trúc Parser → OPS → SAC → S
 | First mux trước accumulator | `sbm_accum_comb` | Token đầu chọn y_base thay acc; cộng term nếu không init_only. Token init_only nạp Y đúng một lần |
 | SBM accumulator | `sbm_accum` + `sbm_accum_comb` | Hồi tiếp tổng magnitude; numerical_tail/metadata cut tách khỏi numerical sticky. Trong FLOOR, phần đã cắt không còn thuộc P_hat và không được OR vào GRS của P_hat |
 | Chuẩn hóa tích, không vẽ thành khối riêng trong Fig.3 | NF mới: `mul_prepack_norm_comb`; standalone legacy: `mul_norm_comb` | Khi carry, NF mới tăng sf và đổi vị trí hidden, giữ nguyên grid/bit thấp. Khác đường legacy dịch bỏ một bit; xem §11.9 |
-| Packer của multiplier / làm tròn tích để ghép NF | Standalone: `posit_pack`; NF: product `posit_pack` P1/P2 → `posit_parser_comb` → `posit_add` → `posit_pack` cuối | Giữ parse(pack(u)) về số học; OPT-03 chốt P1, P2 và product unpacked. Adder và packer tổng là phần mở rộng MAC ngoài Fig.3 |
+| Packer của multiplier / làm tròn tích để ghép NF | Standalone:`posit_pack`; NF:`posit_product_pack` P1/P2 → `posit_magnitude_parse` → `posit_add` → `posit_pack` cuối | Giữ parse(pack(u)); P2 đổi biểu diễn thành magnitude/sign sau RNE,không bỏ làm tròn tích. Ba bank product và adder/packer tổng giữ lịch ngoài Fig.3 |
 
 #### B. Scale factor gộp
 
@@ -798,7 +799,7 @@ Khác với bài báo tham chiếu [P] chỉ dừng lại ở phép nhân hai to
 4. **Thứ tự:** first/last, tag và metadata đi cùng mọi số hạng; giao dịch sau không được khởi tạo accumulator dùng chung trước khi số hạng cuối của giao dịch trước đã được chốt. Zero/NaR bypass theo §5.3. FIFO, credit và lịch hóa là điều kiện bắt buộc nếu chọn chồng lấn.
 5. **Tích lũy NF hiện tại:** tổng đi qua A1/A2/A3→packer RNE P1/P2; bank P2 chứa kết quả Posit,không có round_unpacked thứ hai sau adder. Wrapper commit accumulator ở cạnh đầu quan sát pack_out_valid&&!committed_q,dù out_ready0,giữ busy tới retire. Với một giao dịch,II_acc như II standalone: tối thiểumax(1,t)+14 không stall; không dùng cận4 để mô tả top đã kiểm. V2 cộng C_eff sau prepack; II_min=q+13 đã kiểm tại §11.15. Không dùng lịch stream cũ hoặc giả định fused luôn ít chu kỳ hơn NF.
 
-#### B. Lịch NF RNE hiện hành — OPT-03
+#### B. Lịch NF RNE hiện hành — lịch OPT-03, release OPT-02c/05/09/10A
 
 E0 là cạnh accept. q=max(1,t), t là số vòng fraction thực tế.
 
@@ -808,8 +809,8 @@ E0 là cạnh accept. q=max(1,t), t là số vòng fraction thực tế.
 | E2 | OPS/core launch; lưu C_eff và context |
 | sau E(q+4) | core_done cùng acc, core_sf/sign/mode và trạng thái cut |
 | E(q+5) | Product P1 chốt kết quả normalize + encode/GRS/flags |
-| E(q+6) | Product P2 chốt packed product sau RNE, flags và valid |
-| E(q+7) | Parse tổ hợp từ P2, chốt product unpacked/flags |
+| E(q+6) | Product P2 chốt magnitude đã RNE/clamp NB bit,sign1,flags5 và valid1; Zero/NaR mã hóa trong magnitude |
+| E(q+7) | Decode magnitude/sign từ P2, chốt product unpacked/flags tương đương parse(pack(u)) |
 | E(q+8)..E(q+10) | Adder A1/A2/A3 |
 | E(q+11), E(q+12) | Final packer P1/P2; first-valid sau E(q+12) |
 | E(q+13) | Handshake không stall; commit accumulator nếu chưa commit |
@@ -818,6 +819,8 @@ E0 là cạnh accept. q=max(1,t), t là số vòng fraction thực tế.
 H=2+1+(q+2)+3+3+2=q+13; L_valid=q+12, L_handshake=q+13, II_min=q+14. Tất cả đường special/early-stop đi cùng pipeline; không có bypass rút ngắn lịch. Core_done chỉ phát một chu kỳ; wrapper chỉ nhận giao dịch nếu product packer sẵn sàng, giữ reservation tới retire. Với một transaction, P1/P2 product luôn có credit khi core_done đến. Product P2 giữ data/flags nếu product bank chưa sẵn sàng; product_capture=product_pack_valid && (!norm_valid_q || add_ready). Product bank giữ tới adder handshake, cờ và C_eff không lấy lại từ input ngoài. Reset/startup dùng bridge và reset synchronizer sẵn có của packer; không thêm clock gating hoặc timing exception. Accumulator commit đúng một lần ở cạnh quan sát final valid, kể cả out_ready=0.
 
 Product numerical sticky luôn0: FLOOR/cut/tail của iterative approximation là flags/status, không được đưa lại làm phần dư số học của P_hat. Normalize/width/F_IN và RNE không đổi. `round_unpacked_comb` vẫn là reference/unit module; top NF không đi qua nó. Standalone multiplier và fused không đổi lịch.
+
+Release18/10 dùng `posit_product_pack` nội bộ, giữ ready/CE/reset/holding như packer gốc; sign được chốt cùng data/flags trong P2. `posit_magnitude_parse` không bù hai lại: finite lấy sign đã chốt, Zero trả sign0,NaR trả sign1. Product P2 tăng1 FF metadata,không thêm bank. Public `posit_pack` và `posit_parser_comb` giữ nguyên API. SAC dịch cố định1 bit trước shift theo clz,gộp scale+clz+1,cây zero/one-hot cấp exhausted cho controller; P1 packer dùng prefix OR toàn payload. Đây là thay hiện thực,không đổi các phương trình normative,FRAC_W12 hoặc hợp đồng NF/F.
 
 #### C. Tối ưu sau baseline
 
@@ -1510,6 +1513,14 @@ Hợp đồng hiện hành tại §5.1/§5.11-B: product RNE P1/P2 trước pars
 
 Native main10M/85316 abort,0 mismatch;4 strict lint sạch. ModelSim82.944 corner+28.512 protocol/288 abort và284 reset-age đạt. chưa đạt R2R setup100MHz ở tất cả run; chưa board signoff/final per-n/AC04 hoặc matched NF/F. Baseline reference source-identical được tái dùng và Default được kiểm lại2 part. Không xác nhận baseline gốc paper hoặc chạy Table I.
 <!-- OPT03_REPORT_END:SPEC_Posit_MAC_IP.md -->
+
+### 11.17. Khóa RTL trước tuần14 — 18/10/2026
+
+Release `POSIT_MAC_RTL_20261018_OPT02C` đã promote38 module,khóa bằng `rtl/production_freeze.json`. L1/oracle,public I/O/parameter,14 tầng NF/13 tầng F và latency/II giữ nguyên. Bằng chứng/lệnh/matched PPA tại [Optimization8.30](../doc/Optimization.md#legacy-8-30),`results/opt02c_20261018/summary.json` và `lock_receipt.json`.
+
+NF10M/0 mismatch,ModelSim bốn format và active NF/F replay đạt;F100k smoke mới và tái dùng bằng chứng10M do mọi dependency F byte-identical với8.28. Active production.f đạt37 strict lint profiles. NF100MHz setup/hold đạt ba chiến lược matched C2 với production OPT-03;F chỉ có một phép đo kiểm release,không phải paired PPA. Không đồng nhất F_STA ước lượng với clock đã chạy trên board.
+
+Kiểm khóa trước chạy tuần14: `python scripts/audit_rtl_release.py`. Nếu hash nguồn/model/constraint đổi hoặc test final phát hiện mismatch: dừng,lưu failure,review release mới; không sửa RTL/oracle để hợp thức hóa checkpoint. Defined-clock CDC và reset review trước khóa đã có;review RDC/interface chi tiết W14-00b,final per-n,AC04,paired accuracy và Gate4 vẫn mở. Không chạy matrix tuần14 trong đợt promote này.
 
 ## Phụ lục A. Tóm tắt số liệu của [P] để đối chiếu
 

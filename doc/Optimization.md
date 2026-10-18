@@ -1,6 +1,6 @@
 # Optimization — Tối ưu RTL và hồ sơ kiểm chứng Posit MAC
 
-**Cập nhật:** 17/10/2026. Chuyển từ `Posit_MAC/l1/PLAN.md` theo yêu cầu sinh viên.
+**Cập nhật:** 18/10/2026. Chuyển từ `Posit_MAC/l1/PLAN.md` theo yêu cầu sinh viên.
 
 Tài liệu này giữ các phương án tối ưu, thay đổi RTL, kết quả mô phỏng/lint, synthesis và STA/PPA, gồm cả ứng viên không được chọn và giới hạn bằng chứng. Mọi đường dẫn code/results và lệnh trong phần lịch sử được hiểu từ gốc `Posit_MAC`, trừ liên kết Markdown đã ghi rõ. Không di chuyển hoặc sửa mã nguồn, kết quả, seed hay hash của checkpoint.
 
@@ -20,8 +20,8 @@ Các mã mục cũ `7.x`/`8.x` được giữ để truy vết report và liên 
 | OPS | Masked-popcount và data candidates chạy song song, một swap cuối | Mục8.10 |
 | Prepack OPT-01 | Không promote; production normalizer giữ gốc | Mục8.20 |
 | NF OPT-03 | Production dùng product RNE P1/P2 và parse/product bank riêng | Mục8.21 |
-| A1 OPT-02b | Candidate đã kiểm; chưa promote theo tiêu chí đa chiến lược | Mục8.23/8.24 |
-| SAC/packer/parse/A1–A2 tiếp theo | Đã khảo sát OPT-05/09/10A và tổ hợp; chưa promote,10B/11 tùy chọn còn mở | Mục8.25/8.28 và tiến độ§3.3 |
+| A1 OPT-02c | Đã promote và khóa; A1 Default+2,144ns,0 FF thêm | Mục8.30 |
+| SAC/packer/parse | Production OPT-02c + OPT-05 abc_tree + OPT-09 + OPT-10A; LOCKED_FOR_W14,38 module; cả3 strategy đạt100MHz | Mục8.30 |
 
 Các script report/prepare gắn checkpoint cũ là producer lịch sử, không chạy lại để tái chèn nhật ký vào PLAN hiện hành. Dùng snapshot/README của study khi tái lập; không sửa các script đã khóa hash chỉ để đổi nhãn báo cáo. Collector bảng toàn tầng hiện hành đã được đổi sang vùng báo cáo giới hạn trong tài liệu này.
 
@@ -632,11 +632,12 @@ Partition phủ toàn bộ930 FF, không trùng/thiếu bank; reset được tá
 | 1 — OPT-05 | SAC-A → SAC-B → SAC-C; C so riêng hai cách phát hiện zero/one-hot | Leaf/core/top bit-exact; xem cả fx feedback và đường last/approx_cut; giữ ứng viên trước nếu bước sau không có lợi |
 | 2 — OPT-09 | Product P2 lưu magnitude dương đã RNE/clamp, parser tích nhận magnitude trực tiếp | Định nghĩa bundle magnitude/sign/specials/flags/valid và backpressure; giữ parse(pack(u)), không bỏ làm tròn tích |
 | 3 — OPT-10A | Thay mask/lost reduction của packer bằng prefix OR và lookup hậu tố phù hợp | Thử trong P1 trước, không thêm bank; so đầy đủ G/R/S, specials và flags trên các format hỗ trợ |
-| 3b — OPT-10B, có điều kiện | Cân bằng sticky/flags từ P1 sang P2 nếu 10A chưa đủ và STA mới chỉ ra cần thiết | Liệt kê bit phải chốt, FF tăng và đường P2 mới; không ghép mặc định với10A |
-| 4 — OPT-11, có điều kiện | Cân bằng phần jam/alignment_tail từ A1 sang A2; C-prefix precompute là ứng viên riêng | Chứng minh đúng bundle mới, jam trước add/sub, cancellation và protocol; không ghép cùng precompute khi chưa đo riêng |
-| 5 — OPT-07/08 | Chọn tổ hợp có lợi, regression/freeze và review tác động NF/F | Đủ xác nhận theo §8.16.4/5, chỉ promote khi có bằng chứng; paired NF/F dùng điều kiện tương xứng |
+| 3b — OPT-10B, đóng sau 8.28 | Cân bằng sticky/flags từ P1 sang P2 (không mở vì 10A đã đưa `product_packer_p1` lên `+1.697 ns` và `final_packer_p1` lên `+3.184 ns`) | Đã đóng theo §8.28.4 / §8.29.3; không tăng FF biên P1/P2 |
+| 4a — OPT-02c, ưu tiên cho A1 | Tách `clamp_ab/ba` khỏi `shift_amount`, thay so sánh `>` 12-bit bằng bit-check và tra `jam/tail` song song theo `shift_ab`/`shift_ba` trong `posit_add_align.sv` | 0 FF, không đổi biên A1/A2; đặc tả chi tiết tại §8.29.2 |
+| 4b — OPT-11, dự phòng sau 02c | Cân bằng phần jam/alignment_tail từ A1 sang A2 (đóng nhánh `C-prefix precompute` vì đường găng xuất phát từ `norm_sf_q`) | Chỉ mở nếu sau `OPT-02c` vẫn cần thêm biên độ; không lấy CE slack A2 làm ngân sách số học (§8.29.2) |
+| 5 — OPT-07/08 | Chọn tổ hợp cuối (`OPT-02b/02c + OPT-05 abc_tree + OPT-09 + OPT-10A`), đối chiếu `OPT-03`, freeze/promote và đồng bộ NF/F | Đủ xác nhận theo §8.16.4/5 và §8.28/8.29; khóa baseline trước khi chạy W14-01..08 |
 
-Đọc lại STA toàn top sau mỗi bước đã qua kiểm chức năng; thứ tự sau SAC có thể điều chỉnh theo đường dài mới. Chưa mở OPT-04 A2/A3 hoặc các nhánh khác nếu không có report mới làm căn cứ.
+Đọc lại STA toàn top sau mỗi bước đã qua kiểm chức năng; các nhánh `OPT-04` (A2/A3 LOD), `OPT-06` (`posit_add_norm` zero/shared), `direct round_unpacked` và `remaining-scale budget` được đóng chính thức tại §8.29.3 do các bank tương ứng đã dư biên độ timing (`+1.344 .. +5.007 ns`).
 
 <a id="legacy-8-25-3"></a>
 
@@ -1293,3 +1294,189 @@ PPA Windows: run_opt05_ppa.ps1 -Variant baseline/abc_tree -Strategy Default/Expl
 Đã nén lossless và kiểm CRC/SHA từng entry trước dọn build caches,giải phóng642,878,086byte (~613.1MiB). Giữ source/lệnh/hash/report/fixture và routed DCP local; không đưa binary,wave,work hoặc cache vào Git. Archive manifest mô tả cả lượt lỗi/interrupted riêng,không cộng vào nghiệm thu.
 
 <!-- OPT825_REPORT_END -->
+
+<a id="legacy-8-29"></a>
+
+### 8.29. Phương án OPT-02c cho Adder A1 align và sàng lọc hạng mục tối ưu sau 8.28 — 18/10/2026
+
+Sau khi gói kết hợp (`OPT-02b + OPT-05 abc_tree + OPT-09 + OPT-10A`) tại mục 8.28 đạt bit-exact (10M NF + 10M F, 0 mismatch) và vượt ngưỡng 100 MHz trên cả 3 chiến lược (`F_STA = 109.41 / 110.95 / 110.96 MHz`, `Overall WNS = +0.669 / +0.730 / +0.845 ns`), các nút thắt cũ đã được giải tỏa (`product_packer_p1 = +1.697 ns`, `product_parse_bank = +3.208 ns`, `sac_state = +1.344 ns`, `sac_token_l1 = +2.814 ns`, `final_packer_p1 = +3.184 ns`). Đường tới hạn nội bộ số 1 hiện tại trên cả 3 chiến lược nằm tại **`adder_a1` (`+0.860 ns` ở Explore, `+0.987 ns` ở Default, `+0.988 ns` ở RuntimeOptimized)**.
+
+#### 8.29.1. Giải phẫu đường găng `adder_a1` trong `optcombo_20261018`
+
+Theo báo cáo `results/optcombo_20261018/ppa/combined/Default/adder_a1_setup.rpt`, đường găng `norm_sf_q_reg[1]/C -> a1_q_reg[y][0]/D` (data delay `8.870 ns`, 12 logic levels, slack `+0.987 ns`) và đường thứ hai vào `a1_q_reg[alignment_tail]/D` (slack `+1.153 ns`) bị kéo dài bởi 3 nguyên nhân nối tiếp trong `rtl/candidates/adder/opt02b/posit_add_align.sv`:
+
+1. **Hai chuỗi `CARRY4` nối tiếp nhau trước khi tạo `shift_amount`:**
+   - Chuỗi `CARRY4` thứ nhất (`3.260 -> 5.073 ns`, 3 `CARRY4`): tính hiệu 12-bit `diff_ba = b_sf - a_sf` và `diff_ab = a_sf - b_sf` (dòng 84–85).
+   - Nhánh so sánh tiếp theo (`5.073 -> 6.840 ns`) gồm 2 `CARRY4`, LUT và net, tổng `1.767 ns`: riêng delay hai CARRY4 là `0.672 ns`, còn LUT/net là `1.095 ns`. Đây là arrival tại các điểm của đường đã route; chưa chứng minh bỏ comparator sẽ tiết kiệm nguyên `1.767 ns`.
+2. **Nút thắt `shift_amount` bị chặn bởi `clamp_ab`/`clamp_ba` (fanout = 60):**
+   - Tại dòng 90–92:
+     ```systemverilog
+     shift_ab = clamp_ab ? shift_t'(F + 2) : shift_t'(diff_ab[SHIFT_W-1:0]);
+     shift_ba = clamp_ba ? shift_t'(F + 2) : shift_t'(diff_ba[SHIFT_W-1:0]);
+     shift_amount = sf_a_lt_b ? shift_ba : shift_ab;
+     ```
+   - `shift_ab`/`shift_ba` phụ thuộc clamp; đường report đi qua `shift_amount[3]` có fanout60, arrival `7.735 ns` tại LUT5 và `8.520 ns` sau net. Không gán fanout60 cho mọi bit nếu chưa đo. Với32/3,F26,ADD_W31,`u_align_shift` chỉ dịch30 bit phía trên; bit0 tạo riêng bằng jam.
+3. **Tra bảng 32-to-1 `jam`/`tail` nối tiếp sau `shift_amount` (`8.520 -> 11.674 ns`, 4 tầng LUT):**
+   - Sau khi `shift_amount` được chọn bởi `sf_a_lt_b = diff_ab[SF_W]`, tín hiệu còn phải đi qua cây MUX 32-to-1 (`jam_a[shift_amount]` / `jam_b[shift_amount]`) rồi mới trộn với `clamped` và `sf_equal` để nạp vào `a1_q.y[0]` và `a1_q.alignment_tail`.
+
+#### 8.29.2. Đặc tả kỹ thuật phương án `OPT-02c` (Tối ưu tổ hợp nội bộ `posit_add_align.sv`, 0 FF, giữ nguyên biên tầng)
+
+Quan sát hợp đồng đầu ra của tầng A1 tại `posit_add_align.sv` (dòng 160–167):
+```systemverilog
+end else if (clamped) begin
+  y = word_t'(1);
+  alignment_tail = 1'b1;
+```
+Khi `clamped == 1'b1`, toàn bộ kết quả của bộ dịch `shifted_main`, `jam_bit` và `lost_tail` **đều bị ghi đè hoàn toàn** bởi hằng số (`y = 1`, `alignment_tail = 1`). Do đó, việc kẹp `shift_ab`/`shift_ba` về `F + 2` bằng `clamp_ab`/`clamp_ba` trước khi đưa vào `shift_amount` là dư thừa về mặt logic nhưng lại cộng thêm `~2.0 ns` vào đường găng có fanout = 60.
+
+Phương án **`OPT-02c`** thử 3 cải tiến thuần tổ hợp trong `posit_add_align.sv` (không thêm FF RTL, không thay đổi `align_context_t` hay giao diện `posit_add_arith.sv` / `posit_add_comb.sv`). Mức giảm delay/LUT và slack>+2ns là mục tiêu, phải kiểm netlist/STA trước kết luận:
+
+1. **Tách `clamp_ab`/`clamp_ba` khỏi `shift_amount`:**
+   - Gán trực tiếp 5 bit thấp của hiệu scale factor:
+     ```systemverilog
+     shift_ab = shift_t'(diff_ab[SHIFT_W-1:0]);
+     shift_ba = shift_t'(diff_ba[SHIFT_W-1:0]);
+     shift_amount = sf_a_lt_b ? shift_ba : shift_ab;
+     ```
+   - Các bit thấp không cần chờ clamp hoặc carry vào bit cao. Đây là cơ sở rút ngắn đường điều khiển; số CARRY4 và thời điểm sẵn sàng thực tế phụ thuộc mapping/routing, chưa hứa giảm1,8–2ns.
+2. **Tra bảng `jam` và `tail` song song theo `shift_ab` / `shift_ba` trước khi chọn theo `sf_a_lt_b`:**
+   - Thay vì đợi bit dấu `sf_a_lt_b = diff_ab[SF_W]` ở đỉnh chuỗi `CARRY4` thứ 3 chọn xong `shift_amount` rồi mới tra bảng 32-to-1, thực hiện tra bảng song song trên từng nhánh ngay khi 5 bit thấp `shift_ab`/`shift_ba` vừa có:
+     - Nhánh `a >= b` (`b` là toán hạng nhỏ hơn, dịch bởi `shift_ab`): tính trước `jam_ab = jam_b[shift_ab]` và `tail_ab = tail_b[shift_ab]`.
+     - Nhánh `a < b` (`a` là toán hạng nhỏ hơn, dịch bởi `shift_ba`): tính trước `jam_ba = jam_a[shift_ba]` và `tail_ba = tail_a[shift_ba]`.
+   - Đưa lookup lên trước phép chọn theo dấu. Phép chọn và override cuối có thể cần nhiều mức LUT do special/equal/clamp; xác nhận độ sâu sau synthesis, không bảo đảm chỉ một LUT.
+3. **Thay bộ so sánh `CARRY4` 12-bit của `clamp_ab`/`clamp_ba` bằng kiểm tra bit trực tiếp:**
+   - Với hiệu không âm (`!diff[SF_W]`), điều kiện `diff > (F + 2)` tương đương với việc có bất kỳ bit cao nào trong `diff[SF_W-1:SHIFT_W]` khác 0, hoặc phần thấp `diff[SHIFT_W-1:0] > shift_t'(F + 2)`:
+     ```systemverilog
+     clamp_ab = !diff_ab[SF_W] && ((|diff_ab[SF_W-1:SHIFT_W]) || (diff_ab[SHIFT_W-1:0] > shift_t'(F + 2)));
+     clamp_ba = !diff_ba[SF_W] && ((|diff_ba[SF_W-1:SHIFT_W]) || (diff_ba[SHIFT_W-1:0] > shift_t'(F + 2)));
+     ```
+   - Với32/3, so phần thấp5-bit với28 có thể map vào LUT5; OR phần cao, qualification theo dấu và override vẫn là logic riêng. Không mặc định Vivado sẽ bỏ mọi CARRY4 hoặc đạt mức giảm delay dự đoán. Các format khác dùng F+2 và SHIFT_W tương ứng.
+
+**So sánh `OPT-02c` với `OPT-11` (A1 $\rightarrow$ A2 retiming):**
+- `OPT-02c` giữ nguyên 100% biên thanh ghi A1/A2, 0 FF tăng thêm, dùng chung trực tiếp cho cả `posit_add_comb` và `posit_add`, cắt bỏ cả chuỗi `CARRY4` thứ hai lẫn độ trễ nối tiếp của MUX 32-to-1 sau `sf_a_lt_b`.
+- `OPT-11` cần chốt bundle `align_context_t` và đếm FF theo tín hiệu thực sự chuyển tầng; chưa có cơ sở khóa con số7 FF. Logic jam phải hoàn tất trước cộng/trừ ở A2. Ưu tiên thử OPT-02c trước, không tự mở retiming trong đợt khóa RTL này.
+
+#### 8.29.3. Quyết định sàng lọc các hạng mục tối ưu sau 8.28
+
+Để tập trung nguồn lực cho kiểm chứng cuối Tuần 14–15 (`W14-00..08` và Gate 4), các hạng mục tối ưu trong mục 8.25 được phân loại lại dựa trên bằng chứng STA thực tế tại mục 8.28.3:
+
+1. **Các hạng mục ĐÁNG LÀM / TIẾP TỤC (`open` / `processing`):**
+   - **`OPT-00` / `OPT-02b` + `OPT-07/08` (Đối chiếu baseline `OPT-03` và Promote gói kết hợp lên `production`):** Chốt bảng so sánh 3 chiến lược giữa `production OPT-03` và gói kết hợp trên cùng `A35T-C2`, đồng bộ module dùng chung NF/F và promote lên `rtl/production.f`.
+   - **`OPT-02c` (Tối ưu tổ hợp `posit_add_align.sv`):** Thử nghiệm nhanh ứng viên `OPT-02c` trên nền gói 8.28 để nâng slack `adder_a1` (`+0.860..+0.988 ns`) lên vùng `> +2.0 ns` mà không tốn FF.
+2. **Các hạng mục ĐÓNG / KHÔNG CẦN TỐI ƯU THÊM (`closed — no longer needed`):**
+   - **`OPT-10B` (Dời sticky/flags từ P1 sang P2):** Đóng vì `OPT-10A` đã nâng `product_packer_p1` lên `+1.697 ns` và `final_packer_p1` lên `+3.184 ns`.
+   - **Nhánh `C-prefix precompute` tại `pair_retire` (thuộc `OPT-11`):** Đóng vì toàn bộ top critical paths tại `adder_a1` xuất phát từ `norm_sf_q` (scale factor của tích) qua bộ trừ `diff_ab/ba`, không xuất phát từ `c_frac_q`; thêm ~30 FF tại `pair_retire` không rút ngắn đường găng.
+   - **`OPT-04` (A2/A3 LOD) và `OPT-06` (`posit_add_norm` zero/shared):** Đóng vì `adder_a2` (`+5.007 ns`) và `adder_a3` (`+2.318 ns`) đã có biên độ timing rộng, cải tiến trước đó chỉ lệch 4–7 LUT.
+   - **Nhánh `direct round_unpacked` (bỏ qua pack $\rightarrow$ parse) và `remaining-scale budget` trong SAC:** Đóng vì `OPT-09` (`product_parse_bank = +3.208 ns`) và `OPT-05 abc_tree` (`sac_state = +1.344 ns`, `sac_token_l1 = +2.814 ns`) đã giải quyết triệt để các bank này với rủi ro thấp hơn nhiều.
+
+<a id="legacy-8-30"></a>
+
+### 8.30. OPT-02c, promote và khóa RTL trước W14 — 18/10/2026
+
+**Đã chọn và promote** `OPT-02c + OPT-05 abc_tree + OPT-09 + OPT-10A` vào production.
+Release `POSIT_MAC_RTL_20261018_OPT02C`, trạng thái `LOCKED_FOR_W14`, gồm38 module SV và header.
+Manifest: `rtl/production_freeze.json`; bằng chứng: `results/opt02c_20261018/summary.json`,
+`promotion.json`, `lock_receipt.json`, `evidence.zip` và `archive_manifest.json`.
+Nguồn trước promote, reference8.28 và candidate được giữ riêng trong snapshot/archive;
+không sửa hash hoặc ghi đè hồ sơ cũ.
+
+#### 8.30.1. Thay đổi RTL và giữ nguyên hợp đồng
+
+- A1: hai hiệu scale, hai clamp và hai nhánh tra jam/tail chạy song song; clamp không còn nối tiếp vào điều khiển shifter.
+  So sánh clamp bằng bit-check được qualify bằng dấu hiệu số. Equal-scale, specials, flags và jam giữ bit-exact; không thêm FF.
+- SAC/controller: fixed shift1, gộp scale+count+1 và zero/one-hot cân bằng (`abc_tree`); controller dùng exhausted đã kiểm.
+- Packer P1: prefix OR/lookup sticky; product P2 lưu magnitude đã RNE và sign riêng,
+  rồi `posit_magnitude_parse` giải mã magnitude trực tiếp.
+- Bảy file SV thay đổi/thêm được ghi hash trước/sau trong promotion.json.
+  Hai helper mới là `rtl/mac_nf/posit_product_pack.sv` và `posit_magnitude_parse.sv`.
+  `production.f` từ36 lên38 module; public ports/parameters, số học, reset/stall/commit và latency không đổi.
+  NF14 tầng: Lvalid=q+12, H=q+13, II=q+14. F13 tầng: q+11/q+12/q+13, q=max(1,t thực tế).
+  Magnitude P2 thêm1 FF metadata so với production cũ, không thêm bank hoặc tầng.
+  L1/oracle và hai XDC A35T-C2 giữ nguyên byte.
+
+#### 8.30.2. Chức năng và công cụ
+
+ModelSim10.1d, Verilator5.032, GCC15.2.0; Vivado2026.1 build6511674.
+NF seed20264217; F smoke seed20261015. Lệnh, source/tool/hash và counters giữ trong study.
+ES3 dùng oracle độc lập; không gọi SoftPosit32 ES2 là oracle ES3.
+
+| Kiểm chứng | Kết quả |
+| --- | --- |
+| A1 leaf baseline/candidate/oracle,11 profile, gồm F2..27 và SF_W35 | 0 mismatch;406 profile strict lint đạt |
+| NF pilot8/0,16/1,32/2,32/3 | 80.000 completed,0 mismatch |
+| NF acceptance32/3 | 10.000.000 completed,85.316 reset-abort,0 mismatch; toàn bộ JSON counters bằng8.28 |
+| NF ModelSim candidate4 format | 111.456 completed,288 reset-abort,0 mismatch |
+| F acceptance10M từ8.28 | Kế thừa có kiểm hash:23 SV+header dùng thực tế đều byte-identical; không chạy lại10M |
+| F smoke mới | 100.000 completed,0 mismatch; counters bằng8.28 |
+| Build từ production sau promote | 37 profile strict lint0 warning/error; NF smoke20.000/0 mismatch |
+| ModelSim từ production sau promote | NF32/3:27.864 completed/72 abort; F:8.192 completed/24 abort;0 mismatch, kiểm CK2Q1ns |
+
+Kiểm có reset khi busy/stall, metadata, thứ tự giao dịch, latency, flags và feedback.
+Đây là qualification trước W14, **chưa phải** final per-n, coverage AC04 hay Gate4.
+
+#### 8.30.3. PPA matched A35T-C2
+
+Part xc7a35tcpg236-1,10ns; uncertainty setup/hold0,100ns;
+input min=max2,500ns, output min0/max0,500ns. XDC đọc trước synthesis.
+Production là OPT-03 cũ; reference là tổ hợp OPT-02b của8.28, được dùng lại chỉ sau đối chiếu
+hash nguồn, thứ tự file, wrapper, XDC và flow. Candidate chỉ đổi A1 so với reference.
+Không nới ràng buộc, không thêm timing exception.
+
+| Gói | Strategy | WNS toàn thiết kế (ns) | R2R WNS (ns) | WHS (ns) | LUT | FF | CARRY4 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| production | Default | -2.840 | -2.840 | +0.014 | 2463 | 930 | 99 |
+| production | Explore | -2.454 | -2.454 | +0.014 | 2463 | 930 | 99 |
+| production | RuntimeOptimized | -3.202 | -3.202 | +0.014 | 2463 | 930 | 99 |
+| reference | Default | +0.730 | +0.987 | +0.028 | 2547 | 931 | 86 |
+| reference | Explore | +0.669 | +0.860 | +0.046 | 2548 | 931 | 86 |
+| reference | RuntimeOptimized | +0.845 | +0.988 | +0.039 | 2587 | 931 | 86 |
+| candidate | Default | +0.894 | +1.259 | +0.053 | 2546 | 931 | 82 |
+| candidate | Explore | +0.894 | +1.259 | +0.053 | 2546 | 931 | 82 |
+| candidate | RuntimeOptimized | +1.011 | +1.453 | +0.053 | 2587 | 931 | 82 |
+
+Median F_STA nội bộ: production77,88MHz → reference110,95MHz → candidate114,40MHz.
+Đây là 1000/(10−R2R_WNS), **ước lượng từ STA tại100MHz**, chưa phải quét clock hoặc đo kit.
+Candidate đạt setup/hold100MHz trên cả3 strategy; Default/Explore cho cùng kết quả vật lý,
+không tính là hai seed ngẫu nhiên độc lập. Default so production: +83 LUT,+1 FF,−17 CARRY4;
+so reference:−1 LUT,0 FF,−4 CARRY4. Không tuyên bố giảm tổng LUT so production.
+
+A1 Default: data delay8,870→7,718ns,12→7 logic levels, setup slack+0,987→+2,144ns.
+Đường găng R2R mới thuộc accumulator→parserC P1 (+1,259ns).
+Không mở thêm tối ưu parser/control sau khi khóa.
+
+F release Default32/3 FW12 W32 EXACT_EN0: WNS+0,982ns,WHS+0,045ns,
+R2R+2,002ns,1486 LUT/815 FF/69 CARRY4; đạt mốc100MHz.
+NF trong bảng dùng EXACT_EN1, vì vậy **không dùng bảng này kết luận paired NF/F PPA**.
+Comparator NF EXACT_EN0 và matched PPA tuần15 còn phải làm.
+
+#### 8.30.4. Reset/CDC, giới hạn và lỗi runner đã xử lý
+
+NF/F có1 clock,0 latch,0 unrouted;931/815 FF,20/18 ASYNC_REG.
+report_cdc: All paths are Safely Timed. Giữ bridge và2FF reset release;
+sign P2 mới dùng cùng reset/CE. Không thêm clock/reset domain.
+Đây chưa phải formal RDC hoặc board signoff; review interface/RDC W14-00b vẫn phải hoàn tất.
+Methodology XDCH-2 do budget input min=max và DRC CFGBVS-1 do benchmark OOC không cấu hình
+điện áp board được giữ nguyên, ghi rõ giới hạn. Không bỏ warning để làm đẹp kết quả.
+
+Production cũ không đạt setup: Route35-39 trong các lượt baseline được ghi là timing fail,
+không phải candidate pass. Collector chỉ chấp nhận warning này khi đi cùng slack âm tương ứng.
+Các lỗi launcher không được tính làm bằng chứng PASS: CR cuối lệnh tail sau NF10M
+(JSON mô phỏng đã hoàn tất; sửa LF, không chạy lại10M), đường dẫn DCP có khoảng trắng ở
+release_checks (sửa ởv2), và PowerShell unwrap tuple làm thiếu ES ở active_event
+(sửa ở active_event_v2). Giữ log các lượt lỗi để truy vết.
+
+#### 8.30.5. Khóa nguồn và bàn giao W14
+
+```powershell
+python scripts/audit_rtl_release.py --self-test
+```
+
+Validator kiểm hash38 SV+header, L1/oracle headers, production.f, maps, filelistF và haiXDC;
+4/4 mutation giả lập bị từ chối, không sửa nguồn thật.
+Không sửa các file đã khóa khi chạy W14; nếu phát hiện lỗi phải mở change review,
+kiểm lại phạm vi ảnh hưởng và tạo release mới, không âm thầm rehash.
+Script lịch sử kiểm hash cũ cần chạy trên snapshot tương ứng, không đổi hash để nhận PASS.
+
+Bước kế: W14-00 (matrix freeze/đối chiếu contract và review W14-00b), rồi W14-01..08
+theo tiến độ. **Chưa chạy W14 final matrix, chưa đóng Gate4.** Các nhánh đã đóng ở8.29
+tiếp tục đóng. Không chạy thêm A100T hoặc thay FW12.

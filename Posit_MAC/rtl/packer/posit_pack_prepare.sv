@@ -46,8 +46,10 @@ module posit_pack_prepare #(
     wire [SHIFT_W-1:0] offset;
     wire [PAYLOAD_W-1:0] payload;
     wire [PAYLOAD_W-1:0] shifted;
-    wire [PAYLOAD_W-1:0] lost_mask;
-    wire lost_sticky;
+    localparam int LOW_W = PAYLOAD_W - NB - 1;
+    localparam int OFFSETS = 1 << SHIFT_W;
+    wire [OFFSETS-1:0] sticky_lookup;
+    wire payload_sticky;
 
     generate
         if (NB < 4 || NB > 32 || ES < 0 || ES > NB - 4 ||
@@ -84,18 +86,28 @@ module posit_pack_prepare #(
         .out (shifted)
     );
 
-    // This mask collects original bits discarded by the right shift.
-    // It does not include the regime fill bits introduced above the payload.
-    assign lost_mask = ~({PAYLOAD_W{1'b1}} << offset);
-    assign lost_sticky = |(payload & lost_mask);
+    // Union of shift-discarded bits and the retained low shifted slice:
+    // original payload[LOW_W + offset - 1:0]. Fixed slices run in parallel
+    // with the barrel shifter. Include exponent and regime bits, not only frac.
+    generate
+        for (genvar j = 0; j < OFFSETS; j++) begin : g_sticky_prefix
+            if (LOW_W + j <= PAYLOAD_W) begin : g_payload_only
+                assign sticky_lookup[j] = |payload[LOW_W+j-1:0];
+            end else begin : g_with_fill
+                // Preserve raw combinational behavior even for oversized
+                // offsets that the normal finite encoding does not use.
+                assign sticky_lookup[j] = (|payload) | first_regime_bit;
+            end
+        end
+    endgenerate
+    assign payload_sticky = sticky_lookup[offset];
 
     always_comb begin
         mag_trunc = shifted[PAYLOAD_W-1 -: NB-1];
         guard_bit = shifted[PAYLOAD_W-NB];
         round_bit = shifted[PAYLOAD_W-NB-1];
         sticky_bit = sticky
-                   | lost_sticky
-                   | (|shifted[PAYLOAD_W-NB-2:0]);
+                   | payload_sticky;
         sign_o = sign;
         special_sel = NORMAL;
         flags_o = {1'b0, flags_in[3:0]};

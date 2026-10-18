@@ -1,0 +1,1533 @@
+{
+  "status": "PASS_W14_01_TO_04",
+  "release_id": "POSIT_MAC_RTL_20261018_OPT12_120",
+  "pilots": [
+    {
+      "job": "f32_3_ops1_n0",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 3.903164825999994,
+      "rate": 5124.046995600803,
+      "rss_kib": 19056,
+      "coverage": {
+        "points": {
+          "v_toggle": 4897,
+          "v_line": 60,
+          "v_branch": 108
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "fused_abs_borrow_comb.sv",
+          "fused_add_pipe.sv",
+          "fused_align_comb.sv",
+          "fused_arith_comb.sv",
+          "fused_norm_comb.sv",
+          "fused_prepare_comb.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_f_wrapper.sv",
+          "mul_iter_core.sv",
+          "ops_sel_comb.sv",
+          "posit_mac_f.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "f32_3_ops1_n0",
+      "phase": "pilot_fast",
+      "completed": 20000,
+      "seconds": 0.2290933069999994,
+      "rate": 87300.67351989489,
+      "rss_kib": 18604,
+      "coverage": {
+        "instrumentation": "line-only numerical pilot, not AC04"
+      }
+    },
+    {
+      "job": "f32_3_ops1_n1",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 3.9969415990000243,
+      "rate": 5003.825926554369,
+      "rss_kib": 19056,
+      "coverage": {
+        "points": {
+          "v_toggle": 4897,
+          "v_line": 60,
+          "v_branch": 108
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "fused_abs_borrow_comb.sv",
+          "fused_add_pipe.sv",
+          "fused_align_comb.sv",
+          "fused_arith_comb.sv",
+          "fused_norm_comb.sv",
+          "fused_prepare_comb.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_f_wrapper.sv",
+          "mul_iter_core.sv",
+          "ops_sel_comb.sv",
+          "posit_mac_f.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "f32_3_ops1_n1",
+      "phase": "pilot_fast",
+      "completed": 20000,
+      "seconds": 0.232929103999993,
+      "rate": 85863.03581883268,
+      "rss_kib": 18604,
+      "coverage": {
+        "instrumentation": "line-only numerical pilot, not AC04"
+      }
+    },
+    {
+      "job": "f32_3_ops1_n2",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 3.9467934779999894,
+      "rate": 5067.404745518852,
+      "rss_kib": 19056,
+      "coverage": {
+        "points": {
+          "v_toggle": 4897,
+          "v_line": 60,
+          "v_branch": 108
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "fused_abs_borrow_comb.sv",
+          "fused_add_pipe.sv",
+          "fused_align_comb.sv",
+          "fused_arith_comb.sv",
+          "fused_norm_comb.sv",
+          "fused_prepare_comb.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_f_wrapper.sv",
+          "mul_iter_core.sv",
+          "ops_sel_comb.sv",
+          "posit_mac_f.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "f32_3_ops1_n2",
+      "phase": "pilot_fast",
+      "completed": 20000,
+      "seconds": 0.24740990399999419,
+      "rate": 80837.50762055375,
+      "rss_kib": 18604,
+      "coverage": {
+        "instrumentation": "line-only numerical pilot, not AC04"
+      }
+    },
+    {
+      "job": "f32_3_ops1_n3",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 3.998469865000004,
+      "rate": 5001.913400690336,
+      "rss_kib": 19056,
+      "coverage": {
+        "points": {
+          "v_toggle": 4897,
+          "v_line": 60,
+          "v_branch": 108
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "fused_abs_borrow_comb.sv",
+          "fused_add_pipe.sv",
+          "fused_align_comb.sv",
+          "fused_arith_comb.sv",
+          "fused_norm_comb.sv",
+          "fused_prepare_comb.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_f_wrapper.sv",
+          "mul_iter_core.sv",
+          "ops_sel_comb.sv",
+          "posit_mac_f.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "f32_3_ops1_n3",
+      "phase": "pilot_fast",
+      "completed": 20000,
+      "seconds": 0.26457670399997824,
+      "rate": 75592.44520636875,
+      "rss_kib": 18604,
+      "coverage": {
+        "instrumentation": "line-only numerical pilot, not AC04"
+      }
+    },
+    {
+      "job": "f32_3_ops1_n4",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 3.866568897999997,
+      "rate": 5172.54458089318,
+      "rss_kib": 19056,
+      "coverage": {
+        "points": {
+          "v_toggle": 4897,
+          "v_line": 60,
+          "v_branch": 108
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "fused_abs_borrow_comb.sv",
+          "fused_add_pipe.sv",
+          "fused_align_comb.sv",
+          "fused_arith_comb.sv",
+          "fused_norm_comb.sv",
+          "fused_prepare_comb.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_f_wrapper.sv",
+          "mul_iter_core.sv",
+          "ops_sel_comb.sv",
+          "posit_mac_f.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "f32_3_ops1_n4",
+      "phase": "pilot_fast",
+      "completed": 20000,
+      "seconds": 0.26316660399999137,
+      "rate": 75997.48484804195,
+      "rss_kib": 18604,
+      "coverage": {
+        "instrumentation": "line-only numerical pilot, not AC04"
+      }
+    },
+    {
+      "job": "f32_3_ops1_n5",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.071671632999994,
+      "rate": 4911.987459377727,
+      "rss_kib": 19056,
+      "coverage": {
+        "points": {
+          "v_toggle": 4897,
+          "v_line": 60,
+          "v_branch": 108
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "fused_abs_borrow_comb.sv",
+          "fused_add_pipe.sv",
+          "fused_align_comb.sv",
+          "fused_arith_comb.sv",
+          "fused_norm_comb.sv",
+          "fused_prepare_comb.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_f_wrapper.sv",
+          "mul_iter_core.sv",
+          "ops_sel_comb.sv",
+          "posit_mac_f.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "f32_3_ops1_n5",
+      "phase": "pilot_fast",
+      "completed": 20000,
+      "seconds": 0.25513490400001615,
+      "rate": 78389.90152440582,
+      "rss_kib": 18604,
+      "coverage": {
+        "instrumentation": "line-only numerical pilot, not AC04"
+      }
+    },
+    {
+      "job": "f32_3_ops1_n6",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 3.9524121250000235,
+      "rate": 5060.201053805815,
+      "rss_kib": 19056,
+      "coverage": {
+        "points": {
+          "v_toggle": 4897,
+          "v_line": 60,
+          "v_branch": 108
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "fused_abs_borrow_comb.sv",
+          "fused_add_pipe.sv",
+          "fused_align_comb.sv",
+          "fused_arith_comb.sv",
+          "fused_norm_comb.sv",
+          "fused_prepare_comb.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_f_wrapper.sv",
+          "mul_iter_core.sv",
+          "ops_sel_comb.sv",
+          "posit_mac_f.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "f32_3_ops1_n6",
+      "phase": "pilot_fast",
+      "completed": 20000,
+      "seconds": 0.25072170499998947,
+      "rate": 79769.71917928223,
+      "rss_kib": 18604,
+      "coverage": {
+        "instrumentation": "line-only numerical pilot, not AC04"
+      }
+    },
+    {
+      "job": "f32_3_ops1_n7",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.085647228999989,
+      "rate": 4895.185237247035,
+      "rss_kib": 19056,
+      "coverage": {
+        "points": {
+          "v_toggle": 4897,
+          "v_line": 60,
+          "v_branch": 108
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "fused_abs_borrow_comb.sv",
+          "fused_add_pipe.sv",
+          "fused_align_comb.sv",
+          "fused_arith_comb.sv",
+          "fused_norm_comb.sv",
+          "fused_prepare_comb.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_f_wrapper.sv",
+          "mul_iter_core.sv",
+          "ops_sel_comb.sv",
+          "posit_mac_f.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "f32_3_ops1_n7",
+      "phase": "pilot_fast",
+      "completed": 20000,
+      "seconds": 0.282791503999988,
+      "rate": 70723.48255554683,
+      "rss_kib": 18604,
+      "coverage": {
+        "instrumentation": "line-only numerical pilot, not AC04"
+      }
+    },
+    {
+      "job": "f32_3_ops1_n8",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.058683829000017,
+      "rate": 4927.705838305621,
+      "rss_kib": 19056,
+      "coverage": {
+        "points": {
+          "v_toggle": 4897,
+          "v_line": 60,
+          "v_branch": 108
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "fused_abs_borrow_comb.sv",
+          "fused_add_pipe.sv",
+          "fused_align_comb.sv",
+          "fused_arith_comb.sv",
+          "fused_norm_comb.sv",
+          "fused_prepare_comb.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_f_wrapper.sv",
+          "mul_iter_core.sv",
+          "ops_sel_comb.sv",
+          "posit_mac_f.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "f32_3_ops1_n8",
+      "phase": "pilot_fast",
+      "completed": 20000,
+      "seconds": 0.23968790399999307,
+      "rate": 83441.84110350674,
+      "rss_kib": 18604,
+      "coverage": {
+        "instrumentation": "line-only numerical pilot, not AC04"
+      }
+    },
+    {
+      "job": "nf32_3_ops1_n0",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.4947362,
+      "rate": 4449.649347607986,
+      "rss_kib": 19568,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops1_n1",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.601385099999998,
+      "rate": 4346.517312797838,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops1_n2",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.704968400000002,
+      "rate": 4250.82557408887,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops1_n3",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.8457996439999995,
+      "rate": 4127.285787550815,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops1_n4",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 5.011937007,
+      "rate": 3990.4731388416667,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops1_n5",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 5.059431298,
+      "rate": 3953.013455861339,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops1_n6",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 5.064971218000004,
+      "rate": 3948.68976331466,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops1_n7",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 5.167973574000001,
+      "rate": 3869.988829010215,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops1_n8",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 5.003105689999998,
+      "rate": 3997.5169902916855,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops0_n0",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.524884643,
+      "rate": 4420.002183025818,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops0_n1",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.542609609999992,
+      "rate": 4402.755622224828,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops0_n2",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.686387255,
+      "rate": 4267.679752385295,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops0_n3",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.866755075,
+      "rate": 4109.514387263468,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops0_n4",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.9677251960000035,
+      "rate": 4025.987592088213,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops0_n5",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 5.079678195,
+      "rate": 3937.25728918936,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops0_n6",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 5.140720883,
+      "rate": 3890.5049418533076,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ops0_n8",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 5.313277326999994,
+      "rate": 3764.1551097601914,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7009,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_2_ops0_n1",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.505089111000004,
+      "rate": 4439.423839845103,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7099,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_2_ops0_n2",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.751227665000002,
+      "rate": 4209.438362074361,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7099,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_2_ops0_n3",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.999813430000003,
+      "rate": 4000.149261569544,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7099,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_2_ops0_n4",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 5.042496265000011,
+      "rate": 3966.289502050817,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7099,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_2_ops1_n1",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.601885281999998,
+      "rate": 4346.044886913808,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7099,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_2_ops1_n2",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.668609369000009,
+      "rate": 4283.930913732432,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7099,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_2_ops1_n3",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.777800049999996,
+      "rate": 4186.026997927637,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7099,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_2_ops1_n4",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.831339644999986,
+      "rate": 4139.638582582007,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 7099,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    },
+    {
+      "job": "nf32_3_ex0_ops1_n3",
+      "phase": "pilot",
+      "completed": 20000,
+      "seconds": 4.3491349789999845,
+      "rate": 4598.615608982246,
+      "rss_kib": 19624,
+      "coverage": {
+        "points": {
+          "v_toggle": 6287,
+          "v_line": 68,
+          "v_branch": 126
+        },
+        "active_rtl_files": [
+          "dyn_left_shifter.sv",
+          "dyn_right_shifter.sv",
+          "iter_ctrl.sv",
+          "lod_lzd_core.sv",
+          "mac_nf_wrapper.sv",
+          "mul_iter_core.sv",
+          "mul_prepack_norm_comb.sv",
+          "ops_sel_comb.sv",
+          "posit_add.sv",
+          "posit_add_align.sv",
+          "posit_add_arith.sv",
+          "posit_add_normalize.sv",
+          "posit_mac_nf.sv",
+          "posit_magnitude_parse.sv",
+          "posit_pack.sv",
+          "posit_pack_finish.sv",
+          "posit_pack_prepare.sv",
+          "posit_parser.sv",
+          "posit_product_pack.sv",
+          "sac_step_comb.sv",
+          "sbm_accum.sv",
+          "sbm_accum_comb.sv",
+          "sbm_shift_comb.sv"
+        ]
+      }
+    }
+  ],
+  "accuracy": {
+    "status": "PASS",
+    "cpp_samples_per_n": 100000,
+    "n": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "python_fraction_checks_per_n": [
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024
+    ],
+    "total_python_checks": 9216,
+    "metrics": "decode, exact real A*B+C, independent RNE, absolute/relative error and strict thresholds",
+    "tolerance": "long-double numerical metrics relative1e-15; exact integer classification/reference bits",
+    "scope": "standalone accuracy pilot, not RTL main accuracy or W14-09",
+    "policy": "Standalone shared C; future acc_mode suite reports own NF/F states and exact-real reference state separately, never silently reuses common C across divergent feedback"
+  },
+  "counter_microtests": "PASS",
+  "audit_negative_tests": 9,
+  "failure_replay": "actual corrupted-expected failure rejected and exact packet reproduced",
+  "corners": "64 directed tags/n,9n,180000completed,0mismatch; includes golden/delta28/29/deepLZC/zero/NaR",
+  "warning_review": "One feature-pruned UNUSEDSIGNAL port-line waiver for NF EXACT_EN0 only; raw warning retained. ASSIGNDLY expected in no-timing cycle runs; same RTL4state evidence in review.",
+  "structural_scope": "Pilot proves instrumentation availability; AC04 closure NOT granted"
+}

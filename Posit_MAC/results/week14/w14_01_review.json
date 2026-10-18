@@ -1,0 +1,30 @@
+{
+  "status": "PASS_SCOPED_REVIEW",
+  "release_id": "POSIT_MAC_RTL_20261018_OPT12_120",
+  "release_sha256": "3df1ce053f92439deef36eb17f26a2fe7140b91a95ed484a519471754ddfa4ec",
+  "evidence": {
+    "nf": {
+      "results\\opt120_20261018\\ppa\\negate\\p8300\\Explore_r1\\cdc.rpt": "e9559a1922301d3f939eab92996984777794cf23fed4194195098c33b725a380",
+      "results\\opt120_20261018\\ppa\\negate\\p8300\\Explore_r1\\methodology.rpt": "3b7140cfa21a1c106ca07da84d4f13e25f1545308c5c7b1bf874e84bb2cbc822",
+      "results\\opt120_20261018\\ppa\\negate\\p8300\\Explore_r1\\drc.rpt": "ed371d332b7c55f0f78c552239011f78d3332440130519537e3c55e59607cf28"
+    },
+    "f": {
+      "results\\opt120_20261018\\ppa_f\\negate\\p8300\\Explore_r1\\cdc.rpt": "3de59fdb93808ed1edb5a1af01c30440600a49bfc8b886116bd06dabaab49f9f",
+      "results\\opt120_20261018\\ppa_f\\negate\\p8300\\Explore_r1\\methodology.rpt": "5496cf253e99c86863dd18536000d112f743ea458f305c89c46ab43e489ec952",
+      "results\\opt120_20261018\\ppa_f\\negate\\p8300\\Explore_r1\\drc.rpt": "f4cd775f48b3a793de571078d13bcf42172f52a04eadc46abcf9b933989801da"
+    }
+  },
+  "checklist": {
+    "clock": "single clk; BUFG in measurement wrappers; no fabric-gated clock",
+    "reset": "SPEC4.2 synchronous rst_n sampled into bridge; local async assertion/two-FF release",
+    "startup": "in_ready/out_valid gated by rst_n,meta_sync2 and leaf ready/barrier",
+    "context": "pair_accept captures operands/config/C_eff; pair_retire uses all three parser valids",
+    "ce_stall": "elastic valid/ready banks hold data; production event regression checked output hold and order",
+    "commit": "committed_q prevents repeated accumulator update while output stalled; acc_clr at accept",
+    "reset_abort": "reset flushes pending/context/accumulator; accepted=completed+aborted; W14 pilot rechecks",
+    "guideline_mapping": "Xilinx ASYNC_REG 2FF implements synchronizer intent; no literal Marvell ASIC cell in FPGA",
+    "methodology": "XDCH-2 explained by fixed equal min/max I/O benchmark; CFGBVS/PARTPIN OOC not board pinout"
+  },
+  "event_evidence": "results/opt120_20261018/summary.json events.negate: NF111456/F8192,0 mismatch,8ns CK2Q1ns",
+  "limits": "RTL/source plus existing same-hash routed CDC and four-state evidence review; not formal RDC/metastability or board signoff"
+}

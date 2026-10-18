@@ -46,7 +46,7 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 | 11 | MAC non-fused — Gate3 | ✅ | Hoàn thành14/10: lượt mới10 triệu/0 mismatch,near52,55548%,coverage và ModelSim corner đạt; giữ F pilot,final/F RTL/PPA còn theo các tuần sau |
 | 12 | Oracle/L1 fused và timing sơ bộ NF | ✅ | Hoàn thành15/10:G-F-L1/W32,main phân tầng0 mismatch;đã đo toànNF,đề xuất pipeline,bàn giao và sao lưu. 100MHz chưa đạt,F RTL/accuracy/PPA cuối còn theo các tuần sau |
 | 13 | RTL fused | processing | Đã triển khai sớm15/10: main10M/0 mismatch,pipeline/XSim đạt,STA A35T100MHz R2R đạt; còn hoàn thiện coverage/signoff,final per-n và so sánh theo tuần14–15 |
-| 14 | Regression và accuracy paired NF/F | không | 09–15/11: nghiệm thu đúng riêng từng bản, coverage và corpus chung. Trình tự review → harness → pilot → freeze → main → closure tại mục3.2; chưa thực thi TC W14 |
+| 14 | Regression và accuracy paired NF/F | processing | Đã chạy sớm18/10: W14-01..06 đạt,F90M/0 mismatch. Còn NF main,AC04,paired accuracy,comparator và audit cuối; xem mục3.2/Optimization8.33 |
 | 15 | PPA hai bản và bản thảo — Gate4 | không | 16–22/11: cùng điều kiện,≥3 run/config; accuracy/timing/II/tài nguyên và kết luận |
 | 16 | Báo cáo, demo và bảo vệ | processing | 23–29/11: chốt hồ sơ/tái lập/slide/demo; hiện mới có slide các khối. Đệm30/11–04/12 |
 
@@ -63,7 +63,7 @@ W13-01..05 đã hoàn thành phạm vi bản đầu; checklist chi tiết đã g
 
 **Lập ngày:** 15/10/2026; **sắp lại trình tự:** 18/10/2026 theo yêu cầu sinh viên. **Mốc gốc:** 09–15/11/2026; có thể chuẩn bị sớm trên release đã khóa. **Người thực hiện:** Codex. **Nghiệm thu:** sinh viên, cùng người review kế hoạch/test.
 **Mục tiêu:** chứng minh NF/F bit-exact trên ma trận bắt buộc, đạt coverage AC04 và đo paired accuracy để bàn giao PPA tuần15.
-**Đầu vào tham chiếu:** `POSIT_MAC_RTL_20261018_OPT02C`, `rtl/production_freeze.json`. **Chưa chạy W14 trong khi mở candidate120+MHz**; sau khi chọn/kiểm candidate phải khóa release cuối và gắn hash đó vào matrix. Không lấy audit PASS của reference cũ làm nghiệm thu candidate mới.
+**Đầu vào hiện hành:** `POSIT_MAC_RTL_20261018_OPT12_120`; đã được sinh viên chỉ đạo chạy đến W14-06. Source/matrix/binary freeze và kiểm thử tại results/week14, chi tiết Optimization8.33. Không dùng checkpoint100MHz hoặc10M aggregate cũ thay final từng n.
 
 W13-06 được đóng sau khi counters đã kiểm và coverage thực sự đạt W14-08; không yêu cầu phủ100% trước khi có harness. Phần reset/interface của W13-07 kiểm ở W14-01; matched PPA vẫn thuộc tuần15, không dùng nó làm điều kiện bắt đầu chuẩn bị W14.
 
@@ -80,16 +80,16 @@ W13-06 được đóng sau khi counters đã kiểm và coverage thực sự đ�
 
 ### 3.2.2. Trình tự thực thi và điểm dừng
 
-Mã W14-01..11 trùng đúng bước1..11 theo thứ tự thực hiện; W14-12 là nhánh exact ngoài đường chính. Các mã W14 cũ trước lần đánh số18/10 chỉ dùng truy vết lịch sử, không dùng để giao việc mới. Tất cả mục dưới là kế hoạch, chưa ghi nhận hoàn thành.
+Mã W14-01..11 trùng đúng bước1..11 theo thứ tự thực hiện; W14-12 là nhánh exact ngoài đường chính. Các mã W14 cũ trước lần đánh số18/10 chỉ dùng truy vết lịch sử, không dùng để giao việc mới. W14-01..06 đã hoàn thành phạm vi ngày18/10; W14-07..12 còn mở.
 
 | Bước | ID | Việc cần làm | Chỉ chuyển bước khi |
 | --- | --- | --- | --- |
-| 1 | W14-01 | Kiểm lock release; review reset bridge/2FF release, startup, CE, giao dịch bị reset và interface NF/F; đối chiếu guideline với CDC/methodology đã có | TC-W14-01 PASS; không còn vấn đề nghiêm trọng chưa giải thích. Không cần chạy lại P&R nếu nguồn/flow không đổi |
-| 2 | W14-02 | Định nghĩa bins/cross NF/F theo §6.3/6.6, miền hợp lệ, mẫu số near và kế hoạch structural coverage; triển khai counters và test nhỏ kiểm cách đếm | TC-W14-02 PASS về định nghĩa và tính đúng counters; chưa đòi tất cả bin đã hit |
-| 3 | W14-03 | Lập matrix nháp; xây harness chọn cố định n/OPS/profile, oracle/scoreboard và failure replay; chuẩn bị bộ đo accuracy và comparator EXACT_EN0; snapshot pilot trước chạy | TC-W14-03 PASS; mỗi job định danh rõ, audit chống sai số mẫu/hash/status đã được thử bằng dữ liệu lỗi |
-| 4 | W14-04 | Pilot NF/F qua mọi n và các profile bắt buộc, corner/protocol và comparator; pilot accuracy10^5, đối chuẩn ≥1000 mẫu bằng Python; đo runtime/tài nguyên | TC-W14-04a và TC-W14-04b PASS; mọi hàng có pilot, không dùng pilot ít mẫu tuyên bố đạt coverage cuối |
-| 5 | W14-05 | Khóa `results/week14/matrix_freeze.json`: từng job, số mẫu, seed, source/model/harness/generator/oracle hash, coverage policy, corpus accuracy và provenance pilot | TC-W14-05 PASS; cấu hình main trùng phạm vi pilot đã kiểm, nguồn release không đổi |
-| 6 | W14-06 | Main F32/3 FW12 W32 OPS1 FLOOR/RNE, n0..8: ≥10^7 completed/n; kiểm bits/flags/state và near trước/sau cut | TC-W14-06a/b/c PASS cho toàn bộ9 n; mismatch dừng và giữ failure |
+| 1 | W14-01 | Kiểm lock release; review reset bridge/2FF release, startup, CE, giao dịch bị reset và interface NF/F; đối chiếu guideline với CDC/methodology đã có | TC-W14-01 PASS; không còn vấn đề nghiêm trọng chưa giải thích. Không cần chạy lại P&R nếu nguồn/flow không đổi  **Đã đạt18/10**, evidence Optimization8.33/results/week14. |
+| 2 | W14-02 | Định nghĩa bins/cross NF/F theo §6.3/6.6, miền hợp lệ, mẫu số near và kế hoạch structural coverage; triển khai counters và test nhỏ kiểm cách đếm | TC-W14-02 PASS về định nghĩa và tính đúng counters; chưa đòi tất cả bin đã hit  **Đã đạt18/10**, evidence Optimization8.33/results/week14. |
+| 3 | W14-03 | Lập matrix nháp; xây harness chọn cố định n/OPS/profile, oracle/scoreboard và failure replay; chuẩn bị bộ đo accuracy và comparator EXACT_EN0; snapshot pilot trước chạy | TC-W14-03 PASS; mỗi job định danh rõ, audit chống sai số mẫu/hash/status đã được thử bằng dữ liệu lỗi  **Đã đạt18/10**, evidence Optimization8.33/results/week14. |
+| 4 | W14-04 | Pilot NF/F qua mọi n và các profile bắt buộc, corner/protocol và comparator; pilot accuracy10^5, đối chuẩn ≥1000 mẫu bằng Python; đo runtime/tài nguyên | TC-W14-04a và TC-W14-04b PASS; mọi hàng có pilot, không dùng pilot ít mẫu tuyên bố đạt coverage cuối  **Đã đạt18/10**, evidence Optimization8.33/results/week14. |
+| 5 | W14-05 | Khóa `results/week14/matrix_freeze.json`: từng job, số mẫu, seed, source/model/harness/generator/oracle hash, coverage policy, corpus accuracy và provenance pilot | TC-W14-05 PASS; cấu hình main trùng phạm vi pilot đã kiểm, nguồn release không đổi  **Đã đạt18/10**, evidence Optimization8.33/results/week14. |
+| 6 | W14-06 | Main F32/3 FW12 W32 OPS1 FLOOR/RNE, n0..8: ≥10^7 completed/n; kiểm bits/flags/state và near trước/sau cut | TC-W14-06a/b/c PASS cho toàn bộ9 n; mismatch dừng và giữ failure  **Đã đạt18/10**, evidence Optimization8.33/results/week14. |
 | 7 | W14-07 | Main NF:32/3 OPS1 n0..8;32/3 OPS0 n{0,1,2,3,4,5,6,8};32/2 OPS0/1 n1..4, ≥10^7 completed/điểm | TC-W14-07 PASS cho mọi hàng; có thể chạy song song bước6 chỉ khi pilot xác nhận đủ RAM/CPU/disk |
 | 8 | W14-08 | Gộp coverage từ các lượt final cùng release/instrumentation; kiểm ngưỡng và functional bins. Nếu thiếu, thêm suite directed có manifest riêng trước chạy, giữ nguyên corpus/main gốc | TC-W14-08 PASS; mỗi top line≥95%,branch≥90%,toggle≥85%,100% functional bin hợp lệ; không tự miễn bin còn thiếu |
 | 9 | W14-09 | Main paired accuracy ≥10^6 triple/profile: n2/4/8 trước, sau đó đủ n0..8 trên corpus đã khóa | TC-W14-09 PASS; correctness NF/F đã đạt, báo cả trường hợp F kém NF |
@@ -128,7 +128,8 @@ Mã W14-01..11 trùng đúng bước1..11 theo thứ tự thực hiện; W14-12 
 - **Được chạy main:** TC-W14-01/02/03,TC-W14-04a/b và TC-W14-05 đều PASS; release lock không đổi. Có RTL đạt timing hoặc10M qualification cũ chưa đủ để bỏ các bước này.
 - **Hoàn thành W14 để bàn giao W15:** W14-01..11 PASS theo từng TC. W14-11 phụ thuộc W14-01..10, không phụ thuộc W14-12 tùy lịch. Nếu thiếu comparator thì giữ W14/bàn giao PPA ở processing, không báo đã sẵn sàng paired PPA.
 - **AC02/toàn SPEC:** W14-12 được hoãn trong lịch tuần14, không được miễn nghĩa vụ AC02. Nếu chưa đạt phải công bố rõ trước nghiệm thu tổng/Gate4 và xử lý theo phạm vi đã được sinh viên chốt; không tự bỏ p16 hoặc giảm count.
-- **Hiện tại18/10:** release OPT12_120 đã khóa và audit PASS; có thể bắt đầu W14-01. Chưa triển khai/chạy TC W14, chưa có matrix_freeze hoặc final report; không dùng10M refactor thay final per-n/AC04.
+- **Hiện tại18/10:** W14-01..06 PASS phạm vi đã chốt,F90M/0 mismatch, near trước/sau cut≥30% ở cả9n; bước kế tiếp W14-07. W14-08 AC04 và các bước cuối chưa đóng; toàn tuần14 giữ processing.
+- **Coverage F sơ bộ sau freeze:** line95%,branch88,89%,toggle87,48%; branch chưa đạt90%, cần suite bổ sung/reachability review ở W14-08. Không sửa RTL hoặc hạ ngưỡng.
 
 ## 3.3. Tối ưu RTL — checkpoint100MHz và candidate120+MHz
 
@@ -355,8 +356,9 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | 7 | Thử OPT-12 trên120MHz | Negate đạt10M NF+10M F/0 mismatch và ModelSim; post-route120,48MHz có flow NF/F PASS. Giảm154LUT NF Default so reference cùng clock; chờ chọn/promote/khóa,không chạy W14 | ✅ |
 
 | 8 | RTL mã hóa và làm tròn | ✅ | Packer tổ hợp/pipeline và parser→packer đạt; PPA đơn vị đã khảo sát, sau tối ưu P2, benchmark đạt setup100MHz ở ba seed mỗi mode |
-
+| 8 | Khóa RTL120MHz trước W14 | Promote đúng hai parser OPT-12 negate; Explore8,3ns NF/F setup/hold đạt; audit và backup. Không chạy lại regression lớn hoặc W14 | ✅ |
 | 9 | Thử XCVU9P ngoài nền A35T | Đã setup NF/F và thử NF; thiếu device support trong Vivado, chưa có timing/PPA. Giữ khóa120MHz; xem Optimization8.32 | processing |
+| 10 | Thực hiện W14-01 đến W14-06 | Review/counters/harness,pilot,accuracy calibration và matrix freeze đạt; MAC F90M/0 mismatch,corner/ModelSim đạt. Còn W14-07..12; chi tiết Optimization8.33 | ✅ |
 
 ### 4.18. Mẫu cập nhật tiếp theo
 
@@ -365,5 +367,3 @@ Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1
 | STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
 | --- | --- | --- | --- |
 | … | Mốc lớn được thực hiện | Tóm tắt đã đạt gì và còn thiếu gì | ✅ / processing / không |
-
-| 8 | Khóa RTL120MHz trước W14 | Promote đúng hai parser OPT-12 negate; Explore8,3ns NF/F setup/hold đạt; audit và backup. Không chạy lại regression lớn hoặc W14 | ✅ |

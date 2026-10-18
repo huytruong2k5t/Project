@@ -1,0 +1,5 @@
+`verilator_config
+// EXACT_EN=0 only: shared shifter intentionally ignores upper y_mant bits.
+// The unsuppressed diagnostic and source hash are retained in W14 repairs.
+// No other file, line, module, warning type or functional coverage is waived.
+lint_off -rule UNUSEDSIGNAL -file "*/sbm_shift_comb.sv" -lines 18

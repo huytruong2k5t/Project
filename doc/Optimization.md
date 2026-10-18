@@ -1896,3 +1896,107 @@ Giữ cùng8,3ns để so trực tiếp với A35T trước khi mở lượt qu�
 Kết quả OOC sau này chỉ dùng khảo sát thiết bị; chưa board signoff, paired NF/F PPA
 (NF/F khác EXACT_EN) hoặc bằng chứng tái dựng baseline bài báo. Không chạy thêm mô phỏng:
 RTL đúng byte đã kiểm, lượt này chỉ thay target part trong snapshot riêng.
+
+
+### 8.33. Nghiệm thu W14-01 đến W14-06 — 18/10/2026
+
+**Hoàn thành phạm vi W14-01..06; chưa hoàn thành toàn tuần14.** Sinh viên đã yêu cầu
+thực hiện tuần tự đến W14-06 theo bảng TC hiện có. Release `POSIT_MAC_RTL_20261018_OPT12_120`,
+38 module+header, L1/oracle và constraints giữ nguyên; audit release và matrix trước/sau main PASS.
+Canonical `results/week14/summary.json`, `matrix_freeze.json`, `pilot_qualification.json`.
+
+| Mốc | Bằng chứng / kết quả |
+| --- | --- |
+| W14-01 | Review clock/reset bridge/two-FF release/startup/CE/context/commit/reset-abort; same-hash routed CDC Safely Timed; XDCH-2 là I/O budget. Không gọi đây là formal RDC hoặc board signoff |
+| W14-02 | Counter micro-tests và schema regime/sign, popcount, iteration/config, packer, delta/mode, fused anchor/sign/delta/LZC. Định nghĩa completed/abort/near riêng; reachability/100% closure tiếp tục W14-08 |
+| W14-03 | Harness fixed n/OPS; failure có input/C_eff/config/state/expected/actual/flags; executable âm tính riêng bị bắt và replay đúng packet; audit từ chối9 lỗi metadata/count/status/log/hash |
+| W14-04a | 35 full-instrumentation pilot×20k +9 F fast pilot×20k =880.000 completed,0 mismatch; comparator EX0 đã có pilot, chưa main |
+| W14-04b | 9×100k accuracy samples, Python Fraction kiểm1024/n=9216 ca; kiểm reference RNE, error/threshold/ULP/bộ đếm. Directed128 tách random; chưa phải accuracy final W14-09 |
+| W14-05 | Matrix freeze350M dự kiến gồmF90M+NF250M+comparator10M; khóa seed/source/model/harness/binary/tool/instrumentation/pilot provenance trước main |
+| W14-06a | F32/3 FW12 W32 OPS1 FLOOR/RNE, mỗi n0..8 đúng10M completed; tổng90M,0 mismatch bits/flags/state so L1 và oracle full-grid độc lập |
+| W14-06b | 64 tag corner/n,9n×20k=180k completed,0 mismatch; TV-FUSE01/02,delta±28/29,LZC>15,C=−A×B,zero/NaR. Model golden3,9375/−4,5625 xác nhận n1..8; n0 theo P_hat partial |
+| W14-06c | Reset/stall/order/context/commit/invalid/latency kiểm mỗi job; ModelSim companion mới8ns/CK2Q1ns đo L/H/II không stall cho9n, F144 vàNF-EX0144 completed,0 mismatch; OPS2/3 đều bị chặn khi idle |
+
+**F main riêng từng n:** accepted=completed+reset-aborted; mẫu abort không cộng vào10M
+hoặc mẫu số near. Near-before/after tính trên C_eff thực tế, specials không vào tử số.
+
+| n | Completed | Reset-abort | Mismatch | Near trước cut | Near sau cut | L_valid min–max | Wall seconds |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 10,000,000 | 20,151 | 0 | 48.46579% | 48.46579% | 12–12 | 90.724 |
+| 1 | 10,000,000 | 20,151 | 0 | 48.46250% | 48.46250% | 12–12 | 92.405 |
+| 2 | 10,000,000 | 20,151 | 0 | 48.46254% | 48.46254% | 12–13 | 94.219 |
+| 3 | 10,000,000 | 20,151 | 0 | 48.46328% | 48.46328% | 12–14 | 96.261 |
+| 4 | 10,000,000 | 20,151 | 0 | 48.46454% | 48.46454% | 12–15 | 98.839 |
+| 5 | 10,000,000 | 20,151 | 0 | 48.46103% | 48.46103% | 12–16 | 100.191 |
+| 6 | 10,000,000 | 20,151 | 0 | 48.46376% | 48.46376% | 12–17 | 101.048 |
+| 7 | 10,000,000 | 20,151 | 0 | 48.46317% | 48.46317% | 12–18 | 100.955 |
+| 8 | 10,000,000 | 20,151 | 0 | 48.46235% | 48.46235% | 12–19 | 100.562 |
+
+Tổng **90.000.000 completed / 181,359 reset-abort /0 mismatch**;
+534,210,768 stage observations kiểm prepack/F1..F5.
+PRNG mt19937_64, seed F main/pilot2026101800+n; mọi điểm NF/comparator và accuracy có seed
+trong matrix. Tool: Verilator 5.032 2025-01-01 rev (Debian 5.032-1); g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0; ModelSim10.1d.
+Wall seconds là thời gian chạy mô phỏng phần mềm, không phải latency phần cứng hoặc phép đo throughput FPGA.
+
+**Instrumentation và hiệu năng:** pilot full coverage khoảng4–5k completed/s, F line-only
+pilot khoảng70–87k/s. Main số học dùng binary line-only đã pilot riêng, vẫn kiểm counters
+chức năng và từng stage trên toàn90M. Sau freeze chạy companion full line/branch/toggle20k/n,
+tổng180k completed,0 mismatch. Chỉ các companion full-instrumentation final được gộp để
+đánh giá structural coverage; không dùng toggle pilot hoặc trộn binary line-only để nhận AC04.
+Raw điểm coverage hiện có: `{"v_toggle": {"hit": 4284, "total": 4897, "percent": 87.48213191750051}, "v_line": {"hit": 57, "total": 60, "percent": 95.0}, "v_branch": {"hit": 96, "total": 108, "percent": 88.88888888888889}}`. Đây là số điểm Verilator instrumented
+toàn hierarchy RTL đang hoạt động; chưa phải closure AC04/functional100% của W14-08.
+
+**Các lỗi công cụ kiểm thử đã sửa, giữ lịch sử:** raw CLI EXACT_EN truyền32bit làm lint
+WIDTHTRUNC; đổi sang literal1bit, không sửa RTL. Comparator EXACT_EN0 prune y_mant[26:16]
+tại sbm_shift_comb.sv:18: dùng waiver đúng warning/file/line cho riêng feature này;
+raw warning và cấu hình được giữ, không tắt coverage. Build cycle dùng --no-timing nên
+ASSIGNDLY của CK2Q được ghi là expected; strict lint --timing và mô phỏng4-state kiểm riêng.
+Collector mới từng lỗi NaR/decoder không còn fraction và mất sai số khi trừ floating-point;
+đã giữ các phiên lỗi trong repairs, tính hiệu và strict threshold bằng lưới số nguyên,
+đối chuẩn Python Fraction đạt. Long double chỉ dùng biểu diễn metric/NMSE/percentile;
+phân loại ngưỡng và thắng/thua/hòa dùng số nguyên, NaR/r=0 báo riêng.
+
+Không sửa/reseed corpus sau khi thấy FAIL RTL; chưa có mismatch RTL. Các sửa harness diễn ra
+trước matrix freeze, pilot chịu ảnh hưởng được chạy lại; binary/script main đã khóa hash.
+Protocol/golden companion thêm sau freeze có manifest nguồn riêng, không sửa đầu vào main.
+
+**Lệnh từ Posit_MAC (WSL bash --noprofile --norc):**
+
+```bash
+bash scripts/build_week14.sh
+python3 scripts/run_week14_jobs.py pilot
+python3 scripts/run_week14_jobs.py pilot_fast
+bash scripts/pilot_week14_accuracy.sh
+bash scripts/run_week14_corner.sh
+bash scripts/check_week14_replay.sh
+python3 scripts/freeze_week14.py
+python3 scripts/run_week14_jobs.py main
+python3 scripts/run_week14_jobs.py coverage_final
+```
+
+```powershell
+python scripts/audit_rtl_release.py --self-test
+powershell -NoProfile -File scripts/run_week14_protocol.ps1
+```
+
+Generator/snapshot phải chuẩn bị trước build; các producer từ chối root/attempt đã có.
+Các lệnh trên ghi lại workflow đã chạy, không chạy lại vào evidence cũ. Khi tái lập dùng
+snapshot nguồn và output mới/bản sao workspace; không sửa hash matrix cũ để ép replay PASS.
+README hướng dẫn và archive chứa exact source/build/command/seed/log/raw counters;
+binaries/cache/waves không đưa Git. Runtime/build/peak RSS/dung lượng output từng pilot
+có trong execution.json; không đồng nhất peak RSS này với dung lượng Vivado/P&R.
+
+**Còn lại:** W14-07 NF main250M; W14-08 coverage closure/reachability; W14-09 paired accuracy
+final; W14-10 comparator10M; W14-11 audit/bàn giao. Exact/AC02/W14-12 vẫn riêng và chưa miễn.
+RTL vẫn khóa120,48MHz A35T/Explore theo STA cũ; phiên này không chạy STA mới hoặc XCVU9P.
+Không gọi hoàn thành toàn W14, paired PPA/Gate4 hoặc board signoff.
+
+
+**Điểm còn vướng sau W14-06:** coverage F companion hiện line95%,toggle87,48% nhưng
+branch88,89% chưa đạt90%; giữ W14-08 processing. Phải phân tích các branch/bin chưa hit
+và chạy suite directed có manifest riêng; không hạ ngưỡng hoặc tự loại branch.
+
+`prepare_week14.py` là bootstrap lịch sử trước các bản sửa harness đã lưu trong repairs;
+không chạy lại nó để ghi đè harness hiện hành. Tái lập bằng exact source snapshot trong
+archive cùng các file harness đã commit, trên bản sao workspace/output mới; nếu tool hoặc
+binary hash thay đổi thì lưu manifest replay riêng, không rehash matrix/evidence gốc.

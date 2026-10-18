@@ -4,7 +4,7 @@
 
 RTL production đã khóa tại `rtl/production_freeze.json` (release `POSIT_MAC_RTL_20261018_OPT12_120`). Chạy `python scripts/audit_rtl_release.py --self-test` trước tuần14. Manifest38 module giữ nguyên; L1/oracle không đổi. Optimization8.31.8 lưu khóa mới.
 
-Workflow18/10: đã promote OPT-12 negate theo lựa chọn của sinh viên; A35T Explore8,3ns≈120,48MHz NF/F setup/hold đạt. Recipe syn/opt12_120mhz_release.json khóa I/O2,5ns input,0/0,5ns output. 10M NF+10M F/0 mismatch và ModelSim là bằng chứng refactor; W14 final per-n/AC04 chưa chạy. OPT02C100MHz giữ lịch sử riêng.
+Workflow18/10: đã promote OPT-12 negate theo lựa chọn của sinh viên; A35T Explore8,3ns≈120,48MHz NF/F setup/hold đạt. Recipe syn/opt12_120mhz_release.json khóa I/O2,5ns input,0/0,5ns output. 10M NF+10M F/0 mismatch và ModelSim là bằng chứng refactor; W14-01..06 đã đạt:F90M/0 mismatch và counters/pilot/accuracy calibration/matrix freeze; NF final/AC04/accuracy/comparator/audit cuối còn mở (Optimization8.33). OPT02C100MHz giữ lịch sử riêng.
 
 - [SPEC hiện hành](../SPEC_Posit_MAC_IP.md): nguồn quy định chính về số học, width, flags và giao dịch.
 - [Optimization.md](../../doc/Optimization.md): phương án tối ưu RTL và mọi báo cáo kiểm chứng/synthesis/STA đã chuyển từ PLAN cũ.

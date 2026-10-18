@@ -1,0 +1,63 @@
+{
+  "status": "DEFINED_NOT_COVERAGE_CLOSED",
+  "near_denominator": "all completed incl specials, excluding reset aborts",
+  "near_before": "both finite nonzero product/C_eff, different signs, abs(sf_product-sf_C)<=4",
+  "near_after": "same test on retained leading positions, both retained nonzero; independent before/after counters",
+  "fused_cross": {
+    "shape": [
+      2,
+      2,
+      5,
+      5
+    ],
+    "anchor": "P on scale tie; C only when c_sf>p_sf",
+    "signs": [
+      "same",
+      "different"
+    ],
+    "delta": [
+      0,
+      1,
+      "2..7",
+      "8..FRAC_MAX+2",
+      ">FRAC_MAX+2"
+    ],
+    "lzc": [
+      0,
+      1,
+      "2..4",
+      "5..15",
+      ">15"
+    ],
+    "specials": "exclude zero operand/NaR from cross; exact zero sum separate counter",
+    "universe": 100,
+    "structurally_impossible": "same-sign with LZC>0:40 bins; no cancellation on positive-magnitude sum",
+    "unresolved": "other60 bins retained pending reachability review at W14-08; unhit bins never silently waived"
+  },
+  "other_bins": [
+    "regime/sign256 for32bit",
+    "run/polarity61",
+    "popcount6",
+    "iteration/mode",
+    "flags5",
+    "delta/mode10",
+    "NF adder70 candidate bins",
+    "packer7 each boundary",
+    "n/ops/acc_mode/config validity"
+  ],
+  "structural": {
+    "instrumentation": "Verilator --coverage line+branch+toggle, full active top hierarchy; no coverage_off filters",
+    "closure": "W14-08 only: line>=95,branch>=90,toggle>=85; no requirement to hit every bin in pilot",
+    "final_policy": "Full coverage companion after matrix freeze per F n; only those full instrumentations form structural AC04 evidence. Numerical10M line-only kept separate, not merged for AC04.",
+    "pilot_policy": "Each main F line-only binary gets its own fixed-n pilot; full toggle pilots separately verified"
+  },
+  "lint_waivers": [
+    {
+      "scope": "NF EXACT_EN0 only",
+      "file": "sbm_shift_comb.sv",
+      "line": 18,
+      "rule": "UNUSEDSIGNAL",
+      "reason": "Upper y_mant26:16 pruned by exact feature disable. Unsuppressed warning retained; no RTL/functional coverage exclusion."
+    }
+  ]
+}

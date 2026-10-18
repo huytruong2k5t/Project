@@ -2,9 +2,9 @@
 
 ## Release production đã khóa — 18/10/2026
 
-**Workflow cập nhật18/10:** sinh viên đã mở lại candidate trên120MHz tại Optimization8.31.6;
-release100MHz bên dưới giữ làm reference có hash, chưa phải quyết định chốt cuối mới.
-Chưa chạy W14 trong lúc chọn candidate; audit reference PASS không nghiệm thu candidate.
+**Workflow cập nhật18/10:** candidate OPT-12 negate đã qua10M NF+10M F/0 mismatch và
+post-route120,48MHz với Explore cho cả NF/F (Optimization8.31.7). Chờ sinh viên chọn,
+chưa promote/lock mới hoặc chạy W14; release100MHz bên dưới giữ làm reference có hash.
 
 
 `POSIT_MAC_RTL_20261018_OPT02C` (`LOCKED_FOR_W14`),38 module trong `rtl/production.f`.
@@ -496,3 +496,23 @@ trước khi replay; nếu thiếu fixture phải sinh lại bằng generator đ
 Không suy rằng metadata JSON thay được vector/binary. Archive không chứa executable,
 ModelSim work, wave hoặc DCP; build lại từ source đã lưu. Không chạy prepare/promote/lock
 cũ trên release hiện hành: chúng là producer của checkpoint, không phải lệnh regression W14.
+
+## Candidate OPT-12 sau thử nghiệm18/10
+
+Nguồn ở rtl/candidates/parser/opt12; production/reference vẫn là release OPT02C100MHz.
+Chỉ Explore đạt120,48MHz cho cả NF/F trong study này; không sửa clock100MHz hoặc giảm budget I/O.
+Từ gốc Posit_MAC, sau khi khôi phục và kiểm archive/source hashes:
+
+```powershell
+python scripts/audit_opt12.py
+./scripts/run_opt12_ppa.ps1 -Variant negate -Top nf -Period 8.300 -Strategy Explore -Attempt replay01
+./scripts/run_opt12_ppa.ps1 -Variant negate -Top f -Period 8.300 -Strategy Explore -Attempt replay01
+./scripts/verify_opt12_modelsim.ps1 -Variant negate -AllFormats -RunRoot results/opt120_20261018/event_replay01
+```
+
+Không ghi đè attempt hoặc thư mục kết quả đã có. Sau clone, archive chứa private source snapshot,
+report/counters/fixtures; binaries/work/wave cần build lại. Khôi phục trong bản sao sạch và kiểm SHA theo
+archive_manifest.json; không ghi đè file đang có khác hash. external_inputs trong archive giữ NF fixtures
+ở đường dẫn origin của study cũ; chỉ khôi phục về đúng đường dẫn trong Posit_MAC khi thiếu và khớp SHA.
+Các producer unit/stress dùng output checkpoint cố định; nếu thay mã phải mở study mới, không xóa FAIL hoặc
+rehash checkpoint cũ để chạy tiếp. Chi tiết lệnh đã thực hiện và giới hạn ở Optimization8.31.7.

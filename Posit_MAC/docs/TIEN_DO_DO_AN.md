@@ -168,9 +168,9 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | Nhóm | Việc tiếp theo | Trạng thái |
 | --- | --- | --- |
 | Review OPT-12/13/14 | Đã đọc8.31,ghi điều kiện/sai phạm tại8.31.6; mở snapshot candidate bằng reference,không sửa RTL | ✅ |
-| OPT-12 parser | Thử adjacent-XOR/sentinel trước,conditional-negate A/B riêng; leaf/lint/pilot NF/F rồi PPA | không |
-| Timing trên120MHz | Đo clock cao trực tiếp,cùng budget; phân biệt R2R với I/O/ready. Không suy đạt chỉ từ slack100MHz | không |
-| OPT-13/14 và khóa lại | Chỉ thử phần còn chặn theo STA; giữ contract/zero-extension. Chọn/kiểm candidate rồi mới lock release mới | không |
+| OPT-12 parser | Candidate negate đã qua lint/decoder/cycle-equivalence,pilot và10M NF+10M F/0 mismatch; ModelSim125MHz đạt | ✅ |
+| Timing trên120MHz | Đã post-route8,3ns≈120,48MHz,NF/F có flow PASS; giữ cả hàng FAIL,đặc biệt F Default−0,009ns. Chi tiết8.31.7 | ✅ |
+| Chọn/promote/khóa lại | Chờ sinh viên chọn OPT-12 và flow; chưa promote/lock mới hoặc chạy W14. OPT-13/14 để riêng,chưa triển khai | processing |
 
 ## 3.4. Công việc mở khác và giới hạn phạm vi (Ưu tiên giai đoạn cuối Tuần 14–16)
 
@@ -353,6 +353,7 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | 4 | Sắp lại trình tự tuần14 | Tách chuẩn bị coverage khỏi đóng coverage; bổ sung harness/pilot trước freeze/main,định rõ điểm dừng và comparator trước bàn giao PPA. Chỉ sửa kế hoạch,không chạy TC W14 hoặc đổi RTL | ✅ |
 | 5 | Đánh lại mã tuần14 theo thứ tự thực hiện | W14-01..11 tương ứng các bước chính, W14-12 exact riêng; đồng bộ TC và tham chiếu. Pilot W14-04, main F/NF W14-06/07; chỉ đổi mã kế hoạch, không chạy nghiệm thu | ✅ |
 | 6 | Mở lại candidate trên120MHz | Giữ reference100MHz và mở study mới,review OPT-12/13/14 có điều kiện; chưa sửa RTL,chưa chạy STA mới hoặc W14. Chi tiết8.31.6 | ✅ |
+| 7 | Thử OPT-12 trên120MHz | Negate đạt10M NF+10M F/0 mismatch và ModelSim; post-route120,48MHz có flow NF/F PASS. Giảm154LUT NF Default so reference cùng clock; chờ chọn/promote/khóa,không chạy W14 | ✅ |
 
 ### 4.18. Mẫu cập nhật tiếp theo
 

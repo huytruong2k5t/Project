@@ -158,3 +158,7 @@ results/opt02c_20261018/** -text
 
 # Reference snapshot for open120MHz candidate.
 results/opt120_20261018/** -text
+
+# OPT12 candidate/tests: preserve bytes used by evidence hashes.
+scripts/*opt12* -text
+tb/*opt12* -text

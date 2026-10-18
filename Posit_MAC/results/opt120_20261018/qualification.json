@@ -1,0 +1,26 @@
+{
+  "status": "TRIAL_COMPLETE_PENDING_USER_SELECTION",
+  "recommendation": {
+    "variant": "negate",
+    "meaning": "adjacent XOR + sentinel + conditional negate",
+    "candidate_path": "rtl/candidates/parser/opt12",
+    "target_clock_ns": 8.3,
+    "target_mhz": 120.48192771084337,
+    "both_tops_passing_strategies": [
+      "Explore"
+    ],
+    "source_sha256": {
+      "rtl/parser/posit_parser.sv": "56f2fc18624ab1525773c3d558c5cfb5c932ea4289ea09c35dd18365bde5cbf8",
+      "rtl/parser/posit_parser_comb.sv": "35d56fa5d8401f178f1360136dcd674369e8b9c44696e5c76eca675fe0b639f1"
+    },
+    "limits": "OOC fixed-budget STA only; not board signoff, W14 or maximum Fmax proof; no promotion/lock"
+  },
+  "reference_release": "POSIT_MAC_RTL_20261018_OPT02C",
+  "production_unchanged": true,
+  "limits": [
+    "No candidate promoted or release lock created",
+    "Not W14 final per-n/AC04",
+    "Report actual full-interface and R2R results separately"
+  ],
+  "summary_sha256": "89c42539e10f93365a591cf3f800ea39c21114234f4874e9495e22d29ef2c303"
+}

@@ -2,9 +2,9 @@
 
 ## Release production đã khóa — 18/10/2026
 
-**Workflow cập nhật18/10:** sinh viên đã mở lại candidate trên120MHz tại Optimization8.31.6;
-release100MHz bên dưới giữ làm reference có hash, chưa phải quyết định chốt cuối mới.
-Chưa chạy W14 trong lúc chọn candidate; audit reference PASS không nghiệm thu candidate.
+**Workflow cập nhật18/10:** candidate OPT-12 negate đã qua10M NF+10M F/0 mismatch và
+post-route120,48MHz với Explore cho cả NF/F (Optimization8.31.7). Chờ sinh viên chọn,
+chưa promote/lock mới hoặc chạy W14; release100MHz bên dưới giữ làm reference có hash.
 
 
 `POSIT_MAC_RTL_20261018_OPT02C` (`LOCKED_FOR_W14`),38 module trong `rtl/production.f`.
@@ -246,3 +246,12 @@ trước khi replay; nếu thiếu fixture phải sinh lại bằng generator đ
 Không suy rằng metadata JSON thay được vector/binary. Archive không chứa executable,
 ModelSim work, wave hoặc DCP; build lại từ source đã lưu. Không chạy prepare/promote/lock
 cũ trên release hiện hành: chúng là producer của checkpoint, không phải lệnh regression W14.
+
+## OPT-12 candidate120,48MHz — 18/10/2026
+
+Nguồn đề nghị: rtl/candidates/parser/opt12; chưa promote/lock. Verify study bằng
+`python scripts/audit_opt12.py`; check reference bằng `python scripts/audit_rtl_release.py`.
+Evidence: results/opt120_20261018/summary.json,qualification.json,archive_manifest.json,evidence.zip.
+Explore đạt120,48MHz cho cả NF/F; F Default và NF RuntimeOptimized vẫn FAIL, không gọi mọi flow đạt.
+Runners prepare/verify/stress/finalize là producer checkpoint, không chạy lại vào output đã có.
+PPA replay dùng Attempt mới và đúng nguồn đã restore/kiểm SHA; xem hướng dẫn WSL/ModelSim và Optimization8.31.7.

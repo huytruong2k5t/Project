@@ -22,7 +22,7 @@ Các mã mục cũ `7.x`/`8.x` được giữ để truy vết report và liên 
 | NF OPT-03 | Production dùng product RNE P1/P2 và parse/product bank riêng | Mục8.21 |
 | A1 OPT-02c | Đã promote và khóa; A1 Default+2,144ns,0 FF thêm | Mục8.30 |
 | SAC/packer/parse | Production OPT-02c + OPT-05 abc_tree + OPT-09 + OPT-10A; LOCKED_FOR_W14,38 module; cả3 strategy đạt100MHz | Mục8.30 |
-| Hướng tối ưu sâu 120+ MHz | Đã mở study candidate riêng; review OPT-12 trước, OPT-13/14 có điều kiện; chưa sửa RTL, chưa khóa release mới. W14 chưa chạy trong khi chọn candidate | Mục8.31.6 |
+| Hướng tối ưu sâu 120+ MHz | OPT-12 negate đã qua10M NF+10M F/0 mismatch,STA120,48MHz theo flow có PASS; chờ chọn/promote/khóa mới. OPT-13/14 chưa triển khai | Mục8.31.7 |
 
 Các script report/prepare gắn checkpoint cũ là producer lịch sử, không chạy lại để tái chèn nhật ký vào PLAN hiện hành. Dùng snapshot/README của study khi tái lập; không sửa các script đã khóa hash chỉ để đổi nhãn báo cáo. Collector bảng toàn tầng hiện hành đã được đổi sang vùng báo cáo giới hạn trong tài liệu này.
 
@@ -1695,3 +1695,92 @@ rồi mới matched PPA A35T. Chọn theo số đo timing/LUT/FF, không theo d�
 ready/CE nếu báo cáo mới cho thấy còn chặn mục tiêu. Không thêm tầng, đổi precision hoặc oracle trong đợt này.
 Sau khi chọn biến thể và kiểm tích hợp cần thiết mới phát hành lock mới và tiếp tục W14-01..12.
 **Hiện chưa chạy RTL simulation, synthesis hoặc STA mới.**
+
+#### 8.31.7. Thử OPT-12 và STA trực tiếp120,48/125MHz — 18/10/2026
+
+**Đã hoàn tất thử nghiệm, chưa promote hoặc khóa RTL mới.** Candidate đề nghị là `negate`:
+adjacent-XOR + sentinel + conditional-negate, tại `rtl/candidates/parser/opt12/`.
+Hai file giữ nguyên byte từ source đã kiểm; production38 module, model/oracle, XDC100MHz và lock reference không đổi.
+`source/candidate` trong study là alias review của negate; reference và các biến thể riêng vẫn được giữ để đối chiếu.
+Chỉ thay hai parser comb/pipeline; không sửa common LOD, precision, OPS, SAC, packer hoặc lịch NF14/F13 tầng.
+Không triển khai OPT-13/14. Macro clock/reset/valid/ready, C_eff và thuật toán giữ nguyên.
+
+**Kiểm chức năng:** ba biến thể adjacent/sentinel/negate, mỗi biến thể870 strict lint cấu hình
+(435 NB/ES × comb/pipeline),0 warning/error;13 profile cycle-equivalence với parser reference và decoder
+trường độc lập,84.272 checks; vét cạn6 format nhỏ gồm8/0 và16/1,66.480 checks/biến thể.
+Các profile biên gồm NB4/5/7/9/17/31/32,ES28 và SF_W9/40; có reset,bubble và stall.
+Đây là bằng chứng kiểm thử, không phải formal exhaustive toàn posit32 hoặc tương đương X/Z.
+
+Sentinel và negate **mỗi biến thể** đều đạt:
+
+- NF pilot8/0,16/1,32/2,32/3:80.000 completed,0 mismatch; F32/3 pilot100.000,0 mismatch.
+- NF32/3 main10.000.000 completed/85.316 reset-aborted,0 mismatch.
+- F32/3 main10.000.000 completed/20.151 reset-aborted,0 mismatch,59.356.752 stage checks.
+- Toàn bộ JSON numerical/protocol/coverage counters của các lượt10M bằng checkpoint reference tương ứng;
+  không chỉ so một tổng số mismatch. Hai main này là lượt mới, không kế thừa hash source cũ để gọi PASS.
+- ModelSim10.1d ở chu kỳ8ns/CK2Q1ns: NF bốn format111.456 completed/288 abort;
+  F8.192 completed/24 abort;0 mismatch, kiểm reset/stall/latency/state. Đây là RTL event simulation, không phải SDF.
+
+Verilator5.032,GCC15.2.0,SoftPosit0.4.1 đúng format cho NF8/0,16/1,32/2; ES3 dùng oracle độc lập.
+NF seed20264217,F20261015; parser parameter generator giữ seed20261016+100*NB+ES+SF_W.
+Lệnh/source/binary/compiler/simulator hashes và counters giữ tại study `results/opt120_20261018`.
+Main vẫn trộn n/config; **không thay W14 per-n/AC04 hoặc nghiệm thu exact toàn SPEC**.
+
+**STA/PPA:** Vivado2026.1 build6511674,A35T xc7a35tcpg236-1; clock8ns hoặc8,3ns đọc trước synthesis.
+Giữ input min=max2,5ns,output min0/max0,5ns,user setup/hold uncertainty0,1ns; không thêm timing exception.
+Profile clock cao riêng, không ghi đè C2/10ns và không scale I/O. Mỗi hàng là post-route thực tế,
+không phải F_STA suy từ10ns. NF EXACT_EN1; F EXACT_EN0/W32; chưa phải paired NF/F PPA công bằng của tuần15.
+
+| Top | Biến thể | Strategy | Clock ns | MHz | WNS toàn thiết kế ns | WHS ns | R2R setup ns | LUT | FF | Setup/hold toàn thiết kế |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| NF | negate | Default | 8.000 | 125.00 | -0.154 | +0.055 | +0.072 | 2428 | 931 | FAIL |
+| NF | negate | Default | 8.300 | 120.48 | +0.166 | +0.057 | +0.538 | 2423 | 931 | PASS |
+| NF | negate | Explore | 8.300 | 120.48 | +0.227 | +0.053 | +0.309 | 2424 | 931 | PASS |
+| NF | negate | RuntimeOptimized | 8.300 | 120.48 | -0.058 | +0.056 | +0.105 | 2465 | 931 | FAIL |
+| NF | reference | Default | 8.000 | 125.00 | -0.333 | +0.039 | +0.450 | 2597 | 931 | FAIL |
+| NF | reference | Default | 8.300 | 120.48 | +0.083 | +0.016 | +0.150 | 2577 | 931 | PASS |
+| NF | sentinel | Default | 8.000 | 125.00 | -0.147 | +0.030 | +0.142 | 2565 | 931 | FAIL |
+| NF | sentinel | Default | 8.300 | 120.48 | +0.329 | +0.036 | +0.329 | 2546 | 931 | PASS |
+| F | negate | Default | 8.300 | 120.48 | -0.009 | +0.040 | +0.601 | 1361 | 815 | FAIL |
+| F | negate | Explore | 8.300 | 120.48 | +0.093 | +0.040 | +0.608 | 1362 | 815 | PASS |
+| F | negate | RuntimeOptimized | 8.300 | 120.48 | +0.470 | +0.046 | +0.765 | 1375 | 815 | PASS |
+
+TNS/THS bằng0 đối với các hàng PASS; hàng FAIL được giữ, không làm tròn slack âm thành0 hoặc bỏ khỏi bảng.
+Default125MHz của reference/sentinel/negate đều chưa đạt toàn giao tiếp dù R2R đạt;
+đường chặn là in_ready. Ở120,48MHz, F Default thiếu0,009ns; dùng strategy đã PASS cho cả NF/F được liệt kê
+trong qualification.json, không tuyên bố mọi strategy đều đạt. Chưa quét Fmax cực đại hoặc xác nhận trên board.
+
+NF reference Default tại8,3ns cũng đạt (WNS+0,083ns,WHS+0,016ns,2577LUT/931FF).
+Negate Default cùng điều kiện đạt+0,166/+0,057ns,2423LUT/931FF: **giảm154LUT (~5,98%), FF không đổi**.
+Đây là lợi ích đo được so reference cùng clock/flow; không quy toàn bộ việc đạt120MHz cho OPT-12.
+Không so LUT của profile8ns với8,3ns để kết luận phần trăm tối ưu.
+
+Giữ warning OOC về PARTPIN/CFGBVS và giới hạn báo cáo: budget I/O là giả định benchmark, chưa có pinout/load
+hoặc timing giao tiếp board thực. Defined-clock CDC report không thay RDC/board signoff.
+Lượt đầu `ppa/reference/p8000/Default` dừng trước synthesis do runner thay nhầm tên file I/O XDC khi đổi profile;
+đã sửa runner, giữ failed log riêng và chạy vào *_r1. Lượt lỗi không được tính vào11 phép đo trong bảng.
+
+**Lệnh chính từ Posit_MAC:**
+
+```bash
+bash --noprofile --norc scripts/verify_opt12.sh sentinel
+bash --noprofile --norc scripts/verify_opt12.sh adjacent
+bash --noprofile --norc scripts/verify_opt12.sh negate
+bash --noprofile --norc scripts/verify_opt12_nf.sh negate
+bash --noprofile --norc scripts/verify_opt12_fused.sh negate
+bash --noprofile --norc scripts/stress_opt12.sh negate nf 10000000
+bash --noprofile --norc scripts/stress_opt12.sh negate f 10000000
+```
+
+```powershell
+./scripts/verify_opt12_modelsim.ps1 -Variant negate -AllFormats -RunRoot results/opt120_20261018/event_negate
+./scripts/run_opt12_ppa.ps1 -Variant negate -Top nf -Period 8.300 -Strategy Explore
+./scripts/run_opt12_ppa.ps1 -Variant negate -Top f -Period 8.300 -Strategy Explore
+python scripts/audit_opt12.py
+python scripts/audit_rtl_release.py --self-test
+```
+
+Các producer từ chối output root đã có; khi replay cần giữ nguyên bằng chứng, chọn attempt/root mới hoặc
+restore snapshot vào bản sao workspace trong phạm vi dự án. Không chạy prepare/finalize để ghi đè checkpoint.
+Evidence/nguồn/rpt/CSV/raw counters đóng gói gọn, kiểm CRC/SHA; binary/work/cache/wave không đưa vào Git.
+**Chờ sinh viên chọn candidate trước promote/khóa cuối; W14 vẫn chưa chạy.**

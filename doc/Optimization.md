@@ -1810,6 +1810,29 @@ Hai XDC100MHz gốc giữ nguyên để replay lịch sử. Không dùng script1
 gọi đó là phép đo120MHz; replay dùng run_opt12_ppa với `-Period 8.300 -Strategy Explore`
 và `-Attempt` mới cho từng `-Top nf`/`-Top f`.
 
+**Đối chiếu timing toàn giao diện và Fmax ước lượng riêng Internal R2R:**
+
+Cùng hai lượt A35T/Explore8,3ns đã khóa, bảng dưới tách WNS/WHS toàn giao diện
+(có input/output delay nêu trên) khỏi slack của nhóm thanh ghi → thanh ghi.
+Fmax R2R được suy ra bằng `1000 / (8,3 − setup_slack_R2R)` với đơn vị ns/MHz;
+đây không phải một lượt synthesis/P&R hay quét clock mới.
+
+| Thiết kế | Clock toàn giao diện đã kiểm đạt | WNS / WHS toàn giao diện | Setup / hold slack R2R tại8,3ns | Chu kỳ R2R suy ra | Fmax R2R ước lượng |
+| --- | --- | --- | --- | --- | --- |
+| MAC NF | 120,48MHz | +0,227 / +0,053ns | +0,309 / +0,053ns | 7,991ns | **125,14MHz** |
+| MAC F | 120,48MHz | +0,093 / +0,040ns | +0,608 / +0,040ns | 7,692ns | **130,01MHz** |
+
+Nguồn: `results/opt120_20261018/summary.json`, hai record `negate/Explore/8.3ns`;
+report gốc `ppa/negate/p8300/Explore_r1/r2r_setup.rpt`, `r2r_hold.rpt` cho NF và
+`ppa_f/negate/p8300/Explore_r1/r2r_setup.rpt`, `r2r_hold.rpt` cho F, dưới cùng study.
+Các slack đã phản ánh clock/skew/uncertainty của lượt STA; không trừ uncertainty thêm lần nữa.
+
+**Giới hạn:** 125,14/130,01MHz chỉ là ước lượng từ netlist và placement/routing hiện có,
+không phải Fmax cực đại đã xác nhận trực tiếp. Cần chạy STA/P&R ở clock mới để kiểm lại
+setup/hold và mọi đường liên quan; đường I/O có thể giới hạn trước R2R. Không sửa input delay,
+output delay, recipe hoặc hash RTL đã khóa trong lần bổ sung báo cáo này. Mốc nghiệm thu
+OOC trực tiếp cho cả NF/F vẫn **120,48MHz**, không phải hai Fmax R2R ước lượng trên.
+
 Nguồn38 module+header được đối chiếu toàn bộ hash với snapshot negate đã chạy.
 Kế thừa đúng bằng chứng đã thực thi: parser870 profile lint,84.272 cyclechecks,
 66.480 exhaustive checks; NF10M và F10M đều0 mismatch; ModelSim NF111.456/F8.192

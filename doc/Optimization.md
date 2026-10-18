@@ -1449,6 +1449,55 @@ R2R+2,002ns,1486 LUT/815 FF/69 CARRY4; đạt mốc100MHz.
 NF trong bảng dùng EXACT_EN1, vì vậy **không dùng bảng này kết luận paired NF/F PPA**.
 Comparator NF EXACT_EN0 và matched PPA tuần15 còn phải làm.
 
+**Bảng setup/hold của release đã khóa — strategy Default.** Nguồn là candidate đã promote thành
+`POSIT_MAC_RTL_20261018_OPT02C`, post-route Vivado2026.1, A35T-C2/10ns với budget/uncertainty nêu trên.
+NF32/3 FW12 EXACT_EN1; F32/3 FW12 W32 EXACT_EN0. Hai cấu hình này chưa tạo phép so paired PPA.
+Các dòng NF theo nhóm endpoint D/CE, gồm cả đường enable; setup và hold là hai phép tìm worst path độc lập,
+không nhất thiết cùng một đường. 24 nhóm trong stages.csv gồm23 nhóm bank và một dòng whole_data tổng hợp,
+**không phải24 tầng pipeline** (NF vẫn14 tầng, F13 tầng).
+
+| Bản / phạm vi Default | Setup slack nhỏ nhất (ns) | Hold slack nhỏ nhất (ns) |
+| --- | ---: | ---: |
+| **NF — toàn thiết kế (WNS/WHS)** | **+0.894** | **+0.053** |
+| NF — Parser A — P1 | +2.029 | +0.156 |
+| NF — Parser A — P2 | +4.797 | +0.135 |
+| NF — Parser B — P1 | +1.910 | +0.160 |
+| NF — Parser B — P2 | +4.476 | +0.090 |
+| NF — Parser C — P1 | +1.259 | +0.164 |
+| NF — Parser C — P2 | +4.093 | +0.106 |
+| NF — OPS — M0/core context | +2.800 | +0.154 |
+| NF — SAC — state/feedback | +1.850 | +0.073 |
+| NF — SAC — token L1 | +2.844 | +0.053 |
+| NF — SBM dịch — L2 | +3.989 | +0.117 |
+| NF — SBM tích lũy — L3 | +4.165 | +0.125 |
+| NF — Packer tích — P1 (kể cả normalize phía trước) | +1.769 | +0.199 |
+| NF — Packer tích — P2 magnitude/sign | +4.531 | +0.102 |
+| NF — Magnitude parse → product bank | +3.418 | +0.125 |
+| NF — Adder — A1 align/jam | +2.144 | +0.082 |
+| NF — Adder — A2 arithmetic | +5.282 | +0.063 |
+| NF — Adder — A3 normalize | +2.369 | +0.112 |
+| NF — Packer kết quả — P1 | +3.152 | +0.086 |
+| NF — Packer kết quả — P2 | +3.401 | +0.073 |
+| NF — Context C/specials | +4.206 | +0.054 |
+| NF — Điều khiển giao dịch | +3.589 | +0.163 |
+| NF — Accumulator feedback/commit | +2.535 | +0.240 |
+| NF — Reset bridge/synchronizer (D/CE) | +7.992 | +0.060 |
+| NF — Toàn bộ bank D/CE (có thể gồm đường input) | +1.259 | +0.053 |
+| NF — Internal R2R riêng | +1.259 | +0.053 |
+| **F — toàn thiết kế (WNS/WHS)** | **+0.982** | **+0.045** |
+| F — Internal R2R riêng | +2.002 | +0.045 |
+
+Tất cả slack trong bảng đều dương tại mốc100MHz đã đo. Setup R2R nhỏ nhất của NF nằm ở
+accumulator→Parser C P1 (+1,259ns); hold R2R nhỏ nhất ở SAC token L1 (+0,053ns).
+WNS toàn thiết kế có thể nhỏ hơn R2R do có thêm đường I/O với budget giả định.
+F chưa có bảng phân nhóm F1–F5 trong checkpoint này; hai dòng F chỉ báo tổng thể/R2R, không suy số từng tầng.
+Các nhóm reset D/CE ở đây không thay kiểm recovery/removal hoặc review RDC.
+
+Nguồn đối chiếu: [NF stages.csv](../Posit_MAC/results/opt02c_20261018/ppa/candidate/Default/stages.csv),
+`ppa/candidate/Default/*_setup.rpt`, `*_hold.rpt`, `timing.rpt`, `r2r_*.rpt` và
+`ppa_f/candidate/Default/timing.rpt`, `r2r_*.rpt` trong study `results/opt02c_20261018`.
+Các report/CSV có trong evidence.zip đã kiểm SHA theo archive_manifest.json; không chạy lại STA trong lần bổ sung bảng này.
+
 #### 8.30.4. Reset/CDC, giới hạn và lỗi runner đã xử lý
 
 NF/F có1 clock,0 latch,0 unrouted;931/815 FF,20/18 ASYNC_REG.

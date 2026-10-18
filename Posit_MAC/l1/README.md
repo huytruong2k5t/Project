@@ -1,5 +1,7 @@
 # Tầng L1: Mô hình Thuật toán C++ (`l1/`)
 
+**Trạng thái kiểm chứng18/10/2026:** W14-01..11 đã đạt18/10:350M completed RTL/0 mismatch (F90M+NF250M+NF-EX010M),AC04 main và9M paired standalone accuracy. W14-12/AC02 và matched PPA/Gate4 còn mở;Optimization8.34/results/week14/handoff.json. Không đổi hợp đồng số học,source release hoặc timing. Các mô tả/tiến độ có ngày cũ bên dưới giữ lịch sử.
+
 **Tài liệu hiện hành:** [PLAN — kiến trúc/build L1/NF/F](../l1/PLAN.md), [Optimization — tối ưu và kiểm chứng/STA](../../doc/Optimization.md), [tiến độ — việc còn mở](../docs/TIEN_DO_DO_AN.md).
 
 **Hợp đồng tích hợp cập nhật 06/10/2026 — SPEC v1.4:** RTL baseline v0/v1 giữ profile L1 normative: cfg_ops=0/1, cfg_n đếm fraction, hidden khởi tạo riêng; paper_source_config/predictor7-bit là nghiên cứu riêng. H là ngân sách hạng thanh ghi; không bubble thì L_valid=H-1, L_handshake=H (E0 là input handshake). n=0 dùng token init_only; core_done=q+2 cạnh sau OPS launch, q=max(1,n), last chỉ hoàn tất ở accumulator. Top rst_n đồng bộ dùng reset bridge/startup barrier để phối hợp leaf reset_n và nhận A/B/C nguyên tử. Đây là hợp đồng triển khai, chưa nghiệm thu core/bridge/MAC RTL. Chi tiết và trạng thái tại [SPEC §4–§5 và §11](../SPEC_Posit_MAC_IP.md). Bước tiếp theo: packer tuần8, rồi core và tích hợp; chồng lấn sau baseline.

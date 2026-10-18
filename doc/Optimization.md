@@ -2000,3 +2000,160 @@ và chạy suite directed có manifest riêng; không hạ ngưỡng hoặc tự
 không chạy lại nó để ghi đè harness hiện hành. Tái lập bằng exact source snapshot trong
 archive cùng các file harness đã commit, trên bản sao workspace/output mới; nếu tool hoặc
 binary hash thay đổi thì lưu manifest replay riêng, không rehash matrix/evidence gốc.
+
+
+### 8.34. Hoàn tất W14-07..11 trên release đã khóa — 18/10/2026
+
+**Phạm vi kỹ thuật W14-01..11 đã đạt, đủ chuyển sang matched PPA tuần15.**
+Release `POSIT_MAC_RTL_20261018_OPT12_120`,38 module+header, L1/oracle và mọi constraints không đổi.
+W14-12/AC02 vẫn mở riêng: không gọi đây là nghiệm thu toàn SPEC/Gate4 hoặc board signoff.
+Backup Git được kiểm bằng kết quả push cuối phiên; JSON `handoff.json` không tự tuyên bố đã push.
+W14-01..06 và archive8.33 giữ nguyên để truy vết, không ghi đè nguồn/kết quả lịch sử.
+
+| Mốc | Bằng chứng chính |
+| --- | --- |
+| W14-07 | 25 điểm NF ×10M=250M completed;32/3 OPS1 n0..8,OPS0 n0..6 và8;32/2 OPS0/1 n1..4;0 mismatch bits/flags/state/oracle |
+| W14-08 | NF32/3,NF32/2,F32/3 main đạt line≥95%,branch≥90%,toggle≥85%; functional100% miền hợp lệ, raw và proof/exclusion giữ riêng |
+| W14-09 | 9n ×1M=9M paired standalone triples; n2/4/8 trước; pilot100k/n replay đúng counter cũ,9216 Fraction checks trước và sau main;CI95/ngoại lệ/kết quả F bất lợi được lưu |
+| W14-10 | Comparator NF32/3 EXACT_EN0,OPS1,n3 ×10M completed;0 mismatch; mode0 từ chối,reset/stall/state/latency được kiểm, ModelSim companion8.33 và lint waiver có scope giữ nguyên |
+| W14-11 | Audit35 điểm/350M;15 mutant thiếu job/count/status/hash/log/coverage/accuracy/replay đều bị từ chối;4 pilot×20k replay normalized JSON giống hệt; archive CRC/SHA và backup cuối phiên |
+
+Tổng main **350.000.000 completed** = F90M + NF250M + comparator10M,
+**2,252,889 reset-abort /0 mismatch**. Abort không cộng vào completed hoặc mẫu số near.
+F90M là bằng chứng8.33 tái dùng đúng source hash; phiên này thêm NF/comparator260M.
+Near của mọi điểm đều≥30%; standalone/acc_mode,clear/commit,stall và invalid config có counter riêng.
+Các reset abort kiểm scoreboard nhưng không gọi là phép tính hoàn thành.
+
+| Điểm NF | Completed | Reset-abort | Mismatch | Near | Wall seconds |
+| --- | --- | --- | --- | --- | --- |
+| nf32_3_ops1_n0 | 10,000,000 | 74,643 | 0 | 52.50860% | 179.42 |
+| nf32_3_ops1_n1 | 10,000,000 | 74,732 | 0 | 52.53711% | 180.93 |
+| nf32_3_ops1_n2 | 10,000,000 | 77,086 | 0 | 52.53932% | 183.20 |
+| nf32_3_ops1_n3 | 10,000,000 | 78,840 | 0 | 52.53679% | 188.95 |
+| nf32_3_ops1_n4 | 10,000,000 | 80,323 | 0 | 52.54191% | 190.72 |
+| nf32_3_ops1_n5 | 10,000,000 | 81,401 | 0 | 52.53860% | 190.41 |
+| nf32_3_ops1_n6 | 10,000,000 | 81,804 | 0 | 52.54311% | 195.32 |
+| nf32_3_ops1_n7 | 10,000,000 | 82,080 | 0 | 52.54344% | 195.54 |
+| nf32_3_ops1_n8 | 10,000,000 | 82,116 | 0 | 52.53917% | 195.09 |
+| nf32_3_ops0_n0 | 10,000,000 | 74,794 | 0 | 52.83159% | 185.01 |
+| nf32_3_ops0_n1 | 10,000,000 | 74,839 | 0 | 52.75241% | 185.94 |
+| nf32_3_ops0_n2 | 10,000,000 | 77,843 | 0 | 52.68422% | 190.61 |
+| nf32_3_ops0_n3 | 10,000,000 | 80,683 | 0 | 52.62651% | 195.91 |
+| nf32_3_ops0_n4 | 10,000,000 | 83,191 | 0 | 52.59662% | 199.42 |
+| nf32_3_ops0_n5 | 10,000,000 | 85,132 | 0 | 52.57161% | 202.09 |
+| nf32_3_ops0_n6 | 10,000,000 | 86,579 | 0 | 52.55239% | 199.27 |
+| nf32_3_ops0_n8 | 10,000,000 | 87,944 | 0 | 52.52074% | 199.77 |
+| nf32_2_ops0_n1 | 10,000,000 | 74,783 | 0 | 53.97679% | 157.73 |
+| nf32_2_ops0_n2 | 10,000,000 | 77,928 | 0 | 53.90669% | 164.00 |
+| nf32_2_ops0_n3 | 10,000,000 | 80,830 | 0 | 53.84349% | 167.34 |
+| nf32_2_ops0_n4 | 10,000,000 | 83,344 | 0 | 53.81474% | 170.15 |
+| nf32_2_ops1_n1 | 10,000,000 | 74,767 | 0 | 53.75687% | 156.95 |
+| nf32_2_ops1_n2 | 10,000,000 | 77,140 | 0 | 53.75993% | 161.67 |
+| nf32_2_ops1_n3 | 10,000,000 | 79,153 | 0 | 53.75171% | 162.65 |
+| nf32_2_ops1_n4 | 10,000,000 | 80,674 | 0 | 53.75433% | 154.59 |
+
+**Hiệu năng harness:** giữ binary full instrumentation cũ; derivative line-only NF fast
+copy nguyên snapshot nguồn,26 pilot20k từng điểm có JSON số học/protocol/counters trùng
+byte-value với full pilot cũ. Khóa `nf_extension/freeze.json` trước main;workers3 được
+chọn sau đo CPU/RAM/RSS. Không đổi seed,phân bố,n/OPS hoặc oracle để tăng tốc.
+Tool Verilator5.032/GCC15.2.0,ModelSim10.1d; seed/lệnh/runtime/binary/source SHA trong execution.json.
+Wall seconds phản ánh mô phỏng phần mềm có chạy đồng thời, không phải throughput FPGA.
+
+**AC04 — số điểm instrumented toàn hierarchy RTL đang hoạt động, theo từng profile:**
+
+| Profile | Line thô | Branch thô | Branch sau review | Toggle thô |
+| --- | --- | --- | --- | --- |
+| F32_3 | 57/60 (95.000%) | 96/108 (88.889%) | 96/106 (90.566%) | 4284/4897 (87.482%) |
+| NF32_3 | 66/68 (97.059%) | 116/126 (92.063%) | 116/126 (92.063%) | 6320/7009 (90.170%) |
+| NF32_2 | 66/68 (97.059%) | 116/126 (92.063%) | 116/126 (92.063%) | 6409/7099 (90.280%) |
+
+NF không loại điểm structural nào. F chỉ loại **2 branch**:
+`ops_sel_comb.sv:125 else` vì F wrapper nối cfg_mode tới hằng MODE_APPROX=1;
+`fused_add_pipe.sv:249 else` vì chuỗi `if(!meta_sync2) else if(meta_sync2)` không có
+nhánh cuối trong mô hình2-state. Source SHA,identity/file/line/hierarchy và căn cứ ở
+`coverage_closure.json`. Tất cả nhánh ready/stall chưa hit vẫn giữ trong mẫu số;
+không miễn theo lý do “chưa hit”. Mô phỏng ModelSim4-state/reset/CK2Q là bằng chứng riêng,
+không dùng coverage2-state để tuyên bố an toàn với mọi X/Z.
+
+Full companion F20k/n đã chạy sau matrix freeze; thêm directed F30k/OPS0 và30k/OPS1,
+NF mixed exact/approx100k/format và carry20k/format; mỗi suite có manifest trước chạy,
+dùng đúng full RTL library cũ. Không trộn line-only main để suy toggle/branch.
+Bin carry NF còn thiếu ban đầu được hit bằng vector `(2−2^-F)×1+2^-8`, đạt153/157 lần
+ở32/3 và32/2; không sửa corpus main để nhận PASS.
+
+Functional NF: regime/sign256/256,run61/61,popcount6/6,flags5/5,config72/72,
+iteration-mode13/13,adder24/24 trong70 candidate,product packer7/7,final packer6/6.
+Final sat_min không thể xảy ra vì hai toán hạng cộng đều là bội nguyên của minpos.
+Các46 bin adder không hợp lệ có proof theo delta/sign/normalization.
+F: cross anchor/sign/delta/LZC **34/34** trong100 candidate,packer7/7,regime/sign256/256,
+run61/61,n9/9,iteration9/9,flags5/5 vàdelta/mode10/10 trước/sau cut.
+66 bin cross còn lại được phân tích theo cùng-sign,anchor tie,delta≥2 và giới hạn14 bit
+significant của P_hat; giữ từng lý do và directed witness ở closure/plan.json.
+
+Comparator EX0 full companion20k giữ structural diagnostic riêng (toggle chưa đạt85%
+trong diagnostic này); không gán coverage main EXACT_EN1 cho derivative EX0.
+TC-W14-10 kiểm số học/protocol/lint/feature policy, không tuyên bố AC04 riêng cho EX0.
+Lint comparator có đúng1 waiver UNUSEDSIGNAL tại sbm_shift_comb.sv:18 do pruning upper
+y_mant khi exact disabled; unsuppressed warning vẫn lưu, không gọi raw strict là0 warning.
+
+**Paired accuracy — mỗi n1M triples, directed128 tách IID random:**
+
+| n | Mean Err% NF / F (random) | CorrectRate NF % (<0,1 /0,5 /1 /5%) | CorrectRate F % | F thắng/thua/hòa (paired finite) |
+| --- | --- | --- | --- | --- |
+| 0 | 46.21502 / 46.21502 | 38.3251/42.1591/44.1165/50.9805 | 38.3251/42.1591/44.1165/50.9805 | 10/13/999925 |
+| 1 | 6.281 / 6.281 | 42.6051/49.2230/53.6670/71.4005 | 42.6051/49.2229/53.6670/71.4005 | 11/12/999925 |
+| 2 | 1.964347 / 1.964347 | 49.7575/63.4735/71.6139/92.7365 | 49.7575/63.4735/71.6139/92.7365 | 10/10/999928 |
+| 3 | 0.4443513 / 0.4443514 | 61.8365/81.8446/89.5613/99.4480 | 61.8367/81.8446/89.5613/99.4480 | 11/15/999922 |
+| 4 | 0.1555032 / 0.1555031 | 77.2217/94.6399/98.1045/99.9149 | 77.2218/94.6399/98.1045/99.9149 | 9/7/999932 |
+| 5 | 0.06370584 / 0.06370578 | 89.7284/99.0554/99.7506/99.9642 | 89.7283/99.0554/99.7506/99.9642 | 16/15/999917 |
+| 6 | 0.04038788 / 0.04038804 | 96.1675/99.7367/99.8774/99.9764 | 96.1674/99.7367/99.8774/99.9764 | 14/13/999921 |
+| 7 | 0.03743171 / 0.03743177 | 98.1303/99.7799/99.8891/99.9774 | 98.1303/99.7799/99.8891/99.9774 | 8/8/999932 |
+| 8 | 0.03291803 / 0.03291795 | 98.4895/99.7782/99.8910/99.9783 | 98.4894/99.7782/99.8910/99.9783 | 17/11/999920 |
+
+Reference là exact-real `A×B+C` full-grid32/3, không phải kết quả nhân approximate.
+Hai model nhận cùng A/B/C,OPS1,FLOOR/RNE,FW12;F W32/Q29. Main accuracy chạy L1 frozen,
+không tính9M này vào350M RTL. Đối chuẩn Python Fraction độc lập1024/n=9216 ca kiểm
+decode/RNE/reference/error/strict threshold; prefix trace khớp pilot đã kiểm.
+Err%=100|y−r|/|r|;CorrectRate dùng `<` nghiêm ngặt bằng integer grid,không trừ floating
+để quyết định ngưỡng hoặc win/lose/tie. Relative NMSE=mean((y−r)^2/r^2),không phải
+ratio tổng công suất. MaxErr,p50/p90/p99,maxULP,NaR/reference-zero/zero-match lưu JSON.
+CI95 Wilson cho CorrectRate trong random finite/nonzero;mean-error CI chuẩn là mô tả,
+không bảo đảm đuôi phân bố nặng. Directed128 không vào CI IID. Win CI điều kiện trên
+ca quyết định random,không gộp tie làm win. `accuracy_inference.json` trừ directed128
+bằng Fraction trước khi tính CI thắng;field win CI gộp trong main_check giữ như số mô tả,
+không dùng để suy luận IID. CorrectRate CI random không đổi. Không khẳng định F luôn chính xác hơn NF:
+sai số nhân approximate và cửa sổ W32 có thể chi phối,lượt F kém NF vẫn công bố.
+Đây là phân bố raw-code Posit32,không phải benchmark AI; chưa đo application/feedback accuracy.
+Feedback đúng chức năng/state đã kiểm trong RTL main,nhưng không suy accuracy chuỗi từ standalone.
+
+**Lệnh đã chạy từ Posit_MAC trong WSL không nạp profile cá nhân:**
+
+```bash
+bash scripts/build_week14_nf_fast.sh
+python3 scripts/run_week14_nf_ext.py pilot
+python3 scripts/run_week14_nf_ext.py main
+bash scripts/run_week14_closure.sh
+bash scripts/run_week14_nf_carry.sh
+bash scripts/run_week14_ex0_coverage.sh
+python3 scripts/audit_week14_closure.py
+bash scripts/run_week14_accuracy_final.sh pilot
+bash scripts/run_week14_accuracy_final.sh main
+python3 scripts/replay_week14_final.py
+python3 scripts/check_week14_accuracy_inference.py
+python3 scripts/audit_week14_final.py
+python3 scripts/report_week14_final.py
+python3 scripts/retain_week14_final.py
+```
+
+Producer từ chối output đã tồn tại; đây là lệnh truy vết phiên,không chạy đè checkpoint.
+Tái lập bằng hai archive `evidence_w14_06.zip` và `evidence_w14_final.zip`,source snapshot
+và manifest; dùng workspace/output mới. Tool/binary khác phải có manifest replay riêng,
+không rehash lịch sử. Archive bỏ binary/cache/wave/DCP,giữ nguồn/log/report/counter/raw coverage.
+Một lệnh gọi bash qua heredoc từ PowerShell bị lỗi quoting trước thực thi; đổi sang script
+file riêng. Collector/audit mới từng nhầm tên key plan; đã sửa auditor trước nghiệm thu,
+không sửa dữ liệu hoặc RTL. Không có mismatch RTL bị che.
+
+**Còn mở:** W14-12/AC02 p8 MAC2^24,p32/2≥1e8+corner vàp16 exhaustive theo SPEC;
+matched PPA NF EXACT_EN1/NF EXACT_EN0/F trên A35T với≥3 run/config ở W15;
+hồ sơ/demo W16. Không có STA mới trong phiên này,khóa timing8,3ns120,48MHz giữ nguyên.
+Không tiếp tục paper baseline/TableI hoặc XCVU9P trong W14.

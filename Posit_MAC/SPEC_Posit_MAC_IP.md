@@ -95,11 +95,11 @@ Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham
 
 Các Tier là định nghĩa mức nghiệm thu, không phải tự đánh dấu đã đạt theo số tuần.
 
-| Mức | Điều kiện | Hiện trạng14/10/2026 |
+| Mức | Điều kiện | Hiện trạng18/10/2026 |
 | --- | --- | --- |
-| Tier1 — nền tảng | Parser/packer, multiplier và adder đúng ở profile công bố; hoàn tất AC01/AC02/AC05 áp dụng | Các mốc đơn vị/Gate1/Gate2 đạt; ma trận final và PPA toàn khối chưa đạt |
-| Tier2 — NF | MAC NF đúng số học/giao thức và coverage tích hợp theo SPEC; baseline nội bộ có nguồn đóng băng | Gate3 tuần11 đạt số học/protocol và coverage phân bố,near52,55548% (§11.12); ma trận final/PPA còn mở |
-| Tier3 — mục tiêu đầy đủ | Tier2 cùng fused profile chính, paired accuracy/PPA và toàn bộ AC01..08 áp dụng | Chưa đạt; oracle/L1 F_W32/flags/state đã đạt tuần12; F RTL,ma trận cuối,paired accuracy/PPA và Gate4 còn mở |
+| Tier1 — nền tảng | Parser/packer, multiplier và adder đúng ở profile công bố; hoàn tất AC01/AC02/AC05 áp dụng | Các mốc đơn vị/Gate1/Gate2 đạt;final approximate W14 đạt;AC02 exhaustive và matched PPA vẫn mở |
+| Tier2 — NF | MAC NF đúng số học/giao thức và coverage tích hợp theo SPEC; baseline nội bộ có nguồn đóng băng | Gate3 tuần11 và final NF250M/AC04 W14 đạt;AC02 exact và matched PPA còn mở,không gọi toàn Tier đạt |
+| Tier3 — mục tiêu đầy đủ | Tier2 cùng fused profile chính, paired accuracy/PPA và toàn bộ AC01..08 áp dụng | Chưa đạt toàn Tier;F RTL90M,final approximate/AC04 và9M paired standalone accuracy đã đạt;AC02,matched PPA/Gate4 và hồ sơ vẫn mở |
 
 Các Tier không bảo đảm xếp loại hội đồng. Một report PASS có phạm vi riêng không thay chứng cứ của các AC chưa chạy.
 
@@ -108,8 +108,9 @@ Các Tier không bảo đảm xếp loại hội đồng. Một report PASS có 
 | Nhánh | Hiện thực / oracle | Phạm vi đã kiểm |
 | --- | --- | --- |
 | Legacy giữ lịch sử | L1 `PositMac`, `L1MultiplierIter`; RTL `posit_mul_iter`/`mul_iter_wrapper` với `mul_norm_comb` | Gate1/Gate1B/Gate2 và freeze L1 giữ nguyên. Multiplier đã kiểm bốn format,FLOOR/JAM,RNE/TRUNC; không dùng bits legacy làm R(P_hat) cho so NF/F khi carry |
-| NF so sánh chính | `posit_mac_nf`/`mac_nf_wrapper`; `mul_prepack_norm_comb`; `week11::Model` ở tb/week11_model.hpp | RNE/FLOOR,main32/3,FRAC_W12,OPS1,n0..8; OPS0/exact kiểm bổ trợ. Main mới10M,near52,55548% và coverage Gate3 đạt; pilot bốn format0 mismatch. Chưa toàn ma trận final |
+| NF so sánh chính | `posit_mac_nf`/`mac_nf_wrapper`; `mul_prepack_norm_comb`; `week11::Model` ở tb/week11_model.hpp | RNE/FLOOR,main32/3,FRAC_W12,OPS1,n0..8; OPS0/exact kiểm bổ trợ. Gate3/pilot bốn format đạt;W14 NF250M completed/0 mismatch trên25 điểm32/3 và32/2,near≥30% từng điểm;AC04 main đạt. Exact/AC02 vẫn riêng |
 | F phần mềm | `FusedWindow`/`FusedWindowAccumulator` ở l1/include/posit_fused_window.hpp; Oracle full-grid độc lập ở tb/week12_fused_reference.hpp và Python trace | G-F-L1 tuần12:32/3,FW12,W32/Q29,FLOOR/RNE,n0..8,OPS0/1,flags/state;2.208.768 ca/nền tảng Linux/Windows/UBSan0 mismatch,near52,55300693%. Không phải RTL F hoặc FMA exact từ A×B |
+| F RTL so sánh chính | `posit_mac_f`/`mac_f_wrapper`,F1–F5,L1 F_W32 và oracle full-grid32/3 | W14 n0..8 OPS1/FLOOR/RNE,FW12 W32:90M completed/0 mismatch;AC04 main vàpaired standalone accuracy đạt. Chưa matched PPA/board signoff |
 | Paper research | `paper_mul_iter`, predictor/RND và các profile có tên riêng | Trace/Fig.4 và các khảo sát lịch sử có bằng chứng riêng; chưa có RTL tác giả/provenance/TableI nguyên bản |
 
 RNE/NF mới được kiểm theo chính hợp đồng prepack đã chốt; không gọi nó approximate bit-exact với MAC legacy. Chọn đúng oracle theo tên nhánh trước khi chạy regression.
@@ -1522,7 +1523,7 @@ NF10M/0 mismatch,ModelSim bốn format và active NF/F replay đạt;F100k smoke
 
 Kiểm khóa trước chạy tuần14: `python scripts/audit_rtl_release.py`. Nếu hash nguồn/model/constraint đổi hoặc test final phát hiện mismatch: dừng,lưu failure,review release mới; không sửa RTL/oracle để hợp thức hóa checkpoint. Defined-clock CDC và reset review trước khóa đã có;review RDC/interface chi tiết W14-01,final per-n,AC04,paired accuracy và Gate4 vẫn mở. Không chạy matrix tuần14 trong đợt promote này.
 
-**Workflow khóa120MHz18/10:** theo lựa chọn sinh viên, đã promote đúng byte OPT-12 negate vào production và khóa `POSIT_MAC_RTL_20261018_OPT12_120`. A35T/Explore8,3ns≈120,48MHz, NF WNS/WHS+0,227/+0,053ns, F+0,093/+0,040ns; giữ I/O và uncertainty. Recipe `syn/opt12_120mhz_release.json`, clock120MHz riêng; XDC100MHz và lock OPT02C lưu làm lịch sử. 10M NF+10M F/0 mismatch, ModelSim và hash nguồn tại Optimization8.31.8. Hợp đồng số học/I/O/precision/latency không đổi. W14-01..06 đạt18/10 trên cùng release:F90M/0 mismatch,review/counters/harness/pilot/calibration/freeze; corner/ModelSim đạt. NF final,AC04,paired accuracy/comparator/audit cuối vẫn mở; chưa paired PPA/board signoff. Xem Optimization8.33 và results/week14/summary.json.
+**Workflow khóa120MHz18/10:** theo lựa chọn sinh viên, đã promote đúng byte OPT-12 negate vào production và khóa `POSIT_MAC_RTL_20261018_OPT12_120`. A35T/Explore8,3ns≈120,48MHz, NF WNS/WHS+0,227/+0,053ns, F+0,093/+0,040ns; giữ I/O và uncertainty. Recipe `syn/opt12_120mhz_release.json`, clock120MHz riêng; XDC100MHz và lock OPT02C lưu làm lịch sử. 10M NF+10M F/0 mismatch, ModelSim và hash nguồn tại Optimization8.31.8. Hợp đồng số học/I/O/precision/latency không đổi. W14-01..11 đã đạt18/10:350M completed RTL/0 mismatch (F90M+NF250M+NF-EX010M),AC04 main và9M paired standalone accuracy. W14-12/AC02 và matched PPA/Gate4 còn mở;Optimization8.34/results/week14/handoff.json. Không đổi hợp đồng số học,source release hoặc timing. Chưa paired PPA/board signoff. Lint EX0 có1 scoped feature-unused waiver;AC04 chính không bao gồm toggle closure riêng EX0.
 
 ## Phụ lục A. Tóm tắt số liệu của [P] để đối chiếu
 
@@ -1626,14 +1627,14 @@ Bằng chứng: `results/paper_table1_200m.log`, `paper_baseline_verified.log`, 
 | --- | --- | --- |
 | FR01,FR03 | parser_comb/parser_pipeline và tests tuple hỗ trợ | results/parser_comb,results/parser_pipeline; tuple khác chưa nghiệm thu |
 | FR02,FR04 | packer unit/chain và NF special/context tests | results/packer/summary.json,results/week11/summary.json; bypass rút ngắn chưa có |
-| FR05..FR08 | Gate2 standalone16 profile,OPS/SAC/core suites | results/week9_implementation/gate2_acceptance.json; final per-profile matrix còn mở |
-| FR09 | W10 comb/pipeline + independent integer oracle | results/week10_adder/summary.json; final AC02/AC04 còn mở |
-| FR10,FR12..FR15 | W11 direct NF model/oracle,harness và ModelSim replay | results/week11/summary.json; coverage near30% chưa đạt theo §11.11,không gọi mọi tiêu chí Gate3 đã đóng |
-| FR11 | Oracle full-grid độc lập,L1 F_W32 và state/flags | results/week12/{summary,freeze}.json: G-F-L1 đạt trong profile đã chốt; F RTL và ma trận final còn mở |
+| FR05..FR08 | Gate2 standalone16 profile,OPS/SAC/core suites | results/week9_implementation/gate2_acceptance.json;final approximate MAC profiles results/week14/completion.json,không thay AC02 |
+| FR09 | W10 comb/pipeline + independent integer oracle | results/week10_adder/summary.json;AC04 tích hợp main đạt tại results/week14/coverage_closure.json;exact/AC02 vẫn mở |
+| FR10,FR12..FR15 | W11 direct NF model/oracle,harness và ModelSim replay | results/week11/summary.json,results/nf_coverage_20261014/summary.json;W14 NF250M/0 mismatch,near≥30% mỗi điểm và AC04 main đạt;AC02 riêng |
+| FR11 | Oracle full-grid độc lập,L1 F_W32 và state/flags | results/week12/{summary,freeze}.json;W14 F90M/0 mismatch,AC04 main,9M paired standalone accuracy;matched PPA còn mở |
 | FR16 | Chồng lấn/FIFO/credit | Chưa triển khai; cần protocol/II coverage sau thiết kế |
-| NFR01 | Strict lint Gate2/W10/W11 | Logs đi cùng canonical reports; chưa CDC/RDC/STA signoff |
+| NFR01 | Strict lint Gate2/W10/W11 | Logs canonical;W14 reset/interface review và ModelSim đạt,EX0 có1 scoped lint waiver;không formal RDC/board signoff |
 | NFR02..05,AC05/06 | OPS/packer PPA riêng | results/ops_ppa,results/packer_ppa; chưa NF/F whole-top PPA |
-| AC07/08 | Runner/source/fixture/library hashes và manifest | Đã có tái lập theo mốc; orchestration toàn bộ và traceability final cần hoàn thiện |
+| AC07/08 | Runner/source/fixture/library hashes và manifest | W14 audit35 điểm,15 mutant,replay4 pilot vàarchive CRC/SHA đạt;backup theo Git push cuối phiên. Toàn SPEC/AC02 vẫn riêng |
 
 Tên TC-* chuẩn và fail-vector tự động sẽ gắn với suite/case cụ thể khi triển khai. Không dẫn tới các results/mac.csv/fused.csv/ppa.csv placeholder như bằng chứng tồn tại.
 

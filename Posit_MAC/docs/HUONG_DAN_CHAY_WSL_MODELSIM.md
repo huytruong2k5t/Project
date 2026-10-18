@@ -514,3 +514,31 @@ archive_manifest.json; không ghi đè file đang có khác hash. external_input
 ở đường dẫn origin của study cũ; chỉ khôi phục về đúng đường dẫn trong Posit_MAC khi thiếu và khớp SHA.
 Các producer unit/stress dùng output checkpoint cố định; nếu thay mã phải mở study mới, không xóa FAIL hoặc
 rehash checkpoint cũ để chạy tiếp. Chi tiết lệnh đã thực hiện và giới hạn ở Optimization8.31.7.
+
+
+## W14 final18/10 — nguồn chuẩn và cách tái lập
+
+Production hiện hành là OPT12_120,không còn OPT02C100MHz. W14-01..11 đã đạt phạm vi kỹ thuật;
+W14-12/AC02 và matched PPA W15 vẫn riêng. Xem Optimization8.33/8.34 và results/week14/handoff.json.
+Hai archive evidence_w14_06.zip + evidence_w14_final.zip cùng hai archive_manifest.json/
+final_archive_manifest.json giữ nguồn,lệnh,seed,report,counter và raw coverage. Kiểm SHA/CRC trước
+giải nén trên workspace mới;không ghi đè checkpoint hiện có. Binary,obj,ModelSim work/wave cần build lại.
+
+Runner main F lịch sử chỉ chạy F;NF dùng build_week14_nf_fast.sh/run_week14_nf_ext.py.
+Các script prepare/build/freeze/collector có output cố định và từ chối chạy lại. Chúng ghi workflow
+gốc,không phải một lệnh replay tùy thư mục. Dùng snapshot exact đã lưu để rebuild trên bản sao sạch;
+compiler/binary khác cần manifest replay mới,không sửa source/hash của evidence cũ để gọi PASS.
+prepare_week14.py là bootstrap trước các bản sửa harness,không chạy ghi đè harness hiện hành.
+
+```bash
+# Kiểm trên workspace hiện tại sau khi evidence đã được khôi phục:
+python3 scripts/audit_rtl_release.py --self-test
+python3 scripts/audit_week14_closure.py
+python3 scripts/audit_week14_accuracy_final.py main
+python3 scripts/audit_week14_final.py
+```
+
+Auditor final cần binaries frozen còn trong local hoặc rebuild tương thích byte đúng toolchain;
+archive không chứa binary. Nếu hash mới khác,giữ nguyên receipt cũ và mở bản replay có provenance riêng.
+replay_week14_final.py tạo4 output mới và từ chối thư mục final_replay đã tồn tại.
+Không chạy lại STA hoặc regression lớn chỉ vì cập nhật tài liệu.

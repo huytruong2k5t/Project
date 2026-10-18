@@ -13,10 +13,10 @@ Recipe120MHz: `syn/opt12_120mhz_release.json`, clock `syn/constraints/a35t_clock
 XDC100MHz vẫn giữ cho replay lịch sử, không phải clock nghiệm thu120MHz.
 870 profile lint parser, equivalence/decoder,10M NF+10M F đều0 mismatch; ModelSim NF/F đạt.
 Hai file production là đúng byte đã kiểm, không chạy lại regression lớn khi promote.
-Đây là OOC theo profile công bố, chưa board signoff, final per-n/AC04 W14 hoặc paired NF/F PPA.
+Đây là OOC theo profile công bố;W14 final approximate/AC04 main đã đạt. Chưa board signoff,exact/AC02 hoặc paired NF/F PPA.
 Old lock OPT02C giữ trong `results/opt120_20261018/reference_freeze.json` và `reference_source.zip`.
 Chi tiết Optimization8.31.8; trial8.31.7 và các trạng thái chưa promote trước đó là lịch sử.
-Producer lịch sử không dùng để refreeze/ghi đè release mới. W14-01..06 đã đạt: F90M/0 mismatch, pilot/accuracy calibration/matrix freeze; W14-07..12 còn mở (Optimization8.33).
+Producer lịch sử không dùng để refreeze/ghi đè release mới. W14-01..11 đạt:350M RTL completed/0 mismatch,AC04 main và9M paired standalone accuracy;Optimization8.34/results/week14/handoff.json. W14-12/AC02 hoãn riêng;EX0 structural diagnostic chưa claim toggle closure.
 
 
 

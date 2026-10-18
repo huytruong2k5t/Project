@@ -2,6 +2,11 @@
 
 ## Release production đã khóa — 18/10/2026
 
+**Workflow cập nhật18/10:** sinh viên đã mở lại candidate trên120MHz tại Optimization8.31.6;
+release100MHz bên dưới giữ làm reference có hash, chưa phải quyết định chốt cuối mới.
+Chưa chạy W14 trong lúc chọn candidate; audit reference PASS không nghiệm thu candidate.
+
+
 `POSIT_MAC_RTL_20261018_OPT02C` (`LOCKED_FOR_W14`),38 module trong `rtl/production.f`.
 Gói hiện hành: OPT-02c + OPT-05 abc_tree + OPT-09 + OPT-10A; không đổi hợp đồng số học/latency.
 NF thực hiện R(R(P_hat)+C_eff); F thực hiện R(P_hat+C_eff), với phạm vi/profile ở SPECv1.20.

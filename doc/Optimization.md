@@ -22,6 +22,7 @@ Các mã mục cũ `7.x`/`8.x` được giữ để truy vết report và liên 
 | NF OPT-03 | Production dùng product RNE P1/P2 và parse/product bank riêng | Mục8.21 |
 | A1 OPT-02c | Đã promote và khóa; A1 Default+2,144ns,0 FF thêm | Mục8.30 |
 | SAC/packer/parse | Production OPT-02c + OPT-05 abc_tree + OPT-09 + OPT-10A; LOCKED_FOR_W14,38 module; cả3 strategy đạt100MHz | Mục8.30 |
+| Hướng tối ưu sâu 120+ MHz | Đã mở study candidate riêng; review OPT-12 trước, OPT-13/14 có điều kiện; chưa sửa RTL, chưa khóa release mới. W14 chưa chạy trong khi chọn candidate | Mục8.31.6 |
 
 Các script report/prepare gắn checkpoint cũ là producer lịch sử, không chạy lại để tái chèn nhật ký vào PLAN hiện hành. Dùng snapshot/README của study khi tái lập; không sửa các script đã khóa hash chỉ để đổi nhãn báo cáo. Collector bảng toàn tầng hiện hành đã được đổi sang vùng báo cáo giới hạn trong tài liệu này.
 
@@ -1530,3 +1531,167 @@ Mã công việc hiện hành theo tiến độ đã đánh lại18/10: W14-01 r
 W14-04 pilot, W14-05 matrix freeze, W14-06/07 main F/NF, W14-08..11 closure/audit; W14-12 exact riêng.
 Các mã trong hồ sơ lịch sử giữ ý nghĩa tại thời điểm ghi. **Chưa chạy W14 final matrix, chưa đóng Gate4.** Các nhánh đã đóng ở8.29
 tiếp tục đóng. Không chạy thêm A100T hoặc thay FW12.
+
+<a id="legacy-8-31"></a>
+
+### 8.31. Phương án tối ưu sâu hướng tới mốc 120+ MHz (Parser C P1, Packer tích P1 và SAC/OPS launch) — 18/10/2026
+
+**Trạng thái:** Đặc tả kỹ thuật ứng viên (`OPT-12`, `OPT-13`, `OPT-14`) dựa trên kết quả giải phẫu STA post-route của bản release `POSIT_MAC_RTL_20261018_OPT02C` (mục 8.30.3). Bản `LOCKED_FOR_W14` hiện tại giữ nguyên hash; nếu triển khai một hoặc cả ba bước dưới đây để vượt mốc **120 MHz** (`T = 8.333 ns`, tương ứng yêu cầu `R2R setup slack >= +1.667 ns` trên thang đo 10 ns trước khi quét trực tiếp tại clock 8.333 ns), phải thực hiện trong study root mới và mở change review theo mục8.30.5. Không sửa/ghi đè lock cũ để cho candidate PASS; chỉ tạo release mới sau khi kiểm chứng và chọn candidate. Review hiện hành tại8.31.6 thay các dự đoán chưa được đo bên dưới.
+
+#### 8.31.1. Các nhóm đường găng R2R khi hướng tới 120+ MHz sau khi khóa `OPT-02c`
+
+Sau khi `OPT-02c` đẩy `adder_a1` lên `+2.144 ns` (`7.718 ns`, 7 logic levels), bảng phân bố slack nội bộ (Internal R2R, strategy Default tại mục 8.30.3) cho thấy **4 nhóm endpoint** nằm dưới ngưỡng `+2.000 ns` (`~125 MHz`):
+
+| Thứ tự găng | Nhóm bank (Default) | Setup slack tại 10 ns | Ước lượng `F_STA` | Đường găng đại diện (`Source -> Destination`) | Data delay / Logic levels |
+| :---: | --- | ---: | ---: | --- | --- |
+| **#1** | `Parser C — P1` (`parser_c_p1`) | **`+1.259 ns`** | `114.40 MHz` | `accumulator_q_reg[0]/C -> u_c/p1_cnt_q_reg[0]/D` | `8.594 ns` / **14 levels** (`8 CARRY4 + 6 LUT`) |
+| **#2** | `Packer tích — P1` (`product_packer_p1`) | **`+1.769 ns`** | `121.49 MHz` | `u_core/u_acc/acc_reg[53]/C -> u_product_pack/g_rne.p1_flags_q_reg[1]/D` | `8.090 ns` / **8 levels** (`2 CARRY4 + 6 LUT`) |
+| **#3** | `SAC — state/feedback` (`sac_state`) | **`+1.850 ns`** | `122.70 MHz` | `mode_q_reg/C -> u_core/u_ctrl/fx_q_reg[24]/D` (qua `u_ops`) | `7.937 ns` / **7 levels** (`7 LUT`, route `80.4%`) |
+| **#4** | `Parser B — P1` (đường CE) | **`+1.910 ns`** | `123.61 MHz` | `u_a/p2_valid_q_reg/C -> u_b/p1_payload_seed_q_reg[4]/CE` | `7.255 ns` / **7 levels** |
+
+- Để vượt mốc **120 MHz** (`slack >= +1.667 ns` ở 10 ns): **bắt buộc phải giải quyết `Parser C — P1` (`OPT-12`)** vì hai nhóm `#2` (`+1.769 ns`) và `#3` (`+1.850 ns`) đã nằm trên ngưỡng `+1.667 ns`.
+- Để tiến lên vùng **125–130+ MHz** (`slack >= +2.000 .. +2.308 ns` trên toàn bộ R2R): kết hợp thêm **`OPT-13` (`Packer tích — P1`)** và **`OPT-14` (`SAC/OPS launch`)**. Mục tiêu là tối ưu tổ hợp, không đổi số tầng hoặc `L_valid / H / II`; chi phí0FF chỉ áp dụng các biến thể không nhân bản thanh ghi. Bất kỳ duplicate FF nào phải báo chi phí riêng và review trước, xem8.31.6.
+
+---
+
+#### 8.31.2. `OPT-12` — Tối ưu `Parser — P1` (`posit_parser.sv` & `posit_parser_comb.sv`)
+
+**1. Nguyên nhân gốc rễ từ `results/opt02c_20261018/ppa/candidate/Default/parser_c_p1_setup.rpt`:**
+- **Vì sao chỉ `Parser C — P1` nằm trên đường R2R:** `u_a` và `u_b` nhận trực tiếp port `a`, `b` (thuộc nhóm Input-to-Register; worst path được báo vào `u_a`/`u_b` là đường `CE` có slack `+2.029 ns` và `+1.910 ns`). Ngược lại, `u_c` nhận `c_eff = acc_mode ? (acc_clr ? 0 : accumulator_q) : c` từ thanh ghi nội bộ `accumulator_q_reg[31:0]`. Do đó, toàn bộ chặng `accumulator_q_reg[0] -> chặng c_eff (LUT4 và routing, khoảng1.331 ns) -> P1 combinational` trở thành đường R2R nội bộ (trong cả NF ở `+1.259 ns` lẫn F ở `+2.002 ns`).
+- **Ba điểm nghẽn nối tiếp bên trong `posit_parser.sv` (dòng 118–144):**
+  1. *MUX chọn dấu nằm sau chuỗi `CARRY4` (`6.391 -> 8.164 ns`, mất `1.773 ns`):* Cách viết `assign magnitude = s_d ? (~p + 1'b1) : p;` khiến Vivado tổng hợp `magnitude0 = ~p + 1` qua 8 `CARRY4` (`4.582 -> 6.391 ns`), rồi đặt thêm một tầng `LUT6` (`p1_first_regime_bit_q_i_1__1`, `0.303 ns`) ở **phía sau** `CARRY4` thứ 8 kèm hai chặng dây (`0.918 ns` trước LUT và `0.552 ns` sau LUT với **fanout = 27**) để tạo `first_regime_bit`.
+  2. *Cả 30 bit `terminator_bits[29:0]` phải chờ bit MSB `first_regime_bit = magnitude[30]`:* Biểu thức `terminator_bits = regime_tail ^ {(NB-2){first_regime_bit}}` bắt tất cả các bit thấp (vốn đã ra khỏi `CARRY4` từ `5.364 .. 6.057 ns`) phải đứng đợi carry lan truyền lên tận bit 30 và chờ mạng fanout 27 của `first_regime_bit` tại `8.164 ns` rồi mới bắt đầu vào cây LOD.
+  3. *Độ rộng `N = NB - 2 = 30` trượt khỏi nhánh `g_group4` và bị chặn cuối bởi MUX `MAX_COUNT` (`8.164 -> 11.389 ns`, mất `3.225 ns`):* Trong `lod_lzd_core.sv` (dòng 25), nhánh cây 4-nhóm (`g_group4`) chỉ bật cho `N == 31 || N == 32`. Do `posit_parser` gọi `N = 30`, nó rơi về cây nhị phân `g_baseline` và phải nối tiếp thêm MUX bão hòa `cnt_d = terminator_valid ? terminator_count : MAX_COUNT` ở cuối (trong đó `cnt_d[0]` phải chờ `terminator_valid` qua đường dây dài `0.997 ns`).
+
+**2. Ba cải tiến kỹ thuật của `OPT-12` (0 FF, giữ nguyên hợp đồng P1/P2):**
+1. **Dùng XOR hai bit kề nhau cho `terminator_bits` để cắt đứt sự phụ thuộc vào `first_regime_bit` (fanout 27 $\rightarrow$ 1):**
+   - Thay `assign terminator_bits = regime_tail ^ {(NB-2){first_regime_bit}};` bằng:
+     ```systemverilog
+     assign terminator_bits = magnitude[NB-3:0] ^ magnitude[NB-2:1];
+     ```
+   - *Chứng minh tương đương bit-exact:* Giả sử từ bit `NB-2` xuống bit `m+1`, các bit của `magnitude` đều bằng `r`, và bit `m` là bit đầu tiên bằng `~r`. Khi đó với mọi `k > m`, `magnitude[k] == magnitude[k+1] == r` nên `magnitude[k] ^ magnitude[k+1] == 0`; tại `k = m`, `magnitude[m] ^ magnitude[m+1] == (~r) ^ r == 1`. Vì `lod_lzd_core` (`MODE = 0`) chỉ tìm **vị trí bit `1` đầu tiên tính từ MSB** (`k = m`) và bỏ qua mọi bit tại `k < m`, kết quả `terminator_count` và `terminator_valid` của `magnitude[NB-3:0] ^ magnitude[NB-2:1]` **đồng nhất 100%** với `magnitude[NB-3:0] ^ {(NB-2){magnitude[NB-2]}}` trên mọi giá trị nhị phân!
+   - *Lợi ích:* Mỗi bit `terminator_bits[k]` sẵn sàng ngay khi `CARRY4` đi qua bit `k+1`, không cần đợi carry lên tới bit 30 và xóa bỏ hoàn toàn mạng fanout 27 của `first_regime_bit` trên đường vào LOD.
+2. **Ghép bit sentinel `'1'` vào LSB của bộ dò regime (`{terminator_bits, 1'b1}`) để bỏ MUX `terminator_valid` và kích hoạt `g_group4` (`N = 31`):**
+   - Khi không có bit terminator trong `NB - 2` bit (`terminator_bits == '0`), giá trị cần trả về là `MAX_COUNT = NB - 2` (`30` với Posit32).
+   - Nếu ghép thêm hằng số `1'b1` vào ngay sau LSB:
+     ```systemverilog
+     wire [NB-2:0] detector_in = {terminator_bits, 1'b1};
+     ```
+     thì bit `'1'` nối thêm nằm ở đúng chỉ số **`NB - 2 = MAX_COUNT`** tính từ MSB!
+   - Với các cấu hình thỏa `$clog2(NB - 1) == CNT_W` (đúng cho mọi Posit chuẩn `NB = 8, 16, 32`; dùng `generate if ($clog2(NB - 1) == CNT_W)` để giữ tương thích với các `NB` lẻ trong lint):
+     - Gọi `lod_lzd_core #(.N(NB - 1), .MODE(0), .S(CNT_W))` với `.in(detector_in)` và nối thẳng `.K(cnt_d)`.
+     - Nếu `terminator_bits != '0`, vị trí bit `1` đầu tiên nằm trong `0 .. NB-3` (không đổi). Nếu `terminator_bits == '0`, bit `1` đầu tiên chính là bit sentinel tại chỉ số `NB - 2 = MAX_COUNT`!
+     - **Xóa bỏ hoàn toàn logic `terminator_valid` và tầng MUX `terminator_valid ? terminator_count : MAX_COUNT` ở cuối P1**, đồng thời với `NB = 32` thì `N = NB - 1 = 31` **tự động bật nhánh cây 4-nhóm `g_group4`** trong `lod_lzd_core.sv` (và có thể mở rộng thêm `N == 30 || N == 31 || N == 32` trong `lod_lzd_core.sv` cho `posit_magnitude_parse.sv`).
+3. **Đảo bit có điều kiện ngay trước dây chuyền nhớ `CARRY4`:**
+   - Viết `assign magnitude = (p ^ {NB{s_d}}) + {{(NB-1){1'b0}}, s_d};` để `magnitude` lấy trực tiếp từ ngõ ra `O` của `CARRY4`, tránh phát sinh LUT MUX chọn `s_d` phía sau chuỗi `CARRY4`.
+
+---
+
+#### 8.31.3. `OPT-13` — Tối ưu sâu `Packer tích — P1` (`mul_prepack_norm_comb.sv` & `posit_pack_prepare.sv`)
+
+**1. Nguyên nhân gốc rễ từ `results/opt02c_20261018/ppa/candidate/Default/product_packer_p1_setup.rpt`:**
+- **Path 1 (`+1.769 ns`, `acc_reg[53]/C -> p1_flags_q_reg[1]/D`, 8 levels) & Path 2 (`+1.822 ns`, `acc_reg[53]/C -> p1_mag_trunc_q_reg[13]/D`, 8 levels):**
+  1. *Nút thắt `carry` (`acc_reg[53]`, fanout = 97) nối tiếp vào bộ cộng `sf_norm = sf + 1` (fanout = 47):* Trong `mul_prepack_norm_comb.sv` (dòng 33–36), bit nhớ `grid[q+1]` (`acc_reg[53]`) vừa phải lái MUX 53-bit của `frac_norm` (làm fanout = 97, mất `1.035 ns` đi dây), vừa đi vào đáy chuỗi `CARRY4` cộng `sf_norm = sf + 1` (`4.417 -> 5.171 ns`), rồi `sf_norm[4]` (fanout = 47, mất thêm `1.216 ns` đi dây) mới tới được `posit_pack_prepare` ở `6.387 ns` để tính `offset` (`7.969 ns`, fanout = 32).
+  2. *Ghi đè dư thừa `mag_trunc` và `G/R/S` theo `MAXPOS`/`MINPOS` ngay tại P1:* Trong `posit_pack_prepare.sv` (dòng 119–153), khi `sf >= SF_MAX` hoặc `sf < -SF_MAX`, mạch tổ hợp P1 ép `mag_trunc = {NB-1{1'b1}}` (hoặc `1`) và xóa `guard/round/sticky = 0`. Tuy nhiên, ở tầng P2 (`posit_pack_finish.sv` dòng 76–90), khi `special_sel != NORMAL`, tầng P2 **đã chọn trực tiếp hằng số `0 / NaR / max_encoded / min_encoded` và bỏ qua hoàn toàn `p1_mag_trunc_q`, `p1_guard_bit_q`, `p1_round_bit_q`, `p1_sticky_bit_q`**! Việc ép lại `mag_trunc` ở P1 khiến toàn bộ 31 bit `p1_mag_trunc_q` (Path 2) phải đi qua bộ so sánh `sf >= SF_MAX` và 3 tầng LUT MUX cuối (`6.396 -> 10.836 ns`, mất `4.440 ns`).
+  3. *Tính cờ `flags_o[1]` (`inexact`) ở cuối P1:* Trong Path 1 (`+1.769 ns`), sau khi tra bảng `sticky_lookup[offset]` xong ở `8.295 ns`, tín hiệu còn phải đi qua **3 tầng LUT6** (`8.295 -> 10.891 ns`, mất `2.596 ns`) để OR `guard_bit | round_bit | sticky_bit` và kết hợp với các điều kiện `is_nar`, `is_zero`, `sf >= SF_MAX`, `sf < -SF_MAX`.
+
+**2. Ba cải tiến kỹ thuật của `OPT-13` (0 FF, giữ nguyên hợp đồng Packer):**
+1. **Tính trước `sf_plus1 = sf + 1` từ `core_sf` (`sf_o_reg`) và chọn `sf_norm` / `offset` bằng MUX 2:1 theo `carry`:**
+   - Thanh ghi `sf_o_reg` (`core_sf`) trong `mul_iter_core.sv` đã được chốt cố định ngay từ chu kỳ `launch` (ổn định suốt `q + 3` chu kỳ trước khi `core_done` bật).
+   - Thay vì đưa `carry = grid[q+1]` vào đáy chuỗi `CARRY4` cộng `sf + carry`, tính sẵn `sf_plus1 = sf + sf_t'(1)` chỉ phụ thuộc vào `sf` (`sf_o_reg`), rồi chọn `sf_norm = carry ? sf_plus1 : sf` (hoặc tính sẵn `offset_0` từ `sf` và `offset_1` từ `sf_plus1` rồi chọn `offset = carry ? offset_1 : offset_0`). Nhờ đó, `acc_reg[53]` không còn phải đi qua chuỗi `CARRY4` 12-bit trước khi điều khiển `offset`!
+2. **Tách nhân bản thanh ghi hoặc buffer cho tín hiệu điều khiển fanout cao (`mode_o` fanout 109 và `carry` fanout 97):**
+   - Trong `mul_prepack_norm_comb.sv`, tách tín hiệu chọn `carry_data` (lái 53 bit `frac_norm`) và `carry_ctrl` (lái `sf_norm`/`offset`) để tổng hợp viên không gộp chung net fanout = 97 vào đường điều khiển `offset`.
+3. **Rút ngắn nhánh override cuối P1 của `posit_pack_prepare.sv` (hoặc dời phép OR `guard | round | sticky` của `flags[1]` sang P2 nơi đang dư `+4.531 ns` slack):**
+   - Trong `posit_pack_prepare.sv`, tính song song điều kiện tràn `ovf = (int'($signed(sf)) >= SF_MAX)` và `udf = (int'($signed(sf)) < -SF_MAX)` độc lập với đường dịch `shifted` / `sticky_lookup[offset]`.
+   - Đặc biệt đối với `posit_product_pack.sv` (và `posit_pack.sv` ở chế độ RNE), vì P1 đã chốt đầy đủ `p1_guard_bit_q`, `p1_round_bit_q`, `p1_sticky_bit_q` và `p1_special_sel_q` qua thanh ghi P1, phép gộp `inexact = flags_in[1] | guard_bit | round_bit | sticky_bit` khi `special_sel == NORMAL` có thể đặt ở đầu `posit_pack_finish.sv` (nơi `product_packer_p2` có slack **`+4.531 ns`** và `final_packer_p2` có slack **`+3.401 ns`**) mà **không tốn thêm 1 FF nào** ở biên P1/P2!
+
+---
+
+#### 8.31.4. `OPT-14` — Tối ưu sâu `SAC — state/feedback` bằng cách tách `cfg_mode` khỏi đáy cây Popcount trong `ops_sel_comb.sv`
+
+**1. Nguyên nhân gốc rễ từ `results/opt02c_20261018/ppa/candidate/Default/sac_state_setup.rpt`:**
+- Cả 3 đường găng chậm nhất của nhóm `sac_state` (`+1.850 ns` vào `fx_q_reg[24]/D`, `+1.925 ns` vào `fx_q_reg[14]/D`, `+2.030 ns` vào `fx_q_reg[25]/D`) **không còn nằm ở vòng lặp nội bộ `fx_q -> sac_step_comb -> fx_q`** (vốn đã được rút ngắn bởi `OPT-05 abc_tree`), mà đều là **đường nạp khởi tạo khi `launch`**:
+  `u_wrapper/mode_q_reg/C (fanout = 112, route 1.283 ns) -> ops_sel_comb (cây popcount 5 tầng -> choose_b, fanout = 25, arrival 9.735 ns) -> MUX swap x_frac -> MUX launch -> u_core/u_ctrl/fx_q_reg/D`!
+- **Tại sao `mode_q_reg` phải đi xuyên qua 5 tầng LUT của cây popcount trong `ops_sel_comb.sv`?**
+  Tại `ops_sel_comb.sv` (dòng 69–77):
+  ```systemverilog
+  for (bit_index = 0; bit_index < FRAC_MAX; bit_index++) begin : g_count_mask
+      if (bit_index < CUT_W) begin : g_low
+          assign pop_a[bit_index] = frac_a[bit_index] & !cfg_mode;
+          assign pop_b[bit_index] = frac_b[bit_index] & !cfg_mode;
+  ```
+  Việc dùng `!cfg_mode` để che 14 bit thấp ngay tại **tầng lá (level 0)** của cây cộng popcount 26-bit làm phát sinh hai hệ lụy:
+  1. `mode_q_reg` phải kéo thêm 28 cổng AND ở đáy cây popcount (đẩy tổng **fanout của `mode_q_reg` lên 112**, mất `1.283 ns` chỉ riêng dây dẫn từ FF tới LUT đầu tiên!).
+  2. Tín hiệu từ `mode_q_reg` phải leo qua toàn bộ **5 tầng LUT của cây cộng popcount 26-bit + bộ so sánh `count_b < count_a`** (`4.541 -> 9.735 ns`, mất **`5.194 ns`**) mới tạo ra được bit điều khiển hoán vị `choose_b`!
+
+**2. Hai cải tiến kỹ thuật của `OPT-14` (0 FF, giữ nguyên giao diện `ops_sel_comb.sv`):**
+1. **Đưa `cfg_mode` ra khỏi đáy cây popcount — tính song song `choose_b_approx` và `choose_b_exact` rồi mới MUX 1-bit ở đỉnh:**
+   - Các bit `frac_a[25:0]` và `frac_b[25:0]` xuất phát trực tiếp từ thanh ghi P2 của `u_a` và `u_b` (`p2_frac_q_reg`, nơi đang có slack rất lớn).
+   - Thay vì che `!cfg_mode` ở đáy cây:
+     - Nhánh 12-bit cao (`frac_a[FRAC_MAX-1 -: FRAC_W]` và `frac_b[FRAC_MAX-1 -: FRAC_W]`): tính trực tiếp tổng số bit 1 phần cao `count_hi_a`, `count_hi_b` và kết quả so sánh `choose_b_approx = (count_hi_b < count_hi_a)` **hoàn toàn không phụ thuộc `cfg_mode`**.
+     - Nhánh 14-bit thấp (`frac_a[CUT_W-1:0]` và `frac_b[CUT_W-1:0]`): tính tổng số bit 1 phần thấp `count_lo_a`, `count_lo_b`, cộng với `count_hi_a`/`count_hi_b` để tạo `count_full_a`, `count_full_b` và `choose_b_exact = (count_full_b < count_full_a)` **hoàn toàn không phụ thuộc `cfg_mode`**.
+     - Tại đỉnh cây, chỉ dùng **1 MUX 2:1 duy nhất** theo `cfg_mode`:
+       ```systemverilog
+       assign choose_b = OPS_EN && (cfg_ops == 2'd1)
+                       && (cfg_mode ? choose_b_approx : choose_b_exact);
+       ```
+   - *Lợi ích:* `mode_q_reg` giảm ngay ~28 tải fanout và **không còn phải đi qua 5 tầng LUT của cây popcount**, rút ngắn đường `mode_q_reg -> choose_b -> fx_q_reg` khoảng **3–4 tầng LUT (`~1.5 – 2.0 ns`)**!
+2. **Không ép xóa 14 bit cao `candidate_x_a/b[FRAC_MAX-1:FRAC_W]` theo `cfg_mode` khi nạp `x_frac` (hoặc bật `g_group4` cho `N = 26` trong `lod_lzd_core.sv`):**
+   - Trong `iter_ctrl.sv` (dòng 53), khi `mode_q == 1` (approximate), mạch SAC chỉ đọc `fx_approx = fx_q[FRAC_W-1:0]` và hoàn toàn không dùng `fx_q[FRAC_MAX-1:FRAC_W]`. Đồng thời, nếu muốn tăng thêm biên độ cho cả vòng lặp `fx_q -> sac_step_comb -> fx_q` của chế độ exact (`W_X = 26`), chỉ cần mở rộng điều kiện `g_group4` trong `lod_lzd_core.sv` (dòng 25) để bao gồm thêm `N == 26` (cùng `N == 30, 31, 32`).
+
+---
+
+#### 8.31.5. Thứ tự triển khai khuyến nghị nếu mở đợt nâng cấp 120+ MHz
+
+| Bước | Mã ứng viên | File RTL tác động | Chi phí FF / Chu kỳ | Mục tiêu Setup Slack (ở 10 ns) | Mục tiêu `F_STA` toàn NF |
+| :---: | :--- | :--- | :---: | :---: | :---: |
+| **Bước 1 (Thử trước, chưa bảo đảm timing)** | **`OPT-12`** | `posit_parser.sv`, `posit_parser_comb.sv`, `posit_magnitude_parse.sv` | `0 FF` / `0 cycle` | Kéo `Parser C — P1` từ `+1.259 ns` lên **`> +2.10 ns`** | **`~121.5 MHz`** (bị chặn tiếp bởi `product_packer_p1` ở `+1.769 ns`) |
+| **Bước 2 (Chỉ khi còn găng)** | **`OPT-13`** | `mul_prepack_norm_comb.sv`, `posit_pack_prepare.sv`, `posit_pack_finish.sv` | `0 FF` / `0 cycle` | Kéo `Packer tích — P1` từ `+1.769 ns` lên **`> +2.40 ns`** | **`~122.7 MHz`** (bị chặn tiếp bởi `sac_state` ở `+1.850 ns`) |
+| **Bước 3 (Hướng tới 125–130 MHz)** | **`OPT-14`** | `ops_sel_comb.sv` (và tùy chọn `lod_lzd_core.sv` `N=26/30`) | `0 FF` / `0 cycle` | Kéo `SAC — state/feedback` từ `+1.850 ns` lên **`> +2.40 ns`** | **`125 – 130+ MHz`** (mục tiêu khảo sát; chưa có bằng chứng mọi bank đạt, kể cả CE Parser B) |
+
+#### 8.31.6. Change review và mở lại candidate — 18/10/2026
+
+**Quyết định hiện hành:** theo yêu cầu sinh viên, mở lại nghiên cứu candidate cho mục tiêu **trên120MHz**;
+chưa triển khai tối ưu RTL và chưa chạy W14. Production/lock `POSIT_MAC_RTL_20261018_OPT02C` giữ nguyên
+làm reference100MHz có bằng chứng, không còn là quyết định chốt cuối cho đợt nghiệm thu sắp tới.
+Study mới: `results/opt120_20261018/review.json`, trạng thái `OPEN_PENDING_OPT12_IMPLEMENTATION`;
+`source/reference` và `source/candidate` hiện cùng byte, chưa có candidate được kiểm/promote.
+Snapshot reference RTL/model/build/XDC được đóng gói trong reference_source.zip, đã kiểm SHA/CRC.
+Mở candidate không có nghĩa bỏ hash của checkpoint cũ hoặc được chạy W14 trên nguồn đang đổi.
+
+**Đánh giá:** đồng ý hướng OPT-12 trước; chưa đồng ý triển khai nguyên cả8.31 như một gói.
+Các điều chỉnh dưới đây là điều kiện cho lần triển khai sau:
+
+| Hạng mục | Đánh giá và giới hạn |
+| --- | --- |
+| OPT-12: XOR hai bit kề | Hợp lý: giữ vị trí bit1 đầu tiên/invalid của detector với dữ liệu nhị phân; vector terminator_bits không giống từng bit ở phía sau terminator. Vẫn giữ first_regime_bit và payload magnitude cho P1/P2. Không tuyên bố tương đương X/Z |
+| OPT-12: sentinel1 | Hợp lý: nối ở LSB vật lý, khoảng cách tính từ MSB là NB−2; đếm no-terminator đúng MAX_COUNT. CNT_W vốn bằng clog2(NB−1), nên guard đề xuất là đồng nhất, không phải trường hợp riêng cho NB chẵn/lẻ. Phải kiểm toàn miền NB/ES/width hợp lệ trước adopt |
+| OPT-12: conditional negate | Hai biểu thức tương đương trên số nhị phân NB bit, kể cả0/NaR; phù hợp thử A/B riêng. Cách viết không bảo đảm Vivado bỏ MUX hoặc giảm CARRY/LUT. Fanout27→1 và mức tăng slack là giả thuyết, chưa phải số đo |
+| OPT-13: sf+1 tính song song | Đáng khảo sát nếu Packer P1 vẫn găng sau OPT-12. RTL hiện đã viết sf+1 trong nhánh carry; chỉ đổi cú pháp có thể tổng hợp lại cùng netlist. SF ổn định nhiều chu kỳ không tự cho phép multicycle hay bỏ timing; không thêm exception |
+| OPT-13: tách carry_data/carry_ctrl | Hai wire alias sẽ bị tối ưu gộp, không bảo đảm giảm fanout. Duplicate thanh ghi là tăng FF dù không tăng cycle; không được ghi0FF. Chỉ dùng tối ưu vật lý có đo và báo chi phí, không thêm buffer/FF mù |
+| OPT-13: special overrides/inexact | Không được xóa override hoặc đổi flags ở public posit_pack_prepare rồi vẫn gọi bit-exact từng leaf. Module này dùng chung với comb/RNE/TRUNC và NF/F. Chỉ thử cặp helper nội bộ với hợp đồng rõ hoặc giữ nguyên leaf công khai; kiểm Zero/NaR/max/min,biên SF,flags đầu vào,RNE/TRUNC và reset/stall. OR G/R/S ở P2 chỉ cho NORMAL, giữ flags đặc biệt đúng contract |
+| OPT-14: hai predictor exact/approx | Hợp lý về hàm chọn: popcount high cho approx và full cho exact, tie giữ A. cfg_mode chỉ chọn ở cuối; có thể tăng LUT/routing do thêm sum/comparator. EXACT_EN0 phải loại cone exact khi elaboration; CUT_W0 không sinh slice âm. Không mặc định tiết kiệm LUT hoặc nhanh thêm1,5–2ns |
+| OPT-14: bỏ x_frac high-bit clearing | **Không chấp thuận như đề xuất hiện tại.** x_frac là output đã quy định và controller kiểm cả fx_q ở is_init=(fx_q==0)||(limit_q==0), cùng approx_cut dùng fx_q!=0. Chỉ nhìn fx_approx slice không chứng minh các bit cao là don't-care; giữ zero-extension để bảo toàn output/iteration/token/flags |
+| Mở group4 cho N26/30 | Thử riêng sau khi cần, không gộp vào OPT-12. Sentinel của parser32 đã cho N31 và dùng group4 hiện có; không cần sửa common LOD ngay. Magnitude parser đang có slack+3,418ns, chưa phải ưu tiên |
+
+Kiểm nhanh biểu thức bằng Python: vét NB4..16, **131.056 trường hợp/0 mismatch** về count sau adjacent-XOR
+và sentinel. Đây chỉ là kiểm đại số nhị phân, **chưa phải test RTL/parser hoặc bằng chứng timing**.
+
+**Chỉnh cách đọc STA và mục tiêu:**
+
+- +1,667ns tại10ns chỉ là mốc sàng lọc ước lượng120MHz; đúng120MHz chưa đạt mục tiêu trên120MHz.
+  Không thể kết luận OPT-12 chắc chắn đủ hoặc ba bước chắc chắn đạt125–130MHz, vì placement/routing,
+  skew,CE và đường găng có thể đổi. Parser B P1 CE+1,910ns cũng dưới mốc+2ns cho125MHz.
+- NF Default còn đường output in_ready WNS+0,894ns, F toàn thiết kế+0,982ns tại100MHz.
+  Vì vậy chỉ tối ưu R2R parser chưa bảo đảm toàn giao tiếp đạt trên120MHz với cùng budget I/O.
+  Khi đo clock cao phải báo setup/hold I/O và Internal R2R riêng; nếu chỉ R2R PASS thì chỉ kết luận R2R.
+- Giữ A35T-C2/10ns và cả hai XDC gốc để đối chiếu. Lần đo clock cao tạo profile mới, đề xuất8ns/125MHz,
+  user uncertainty0,1ns và cùng I/O budget, không ghi đè profile100MHz hoặc ngầm giảm delay để nhận PASS.
+  Timing cao chỉ được công bố sau post-route trực tiếp tại clock đó, setup/hold đều đạt và không có đường unconstrained.
+
+**Thứ tự thử sau review:** baseline → adjacent-XOR → adjacent-XOR+sentinel → thêm conditional-negate như
+một biến thể riêng; kiểm bit-exact/lint/parameter/Zero/NaR trước, pilot NF/F reset/stall/flags/state,
+rồi mới matched PPA A35T. Chọn theo số đo timing/LUT/FF, không theo dự báo. Chỉ mở OPT-13/14 hoặc nhánh
+ready/CE nếu báo cáo mới cho thấy còn chặn mục tiêu. Không thêm tầng, đổi precision hoặc oracle trong đợt này.
+Sau khi chọn biến thể và kiểm tích hợp cần thiết mới phát hành lock mới và tiếp tục W14-01..12.
+**Hiện chưa chạy RTL simulation, synthesis hoặc STA mới.**

@@ -25,7 +25,7 @@ MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng ch�
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder, NF tuần11 và F profile chính đã kiểm; còn ma trận final và coverage cuối NF/F |
 | PPA, mở rộng và hồ sơ — Gate4 | processing | NF CycloneIV45,07MHz là lịch sử; F A35T100MHz R2R đạt. Còn đo matched NF/F, accuracy và hồ sơ cuối; số đo riêng xem Optimization |
 
-**Trạng thái tối ưu:** production đã khóa release POSIT_MAC_RTL_20261018_OPT02C; OPT-02c/05/09/10A đã promote, xem mục3.3 và Optimization8.30. Giữ fraction12/W32, phép đo mới chỉ A35T xc7a35tcpg236-1; không nới precision/constraint. Hạn chính29/11, đệm30/11–04/12, hoàn thành trước05/12/2026.
+**Trạng thái tối ưu:** đã mở lại candidate trên120MHz theo yêu cầu18/10; release POSIT_MAC_RTL_20261018_OPT02C giữ làm reference100MHz, chưa chốt bản cuối mới; OPT-02c/05/09/10A đã promote, xem mục3.3 và Optimization8.30. Giữ fraction12/W32, phép đo mới chỉ A35T xc7a35tcpg236-1; không nới precision/constraint. Hạn chính29/11, đệm30/11–04/12, hoàn thành trước05/12/2026.
 
 
 ## 3. Tiến độ theo tuần
@@ -64,7 +64,7 @@ W13-01..05 đã hoàn thành phạm vi bản đầu; checklist chi tiết đã g
 
 **Lập ngày:** 15/10/2026; **sắp lại trình tự:** 18/10/2026 theo yêu cầu sinh viên. **Mốc gốc:** 09–15/11/2026; có thể chuẩn bị sớm trên release đã khóa. **Người thực hiện:** Codex. **Nghiệm thu:** sinh viên, cùng người review kế hoạch/test.
 **Mục tiêu:** chứng minh NF/F bit-exact trên ma trận bắt buộc, đạt coverage AC04 và đo paired accuracy để bàn giao PPA tuần15.
-**Đầu vào:** `POSIT_MAC_RTL_20261018_OPT02C`, `rtl/production_freeze.json`; không đổi nguồn/model/constraint đã khóa.
+**Đầu vào tham chiếu:** `POSIT_MAC_RTL_20261018_OPT02C`, `rtl/production_freeze.json`. **Chưa chạy W14 trong khi mở candidate120+MHz**; sau khi chọn/kiểm candidate phải khóa release cuối và gắn hash đó vào matrix. Không lấy audit PASS của reference cũ làm nghiệm thu candidate mới.
 
 W13-06 được đóng sau khi counters đã kiểm và coverage thực sự đạt W14-08; không yêu cầu phủ100% trước khi có harness. Phần reset/interface của W13-07 kiểm ở W14-01; matched PPA vẫn thuộc tuần15, không dùng nó làm điều kiện bắt đầu chuẩn bị W14.
 
@@ -129,13 +129,13 @@ Mã W14-01..11 trùng đúng bước1..11 theo thứ tự thực hiện; W14-12 
 - **Được chạy main:** TC-W14-01/02/03,TC-W14-04a/b và TC-W14-05 đều PASS; release lock không đổi. Có RTL đạt timing hoặc10M qualification cũ chưa đủ để bỏ các bước này.
 - **Hoàn thành W14 để bàn giao W15:** W14-01..11 PASS theo từng TC. W14-11 phụ thuộc W14-01..10, không phụ thuộc W14-12 tùy lịch. Nếu thiếu comparator thì giữ W14/bàn giao PPA ở processing, không báo đã sẵn sàng paired PPA.
 - **AC02/toàn SPEC:** W14-12 được hoãn trong lịch tuần14, không được miễn nghĩa vụ AC02. Nếu chưa đạt phải công bố rõ trước nghiệm thu tổng/Gate4 và xử lý theo phạm vi đã được sinh viên chốt; không tự bỏ p16 hoặc giảm count.
-- **Hiện tại18/10:** RTL đã khóa và audit PASS; chưa triển khai/chạy các TC W14 mới, chưa có matrix_freeze hoặc final report W14. Trạng thái tuần14 giữ `không` cho phần thực thi; kế hoạch đã được sắp lại, chưa phải bằng chứng PASS.
+- **Hiện tại18/10:** RTL đã khóa và audit PASS; chưa triển khai/chạy các TC W14 mới, chưa có matrix_freeze hoặc final report W14; việc thực thi đang chờ candidate120+MHz được chọn/khóa. Trạng thái tuần14 giữ `không` cho phần thực thi; kế hoạch đã được sắp lại, chưa phải bằng chứng PASS.
 
-## 3.3. Tối ưu RTL — hạng mục ưu tiên thực hiện và hạng mục đã đóng sau §8.28/8.29
+## 3.3. Tối ưu RTL — checkpoint100MHz và candidate120+MHz
 
 **Phạm vi thiết bị:** chỉ A35T `xc7a35tcpg236-1` (`A35T-C2`) cho các lần kiểm chứng timing/synthesis/P&R tiếp theo, gồm paired NF/F tuần15. Không chạy A100T; giữ số đo A100T cũ như lịch sử.
 
-Release **`POSIT_MAC_RTL_20261018_OPT02C` đã LOCKED_FOR_W14**: production38 module,
+Checkpoint **`POSIT_MAC_RTL_20261018_OPT02C` giữ lock/hash làm reference100MHz**; workflow đã mở lại candidate tại Optimization8.31.6: production38 module,
 L1/oracle/constraint không đổi; NF10M/0 mismatch, F10M kế thừa theo hash và smoke mới đạt.
 Candidate đạt100MHz cả3 strategy A35T-C2; median R2R F_STA114,40MHz (ước lượng STA, không phải đo kit).
 Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#legacy-8-30).
@@ -161,13 +161,22 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | Tinh chỉnh thêm biên `in_ready` | Giảm logic điều khiển parser-valid/ready tới `in_ready` | **Đóng (Bỏ qua)** | Default8.28: `u_a/p2_valid_q→in_ready`,6 tầng LUT,data5,829ns,slack+0,730ns; wrapper không có `fifo_count_q`. Dừng vì đạt budget100MHz hiện hành,không vì giả định đường chỉ có2 LUT |
 | Khảo sát đổi `FRAC_W` | Đổi độ rộng fraction khỏi mức `FW12` hiện hành | **Đóng cho RTL chính** | Giữ nguyên `FW12` cho RTL NF/F và báo cáo so sánh; bảng khảo sát 8–26 bit tại [Optimization §8.11](../../doc/Optimization.md#legacy-8-11) dùng làm phân tích lựa chọn tham số trong luận văn |
 
-Tối ưu và promote đã hoàn tất. Quy tắc **không sửa RTL/L1/constraint đã khóa** có hiệu lực từ release18/10; W14 chạy trên hash này. Nếu có lỗi phải review và phát hành release mới, không tự rehash để vượt gate.
+Đợt promote100MHz đã hoàn tất; theo yêu cầu mới, mở study candidate riêng `results/opt120_20261018`. L1/oracle và nguồn reference giữ nguyên; chưa sửa production và chưa phát hành lock mới. Candidate phải kiểm lại trước promote/freeze; chưa chạy W14 hoặc tự rehash lock cũ.
+
+### 3.3.3. Candidate trên120MHz — mở lại18/10
+
+| Nhóm | Việc tiếp theo | Trạng thái |
+| --- | --- | --- |
+| Review OPT-12/13/14 | Đã đọc8.31,ghi điều kiện/sai phạm tại8.31.6; mở snapshot candidate bằng reference,không sửa RTL | ✅ |
+| OPT-12 parser | Thử adjacent-XOR/sentinel trước,conditional-negate A/B riêng; leaf/lint/pilot NF/F rồi PPA | không |
+| Timing trên120MHz | Đo clock cao trực tiếp,cùng budget; phân biệt R2R với I/O/ready. Không suy đạt chỉ từ slack100MHz | không |
+| OPT-13/14 và khóa lại | Chỉ thử phần còn chặn theo STA; giữ contract/zero-extension. Chọn/kiểm candidate rồi mới lock release mới | không |
 
 ## 3.4. Công việc mở khác và giới hạn phạm vi (Ưu tiên giai đoạn cuối Tuần 14–16)
 
 | Nhóm | Việc còn lại | Trạng thái | Ưu tiên & Hướng xử lý |
 | --- | --- | --- | --- |
-| **1. Khóa RTL & Chạy Tuần 14 (`Paired NF/F`)** | RTL đã promote/khóa tại §8.30; tiếp theo khóa `matrix_freeze.json` tại W14-05, chạy final per-n AC01 NF/F, coverage AC04, paired accuracy AC03 và comparator `NF EXACT_EN=0` | processing | **Ưu tiên số 1:** W14-01..05 review/harness/pilot/freeze → W14-06/07 main F/NF → W14-08..11 closure và audit theo mục3.2; chưa chạy final matrix |
+| **1. Khóa RTL & Chạy Tuần 14 (`Paired NF/F`)** | Đang chờ chọn/khóa candidate120+MHz (§8.31.6); sau đó mới khóa `matrix_freeze.json` tại W14-05, chạy final per-n AC01 NF/F, coverage AC04, paired accuracy AC03 và comparator `NF EXACT_EN=0` | processing | **Ưu tiên sau candidate:** W14-01..05 review/harness/pilot/freeze → W14-06/07 main F/NF → W14-08..11 closure và audit theo mục3.2; chưa chạy final matrix |
 | **2. PPA đối xứng NF/F — Gate 4 (Tuần 15)** | Đo matched PPA giữa `NF` (`EXACT_EN=1` & `EXACT_EN=0`) và `F` trên cùng `A35T-C2` (≥3 chiến lược/cấu hình), lập bảng tổng hợp Accuracy – Timing – II – Resource | không | **Ưu tiên số 2:** Thực hiện ngay sau `W14-10`; dùng trực tiếp luồng runner `A35T-C2` đã chuẩn hóa |
 | **3. Hồ sơ / Báo cáo / Slide bảo vệ (Tuần 16)** | Tổng hợp bằng chứng CDC/RDC đã kiểm ở `W14-01`, hoàn thiện luận văn, biểu đồ Pareto, slide và demo | processing | **Ưu tiên số 3:** Hạn chính29/11,đệm30/11–04/12. Kiểm CDC/RDC/reset thuộc ưu tiên1 trước matrix final,không dời kiểm kỹ thuật sang tuần16; công khai phạm vi OOC chưa board signoff |
 | **4. Tái lập / Luồng tự động** | Duy trì collector/audit và kiểm tra hash nguồn frozen cho `results/week14` và `results/week15` | processing | **Ưu tiên duy trì:** Chỉ phục vụ nghiệm thu W14/W15; không chạy lại các lượt lịch sử chỉ vì cập nhật tài liệu |
@@ -343,6 +352,7 @@ Tối ưu và promote đã hoàn tất. Quy tắc **không sửa RTL/L1/constrai
 | 3 | Tối ưu, promote và khóa RTL trước W14 | OPT-02c+05+09+10A đã vào production38 module; NF10M/0 mismatch, F10M kế thừa theo hash và smoke mới;37 strict lint/ModelSim NF/F đạt. A35T100MHz setup/hold đạt3 strategy. Release POSIT_MAC_RTL_20261018_OPT02C đã khóa; W14 final và Gate4 chưa chạy | ✅ |
 | 4 | Sắp lại trình tự tuần14 | Tách chuẩn bị coverage khỏi đóng coverage; bổ sung harness/pilot trước freeze/main,định rõ điểm dừng và comparator trước bàn giao PPA. Chỉ sửa kế hoạch,không chạy TC W14 hoặc đổi RTL | ✅ |
 | 5 | Đánh lại mã tuần14 theo thứ tự thực hiện | W14-01..11 tương ứng các bước chính, W14-12 exact riêng; đồng bộ TC và tham chiếu. Pilot W14-04, main F/NF W14-06/07; chỉ đổi mã kế hoạch, không chạy nghiệm thu | ✅ |
+| 6 | Mở lại candidate trên120MHz | Giữ reference100MHz và mở study mới,review OPT-12/13/14 có điều kiện; chưa sửa RTL,chưa chạy STA mới hoặc W14. Chi tiết8.31.6 | ✅ |
 
 ### 4.18. Mẫu cập nhật tiếp theo
 

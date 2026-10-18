@@ -4,6 +4,8 @@
 
 RTL production đã khóa tại `rtl/production_freeze.json` (release `POSIT_MAC_RTL_20261018_OPT02C`). Chạy `python scripts/audit_rtl_release.py` trước tuần14. Manifest38 module là đầu vào build; L1/oracle và hợp đồng số học giữ nguyên. Bằng chứng tối ưu/promote tại Optimization8.30,không ghi lại vào PLAN.
 
+Workflow18/10 đã mở candidate trên120MHz (Optimization8.31.6); lock hiện có giữ làm reference100MHz. Chưa chạy W14 cho tới khi chọn/kiểm candidate và khóa release cuối mới. L1/oracle giữ nguyên.
+
 - [SPEC hiện hành](../SPEC_Posit_MAC_IP.md): nguồn quy định chính về số học, width, flags và giao dịch.
 - [Optimization.md](../../doc/Optimization.md): phương án tối ưu RTL và mọi báo cáo kiểm chứng/synthesis/STA đã chuyển từ PLAN cũ.
 - [Tiến độ đồ án](../docs/TIEN_DO_DO_AN.md): các việc chưa làm/processing, kế hoạch tuần và mốc đã hoàn thành.

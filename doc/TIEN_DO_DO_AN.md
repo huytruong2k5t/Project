@@ -356,6 +356,8 @@ Chi tiết và giới hạn: [Optimization §8.30](Optimization.md#legacy-8-30).
 
 | 8 | RTL mã hóa và làm tròn | ✅ | Packer tổ hợp/pipeline và parser→packer đạt; PPA đơn vị đã khảo sát, sau tối ưu P2, benchmark đạt setup100MHz ở ba seed mỗi mode |
 
+| 9 | Thử XCVU9P ngoài nền A35T | Đã setup NF/F và thử NF; thiếu device support trong Vivado, chưa có timing/PPA. Giữ khóa120MHz; xem Optimization8.32 | processing |
+
 ### 4.18. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.

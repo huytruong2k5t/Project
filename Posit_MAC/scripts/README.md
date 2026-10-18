@@ -253,3 +253,6 @@ Evidence: results/opt120_20261018/summary.json,qualification.json,archive_manife
 Explore đạt120,48MHz cho cả NF/F; F Default và NF RuntimeOptimized vẫn FAIL, không gọi mọi flow đạt.
 Runners prepare/verify/stress/finalize là producer checkpoint, không chạy lại vào output đã có.
 PPA replay dùng Attempt mới và đúng nguồn đã restore/kiểm SHA; xem hướng dẫn WSL/ModelSim và Optimization8.31.7.
+
+
+Khảo sát XCVU9P riêng: prepare_xcvu9p_trial.py / run_xcvu9p_trial.ps1, fixed8,3ns Explore; hiện thiếu device support, xem Optimization8.32. Dùng -Attempt mới sau khi có device; không đổi production/A35T lock.

@@ -1,0 +1,43 @@
+{
+  "status": "BLOCKED_DEVICE_SUPPORT_NOT_INSTALLED",
+  "date_local": "2026-10-18",
+  "tool": "Vivado 2026.1 build 6511674",
+  "part": "xcvu9p-flgb2104-2-i",
+  "release_id": "POSIT_MAC_RTL_20261018_OPT12_120",
+  "release_sha256": "3df1ce053f92439deef36eb17f26a2fe7140b91a95ed484a519471754ddfa4ec",
+  "paper": "An Approximate and Iterative Posit Multiplier Architecture for FPGAs.pdf",
+  "paper_sha256": "5016d5eac4395c40ad513ee9a0294d5070041d8120a8328b55e5277b7e11548d",
+  "paper_page": 4,
+  "paper_device": "xcvu9p; package/speed grade unspecified; Vivado 2020.1",
+  "part_selection": "SPEC example package/speed grade, not confirmed as the paper exact part",
+  "target_clock_ns": 8.3,
+  "strategy": "Explore",
+  "input_min_max_ns": [
+    2.5,
+    2.5
+  ],
+  "output_min_max_ns": [
+    0.0,
+    0.5
+  ],
+  "uncertainty_setup_hold_ns": [
+    0.1,
+    0.1
+  ],
+  "device_probe": "get_parts -quiet xcvu9p* returned empty",
+  "nf": "Attempted; stopped before synthesis: device files unavailable",
+  "f": "Snapshot prepared; implementation not attempted after family availability probe failed",
+  "setup_wns_ns": null,
+  "hold_whs_ns": null,
+  "fmax_mhz": null,
+  "resources": null,
+  "license": "Not tested: device availability failed first",
+  "production_unchanged": true,
+  "w14_execution": "NOT_STARTED",
+  "required_external_action": "Add Virtex UltraScale+ device support to the Vivado installation; license may then need verification",
+  "rerun_commands": [
+    "powershell -NoProfile -File scripts/run_xcvu9p_trial.ps1 -Top nf -Attempt device_ready01",
+    "powershell -NoProfile -File scripts/run_xcvu9p_trial.ps1 -Top f -Attempt device_ready01"
+  ],
+  "limits": "No PPA measurement or performance conclusion available; no software installation or system/license changes performed"
+}

@@ -1826,3 +1826,50 @@ receipt chuyển tiếp `results/opt120_20261018/promotion.json` ghi hash hai lo
 chưa final per-n/AC04/AC02, chưa paired accuracy/PPA hoặc Gate4. Bất kỳ sửa RTL/L1/
 constraint đã khóa nào tiếp theo phải mở change review và release mới, giữ evidence FAIL.
 Các đoạn8.31.6/7 ghi chưa promote là trạng thái lịch sử, không còn là workflow hiện hành.
+
+
+### 8.32. Khảo sát riêng Virtex UltraScale+ XCVU9P — 18/10/2026
+
+**Trạng thái: chưa chạy được synthesis/P&R vì Vivado chưa cài device support XCVU9P.**
+Yêu cầu mới của sinh viên cho phép lượt thử riêng ngoài nền A35T chính. Không đổi release
+`POSIT_MAC_RTL_20261018_OPT12_120`, không mở lại khóa, không tính lượt này vào tuần14/Gate4.
+
+Bài báo *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, trang4,
+phần Hardware Implementation Results/TableIII, ghi `xcvu9p` và Vivado2020.1, không ghi
+package hoặc speed grade. Chọn `xcvu9p-flgb2104-2-i` theo ví dụ SPEC§7.5/7.6;
+không tuyên bố đây là part đầy đủ chính xác của tác giả. Không so575MHz của bộ nhân
+bài báo với toàn bộ MAC NF/F của đồ án để kết luận nhanh/chậm hơn.
+
+| Hạng mục | Thiết lập / kết quả thực tế |
+| --- | --- |
+| Công cụ | Vivado2026.1 build6511674 |
+| Nguồn | Snapshot đúng38 module+header của release OPT12_120; audit hash PASS |
+| Profile NF | 32/3,FW12,EXACT_EN1,OPS_EN1; wrapper prepack_nf_ppa_top |
+| Profile F | 32/3,FW12,W32,EXACT_EN0,OPS_EN1; wrapper week13_fused_ppa_top |
+| Clock / strategy dự kiến | 8,3ns≈120,48MHz / Explore; đọc XDC trước synthesis |
+| I/O / uncertainty | Input min=max2,5ns; output min0/max0,5ns; setup/hold0,1ns |
+| Device probe đã chạy | `get_parts -quiet xcvu9p*` trả rỗng |
+| NF đã thử chạy | Dừng trước synthesis: `Device files unavailable: xcvu9p-flgb2104-2-i` |
+| F | Snapshot đã chuẩn bị; chưa gọi implementation sau khi probe xác nhận thiếu family |
+| Setup / hold / tài nguyên / Fmax | Chưa có số đo; không ước lượng từ A35T hoặc từ tên dòng chip |
+| License | Chưa kiểm được; device availability lỗi trước, không kết luận thiếu license |
+
+Runner: `scripts/run_xcvu9p_trial.ps1`; chuẩn bị snapshot bằng
+`scripts/prepare_xcvu9p_trial.py`; probe `scripts/probe_xcvu9p.tcl`.
+Kết quả/log/source manifest và archive kiểm CRC/SHA ở `results/xcvu9p_trial_20261018`.
+Chỉ giữ JSON và evidence.zip khi backup, không đưa cache/binary/wave vào Git.
+
+Cần bổ sung gói device **Virtex UltraScale+** cho bản Vivado đang dùng; đây là thay đổi
+cài đặt hệ thống, không thực hiện trong phạm vi phiên này. Khi part hiện ra, chạy từ Posit_MAC:
+
+```powershell
+powershell -NoProfile -File scripts/run_xcvu9p_trial.ps1 -Top nf -Attempt device_ready01
+powershell -NoProfile -File scripts/run_xcvu9p_trial.ps1 -Top f -Attempt device_ready01
+```
+
+Runner giữ log cũ và từ chối ghi đè attempt. Cần kiểm WNS/WHS, R2R, timing I/O,
+unconstrained paths và cảnh báo sau khi chạy; COMPLETE chỉ là thực thi xong.
+Giữ cùng8,3ns để so trực tiếp với A35T trước khi mở lượt quét clock mới.
+Kết quả OOC sau này chỉ dùng khảo sát thiết bị; chưa board signoff, paired NF/F PPA
+(NF/F khác EXACT_EN) hoặc bằng chứng tái dựng baseline bài báo. Không chạy thêm mô phỏng:
+RTL đúng byte đã kiểm, lượt này chỉ thay target part trong snapshot riêng.

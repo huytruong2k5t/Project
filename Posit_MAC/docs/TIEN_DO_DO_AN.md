@@ -313,6 +313,7 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | 9 | Thử XCVU9P ngoài nền A35T | Đã setup NF/F và thử NF; thiếu device support trong Vivado, chưa có timing/PPA. Giữ khóa120MHz; xem Optimization8.32 | processing |
 | 10 | Thực hiện W14-01 đến W14-06 | Review/counters/harness,pilot,accuracy calibration và matrix freeze đạt; MAC F90M/0 mismatch,corner/ModelSim đạt. Còn W14-07..12; chi tiết Optimization8.33 | ✅ |
 | 11 | Hoàn thành W14-07..11 | NF250M+NF-EX010M mới/0 mismatch;kế thừaF90M đúng hash. AC04 chính,9M paired standalone accuracy và audit/replay đạt;archive/backup cuối phiên. Exact/AC02 hoãn riêng;chuyển W15 matched PPA | ✅ phạm vi kỹ thuật |
+| 12 | Slide datapath RTL NF/F | Hoàn tất7 slide native PowerPoint:NF14 tầng,F13 tầng;phóng to parser/OPS,SAC/SBM,NF/F tail vàfeedback. Theo releaseOPT12_120,giữ đủMUX/FF/metadata quan trọng;không sửa RTL hoặc chạy STA/regression mới | ✅ |
 
 ### 4.18. Mẫu cập nhật tiếp theo
 

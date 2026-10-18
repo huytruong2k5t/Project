@@ -1454,7 +1454,7 @@ Comparator NF EXACT_EN0 và matched PPA tuần15 còn phải làm.
 NF/F có1 clock,0 latch,0 unrouted;931/815 FF,20/18 ASYNC_REG.
 report_cdc: All paths are Safely Timed. Giữ bridge và2FF reset release;
 sign P2 mới dùng cùng reset/CE. Không thêm clock/reset domain.
-Đây chưa phải formal RDC hoặc board signoff; review interface/RDC W14-00b vẫn phải hoàn tất.
+Đây chưa phải formal RDC hoặc board signoff; review interface/RDC W14-01 vẫn phải hoàn tất.
 Methodology XDCH-2 do budget input min=max và DRC CFGBVS-1 do benchmark OOC không cấu hình
 điện áp board được giữ nguyên, ghi rõ giới hạn. Không bỏ warning để làm đẹp kết quả.
 
@@ -1477,6 +1477,7 @@ Không sửa các file đã khóa khi chạy W14; nếu phát hiện lỗi phả
 kiểm lại phạm vi ảnh hưởng và tạo release mới, không âm thầm rehash.
 Script lịch sử kiểm hash cũ cần chạy trên snapshot tương ứng, không đổi hash để nhận PASS.
 
-Bước kế: W14-00 (matrix freeze/đối chiếu contract và review W14-00b), rồi W14-01..08
-theo tiến độ. **Chưa chạy W14 final matrix, chưa đóng Gate4.** Các nhánh đã đóng ở8.29
+Mã công việc hiện hành theo tiến độ đã đánh lại18/10: W14-01 review, W14-02/03 counters/harness,
+W14-04 pilot, W14-05 matrix freeze, W14-06/07 main F/NF, W14-08..11 closure/audit; W14-12 exact riêng.
+Các mã trong hồ sơ lịch sử giữ ý nghĩa tại thời điểm ghi. **Chưa chạy W14 final matrix, chưa đóng Gate4.** Các nhánh đã đóng ở8.29
 tiếp tục đóng. Không chạy thêm A100T hoặc thay FW12.

@@ -57,8 +57,8 @@ W13-01..05 đã hoàn thành phạm vi bản đầu; checklist chi tiết đã g
 
 | ID | Phần còn lại | Trạng thái | Liên hệ |
 | --- | --- | --- | --- |
-| W13-06 | Chuẩn bị counters tại W14-00a/c,kiểm pilot00d; đóng coverage tại W14-04 sau main | processing | Không yêu cầu100% hit trước khi chuẩn bị W14; SPEC§6.6/6.7 |
-| W13-07 | Reset/interface review trước main ở W14-00b; comparator W14-06 và matched PPA/signoff tuần15 | processing | Không dùng matched PPA chưa làm làm điều kiện bắt đầu chuẩn bị W14 |
+| W13-06 | Chuẩn bị counters/harness tại W14-02/03,kiểm pilot W14-04; đóng coverage tại W14-08 sau main | processing | Không yêu cầu100% hit trước khi chuẩn bị W14; SPEC§6.6/6.7 |
+| W13-07 | Reset/interface review trước main ở W14-01; comparator W14-10 và matched PPA/signoff tuần15 | processing | Không dùng matched PPA chưa làm làm điều kiện bắt đầu chuẩn bị W14 |
 
 ## 3.2. Kế hoạch tuần14 cho Codex — regression, coverage và paired accuracy NF/F
 
@@ -66,7 +66,7 @@ W13-01..05 đã hoàn thành phạm vi bản đầu; checklist chi tiết đã g
 **Mục tiêu:** chứng minh NF/F bit-exact trên ma trận bắt buộc, đạt coverage AC04 và đo paired accuracy để bàn giao PPA tuần15.
 **Đầu vào:** `POSIT_MAC_RTL_20261018_OPT02C`, `rtl/production_freeze.json`; không đổi nguồn/model/constraint đã khóa.
 
-W13-06 được đóng sau khi counters đã kiểm và coverage thực sự đạt W14-04; không yêu cầu phủ100% trước khi có harness. Phần reset/interface của W13-07 kiểm ở W14-00b; matched PPA vẫn thuộc tuần15, không dùng nó làm điều kiện bắt đầu chuẩn bị W14.
+W13-06 được đóng sau khi counters đã kiểm và coverage thực sự đạt W14-08; không yêu cầu phủ100% trước khi có harness. Phần reset/interface của W13-07 kiểm ở W14-01; matched PPA vẫn thuộc tuần15, không dùng nó làm điều kiện bắt đầu chuẩn bị W14.
 
 ### 3.2.1. Quy tắc bắt buộc và điều kiện chuyển bước
 
@@ -81,54 +81,54 @@ W13-06 được đóng sau khi counters đã kiểm và coverage thực sự đ�
 
 ### 3.2.2. Trình tự thực thi và điểm dừng
 
-Giữ ID W14-00..08 để truy vết; thêm nhánh chuẩn bị00c/00d. Thứ tự chạy theo bảng, không theo số ID thuần túy. Tất cả mục dưới là kế hoạch, chưa ghi nhận hoàn thành.
+Mã W14-01..11 trùng đúng bước1..11 theo thứ tự thực hiện; W14-12 là nhánh exact ngoài đường chính. Các mã W14 cũ trước lần đánh số18/10 chỉ dùng truy vết lịch sử, không dùng để giao việc mới. Tất cả mục dưới là kế hoạch, chưa ghi nhận hoàn thành.
 
 | Bước | ID | Việc cần làm | Chỉ chuyển bước khi |
 | --- | --- | --- | --- |
-| 1 | W14-00b | Kiểm lock release; review reset bridge/2FF release, startup, CE, giao dịch bị reset và interface NF/F; đối chiếu guideline với CDC/methodology đã có | TC-W14-00b PASS; không còn vấn đề nghiêm trọng chưa giải thích. Không cần chạy lại P&R nếu nguồn/flow không đổi |
-| 2 | W14-00a | Định nghĩa bins/cross NF/F theo §6.3/6.6, miền hợp lệ, mẫu số near và kế hoạch structural coverage; triển khai counters và test nhỏ kiểm cách đếm | TC-W14-00a PASS về định nghĩa và tính đúng counters; chưa đòi tất cả bin đã hit |
-| 3 | W14-00c | Lập matrix nháp; xây harness chọn cố định n/OPS/profile, oracle/scoreboard và failure replay; chuẩn bị bộ đo accuracy và comparator EXACT_EN0; snapshot pilot trước chạy | TC-W14-00c PASS; mỗi job định danh rõ, audit chống sai số mẫu/hash/status đã được thử bằng dữ liệu lỗi |
-| 4 | W14-00d + W14-05a | Pilot NF/F qua mọi n và các profile bắt buộc, corner/protocol và comparator; pilot accuracy10^5, đối chuẩn ≥1000 mẫu bằng Python; đo runtime/tài nguyên | TC-W14-00d và TC-W14-05a PASS; mọi hàng có pilot, không dùng pilot ít mẫu tuyên bố đạt coverage cuối |
-| 5 | W14-01 | Khóa `results/week14/matrix_freeze.json`: từng job, số mẫu, seed, source/model/harness/generator/oracle hash, coverage policy, corpus accuracy và provenance pilot | TC-W14-01 PASS; cấu hình main trùng phạm vi pilot đã kiểm, nguồn release không đổi |
-| 6 | W14-03 | Main F32/3 FW12 W32 OPS1 FLOOR/RNE, n0..8: ≥10^7 completed/n; kiểm bits/flags/state và near trước/sau cut | TC-W14-03a/b/c PASS cho toàn bộ9 n; mismatch dừng và giữ failure |
-| 7 | W14-02 | Main NF:32/3 OPS1 n0..8;32/3 OPS0 n{0,1,2,3,4,5,6,8};32/2 OPS0/1 n1..4, ≥10^7 completed/điểm | TC-W14-02 PASS cho mọi hàng; có thể chạy song song bước6 chỉ khi pilot xác nhận đủ RAM/CPU/disk |
-| 8 | W14-04 | Gộp coverage từ các lượt final cùng release/instrumentation; kiểm ngưỡng và functional bins. Nếu thiếu, thêm suite directed có manifest riêng trước chạy, giữ nguyên corpus/main gốc | TC-W14-04 PASS; mỗi top line≥95%,branch≥90%,toggle≥85%,100% functional bin hợp lệ; không tự miễn bin còn thiếu |
-| 9 | W14-05b | Main paired accuracy ≥10^6 triple/profile: n2/4/8 trước, sau đó đủ n0..8 trên corpus đã khóa | TC-W14-05b PASS; correctness NF/F đã đạt, báo cả trường hợp F kém NF |
-| 10 | W14-06 | Main comparator NF EXACT_EN0: ≥10^7 profile chính sau pilot; freeze derivative manifest tham chiếu release gốc, không sửa RTL | TC-W14-06 PASS; same feature policy với F, cfg_mode0 bị từ chối, strict lint/reset/stall/state đạt |
-| 11 | W14-08 | Audit các mục bắt buộc, replay pilot, đóng gói evidence/hash; cập nhật trạng thái SPEC/Optimization/tiến độ và commit/push | TC-W14-08 PASS; chỉ bàn giao PPA tuần15 khi W14-06 đã đạt |
-| Ngoài đường chính | W14-07 | Exact NF/AC02: lên job riêng cho p8 MAC2^24, p32/2≥10^8+corner và yêu cầu p16 của SPEC; chỉ dùng tài nguyên rảnh sau pilot | Không chặn các bước chuẩn bị/main approx. Chưa chạy/đạt thì giữ mở AC02, không tuyên bố toàn SPEC đã nghiệm thu |
+| 1 | W14-01 | Kiểm lock release; review reset bridge/2FF release, startup, CE, giao dịch bị reset và interface NF/F; đối chiếu guideline với CDC/methodology đã có | TC-W14-01 PASS; không còn vấn đề nghiêm trọng chưa giải thích. Không cần chạy lại P&R nếu nguồn/flow không đổi |
+| 2 | W14-02 | Định nghĩa bins/cross NF/F theo §6.3/6.6, miền hợp lệ, mẫu số near và kế hoạch structural coverage; triển khai counters và test nhỏ kiểm cách đếm | TC-W14-02 PASS về định nghĩa và tính đúng counters; chưa đòi tất cả bin đã hit |
+| 3 | W14-03 | Lập matrix nháp; xây harness chọn cố định n/OPS/profile, oracle/scoreboard và failure replay; chuẩn bị bộ đo accuracy và comparator EXACT_EN0; snapshot pilot trước chạy | TC-W14-03 PASS; mỗi job định danh rõ, audit chống sai số mẫu/hash/status đã được thử bằng dữ liệu lỗi |
+| 4 | W14-04 | Pilot NF/F qua mọi n và các profile bắt buộc, corner/protocol và comparator; pilot accuracy10^5, đối chuẩn ≥1000 mẫu bằng Python; đo runtime/tài nguyên | TC-W14-04a và TC-W14-04b PASS; mọi hàng có pilot, không dùng pilot ít mẫu tuyên bố đạt coverage cuối |
+| 5 | W14-05 | Khóa `results/week14/matrix_freeze.json`: từng job, số mẫu, seed, source/model/harness/generator/oracle hash, coverage policy, corpus accuracy và provenance pilot | TC-W14-05 PASS; cấu hình main trùng phạm vi pilot đã kiểm, nguồn release không đổi |
+| 6 | W14-06 | Main F32/3 FW12 W32 OPS1 FLOOR/RNE, n0..8: ≥10^7 completed/n; kiểm bits/flags/state và near trước/sau cut | TC-W14-06a/b/c PASS cho toàn bộ9 n; mismatch dừng và giữ failure |
+| 7 | W14-07 | Main NF:32/3 OPS1 n0..8;32/3 OPS0 n{0,1,2,3,4,5,6,8};32/2 OPS0/1 n1..4, ≥10^7 completed/điểm | TC-W14-07 PASS cho mọi hàng; có thể chạy song song bước6 chỉ khi pilot xác nhận đủ RAM/CPU/disk |
+| 8 | W14-08 | Gộp coverage từ các lượt final cùng release/instrumentation; kiểm ngưỡng và functional bins. Nếu thiếu, thêm suite directed có manifest riêng trước chạy, giữ nguyên corpus/main gốc | TC-W14-08 PASS; mỗi top line≥95%,branch≥90%,toggle≥85%,100% functional bin hợp lệ; không tự miễn bin còn thiếu |
+| 9 | W14-09 | Main paired accuracy ≥10^6 triple/profile: n2/4/8 trước, sau đó đủ n0..8 trên corpus đã khóa | TC-W14-09 PASS; correctness NF/F đã đạt, báo cả trường hợp F kém NF |
+| 10 | W14-10 | Main comparator NF EXACT_EN0: ≥10^7 profile chính sau pilot; freeze derivative manifest tham chiếu release gốc, không sửa RTL | TC-W14-10 PASS; same feature policy với F, cfg_mode0 bị từ chối, strict lint/reset/stall/state đạt |
+| 11 | W14-11 | Audit các mục bắt buộc, replay pilot, đóng gói evidence/hash; cập nhật trạng thái SPEC/Optimization/tiến độ và commit/push | TC-W14-11 PASS; chỉ bàn giao PPA tuần15 khi W14-10 đã đạt |
+| Ngoài đường chính | W14-12 | Exact NF/AC02: lên job riêng cho p8 MAC2^24, p32/2≥10^8+corner và yêu cầu p16 của SPEC; chỉ dùng tài nguyên rảnh sau pilot | Không chặn các bước chuẩn bị/main approx. Chưa chạy/đạt thì giữ mở AC02, không tuyên bố toàn SPEC đã nghiệm thu |
 
 **Ma trận tối thiểu:** NF250M + F90M =340M completed; comparator thêm10M =350M, chưa tính pilot, suite coverage bổ sung, accuracy và exact. Không giảm số mẫu vì runtime. Các nghĩa vụ legacy/exact khác của SPEC§6.7 được theo dõi riêng, không coi350M là toàn bộ nghiệm thu của mọi module.
 
 **Phiên ngắn đầu tiên:** ưu tiên bước1 và chốt định nghĩa/TC của bước2–3. Nếu đủ thời gian mới triển khai sau khi phạm vi TC được duyệt; không ghép main vào phiên chỉ sửa kế hoạch. Các phiên tiếp lần lượt: harness/counters → pilot và benchmark → freeze → main → closure/audit. Chỉ ước lượng lịch main sau benchmark; giữ hạn chính29/11, đệm30/11–04/12, trước05/12/2026.
 
-**Khi thiếu thời gian:** giữ nguyên các điều kiện đầu vào; sau freeze ưu tiên F main → NF main → AC04 → accuracy → comparator → audit. Hoãn khảo sát thêm và W14-07 trong lịch W14; ghi rõ AC02 còn mở. Không đưa W14-00 xuống sau main, không bỏ bước pilot/freeze/coverage để ghi hoàn thành.
+**Khi thiếu thời gian:** giữ nguyên các điều kiện đầu vào; sau freeze ưu tiên F main → NF main → AC04 → accuracy → comparator → audit. Hoãn khảo sát thêm và W14-12 trong lịch W14; ghi rõ AC02 còn mở. Không đưa W14-01..04 xuống sau main, không bỏ bước pilot/freeze/coverage để ghi hoàn thành.
 
 ### 3.2.3. Test case đề nghị duyệt trước triển khai
 
 | TC | Phạm vi | Tiêu chí PASS |
 | --- | --- | --- |
-| TC-W14-00b | Release/reset/interface review | Audit release PASS; checklist từng clock/reset domain, bridge/2FF release/startup/CE/stall/reset-abort có dẫn chứng. CDC/methodology không còn lỗi nghiêm trọng chưa giải thích; phân biệt OOC với board signoff |
-| TC-W14-00a | Định nghĩa và kiểm counters | Có danh mục bins NF/F§6.6, cả cross fused mốc tích/C × dấu × \|ΔSF\| × LZC, số bin hợp lệ/loại và lý do; directed micro-tests cho kết quả đếm đã biết, zero/NaR/reset-abort không tính sai near. Chưa yêu cầu100% hit; đóng tiêu chí đó tại TC-W14-04 |
-| TC-W14-00c | Harness/matrix nháp và audit | Cố định được n/OPS/profile và phân biệt request invalid; oracle đúng format; failure có input/C_eff/config/state và replay. Test audit từ chối hash đổi, thiếu log, RUNNING, trộn n, thiếu completed và sai đối soát accepted/completed/abort |
-| TC-W14-00d | Pilot trước main | Mọi job point bắt buộc có pilot trước main, dự kiến10^4–10^5 completed/điểm;0 mismatch bits/flags/state, reset/stall/order/latency đúng. Giữ counters theo n/config và file tốc độ/RAM/disk; kiểm instrumentation line/branch/toggle toàn top. Pilot không thay số mẫu hoặc coverage cuối |
-| TC-W14-01 | Main freeze | matrix_freeze ghi toàn bộ job/profile/n/OPS/count, seed, source/model/harness/generator/oracle/instrumentation hash, corpus và metric policy; liên kết pilot PASS. Audit trước/sau main từ chối mọi sai lệch; chunk chạy tiếp phải giữ sequence/seed/state và không đếm trùng |
-| TC-W14-02 | NF final | 0 mismatch d/flags/state với Model/oracle; ≥10^7 completed cho từng điểm ở bước7; giữ phân tầng§6.3,near≥30% theo suite đã chốt và phân bố theo n/standalone/acc_mode. Không dùng10M aggregate thay mỗi điểm |
-| TC-W14-03a | F final | Với từng n0..8: ≥10^7 completed,0 mismatch bits/flags/state với L1 F_W32/oracle; near trước/sau cut≥30%, giữ phân tầng/counters§6.3 và phân bố theo n |
-| TC-W14-03b | F corner | TV-FUSE-01/02,\|ΔSF\|=FRAC_MAX+2 và+3,C=−A×B zero,near LZC>15,C=0,tích=0,NaR từng operand:0 mismatch |
-| TC-W14-03c | F protocol | Không mất/lặp/đảo thứ tự; giữ output khi stall; reset-abort tách completed; commit đúng một lần; request invalid không accept; latency theo release |
-| TC-W14-04 | AC04 closure | Mỗi top NF/F, toàn hierarchy: line≥95%,branch≥90%,toggle≥85%; functional bins hợp lệ100%. Cách gộp/instrumentation và loại trừ truy vết được; thiếu hit giữ FAIL/processing, không tự hạ ngưỡng |
-| TC-W14-05a | Accuracy pilot | 10^5 mẫu; collector C++ khớp Python fractions độc lập trên≥1000 mẫu, gồm NaR,r=0,gần0 và tie/ULP; chính sách denominator/ngoại lệ/chuỗi/state được khóa theo SPEC§6.8/11.8. Chạy trước main accuracy |
-| TC-W14-05b | Accuracy main | ≥10^6 triple/profile ở n2/4/8 rồi đủ n0..8; Err%,CorrectRate0,1/0,5/1/5%,NMSE,MaxErr,percentile,ULP,thắng/thua/hòa và CI95%; cùng corpus/reference và báo ngoại lệ,phân bố,trường hợp F bất lợi |
-| TC-W14-06 | Comparator NF EXACT_EN0 | Pilot + ≥10^7 completed profile chính,0 mismatch; strict lint sạch,cfg_mode0 bị từ chối; kiểm reset/stall/state; manifest riêng liên kết release cùng source hash,khác parameter feature đã công bố |
-| TC-W14-07 | Exact/AC02 | Theo đúng SPEC§6.7/AC02: p8 MAC2^24,p32/2≥10^8+corner,p16 yêu cầu exhaustive;0 mismatch với oracle đúng format. Phần chưa chạy giữ mở,không dùng vài pilot gọi PASS toàn AC02 |
-| TC-W14-08 | Audit và bàn giao | Tất cả mục bắt buộc00..06 PASS; audit từ chối thiếu job/mẫu/coverage/hash hoặc trạng thái RUNNING. Replay pilot có cùng corpus và normalized numerical/counter results; không đòi hash raw log chứa timestamp giống nhau. Archive/hash tái lập được,push GitHub thành công; AC02/W14-07 ghi riêng |
+| TC-W14-01 | Release/reset/interface review | Audit release PASS; checklist từng clock/reset domain, bridge/2FF release/startup/CE/stall/reset-abort có dẫn chứng. CDC/methodology không còn lỗi nghiêm trọng chưa giải thích; phân biệt OOC với board signoff |
+| TC-W14-02 | Định nghĩa và kiểm counters | Có danh mục bins NF/F§6.6, cả cross fused mốc tích/C × dấu × \|ΔSF\| × LZC, số bin hợp lệ/loại và lý do; directed micro-tests cho kết quả đếm đã biết, zero/NaR/reset-abort không tính sai near. Chưa yêu cầu100% hit; đóng tiêu chí đó tại TC-W14-08 |
+| TC-W14-03 | Harness/matrix nháp và audit | Cố định được n/OPS/profile và phân biệt request invalid; oracle đúng format; failure có input/C_eff/config/state và replay. Test audit từ chối hash đổi, thiếu log, RUNNING, trộn n, thiếu completed và sai đối soát accepted/completed/abort |
+| TC-W14-04a | Pilot trước main | Mọi job point bắt buộc có pilot trước main, dự kiến10^4–10^5 completed/điểm;0 mismatch bits/flags/state, reset/stall/order/latency đúng. Giữ counters theo n/config và file tốc độ/RAM/disk; kiểm instrumentation line/branch/toggle toàn top. Pilot không thay số mẫu hoặc coverage cuối |
+| TC-W14-04b | Accuracy pilot | 10^5 mẫu; collector C++ khớp Python fractions độc lập trên≥1000 mẫu, gồm NaR,r=0,gần0 và tie/ULP; chính sách denominator/ngoại lệ/chuỗi/state được khóa theo SPEC§6.8/11.8. Chạy trước main accuracy |
+| TC-W14-05 | Main freeze | matrix_freeze ghi toàn bộ job/profile/n/OPS/count, seed, source/model/harness/generator/oracle/instrumentation hash, corpus và metric policy; liên kết pilot PASS. Audit trước/sau main từ chối mọi sai lệch; chunk chạy tiếp phải giữ sequence/seed/state và không đếm trùng |
+| TC-W14-06a | F final | Với từng n0..8: ≥10^7 completed,0 mismatch bits/flags/state với L1 F_W32/oracle; near trước/sau cut≥30%, giữ phân tầng/counters§6.3 và phân bố theo n |
+| TC-W14-06b | F corner | TV-FUSE-01/02,\|ΔSF\|=FRAC_MAX+2 và+3,C=−A×B zero,near LZC>15,C=0,tích=0,NaR từng operand:0 mismatch |
+| TC-W14-06c | F protocol | Không mất/lặp/đảo thứ tự; giữ output khi stall; reset-abort tách completed; commit đúng một lần; request invalid không accept; latency theo release |
+| TC-W14-07 | NF final | 0 mismatch d/flags/state với Model/oracle; ≥10^7 completed cho từng điểm ở bước7; giữ phân tầng§6.3,near≥30% theo suite đã chốt và phân bố theo n/standalone/acc_mode. Không dùng10M aggregate thay mỗi điểm |
+| TC-W14-08 | AC04 closure | Mỗi top NF/F, toàn hierarchy: line≥95%,branch≥90%,toggle≥85%; functional bins hợp lệ100%. Cách gộp/instrumentation và loại trừ truy vết được; thiếu hit giữ FAIL/processing, không tự hạ ngưỡng |
+| TC-W14-09 | Accuracy main | ≥10^6 triple/profile ở n2/4/8 rồi đủ n0..8; Err%,CorrectRate0,1/0,5/1/5%,NMSE,MaxErr,percentile,ULP,thắng/thua/hòa và CI95%; cùng corpus/reference và báo ngoại lệ,phân bố,trường hợp F bất lợi |
+| TC-W14-10 | Comparator NF EXACT_EN0 | Pilot + ≥10^7 completed profile chính,0 mismatch; strict lint sạch,cfg_mode0 bị từ chối; kiểm reset/stall/state; manifest riêng liên kết release cùng source hash,khác parameter feature đã công bố |
+| TC-W14-11 | Audit và bàn giao | Tất cả mục bắt buộc W14-01..10 PASS; audit từ chối thiếu job/mẫu/coverage/hash hoặc trạng thái RUNNING. Replay pilot có cùng corpus và normalized numerical/counter results; không đòi hash raw log chứa timestamp giống nhau. Archive/hash tái lập được,push GitHub thành công; AC02/W14-12 ghi riêng |
+| TC-W14-12 | Exact/AC02 | Theo đúng SPEC§6.7/AC02: p8 MAC2^24,p32/2≥10^8+corner,p16 yêu cầu exhaustive;0 mismatch với oracle đúng format. Phần chưa chạy giữ mở,không dùng vài pilot gọi PASS toàn AC02 |
 
 ### 3.2.4. Điều kiện nghiệm thu và trạng thái hiện tại
 
-- **Được chạy main:** TC-W14-00a/b/c/d,TC-W14-05a và TC-W14-01 đều PASS; release lock không đổi. Có RTL đạt timing hoặc10M qualification cũ chưa đủ để bỏ các bước này.
-- **Hoàn thành W14 để bàn giao W15:** W14-00..06 và W14-08 PASS theo từng TC. W14-08 phụ thuộc các mục bắt buộc này, không phụ thuộc W14-07 tùy lịch. Nếu thiếu comparator thì giữ W14/bàn giao PPA ở processing, không báo đã sẵn sàng paired PPA.
-- **AC02/toàn SPEC:** W14-07 được hoãn trong lịch tuần14, không được miễn nghĩa vụ AC02. Nếu chưa đạt phải công bố rõ trước nghiệm thu tổng/Gate4 và xử lý theo phạm vi đã được sinh viên chốt; không tự bỏ p16 hoặc giảm count.
+- **Được chạy main:** TC-W14-01/02/03,TC-W14-04a/b và TC-W14-05 đều PASS; release lock không đổi. Có RTL đạt timing hoặc10M qualification cũ chưa đủ để bỏ các bước này.
+- **Hoàn thành W14 để bàn giao W15:** W14-01..11 PASS theo từng TC. W14-11 phụ thuộc W14-01..10, không phụ thuộc W14-12 tùy lịch. Nếu thiếu comparator thì giữ W14/bàn giao PPA ở processing, không báo đã sẵn sàng paired PPA.
+- **AC02/toàn SPEC:** W14-12 được hoãn trong lịch tuần14, không được miễn nghĩa vụ AC02. Nếu chưa đạt phải công bố rõ trước nghiệm thu tổng/Gate4 và xử lý theo phạm vi đã được sinh viên chốt; không tự bỏ p16 hoặc giảm count.
 - **Hiện tại18/10:** RTL đã khóa và audit PASS; chưa triển khai/chạy các TC W14 mới, chưa có matrix_freeze hoặc final report W14. Trạng thái tuần14 giữ `không` cho phần thực thi; kế hoạch đã được sắp lại, chưa phải bằng chứng PASS.
 
 ## 3.3. Tối ưu RTL — hạng mục ưu tiên thực hiện và hạng mục đã đóng sau §8.28/8.29
@@ -167,9 +167,9 @@ Tối ưu và promote đã hoàn tất. Quy tắc **không sửa RTL/L1/constrai
 
 | Nhóm | Việc còn lại | Trạng thái | Ưu tiên & Hướng xử lý |
 | --- | --- | --- | --- |
-| **1. Khóa RTL & Chạy Tuần 14 (`Paired NF/F`)** | RTL đã promote/khóa tại §8.30; tiếp theo khóa `matrix_freeze.json`, chạy final per-n AC01 NF/F, coverage AC04, paired accuracy AC03 và comparator `NF EXACT_EN=0` | processing | **Ưu tiên số 1:** review/reset và counters → harness/pilot → matrix freeze → main/coverage/accuracy/comparator → audit theo mục3.2; chưa chạy final matrix |
-| **2. PPA đối xứng NF/F — Gate 4 (Tuần 15)** | Đo matched PPA giữa `NF` (`EXACT_EN=1` & `EXACT_EN=0`) và `F` trên cùng `A35T-C2` (≥3 chiến lược/cấu hình), lập bảng tổng hợp Accuracy – Timing – II – Resource | không | **Ưu tiên số 2:** Thực hiện ngay sau `W14-06`; dùng trực tiếp luồng runner `A35T-C2` đã chuẩn hóa |
-| **3. Hồ sơ / Báo cáo / Slide bảo vệ (Tuần 16)** | Tổng hợp bằng chứng CDC/RDC đã kiểm ở `W14-00b`, hoàn thiện luận văn, biểu đồ Pareto, slide và demo | processing | **Ưu tiên số 3:** Hạn chính29/11,đệm30/11–04/12. Kiểm CDC/RDC/reset thuộc ưu tiên1 trước matrix final,không dời kiểm kỹ thuật sang tuần16; công khai phạm vi OOC chưa board signoff |
+| **1. Khóa RTL & Chạy Tuần 14 (`Paired NF/F`)** | RTL đã promote/khóa tại §8.30; tiếp theo khóa `matrix_freeze.json` tại W14-05, chạy final per-n AC01 NF/F, coverage AC04, paired accuracy AC03 và comparator `NF EXACT_EN=0` | processing | **Ưu tiên số 1:** W14-01..05 review/harness/pilot/freeze → W14-06/07 main F/NF → W14-08..11 closure và audit theo mục3.2; chưa chạy final matrix |
+| **2. PPA đối xứng NF/F — Gate 4 (Tuần 15)** | Đo matched PPA giữa `NF` (`EXACT_EN=1` & `EXACT_EN=0`) và `F` trên cùng `A35T-C2` (≥3 chiến lược/cấu hình), lập bảng tổng hợp Accuracy – Timing – II – Resource | không | **Ưu tiên số 2:** Thực hiện ngay sau `W14-10`; dùng trực tiếp luồng runner `A35T-C2` đã chuẩn hóa |
+| **3. Hồ sơ / Báo cáo / Slide bảo vệ (Tuần 16)** | Tổng hợp bằng chứng CDC/RDC đã kiểm ở `W14-01`, hoàn thiện luận văn, biểu đồ Pareto, slide và demo | processing | **Ưu tiên số 3:** Hạn chính29/11,đệm30/11–04/12. Kiểm CDC/RDC/reset thuộc ưu tiên1 trước matrix final,không dời kiểm kỹ thuật sang tuần16; công khai phạm vi OOC chưa board signoff |
 | **4. Tái lập / Luồng tự động** | Duy trì collector/audit và kiểm tra hash nguồn frozen cho `results/week14` và `results/week15` | processing | **Ưu tiên duy trì:** Chỉ phục vụ nghiệm thu W14/W15; không chạy lại các lượt lịch sử chỉ vì cập nhật tài liệu |
 | **5. Timing giao tiếp tích hợp ngoại vi** | Điền budget I/O thực tế và pinout/IOSTANDARD nếu ghép vào hệ thống SoC/board cụ thể | **Đóng / Ngoài phạm vi bắt buộc** | Giữ mẫu `a35t_io_template.xdc` làm tài liệu bàn giao IP (`syn/README.md`); đánh giá lõi IP dùng chuẩn `A35T-C2` |
 | **6. Provenance Baseline Paper gốc (2024)** | Xác minh phần dư provenance LUT/width/tie-breaking/seed gốc của tác giả bài báo | **Đóng (Giữ nghiên cứu phụ)** | Đã có đủ bằng chứng phân tích tại Optimization; không dò thêm tham số để ép khớp Table I |
@@ -306,7 +306,7 @@ Tối ưu và promote đã hoàn tất. Quy tắc **không sửa RTL/L1/constrai
 | 8 | Khảo sát primitive trên Xilinx | XSim7.275.184 đối chiếu/0 mismatch,lint197 lượt và108 P&R hoàn tất. R2R đạt200MHz;refactor có đánh đổi theo width/part,chưa thắng đồng nhất;giữ RTL chính. I/O OOC chưa closure,không suy tần số MAC/kit. Bảng/snapshot tại [Optimization §8.16.9](Optimization.md#legacy-8-16-9) | ✅ |
 | 9 | Cụ thể hóa kế hoạch RTL fused | Đối chiếu SPEC/guideline/L1 và bằng chứng tuần12; chốt phạm vi bản đầu, kế hoạch F1–F5 và W13-01..07, tiêu chí số học/protocol/STA. Đã đủ điều kiện bắt đầu; chưa sửa RTL hoặc chạy kiểm mới | ✅ |
 | 10 | Triển khai và kiểm RTL fused | F1–F5/top main10M và pipeline/XSim đạt0 mismatch; strict lint sạch,STA A35T100MHz R2R đạt,1520LUT/815FF. Audit nguồn/kết quả đạt; còn final per-n/coverage/CDC và paired NF/F PPA | ✅ |
-| 11 | Lập kế hoạch tuần14 cho Codex | Mục3.2: W14-00..08 và TC-W14-00a..08 cho final per-n NF/F, AC04, paired accuracy và comparator NF EXACT_EN0. Chỉ lập kế hoạch; chưa chạy hoặc sửa mã | processing |
+| 11 | Lập kế hoạch tuần14 cho Codex | Đã lập phạm vi final per-n NF/F, AC04, paired accuracy và comparator NF EXACT_EN0; mã công việc hiện hành được đánh lại tại mục3.2 ngày18/10. Chưa chạy nghiệm thu | processing |
 
 ### 4.15. Ngày 16/10/2026
 
@@ -342,6 +342,7 @@ Tối ưu và promote đã hoàn tất. Quy tắc **không sửa RTL/L1/constrai
 | 2 | Đặc tả OPT-02c cho A1 và sàng lọc mục3.3/3.4 | Bổ sung Optimization8.29 (`OPT-02c`: tách `clamp` khỏi `shift_amount`, bit-check `>` F+2, tra `jam/tail` song song trong A1, 0 FF); đóng các nhánh tối ưu dư thừa (`OPT-10B`, `C-prefix`, `OPT-04/06`), chỉ giữ `OPT-02c` và promote `OPT-07/08` trước W14 | ✅ |
 | 3 | Tối ưu, promote và khóa RTL trước W14 | OPT-02c+05+09+10A đã vào production38 module; NF10M/0 mismatch, F10M kế thừa theo hash và smoke mới;37 strict lint/ModelSim NF/F đạt. A35T100MHz setup/hold đạt3 strategy. Release POSIT_MAC_RTL_20261018_OPT02C đã khóa; W14 final và Gate4 chưa chạy | ✅ |
 | 4 | Sắp lại trình tự tuần14 | Tách chuẩn bị coverage khỏi đóng coverage; bổ sung harness/pilot trước freeze/main,định rõ điểm dừng và comparator trước bàn giao PPA. Chỉ sửa kế hoạch,không chạy TC W14 hoặc đổi RTL | ✅ |
+| 5 | Đánh lại mã tuần14 theo thứ tự thực hiện | W14-01..11 tương ứng các bước chính, W14-12 exact riêng; đồng bộ TC và tham chiếu. Pilot W14-04, main F/NF W14-06/07; chỉ đổi mã kế hoạch, không chạy nghiệm thu | ✅ |
 
 ### 4.18. Mẫu cập nhật tiếp theo
 

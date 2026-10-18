@@ -1520,7 +1520,7 @@ Release `POSIT_MAC_RTL_20261018_OPT02C` đã promote38 module,khóa bằng `rtl/
 
 NF10M/0 mismatch,ModelSim bốn format và active NF/F replay đạt;F100k smoke mới và tái dùng bằng chứng10M do mọi dependency F byte-identical với8.28. Active production.f đạt37 strict lint profiles. NF100MHz setup/hold đạt ba chiến lược matched C2 với production OPT-03;F chỉ có một phép đo kiểm release,không phải paired PPA. Không đồng nhất F_STA ước lượng với clock đã chạy trên board.
 
-Kiểm khóa trước chạy tuần14: `python scripts/audit_rtl_release.py`. Nếu hash nguồn/model/constraint đổi hoặc test final phát hiện mismatch: dừng,lưu failure,review release mới; không sửa RTL/oracle để hợp thức hóa checkpoint. Defined-clock CDC và reset review trước khóa đã có;review RDC/interface chi tiết W14-00b,final per-n,AC04,paired accuracy và Gate4 vẫn mở. Không chạy matrix tuần14 trong đợt promote này.
+Kiểm khóa trước chạy tuần14: `python scripts/audit_rtl_release.py`. Nếu hash nguồn/model/constraint đổi hoặc test final phát hiện mismatch: dừng,lưu failure,review release mới; không sửa RTL/oracle để hợp thức hóa checkpoint. Defined-clock CDC và reset review trước khóa đã có;review RDC/interface chi tiết W14-01,final per-n,AC04,paired accuracy và Gate4 vẫn mở. Không chạy matrix tuần14 trong đợt promote này.
 
 ## Phụ lục A. Tóm tắt số liệu của [P] để đối chiếu
 

@@ -1,6 +1,8 @@
 # Xây dựng L1, baseline nội bộ và MAC non-fused/fused
 
-**Cập nhật:** 18/10/2026 — tài liệu kiến trúc, mapping và build; không còn là nhật ký tối ưu hoặc lịch nghiệm thu theo tuần.
+**Cập nhật:** 22/10/2026 — khóa phạm vi duy nhất posit(32,3); tài liệu kiến trúc, mapping và build.
+
+**Phạm vi chốt với giảng viên:** chỉ thiết kế, nghiệm thu và so PPA NF/F tại `NB=32, ES=3`. Giữ FW12/FLOOR/RNE/OPS1/n0..8, F W32/Q29; chọn định dạng không bỏ exact NF hoặc thay hợp đồng số học. Format8/0,16/1,32/2 chỉ giữ mô hình/bằng chứng lịch sử, không còn là công việc nghiệm thu mới. Exact32/3 theo AC02 dùng oracle integer/rational độc lập, không dùng SoftPosit ES2. Build phải truyền NB/ES tường minh: default NF production vẫn ES2; đổi default/top cần release mới cùng kiểm chứng, chưa thực hiện trong lần sửa tài liệu này. Ngưỡng vector/coverage32/3 không giảm; manifest/report đa format cũ giữ nguyên và lọc32/3 khi báo cáo mới.
 
 RTL production đã khóa tại `rtl/production_freeze.json` (release `POSIT_MAC_RTL_20261018_OPT12_120`). Chạy `python scripts/audit_rtl_release.py --self-test` trước tuần14. Manifest38 module giữ nguyên; L1/oracle không đổi. Optimization8.31.8 lưu khóa mới.
 
@@ -17,8 +19,8 @@ Baseline chính của đồ án là MAC NF normative; biến thể so sánh là 
 
 | Nhánh | Profile / vai trò | Nguồn chính |
 | --- | --- | --- |
-| Exact bổ trợ | Posit8/ES0,16/ES1,32/ES2 đối chiếu SoftPosit đúng format | parser/packer, l1_multiplier_exact, posit_adder |
-| Nhân lặp normative | NB/ES theo miền đã công bố; profile so sánh32/3,FW12,FLOOR/RNE,OPS1,n0..8 | l1_multiplier_iter.hpp, floor_rne_profile.hpp |
+| Exact32/3 | Nghiệm thu AC02 bằng oracle độc lập; SoftPosit8/0,16/1,32/2 giữ kiểm lịch sử | parser/packer, l1_multiplier_exact, posit_adder |
+| Nhân lặp normative | Chỉ32/3; profile so sánh FW12,FLOOR/RNE,OPS1,n0..8 | l1_multiplier_iter.hpp, floor_rne_profile.hpp |
 | NF legacy | MAC v0/v1 và API cũ giữ nguyên checkpoint | posit_mac.hpp, l1_api.h/src/l1_api.cpp |
 | NF so sánh | Bảo toàn P_hat rồi làm tròn tích trước cộng C_eff | exporter prepack, tb/week11_model.hpp, RTL mac_nf |
 | F profile chính |32/3,FW12,W32/Q29, approximate-only; signed residual/borrow và RNE cuối | posit_fused_window.hpp, RTL mac_f |
@@ -119,6 +121,23 @@ F có accumulator riêng; mỗi giao dịch acc_mode vẫn RNE một lần khi c
 Bank elastic nằm trong fused_add_pipe; mac_f_wrapper giữ C/config/accumulator và reset bridge; posit_mac_f chỉ instance. F hiện chặn tuple ngoài NB32/ES3/FW12/W32,N_MAX8,EXACT_EN0,OPS_EN1; không suy C++ template tổng quát đồng nghĩa RTL hỗ trợ mọi tuple.
 
 F có13 tầng datapath; q=max(1,t), L_valid=q+11,H=q+12,II_min=q+13. Top một giao dịch, commit đúng một lần khi kết quả valid lần đầu rồi giữ output tới retire; không nhận mới trước retire. Leaf pipeline elastic có sức chứa riêng, không dùng II leaf làm II top.
+
+### 4.3. Build candidate F chia sẻ parser và bộ cộng NF
+
+Production ở4.2 giữ nguyên. Candidate `rtl/candidates/mac_f/opt15/parser2/`
+dùng hai parser A/C–B và F1–F5;candidate `rtl/candidates/mac_f/opt16/shared_nf_add/`
+dùng hai parser,một adapter tích không làm tròn,`posit_add` A1/A2/A3 và một packer cuối.
+Chỉ profile32/3,FW12,N_MAX8,EXACT_EN0,OPS_EN1 hiện được nhận.
+Không chuyển P_hat qua Posit trung gian;giữ RNE(P_hat+C_eff).
+
+Từng candidate có `production.f` riêng;`rtl/candidates/opt15_sources.json` entry
+`f_opt15`/`f_opt16_shared_add` là bản đồ nguồn. Chỉ compile file list đã chọn,
+không ghép wrapper production trùng tên. Runner build/replay:
+`scripts/prepare_f_shared_add.py`,`verify_f_shared_add.sh`,
+`verify_f_shared_add_modelsim.ps1`,`verify_f_shared_add_fast.sh`.
+L1/oracle hiện hành giữ nguyên;mapping/tail của candidate phải được kiểm riêng,
+không kế thừa tính đúng từ module NF. Mọi kết quả/timing/giới hạn ở Optimization8.36;
+candidate chưa thay hợp đồng normative hoặc release production.
 
 ## 5. Nhánh baseline paper và phép so sánh
 

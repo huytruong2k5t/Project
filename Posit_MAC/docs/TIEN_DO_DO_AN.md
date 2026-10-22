@@ -1,9 +1,9 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 18/10/2026 (giờ Việt Nam)
+**Ngày cập nhật:** 22/10/2026 (giờ Việt Nam)
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.20](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
+**Tài liệu chi tiết:** [SPEC v1.21](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -19,8 +19,11 @@ MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng ch�
 
 ## 2. Công việc còn lại và ưu tiên
 
+**Quyết định22/10:** chỉ posit32/ES3 cho thiết kế và nghiệm thu NF/F, theo lựa chọn sau trao đổi với giảng viên. Giữ FW12/FLOOR/RNE/OPS1/n0..8, F W32/Q29 và ngưỡng kiểm32/3. Các format khác lưu lịch sử; không tiếp tục exhaustive8/16 hoặc nghiệm thu32/2. Exact32/3 vẫn mở theo AC02 với oracle độc lập, không dùng SoftPosit ES2. Chỉ sửa phạm vi tài liệu; source/freeze và các kết quả cũ giữ nguyên. Hồ sơ mới phải tách số lượt32/3 khỏi tổng đa format cũ.
+
 | Mốc lớn | Trạng thái | Phần cần hoàn thiện |
 | --- | --- | --- |
+| Khóa cấu hình duy nhất32/3 | processing | SPEC/PLAN đã chốt; còn đồng bộ default NF/build/synthesis bằng revision được kiểm và khóa mới. Không đổi nguồn đã frozen trong phiên cập nhật phạm vi |
 | Baseline nội bộ và so sánh NF/F | processing | RTL NF/F final approximate và paired standalone accuracy đã đạt; còn matched PPA. Baseline paper giữ nghiên cứu phụ |
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder, NF tuần11 và F profile chính đã kiểm; final approximate và coverage NF/F đã đạt;exact/AC02 vẫn mở riêng |
 | PPA, mở rộng và hồ sơ — Gate4 | processing | NF CycloneIV45,07MHz là lịch sử; F A35T100MHz R2R đạt. Còn đo matched NF/F,AC02 và hồ sơ cuối; số đo riêng xem Optimization |
@@ -77,9 +80,7 @@ Backup cuối phiên được xác nhận bằng kết quả Git push,không suy
 
 | Phần còn lại | Tiêu chí chưa chạy đủ | Trạng thái |
 | --- | --- | --- |
-| Exact p8 | MAC exhaustive2^24 bộ ba,0 mismatch; các đơn vị exhaustive theo SPEC | không |
-| Exact p16 | Exhaustive mul/add2^32 cặp mỗi phép,0 mismatch | không |
-| Exact p32/2 | ≥10^8 vector phân tầng+corner,0 mismatch với SoftPosit đúng format | không |
+| Exact p32/3 | ≥10^8 vector phân tầng+corner,0 mismatch với oracle integer/rational độc lập32/3 theo AC02; tách khỏi các lượt approximate đã đạt | không |
 
 W14-01..11 đủ bàn giao matched PPA W15;W14-12 được hoãn theo lịch đã duyệt,không được miễn AC02
 hoặc gọi toàn SPEC/Gate4 đã đạt. ComparatorEX0 giữ structural diagnostic riêng,chưa claim toggle85%
@@ -131,10 +132,10 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 
 | Nhóm | Việc còn lại | Trạng thái | Ưu tiên & Hướng xử lý |
 | --- | --- | --- | --- |
-| **1. PPA đối xứng NF/F — Gate 4 (Tuần 15)** | Đo matched PPA giữa `NF` (`EXACT_EN=1` & `EXACT_EN=0`) và `F` trên cùng `A35T-C2` (≥3 chiến lược/cấu hình), lập bảng tổng hợp Accuracy – Timing – II – Resource | không | **Ưu tiên số 1:** W14-01..11 đã đạt;thực hiện tiếp W15; dùng trực tiếp luồng runner `A35T-C2` đã chuẩn hóa |
+| **1. Gói ứng viên OPT-15/16 và PPA đối xứng NF/F — Gate 4 (Tuần 15)** | NF chọn OPT-15 combined;F đã kiểm/đo hai parser với F1–F5 và với bộ cộng NF ba tầng. Cần chọn F candidate,kiểm derivative NF EXACT_EN0 nếu dùng,rồi đo matched ≥3 strategy/config trên A35T,8,300ns,budget I/O giữ nguyên | processing | **Ưu tiên số 1:** chốt đánh đổi LUT/FF/latency của F theo Optimization8.36 trước gói matched PPA. Các trial chưa promote production hoặc thay bằng chứng W14 |
 | **2. Hồ sơ / Báo cáo / Slide bảo vệ (Tuần 16)** | Tổng hợp bằng chứng CDC/RDC đã kiểm ở `W14-01`, hoàn thiện luận văn, biểu đồ Pareto, slide và demo | processing | **Ưu tiên số 2:** Hạn chính29/11,đệm30/11–04/12. Kiểm CDC/RDC/reset thuộc ưu tiên1 trước matrix final,không dời kiểm kỹ thuật sang tuần16; công khai phạm vi OOC chưa board signoff |
 | **3. Tái lập / Luồng tự động** | Duy trì collector/audit và kiểm tra hash nguồn frozen cho `results/week14` và `results/week15` | processing | **Ưu tiên duy trì:** Chỉ phục vụ nghiệm thu W14/W15; không chạy lại các lượt lịch sử chỉ vì cập nhật tài liệu |
-| **4. Exact/AC02 (W14-12)** | p8 MAC2^24,p16 exhaustive mul/add2^32,p32/2≥1e8+corner theo SPEC | không | Nhánh được hoãn riêng theo lịch;phải công bố phần chưa chạy trước nghiệm thu tổng/Gate4,không dùng W14 approximate thay AC02 |
+| **4. Exact/AC02 (W14-12)** | Chỉ32/3: ≥1e8 vector phân tầng+corner,oracle integer/rational độc lập theo SPEC v1.21; không dùng approximate PASS thay exact | không | Nhánh được hoãn riêng theo lịch;phải công bố phần chưa chạy trước nghiệm thu tổng/Gate4,không dùng W14 approximate thay AC02 |
 | **5. Timing giao tiếp tích hợp ngoại vi** | Điền budget I/O thực tế và pinout/IOSTANDARD nếu ghép vào hệ thống SoC/board cụ thể | **Đóng / Ngoài phạm vi bắt buộc** | Giữ mẫu `a35t_io_template.xdc` làm tài liệu bàn giao IP (`syn/README.md`); đánh giá lõi IP dùng chuẩn `A35T-C2` |
 | **6. Provenance Baseline Paper gốc (2024)** | Xác minh phần dư provenance LUT/width/tie-breaking/seed gốc của tác giả bài báo | **Đóng (Giữ nghiên cứu phụ)** | Đã có đủ bằng chứng phân tích tại Optimization; không dò thêm tham số để ép khớp Table I |
 | **7. Mở rộng tùy chọn ngoài đề cương chính** | Exact fused rộng, format phụ ngoài ma trận §6.7, TRUNC/JAM F, quire hoặc ASIC synthesis | **Đóng (Không thực hiện)** | Ngoài profile chính; dừng hoàn toàn để tập trung 100% cho nghiệm thu NF/F và viết báo cáo |
@@ -315,7 +316,28 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | 11 | Hoàn thành W14-07..11 | NF250M+NF-EX010M mới/0 mismatch;kế thừaF90M đúng hash. AC04 chính,9M paired standalone accuracy và audit/replay đạt;archive/backup cuối phiên. Exact/AC02 hoãn riêng;chuyển W15 matched PPA | ✅ phạm vi kỹ thuật |
 | 12 | Slide datapath RTL NF/F | Hoàn tất7 slide native PowerPoint:NF14 tầng,F13 tầng;phóng to parser/OPS,SAC/SBM,NF/F tail vàfeedback. Theo releaseOPT12_120,giữ đủMUX/FF/metadata quan trọng;không sửa RTL hoặc chạy STA/regression mới | ✅ |
 
-### 4.18. Mẫu cập nhật tiếp theo
+### 4.18. Ngày 19/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Thử OPT-15 giảm LUT MAC NF | Hai parser input + packer dùng chung đạt11,08M completed/bản,0 mismatch và ModelSim bốn format. A35T120,48MHz đạt setup/hold; LUT2424→2104 (−13,20%),FF931→806 (−13,43%). Giữ latency/II; chỉ là candidate,một run Explore,chưa promote. Xem Optimization8.35;không push GitHub | ✅ thử nghiệm |
+| 2 | Chọn nền ứng viên tối ưu tiếp NF/F | Chọn NF OPT-15 combined; chốt F dùng hai parser input và giữ một packer cuối. Các tối ưu sau đi từ nền này bằng revision mới. F OPT-15 chưa triển khai/kiểm/STA,gói chung chưa promote; xem Optimization8.35.5 | ✅ quyết định / processing triển khai F |
+
+### 4.19. Ngày 20/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Sửa datapath NF/F cho hướng chia sẻ tài nguyên | Hai slide native PowerPoint thể hiện rõ parser A/C–B,MUX và bank FF;không thêm lịch chu kỳ. F chia sẻ parser được ghi dự kiến tại thời điểm vẽ;RTL thử sau đó ở mốc2 | ✅ |
+| 2 | Thử F hai parser và reuse bộ cộng NF | OPT-15 parser2 và OPT-16 shared_add đạt10,1M completed/bản,0 mismatch,ModelSim và một run Explore120,48MHz. OPT-16 thêm100k luồng không stall,giảm2 chu kỳ;LUT/FF1362/815→1345/645. Parser2 riêng1262/771 tốt hơn về LUT. Giữ hai candidate/chưa promote,chưa Gate4;chi tiết Optimization8.36 và JSON nguồn;không push GitHub | ✅ thử nghiệm / chờ chọn |
+| 3 | Slide datapath tổ hợp bộ cộng A1/A2/A3 | Hoàn tất5 slide PowerPoint đen trắng,native shapes:chọn/dịch/jam/clamp A1,cộng/trừ A2,normalize/Zero/NaR/sticky/cờ A3. Giữ nhãnMUX và width theo RTL32/3 hiện tại,không vẽ FF hoặc sửa RTL | ✅ |
+
+### 4.20. Ngày 22/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Chốt duy nhất posit32/ES3 | Đồng bộ SPEC v1.21, PLAN, README và phạm vi nghiệm thu mới; bỏ yêu cầu tiếp tục8/16/32-ES2, giữ chứng cứ lịch sử. Chưa sửa RTL/model/freeze hoặc chạy mô phỏng mới; còn đồng bộ default NF và kiểm exact32/3,matched PPA | ✅ quyết định / processing hiện thực |
+
+### 4.21. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

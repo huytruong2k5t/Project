@@ -1,92 +1,113 @@
-# ĐỒ ÁN CHUYÊN NGÀNH — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP (FPGA & ASIC)
+# Posit MAC — NF và fused
 
-## Release production đã khóa — 18/10/2026
+Đồ án chuyên ngành HK261, HCMUT — Đan Huy.
+Thiết kế và kiểm chứng IP tính `D = A × B + C_eff`, với bộ nhân lặp,
+cấu hình xấp xỉ và hai kiến trúc MAC để so sánh nội bộ.
 
-**Production hiện hành18/10:** đã chọn và promote OPT-12 negate, khóa release
-`POSIT_MAC_RTL_20261018_OPT12_120` (`LOCKED_FOR_W14`),38 module trong `rtl/production.f`.
-A35T `xc7a35tcpg236-1`, Explore,8,3ns≈120,48MHz: NF WNS/WHS +0,227/+0,053ns;
-F +0,093/+0,040ns. Input min=max2,5ns, output min0/max0,5ns, uncertainty0,1ns giữ nguyên.
-Gói OPT-02c/05/09/10A + OPT-12; không đổi I/O, precision, latency hoặc L1/oracle.
+**Phạm vi chốt22/10/2026: duy nhất posit(32 bit, ES=3)** cho cả NF và F.
+Các format khác giữ bằng chứng lịch sử, không thuộc nghiệm thu mới.
+Giữ profile nhân FW12/FLOOR/RNE/OPS1/n0..8 và fused W32/Q29.
+Build phải truyền tường minh NB32/ES3; top NF đã khóa còn default ES2,
+chưa đổi RTL/default hoặc khóa release mới trong lần cập nhật tài liệu này.
+Exact32/3 vẫn theo AC02 với oracle độc lập; không dùng SoftPosit ES2 làm chuẩn.
 
-Trước build W14: `python scripts/audit_rtl_release.py --self-test`.
-Recipe120MHz: `syn/opt12_120mhz_release.json`, clock `syn/constraints/a35t_clock_120mhz.xdc`;
-XDC100MHz vẫn giữ cho replay lịch sử, không phải clock nghiệm thu120MHz.
-870 profile lint parser, equivalence/decoder,10M NF+10M F đều0 mismatch; ModelSim NF/F đạt.
-Hai file production là đúng byte đã kiểm, không chạy lại regression lớn khi promote.
-Đây là OOC theo profile công bố, chưa board signoff, final per-n/AC04 W14 hoặc paired NF/F PPA.
-Old lock OPT02C giữ trong `results/opt120_20261018/reference_freeze.json` và `reference_source.zip`.
-Chi tiết Optimization8.31.8; trial8.31.7 và các trạng thái chưa promote trước đó là lịch sử.
-Producer lịch sử không dùng để refreeze/ghi đè release mới. W14-01..06 đã đạt: F90M/0 mismatch, pilot/accuracy calibration/matrix freeze; W14-07..12 còn mở (Optimization8.33).
+## 1. Bản dùng hiện tại
 
+Release đã khóa: **`POSIT_MAC_RTL_20261018_OPT12_120`** (`LOCKED_FOR_W14`).
+Build bằng [`rtl/production.f`](rtl/production.f), gồm 38 module.
+Thông tin khóa nguồn ở [`rtl/production_freeze.json`](rtl/production_freeze.json).
 
+Gói đã chọn gồm OPT-02c, OPT-05 abc_tree, OPT-09, OPT-10A và OPT-12.
+Các bản trong `rtl/candidates/` chỉ là snapshot đối chiếu; mã chạy chính nằm ở
+các thư mục chức năng của `rtl/`. Không compile đệ quy toàn bộ RTL vì có tên module trùng.
 
+Kết quả OOC đã lưu trên Artix-7 `xc7a35tcpg236-1`, Explore, chu kỳ 8,3 ns
+(khoảng 120,48 MHz):
 
-> **Dự án**: Thiết kế và kiểm chứng lõi IP Posit MAC xấp xỉ, lặp (Approximate & Iterative Posit MAC) trên FPGA, có mở rộng ASIC  
-> **Sinh viên thực hiện**: Đan Huy  
-> **Học kỳ**: HK261 — Trường Đại học Bách Khoa - ĐHQG TP.HCM (HCMUT)  
-> **Tài liệu đặc tả chi tiết**: [`SPEC_Posit_MAC_IP.md`](SPEC_Posit_MAC_IP.md)  
-> **Nhật ký quyết định thiết kế**: [`docs/ambiguity.md`](docs/ambiguity.md)  
-> **Quy chuẩn mã nguồn RTL**: [`Digital_Design_Guidelines.md`](Digital_Design_Guidelines.md)  
+| Top | Setup WNS | Hold WHS |
+| --- | ---: | ---: |
+| NF | +0,227 ns | +0,053 ns |
+| Fused | +0,093 ns | +0,040 ns |
 
----
+Giữ input min/max 2,5 ns, output min 0/max 0,5 ns và uncertainty 0,1 ns.
+Recipe: [`syn/opt12_120mhz_release.json`](syn/opt12_120mhz_release.json).
+Đây là kết quả theo profile OOC đã công bố, chưa phải phép đo trên kit hoặc Fmax cực đại.
 
-## 1. Giới thiệu Đề tài
+W14-01..11 đã hoàn tất trong phạm vi ghi ở
+[`results/week14/handoff.json`](results/week14/handoff.json):
+350 triệu giao dịch RTL hoàn tất, 0 mismatch; AC04 của profile chính và
+9 triệu mẫu accuracy paired standalone đã được báo cáo.
+W14-12/exact AC02 hoãn riêng; structural coverage của EX0 chưa được tuyên bố đóng.
+Paired PPA NF/F và board signoff vẫn còn mở.
 
-Đồ án tập trung nghiên cứu, thiết kế phần cứng và kiểm chứng toàn diện lõi IP **Posit Multiply-Accumulate (MAC)** ($D = A \times B + C$) với các đóng góp cốt lõi:
-1. **Kiến trúc Nhân Lặp & Xấp xỉ (Iterative & Approximate Multiplier)**: Dựa trên bài báo tham chiếu [P] (*Norris & Kim, ISCAS 2021*), thực hiện phép nhân mantissa bằng chuỗi các phép dịch-cộng lặp (SAC $\rightarrow$ Shifter $\rightarrow$ Accumulator) với số vòng lặp $n$ có thể cấu hình linh hoạt lúc chạy, Bài báo báo cáo giảm44% LUT và tăng51% fmax ở điều kiện của tác giả; đề tài chưa đo PPA toàn MAC để xác nhận các tỷ lệ này.
-2. **Hai kiến trúc MAC so sánh nội bộ**: NF làm tròn tích rồi cộng, D=R(R(P_hat)+C_eff); fused cộng P_hat với C_eff trong cửa sổ W32 trước RNE cuối. NF hiện dùng product pack P1/P2 và magnitude parse riêng; không còn tuyên bố loại bỏ pack/parse trung gian. Lịch NF14 tầng và F13 tầng theo SPECv1.20; final per-n/AC04 và paired accuracy/PPA còn mở.
-3. **Tối ưu các khối tổ hợp**: Masked OPS, SAC abc_tree, A1 parallel shift/jam và prefix sticky giữ bit-exact, không tăng latency so lịch OPT-03. Gói NF đạt setup/hold100MHz trên A35T-C2 qua3 strategy, với đánh đổi LUT/FF được ghi tại Optimization8.30.
-4. **Môi trường Kiểm chứng 3 Tầng**: Golden Model độc lập SoftPosit (L0), C++ Algorithmic Model (L1), và RTL SystemVerilog với phương pháp lấy mẫu phân tầng (Stratified Sampling).
-5. **PPA có điều kiện so sánh thống nhất**: Các lượt đo tiếp theo chỉ dùng Vivado/A35T-C2, cùng nguồn, XDC và strategy cho các biến thể. Số liệu CycloneIV/A100T giữ làm lịch sử; chưa có paired NF/F PPA cuối hoặc đo tần số board.
+**Ứng viên riêng OPT-15 (19/10):** chia sẻ parser A/C và packer tích/tổng trong NF,
+LUT 2.424→2.104, FF 931→806, giữ lịch giao dịch và qua STA 120,48 MHz trong một run Explore.
+11,08 triệu completed/bản, 0 mismatch; chưa promote, không thay release đã khóa.
+Đã chọn OPT-15 làm nền tối ưu tiếp cho NF/F: NF dùng `combined`.
+Ngày20/10,F có hai candidate riêng: OPT-15 parser2 giữ F1–F5 và OPT-16 parser2
+dùng bộ cộng NF ba tầng,cùng một packer cuối. Cả hai đạt10,1M completed/bản,
+ModelSim và một run A35T120,48MHz;chưa promote. Xem [Optimization8.36](../doc/Optimization.md)
+và [bản đồ nguồn JSON](rtl/candidates/opt15_sources.json);LUT/FF/latency có đánh đổi khác nhau.
+Xem [Optimization §8.35](../doc/Optimization.md#835-opt-15--chia-sẻ-parserpacker-để-giảm-lut-nf--19102026)
+và [báo cáo ứng viên](results/opt15_share_20261019/summary.json).
 
----
+## 2. Bản đồ thư mục sau dọn — 19/10/2026
 
-## 2. Cấu trúc Thư mục Dự án
+| Thư mục | Mục đích |
+| --- | --- |
+| [`rtl/`](rtl/README.md) | RTL production theo chức năng; file list và khóa nguồn |
+| [`rtl/candidates/`](rtl/candidates/README.md) | 9 file snapshot của gói đã chọn, dùng đối chiếu khi cần |
+| [`archive/`](archive/README.md) | Kho nén 23 file ứng viên cũ đã bỏ khỏi cây làm việc, có danh mục/hash/cách phục hồi |
+| [`l0/`](l0/README.md) | Wrapper và thư viện SoftPosit/oracle |
+| [`l1/`](l1/README.md) | Mô hình thuật toán và công cụ sinh vector |
+| [`tb/`](tb/README.md), [`tests/`](tests/README.md) | Testbench, harness và dữ liệu kiểm thử |
+| [`scripts/`](scripts/README.md) | Runner kiểm chứng, audit, tổng hợp và thu thập báo cáo |
+| [`syn/`](syn/README.md) | Luồng Vivado, recipe và constraints; A35T là mục tiêu chính |
+| [`results/`](results/README.md) | Kết quả 120 MHz, W14 và bằng chứng lịch sử giữ nguyên đường dẫn |
+| [`docs/`](docs/README.md) | Tiến độ, hướng dẫn chạy và tài liệu chi tiết |
+| `presentation/` | PowerPoint và nguồn dựng slide; sản phẩm MAC NF/F trong `MAC_NF_F_RTL_DATAPATH/` |
+| `scratch/` | Dữ liệu làm việc và checkout sao lưu Git riêng; không phải nguồn production |
+| [`asic/`](asic/README.md) | Luồng ASIC tham khảo |
 
-RTL đã phân nhóm theo chức năng; xem [bản đồ RTL](rtl/README.md). Danh sách build chính: `rtl/production.f`. Không compile chung các candidate trùng tên module.
+Các PDF tham khảo, SPEC và guideline giữ nguyên vị trí để không làm hỏng đường dẫn.
+Không đổi vị trí RTL production, L0/L1, testbench, runner, constraints hoặc kết quả nghiệm thu.
 
+Các phương án thử cũ như OPT-02b, prepack OPT-01, SAC a/ab/abc_sub và
+primitive thay thế được lưu tại [`archive/`](archive/README.md).
+Giữ các báo cáo đo cũ để giải thích việc chọn kiến trúc, kể cả kết quả dưới 120 MHz.
+Các runner lịch sử cần nguồn đã lưu trữ phải phục hồi archive trước khi chạy;
+runner production dùng file list hiện hành.
 
-```text
-Posit_MAC/
-├── README.md               # Giới thiệu tổng quan toàn bộ dự án
-├── SPEC_Posit_MAC_IP.md    # Tài liệu đặc tả kỹ thuật chi tiết nhất (v1.20)
-├── Digital_Design_Guidelines.md # Quy chuẩn thiết kế RTL số chuẩn công nghiệp
-├── Makefile                # Kịch bản điều khiển luồng (lint, sim, syn, regress)
-├── docs/                   # Tài liệu chi tiết, nhật ký quyết định (ambiguity.md)
-├── rtl/                    # Mã nguồn phần cứng SystemVerilog
-├── tb/                     # Môi trường testbench (Đơn vị, Verilator, UVM-lite)
-├── l0/                     # Tầng L0: Wrapper thư viện chuẩn SoftPosit
-├── l1/                     # Tầng L1: Mô hình thuật toán C++ bit-exact
-├── tests/                  # Dữ liệu ca kiểm thử, corner cases, TV từ paper
-├── syn/                    # Kịch bản tổng hợp FPGA Vivado (OOC, non-DSP)
-├── asic/                   # Luồng thiết kế ASIC RTL-to-GDSII (OpenROAD)
-├── scripts/                # Kịch bản Python tự động hóa và trích xuất PPA
-└── results/                # Báo cáo đầu ra tự động (ppa.csv, summary.md)
+## 3. Tài liệu cần đọc
+
+- [Đặc tả IP](SPEC_Posit_MAC_IP.md).
+- [Digital Design Guidelines](Digital_Design_Guidelines.md).
+- [Kế hoạch và cách build L1/NF/F](l1/PLAN.md).
+- [Tiến độ đồ án](docs/TIEN_DO_DO_AN.md).
+- [Optimization — quyết định tối ưu và kết quả STA](../doc/Optimization.md).
+- [Hướng dẫn WSL và ModelSim](docs/HUONG_DAN_CHAY_WSL_MODELSIM.md).
+
+NF làm tròn tích trước phép cộng; fused cộng tích prepack với `C_eff` trong
+cửa sổ quy định rồi làm tròn cuối. Hai bản dùng hợp đồng và profile trong SPEC.
+Provenance và Table I của paper là nghiên cứu phụ, chưa được coi là baseline tác giả đã xác nhận.
+
+## 4. Lệnh kiểm tra khi cần chạy lại
+
+Từ gốc `Posit_MAC`, trong môi trường đã cài công cụ:
+
+```sh
+python3 scripts/audit_rtl_release.py --self-test
+verilator --lint-only --timing --assert -Wall -Irtl --top-module posit_mac_f -f rtl/production.f
 ```
 
----
+Đây là hướng dẫn, không phải các lệnh đã chạy trong phiên dọn thư mục này.
+Cache biên dịch W14 đã được dọn; trước khi replay regression phải build lại theo runner tương ứng.
+Giữ fixture, log, raw coverage, hash và archive bằng chứng. File thiếu không được coi là PASS.
 
-## 3. Trạng thái Hiện thực Dự án
+## 5. Phạm vi phiên dọn
 
-- ✅ **Quy chuẩn & Đặc tả**: Hoàn thành tài liệu [SPEC](SPEC_Posit_MAC_IP.md), [Design Guidelines](Digital_Design_Guidelines.md), và [Ambiguity Log](docs/ambiguity.md).
-- ✅ **Khối Cơ sở RTL (100% Verified)**:
-  - [`rtl/common/lod_lzd_core.sv`](rtl/common/lod_lzd_core.sv): Cây nhị phân phẳng dò Lead One / Lead Zero.
-  - [`rtl/common/dyn_left_shifter.sv`](rtl/common/dyn_left_shifter.sv): Bộ dịch trái logarit đa tầng kèm chống tràn ($b \ge N$).
-  - [`rtl/common/dyn_right_shifter.sv`](rtl/common/dyn_right_shifter.sv): Bộ dịch phải logarit đa tầng hỗ trợ dịch logic/arithmetic/custom fill kèm chống tràn.
-- ✅ **Môi trường Testbench Đơn vị**:
-  - [`tb/tb_lod_lzd_core.sv`](tb/tb_lod_lzd_core.sv) (Pass 100%).
-  - [`tb/tb_dyn_left_shifter.sv`](tb/tb_dyn_left_shifter.sv) (Pass 100% trên 60,832 vectors).
-  - [`tb/tb_dyn_right_shifter.sv`](tb/tb_dyn_right_shifter.sv) (Pass 100% trên 146,400 vectors).
-
----
-
-## 4. Hướng dẫn Chạy Nhanh (Quick Start)
-
-### Chạy kiểm chứng tự động các bộ dịch động:
-```bash
-# Kiểm tra bộ dịch trái động (60,832 vectors)
-python scripts/verify_dyn_left_shifter.py
-
-# Kiểm tra bộ dịch phải động (146,400 vectors)
-python scripts/verify_dyn_right_shifter.py
-```
+Ngày 19/10/2026: chỉ cập nhật README, lưu trữ ứng viên đã ngừng dùng và xóa
+920 file cache có thể tạo lại, giải phóng khoảng **1.204,85 MiB**.
+Danh mục và xác minh toàn vẹn ở [`archive/README.md`](archive/README.md).
+Không sửa nội dung mã nguồn, SPEC, PLAN, constraints hoặc báo cáo.
+Không chạy lại mô phỏng, synthesis, STA; không commit hoặc push GitHub.

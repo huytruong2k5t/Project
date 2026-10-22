@@ -6,11 +6,13 @@
 | Sinh viên | Đan Huy |
 | Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
 | Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.20 — 2026-10-18 — khóa RTL OPT-02c/05/09/10A trước tuần14; số học và latency/II giữ nguyên |
+| Phiên bản | v1.21 — 2026-10-22 — chốt duy nhất posit(32,3) cho thiết kế và nghiệm thu; giữ nguyên nguồn RTL đã khóa |
 | Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
 | Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
 
 Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh mục của [P]. `[F]` là bài báo FloPoCo bổ sung; `[19]` trong [P] là DRUM, không phải nguồn thuật toán đóng gói. SPEC mô tả yêu cầu và kiến trúc mục tiêu; kết quả thực hiện được ghi trong `results/` và nhật ký tiến độ. Nguồn local đã đối chiếu: [P](An%20Approximate%20and%20Iterative%20Posit%20Multiplier%20Architecture%20for%20FPGAs.pdf), [F](Customized%20Posit%20Adders%20and%20Multipliers%20using%20the%20FloPoCo%20Core%20Generator.pdf).
+
+**Quyết định phạm vi 22/10/2026:** theo lựa chọn của sinh viên sau trao đổi với giảng viên, chỉ thiết kế và nghiệm thu định dạng `NB=32, ES=3`. Quyết định này thay phạm vi đa định dạng của các phiên bản trước; số liệu, snapshot và nhật ký có ngày giữ nguyên ý nghĩa lịch sử. Các yêu cầu số học, ngưỡng kiểm chứng và coverage vẫn áp dụng cho32/3. Thu hẹp định dạng không đồng nghĩa bỏ chế độ exact, đổi số vòng n hoặc tăng độ chính xác của nhân approximate.
 
 ### Lịch sử thay đổi (Changelog)
 
@@ -37,6 +39,7 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 | v1.18 | 2026-10-15 | Triển khai posit_mac_f 32/3 FW12 W32/Q29, F1–F5 và RNE cuối; 10M giao dịch/0 mismatch với oracle và trace, pipeline đầy/stall/reset và XSim CK2Q đạt. Core approximate thu hẹp12 bit, ABS/borrow một adder. Vivado A35T một run đạt100MHz R2R; giữ final per-n/AC04, CDC/RDC và paired NF/F PPA mở. |
 | v1.19 | 2026-10-17 | NF tách normalize+product P1 → P2 → parse/product bank. L_valid=q+12, H=q+13, II_min=q+14; kiểm chứng/STA riêng tại §11.16. Không đổi L1 hoặc fused. |
 | v1.20 | 2026-10-18 | Promote OPT-02c, SAC abc_tree, product magnitude P2 và sticky prefix;38 module trong production.f. Khóa source/model/build bằng production_freeze.json; không đổi public I/O/parameter, precision, flags hoặc lịch NF/F. Đây là đầu vào tuần14, chưa nghiệm thu final/Gate4. |
+| v1.21 | 2026-10-22 | Chọn duy nhất32/3; chuyển8/0,16/1,32/2 thành bằng chứng lịch sử ngoài phạm vi nghiệm thu mới. AC02 exact32/3 dùng oracle độc lập; cập nhật matrix và kế hoạch. Chỉ sửa tài liệu, không đổi hash RTL/model/constraint hoặc kết quả kiểm cũ. |
 
 **Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Profile hiện thực và giới hạn bằng chứng được tóm tắt tại §1.6/§11.10–§11.16. Nhật ký có ngày ở phụ lục là lịch sử, không ghi đè hợp đồng hiện hành hoặc tự mở rộng một mốc PASS thành toàn bộ AC.
 
@@ -46,20 +49,22 @@ Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh m�
 
 ### 1.1 Mục tiêu
 
-Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham số hóa, trong đó phép nhân là **nhân xấp xỉ dạng lặp dịch-cộng** (theo [P], kế thừa [15]) với số vòng lặp `n` chọn được lúc chạy, kèm môi trường kiểm chứng tự động bit-accurate với SoftPosit, và bộ số liệu accuracy/PPA tái lập giữa MAC v1 non-fused (baseline nội bộ) và MAC v2 fused. FP32/FP16 là đối chứng bổ sung khi có thời gian; không yêu cầu tái hiện RTL gốc tác giả để đóng mục tiêu này.
+Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog với định dạng duy nhất posit(32,3), trong đó phép nhân là **nhân xấp xỉ dạng lặp dịch-cộng** (theo [P], kế thừa [15]) với số vòng lặp `n` chọn được lúc chạy, kèm môi trường kiểm chứng tự động bit-accurate với oracle integer/rational độc lập đúng32/3 (SoftPosit giữ kiểm lịch sử đúng format), và bộ số liệu accuracy/PPA tái lập giữa MAC v1 non-fused (baseline nội bộ) và MAC v2 fused. FP32/FP16 là đối chứng bổ sung khi có thời gian; không yêu cầu tái hiện RTL gốc tác giả để đóng mục tiêu này.
 
 ### 1.2 Phạm vi
 
 **Trong phạm vi (In-scope)**
 
-- Định dạng posit tham số hóa `(NB, ES)`; cấu hình chuẩn: `(8,0)`, `(16,1)`, `(32,2)`, `(32,3)`.
+- **Định dạng duy nhất MUST: posit(32,3)**, với `NB=32`, `ES=3`, `FRAC_MAX=26`, `SF_MAX=240`; exponent có tối đa3 bit tùy độ dài regime. Tham số nội bộ có thể được giữ để tái sử dụng mã, nhưng không tạo cam kết hỗ trợ/đo PPA các format khác.
+- Profile so sánh NF/F giữ `FRAC_W=12`, FLOOR/RNE, OPS1, n0..8; fused giữ W32/Q29 theo hợp đồng hiện hành. `FRAC_W=12` chỉ là precision nhân approximate, không thay26 bit fraction tối đa của định dạng hoặc đầu vào cộng NF. Exact32/3 và OPS0 giữ theo ma trận §6.7; exact fused vẫn MAY.
+- Build nghiệm thu và synthesis MUST truyền tường minh `NB=32, ES=3` xuyên suốt hierarchy. Top NF nguồn đã khóa còn mặc định ES2; không dùng mặc định đó để build sản phẩm32/3. Chuyển mặc định/top sang cố định32/3 là thay đổi RTL cần lint, pilot/hồi quy, kiểm hash và khóa release mới; phiên sửa phạm vi này chưa thực hiện bước đó.
 - Các khối: Parser, Operand Selector (OPS), Shift Amount Calculator (SAC), Shift-Based Multiplier (SBM) + bộ điều khiển lặp, Posit Adder, Rounder/Packer, MAC top.
 - **Hai bản bắt buộc:** MAC v1 non-fused làm baseline nội bộ và MAC v2 fused profile §11.8; hoàn thành NF/Gate3 trước, hoàn thành fused trước nghiệm thu đề tài. Exact fused và cấu hình F phụ là MAY.
 - Ba tầng đối chiếu L0 SoftPosit, L1 mô hình thuật toán và Ideal; RTL là thiết kế được kiểm chứng (§6.1).
 - Testbench tự động, coverage, hồi quy, thống kê sai số (Error Rate, MSE, max error).
 - Tổng hợp/P&R Vivado theo **chính sách bậc thang thiết bị (§7.6)**: nền tảng khảo sát tiếp theo từ17/10 chỉ là Artix-7 D2 A35T (`xc7a35tcpg236-1`); D0 (`xcvu9p`) dành cho đối chiếu cùng device bài báo khi có điều kiện, D1/D3/D4 là phương án bổ sung. So sánh công bằng giữa NF/F; FP32/FP16 MAC là đối chứng bổ sung.
 - **Chiến lược phân kỳ hiện thực (Staged Implementation Strategy)**:
-  - *Giai đoạn 1 (Baseline - Hoàn thành trước Gate 3)*: Hoàn thiện lõi MAC **đơn lẻ cô lập**; exact/RNE khớp L0, approx khớp L1. Bắt tay, giữ đầu ra khi bị chặn và xử lý Zero/NaR đúng là bắt buộc từ giai đoạn này.
+  - *Giai đoạn 1 (Baseline - Hoàn thành trước Gate 3)*: Hoàn thiện lõi MAC **đơn lẻ cô lập**; exact/RNE khớp oracle độc lập32/3, approx khớp L1 và oracle phù hợp. Bắt tay, giữ đầu ra khi bị chặn và xử lý Zero/NaR đúng là bắt buộc từ giai đoạn này.
   - *Giai đoạn 2 (Advanced Optimization - Tích hợp sau Gate 3)*: Khảo sát chồng lấn giao dịch (mục tiêu $\text{II} \approx n$), bypass Zero/NaR với Order FIFO khi cần giữ thứ tự, Output Skid Buffer và tối ưu Clock Enable (CE). Early-stop khi fraction hết bit 1 đã có trong baseline; không coi đây là chức năng chưa triển khai.
 
 **Ngoài phạm vi (Out-of-scope)**
@@ -83,7 +88,7 @@ Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog tham
 | ID | Tiêu chí | Ngưỡng đo được |
 | --- | --- | --- |
 | AC-01 | RTL khớp L1 bit-exact | **0 mismatch** trên ≥ 10^7 vector cho mỗi điểm approx bắt buộc của §6.7, gồm từng OPS, n, ROUND_MODE và ROUND_SCHEME đã chọn; exact theo AC-02. Các hàng MAY/EXT chỉ áp dụng khi triển khai |
-| AC-02 | Chế độ exact (EXACT_EN=1, cfg_mode=0, RNE) khớp SoftPosit bit-exact | posit8: exhaustive mul (2^16 cặp), add (2^16 cặp), MAC (2^24 bộ ba); posit16: exhaustive mul và add (2^32 cặp); posit32: ≥ 10^8 vector ngẫu nhiên phân tầng + toàn bộ corner list. **0 mismatch**; p8/0,p16/1,p32/2 dùng SoftPosit đúng format,32/3 dùng oracle integer/rational độc lập đủ rộng |
+| AC-02 | Chế độ exact32/3 (EXACT_EN=1, cfg_mode=0, RNE) khớp oracle độc lập bit-exact | ≥10^8 vector ngẫu nhiên phân tầng + toàn bộ corner list; **0 mismatch**. Dùng oracle integer/rational đủ rộng đúng32/3 cho nhân, cộng và MAC NF theo hợp đồng từng phép. SoftPosit p32/ES2 không phải chuẩn32/3. Exhaustive8/16 và exact32/2 không còn là điều kiện nghiệm thu mới; các kết quả cũ giữ lịch sử. Không suy approximate PASS thành exact PASS hoặc yêu cầu exact fused từ dòng này |
 | AC-03 | Đánh giá paired accuracy NF/F theo §11.8 | Pilot10^5, phép đo chính≥10^6 triple/profile; oracle độc lập, seed/corpus/ngoại lệ đóng băng, báo cả kết quả bất lợi. Không thay AC01/AC02 |
 | AC-04 | Bao phủ | Line ≥ 95%, branch ≥ 90%, toggle ≥ 85%; functional coverage 100% các bin hợp lệ của §6.6. Bin không thể đạt do cấu hình phải có giải thích và loại trừ được truy vết |
 | AC-05 | Tổng hợp | Báo cáo LUT/FF/CARRY/DSP/BRAM, WNS, fmax post-route cho ≥ 3 cấu hình; DSP = 0, BRAM = 0. Nền tảng theo chính sách bậc thang §7.6 (có phương án khi không có `xcvu9p`) |
@@ -132,14 +137,11 @@ x = (-1)^s × useed^k × 2^e × (1.f),   useed = 2^(2^ES)
 - `0…0` là **zero**; `1 0…0` là **NaR** (Not a Real). Với kết quả hữu hạn khác 0, vượt dải thì bão hòa độ lớn về `maxpos`/`minpos`; zero vẫn được xuất khi tích bằng 0 hoặc tổng triệt tiêu chính xác. NaR chỉ xuất theo quy tắc lan truyền ngoại lệ.
 - Số âm biểu diễn bằng bù hai của toàn bộ chuỗi bit.
 
-### 2.2 Bảng cấu hình chuẩn
+### 2.2 Cấu hình thiết kế duy nhất
 
 | Cấu hình | NB | ES | useed | FRAC_MAX = NB−3−ES | maxpos | minpos | Ghi chú |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| posit8 | 8 | 0 | 2 | 5 | 2^6 = 64 | 2^-6 ≈ 1.56×10^-2 | Trùng kiểu p8 của SoftPosit |
-| posit16 | 16 | 1 | 4 | 12 | 2^28 ≈ 2.7×10^8 | 2^-28 ≈ 3.7×10^-9 | Trùng kiểu p16 của SoftPosit |
-| posit32 | 32 | 2 | 16 | 27 | 2^120 ≈ 1.3×10^36 | 2^-120 ≈ 7.5×10^-37 | Trùng kiểu p32 của SoftPosit |
-| posit32-paper | 32 | 3 | 256 | 26 | 2^240 ≈ 1.8×10^72 | 2^-240 ≈ 5.6×10^-73 | Cấu hình của [P] |
+| posit32/ES3 | 32 | 3 | 256 | 26 | 2^240 ≈ 1.8×10^72 | 2^-240 ≈ 5.6×10^-73 | Duy nhất cho NF/F; cùng định dạng với [P], không chứng minh cùng RTL tác giả |
 
 Tham chiếu IEEE-754: FP32 có max ≈ 3.4×10^38, subnormal nhỏ nhất ≈ 1.4×10^-45; FP16 có max = 65504, subnormal nhỏ nhất ≈ 6.0×10^-8.
 
@@ -195,17 +197,17 @@ Quy tắc: xây chuỗi `regime | exponent | fraction` đầy đủ, cắt tại
 
 | ID | Ưu tiên | Yêu cầu |
 | :--- | :---: | :--- |
-| FR-01 | MUST | Tham số hóa `(NB, ES)`; cấu hình chuẩn ở §2.2 phải tổng hợp và kiểm chứng được |
+| FR-01 | MUST | Chỉ posit(32,3) ở §2.2 phải tổng hợp và kiểm chứng được; NB/ES nội bộ có thể giữ tham số nhưng build sản phẩm phải khóa32/3 |
 | FR-02 | MUST | Xử lý Zero/NaR và giữ thứ tự theo §5.3. Đúng chức năng là MUST; bypass rút ngắn độ trễ và CE là tối ưu SHOULD sau Gate 3 |
 | FR-03 | MUST | Parser giải mã đúng `(s, is_zero, is_nar, sf, frac)` với mọi chuỗi bit, gồm cả số âm và trường hợp regime chiếm hết `NB-1` bit |
 | FR-04 | MUST | Packer làm tròn RNE, bão hòa về maxpos/minpos, không sinh NaR/zero từ phép toán khác NaR/zero (trừ khi hai số hạng triệt tiêu chính xác cho ra 0) |
-| FR-05 | MUST | Multiplier `cfg_mode=0`, `EXACT_EN=1`, `ROUND_MODE="RNE"`: giữ toàn bộ fraction, chạy đến khi SAC hết bit 1, khớp `p<N>_mul` của L0 ở các cấu hình §6.2 |
+| FR-05 | MUST | Multiplier32/3 `cfg_mode=0`, `EXACT_EN=1`, `ROUND_MODE="RNE"`: giữ toàn bộ fraction, chạy đến khi SAC hết bit 1, khớp oracle nhân integer/rational độc lập32/3 theo AC02 |
 | FR-06 | MUST | Multiplier chế độ **approx**: số vòng lặp tối đa `cfg_n` cấu hình lúc chạy; khớp L1 bit-exact |
 | FR-07 | MUST | Dừng sớm (early termination) khi SAC không còn bit 1 trong fraction toán hạng X |
 | FR-08 | SHOULD | OPS chọn toán hạng làm X: cố định A, hoặc chọn toán hạng có ít bit 1 hơn (popcount) theo `cfg_ops` |
-| FR-09 | MUST | Adder khớp `p<N>_add` bit-exact (RNE) |
+| FR-09 | MUST | Adder32/3 khớp oracle cộng integer/rational độc lập bit-exact (RNE), không dùng p32_add ES2 làm chuẩn |
 | FR-10 | MUST | MAC NF mới: D=R(R(P_hat)+C_eff); exact P_hat=A×B và khớp add(mul(a,b),C_eff) của oracle đúng format. Approx P_hat là tổng term FLOOR đã chốt, không ngầm thay bằng tích exact hoặc bits legacy |
-| FR-11 | MUST (profile so sánh §11.8) | MAC fused v2: làm tròn một lần ở đầu ra (§5.12). Approx cửa sổ hữu hạn phải khớp L1; so L0 chỉ đánh giá sai số. Exact fused posit8/16 chỉ được tuyên bố khi giữ đủ tích và phần căn chỉnh để khớp `p<N>_mulAdd`; không suy ra exact từ `ACC_WIN` mặc định |
+| FR-11 | MUST (profile so sánh §11.8) | MAC fused v2 tại32/3: làm tròn một lần ở đầu ra (§5.12). Approx cửa sổ hữu hạn phải khớp L1 và oracle độc lập đúng hợp đồng. Exact fused32/3 là MAY, chỉ được tuyên bố khi giữ đủ tích/phần căn chỉnh và khớp oracle FMA độc lập; không suy exact từ ACC_WIN mặc định |
 | FR-12 | SHOULD | `acc_mode=1` dùng trạng thái tích lũy làm C, bỏ qua c bên ngoài; làm tròn sau từng giao dịch, duy trì ngữ nghĩa NaR trong accumulator (mã Posit hoặc cờ tương đương, không bắt buộc FF acc_nar_q riêng). Thứ tự cập nhật và ngữ nghĩa `acc_clr` theo §4.2 |
 | FR-13 | MUST | Giao tiếp valid/ready, chịu backpressure, độ trễ thay đổi theo `n` |
 | FR-14 | SHOULD | Cờ trạng thái: `nar`, `sat_max`, `sat_min`, `inexact`, `approx_cut` (bị cắt do đạt `cfg_n`) |
@@ -238,7 +240,7 @@ Phạm vi NF đã kiểm: bốn tuple ở §2.2,F=NB-3-ES>=2,FRAC_W=min(F,12),N_
 | Tham số | Mặc định | Ý nghĩa |
 | --- | --- | --- |
 | `NB` | 32 | Độ rộng tổng thể của số Posit (bitwidth) |
-| `ES` | 2 | Số bit exponent tối đa (exponent size) |
+| `ES` | 3 (build sản phẩm) | Số bit exponent tối đa; override3 bắt buộc, default NF source frozen còn2 theo ghi chú trên |
 | `FRAC_MAX` | tính | Số bit fraction tối đa `= NB - 3 - ES` (27 cho posit32 ES=2, 26 cho ES=3, 12 cho posit16, 5 cho posit8) |
 | `FRAC_W` | NF: min(FRAC_MAX,12) | Độ rộng fraction SBM ở chế độ xấp xỉ; bằng12 cho profile32/3 và bằng5 cho8/0 |
 | `EXACT_EN` | 1 | Bật khả năng chạy exact; chế độ từng giao dịch do `cfg_mode` chọn. Exact: `ACC_W = 2×FRAC_MAX + 2`. Approx vẫn dùng độ rộng/chính sách §5.6 dù `EXACT_EN=1` |
@@ -524,7 +526,7 @@ Ngõ vào hai bộ ba unpacked `(s, sf, m)` với `m = 1.f` rộng `W = FRAC_MAX
 
 #### A. Hợp đồng giao diện W10-01 — chốt 12/10/2026
 
-**Phạm vi:** posit_add cho NF/v0/v1 và cộng hai Posit độc lập; bốn format nghiệm thu (8,0),(16,1),(32,2),(32,3). F=FRAC_MAX=NB-3-ES là fraction đầy đủ của format, khác FRAC_W12 của multiplier approximate. NB32/ES3 dùng F26, không cắt đầu vào adder còn12 bit. Các cấu hình khác chưa nghiệm thu; adapter baseline yêu cầu F>=2, không tuyên bố hỗ trợ toàn bộ tuple hợp lệ của IP. Không đổi mô hình L1 đóng băng.
+**Phạm vi:** posit_add cho NF/v0/v1 và cộng hai Posit độc lập; format nghiệm thu hiện hành32/3; bốn format từng kiểm (8,0),(16,1),(32,2),(32,3) là bằng chứng lịch sử. F=FRAC_MAX=NB-3-ES là fraction đầy đủ của format, khác FRAC_W12 của multiplier approximate. NB32/ES3 dùng F26, không cắt đầu vào adder còn12 bit. Các cấu hình khác chưa nghiệm thu; adapter baseline yêu cầu F>=2, không tuyên bố hỗ trợ toàn bộ tuple hợp lệ của IP. Không đổi mô hình L1 đóng băng.
 
 Đầu vào hữu hạn khác0 là exact normalized 1.f: `a_frac/b_frac` chỉ chứa F bit sau hidden, scale signed trong[-SF_MAX,SF_MAX]; parser hoặc round_unpacked cung cấp. Không nhận prepack P_hat, GRS/đuôi của tích chưa round, hay sticky_input; metadata flags không thay giá trị toán hạng. Hai toán hạng, special và flags_in được nhận nguyên tử tại cùng handshake. Không có cfg_n/cfg_ops hoặc acc_mode bên trong adder; MAC quản lý C_eff/config/feedback theo §4.2.
 
@@ -658,7 +660,7 @@ Hợp đồng bắt buộc: round_unpacked(u, mode) tương đương parse(pack(
 
 **Phạm vi:** baseline ROUND_MODE="RNE", PIPE_PACK=2, cùng clk, hai slot elastic. Lõi tổ hợp và pipeline dùng cùng hai module posit_pack_prepare/posit_pack_finish, đối chiếu độc lập với L1. Đầu vào hữu hạn khác 0 đã chuẩn hóa thành sign, sf signed và fraction của 1.f; phần dư thấp chuyển thành sticky của độ lớn đúng. Packer không chuẩn hóa mantissa chưa chuẩn hóa và không diễn giải phần dư có dấu của fused bằng một sticky OR chung.
 
-**Giao diện chốt07/10/2026:** rtl/packer/posit_pack_comb.sv và rtl/packer/posit_pack.sv dùng NB, ES, F_IN, SF_W, ROUND_MODE. F_IN mặc định 2*FRAC_MAX+1: posit8/0=11, posit16/1=25, posit32/2=55, posit32/3=53. Điều kiện F_IN>=FRAC_MAX+2 và <=63 cho adapter/oracle L1 hiện tại; bốn format này là phạm vi nghiệm thu, cấu hình khác cần kiểm riêng. frac[F_IN-1:0] không hidden, giá trị fraction=frac/2^F_IN; frac=0 cùng is_zero=0 biểu diễn mantissa1.0, không phải số0. F_IN mặc định giữ đủ tích của hai fraction FRAC_MAX bit sau chuẩn hóa, kể cả bit thấp thêm do tích>=2 được dịch phải một vị trí.
+**Giao diện chốt07/10/2026:** rtl/packer/posit_pack_comb.sv và rtl/packer/posit_pack.sv dùng NB, ES, F_IN, SF_W, ROUND_MODE. F_IN mặc định 2*FRAC_MAX+1: posit8/0=11, posit16/1=25, posit32/2=55, posit32/3=53. Điều kiện F_IN>=FRAC_MAX+2 và <=63 cho adapter/oracle L1 hiện tại; chỉ32/3 là phạm vi nghiệm thu hiện hành; các format còn lại giữ như kiểm lịch sử. frac[F_IN-1:0] không hidden, giá trị fraction=frac/2^F_IN; frac=0 cùng is_zero=0 biểu diễn mantissa1.0, không phải số0. F_IN mặc định giữ đủ tích của hai fraction FRAC_MAX bit sau chuẩn hóa, kể cả bit thấp thêm do tích>=2 được dịch phải một vị trí.
 
 Ports số học: sign, is_zero, is_nar, sf signed, frac, sticky, flags_in[4:0]. Đầu ra d[NB-1:0], flags[4:0]; wrapper tuần tự thêm clk/reset_n/in_valid/in_ready/out_valid/out_ready. flags_in[4]=1 cũng buộc NaR, không cho mất NaR từ phép toán trước. Các bit cờ theo §4.2.
 
@@ -920,7 +922,7 @@ Luồng hành vi: nhận A/B/C_eff/config nguyên tử → parse → OPS launch 
 | **L1** | Legacy khác week11::Model của NF; F_W32 và full-grid oracle đã kiểm theo W12-F-1 | Bit-exact theo từng profile; F32/3 approx FW12 đã đóng G-F-L1,không suy exact F hoặc RTL F đã đạt |
 | **Ideal** | Tích/tổng chính xác của hai giá trị thực bằng số nguyên rộng (`unsigned __int128` cho mantissa, hoặc Python `fractions.Fraction`) | Dùng để tính Err theo định nghĩa của [P] |
 
-Lý do cần tầng Ideal riêng: mỗi significand Posit32/ES2 có tối đa28 bit kể cả hidden,tích có thể dài56 bit, vượt độ chính xác 53 bit của `double`, nên không được dùng `double` làm chuẩn ở posit32.
+Lý do cần tầng Ideal riêng: mỗi significand Posit32/ES3 có tối đa27 bit kể cả hidden,tích có thể dài54 bit, vượt độ chính xác 53 bit của `double`, nên không được dùng `double` làm chuẩn ở posit32.
 
 **Nguyên tắc độc lập và thẩm định L1 trước khi kiểm chứng RTL**:
 
@@ -1036,17 +1038,12 @@ Nhóm regime 256 bin áp dụng posit32; với NB nhỏ hơn phải cắt các k
 
 | Nhóm | (NB, ES) | FRAC_W | cfg_mode / n | OPS | Số vector | Kiểm |
 | --- | --- | --- | --- | --- | --- | --- |
-| Exact posit8 | (8,0) | 5 | exact | 0 | exhaustive | L0 bit-exact |
-| Exact posit16 | (16,1) | 12 | exact | 0 | exhaustive mul/add; MAC ≥ 10^9 | L0 bit-exact |
-| Exact posit32 | (32,2) | 27 | exact | 0,1 | ≥ 10^8 | L0 bit-exact |
+| Exact posit32 (AC02) | (32,3) | 26 (fraction đầy đủ) | exact/RNE; NF và các đơn vị, không phải F exact | 0,1 theo hợp đồng | ≥10^8 + corner theo AC02 | Oracle integer/rational độc lập32/3, 0 mismatch |
 | Approx posit32-paper | (32,3) | 12 | n ∈ {0,1,2,3,4,5,6,8} | 0,1 | ≥ 10^7 mỗi điểm bắt buộc | L1 bit-exact; Ideal/posit exact ES=3 thống kê, không dùng p32 ES=2 làm chuẩn cùng giá trị |
-| Approx posit32 | (32,2) | 12 | n ∈ {1,2,3,4} | 0,1 | ≥ 10^7 mỗi n | L1 bit-exact; L0 thống kê |
 | NF/F profile so sánh chính (MUST, cả hai bản) | (32,3) | 12 | approx; n ∈ {0,1,2,3,4,5,6,7,8} | 1 | ≥ 10^7 mỗi n và mỗi bản, FLOOR/RNE | NF=L1 NF; F_W=L1 F_W sau §5.12-c; oracle ES3 integer/rational cho kiểm reference/accuracy, không dùng SoftPosit ES2 |
-| v2 approx posit32 bổ trợ (MAY) | (32,2) | 12 | n ∈ {1,2,3,4} | 0,1 | ≥ 10^7 mỗi n/OPS nếu triển khai | L1 fused sau khi chốt §5.12-c; p32_mulAdd thống kê |
-| v2 exact posit8 (MAY) | (8,0) | 5 | exact | 0 | exhaustive (2^24) nếu triển khai | p8_mulAdd bit-exact, oracle đủ rộng |
-| Quét FRAC_W (MAY) | (32,2) hoặc (32,3) | 8, 12, 16, 23 | n = 3 | 1 | ≥ 10^6 | Cho EXT-B |
+| Quét FRAC_W (MAY) | (32,3) | 8, 12, 16, 23 | n = 3 | 1 | ≥ 10^6 | Cho EXT-B; không đổi định dạng Posit |
 
-Ma trận final khác ngưỡng Gate 1/1B ở §6.1. Hàng NF/F profile chính bổ sung, không thay hoặc giảm các hàng bắt buộc đã có. F32/3 OPS1/FLOOR/RNE là MUST; exact fused posit8 và F32/2 vẫn MAY. Nghiệm thu F gồm cả acc_mode/control/flags và coverage §6.6 hợp lệ; chọn test/corpus trước chạy. Tách theo module: final legacy multiplier vẫn kiểm exact/RNE,approx/RNE+STICKY_ACC và local TRUNC+FLOOR theo phạm vi công bố; không gọi local TRUNC là RTL tác giả. Final NF/F so sánh chính dùng FLOOR/RNE và cùng P_hat. NF top hiện không expose JAM/TRUNC; không dùng nghiệm thu legacy để suy NF/F đã hỗ trợ hai mode đó. Chạy từng OPS và n đã liệt kê; tổ hợp ROUND_MODE/SCHEME khác là MAY và phải có regression nếu công bố hỗ trợ. n=0 luôn có test đơn vị/corner cho mọi profile, dù không phải mỗi hàng đều chạy 10 triệu mẫu ở n=0.
+**Phạm vi hiện hành từ22/10:** chỉ32/3; các hàng8/0,16/1,32/2 của bản trước được rút khỏi nghiệm thu mới, không ghi PASS cho các phép chưa chạy. Kết quả đa format và manifest W14 cũ giữ nguyên; khi tổng hợp hồ sơ mới phải lọc đúng32/3, không cộng lượt32/2 vào số lượt32/3. Gate1/1B ở §6.1 mô tả nền tảng và mốc lịch sử; áp dụng mới dùng oracle32/3 độc lập và ngưỡng tương ứng. NF/F OPS1/FLOOR/RNE vẫn MUST từng n0..8; exact NF theo AC02 vẫn mở riêng, exact fused không tự thành MUST. Nghiệm thu gồm acc_mode/control/flags và coverage hợp lệ; chọn corpus trước chạy. Legacy32/3 giữ profile kiểm đã công bố, không suy NF/F hỗ trợ JAM/TRUNC từ legacy. Các tổ hợp ROUND_MODE/SCHEME bổ sung là MAY; n=0 luôn có đơn vị/corner.
 
 ### 6.8 Chỉ số sai số
 
@@ -1105,7 +1102,7 @@ FAIL khi mismatch RTL/L1 hoặc exact/oracle đúng format; giữ seed/input/con
 
 | Nhóm | Thiết kế |
 | --- | --- |
-| Đề tài | **So sánh chính MUST:** MAC v1 NF baseline nội bộ và MAC v2 F, cùng `(32,3)`, FRAC_W12, OPS1, FLOOR/RNE; n0..8, ưu tiên đo n2/4/8 rồi đủ sweep. F dùng ACC_WIN/chính sách cut được khóa sau L1 tuần12, không mặc định theo ứng viên §4.1. So accuracy, LUT/FF/CARRY/DSP/BRAM, timing post-route, latency, II và throughput theo §11.8. NF32/2 giữ yêu cầu bắt buộc của §6.7; F32/2, quét FRAC_W và exact fused là khảo sát bổ trợ; không đặt trước fmax hoặc mặc định F chính xác hơn NF. |
+| Đề tài | **So sánh chính MUST:** MAC v1 NF baseline nội bộ và MAC v2 F, cùng `(32,3)`, FRAC_W12, OPS1, FLOOR/RNE; n0..8, ưu tiên đo n2/4/8 rồi đủ sweep. F dùng ACC_WIN/chính sách cut được khóa sau L1 tuần12, không mặc định theo ứng viên §4.1. So accuracy, LUT/FF/CARRY/DSP/BRAM, timing post-route, latency, II và throughput theo §11.8. NF32/2 và các format khác không còn bắt buộc từ22/10; quét FRAC_W tại32/3 và exact fused32/3 là khảo sát bổ trợ; không đặt trước fmax hoặc mặc định F chính xác hơn NF. |
 | Đối chứng posit bổ sung (MAY) | PACoGen multiplier ([23], mã nguồn [24]) sinh ra cho **cùng** `(NB, ES)` với thiết kế của bạn, DSP thay bằng LUT |
 | Đối chứng FP32/FP16 bổ sung (MAY) | (B1) Xilinx Floating-Point Operator IP: bộ nhân + bộ cộng, không dùng DSP, độ trễ chọn để fmax gần nhất với thiết kế của bạn; (B2, MAY) bộ FP sinh bởi FloPoCo hoặc tự viết |
 | Đối chiếu bài báo | Multiplier riêng lẻ (không adder), `(32,3)`, `FRAC_W=12` để so với 698 LUT / 289 FF / 575 MHz của [P] (so tuyệt đối chỉ khi ở bậc D0; nếu không thì so tỉ lệ theo §7.6) |

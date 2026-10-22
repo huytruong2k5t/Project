@@ -8,21 +8,26 @@
 // Contract: NB>=4, NB<=32, 0<=ES<=NB-4; canonical Zero/NaR outputs.
 // $Log: 2026-10-16: XOR-normalized tail shares one LOD; no interface change.
 //-----------------------------------------------------------------------------
-module posit_parser_comb #(
-    parameter int NB=32,
-    parameter int ES=2,
-    parameter int FRAC_MAX=NB-3-ES,
-    parameter int SF_W=$clog2(64'd4 * (longint'(NB) - 64'd2)*(64'd1<<ES)+64'd4)+1
-)(
-    input logic [NB-1:0] p,
+module posit_parser_comb (
+    input logic [31:0] p,
     output wire s,
     output wire is_zero,
     output wire is_nar,
-    output wire signed [SF_W-1:0] sf,
-    output wire [FRAC_MAX-1:0] frac
+    output wire signed [10:0] sf,
+    output wire [25:0] frac
 );
-    localparam int CNT_W=$clog2(NB-1);
-    localparam int REG_W=CNT_W+1;
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // NB: 32 (original).
+    localparam int NB = 32;
+    // ES: 2 (original).
+    localparam int ES = 3;
+    // FRAC_MAX: NB-3-ES (original).
+    localparam int FRAC_MAX = 26;
+    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2)*(64'd1<<ES)+64'd4)+1 (original).
+    localparam int SF_W = 11;
+
+    localparam int CNT_W=5; // $clog2(NB-1)
+    localparam int REG_W=6; // CNT_W+1
     if(NB<4 || NB>32 || ES<0 || ES>NB-4 || FRAC_MAX!=NB-3-ES || SF_W<REG_W+ES)
         begin : g_invalid
             initial $fatal(1,"posit_parser_comb: unsupported parameters");
@@ -50,11 +55,7 @@ module posit_parser_comb #(
     // Sentinel supplies the no-terminator count NB-2.
     assign detector_in = {terminator_bits, 1'b1};
 
-    lod_lzd_core #(
-        .N    (NB - 1),
-        .MODE (0),
-        .S    (CNT_W)
-    ) u_regime_detector (
+    lod_lzd_core_fixed2  u_regime_detector (
         .in  (detector_in),
         .K   (cnt),
         .vld (unused_terminator_valid)
@@ -64,7 +65,7 @@ module posit_parser_comb #(
     assign regime=~({1'b0,cnt}^{REG_W{r}});
     // Drop sign, FRB and one more bit BEFORE the variable shift.
     // This equals shift rest by cnt, then drop the terminator (L1 formulation).
-    dyn_left_shifter #(.N(NB-3),.SHIFT_W(CNT_W)) align_payload(
+    dyn_left_shifter  align_payload(
         .in(magnitude[NB-4:0]),.b(cnt),.out(payload));
     if(ES==0) begin:g_es0
         assign finite_sf=sf_value_t'(regime);

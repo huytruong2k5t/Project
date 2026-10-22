@@ -1,3 +1,18 @@
+## RTL hiện hành — fixed posit32/ES3, hoàn tất23/10/2026
+
+Release `POSIT_MAC_RTL_20261022_FIXED32_3`:54 module trong `rtl/production.f`,
+không public parameter hoặc override, cổng literal; các hằng nội bộ dùng localparam.
+Giữ biểu thức genvar/kết nối bit để mô tả cấu trúc. Các biến thể fixed2/fixed3 là
+độ rộng khác nhau của cùng khối trong posit32/ES3, không phải định dạng Posit khác.
+Bản đồ đầy đủ: `results/fixed32_3_20261022/specialization.json`.
+NF exact-capable,F approximate-only; cfg_mode/n/OPS và accumulator vẫn theo spec.
+20M completed NF/F và740k so sánh tổ hợp/0 mismatch;ModelSim và54 strict lint đạt.
+L1/oracle không sửa. STA/PPA/final per-n/AC02/AC04 mới chưa được đóng bằng lượt này.
+Các release38 module,parameter API,candidate và số đo bên dưới giữ ý nghĩa lịch sử.
+Chỉ compile file list hiện hành; không compile đệ quy hoặc trộn với candidate.
+
+---
+
 # Thư mục Mã nguồn RTL (`rtl/`)
 
 ## Release production đã khóa — 18/10/2026
@@ -23,10 +38,21 @@ Producer lịch sử không dùng để refreeze/ghi đè release mới. W14-01.
 
 **Tài liệu hiện hành:** [PLAN — kiến trúc/build L1/NF/F](../l1/PLAN.md), [Optimization — tối ưu và kiểm chứng/STA](../../doc/Optimization.md), [tiến độ — việc còn mở](../docs/TIEN_DO_DO_AN.md).
 
-## Bản đồ RTL hiện hành — 15/10/2026
+## Bản đồ RTL hiện hành — cập nhật 19/10/2026
 
 Đọc mục này trước; các mục có ngày bên dưới là lịch sử triển khai, không phải danh sách file hiện hành.
-Tổ chức lại chỉ đổi vị trí file, giữ nguyên byte mã nguồn, tên module, parameter, I/O và hành vi.
+Giữ nguyên byte mã nguồn, tên module, parameter, I/O và hành vi.
+Lần dọn 19/10 không đổi đường dẫn production; 23 file ứng viên cũ được bỏ khỏi
+cây làm việc sau khi lưu ZIP và kiểm SHA256. Còn 9 snapshot thuộc gói đã chọn.
+Xem [danh mục snapshot](candidates/README.md) và
+[kho ứng viên cũ/cách phục hồi](../archive/README.md).
+Thử mới OPT-15 ở `candidates/mac_nf/opt15/` chia sẻ hai parser input và một packer NF;
+đã kiểm/đo theo Optimization8.35 nhưng chưa promote, không nằm trong production.f.
+F có `candidates/mac_f/opt15/parser2/` và `candidates/mac_f/opt16/shared_nf_add/`:
+cùng hai parser/một packer;OPT-16 dùng A1/A2/A3 của NF với adapter tích không làm tròn.
+File list riêng và `candidates/opt15_sources.json` chọn đúng wrapper;kiểm/STA tại Optimization8.36.
+Các đường dẫn candidate ở phần lịch sử bên dưới là đường dẫn tại thời điểm đo;
+phải phục hồi kho nén trước khi replay nếu file đó không còn trong cây làm việc.
 
 | Thư mục | Nội dung |
 | --- | --- |
@@ -38,9 +64,10 @@ Tổ chức lại chỉ đổi vị trí file, giữ nguyên byte mã nguồn, t
 | `mac_nf/` | Top `posit_mac_nf`, wrapper, product pack và magnitude parser |
 | `mac_f/` | Top `posit_mac_f`, wrapper và pipeline F1–F5 |
 | `research/paper/` | Nhánh tái dựng paper độc lập với hợp đồng NF/F |
-| `candidates/parser/opt12/` | Hai parser candidate đã thử; chưa nằm trong production.f, xem Optimization8.31.7 |
-| `candidates/adder/` | Snapshot alignment/normalization; OPT-02c đã promote, các bản khác giữ nghiên cứu |
-| `candidates/primitives/` | Các phương án thử shifter/LOD; trùng tên module với bản chính |
+| `candidates/parser/opt12/` | Snapshot hai parser của gói đã chọn; production nằm trong `parser/` |
+| `candidates/adder/opt02c/` | Snapshot A1 đã promote; production nằm trong `adder/` |
+| `candidates/multiplier/opt05/abc_tree/`, `candidates/mac_nf/opt09/`, `candidates/packer/opt10a/` | Snapshot SAC/control, product path NF và packer đã chọn |
+| `../archive/rtl_candidates_pre120_20261019.zip` | Các align/normalization/prepack/SAC và primitive thử cũ; không compile mặc định |
 | `benchmarks/` | Wrapper đo PPA/so sánh, không ghép vào IP sản phẩm |
 | `posit_mac.vh` | Header dùng chung, giữ tại gốc để `-Irtl`/`+incdir+rtl` không đổi |
 | `production.f` | Danh sách 38 module chính, không gồm nghiên cứu/candidate/benchmark |

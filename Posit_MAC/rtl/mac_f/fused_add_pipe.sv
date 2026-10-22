@@ -7,9 +7,7 @@
 // $Source: $ $Revision: 1.0 $ $Log: Week13 RTL implementation. $
 //-----------------------------------------------------------------------------
 `include "posit_mac.vh"
-module fused_add_pipe #(
-    parameter int SF_W = 11
-)(
+module fused_add_pipe (
     input  logic clk,
     input  logic reset_n,
     input  logic in_valid,
@@ -17,23 +15,27 @@ module fused_add_pipe #(
     output wire out_valid,
     input  logic out_ready,
     input  logic [13:0] p_magnitude,
-    input  logic signed [SF_W-1:0] p_scale,
+    input  logic signed [10:0] p_scale,
     input  logic p_sign,
     input  logic p_zero,
     input  logic is_nar_in,
     input  logic [1:0] loss_in,
-    input  logic signed [SF_W-1:0] c_sf,
+    input  logic signed [10:0] c_sf,
     input  logic [25:0] c_frac,
     input  logic c_sign,
     input  logic c_zero,
     output wire sign,
     output wire is_zero,
     output wire is_nar,
-    output wire signed [SF_W-1:0] sf,
+    output wire signed [10:0] sf,
     output wire [52:0] frac,
     output wire sticky,
     output wire [4:0] flags_out
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // SF_W: 11 (original).
+    localparam int SF_W = 11;
+
     typedef struct packed {
         logic [30:0] large_value;
         logic [30:0] small_value;
@@ -112,7 +114,7 @@ module fused_add_pipe #(
     end
     assign in_ready = meta_sync2 && ready[0];
     assign out_valid = meta_sync2 && valid_q[4];
-    fused_prepare_comb #(.SF_W (SF_W)) u_prepare (
+    fused_prepare_comb  u_prepare (
         .p_magnitude (p_magnitude),
         .p_scale (p_scale),
         .p_sign (p_sign),
@@ -153,7 +155,7 @@ module fused_add_pipe #(
         .sign (f4_d.sign),
         .borrow (borrow)
     );
-    fused_norm_comb #(.SF_W (SF_W)) u_norm (
+    fused_norm_comb  u_norm (
         .magnitude (f4_q.magnitude),
         .anchor (f4_q.anchor),
         .is_zero (f5_d.zero),

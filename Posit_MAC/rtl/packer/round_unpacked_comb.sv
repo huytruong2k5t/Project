@@ -6,34 +6,35 @@
 // Description   : Normative parse(pack(u)) reference implementation.
 //-----------------------------------------------------------------------------
 // $Source: $ $Revision: 1.0 $ $Log: W11 first implementation; STA not claimed. $
-module round_unpacked_comb #(
-    parameter int NB = 32,
-    parameter int ES = 3,
-    parameter int F = NB-3-ES,
-    parameter int F_IN = 2*F+1,
-    parameter int SF_W = $clog2(64'd4*(longint'(NB)-64'd2)*(64'd1<<ES)+64'd4)+1
-)(
+module round_unpacked_comb (
     input logic sign,
     input logic is_zero,
     input logic is_nar,
-    input logic signed [SF_W-1:0] sf,
-    input logic [F_IN-1:0] frac,
+    input logic signed [10:0] sf,
+    input logic [52:0] frac,
     input logic [4:0] flags_in,
     output wire sign_o,
     output wire is_zero_o,
     output wire is_nar_o,
-    output wire signed [SF_W-1:0] sf_o,
-    output wire [F-1:0] frac_o,
+    output wire signed [10:0] sf_o,
+    output wire [25:0] frac_o,
     output wire [4:0] flags_o
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // NB: 32 (original).
+    localparam int NB = 32;
+    // ES: 3 (original).
+    
+    // F: NB-3-ES (original).
+    
+    // F_IN: 2*F+1 (original).
+    
+    // SF_W: $clog2(64'd4*(longint'(NB)-64'd2)*(64'd1<<ES)+64'd4)+1 (original).
+    
+
     wire [NB-1:0] packed_value;
     wire numerical_sticky = 1'b0;
-    posit_pack_comb #(
-        .NB(NB),
-        .ES(ES),
-        .F_IN(F_IN),
-        .SF_W(SF_W)
-    ) u_pack (
+    posit_pack_comb  u_pack (
         .sign(sign),
         .is_zero(is_zero),
         .is_nar(is_nar),
@@ -44,11 +45,7 @@ module round_unpacked_comb #(
         .d(packed_value),
         .flags(flags_o)
     );
-    posit_parser_comb #(
-        .NB(NB),
-        .ES(ES),
-        .SF_W(SF_W)
-    ) u_parse (
+    posit_parser_comb  u_parse (
         .p(packed_value),
         .s(sign_o),
         .is_zero(is_zero_o),

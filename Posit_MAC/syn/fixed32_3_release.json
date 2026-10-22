@@ -1,0 +1,16 @@
+{
+  "release_id": "POSIT_MAC_RTL_20261022_FIXED32_3",
+  "format": {
+    "NB": 32,
+    "ES": 3
+  },
+  "part": "xc7a35tcpg236-1",
+  "source_list": "rtl/production.f",
+  "clock_target_ns": 8.3,
+  "clock_xdc": "syn/constraints/a35t_clock_120mhz.xdc",
+  "io_xdc": "syn/constraints/a35t_benchmark_100mhz.xdc",
+  "qualification": "FUNCTION_ONLY_STA_NOT_RERUN",
+  "generics": {},
+  "nf_exact_enabled": true,
+  "f_exact_enabled": false
+}

@@ -11,6 +11,9 @@ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 
 
 def validate(manifest,root=R):
+    if manifest.get('status') == 'FIXED32_3_FUNCTION_VERIFIED':
+        from audit_fixed32_3 import validate as validate_fixed
+        return validate_fixed(manifest, root)
     assert manifest['status']=='LOCKED_FOR_W14','RTL release is not locked'
     for group in ('rtl_sha256','model_sha256','build_contract_sha256'):
         for name,digest in manifest[group].items():
@@ -77,7 +80,7 @@ def main():
         except AssertionError:rejected+=1
         assert rejected==4
         print('Freeze anti-tamper guards: 4/4 rejected in-memory mutations; live data untouched')
-    print('RTL RELEASE PASS '+manifest['release_id']+'; 38 modules, frozen model/build contract unchanged')
+    print('RTL RELEASE PASS '+manifest['release_id']+'; '+str(len(manifest['production_files']))+' modules, frozen model/build contract checked')
 
 
 if __name__=='__main__':main()

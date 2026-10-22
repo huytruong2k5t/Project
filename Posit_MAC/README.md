@@ -7,21 +7,29 @@ cấu hình xấp xỉ và hai kiến trúc MAC để so sánh nội bộ.
 **Phạm vi chốt22/10/2026: duy nhất posit(32 bit, ES=3)** cho cả NF và F.
 Các format khác giữ bằng chứng lịch sử, không thuộc nghiệm thu mới.
 Giữ profile nhân FW12/FLOOR/RNE/OPS1/n0..8 và fused W32/Q29.
-Build phải truyền tường minh NB32/ES3; top NF đã khóa còn default ES2,
-chưa đổi RTL/default hoặc khóa release mới trong lần cập nhật tài liệu này.
+RTL production hiện đã cố định32/3:54 module không còn public parameter,
+cổng có độ rộng literal; build không truyền NB/ES hoặc feature override.
 Exact32/3 vẫn theo AC02 với oracle độc lập; không dùng SoftPosit ES2 làm chuẩn.
 
 ## 1. Bản dùng hiện tại
 
-Release đã khóa: **`POSIT_MAC_RTL_20261018_OPT12_120`** (`LOCKED_FOR_W14`).
-Build bằng [`rtl/production.f`](rtl/production.f), gồm 38 module.
+Release đã khóa chức năng: **`POSIT_MAC_RTL_20261022_FIXED32_3`** (`FIXED32_3_FUNCTION_VERIFIED`).
+Build bằng [`rtl/production.f`](rtl/production.f), gồm54 module cố định.
 Thông tin khóa nguồn ở [`rtl/production_freeze.json`](rtl/production_freeze.json).
+
+NF/F mỗi bản10M completed/0 mismatch,740k so sánh trên37 biến thể tổ hợp,
+ModelSim36.056 giao dịch hoàn tất/0 mismatch và54 strict lint đạt.
+Xem [`kết quả fixed32/3`](results/fixed32_3_20261022/summary.json) và
+[`hướng dẫn tái chạy`](docs/HUONG_DAN_CHAY_WSL_MODELSIM.md).
+NF vẫn nhận exact/approx qua cfg_mode; F approximate-only. Hằng feature đã khóa,
+không truyền tham số vào DUT. AC02 exact>=100M,final per-n/AC04 và STA/PPA mới
+chưa được nghiệm thu bằng lượt aggregate này.
 
 Gói đã chọn gồm OPT-02c, OPT-05 abc_tree, OPT-09, OPT-10A và OPT-12.
 Các bản trong `rtl/candidates/` chỉ là snapshot đối chiếu; mã chạy chính nằm ở
 các thư mục chức năng của `rtl/`. Không compile đệ quy toàn bộ RTL vì có tên module trùng.
 
-Kết quả OOC đã lưu trên Artix-7 `xc7a35tcpg236-1`, Explore, chu kỳ 8,3 ns
+Kết quả OOC lịch sử của release OPT12, chưa đo lại trên fixed32/3: Artix-7 `xc7a35tcpg236-1`, Explore, chu kỳ 8,3 ns
 (khoảng 120,48 MHz):
 
 | Top | Setup WNS | Hold WHS |

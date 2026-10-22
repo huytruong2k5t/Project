@@ -1,3 +1,50 @@
+## Luồng hiện hành: posit(32,3) cố định — 23/10/2026
+
+Release `POSIT_MAC_RTL_20261022_FIXED32_3`,54 module không public parameter.
+Không thêm -GNB/-GES/-GFRAC_W hoặc generic của DUT. Các lệnh tuần cũ bên dưới
+chỉ tái chạy với snapshot/release cũ; không dùng chúng để build source fixed hiện tại.
+L1/oracle được giữ nguyên; snapshot RTL cũ dùng làm comparator từng chu kỳ.
+Đổi nhãn build/run khi tái chạy để giữ nguyên bằng chứng đã có.
+
+Trong WSL, từ gốc Posit_MAC:
+
+```bash
+mkdir -p results/fixed32_3_20261022/tmp
+export TMPDIR="$PWD/results/fixed32_3_20261022/tmp"
+export PYTHONPYCACHEPREFIX="$TMPDIR/pycache"
+python3 scripts/audit_rtl_release.py --self-test
+export POSIT32_BUILD_TAG=_replay1
+python3 scripts/verify_fixed32_3.py build nf
+python3 scripts/verify_fixed32_3.py build f
+python3 scripts/verify_fixed32_3.py run nf 100000 replay_pilot
+python3 scripts/verify_fixed32_3.py run f 100000 replay_pilot
+# Sau pilot PASS, nếu cần lặp lượt10M:
+python3 scripts/verify_fixed32_3.py run nf 10000000 replay_main
+python3 scripts/verify_fixed32_3.py run f 10000000 replay_main
+python3 scripts/verify_fixed32_3.py unit-reference
+```
+
+Build tự phục hồi snapshot comparator từ reference_source.zip và kiểm SHA256,
+không sửa production hoặc L1. _replay1 là tên thư mục build, không phải tham số RTL.
+Khi chạy lại lần sau, chọn _replay2 và nhãn event mới; không xóa kết quả cũ.
+
+Từ Windows CMD, ở gốc Posit_MAC, sau khi đã sinh vector pilot F ở trên:
+
+```bat
+powershell -NoProfile -File scripts\verify_fixed32_3_modelsim.ps1 -RunLabel event_replay1 -BuildTag _replay1 -VectorLabel replay_pilot
+powershell -NoProfile -File scripts\verify_fixed32_3_units.ps1 -RunLabel modelsim_replay1 -EventLabel event_replay1
+```
+
+Work/tmp/log/wave nằm trong results của dự án. ModelSim10.1d cần bản sao tương thích
+chỉ đổi cú pháp sized cast sang typedef cast; runner ghi riêng phạm vi này.
+Không tạo/sửa license hoặc cấu hình hệ thống. Tổng kết gốc ở
+results/fixed32_3_20261022/summary.json; seed20261022,Verilator5.032,GCC15.2.0.
+Lượt20M là aggregate NF/F, không phải10M cho từng điểm n/OPS; AC02 exact>=100M,
+final per-n/AC04 và STA/PPA của release mới vẫn cần nghiệm thu riêng.
+Không chạy lại fix_posit32_3.py prepare/specialize/promote để tái lập mô phỏng.
+
+---
+
 # HƯỚNG DẪN BUILD VÀ KIỂM CHỨNG POSIT MAC — WSL / MODELSIM
 
 ## Release production đã khóa — 18/10/2026

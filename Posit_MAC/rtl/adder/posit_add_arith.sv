@@ -9,14 +9,16 @@
 // $Revision: 1.0 $
 // $Log: W10 implementation, SPEC 5.8-A..D. $
 
-module posit_add_arith #(
-    parameter int F = 27
-)(
-    input logic [F+4:0] x,
-    input logic [F+4:0] y,
+module posit_add_arith (
+    input logic [30:0] x,
+    input logic [30:0] y,
     input logic subtract,
-    output wire [F+4:0] magnitude
+    output wire [30:0] magnitude
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // F: 27 (original).
+    
+
     assign magnitude = subtract ? x - y : x + y;
 endmodule
 

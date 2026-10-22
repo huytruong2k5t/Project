@@ -12,6 +12,8 @@ module fused_arith_comb (
     input  logic subtract,
     output wire signed [31:0] retained_sum
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+
     wire [31:0] addend;
     assign addend = {1'b0, small_value} ^ {32{subtract}};
     // One carry chain with subtraction carry-in; signs are handled outside it.

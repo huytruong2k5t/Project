@@ -8,36 +8,51 @@
 // $Source: $ $Revision: 1.0 $ $Log: Week9 standalone multiplier integration. $
 //-----------------------------------------------------------------------------
 `include "posit_mac.vh"
-module mul_iter_wrapper #(
-    parameter int NB=32,
-    parameter int ES=2,
-    parameter int FRAC_W=12,
-    parameter int N_MAX=8,
-    parameter int ROUND_SCHEME=0,
-    parameter [39:0] ROUND_MODE ="RNE",
-    parameter bit EXACT_EN=1'b1,
-    parameter bit OPS_EN=1'b1,
-    parameter int F=NB-3-ES,
-    parameter int SF_W=$clog2(64'd4 * (longint'(NB) - 64'd2)*(64'd1<<ES)+64'd4)+1,
-    parameter int N_W=(N_MAX>1)?$clog2(N_MAX+1):1,
-    parameter int I_W=$clog2(((F>N_MAX)?F:N_MAX)+1),
-    parameter int ACC_W=EXACT_EN?((2*F+2>FRAC_W+4)?2*F+2:FRAC_W+4):FRAC_W+4,
-    parameter int FIN=2*F+1
-)(
+module mul_iter_wrapper (
     input logic clk,
     input logic rst_n,
     input logic in_valid,
     output wire in_ready,
-    input logic [NB-1:0] a,
-    input logic [NB-1:0] b,
+    input logic [31:0] a,
+    input logic [31:0] b,
     input logic cfg_mode,
-    input logic [N_W-1:0] cfg_n,
+    input logic [3:0] cfg_n,
     input logic [1:0] cfg_ops,
     output wire out_valid,
     input logic out_ready,
-    output wire [NB-1:0] d,
+    output wire [31:0] d,
     output wire [4:0] flags
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // NB: 32 (original).
+    
+    // ES: 2 (original).
+    
+    // FRAC_W: 12 (original).
+    
+    // N_MAX: 8 (original).
+    localparam int N_MAX = 8;
+    // ROUND_SCHEME: 0 (original).
+    
+    // ROUND_MODE: "RNE" (original).
+    
+    // EXACT_EN: 1'b1 (original).
+    localparam bit EXACT_EN = 1'h1;
+    // OPS_EN: 1'b1 (original).
+    localparam bit OPS_EN = 1'h1;
+    // F: NB-3-ES (original).
+    localparam int F = 26;
+    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2)*(64'd1<<ES)+64'd4)+1 (original).
+    localparam int SF_W = 11;
+    // N_W: (N_MAX>1)?$clog2(N_MAX+1):1 (original).
+    localparam int N_W = 4;
+    // I_W: $clog2(((F>N_MAX)?F:N_MAX)+1) (original).
+    localparam int I_W = 5;
+    // ACC_W: EXACT_EN?((2*F+2>FRAC_W+4)?2*F+2:FRAC_W+4):FRAC_W+4 (original).
+    localparam int ACC_W = 54;
+    // FIN: 2*F+1 (original).
+    localparam int FIN = 53;
+
     logic reset_bridge_q;
     (* ASYNC_REG="TRUE" *) logic meta_sync1,meta_sync2;
     logic busy_q,mode_q;
@@ -92,9 +107,7 @@ module mul_iter_wrapper #(
             meta_sync2 <= `CK2Q meta_sync1;
         end
     end
-    posit_parser #(
-        .NB(NB),
-        .ES(ES)) u_a (
+    posit_parser  u_a (
         .clk(clk),
         .reset_n(reset_n),
         .in_valid(pair_accept),
@@ -108,9 +121,7 @@ module mul_iter_wrapper #(
         .sf(sf_a),
         .frac(frac_a)
     );
-    posit_parser #(
-        .NB(NB),
-        .ES(ES)) u_b (
+    posit_parser  u_b (
         .clk(clk),
         .reset_n(reset_n),
         .in_valid(pair_accept),
@@ -124,12 +135,7 @@ module mul_iter_wrapper #(
         .sf(sf_b),
         .frac(frac_b)
     );
-    ops_sel_comb #(
-        .FRAC_MAX(F),
-        .FRAC_W(FRAC_W),
-        .SF_W(SF_W),
-        .EXACT_EN(EXACT_EN),
-        .OPS_EN(OPS_EN)) u_ops (
+    ops_sel_comb  u_ops (
         .frac_a(frac_a),
         .frac_b(frac_b),
         .s_a(s_a),
@@ -147,13 +153,7 @@ module mul_iter_wrapper #(
         .input_cut(ops_cut),
         .cfg_error(unused_ops_error)
     );
-    mul_iter_core #(
-        .FRAC_MAX(F),
-        .FRAC_W(FRAC_W),
-        .N_MAX(N_MAX),
-        .ROUND_SCHEME(ROUND_SCHEME),
-        .EXACT_EN(EXACT_EN),
-        .SF_W(SF_W)) u_core (
+    mul_iter_core  u_core (
         .clk(clk),
         .reset_n(reset_n),
         .launch_valid(pair_retire),
@@ -179,12 +179,7 @@ module mul_iter_wrapper #(
         .mode_o(core_mode),
         .state_error(core_error)
     );
-    mul_norm_comb #(
-        .FRAC_MAX(F),
-        .FRAC_W(FRAC_W),
-        .ROUND_SCHEME(ROUND_SCHEME),
-        .EXACT_EN(EXACT_EN),
-        .SF_W(SF_W)) u_norm (
+    mul_norm_comb  u_norm (
         .cfg_mode(core_mode),
         .acc(acc),
         .sticky_acc(sticky_acc),
@@ -193,10 +188,7 @@ module mul_iter_wrapper #(
         .frac_norm(frac_norm),
         .sticky_norm(sticky_norm)
     );
-    posit_pack #(
-        .NB(NB),
-        .ES(ES),
-        .ROUND_MODE(ROUND_MODE)) u_pack (
+    posit_pack  u_pack (
         .clk(clk),
         .reset_n(reset_n),
         .in_valid(norm_valid_q),

@@ -11,13 +11,7 @@
 
 `include "posit_mac.vh"
 
-module posit_add #(
-    parameter int NB = 32,
-    parameter int ES = 2,
-    parameter int F = NB - 3 - ES,
-    parameter int SF_W = $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1,
-    parameter int F_OUT = 2 * F + 1
-)(
+module posit_add (
     input logic clk,
     input logic reset_n,
     input logic in_valid,
@@ -27,22 +21,34 @@ module posit_add #(
     input logic a_sign,
     input logic a_is_zero,
     input logic a_is_nar,
-    input logic signed [SF_W-1:0] a_sf,
-    input logic [F-1:0] a_frac,
+    input logic signed [10:0] a_sf,
+    input logic [25:0] a_frac,
     input logic b_sign,
     input logic b_is_zero,
     input logic b_is_nar,
-    input logic signed [SF_W-1:0] b_sf,
-    input logic [F-1:0] b_frac,
+    input logic signed [10:0] b_sf,
+    input logic [25:0] b_frac,
     input logic [4:0] flags_in,
     output logic sign,
     output logic is_zero,
     output logic is_nar,
-    output logic signed [SF_W-1:0] sf,
-    output logic [F_OUT-1:0] frac,
+    output logic signed [10:0] sf,
+    output logic [52:0] frac,
     output logic sticky,
     output logic [4:0] flags_out
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // NB: 32 (original).
+    
+    // ES: 2 (original).
+    
+    // F: NB - 3 - ES (original).
+    localparam int F = 26;
+    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1 (original).
+    localparam int SF_W = 11;
+    // F_OUT: 2 * F + 1 (original).
+    localparam int F_OUT = 53;
+
 
     typedef struct packed {
         logic [F+4:0] x;
@@ -101,12 +107,7 @@ module posit_add #(
     assign in_ready = reset_b_sync_clk && ready1;
     assign out_valid = reset_b_sync_clk && valid3_q;
 
-    posit_add_align #(
-        .NB(NB),
-        .ES(ES),
-        .F(F),
-        .SF_W(SF_W)
-    ) u_align (
+    posit_add_align  u_align (
         .a_sign(a_sign),
         .a_is_zero(a_is_zero),
         .a_is_nar(a_is_nar),
@@ -128,19 +129,13 @@ module posit_add #(
         .is_nar(a1_d.is_nar),
         .flags_o(a1_d.flags)
     );
-    posit_add_arith #(.F(F)) u_arith (
+    posit_add_arith  u_arith (
         .x(a1_q.x),
         .y(a1_q.y),
         .subtract(a1_q.subtract),
         .magnitude(magnitude_d)
     );
-    posit_add_normalize #(
-        .NB(NB),
-        .ES(ES),
-        .F(F),
-        .SF_W(SF_W),
-        .F_OUT(F_OUT)
-    ) u_normalize (
+    posit_add_normalize  u_normalize (
         .magnitude(a2_q.magnitude),
         .sign_base(a2_q.sign_base),
         .sf_base(a2_q.sf_base),

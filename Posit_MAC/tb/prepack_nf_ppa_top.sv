@@ -19,7 +19,8 @@ module prepack_nf_ppa_top (
 );
     wire clk_core;
     BUFG u_clk (.I(clk), .O(clk_core));
-    posit_mac_nf #(.NB(32), .ES(3), .FRAC_W(12), .EXACT_EN(1'b1), .OPS_EN(1'b1)) u_dut (
+    // Fixed posit32/ES3 production: no elaboration overrides.
+    posit_mac_nf u_dut (
         .clk(clk_core), .rst_n(rst_n),
         .in_valid(in_valid), .in_ready(in_ready),
         .a(a), .b(b), .c(c), .acc_mode(acc_mode), .acc_clr(acc_clr),

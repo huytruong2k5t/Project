@@ -7,11 +7,7 @@
 // $Source: $ $Revision: 1.0 $ $Log: Week9 sequential accumulator. $
 //-----------------------------------------------------------------------------
 `include "posit_mac.vh"
-module sbm_accum #(
-    parameter int ACC_W=56,
-    parameter int I_W=5,
-    parameter int ROUND_SCHEME=0
-)(
+module sbm_accum (
     input logic clk,
     input logic reset_n,
     input logic commit_valid,
@@ -19,29 +15,35 @@ module sbm_accum #(
     input logic first,
     input logic last,
     input logic init_only,
-    input logic [ACC_W-1:0] y_base,
-    input logic [ACC_W-1:0] term,
+    input logic [53:0] y_base,
+    input logic [53:0] term,
     input logic term_tail,
-    input logic [I_W-1:0] iteration,
+    input logic [4:0] iteration,
     input logic approx_cut,
     output wire run_ready,
-    output logic [ACC_W-1:0] acc,
+    output logic [53:0] acc,
     output logic sticky_acc,
     output logic numerical_tail,
-    output logic [I_W-1:0] iterations_done,
+    output logic [4:0] iterations_done,
     output logic approx_cut_o,
     output logic done,
     output wire carry_error
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // ACC_W: 56 (original).
+    localparam int ACC_W = 54;
+    // I_W: 5 (original).
+    
+    // ROUND_SCHEME: 0 (original).
+    
+
     (* ASYNC_REG="TRUE" *) logic meta_sync1,meta_sync2;
     wire [ACC_W-1:0] acc_next;
     wire sticky_next,numerical_next;
     wire carry_raw;
     assign run_ready=meta_sync2;
     assign carry_error=commit_valid && carry_raw;
-    sbm_accum_comb #(
-        .ACC_W(ACC_W),
-        .ROUND_SCHEME(ROUND_SCHEME)) u_add (
+    sbm_accum_comb  u_add (
         .cfg_mode(cfg_mode),
         .first(first),
         .init_only(init_only),

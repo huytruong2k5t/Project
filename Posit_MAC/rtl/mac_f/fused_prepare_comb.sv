@@ -6,25 +6,27 @@
 // Description   : W12-F-1 fused datapath, approximate posit(32,3).
 // $Source: $ $Revision: 1.0 $ $Log: Week13 RTL implementation. $
 //-----------------------------------------------------------------------------
-module fused_prepare_comb #(
-    parameter int SF_W = 11
-)(
+module fused_prepare_comb (
     input  logic [13:0] p_magnitude,
-    input  logic signed [SF_W-1:0] p_scale,
+    input  logic signed [10:0] p_scale,
     input  logic p_sign,
     input  logic p_zero,
-    input  logic signed [SF_W-1:0] c_sf,
+    input  logic signed [10:0] c_sf,
     input  logic [25:0] c_frac,
     input  logic c_sign,
     input  logic c_zero,
     output wire [30:0] large_seed,
     output wire [30:0] small_seed,
-    output wire signed [SF_W-1:0] anchor,
+    output wire signed [10:0] anchor,
     output wire [4:0] shift_amount,
     output wire shift_all,
     output wire base_sign,
     output wire subtract
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // SF_W: 11 (original).
+    localparam int SF_W = 11;
+
     typedef logic signed [SF_W-1:0] sf_t;
     typedef logic signed [SF_W:0] delta_t;
     wire [30:0] p_seed;

@@ -10,20 +10,15 @@
 // $Revision: 1.0 $
 // $Log: Initial implementation of SPEC 5.9-D. $
 
-module posit_pack_prepare #(
-    parameter int NB = 32,
-    parameter int ES = 2,
-    parameter int F_IN = 2 * (NB - 3 - ES) + 1,
-    parameter int SF_W = $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1
-)(
+module posit_pack_prepare (
     input  logic sign,
     input  logic is_zero,
     input  logic is_nar,
-    input  logic signed [SF_W-1:0] sf,
-    input  logic [F_IN-1:0] frac,
+    input  logic signed [10:0] sf,
+    input  logic [52:0] frac,
     input  logic sticky,
     input  logic [4:0] flags_in,
-    output logic [NB-2:0] mag_trunc,
+    output logic [30:0] mag_trunc,
     output logic guard_bit,
     output logic round_bit,
     output logic sticky_bit,
@@ -31,9 +26,19 @@ module posit_pack_prepare #(
     output logic [2:0] special_sel,
     output logic [4:0] flags_o
 );
-    localparam int SF_MAX = int'((longint'(NB) - 64'd2) * (64'd1 << ES));
-    localparam int SHIFT_W = $clog2(NB - 1);
-    localparam int PAYLOAD_W = 2 + ES + F_IN + 1;
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // NB: 32 (original).
+    localparam int NB = 32;
+    // ES: 2 (original).
+    localparam int ES = 3;
+    // F_IN: 2 * (NB - 3 - ES) + 1 (original).
+    localparam int F_IN = 53;
+    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1 (original).
+    localparam int SF_W = 11;
+
+    localparam int SF_MAX = 240; // int'((longint'(NB) - 64'd2) * (64'd1 << ES))
+    localparam int SHIFT_W = 5; // $clog2(NB - 1)
+    localparam int PAYLOAD_W = 59; // 2 + ES + F_IN + 1
     localparam logic [2:0] NORMAL = 3'd0;
     localparam logic [2:0] ZERO = 3'd1;
     localparam logic [2:0] NAR = 3'd2;
@@ -46,8 +51,8 @@ module posit_pack_prepare #(
     wire [SHIFT_W-1:0] offset;
     wire [PAYLOAD_W-1:0] payload;
     wire [PAYLOAD_W-1:0] shifted;
-    localparam int LOW_W = PAYLOAD_W - NB - 1;
-    localparam int OFFSETS = 1 << SHIFT_W;
+    localparam int LOW_W = 26; // PAYLOAD_W - NB - 1
+    localparam int OFFSETS = 32; // 1 << SHIFT_W
     wire [OFFSETS-1:0] sticky_lookup;
     wire payload_sticky;
 
@@ -75,11 +80,7 @@ module posit_pack_prepare #(
         end
     endgenerate
 
-    dyn_right_shifter #(
-        .N (PAYLOAD_W),
-        .SHIFT_W (SHIFT_W),
-        .ARITH (1'b0)
-    ) u_payload_shift (
+    dyn_right_shifter_fixed2  u_payload_shift (
         .in (payload),
         .b (offset),
         .fill_val (first_regime_bit),

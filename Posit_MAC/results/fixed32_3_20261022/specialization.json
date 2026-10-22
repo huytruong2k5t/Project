@@ -1,0 +1,712 @@
+[
+  {
+    "module": "posit_mac_nf",
+    "original": "rtl/mac_nf/posit_mac_nf.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "FRAC_W": "12",
+      "N_MAX": "8",
+      "EXACT_EN": "1'h1",
+      "OPS_EN": "1'h1",
+      "N_W": "4"
+    },
+    "cells": {
+      "u_wrapper": "mac_nf_wrapper"
+    }
+  },
+  {
+    "module": "mac_nf_wrapper",
+    "original": "rtl/mac_nf/mac_nf_wrapper.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "FRAC_W": "12",
+      "N_MAX": "8",
+      "EXACT_EN": "1'h1",
+      "OPS_EN": "1'h1",
+      "F": "26",
+      "SF_W": "11",
+      "N_W": "4",
+      "I_W": "5",
+      "ACC_W": "54",
+      "FIN": "53"
+    },
+    "cells": {
+      "u_a": "posit_parser",
+      "u_b": "posit_parser",
+      "u_c": "posit_parser",
+      "u_ops": "ops_sel_comb",
+      "u_core": "mul_iter_core",
+      "u_norm": "mul_prepack_norm_comb",
+      "u_product_pack": "posit_product_pack",
+      "u_product_parse": "posit_magnitude_parse",
+      "u_add": "posit_add",
+      "u_pack": "posit_pack"
+    }
+  },
+  {
+    "module": "mul_prepack_norm_comb",
+    "original": "rtl/multiplier/mul_prepack_norm_comb.sv",
+    "constants": {
+      "FRAC_MAX": "26",
+      "FRAC_W": "12",
+      "EXACT_EN": "1'h1",
+      "ACC_W": "54",
+      "SF_W": "11",
+      "F_IN": "53"
+    },
+    "cells": {}
+  },
+  {
+    "module": "posit_product_pack",
+    "original": "rtl/mac_nf/posit_product_pack.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "F_IN": "53",
+      "SF_W": "11",
+      "ROUND_MODE": "40'h524e45"
+    },
+    "cells": {
+      "u_prepare": "posit_pack_prepare",
+      "u_finish": "posit_pack_finish"
+    }
+  },
+  {
+    "module": "posit_magnitude_parse",
+    "original": "rtl/mac_nf/posit_magnitude_parse.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "FRAC_MAX": "26",
+      "SF_W": "11"
+    },
+    "cells": {
+      "u_regime_detector": "lod_lzd_core",
+      "align_payload": "dyn_left_shifter"
+    }
+  },
+  {
+    "module": "posit_add",
+    "original": "rtl/adder/posit_add.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "F": "26",
+      "SF_W": "11",
+      "F_OUT": "53"
+    },
+    "cells": {
+      "u_align": "posit_add_align",
+      "u_arith": "posit_add_arith",
+      "u_normalize": "posit_add_normalize"
+    }
+  },
+  {
+    "module": "posit_parser",
+    "original": "rtl/parser/posit_parser.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "FRAC_MAX": "26",
+      "SF_W": "11"
+    },
+    "cells": {
+      "u_regime_detector": "lod_lzd_core_fixed2",
+      "u_align_payload": "dyn_left_shifter"
+    }
+  },
+  {
+    "module": "ops_sel_comb",
+    "original": "rtl/multiplier/ops_sel_comb.sv",
+    "constants": {
+      "FRAC_MAX": "26",
+      "FRAC_W": "12",
+      "SF_W": "11",
+      "EXACT_EN": "1'h1",
+      "OPS_EN": "1'h1",
+      "WIDTH_W": "5"
+    },
+    "cells": {}
+  },
+  {
+    "module": "mul_iter_core",
+    "original": "rtl/multiplier/mul_iter_core.sv",
+    "constants": {
+      "FRAC_MAX": "26",
+      "FRAC_W": "12",
+      "N_MAX": "8",
+      "ROUND_SCHEME": "0",
+      "EXACT_EN": "1'h1",
+      "SF_W": "11",
+      "S_W": "5",
+      "N_W": "4",
+      "I_W": "5",
+      "ACC_W": "54"
+    },
+    "cells": {
+      "u_ctrl": "iter_ctrl",
+      "u_shift": "sbm_shift_comb",
+      "u_acc": "sbm_accum"
+    }
+  },
+  {
+    "module": "posit_pack",
+    "original": "rtl/packer/posit_pack.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "F_IN": "53",
+      "SF_W": "11",
+      "ROUND_MODE": "40'h524e45"
+    },
+    "cells": {
+      "u_prepare": "posit_pack_prepare",
+      "u_finish": "posit_pack_finish"
+    }
+  },
+  {
+    "module": "posit_add_align",
+    "original": "rtl/adder/posit_add_align.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "F": "26",
+      "SF_W": "11"
+    },
+    "cells": {
+      "u_align_shift": "dyn_right_shifter"
+    }
+  },
+  {
+    "module": "posit_add_arith",
+    "original": "rtl/adder/posit_add_arith.sv",
+    "constants": {
+      "F": "26"
+    },
+    "cells": {}
+  },
+  {
+    "module": "posit_add_normalize",
+    "original": "rtl/adder/posit_add_normalize.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "F": "26",
+      "SF_W": "11",
+      "F_OUT": "53"
+    },
+    "cells": {
+      "u_lod": "lod_lzd_core",
+      "u_left_shift": "dyn_left_shifter_fixed2"
+    }
+  },
+  {
+    "module": "posit_pack_prepare",
+    "original": "rtl/packer/posit_pack_prepare.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "F_IN": "53",
+      "SF_W": "11"
+    },
+    "cells": {
+      "u_payload_shift": "dyn_right_shifter_fixed2"
+    }
+  },
+  {
+    "module": "posit_pack_finish",
+    "original": "rtl/packer/posit_pack_finish.sv",
+    "constants": {
+      "NB": "32",
+      "ROUND_MODE": "40'h524e45"
+    },
+    "cells": {}
+  },
+  {
+    "module": "iter_ctrl",
+    "original": "rtl/multiplier/iter_ctrl.sv",
+    "constants": {
+      "FRAC_MAX": "26",
+      "FRAC_W": "12",
+      "N_MAX": "8",
+      "S_W": "5",
+      "N_W": "4",
+      "I_W": "5"
+    },
+    "cells": {
+      "u_exact": "sac_step_comb",
+      "u_approx": "sac_step_comb_fixed2"
+    }
+  },
+  {
+    "module": "sbm_shift_comb",
+    "original": "rtl/multiplier/sbm_shift_comb.sv",
+    "constants": {
+      "FRAC_MAX": "26",
+      "FRAC_W": "12",
+      "ROUND_SCHEME": "0",
+      "EXACT_EN": "1'h1",
+      "S_W": "5",
+      "ACC_W": "54"
+    },
+    "cells": {}
+  },
+  {
+    "module": "sbm_accum",
+    "original": "rtl/multiplier/sbm_accum.sv",
+    "constants": {
+      "ACC_W": "54",
+      "I_W": "5",
+      "ROUND_SCHEME": "0"
+    },
+    "cells": {
+      "u_add": "sbm_accum_comb"
+    }
+  },
+  {
+    "module": "dyn_right_shifter",
+    "original": "rtl/common/dyn_right_shifter.sv",
+    "constants": {
+      "N": "30",
+      "SHIFT_W": "5",
+      "ARITH": "1'h0"
+    },
+    "cells": {}
+  },
+  {
+    "module": "dyn_right_shifter_fixed2",
+    "original": "rtl/common/dyn_right_shifter.sv",
+    "constants": {
+      "N": "59",
+      "SHIFT_W": "5",
+      "ARITH": "1'h0"
+    },
+    "cells": {}
+  },
+  {
+    "module": "sac_step_comb",
+    "original": "rtl/multiplier/sac_step_comb.sv",
+    "constants": {
+      "W_X": "26",
+      "S_W": "5"
+    },
+    "cells": {
+      "u_lod": "lod_lzd_core_fixed3",
+      "u_shift": "dyn_left_shifter_fixed3"
+    }
+  },
+  {
+    "module": "sac_step_comb_fixed2",
+    "original": "rtl/multiplier/sac_step_comb.sv",
+    "constants": {
+      "W_X": "12",
+      "S_W": "5"
+    },
+    "cells": {
+      "u_lod": "lod_lzd_core_fixed4",
+      "u_shift": "dyn_left_shifter_fixed4"
+    }
+  },
+  {
+    "module": "sbm_accum_comb",
+    "original": "rtl/multiplier/sbm_accum_comb.sv",
+    "constants": {
+      "ACC_W": "54",
+      "ROUND_SCHEME": "0"
+    },
+    "cells": {}
+  },
+  {
+    "module": "lod_lzd_core",
+    "original": "rtl/common/lod_lzd_core.sv",
+    "constants": {
+      "N": "30",
+      "MODE": "0",
+      "S": "5"
+    },
+    "cells": {}
+  },
+  {
+    "module": "dyn_left_shifter",
+    "original": "rtl/common/dyn_left_shifter.sv",
+    "constants": {
+      "N": "29",
+      "SHIFT_W": "5"
+    },
+    "cells": {}
+  },
+  {
+    "module": "lod_lzd_core_fixed2",
+    "original": "rtl/common/lod_lzd_core.sv",
+    "constants": {
+      "N": "31",
+      "MODE": "0",
+      "S": "5"
+    },
+    "cells": {}
+  },
+  {
+    "module": "dyn_left_shifter_fixed2",
+    "original": "rtl/common/dyn_left_shifter.sv",
+    "constants": {
+      "N": "30",
+      "SHIFT_W": "5"
+    },
+    "cells": {}
+  },
+  {
+    "module": "lod_lzd_core_fixed3",
+    "original": "rtl/common/lod_lzd_core.sv",
+    "constants": {
+      "N": "26",
+      "MODE": "0",
+      "S": "5"
+    },
+    "cells": {}
+  },
+  {
+    "module": "dyn_left_shifter_fixed3",
+    "original": "rtl/common/dyn_left_shifter.sv",
+    "constants": {
+      "N": "26",
+      "SHIFT_W": "5"
+    },
+    "cells": {}
+  },
+  {
+    "module": "lod_lzd_core_fixed4",
+    "original": "rtl/common/lod_lzd_core.sv",
+    "constants": {
+      "N": "12",
+      "MODE": "0",
+      "S": "4"
+    },
+    "cells": {}
+  },
+  {
+    "module": "dyn_left_shifter_fixed4",
+    "original": "rtl/common/dyn_left_shifter.sv",
+    "constants": {
+      "N": "12",
+      "SHIFT_W": "5"
+    },
+    "cells": {}
+  },
+  {
+    "module": "posit_mac_f",
+    "original": "rtl/mac_f/posit_mac_f.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "FRAC_W": "12",
+      "N_MAX": "8",
+      "EXACT_EN": "1'h0",
+      "OPS_EN": "1'h1",
+      "ACC_WIN": "32",
+      "N_W": "4"
+    },
+    "cells": {
+      "u_wrapper": "mac_f_wrapper"
+    }
+  },
+  {
+    "module": "mac_f_wrapper",
+    "original": "rtl/mac_f/mac_f_wrapper.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "FRAC_W": "12",
+      "N_MAX": "8",
+      "EXACT_EN": "1'h0",
+      "OPS_EN": "1'h1",
+      "ACC_WIN": "32",
+      "N_W": "4"
+    },
+    "cells": {
+      "u_a": "posit_parser",
+      "u_b": "posit_parser",
+      "u_c": "posit_parser",
+      "u_ops": "ops_sel_comb_fixed2",
+      "u_core": "mul_iter_core_fixed2",
+      "u_fused": "fused_add_pipe",
+      "u_pack": "posit_pack"
+    }
+  },
+  {
+    "module": "fused_add_pipe",
+    "original": "rtl/mac_f/fused_add_pipe.sv",
+    "constants": {
+      "SF_W": "11"
+    },
+    "cells": {
+      "u_prepare": "fused_prepare_comb",
+      "u_align": "fused_align_comb",
+      "u_arith": "fused_arith_comb",
+      "u_abs": "fused_abs_borrow_comb",
+      "u_norm": "fused_norm_comb"
+    }
+  },
+  {
+    "module": "fused_abs_borrow_comb",
+    "original": "rtl/mac_f/fused_abs_borrow_comb.sv",
+    "constants": {},
+    "cells": {}
+  },
+  {
+    "module": "fused_align_comb",
+    "original": "rtl/mac_f/fused_align_comb.sv",
+    "constants": {},
+    "cells": {}
+  },
+  {
+    "module": "fused_arith_comb",
+    "original": "rtl/mac_f/fused_arith_comb.sv",
+    "constants": {},
+    "cells": {}
+  },
+  {
+    "module": "ops_sel_comb_fixed2",
+    "original": "rtl/multiplier/ops_sel_comb.sv",
+    "constants": {
+      "FRAC_MAX": "26",
+      "FRAC_W": "12",
+      "SF_W": "11",
+      "EXACT_EN": "1'h0",
+      "OPS_EN": "1'h1",
+      "WIDTH_W": "5"
+    },
+    "cells": {}
+  },
+  {
+    "module": "mul_iter_core_fixed2",
+    "original": "rtl/multiplier/mul_iter_core.sv",
+    "constants": {
+      "FRAC_MAX": "12",
+      "FRAC_W": "12",
+      "N_MAX": "8",
+      "ROUND_SCHEME": "0",
+      "EXACT_EN": "1'h0",
+      "SF_W": "11",
+      "S_W": "4",
+      "N_W": "4",
+      "I_W": "4",
+      "ACC_W": "16"
+    },
+    "cells": {
+      "u_ctrl": "iter_ctrl_fixed2",
+      "u_shift": "sbm_shift_comb_fixed2",
+      "u_acc": "sbm_accum_fixed2"
+    }
+  },
+  {
+    "module": "fused_prepare_comb",
+    "original": "rtl/mac_f/fused_prepare_comb.sv",
+    "constants": {
+      "SF_W": "11"
+    },
+    "cells": {}
+  },
+  {
+    "module": "fused_norm_comb",
+    "original": "rtl/mac_f/fused_norm_comb.sv",
+    "constants": {
+      "SF_W": "11"
+    },
+    "cells": {
+      "u_lod": "lod_lzd_core_fixed2"
+    }
+  },
+  {
+    "module": "iter_ctrl_fixed2",
+    "original": "rtl/multiplier/iter_ctrl.sv",
+    "constants": {
+      "FRAC_MAX": "12",
+      "FRAC_W": "12",
+      "N_MAX": "8",
+      "S_W": "4",
+      "N_W": "4",
+      "I_W": "4"
+    },
+    "cells": {
+      "u_exact": "sac_step_comb_fixed3",
+      "u_approx": "sac_step_comb_fixed3"
+    }
+  },
+  {
+    "module": "sbm_shift_comb_fixed2",
+    "original": "rtl/multiplier/sbm_shift_comb.sv",
+    "constants": {
+      "FRAC_MAX": "12",
+      "FRAC_W": "12",
+      "ROUND_SCHEME": "0",
+      "EXACT_EN": "1'h0",
+      "S_W": "4",
+      "ACC_W": "16"
+    },
+    "cells": {}
+  },
+  {
+    "module": "sbm_accum_fixed2",
+    "original": "rtl/multiplier/sbm_accum.sv",
+    "constants": {
+      "ACC_W": "16",
+      "I_W": "4",
+      "ROUND_SCHEME": "0"
+    },
+    "cells": {
+      "u_add": "sbm_accum_comb_fixed2"
+    }
+  },
+  {
+    "module": "sac_step_comb_fixed3",
+    "original": "rtl/multiplier/sac_step_comb.sv",
+    "constants": {
+      "W_X": "12",
+      "S_W": "4"
+    },
+    "cells": {
+      "u_lod": "lod_lzd_core_fixed4",
+      "u_shift": "dyn_left_shifter_fixed5"
+    }
+  },
+  {
+    "module": "sbm_accum_comb_fixed2",
+    "original": "rtl/multiplier/sbm_accum_comb.sv",
+    "constants": {
+      "ACC_W": "16",
+      "ROUND_SCHEME": "0"
+    },
+    "cells": {}
+  },
+  {
+    "module": "dyn_left_shifter_fixed5",
+    "original": "rtl/common/dyn_left_shifter.sv",
+    "constants": {
+      "N": "12",
+      "SHIFT_W": "4"
+    },
+    "cells": {}
+  },
+  {
+    "module": "posit_add_comb",
+    "original": "rtl/adder/posit_add_comb.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "F": "26",
+      "SF_W": "11",
+      "F_OUT": "53"
+    },
+    "cells": {
+      "u_align": "posit_add_align",
+      "u_arith": "posit_add_arith",
+      "u_normalize": "posit_add_normalize"
+    }
+  },
+  {
+    "module": "posit_mul_iter",
+    "original": "rtl/multiplier/posit_mul_iter.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "FRAC_W": "12",
+      "N_MAX": "8",
+      "ROUND_SCHEME": "0",
+      "ROUND_MODE": "40'h524e45",
+      "EXACT_EN": "1'h1",
+      "OPS_EN": "1'h1",
+      "N_W": "4"
+    },
+    "cells": {
+      "u_wrapper": "mul_iter_wrapper"
+    }
+  },
+  {
+    "module": "mul_iter_wrapper",
+    "original": "rtl/multiplier/mul_iter_wrapper.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "FRAC_W": "12",
+      "N_MAX": "8",
+      "ROUND_SCHEME": "0",
+      "ROUND_MODE": "40'h524e45",
+      "EXACT_EN": "1'h1",
+      "OPS_EN": "1'h1",
+      "F": "26",
+      "SF_W": "11",
+      "N_W": "4",
+      "I_W": "5",
+      "ACC_W": "54",
+      "FIN": "53"
+    },
+    "cells": {
+      "u_a": "posit_parser",
+      "u_b": "posit_parser",
+      "u_ops": "ops_sel_comb",
+      "u_core": "mul_iter_core",
+      "u_norm": "mul_norm_comb",
+      "u_pack": "posit_pack"
+    }
+  },
+  {
+    "module": "mul_norm_comb",
+    "original": "rtl/multiplier/mul_norm_comb.sv",
+    "constants": {
+      "FRAC_MAX": "26",
+      "FRAC_W": "12",
+      "ROUND_SCHEME": "0",
+      "EXACT_EN": "1'h1",
+      "ACC_W": "54",
+      "SF_W": "11",
+      "F_IN": "53"
+    },
+    "cells": {}
+  },
+  {
+    "module": "posit_pack_comb",
+    "original": "rtl/packer/posit_pack_comb.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "F_IN": "53",
+      "SF_W": "11",
+      "ROUND_MODE": "40'h524e45"
+    },
+    "cells": {
+      "u_prepare": "posit_pack_prepare",
+      "u_finish": "posit_pack_finish"
+    }
+  },
+  {
+    "module": "round_unpacked_comb",
+    "original": "rtl/packer/round_unpacked_comb.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "F": "26",
+      "F_IN": "53",
+      "SF_W": "11"
+    },
+    "cells": {
+      "u_pack": "posit_pack_comb",
+      "u_parse": "posit_parser_comb"
+    }
+  },
+  {
+    "module": "posit_parser_comb",
+    "original": "rtl/parser/posit_parser_comb.sv",
+    "constants": {
+      "NB": "32",
+      "ES": "3",
+      "FRAC_MAX": "26",
+      "SF_W": "11"
+    },
+    "cells": {
+      "u_regime_detector": "lod_lzd_core_fixed2",
+      "align_payload": "dyn_left_shifter"
+    }
+  }
+]

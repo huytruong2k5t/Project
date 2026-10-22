@@ -1,9 +1,9 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 22/10/2026 (giờ Việt Nam)
+**Ngày cập nhật:** 23/10/2026 (giờ Việt Nam)
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.21](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
+**Tài liệu chi tiết:** [SPEC v1.22](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -12,6 +12,8 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 **Trạng thái:** `✅` = hoàn thành phạm vi của dòng và có kiểm chứng; `processing` = đã làm một phần hoặc còn thiếu tiêu chí; `không` = chưa thực hiện.
 
 ## 1. Tổng quan
+
+**Hiện hành23/10:** release `POSIT_MAC_RTL_20261022_FIXED32_3`,54 module fixed32/3 đã kiểm chức năng. NF10M+F10M completed/0 mismatch;37 biến thể tổ hợp740k so sánh,ModelSim36.056 giao dịch hoàn tất/0 mismatch,54 strict lint. L1/oracle không sửa. Các số120,48MHz/W14 và candidate OPT15/16 bên dưới vẫn gắn với nguồn cũ; không suy thành STA/PPA hoặc final coverage của release mới. Chi tiết tại results/fixed32_3_20261022/summary.json.
 
 Đã hoàn thành nền tảng L0, Gate1 của L1 và bộ cộng tuần5. Bộ nhân lặp L1 đã được kiểm chứng; profile source từng đạt ngưỡng TableI nhưng không khớp output ví dụ gốc. Baseline gốc bài báo chưa xác định; giữ nghiên cứu phụ. Mục tiêu chính chuyển sang MAC non-fused làm baseline nội bộ và fused làm biến thể so sánh.
 
@@ -23,7 +25,7 @@ MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng ch�
 
 | Mốc lớn | Trạng thái | Phần cần hoàn thiện |
 | --- | --- | --- |
-| Khóa cấu hình duy nhất32/3 | processing | SPEC/PLAN đã chốt; còn đồng bộ default NF/build/synthesis bằng revision được kiểm và khóa mới. Không đổi nguồn đã frozen trong phiên cập nhật phạm vi |
+| Khóa cấu hình duy nhất32/3 | ✅ phạm vi chức năng |54 module fixed,runner/mapping và wrapper synthesis đã đồng bộ;NF/F20M completed,ModelSim và kiểm tổ hợp0 mismatch. Còn STA/PPA mới,AC02 exact và final per-n/AC04;candidate lịch sử cần rebase riêng |
 | Baseline nội bộ và so sánh NF/F | processing | RTL NF/F final approximate và paired standalone accuracy đã đạt; còn matched PPA. Baseline paper giữ nghiên cứu phụ |
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder, NF tuần11 và F profile chính đã kiểm; final approximate và coverage NF/F đã đạt;exact/AC02 vẫn mở riêng |
 | PPA, mở rộng và hồ sơ — Gate4 | processing | NF CycloneIV45,07MHz là lịch sử; F A35T100MHz R2R đạt. Còn đo matched NF/F,AC02 và hồ sơ cuối; số đo riêng xem Optimization |
@@ -337,7 +339,14 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | --- | --- | --- | --- |
 | 1 | Chốt duy nhất posit32/ES3 | Đồng bộ SPEC v1.21, PLAN, README và phạm vi nghiệm thu mới; bỏ yêu cầu tiếp tục8/16/32-ES2, giữ chứng cứ lịch sử. Chưa sửa RTL/model/freeze hoặc chạy mô phỏng mới; còn đồng bộ default NF và kiểm exact32/3,matched PPA | ✅ quyết định / processing hiện thực |
 
-### 4.21. Mẫu cập nhật tiếp theo
+### 4.21. Ngày 23/10/2026 — tiếp phiên cố định32/3 bắt đầu22/10
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Cố định RTL và kiểm lại32/3 |54 module không public parameter,cổng literal;NF10M+F10M và740k so sánh tổ hợp/0 mismatch. ModelSim NF27.864+F8.192 completed/0 mismatch,abort tách riêng. Giữ snapshot,hash,seed20261022 và lệnh;khóa release mới,L1/oracle không sửa. Chưa STA/PPA/AC02 hoặc final per-n/AC04 mới;backup xác nhận theo push cuối phiên | ✅ chức năng |
+| 2 | Hoàn thiện tái chạy và tài liệu | Build lại từ production,pilot100k mỗi NF/F,ModelSim NF/F và740k so sánh tổ hợp lặp lại đạt0 mismatch;runner không cần format generic. Bổ sung phục hồi comparator từ ZIP có SHA256,giữ mọi kết quả cũ;hướng dẫn luồng fixed tách khỏi lệnh đa format lịch sử | ✅ |
+
+### 4.22. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

@@ -8,43 +8,54 @@
 // $Source: $ $Revision: 1.0 $ $Log: SPEC 5.5-A core implementation. $
 //-----------------------------------------------------------------------------
 `include "posit_mac.vh"
-module mul_iter_core #(
-    parameter int FRAC_MAX=27,
-    parameter int FRAC_W=12,
-    parameter int N_MAX=8,
-    parameter int ROUND_SCHEME=0,
-    parameter bit EXACT_EN=1'b1,
-    parameter int SF_W=11,
-    parameter int S_W=(FRAC_MAX>1) ? $clog2(FRAC_MAX+1) : 1,
-    parameter int N_W=(N_MAX>1) ? $clog2(N_MAX+1) : 1,
-    parameter int I_W=$clog2(((FRAC_MAX>N_MAX) ? FRAC_MAX : N_MAX)+1),
-    parameter int ACC_W=EXACT_EN ? ((2*FRAC_MAX+2>FRAC_W+4) ? 2*FRAC_MAX+2 : FRAC_W+4) : FRAC_W+4
-)(
+module mul_iter_core (
     input logic clk,
     input logic reset_n,
     input logic launch_valid,
     output wire launch_ready,
     input logic release_result,
-    input logic [FRAC_MAX-1:0] x_frac,
-    input logic [FRAC_MAX:0] y_mant,
+    input logic [25:0] x_frac,
+    input logic [26:0] y_mant,
     input logic cfg_mode,
-    input logic [N_W-1:0] cfg_n,
+    input logic [3:0] cfg_n,
     input logic sign_i,
-    input logic signed [SF_W-1:0] sf_i,
+    input logic signed [10:0] sf_i,
     input logic input_cut_i,
     output wire run_ready,
     output wire core_done,
-    output wire [ACC_W-1:0] acc,
+    output wire [53:0] acc,
     output wire sticky_acc,
     output wire numerical_tail,
-    output wire [I_W-1:0] iterations_done,
+    output wire [4:0] iterations_done,
     output wire approx_cut,
     output logic sign_o,
-    output logic signed [SF_W-1:0] sf_o,
+    output logic signed [10:0] sf_o,
     output logic input_cut_o,
     output logic mode_o,
     output wire state_error
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // FRAC_MAX: 27 (original).
+    localparam int FRAC_MAX = 26;
+    // FRAC_W: 12 (original).
+    
+    // N_MAX: 8 (original).
+    
+    // ROUND_SCHEME: 0 (original).
+    
+    // EXACT_EN: 1'b1 (original).
+    
+    // SF_W: 11 (original).
+    
+    // S_W: (FRAC_MAX>1) ? $clog2(FRAC_MAX+1) : 1 (original).
+    localparam int S_W = 5;
+    // N_W: (N_MAX>1) ? $clog2(N_MAX+1) : 1 (original).
+    
+    // I_W: $clog2(((FRAC_MAX>N_MAX) ? FRAC_MAX : N_MAX)+1) (original).
+    localparam int I_W = 5;
+    // ACC_W: EXACT_EN ? ((2*FRAC_MAX+2>FRAC_W+4) ? 2*FRAC_MAX+2 : FRAC_W+4) : FRAC_W+4 (original).
+    localparam int ACC_W = 54;
+
     (* ASYNC_REG="TRUE" *) logic meta_sync1,meta_sync2;
     logic busy_q;
     logic [FRAC_MAX:0] y_q;
@@ -62,10 +73,7 @@ module mul_iter_core #(
     assign launch_ready=run_ready && !busy_q;
     assign launch=launch_valid && launch_ready;
     assign state_error=ctrl_error || carry_error;
-    iter_ctrl #(
-        .FRAC_MAX(FRAC_MAX),
-        .FRAC_W(FRAC_W),
-        .N_MAX(N_MAX)) u_ctrl (
+    iter_ctrl  u_ctrl (
         .clk(clk),
         .reset_n(reset_n),
         .launch(launch),
@@ -82,11 +90,7 @@ module mul_iter_core #(
         .approx_cut(t1_cut),
         .state_error(ctrl_error)
     );
-    sbm_shift_comb #(
-        .FRAC_MAX(FRAC_MAX),
-        .FRAC_W(FRAC_W),
-        .ROUND_SCHEME(ROUND_SCHEME),
-        .EXACT_EN(EXACT_EN)) u_shift (
+    sbm_shift_comb  u_shift (
         .cfg_mode(mode_o),
         .y_mant(y_q),
         .scale(t1_scale),
@@ -95,10 +99,7 @@ module mul_iter_core #(
         .term(term),
         .term_tail(term_tail)
     );
-    sbm_accum #(
-        .ACC_W(ACC_W),
-        .I_W(I_W),
-        .ROUND_SCHEME(ROUND_SCHEME)) u_acc (
+    sbm_accum  u_acc (
         .clk(clk),
         .reset_n(reset_n),
         .commit_valid(t2_valid),

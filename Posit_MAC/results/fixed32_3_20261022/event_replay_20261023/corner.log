@@ -1,0 +1,38 @@
+# vsim {+VECTOR_DIR=C:\HCMUT\HK261\Do an 2\Posit_MAC/results/opt02b_20261017/fixtures} -do run.do -l corner.log -c -wlf corner.wlf work.tb_fixed32_3_nf 
+# Loading sv_std.std
+# Loading work.tb_fixed32_3_nf
+# Loading work.posit_mac_nf
+# Loading work.mac_nf_wrapper
+# Loading work.posit_parser
+# Loading work.lod_lzd_core_fixed2
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.mul_iter_core
+# Loading work.iter_ctrl
+# Loading work.sac_step_comb
+# Loading work.dyn_left_shifter_fixed3
+# Loading work.sac_step_comb_fixed2
+# Loading work.dyn_left_shifter_fixed4
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum
+# Loading work.sbm_accum_comb
+# Loading work.mul_prepack_norm_comb
+# Loading work.posit_product_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter_fixed2
+# Loading work.posit_magnitude_parse
+# Loading work.lod_lzd_core
+# Loading work.posit_add
+# Loading work.posit_add_align
+# Loading work.dyn_right_shifter
+# Loading work.posit_add_arith
+# Loading work.posit_add_normalize
+# Loading work.dyn_left_shifter_fixed2
+# Loading work.posit_pack
+# Loading work.lod_lzd_core_fixed3
+# Loading work.lod_lzd_core_fixed4
+# Loading work.posit_pack_finish
+# do run.do 
+# W11 MODELSIM PASS NB=32 ES=3 rows=20736 completed=20736 aborted=0 stalls=94326 mismatches=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/fixed32_3_20261022/event_replay_20261023/source/tb/tb_fixed32_3_nf.sv(162)
+#    Time: 4422870 ns  Iteration: 1  Instance: /tb_fixed32_3_nf

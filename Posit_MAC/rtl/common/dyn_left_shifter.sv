@@ -16,14 +16,17 @@
 // $Revision: 1.0 $
 // $Log: $
 
-module dyn_left_shifter #(
-    parameter int N       = 32,
-    parameter int SHIFT_W = (N > 1) ? $clog2(N) : 1
-)(
-    input  logic [N-1:0]       in,
-    input  logic [SHIFT_W-1:0] b,
-    output logic [N-1:0]       out
+module dyn_left_shifter (
+    input  logic [28:0] in,
+    input  logic [4:0] b,
+    output logic [28:0] out
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // N: 32 (original).
+    localparam int N = 29;
+    // SHIFT_W: (N > 1) ? $clog2(N) : 1 (original).
+    localparam int SHIFT_W = 5;
+
 
     //-------------------------------------------------------------------------
     // Parameter Validation

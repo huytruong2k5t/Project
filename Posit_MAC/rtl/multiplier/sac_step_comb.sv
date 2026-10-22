@@ -12,21 +12,24 @@
 // $Revision: 1.0 $
 // $Log: 2026-10-08: width-safe normative SAC combinational step. $
 
-module sac_step_comb #(
-    parameter int W_X = 12,
-    parameter int S_W = (W_X > 1) ? $clog2(W_X + 1) : 1
-)(
-    input logic [W_X-1:0] fx,
-    input logic [S_W-1:0] scale,
+module sac_step_comb (
+    input logic [25:0] fx,
+    input logic [4:0] scale,
     output logic term_valid,
-    output logic [S_W-1:0] sa,
-    output logic [S_W-1:0] scale_next,
-    output logic [W_X-1:0] fx_next,
+    output logic [4:0] sa,
+    output logic [4:0] scale_next,
+    output logic [25:0] fx_next,
     output logic exhausted,
     output logic state_error
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // W_X: 12 (original).
+    localparam int W_X = 26;
+    // S_W: (W_X > 1) ? $clog2(W_X + 1) : 1 (original).
+    localparam int S_W = 5;
+
     typedef logic [S_W:0] scale_limit_t;
-    localparam int K_W = (W_X > 1) ? $clog2(W_X) : 1;
+    localparam int K_W = 5; // (W_X > 1) ? $clog2(W_X) : 1
     localparam logic [S_W:0] MAX_SCALE = scale_limit_t'(W_X);
     localparam logic [S_W-1:0] ONE_STEP = 1;
     wire [K_W-1:0] leading_count;
@@ -52,11 +55,7 @@ module sac_step_comb #(
             assign leading_count = '0;
             assign leading_valid = fx[0];
         end else begin : g_detector
-            lod_lzd_core #(
-                .N(W_X),
-                .MODE(0),
-                .S(K_W)
-            ) u_lod (
+            lod_lzd_core_fixed3  u_lod (
                 .in(fx),
                 .K(leading_count),
                 .vld(leading_valid)
@@ -74,8 +73,8 @@ module sac_step_comb #(
         end
     endgenerate
 
-    localparam int ONE_LEVELS = $clog2(W_X);
-    localparam int ONE_PAD = 1 << ONE_LEVELS;
+    localparam int ONE_LEVELS = 5; // $clog2(W_X)
+    localparam int ONE_PAD = 32; // 1 << ONE_LEVELS
     wire [ONE_PAD-1:0] zero_tree [ONE_LEVELS:0] /* verilator split_var */;
     wire [ONE_PAD-1:0] one_tree [ONE_LEVELS:0] /* verilator split_var */;
     generate
@@ -107,10 +106,7 @@ module sac_step_comb #(
         end
     endgenerate
 
-    dyn_left_shifter #(
-        .N(W_X),
-        .SHIFT_W(S_W)
-    ) u_shift (
+    dyn_left_shifter_fixed3  u_shift (
         .in(pre_shifted),
         .b(leading_count_extended),
         .out(shifted)

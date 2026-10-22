@@ -7,30 +7,37 @@
 // $Source: $ $Revision: 1.0 $ $Log: SPEC 5.5-A fraction token schedule. $
 //-----------------------------------------------------------------------------
 `include "posit_mac.vh"
-module iter_ctrl #(
-    parameter int FRAC_MAX = 27,
-    parameter int FRAC_W = 12,
-    parameter int N_MAX = 8,
-    parameter int S_W = (FRAC_MAX > 1) ? $clog2(FRAC_MAX+1) : 1,
-    parameter int N_W = (N_MAX > 1) ? $clog2(N_MAX+1) : 1,
-    parameter int I_W = $clog2(((FRAC_MAX > N_MAX) ? FRAC_MAX : N_MAX)+1)
-)(
+module iter_ctrl (
     input logic clk,
     input logic reset_n,
     input logic launch,
     input logic cfg_mode,
-    input logic [N_W-1:0] cfg_n,
-    input logic [FRAC_MAX-1:0] x_frac,
+    input logic [3:0] cfg_n,
+    input logic [25:0] x_frac,
     output wire run_ready,
     output logic token_valid,
     output logic first,
     output logic last,
     output logic init_only,
-    output logic [S_W-1:0] scale,
-    output logic [I_W-1:0] iteration,
+    output logic [4:0] scale,
+    output logic [4:0] iteration,
     output logic approx_cut,
     output wire state_error
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // FRAC_MAX: 27 (original).
+    localparam int FRAC_MAX = 26;
+    // FRAC_W: 12 (original).
+    localparam int FRAC_W = 12;
+    // N_MAX: 8 (original).
+    
+    // S_W: (FRAC_MAX > 1) ? $clog2(FRAC_MAX+1) : 1 (original).
+    localparam int S_W = 5;
+    // N_W: (N_MAX > 1) ? $clog2(N_MAX+1) : 1 (original).
+    
+    // I_W: $clog2(((FRAC_MAX > N_MAX) ? FRAC_MAX : N_MAX)+1) (original).
+    localparam int I_W = 5;
+
     (* ASYNC_REG="TRUE" *) logic meta_sync1,meta_sync2;
     logic emitting_q;
     logic mode_q;
@@ -58,9 +65,7 @@ module iter_ctrl #(
     assign next_count=count_q+1'b1;
     assign exhausted_selected = mode_q ? exhausted_approx : exhausted_exact;
     assign is_last = is_init || exhausted_selected || (next_count >= limit_q);
-    sac_step_comb #(
-        .W_X(FRAC_MAX),
-        .S_W(S_W)) u_exact (
+    sac_step_comb  u_exact (
         .fx(fx_q),
         .scale(scale_q),
         .term_valid(unused_valid_exact),
@@ -70,9 +75,7 @@ module iter_ctrl #(
         .exhausted(exhausted_exact),
         .state_error(error_exact)
     );
-    sac_step_comb #(
-        .W_X(FRAC_W),
-        .S_W(S_W)) u_approx (
+    sac_step_comb_fixed2  u_approx (
         .fx(fx_approx),
         .scale(scale_q),
         .term_valid(unused_valid_approx),

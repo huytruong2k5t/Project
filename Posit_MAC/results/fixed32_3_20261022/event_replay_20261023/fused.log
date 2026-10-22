@@ -1,0 +1,31 @@
+# vsim {+VECTORS=C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022/build_f_literal_ports/pilot.vectors} -do run.do -l fused.log -c -wlf fused.wlf work.tb_week13_fused_event 
+# Loading sv_std.std
+# Loading work.tb_week13_fused_event
+# Loading work.posit_mac_f
+# Loading work.mac_f_wrapper
+# Loading work.posit_parser
+# Loading work.lod_lzd_core_fixed2
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb_fixed2
+# Loading work.mul_iter_core_fixed2
+# Loading work.iter_ctrl_fixed2
+# Loading work.sac_step_comb_fixed3
+# Loading work.dyn_left_shifter_fixed5
+# Loading work.sbm_shift_comb_fixed2
+# Loading work.sbm_accum_fixed2
+# Loading work.sbm_accum_comb_fixed2
+# Loading work.fused_add_pipe
+# Loading work.fused_prepare_comb
+# Loading work.fused_align_comb
+# Loading work.fused_arith_comb
+# Loading work.fused_abs_borrow_comb
+# Loading work.fused_norm_comb
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter_fixed2
+# Loading work.lod_lzd_core_fixed4
+# Loading work.posit_pack_finish
+# do run.do 
+# W13_EVENT_PASS completed=8192 reset_aborts=24 mismatch=0 CK2Q=1ns
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/fixed32_3_20261022/event_replay_20261023/source/tb/tb_week13_fused_event.sv(133)
+#    Time: 1854377 ns  Iteration: 0  Instance: /tb_week13_fused_event

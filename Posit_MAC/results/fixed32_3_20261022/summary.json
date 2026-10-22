@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "release_id": "POSIT_MAC_RTL_20261022_FIXED32_3",
+  "fixed_modules": 54,
+  "public_parameters": 0,
+  "strict_lint": "54/54 PASS",
+  "tools": {
+    "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)",
+    "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "modelsim": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012"
+  },
+  "verification": {
+    "nf": {
+      "report": "results/fixed32_3_20261022/build_nf_literal_ports/main_summary.json",
+      "sha256": "27a06659d3d0fa6ccab00750744ca17e25d5bf51bb2e60b6cfbe2d6b42259538",
+      "completed": 10000000,
+      "mismatches": 0,
+      "seed": 20261022
+    },
+    "f": {
+      "report": "results/fixed32_3_20261022/build_f_literal_ports/main.json",
+      "sha256": "18f45f80ca0e1b32e4eeb2430e9c7dfeaeb0388f57ffa9856bce5dc9b0c35f5c",
+      "completed": 10000000,
+      "mismatches": 0,
+      "seed": 20261022
+    },
+    "event": {
+      "nf_corner_completed": 20736,
+      "nf_protocol_completed": 7128,
+      "nf_protocol_aborted": 72,
+      "f_completed": 8192,
+      "f_reset_aborts": 24,
+      "mismatches": 0,
+      "typed_cast_compatibility": "results/fixed32_3_20261022/event_literal_ports/compatibility.json"
+    },
+    "comb_units": {
+      "modules": 37,
+      "comparisons": 740000,
+      "mismatches": 0,
+      "seed": 20261022
+    }
+  },
+  "limitations": [
+    "No new post-route timing/PPA or board test",
+    "Aggregate10M per NF/F, not new10M per each n/OPS profile",
+    "Exact32/3 AC02>=100M remains open; no exact fused claim",
+    "Legacy parameterized testbenches/candidates require old snapshot",
+    "No new final structural AC04 closure; functional counters are recorded"
+  ],
+  "replay_20261023": {
+    "nf_completed": 100000,
+    "status": "PASS",
+    "unit_comparisons": 740000,
+    "mismatches": 0,
+    "f_completed": 100000,
+    "restore_files": 41,
+    "event_completed": 36056
+  },
+  "release_manifest_sha256": "dfff720b941ed3c2262cf0506585a60cee7b237585298738b474d91411ecf9e3",
+  "checkout_byte_preservation": "Scoped -text attributes for frozen inputs and fixed32/3 evidence"
+}

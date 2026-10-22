@@ -13,35 +13,42 @@
 // $Revision: 1.1 $
 // $Log: 2026-10-14: mask low count bits; prepare hidden before final swap. $
 
-module ops_sel_comb #(
-    parameter int FRAC_MAX = 27,
-    parameter int FRAC_W = 12,
-    parameter int SF_W = 11,
-    parameter bit EXACT_EN = 1'b1,
-    parameter bit OPS_EN = 1'b1,
-    parameter int WIDTH_W = (FRAC_MAX > 1) ? $clog2(FRAC_MAX + 1) : 1
-)(
-    input logic [FRAC_MAX-1:0] frac_a,
-    input logic [FRAC_MAX-1:0] frac_b,
+module ops_sel_comb (
+    input logic [25:0] frac_a,
+    input logic [25:0] frac_b,
     input logic s_a,
     input logic s_b,
-    input logic signed [SF_W-1:0] sf_a,
-    input logic signed [SF_W-1:0] sf_b,
+    input logic signed [10:0] sf_a,
+    input logic signed [10:0] sf_b,
     input logic cfg_mode,                    // 0 exact, 1 approximate
     input logic [1:0] cfg_ops,                // 0 fixed A, 1 min-popcount
-    output logic [FRAC_MAX-1:0] x_frac,
-    output logic [FRAC_MAX:0] y_mant,
-    output logic [WIDTH_W-1:0] active_width,
+    output logic [25:0] x_frac,
+    output logic [26:0] y_mant,
+    output logic [4:0] active_width,
     output logic sign_o,
-    output logic signed [SF_W-1:0] sf_o,
+    output logic signed [10:0] sf_o,
     output logic swapped,
     output logic input_cut,
     output logic cfg_error
 );
-    localparam int COUNT_W = WIDTH_W;
-    localparam int PAD_N = 1 << ((FRAC_MAX > 1) ? $clog2(FRAC_MAX) : 0);
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // FRAC_MAX: 27 (original).
+    localparam int FRAC_MAX = 26;
+    // FRAC_W: 12 (original).
+    localparam int FRAC_W = 12;
+    // SF_W: 11 (original).
+    localparam int SF_W = 11;
+    // EXACT_EN: 1'b1 (original).
+    localparam bit EXACT_EN = 1'h1;
+    // OPS_EN: 1'b1 (original).
+    localparam bit OPS_EN = 1'h1;
+    // WIDTH_W: (FRAC_MAX > 1) ? $clog2(FRAC_MAX + 1) : 1 (original).
+    localparam int WIDTH_W = 5;
 
-    localparam int CUT_W = FRAC_MAX - FRAC_W;
+    localparam int COUNT_W = 5; // WIDTH_W
+    localparam int PAD_N = 32; // 1 << ((FRAC_MAX > 1) ? $clog2(FRAC_MAX) : 0)
+
+    localparam int CUT_W = 14; // FRAC_MAX - FRAC_W
 
     wire [FRAC_MAX-1:0] pop_a;
     wire [FRAC_MAX-1:0] pop_b;

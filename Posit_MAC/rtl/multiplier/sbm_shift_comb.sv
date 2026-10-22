@@ -6,22 +6,29 @@
 // Description   : Align Y and cut each unsigned fraction term (SPEC 5.6).
 // $Source: $ $Revision: 1.0 $ $Log: Initial week9 implementation. $
 //-----------------------------------------------------------------------------
-module sbm_shift_comb #(
-    parameter int FRAC_MAX = 27,
-    parameter int FRAC_W = 12,
-    parameter int ROUND_SCHEME = 0,
-    parameter bit EXACT_EN = 1'b1,
-    parameter int S_W = (FRAC_MAX > 1) ? $clog2(FRAC_MAX+1) : 1,
-    parameter int ACC_W = EXACT_EN ? ((2*FRAC_MAX+2 > FRAC_W+4) ? 2*FRAC_MAX+2 : FRAC_W+4) : FRAC_W+4
-)(
+module sbm_shift_comb (
     input logic cfg_mode,
-    input logic [FRAC_MAX:0] y_mant,
-    input logic [S_W-1:0] scale,
+    input logic [26:0] y_mant,
+    input logic [4:0] scale,
     input logic init_only,
-    output logic [ACC_W-1:0] y_base,
-    output logic [ACC_W-1:0] term,
+    output logic [53:0] y_base,
+    output logic [53:0] term,
     output logic term_tail
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // FRAC_MAX: 27 (original).
+    localparam int FRAC_MAX = 26;
+    // FRAC_W: 12 (original).
+    
+    // ROUND_SCHEME: 0 (original).
+    localparam int ROUND_SCHEME = 0;
+    // EXACT_EN: 1'b1 (original).
+    
+    // S_W: (FRAC_MAX > 1) ? $clog2(FRAC_MAX+1) : 1 (original).
+    
+    // ACC_W: EXACT_EN ? ((2*FRAC_MAX+2 > FRAC_W+4) ? 2*FRAC_MAX+2 : FRAC_W+4) : FRAC_W+4 (original).
+    localparam int ACC_W = 54;
+
     typedef logic [ACC_W-1:0] acc_value_t;
     logic [ACC_W-1:0] shifted;
     integer shift_discard;

@@ -6,24 +6,27 @@
 // Description   : One accumulator commit; init_only loads Y, not Y+Y.
 // $Source: $ $Revision: 1.0 $ $Log: Initial week9 implementation. $
 //-----------------------------------------------------------------------------
-module sbm_accum_comb #(
-    parameter int ACC_W = 56,
-    parameter int ROUND_SCHEME = 0
-)(
+module sbm_accum_comb (
     input logic cfg_mode,
     input logic first,
     input logic init_only,
-    input logic [ACC_W-1:0] y_base,
-    input logic [ACC_W-1:0] term,
+    input logic [53:0] y_base,
+    input logic [53:0] term,
     input logic term_tail,
-    input logic [ACC_W-1:0] acc,
+    input logic [53:0] acc,
     input logic sticky_acc,
     input logic numerical_tail,
-    output logic [ACC_W-1:0] acc_next,
+    output logic [53:0] acc_next,
     output logic sticky_next,
     output logic numerical_next,
     output logic carry_error
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // ACC_W: 56 (original).
+    localparam int ACC_W = 54;
+    // ROUND_SCHEME: 0 (original).
+    localparam int ROUND_SCHEME = 0;
+
     logic [ACC_W:0] sum;
     always_comb begin
         sum = {1'b0, first ? y_base : acc};

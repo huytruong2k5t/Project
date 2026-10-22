@@ -9,23 +9,29 @@
 // $Revision: 1.0 $
 // $Log: Initial implementation of SPEC 5.9-D. $
 
-module posit_pack_comb #(
-    parameter int NB = 32,
-    parameter int ES = 2,
-    parameter int F_IN = 2 * (NB - 3 - ES) + 1,
-    parameter int SF_W = $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1,
-    parameter [39:0] ROUND_MODE = "RNE"
-)(
+module posit_pack_comb (
     input  logic sign,
     input  logic is_zero,
     input  logic is_nar,
-    input  logic signed [SF_W-1:0] sf,
-    input  logic [F_IN-1:0] frac,
+    input  logic signed [10:0] sf,
+    input  logic [52:0] frac,
     input  logic sticky,
     input  logic [4:0] flags_in,
-    output wire [NB-1:0] d,
+    output wire [31:0] d,
     output wire [4:0] flags
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // NB: 32 (original).
+    localparam int NB = 32;
+    // ES: 2 (original).
+    
+    // F_IN: 2 * (NB - 3 - ES) + 1 (original).
+    
+    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1 (original).
+    
+    // ROUND_MODE: "RNE" (original).
+    
+
     wire [NB-2:0] p1_mag_trunc_d;
     wire  p1_guard_bit_d;
     wire  p1_round_bit_d;
@@ -35,12 +41,7 @@ module posit_pack_comb #(
     wire [4:0] p1_flags_d;
     wire [NB-1:0] d_d;
     wire [4:0] flags_d;
-    posit_pack_prepare #(
-        .NB (NB),
-        .ES (ES),
-        .F_IN (F_IN),
-        .SF_W (SF_W)
-    ) u_prepare (
+    posit_pack_prepare  u_prepare (
         .sign (sign),
         .is_zero (is_zero),
         .is_nar (is_nar),
@@ -56,10 +57,7 @@ module posit_pack_comb #(
         .special_sel (p1_special_sel_d),
         .flags_o (p1_flags_d)
     );
-    posit_pack_finish #(
-        .NB (NB),
-        .ROUND_MODE (ROUND_MODE)
-    ) u_finish (
+    posit_pack_finish  u_finish (
         .mag_trunc (p1_mag_trunc_d),
         .guard_bit (p1_guard_bit_d),
         .round_bit (p1_round_bit_d),

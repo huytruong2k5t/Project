@@ -24,26 +24,30 @@ RESULTS_DIR := results
 
 .PHONY: all help lint smoke regress cov syn ppa asic report clean
 
-all: lint smoke regress cov syn ppa report ## Run full flow: lint, test, synthesis, PPA collection, report
+FIXED_RUN ?= manual
+
+all: lint smoke regress cov ## Fixed32/ES3 functional flow; STA/PPA are separate
 
 help: ## Show this help message
 	@echo "Posit MAC IP Makefile Targets:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-12s %s\n", $$1, $$2}'
 
-lint: ## Strict normative multiplier lint, all sixteen Gate2 profiles
-	@bash $(SCRIPTS_DIR)/lint_gate2.sh
+lint: ## Audit fixed32/ES3 source and all54 strict lint checks
+	$(PYTHON) $(SCRIPTS_DIR)/audit_rtl_release.py --self-test
+	$(PYTHON) $(SCRIPTS_DIR)/audit_fixed32_3.py --lint
 
-smoke: ## Run Gate2 pilot across all sixteen multiplier configurations
-	@bash $(SCRIPTS_DIR)/verify_week9_verilator.sh final_pilot gate2_pilot
-
-
-regress: ## Run Gate2 multiplier stratified matrix (requires regenerated frozen fixtures)
-	@bash $(SCRIPTS_DIR)/verify_week9_verilator.sh stratified_corpus gate2_stratified
+smoke: ## Fixed32/ES3 NF/F pilot; build first with verify_fixed32_3.py
+	$(PYTHON) $(SCRIPTS_DIR)/verify_fixed32_3.py run nf 100000 smoke_$(FIXED_RUN)
+	$(PYTHON) $(SCRIPTS_DIR)/verify_fixed32_3.py run f 100000 smoke_$(FIXED_RUN)
 
 
-cov: ## Audit Gate2 functional and measured line/branch/toggle coverage
-	$(PYTHON) $(SCRIPTS_DIR)/audit_week9_coverage.py results/week9_multiplier/stratified_corpus --rtl-summary results/week9_multiplier/verilator/gate2_stratified/summary.json --output results/week9_multiplier/verilator/gate2_stratified/functional_coverage.json
-	$(PYTHON) $(SCRIPTS_DIR)/audit_gate2_structure.py
+regress: ## Fixed32/ES3 NF/F10M each; choose a fresh FIXED_RUN label
+	$(PYTHON) $(SCRIPTS_DIR)/verify_fixed32_3.py run nf 10000000 regress_$(FIXED_RUN)
+	$(PYTHON) $(SCRIPTS_DIR)/verify_fixed32_3.py run f 10000000 regress_$(FIXED_RUN)
+
+
+cov: ## Audit bound functional evidence; does not declare final structural AC04
+	$(PYTHON) $(SCRIPTS_DIR)/audit_fixed32_3.py --self-test
 
 syn: ## Run FPGA synthesis and implementation via Vivado / Yosys
 	@echo "==> Running FPGA synthesis..."

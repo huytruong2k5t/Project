@@ -11,15 +11,19 @@
 // $Revision: 2.0-selective-candidate $
 // $Log: Same parameters/ports; no registers or added combinational latency. $
 //-----------------------------------------------------------------------------
-module lod_lzd_core #(
-    parameter int N    = 32,
-    parameter int MODE = 0,               // 0: LOD (Lead One), 1: LZD (Lead Zero)
-    parameter int S    = (N > 1) ? $clog2(N) : 1
-)(
-    input  logic [N-1:0] in,
-    output logic [S-1:0] K,               // Index of first match (0-indexed from MSB)
+module lod_lzd_core (
+    input  logic [29:0] in,
+    output logic [4:0] K,               // Index of first match (0-indexed from MSB)
     output logic         vld              // 1 if matching bit is found, 0 if all 0s (LOD) or all 1s (LZD)
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // N: 32 (original).
+    localparam int N = 30;
+    // MODE: 0 (original).
+    localparam int MODE = 0;
+    // S: (N > 1) ? $clog2(N) : 1 (original).
+    localparam int S = 5;
+
 
     generate
         if (MODE == 0 && (N == 31 || N == 32) && S == $clog2(N)) begin : g_group4

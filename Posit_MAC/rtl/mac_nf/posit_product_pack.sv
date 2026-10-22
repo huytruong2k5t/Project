@@ -11,13 +11,7 @@
 
 `include "posit_mac.vh"
 
-module posit_product_pack #(
-    parameter int NB = 32,
-    parameter int ES = 2,
-    parameter int F_IN = 2 * (NB - 3 - ES) + 1,
-    parameter int SF_W = $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1,
-    parameter [39:0] ROUND_MODE = "RNE"
-)(
+module posit_product_pack (
     input logic clk,
     input logic reset_n,
     input logic in_valid,
@@ -25,16 +19,28 @@ module posit_product_pack #(
     input  logic sign,
     input  logic is_zero,
     input  logic is_nar,
-    input  logic signed [SF_W-1:0] sf,
-    input  logic [F_IN-1:0] frac,
+    input  logic signed [10:0] sf,
+    input  logic [52:0] frac,
     input  logic sticky,
     input  logic [4:0] flags_in,
     output wire out_valid,
     input logic out_ready,
-    output wire [NB-1:0] d,
+    output wire [31:0] d,
     output wire [4:0] flags,
     output wire sign_o
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // NB: 32 (original).
+    localparam int NB = 32;
+    // ES: 2 (original).
+    
+    // F_IN: 2 * (NB - 3 - ES) + 1 (original).
+    
+    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1 (original).
+    
+    // ROUND_MODE: "RNE" (original).
+    localparam [39:0] ROUND_MODE = 40'h524e45;
+
     wire [NB-2:0] p1_mag_trunc_d;
     wire  p1_guard_bit_d;
     wire  p1_round_bit_d;
@@ -60,12 +66,7 @@ module posit_product_pack #(
     end
 
     assign reset_b_sync_clk = meta_sync2;
-    posit_pack_prepare #(
-        .NB (NB),
-        .ES (ES),
-        .F_IN (F_IN),
-        .SF_W (SF_W)
-    ) u_prepare (
+    posit_pack_prepare  u_prepare (
         .sign (sign),
         .is_zero (is_zero),
         .is_nar (is_nar),
@@ -130,10 +131,7 @@ module posit_product_pack #(
                     end
                 end
             end
-    posit_pack_finish #(
-        .NB (NB),
-        .ROUND_MODE (ROUND_MODE)
-    ) u_finish (
+    posit_pack_finish  u_finish (
         .mag_trunc (p1_mag_trunc_q),
         .guard_bit (p1_guard_bit_q),
         .round_bit (p1_round_bit_q),
@@ -173,10 +171,7 @@ module posit_product_pack #(
             assign d = d_q;
             assign flags = flags_q;
             assign sign_o = sign_q;
-    posit_pack_finish #(
-        .NB (NB),
-        .ROUND_MODE (ROUND_MODE)
-    ) u_finish (
+    posit_pack_finish  u_finish (
         .mag_trunc (p1_mag_trunc_d),
         .guard_bit (p1_guard_bit_d),
         .round_bit (p1_round_bit_d),

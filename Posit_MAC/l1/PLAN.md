@@ -1,10 +1,12 @@
 # Xây dựng L1, baseline nội bộ và MAC non-fused/fused
 
-**Cập nhật:** 22/10/2026 — khóa phạm vi duy nhất posit(32,3); tài liệu kiến trúc, mapping và build.
+**Cập nhật:** 23/10/2026 — RTL fixed32/3 đã kiểm chức năng; tài liệu kiến trúc, mapping và build.
 
-**Phạm vi chốt với giảng viên:** chỉ thiết kế, nghiệm thu và so PPA NF/F tại `NB=32, ES=3`. Giữ FW12/FLOOR/RNE/OPS1/n0..8, F W32/Q29; chọn định dạng không bỏ exact NF hoặc thay hợp đồng số học. Format8/0,16/1,32/2 chỉ giữ mô hình/bằng chứng lịch sử, không còn là công việc nghiệm thu mới. Exact32/3 theo AC02 dùng oracle integer/rational độc lập, không dùng SoftPosit ES2. Build phải truyền NB/ES tường minh: default NF production vẫn ES2; đổi default/top cần release mới cùng kiểm chứng, chưa thực hiện trong lần sửa tài liệu này. Ngưỡng vector/coverage32/3 không giảm; manifest/report đa format cũ giữ nguyên và lọc32/3 khi báo cáo mới.
+**Release hiện hành:** `POSIT_MAC_RTL_20261022_FIXED32_3`,54 module không có public parameter,cổng literal,localparam số cụ thể. Luồng hiện hành dùng scripts/verify_fixed32_3.py và hai runner ModelSim fixed32_3; không truyền -GNB/-GES. NF/F mỗi bản10M completed/0 mismatch,37 biến thể tổ hợp740k so sánh và ModelSim đạt; giữ cfg_mode/cfg_n/cfg_ops và lịch giao dịch. L1/oracle không sửa. Những mô tả parameter/default ES2,release38 module,candidate và build cũ bên dưới là lịch sử kiến trúc; không phải API top hiện tại. Chưa đo lại STA/PPA hoặc đóng AC02/final per-n/AC04 mới. Bằng chứng results/fixed32_3_20261022/summary.json; tái chạy theo hướng dẫn fixed ở docs.
 
-RTL production đã khóa tại `rtl/production_freeze.json` (release `POSIT_MAC_RTL_20261018_OPT12_120`). Chạy `python scripts/audit_rtl_release.py --self-test` trước tuần14. Manifest38 module giữ nguyên; L1/oracle không đổi. Optimization8.31.8 lưu khóa mới.
+**Phạm vi chốt với giảng viên:** chỉ posit32/ES3. Giữ FW12/FLOOR/RNE/OPS1/n0..8,F W32/Q29; không bỏ exact NF hoặc thay số học. Format khác chỉ giữ lịch sử. Exact32/3 theo AC02 dùng oracle độc lập; top hiện tại không nhận NB/ES/feature override. Ngưỡng vector/coverage không giảm; không cộng kết quả format khác vào32/3.
+
+RTL production hiện khóa tại `rtl/production_freeze.json` (release `POSIT_MAC_RTL_20261022_FIXED32_3`). Chạy `python scripts/audit_rtl_release.py --self-test` trước build. Manifest54 module; L1/oracle không đổi. Release OPT12/W14 giữ snapshot và bằng chứng lịch sử riêng.
 
 Workflow18/10: đã promote OPT-12 negate theo lựa chọn của sinh viên; A35T Explore8,3ns≈120,48MHz NF/F setup/hold đạt. Recipe syn/opt12_120mhz_release.json khóa I/O2,5ns input,0/0,5ns output. 10M NF+10M F/0 mismatch và ModelSim là bằng chứng refactor; W14-01..11 đã đạt18/10:350M completed RTL/0 mismatch (F90M+NF250M+NF-EX010M),AC04 main và9M paired standalone accuracy. W14-12/AC02 và matched PPA/Gate4 còn mở;Optimization8.34/results/week14/handoff.json. Không đổi hợp đồng số học,source release hoặc timing. OPT02C100MHz giữ lịch sử riêng.
 

@@ -15,6 +15,8 @@ module fused_abs_borrow_comb (
     output wire sign,
     output wire borrow
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+
     wire negative;
     wire [30:0] complemented;
     wire [30:0] correction;

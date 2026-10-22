@@ -20,16 +20,20 @@
 // $Revision: 1.0 $
 // $Log: $
 
-module dyn_right_shifter #(
-    parameter int N       = 32,
-    parameter int SHIFT_W = (N > 1) ? $clog2(N) : 1,
-    parameter bit ARITH   = 1'b0  // 0: Logical (or custom fill_val), 1: Arithmetic (sign extension)
-)(
-    input  logic [N-1:0]       in,
-    input  logic [SHIFT_W-1:0] b,
+module dyn_right_shifter (
+    input  logic [29:0] in,
+    input  logic [4:0] b,
     input  logic               fill_val, // Tie to 1'b0 for logical zero fill; ignored when ARITH = 1
-    output logic [N-1:0]       out
+    output logic [29:0] out
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // N: 32 (original).
+    localparam int N = 30;
+    // SHIFT_W: (N > 1) ? $clog2(N) : 1 (original).
+    localparam int SHIFT_W = 5;
+    // ARITH: 1'b0  // 0: Logical (or custom fill_val) (original).
+    localparam bit ARITH = 1'h0;
+
 
     //-------------------------------------------------------------------------
     // Parameter Validation

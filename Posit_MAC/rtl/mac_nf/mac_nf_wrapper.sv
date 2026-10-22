@@ -8,37 +8,50 @@
 // $Source: $ $Revision: 1.0 $ $Log: Week9 standalone multiplier integration. $
 //-----------------------------------------------------------------------------
 `include "posit_mac.vh"
-module mac_nf_wrapper #(
-    parameter int NB=32,
-    parameter int ES=2,
-    parameter int FRAC_W=12,
-    parameter int N_MAX=8,
-    parameter bit EXACT_EN=1'b1,
-    parameter bit OPS_EN=1'b1,
-    parameter int F=NB-3-ES,
-    parameter int SF_W=$clog2(64'd4 * (longint'(NB) - 64'd2)*(64'd1<<ES)+64'd4)+1,
-    parameter int N_W=(N_MAX>1)?$clog2(N_MAX+1):1,
-    parameter int I_W=$clog2(((F>N_MAX)?F:N_MAX)+1),
-    parameter int ACC_W=EXACT_EN?((2*F+2>FRAC_W+4)?2*F+2:FRAC_W+4):FRAC_W+4,
-    parameter int FIN=2*F+1
-)(
+module mac_nf_wrapper (
     input logic clk,
     input logic rst_n,
     input logic in_valid,
     output wire in_ready,
-    input logic [NB-1:0] a,
-    input logic [NB-1:0] b,
-    input logic [NB-1:0] c,
+    input logic [31:0] a,
+    input logic [31:0] b,
+    input logic [31:0] c,
     input logic acc_mode,
     input logic acc_clr,
     input logic cfg_mode,
-    input logic [N_W-1:0] cfg_n,
+    input logic [3:0] cfg_n,
     input logic [1:0] cfg_ops,
     output wire out_valid,
     input logic out_ready,
-    output wire [NB-1:0] d,
+    output wire [31:0] d,
     output wire [4:0] flags
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // NB: 32 (original).
+    localparam int NB = 32;
+    // ES: 2 (original).
+    
+    // FRAC_W: 12 (original).
+    
+    // N_MAX: 8 (original).
+    localparam int N_MAX = 8;
+    // EXACT_EN: 1'b1 (original).
+    localparam bit EXACT_EN = 1'h1;
+    // OPS_EN: 1'b1 (original).
+    localparam bit OPS_EN = 1'h1;
+    // F: NB-3-ES (original).
+    localparam int F = 26;
+    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2)*(64'd1<<ES)+64'd4)+1 (original).
+    localparam int SF_W = 11;
+    // N_W: (N_MAX>1)?$clog2(N_MAX+1):1 (original).
+    localparam int N_W = 4;
+    // I_W: $clog2(((F>N_MAX)?F:N_MAX)+1) (original).
+    localparam int I_W = 5;
+    // ACC_W: EXACT_EN?((2*F+2>FRAC_W+4)?2*F+2:FRAC_W+4):FRAC_W+4 (original).
+    localparam int ACC_W = 54;
+    // FIN: 2*F+1 (original).
+    localparam int FIN = 53;
+
     logic reset_bridge_q;
     (* ASYNC_REG="TRUE" *) logic meta_sync1,meta_sync2;
     logic busy_q;
@@ -168,9 +181,7 @@ module mac_nf_wrapper #(
             meta_sync2 <= `CK2Q meta_sync1;
         end
     end
-    posit_parser #(
-        .NB(NB),
-        .ES(ES)) u_a (
+    posit_parser  u_a (
         .clk(clk),
         .reset_n(reset_n),
         .in_valid(pair_accept),
@@ -184,9 +195,7 @@ module mac_nf_wrapper #(
         .sf(sf_a),
         .frac(frac_a)
     );
-    posit_parser #(
-        .NB(NB),
-        .ES(ES)) u_b (
+    posit_parser  u_b (
         .clk(clk),
         .reset_n(reset_n),
         .in_valid(pair_accept),
@@ -200,10 +209,7 @@ module mac_nf_wrapper #(
         .sf(sf_b),
         .frac(frac_b)
     );
-    posit_parser #(
-        .NB(NB),
-        .ES(ES)
-    ) u_c (
+    posit_parser  u_c (
         .clk(clk),
         .reset_n(reset_n),
         .in_valid(pair_accept),
@@ -217,12 +223,7 @@ module mac_nf_wrapper #(
         .sf(sf_c),
         .frac(frac_c)
     );
-    ops_sel_comb #(
-        .FRAC_MAX(F),
-        .FRAC_W(FRAC_W),
-        .SF_W(SF_W),
-        .EXACT_EN(EXACT_EN),
-        .OPS_EN(OPS_EN)) u_ops (
+    ops_sel_comb  u_ops (
         .frac_a(frac_a),
         .frac_b(frac_b),
         .s_a(s_a),
@@ -240,13 +241,7 @@ module mac_nf_wrapper #(
         .input_cut(ops_cut),
         .cfg_error(unused_ops_error)
     );
-    mul_iter_core #(
-        .FRAC_MAX(F),
-        .FRAC_W(FRAC_W),
-        .N_MAX(N_MAX),
-        .ROUND_SCHEME(0),
-        .EXACT_EN(EXACT_EN),
-        .SF_W(SF_W)) u_core (
+    mul_iter_core  u_core (
         .clk(clk),
         .reset_n(reset_n),
         .launch_valid(pair_retire),
@@ -272,12 +267,7 @@ module mac_nf_wrapper #(
         .mode_o(core_mode),
         .state_error(core_error)
     );
-    mul_prepack_norm_comb #(
-        .FRAC_MAX(F),
-        .FRAC_W(FRAC_W),
-        .EXACT_EN(EXACT_EN),
-        .SF_W(SF_W)
-    ) u_norm (
+    mul_prepack_norm_comb  u_norm (
         .cfg_mode(core_mode),
         .acc(acc),
         .sf(core_sf),
@@ -291,12 +281,7 @@ module mac_nf_wrapper #(
     assign product_parse_ready = !norm_valid_q || add_ready;
     assign product_capture = product_pack_valid && product_parse_ready;
 
-    posit_product_pack #(
-        .NB(NB),
-        .ES(ES),
-        .F_IN(FIN),
-        .SF_W(SF_W)
-    ) u_product_pack (
+    posit_product_pack  u_product_pack (
         .clk(clk),
         .reset_n(reset_n),
         .in_valid(core_done),
@@ -314,11 +299,7 @@ module mac_nf_wrapper #(
         .sign_o(product_sign_encoded),
         .flags(product_flags)
     );
-    posit_magnitude_parse #(
-        .NB(NB),
-        .ES(ES),
-        .SF_W(SF_W)
-    ) u_product_parse (
+    posit_magnitude_parse  u_product_parse (
         .p(product_magnitude),
         .sign_i(product_sign_encoded),
         .s(product_sign),
@@ -327,11 +308,7 @@ module mac_nf_wrapper #(
         .sf(product_sf),
         .frac(product_frac)
     );
-    posit_add #(
-        .NB(NB),
-        .ES(ES),
-        .SF_W(SF_W)
-    ) u_add (
+    posit_add  u_add (
         .clk(clk),
         .reset_n(reset_n),
         .in_valid(norm_valid_q),
@@ -357,10 +334,7 @@ module mac_nf_wrapper #(
         .sticky(sum_sticky),
         .flags_out(sum_flags)
     );
-    posit_pack #(
-        .NB(NB),
-        .ES(ES)
-    ) u_pack (
+    posit_pack  u_pack (
         .clk(clk),
         .reset_n(reset_n),
         .in_valid(add_valid),

@@ -9,20 +9,23 @@
 // $Revision: 1.1 $
 // $Log: 2026-10-07: merge rounding/sign into one carry chain. $
 
-module posit_pack_finish #(
-    parameter int NB = 32,
-    parameter [39:0] ROUND_MODE = "RNE"
-)(
-    input  logic [NB-2:0] mag_trunc,
+module posit_pack_finish (
+    input  logic [30:0] mag_trunc,
     input  logic guard_bit,
     input  logic round_bit,
     input  logic sticky_bit,
     input  logic sign,
     input  logic [2:0] special_sel,
     input  logic [4:0] flags_in,
-    output logic [NB-1:0] d,
+    output logic [31:0] d,
     output logic [4:0] flags
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // NB: 32 (original).
+    localparam int NB = 32;
+    // ROUND_MODE: "RNE" (original).
+    localparam [39:0] ROUND_MODE = 40'h524e45;
+
     // TRUNC intentionally ignores G/R/S for increment; keep explicit consumption.
     wire unused_trunc_grs = ^{guard_bit, round_bit, sticky_bit};
     localparam logic [2:0] NORMAL = 3'd0;

@@ -7,23 +7,31 @@
 //                 No rounding. input_cut is NOT numerical RNE sticky.
 // $Source: $ $Revision: 1.0 $ $Log: Initial week9 implementation. $
 //-----------------------------------------------------------------------------
-module mul_norm_comb #(
-    parameter int FRAC_MAX = 27,
-    parameter int FRAC_W = 12,
-    parameter int ROUND_SCHEME = 0,
-    parameter bit EXACT_EN = 1'b1,
-    parameter int ACC_W = EXACT_EN ? ((2*FRAC_MAX+2 > FRAC_W+4) ? 2*FRAC_MAX+2 : FRAC_W+4) : FRAC_W+4,
-    parameter int SF_W = 11,
-    parameter int F_IN = 2*FRAC_MAX+1
-)(
+module mul_norm_comb (
     input logic cfg_mode,
-    input logic [ACC_W-1:0] acc,
+    input logic [53:0] acc,
     input logic sticky_acc,
-    input logic signed [SF_W-1:0] sf,
-    output logic signed [SF_W-1:0] sf_norm,
-    output logic [F_IN-1:0] frac_norm,
+    input logic signed [10:0] sf,
+    output logic signed [10:0] sf_norm,
+    output logic [52:0] frac_norm,
     output logic sticky_norm
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // FRAC_MAX: 27 (original).
+    localparam int FRAC_MAX = 26;
+    // FRAC_W: 12 (original).
+    localparam int FRAC_W = 12;
+    // ROUND_SCHEME: 0 (original).
+    localparam int ROUND_SCHEME = 0;
+    // EXACT_EN: 1'b1 (original).
+    
+    // ACC_W: EXACT_EN ? ((2*FRAC_MAX+2 > FRAC_W+4) ? 2*FRAC_MAX+2 : FRAC_W+4) : FRAC_W+4 (original).
+    localparam int ACC_W = 54;
+    // SF_W: 11 (original).
+    
+    // F_IN: 2*FRAC_MAX+1 (original).
+    localparam int F_IN = 53;
+
     logic [ACC_W-1:0] grid;
     integer q;
     always_comb begin

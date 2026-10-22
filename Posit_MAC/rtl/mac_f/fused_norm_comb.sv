@@ -6,24 +6,23 @@
 // Description   : W12-F-1 fused datapath, approximate posit(32,3).
 // $Source: $ $Revision: 1.0 $ $Log: Week13 RTL implementation. $
 //-----------------------------------------------------------------------------
-module fused_norm_comb #(
-    parameter int SF_W = 11
-)(
+module fused_norm_comb (
     input  logic [30:0] magnitude,
-    input  logic signed [SF_W-1:0] anchor,
+    input  logic signed [10:0] anchor,
     output wire is_zero,
-    output wire signed [SF_W-1:0] sf,
+    output wire signed [10:0] sf,
     output wire [52:0] frac
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // SF_W: 11 (original).
+    localparam int SF_W = 11;
+
     typedef logic signed [SF_W-1:0] sf_t;
     wire [4:0] leading_count;
     wire nonzero;
     wire [29:0] fraction_shifted;
     wire signed [5:0] scale_adjust;
-    lod_lzd_core #(
-        .N (31),
-        .MODE (0)
-    ) u_lod (
+    lod_lzd_core_fixed2  u_lod (
         .in (magnitude),
         .K (leading_count),
         .vld (nonzero)

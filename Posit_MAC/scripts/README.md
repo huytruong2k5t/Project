@@ -1,4 +1,30 @@
+## Luồng hiện hành fixed32/ES3 — 23/10/2026
+
+Dùng `verify_fixed32_3.py`, `verify_fixed32_3_modelsim.ps1`,
+`verify_fixed32_3_units.ps1` và `audit_rtl_release.py --self-test`.
+Không truyền -GNB/-GES hoặc feature generic vào DUT fixed. Makefile lint/smoke/
+regress/cov đã chuyển sang luồng này. Hướng dẫn ở docs/HUONG_DAN_CHAY_WSL_MODELSIM.md.
+Runner đa format và các lệnh tuần cũ bên dưới chỉ dành cho snapshot tham số hóa cũ;
+không chạy trực tiếp chúng với production fixed32/3 hoặc sửa oracle để vượt lỗi.
+
+---
+
 # Thư mục Kịch bản Bổ trợ (`scripts/`)
+
+## Lưu ý sau dọn thư mục — 19/10/2026
+
+Không sửa nội dung hoặc đường dẫn script trong phiên này. Build production vẫn dùng
+`rtl/production.f` và release `POSIT_MAC_RTL_20261018_OPT12_120`.
+23 file ứng viên cũ đã được lưu ZIP; còn 9 snapshot thuộc gói đã chọn trong
+`rtl/candidates/`. Xem [bản đồ hiện hành](../README.md) và
+[danh mục/cách phục hồi ứng viên cũ](../archive/README.md).
+
+Các lệnh thí nghiệm ở phần lịch sử, đặc biệt primitive, OPT-02b, prepack OPT-01,
+normalization shared/zero và các nhánh SAC a/ab/abc_sub, có thể cần phục hồi
+archive vào gốc dự án trước khi chạy. Không đổi runner để bỏ qua nguồn bị thiếu.
+Cache W14 `.gch/.o/.a/.d`, thư viện ModelSim event protocol và cache Python đã dọn;
+build lại phần cần thiết trước khi replay. Log, raw coverage, fixture, snapshot,
+hash và báo cáo timing giữ nguyên. Phiên dọn không chạy lại các lệnh dưới đây.
 
 ## Release production đã khóa — 18/10/2026
 

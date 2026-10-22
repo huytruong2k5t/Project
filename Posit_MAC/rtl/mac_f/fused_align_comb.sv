@@ -13,6 +13,8 @@ module fused_align_comb (
     output wire [30:0] aligned_small,
     output wire residual
 );
+    // Fixed posit32/ES3 elaboration; no public parameters.
+
     wire [30:0] shifted;
     wire [30:0] lost_mask;
     // Mask and data shifts are parallel. Large delta never wraps modulo 32.

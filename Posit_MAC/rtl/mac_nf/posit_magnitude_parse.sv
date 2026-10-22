@@ -8,22 +8,27 @@
 // Contract: NB>=4, NB<=32, 0<=ES<=NB-4; canonical Zero/NaR outputs.
 // $Log: 2026-10-16: XOR-normalized tail shares one LOD; no interface change.
 //-----------------------------------------------------------------------------
-module posit_magnitude_parse #(
-    parameter int NB=32,
-    parameter int ES=2,
-    parameter int FRAC_MAX=NB-3-ES,
-    parameter int SF_W=$clog2(64'd4 * (longint'(NB) - 64'd2)*(64'd1<<ES)+64'd4)+1
-)(
-    input logic [NB-1:0] p,
+module posit_magnitude_parse (
+    input logic [31:0] p,
     input logic sign_i,
     output wire s,
     output wire is_zero,
     output wire is_nar,
-    output wire signed [SF_W-1:0] sf,
-    output wire [FRAC_MAX-1:0] frac
+    output wire signed [10:0] sf,
+    output wire [25:0] frac
 );
-    localparam int CNT_W=$clog2(NB-1);
-    localparam int REG_W=CNT_W+1;
+    // Fixed posit32/ES3 elaboration; no public parameters.
+    // NB: 32 (original).
+    localparam int NB = 32;
+    // ES: 2 (original).
+    localparam int ES = 3;
+    // FRAC_MAX: NB-3-ES (original).
+    localparam int FRAC_MAX = 26;
+    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2)*(64'd1<<ES)+64'd4)+1 (original).
+    localparam int SF_W = 11;
+
+    localparam int CNT_W=5; // $clog2(NB-1)
+    localparam int REG_W=6; // CNT_W+1
     typedef logic [CNT_W-1:0] count_value_t;
     localparam logic [CNT_W-1:0] MAX_COUNT = count_value_t'(NB-2);
     if(NB<4 || NB>32 || ES<0 || ES>NB-4 || FRAC_MAX!=NB-3-ES || SF_W<REG_W+ES)
@@ -49,11 +54,7 @@ module posit_magnitude_parse #(
     // Keep the original magnitude on the exponent/fraction payload path.
     assign terminator_bits = magnitude[NB-3:0] ^ {(NB-2){r}};
 
-    lod_lzd_core #(
-        .N    (NB - 2),
-        .MODE (0),
-        .S    (CNT_W)
-    ) u_regime_detector (
+    lod_lzd_core  u_regime_detector (
         .in  (terminator_bits),
         .K   (terminator_count),
         .vld (terminator_valid)
@@ -65,7 +66,7 @@ module posit_magnitude_parse #(
     assign regime=~({1'b0,cnt}^{REG_W{r}});
     // Drop sign, FRB and one more bit BEFORE the variable shift.
     // This equals shift rest by cnt, then drop the terminator (L1 formulation).
-    dyn_left_shifter #(.N(NB-3),.SHIFT_W(CNT_W)) align_payload(
+    dyn_left_shifter  align_payload(
         .in(magnitude[NB-4:0]),.b(cnt),.out(payload));
     if(ES==0) begin:g_es0
         assign finite_sf=sf_value_t'(regime);

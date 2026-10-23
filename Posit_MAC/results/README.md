@@ -1,5 +1,48 @@
 # Kết quả kiểm chứng và đo tài nguyên
 
+## Đối chứng chính và dọn cache — 23/10/2026
+
+| Nhóm cần giữ | Nơi tra cứu |
+| --- | --- |
+| Production fixed posit32/ES3 | `fixed32_3_20261022/summary.json`, `specialization.json`, `lint_summary.json`; NF/F mỗi bản10M completed,0 mismatch,ModelSim và740k so sánh tổ hợp đạt; không thay STA/PPA mới hoặc final per-profile |
+| Snapshot trước cố định32/3 | `fixed32_3_20261022/reference_source.zip`, `reference_sha256.json`; giữ nguyên nguồn và hash để tái lập |
+| Biên bản dọn cache | `cleanup_cache_20261023/cleanup.json`, `retained_sha256.json.gz`, `postcheck.json`, `release_audit.log` |
+| W14, accuracy và timing/PPA lịch sử | Các nhóm có trong bảng phía dưới; giữ CSV/JSON,rpt,log PASS/FAIL,raw coverage,fixture và snapshot theo từng nguồn |
+
+Đã dọn2.777 file trong89 thư mục build/library/cache,giải phóng646.415.018 byte
+(khoảng616,5 MiB). SHA256 của34.725 file giữ lại đạt sau xóa; README này được cập nhật
+có chủ đích sau phép kiểm và có ghi nhận hash trước/sau riêng trong biên bản.
+Không xóa `.bin` fixture,`.dat` raw coverage,bảng số liệu,checkpoint PPA hoặc nguồn đối chứng.
+Không chạm checkout Git,thư viện phụ thuộc trong scratch hoặc mã RTL/L1/oracle.
+Binary Verilator và thư viện ModelSim cần build lại; chọn nhãn build/run mới theo
+`../docs/HUONG_DAN_CHAY_WSL_MODELSIM.md`. Không dùng thiếu cache để bỏ kiểm hash
+hoặc xem việc dọn dữ liệu là một lần nghiệm thu mô phỏng mới.
+
+## Hiện trạng sau dọn — 19/10/2026
+
+| Nhóm | Nơi tra cứu |
+| --- | --- |
+| RTL đã khóa, thử và chọn ở mốc 120 MHz | `opt120_20261018/`; recipe `../syn/opt12_120mhz_release.json` |
+| OPT-15 chia sẻ tài nguyên NF, chưa promote | `opt15_share_20261019/summary.json`; `evidence.zip`, `archive_manifest.json`, PPA/stages và các replay trong cùng nhóm |
+| W14, nghiệm thu và accuracy | `week14/`, đặc biệt `handoff.json`, `completion.json`, `coverage_closure.json`, `accuracy_inference.json` |
+| Thử UltraScale+ | `xcvu9p_trial_20261018/` — chỉ là trial riêng |
+| Quyết định chọn/bỏ các ứng viên trước mốc 120 MHz | Các nhóm `opt02b_*`, `opt02c_*`, `opt03_*`, `opt05_*`, `opt09_*`, `opt10a_*`, `optcombo_*`, `primitive_*`, `parser_xor_*`, `prepack_refactor_*`, `align_refactor_*`, `normalize_refactor_*` giữ nguyên |
+| Nguồn ứng viên cũ đã lưu trữ | [Kho nén và cách phục hồi](../archive/README.md) |
+
+Các phần có ngày phía dưới là lịch sử; trạng thái Gate tại mỗi mốc không thay thế
+kết luận W14 hiện hành. Bằng chứng đo dưới 120 MHz vẫn cần để đối chiếu nên không xóa
+summary, STA, CSV, seed, hash hoặc log thất bại theo ngưỡng tần số.
+
+Lượt dọn này xóa cache `.gch/.o/.a/.d` trong `week14/**/obj/`, Python cache và
+ModelSim `week14/event_protocol/work/`. Giữ generated source/header/makefile,
+snapshot, fixture, counter, raw coverage `.dat` và các archive nghiệm thu.
+`results/` giảm từ khoảng 2.088,75 xuống 884,08 MiB; tổng cache dọn cả trong
+`scripts/__pycache__/` là 920 file/1.204,85 MiB.
+
+Trước khi chạy lại phải build thư viện/binary cần thiết; không dùng việc thiếu cache
+làm bằng chứng kiểm mới hoặc bỏ kiểm hash. Phiên này không chạy mô phỏng/STA,
+không sửa nội dung báo cáo. [Danh mục và xác minh toàn vẹn](../archive/README.md).
+
 ## 1. Bằng chứng cần giữ
 
 | Nhóm | Kết quả chính |

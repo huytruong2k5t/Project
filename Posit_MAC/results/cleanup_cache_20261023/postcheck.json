@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-23",
+  "status": "PASS",
+  "release": "POSIT_MAC_RTL_20261022_FIXED32_3",
+  "release_audit": "PASS",
+  "cleanup_retained_hash_check": "PASS",
+  "retained_files_verified": 34725,
+  "cache_files_deleted": 2777,
+  "reclaimed_bytes": 646415018,
+  "results_bytes_after_including_receipts": 901377157,
+  "protected_manifest_sha256": "6b37d257a6d8087d876defb29e898149b0a9be171dbff78a3846a406b10d7c9c",
+  "intentional_documentation_updates": [
+    {
+      "after_sha256": "29ff399e10fe224769c41fabecc79d369b35841cd60da12b6b257ce9432275d7",
+      "reason": "Add current evidence index and cleanup receipt after verifying preserved data",
+      "before_sha256": "7dc7fe2539c6528141f746b6c2615ebac91ae1de5ab78eea3032d64a253742e6",
+      "path": "results/README.md"
+    }
+  ],
+  "note": "No simulation or STA rerun. Historical binary hashes remain evidence; rebuild with a fresh tag before replay.",
+  "rtl_or_numerical_model_changes": false
+}

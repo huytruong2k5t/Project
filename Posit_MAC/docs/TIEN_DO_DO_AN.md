@@ -345,6 +345,7 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | --- | --- | --- | --- |
 | 1 | Cố định RTL và kiểm lại32/3 |54 module không public parameter,cổng literal;NF10M+F10M và740k so sánh tổ hợp/0 mismatch. ModelSim NF27.864+F8.192 completed/0 mismatch,abort tách riêng. Giữ snapshot,hash,seed20261022 và lệnh;khóa release mới,L1/oracle không sửa. Chưa STA/PPA/AC02 hoặc final per-n/AC04 mới;backup xác nhận theo push cuối phiên | ✅ chức năng |
 | 2 | Hoàn thiện tái chạy và tài liệu | Build lại từ production,pilot100k mỗi NF/F,ModelSim NF/F và740k so sánh tổ hợp lặp lại đạt0 mismatch;runner không cần format generic. Bổ sung phục hồi comparator từ ZIP có SHA256,giữ mọi kết quả cũ;hướng dẫn luồng fixed tách khỏi lệnh đa format lịch sử | ✅ |
+| 3 | Dọn cache và bảo toàn đối chứng | Xóa2.777 file build/library/cache,giải phóng616,5 MiB;34.725 file giữ lại được kiểm SHA256 sau xóa. Giữ fixture,raw coverage,bảng CSV/JSON,report/log,snapshot và hash. Không sửa RTL/L1/oracle hoặc chạy lại corpus;biên bản ở results/cleanup_cache_20261023 | ✅ |
 
 ### 4.22. Mẫu cập nhật tiếp theo
 

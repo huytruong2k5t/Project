@@ -1,5 +1,10 @@
 ## Luồng hiện hành: posit(32,3) cố định — 23/10/2026
 
+**Sau dọn cache23/10:** binary,thư viện work và tmp đã được xóa; các báo cáo,vector,
+snapshot và hash vẫn giữ. Chạy lại bước build nf/f với nhãn POSIT32_BUILD_TAG mới
+rồi mới chạy pilot/ModelSim. Manifest binary cũ là chứng cứ lịch sử,không có nghĩa
+binary ấy còn tồn tại. Không chạy lại prepare/specialize/promote hoặc bỏ kiểm hash.
+
 Release `POSIT_MAC_RTL_20261022_FIXED32_3`,54 module không public parameter.
 Không thêm -GNB/-GES/-GFRAC_W hoặc generic của DUT. Các lệnh tuần cũ bên dưới
 chỉ tái chạy với snapshot/release cũ; không dùng chúng để build source fixed hiện tại.

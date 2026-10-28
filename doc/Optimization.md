@@ -1,6 +1,6 @@
 # Optimization — Tối ưu RTL và hồ sơ kiểm chứng Posit MAC
 
-**Cập nhật:** 28/10/2026. Chuyển từ `Posit_MAC/l1/PLAN.md` theo yêu cầu sinh viên; bổ sung đề xuất OPT-17 ở mục8.37, chưa triển khai.
+**Cập nhật:** 28/10/2026. Chuyển từ `Posit_MAC/l1/PLAN.md` theo yêu cầu sinh viên; OPT-17 mục8.37 đã sửa theo ý tưởng hai Parser P1/P2, tầng chờ OPS và stall từ E4, chưa triển khai.
 
 Tài liệu này giữ các phương án tối ưu, thay đổi RTL, kết quả mô phỏng/lint, synthesis và STA/PPA, gồm cả ứng viên không được chọn và giới hạn bằng chứng. Mọi đường dẫn code/results và lệnh trong phần lịch sử được hiểu từ gốc `Posit_MAC`, trừ liên kết Markdown đã ghi rõ. Không di chuyển hoặc sửa mã nguồn, kết quả, seed hay hash của checkpoint.
 
@@ -27,7 +27,7 @@ Các mã mục cũ `7.x`/`8.x` được giữ để truy vết report và liên 
 | Release 120 MHz đối chứng | OPT-12 negate đã promote và khóa `POSIT_MAC_RTL_20261018_OPT12_120`; OPT-13/14 chưa triển khai | Mục8.31.8 |
 | Ứng viên OPT-15/16 lịch sử | NF `combined`, F `parser2`/`shared_add` đã có kiểm/đo riêng; chưa promote vào release fixed32/3. Quyết định ngày19/10 và kết quả ngày20/10 giữ theo mốc, cần rebase/qualification riêng nếu dùng tiếp | Mục8.35.5/8.36 |
 | Production fixed32/3 |54 module, chức năng đã kiểm trên release cố định; chưa suy STA/PPA của nguồn mới từ release120MHz lịch sử | `rtl/production_freeze.json`, SPEC v1.22 |
-| Parser chuẩn bị trước và bàn giao sớm lõi nhân — OPT-17 | Chỉ đề xuất: tách nhận đầu vào, context đang nhân và quyền giữ kết quả; xử lý riêng phụ thuộc tích lũy. Chưa sửa RTL, chưa chạy thử | Mục8.37 |
+| Hai Parser và tầng chờ OPS — OPT-17 | Kế hoạch mới theo sinh viên: lane A/C và lane B, mỗi Parser P1/P2; một bank C, một slot OPS, giữ lịch E0–E4 và cho stall tại E4. Tối đa hai giao dịch; tích lũy giữ tuần tự ở revision đầu. Chưa sửa RTL/chạy thử | Mục8.37 |
 
 Các script report/prepare gắn checkpoint cũ là producer lịch sử, không chạy lại để tái chèn nhật ký vào PLAN hiện hành. Dùng snapshot/README của study khi tái lập; không sửa các script đã khóa hash chỉ để đổi nhãn báo cáo. Collector bảng toàn tầng hiện hành đã được đổi sang vùng báo cáo giới hạn trong tài liệu này.
 
@@ -2500,12 +2500,17 @@ theo ưu tiên đồng nhất thiết kế/giảm FF/latency,OPT-15 parser2 tố
 Giữ cả hai ở nhánh thử nghiệm,chưa chọn thay production,chưa sửa normative SPEC,
 chưa promote/khóa lại,chưa đóng matched ≥3-run Gate4. Không commit/push GitHub trong phiên này.
 
-### 8.37. OPT-17 — Parser chuẩn bị trước và bàn giao sớm lõi nhân — đề xuất28/10/2026
+### 8.37. OPT-17 — Hai Parser P1/P2, tầng chờ OPS và stall từ E4 — kế hoạch28/10/2026
 
-**Trạng thái: ĐỀ XUẤT, CHƯA TRIỂN KHAI — chờ sinh viên xem và duyệt kế hoạch.**
-Yêu cầu hiện tại chỉ cho phép ghi ý tưởng, phân rã công việc và tiêu chí đánh giá.
+**Trạng thái: ĐÃ SỬA KẾ HOẠCH THEO Ý TƯỞNG SINH VIÊN, CHƯA TRIỂN KHAI.**
+Sinh viên chọn cấu trúc tối giản và cho phép kéo dài stall ở E4. Bản kế hoạch này thay
+phương án prefetch tổng quát ban đầu trong cùng mục; yêu cầu hiện tại chỉ là cập nhật tài liệu.
 Không sửa RTL, testbench, SPEC normative, filelist/freeze, L1/oracle hoặc constraint;
 không tạo candidate/build/simulation/STA trong phiên lập kế hoạch này.
+
+**Quy ước tên:** “OBS” trong trao đổi được hiểu là khối chọn toán hạng **OPS** hiện có,
+không tạo một module số học OBS mới. Khi hiện thực sẽ chốt kết quả OPS vào một slot chờ
+để dùng đúng một lần cho mỗi phép nhân, không lặp OPS theo từng bước SAC.
 
 #### 8.37.1. Mục tiêu và vấn đề của nguồn hiện tại
 
@@ -2529,6 +2534,10 @@ Tuy nhiên, các wrapper hiện chỉ cho phép một giao dịch từ accept đ
 chiếm lõi nhân khỏi thời gian giữ toàn bộ kết quả MAC. Đây là tối ưu thông lượng/II;
 không mặc định làm tăng Fmax, giảm latency của một giao dịch hoặc tái hiện lịch paper.
 
+Lane A/C dùng chung Parser đã có trong candidate OPT-15 lịch sử ở mục8.35/8.36;
+phần mới cần khảo sát là kết hợp hai Parser với slot OPS chờ giao dịch kế tiếp và
+quy tắc stall/bàn giao. Chưa có kiểm chứng cho tổ hợp mới trên release fixed32/3.
+
 #### 8.37.2. Phạm vi và các ràng buộc giữ nguyên
 
 - Nền bắt đầu: release fixed32/3 đang khóa; lưu hash nguồn parent và filelist trước thử.
@@ -2540,8 +2549,15 @@ không mặc định làm tăng Fmax, giảm latency của một giao dịch ho�
 - Điểm bắt đầu đề xuất: tối đa **hai giao dịch đã nhận nhưng chưa retire** trên toàn top,
   kể cả giao dịch đang ở Parser, lõi hoặc đuôi MAC. Chỉ cho một giao dịch nằm trong lõi lặp.
   Không nhận T2 nếu T0/T1 đã dùng hết hai credit, dù một bank vật lý còn trống.
-- Dùng P1/P2 sẵn có của Parser làm nơi chờ nếu đủ, bổ sung context metadata tối thiểu.
-  Không mặc định thêm FIFO dữ liệu lớn hoặc FF cho toàn datapath; kiểm từng quyền sở hữu slot.
+- Chọn đúng **hai Parser**: lane0 dùng luân phiên A/C, lane1 dùng B; mỗi lane vẫn có P1/P2.
+  Bổ sung **một slot kết quả OPS** và dùng **một bank C đã giải mã**. C kế tiếp được giữ
+  tại P2 nếu bank C còn bận; chưa thêm FIFO C hoặc FIFO dữ liệu độ sâu tùy ý.
+- Giữ một nơi chốt C dạng mã32 bit để cấp vào lane A/C ở chu kỳ sau, cùng context cấu hình
+  cho tối đa hai giao dịch. A/B/C/cfg vẫn được nhận nguyên tử ở public accept; không đọc c
+  từ bus ngoài muộn hơn rồi giả định phía phát còn giữ giá trị cũ.
+- NF giữ product packer và final packer riêng của production; F giữ `fused_add_pipe` hiện hành.
+  Lượt đầu chỉ thay front-end/lịch điều khiển, không ghép thêm shared-packer OPT-15 combined
+  hoặc shared-adder OPT-16. Không thêm tầng số học vào vòng SAC/shift/acc.
 - Giữ mã dễ đọc, cổng theo từng dòng, một module mỗi file, reset/enable theo bundle và guideline.
   Không nối ready thành vòng tổ hợp; không thêm false path/multicycle chỉ để che đường ready dài.
 
@@ -2549,42 +2565,80 @@ Giới hạn hai credit là điểm thử để giảm độ phức tạp, khôn
 ở n0/n1 hoặc mọi độ dài đuôi NF/F. Nếu thiếu credit là nguyên nhân giới hạn throughput,
 phải ghi nhận rồi đề xuất tăng độ sâu ở revision sau, không tự mở rộng trong cùng study.
 
-#### 8.37.3. Phương án kiến trúc theo hai bước độc lập
+#### 8.37.3. Lịch được chọn và cách stall tối giản
 
-**Bước A — chỉ chuẩn bị trước ở Parser, giữ cách giải phóng lõi cũ.**
+**Tổ chức đường dữ liệu:** lane0 nhận A rồi C; lane1 nhận B. A/B sau P2 được ghép đúng
+giao dịch, đi qua logic OPS và chốt X/Y/sign/scale/cfg/cờ vào một slot OPS. C sau P2
+đi vào bank C riêng, không đi qua OPS. Gắn role A/C theo các enable P1/P2 và giữ thứ tự
+giao dịch; không ghép chỉ dựa trên các valid có mặt cùng lúc.
 
-1. Thử trước trên giao dịch độc lập `acc_mode=0,acc_clr=0` của NF, sau đó áp dụng F.
-   Đây là phạm vi thử trung gian, chưa đủ thay production có chế độ tích lũy.
-2. Khi còn credit và các Parser nhận được cùng giao dịch, cho nhận T1 dù T0 đang chạy.
-   A/B/C bên ngoài và toàn bộ cfg/acc metadata phải được chốt theo accept của T1.
-3. Kết quả Parser T1 giữ ổn định đến handshake bàn giao cho OPS/lõi. A/B/C phải đi cùng
-   giao dịch; không được lấy config của T1 để tính T0 hoặc ghép C của giao dịch khác.
-4. Tách context đang chờ với context đang nhân; chỉ kích hoạt config của T1 khi launch T1.
-   Hai tầng Parser có thể chứa token ở các thời điểm khác nhau nhưng phải có metadata
-   tương ứng, không chỉ thêm một thanh ghi cfg global rồi cho phép nhận tùy ý.
-5. Vẫn giải phóng lõi ở retire T0 trong bước A. T1 lúc đó đã giải mã xong, có thể launch
-   ở cạnh đủ điều kiện tiếp theo. Bước này mới che thời gian Parser, chưa nhận lõi ngay core_done.
+Bộ cấp lane ưu tiên đưa C đã chốt vào lane A/C trước A mới. Public accept của một cặp
+A/B chỉ xảy ra khi lane A/C thực sự nhận A và lane B đồng thời nhận B, còn chỗ C-raw/context
+và còn credit. Role A/C phải được giữ hoặc cập nhật đúng theo enable của từng bank,
+không chạy theo clock độc lập khi dữ liệu đang stall.
 
-**Bước B — bàn giao tích an toàn rồi tái sử dụng lõi, không chờ retire cuối.**
+**Bảng lịch giữ theo trao đổi với sinh viên.** Trạng thái được ghi **sau mỗi cạnh clock**;
+T0/T1 là hai MAC độc lập `acc_mode=0,acc_clr=0`, ban đầu trống, lõi có thể nhận T0 ở E3.
+Ký hiệu cặp ở P1/P2 lần lượt là lane A/C và lane B. C dạng mã được chốt cùng A/B/cfg
+tại accept, dù chỉ đưa vào Parser ở cạnh tiếp theo.
 
-1. Tạo hợp đồng bàn giao kết quả nội bộ có valid/ready hoặc cơ chế giữ tương đương.
-   `result_accept=result_valid&&result_ready` phải xác nhận độ lớn, scale, dấu, mode,
-   Zero/NaR, các cờ cut và context liên quan đã được tầng sau lưu đầy đủ.
-2. Nếu tầng sau chưa sẵn sàng, giữ kết quả/context T0; không dùng xung core_done một chu kỳ
-   làm bằng chứng kết quả đã được nhận. Chỉ cho lõi bắt đầu T1 sau khi quyền sở hữu T0 đã chuyển an toàn.
-3. NF: điểm bàn giao có thể là accept của product P1 nếu toàn bộ context C/flags đi theo
-   product P1/P2 và product-parse tới adder. Bank C/context đơn hiện tại không đủ khi T1
-   được launch trước lúc product T0 vào adder; phải bổ sung sideband theo slot/token.
-4. F: điểm bàn giao có thể là accept ở đầu `fused_add_pipe` nếu P_hat, C_eff và metadata
-   đã được chốt trong cùng giao dịch. Không thay P_hat hoặc thêm product RNE.
-5. Dùng lại credit đã dự trữ; chỉ giải phóng credit toàn top khi retire hoặc reset hủy giao dịch.
-   Bàn giao khỏi lõi giải phóng tài nguyên nhân, không giải phóng quyền giữ kết quả cuối.
-6. Với T1 đã sẵn sàng và tài nguyên đủ, mục tiêu đầu là launch ở cạnh kế tiếp sau
-   result_accept. Nhận/nhả lõi cùng một cạnh chỉ khảo sát sau nếu cần và có bằng chứng;
-   không đặt yêu cầu zero-bubble làm lý do kéo dài ready xuyên toàn datapath.
+| Cạnh | P1 của hai Parser | P2 của hai Parser | Tầng chờ OPS | Lõi nhân | Nơi giữ C |
+| --- | --- | --- | --- | --- | --- |
+| E0 | A0, B0 | Trống | Trống | Trống | C0 dạng mã đã được lưu |
+| E1 | C0, trống | A0, B0 | Trống | Trống | Chưa có C giải mã |
+| E2 | A1, B1 | C0, trống | Giữ kết quả OPS của T0 | Trống | C0 đang ở P2; C1 dạng mã được lưu khi nhận T1 |
+| E3 | C1, trống | A1, B1 | T0 được chuyển vào lõi | Bắt đầu T0 | Lưu C0 đã giải mã |
+| E4 | Dừng nhận thêm khi hết chỗ/credit | C1, trống | Giữ kết quả OPS của T1 | Tiếp tục T0 | Giữ C0 |
+| E4+1… | Tiếp tục stall nếu chưa đủ điều kiện | Giữ C1 nếu bank C còn bận | Giữ nguyên T1,không launch lại | Tiếp tục/xả các bước T0 hoặc giữ kết quả chờ bàn giao | Giữ C0 cho đến khi tầng cộng nhận |
+| Khi đường sau nhận T0 an toàn | Chỉ nhận thêm khi còn credit và lane sẵn sàng | Chuyển C1 khi bank C có chỗ | Chờ hoặc chuyển T1 khi đủ điều kiện launch | Bàn giao T0; nhận T1 tại cạnh hợp lệ sau đó | C0 đã được tầng cộng giữ; bank có thể nạp C1 |
 
-Lõi vẫn SAC→shift→acc theo context của một phép nhân. Có thể chồng các số hạng của cùng
-giao dịch trong ba tầng như cũ, nhưng không xen kẽ số hạng của hai context vào cùng accumulator.
+E1 cho phép P1 nhận C0 đồng thời A0/B0 sang P2. E2 cho phép A1/B1 vào P1 đồng thời
+C0 sang P2 và OPS nhận A0/B0. **E4 được phép stall thêm bao nhiêu chu kỳ cần thiết**;
+không ép kéo token đi chỉ để giữ lịch lý tưởng. Tên E4 chỉ điểm bắt đầu chờ trong ví dụ,
+không phải độ trễ cố định của mọi giao dịch hay số đo RTL đã có.
+
+Nếu OPS chưa thể nhận A1/B1 tại E4, A1/B1 phải giữ tại P2 và C1 giữ ở P1 thay vì
+ép C1 lên P2. Nếu lõi chưa nhận T0 tại E3 thì lịch dừng sớm hơn theo ready. Chỉ các
+transfer thực sự có handshake mới làm dữ liệu/role/context tiến lên.
+
+**Quy tắc stall tại E4 và phối hợp C:**
+
+1. Slot OPS có valid và clock-enable riêng. Khi đang giữ T1 mà lõi chưa nhận được,
+   giữ nguyên toàn bộ payload/cfg/cờ; không nạp đè và không thực hiện lại giao dịch OPS.
+2. Đây là stall đầu vào giao dịch mới. SAC/shift/acc của T0 đang chạy vẫn hoạt động,
+   không dùng OPS-stall để đóng băng vòng lặp hiện tại.
+3. C0 phải có thể tiến từ P1/P2 vào bank C trong khi lõi đang nhân. Không khóa toàn bộ
+   lane A/C theo core-busy; token C đi theo c_ready, token A đi theo khả năng ghép A/B→OPS.
+4. Bank C giữ C0 cho tới `add_accept` của đúng T0; nếu C1 đã ra P2 thì giữ C1 tại đó.
+   Điều kiện cộng là product-valid và C-valid cùng giao dịch, đồng thời adder-ready.
+   Không delay C bằng cfg_n vì early-exit,n0,exact và downstream stall có lịch khác nhau.
+5. Khi bank C đầy thì C1 không ghi đè C0; stall lan từ P2 về P1. Nếu cả hai credit đang
+   thuộc T0/T1, top không nhận T2 dù một ô Parser vật lý còn trống.
+6. `add_accept` của C0 có thể cùng cạnh với nạp C1 nếu CE/ready và thứ tự đọc-ghi đã được
+   chứng minh. Revision đầu có thể thêm một cạnh chờ để đơn giản; không bắt buộc bypass
+   tổ hợp hoặc tạo ready xuyên suốt toàn MAC để tiết kiệm cạnh này.
+
+**Bàn giao lõi và giới hạn của một bank C:**
+
+- Lõi giữ X/Y/config của T0 bên trong sau launch, nên slot OPS được phép chứa T1.
+  Một core-context duy nhất thực hiện SAC→shift→acc; không xen kẽ hai phép nhân vào accumulator.
+- Tách `result_accept=result_valid&&result_ready` khỏi retire cuối. Nếu tích/context chưa
+  được tầng sau chốt an toàn, giữ nó; xung core_done một chu kỳ không thay được handshake.
+- NF: có thể chuyển tích T0 vào product P1/P2 khi sẵn sàng, nhưng **bank C vẫn giữ C0
+  tới khi adder của T0 nhận**. Với phương án tối giản này, T1 còn phải chờ C1 có context
+  an toàn; không overwrite bank C ngay khi product P1 nhận và không thêm FIFO sideband C.
+- F: điểm nhận tích vào `fused_add_pipe` phải chốt đồng thời C0 và metadata của T0.
+  Sau đó bank C mới có thể chứa C1. Không thêm product RNE hoặc đổi giá trị P_hat.
+- Launch T1 cần cả slot OPS hợp lệ, lõi đã bàn giao T0, C1 sẵn sàng hoặc được nạp đồng bộ
+  an toàn, và đủ slot đầu ra. Mục tiêu là cạnh hợp lệ kế tiếp sau khi **tất cả** điều kiện
+  thỏa; chấp nhận core rỗi thêm nếu bank C/tail chưa giải phóng. Không hứa launch ngay core_done.
+- Bàn giao lõi không trả credit toàn top. Credit chỉ giảm tại retire hoặc reset hủy token.
+  Các cờ và context cần dùng ở đuôi T0 phải được giữ theo token,không dùng bank active đã đổi sang T1.
+
+Đánh đổi đã chọn: chấp nhận stall thêm ở E4 và khi chờ bank C để tránh hàng đợi tổng quát,
+nhiều bank C hoặc thêm stage trong feedback SAC. Lane A/C cần hai lần decode cho một MAC
+độc lập nên tốc độ nạp A/B liên tục tối đa một cặp mỗi hai chu kỳ với lịch này;
+không tuyên bố whole-MAC II=1. Các điểm làm core rỗi phải được đo,không che bằng lý thuyết pipeline.
 
 #### 8.37.4. Chế độ tích lũy và phụ thuộc dữ liệu
 
@@ -2592,23 +2646,22 @@ Prefetch độc lập và prefetch chuỗi MAC có phụ thuộc là hai trườ
 Khi `acc_mode=1`, C_eff phải là trạng thái Posit đã làm tròn do giao dịch cập nhật trước
 tạo ra. Core_done của phép nhân trước không chứng minh tổng tích lũy đã sẵn sàng.
 
-Phương án an toàn cho revision đầu:
+**Chọn chính sách tuần tự cho accumulator ở revision đầu để giữ kiến trúc đơn giản:**
 
-- Có thể nhận/lưu A/B và cfg của giao dịch kế tiếp theo credit; không chốt sẵn
-  `C_eff=accumulator_q` nếu giao dịch trước còn chưa commit tổng.
-- Khi kích hoạt giao dịch tích lũy, mới bind C_eff đúng thứ tự và giải mã C_eff cần dùng;
-  phải có valid/tag để ghép với A/B đã chờ. Không giữ nguyên giả định ba parser cùng accept
-  nếu C_eff được tạo ở thời điểm muộn hơn.
-- Giao dịch có `acc_clr=1` dùng C_eff=0 cho chính giao dịch đó. Không xóa accumulator ngay
-  tại prefetch nếu điều này có thể phá giao dịch cũ đang hoạt động. Quy định thời điểm hiệu lực
-  theo thứ tự giao dịch trong hợp đồng candidate trước khi sửa RTL.
-- Chỉ cập nhật trạng thái tích lũy một lần khi kết quả giao dịch được commit; không lặp theo
-  out_valid khi stall. Giao dịch độc lập không tự cập nhật trạng thái tích lũy.
-- Mặc định chưa launch giao dịch tích lũy phụ thuộc trước khi tổng trước đã commit và có đủ
-  slot downstream; nếu chưa đủ điều kiện thì tiếp tục chờ. Tối ưu tính A×B sớm rồi đợi C_eff
-  là một bước riêng, không bắt buộc cho revision đầu và không được làm mất thứ tự/cờ NaR.
-- Kiểm chuỗi trộn independent/accumulate, acc_clr, Zero/NaR và reset; không chỉ thử dot product
-  thuần. Khả năng prefetch không biến accumulator Posit thành quire.
+- Chỉ chồng hai giao dịch nếu cả hai là independent `acc_mode=0,acc_clr=0`.
+- Giao dịch acc_mode=1 được nhận khi giao dịch cũ đã retire hết. Khi nó đang tồn tại,
+  chưa prefetch giao dịch khác; sau retire mới mở lại đường nhận. Đây là hàng rào thứ tự,
+  không loại bỏ hỗ trợ acc_mode khỏi candidate cuối.
+- Tại accept tích lũy lúc top đã rỗng, lấy C_eff từ trạng thái đã commit mới nhất;
+  acc_clr=1 chọn C_eff=0 cho chính giao dịch đó. Không xóa trạng thái của giao dịch đang bay.
+- C_eff đi qua lane A/C theo lịch A rồi C, dùng chung bank C như luồng độc lập.
+  Không đưa tổng cũ vào C1 để đạt bảng E0–E4 khi tổng cần dùng chưa sẵn sàng.
+- Giữ commit một lần và ngữ nghĩa NaR/clear/reset; giao dịch độc lập không tự cập nhật
+  accumulator. Kiểm luồng trộn hai chế độ ở cả hai hướng, bao gồm yêu cầu tích lũy chờ ngoài
+  giao diện trong khi có hai independent chưa retire.
+- Prefetch A/B xuyên các giao dịch tích lũy hoặc tính A×B sớm rồi đợi C_eff là mở rộng riêng
+  sau revision này,không bổ sung ngầm vào OPT-17 tối giản. Accumulator vẫn Posit đã làm tròn,
+  không chuyển thành quire.
 
 Không hứa cùng II cho chuỗi phụ thuộc và các phép MAC độc lập. Chính sách stall hợp lệ
 theo phụ thuộc phải được ghi rõ trong SPEC candidate và đo riêng.
@@ -2619,10 +2672,10 @@ Tất cả bước triển khai bên dưới hiện **chưa thực hiện**. Sau
 
 | Mã | Công việc dự kiến | Sản phẩm / điều kiện đi tiếp |
 | --- | --- | --- |
-| O17-01 | Chốt hợp đồng hàng chờ, hai credit, context ownership, thời điểm C_eff/acc_clr và lịch accept/launch/result_accept/commit/retire; thống nhất với SPEC/guideline | Bảng lịch cho T0/T1, sơ đồ slot/reset và invariant; chưa sửa production |
-| O17-02 | Candidate bước A trên NF independent, rồi F; dùng Parser elastic sẵn có và context chờ | Directed + pilot100k completed mỗi bản,0 mismatch, không đổi oracle; chứng minh T1 đã ở Parser trong khi T0 bận |
-| O17-03 | Candidate bước B, tách bàn giao tích khỏi retire và truyền đủ C/context ở đuôi NF/F | Directed + pilot100k mỗi bản,0 mismatch; chứng minh T1 launch khi T0 chưa retire nếu đủ credit/slot |
-| O17-04 | Hoàn thiện giao dịch tích lũy và chuỗi trộn; bind C_eff, acc_clr theo thứ tự | Pilot100k mỗi bản và case S cũ/S mới phân biệt,0 mismatch; mọi chế độ production được giữ trước qualification |
+| O17-01 | Chốt hai lane A/C–B,tag role P1/P2,slot OPS,bank C duy nhất,C-raw/context và hai credit; lịch E0–E4/hold/resume; thống nhất SPEC/guideline trước code | Bảng8.37.3 là lịch mục tiêu; quy tắc pending/active/reset và phụ thuộc được xác định,chưa sửa production |
+| O17-02 | Rebase cách chia sẻ Parser A/C trên fixed32/3; giữ đúng accept A/B/C/cfg nguyên tử,lịch A rồi C và C-NaR; thử một giao dịch trước | Directed + pilot100k completed mỗi NF/F,0 mismatch; không đưa candidate generic/packer chia sẻ vào production |
+| O17-03 | Thêm slot OPS và prefetch một independent; hold từ E4,đưa C1 chờ tại P2; bàn giao lõi có kiểm bank C/slot tail thay vì chờ retire cuối | Directed + pilot100k mỗi bản,0 mismatch; trace E0–E4 và stall kéo dài; T1 launch khi T0 chưa retire nếu mọi điều kiện đủ |
+| O17-04 | Hoàn thiện hàng rào tuần tự cho acc_mode và luồng trộn; giữ C_eff/acc_clr/commit đúng,full feature set | Pilot100k mỗi bản và case S cũ/S mới phân biệt,0 mismatch; không dùng lịch E0–E4 để hứa throughput cho chuỗi phụ thuộc |
 | O17-05 | Strict lint, ModelSim CK2Q và regression đầy đủ theo giao dịch, trace/coverage | ≥10M completed mới mỗi NF/F cho qualification kiến trúc,0 mismatch; bins và bằng chứng nguồn riêng; không tự thay ma trận final của SPEC |
 | O17-06 | Đo II/latency/throughput và matched STA/PPA so parent fixed32/3 | Tách độc lập/tích lũy, stall/no-stall; ≥3 run/strategy mỗi cấu hình trên cùng A35T/constraint; chỉ số đo mới mới được kết luận |
 | O17-07 | Review lợi ích/chi phí và quyết định giữ candidate, sửa revision hoặc promote | Bảng quyết định, cập nhật SPEC/plan/progress/freeze nếu được chọn; giữ nguyên checkpoint và kết quả lịch sử |
@@ -2641,16 +2694,19 @@ Corpus phải có cùng chuỗi giao dịch theo chỉ số; mỗi DUT có lịc
 
 Các bằng chứng bắt buộc của study:
 
-1. **Prefetch thực sự hoạt động:** T1 accept/Parser-valid trong khi T0 đang nhân; bus ngoài
-   đổi sau accept không làm thay đổi token đã nhận; cấu hình OPS/mode/n khác nhau ở T0/T1.
+1. **Prefetch thực sự hoạt động:** T1 nhận và đi vào slot OPS trong khi T0 chưa hoàn tất;
+   kiểm cả bảng khởi động E0–E4 lẫn luồng đang bận. Bus A/B/C/cfg đổi ngay sau accept
+   không thay token; role A/C tiến đúng theo enable, cấu hình OPS/mode/n khác nhau ở T0/T1.
 2. **Bàn giao đúng:** last ở SAC chưa được coi là done; result_accept chỉ sau commit accumulator.
    Không ghi đè acc/sf/C/flags T0 khi T1 khởi động, kể cả n0/n1,early-exit hoặc exact26bit.
-3. **Backpressure/credit:** giữ output lâu, hết hai credit, consumer nhận trở lại;
-   không drop/duplicate/reorder. Kiểm đồng thời accept/retire, Parser advance/hold và result_accept/launch.
+3. **Backpressure/credit:** giữ E4 nhiều chu kỳ rồi mở lại,giữ C1 tại P2/OPS T1 trong khi
+   C0 còn ở bank; case OPS chưa nhận A1/B1 khiến P2 giữ A1/B1 và P1 giữ C1. Kiểm output stall,
+   credit đầy/nhận trở lại, add_accept C0 và refill C1, không drop/duplicate/reorder hoặc chạy lại OPS.
+   Kiểm đồng thời accept/retire,Parser advance/hold và result_accept/launch; T0 vẫn lặp khi OPS T1 stall.
 4. **Bất biến số giao dịch:** accepted−completed−reset_aborted=outstanding, luôn từ0 đến2;
    core-context≤1; mỗi slot/context chỉ có một chủ sở hữu; xả hết phải về0.
-5. **Reset:** reset khi queued/đang lặp/chờ bàn giao/đuôi MAC/output stall; hủy đúng token,
-   xóa trạng thái tích lũy, startup barrier và không xuất lại kết quả trước reset.
+5. **Reset:** reset khi C-raw pending,A/C đang ở P1/P2,stall E4,đang lặp/chờ bàn giao/đuôi MAC/output stall;
+   hủy đúng hai credit và mọi role/valid, xóa trạng thái tích lũy,startup barrier,không xuất lại token cũ.
 6. **Số học/phụ thuộc:** exact NF,approx n0..8/OPS0/1,carry/term-cut,Zero/NaR,cancellation,
    trạng thái NaR tích lũy,clear và chuyển acc_mode. Phần FLOOR mất đi vẫn chỉ là metadata,
    không OR vào numerical sticky hoặc đổi giá trị P_hat.
@@ -2658,7 +2714,7 @@ Các bằng chứng bắt buộc của study:
    giữ out_ready=0 vô hạn. Khi còn downstream stall thì không hứa launch ngay core_done.
 
 ModelSim kiểm CK2Q/reset/hold/order; Verilator phục vụ pilot/main và probe. Coverage/counter
-phải phân biệt token chờ Parser, token đang nhân, token ở tail và completed với reset-aborted.
+phải phân biệt role A/C, token chờ P1/P2/OPS,bank C,token đang nhân/tail và completed với reset-aborted.
 Kiểm nguồn mới bằng release/study hash; số liệu10M cũ không dùng thay bằng chứng OPT-17.
 
 #### 8.37.7. Cách đánh giá hiệu quả và tiêu chí chọn
@@ -2667,16 +2723,17 @@ Kiểm nguồn mới bằng release/study hash; số liệu10M cũ không dùng 
 | --- | --- |
 | II và throughput | Đo khoảng cách accept,launch,result_accept,retire và số completed/chu kỳ ở steady state. Quét n0/1/2/4/8,early-exit,exact NF; tách independent và accumulator dependency |
 | Latency | Đo accept→first-valid và accept→retire, min/median/max; tách thời gian chờ hàng đợi và output stall. Prefetch có thể làm latency từ accept tăng dù throughput tốt hơn |
-| Slot giới hạn | Ghi số chu kỳ core rỗi vì thiếu queued token, thiếu credit, tail full hoặc chờ C_eff; từ đó mới cân nhắc tăng độ sâu |
+| Slot giới hạn | Ghi chu kỳ stall tại OPS/P2/P1,bank C đầy,C1 chờ,P_hat chờ bàn giao;core rỗi vì thiếu token,credit,tail slot hoặc C_eff. Chỉ cân nhắc tăng độ sâu ở revision riêng |
 | Fmax/STA | So parent và candidate fixed32/3 mới tổng hợp trên cùng A35T, cùng clock/I/O/uncertainty/strategy; kiểm cả global và R2R setup/hold, ready/credit fanout. Không gán120,48MHz lịch sử cho candidate |
 | Tài nguyên | LUT/FF/CARRY/DSP/BRAM và bank context tăng thêm; throughput cải thiện có thể phải đổi bằng FF/LUT |
 | Đúng chức năng |0 mismatch theo giao dịch, giữ flags/precision/config/reset và các chế độ được công bố; không lấy số học đúng để bỏ qua lỗi giao thức |
 
 Chỉ xem xét chọn khi có cải thiện đo được về completed/giây hoặc II trên workload công bố,
 timing đạt ràng buộc và chi phí tài nguyên chấp nhận được. Nếu Fmax giảm, phải báo throughput
-tại clock đạt thực tế, không chỉ báo ít chu kỳ hơn. Bước A có thể được giữ riêng nếu bước B
-phức tạp hoặc không có lợi; không bắt buộc promote toàn bộ để gọi study thành công.
+tại clock đạt thực tế, không chỉ báo ít chu kỳ hơn. Nếu một bank C hoặc hai credit làm
+giảm hiệu quả, báo rõ mức đánh đổi; không tự mở thành FIFO tổng quát để ép đạt throughput.
 
-**Phần cần sinh viên xem trước khi thực hiện:** thứ tự A→B→accumulation, giới hạn hai credit,
-và chính sách chưa launch chuỗi tích lũy phụ thuộc khi tổng trước chưa commit. Hiện mới hoàn
-thành việc ghi kế hoạch; chưa có candidate, số đo cải thiện hoặc tuyên bố đạt OPT-17.
+**Kiến trúc đã ghi theo ý tưởng sinh viên:** hai Parser P1/P2,một slot OPS,một bank C;
+giữ lịch E0–E4 và được stall thêm tại E4, tối đa hai giao dịch độc lập; accumulator giữ
+tuần tự ở revision đầu. Hiện chỉ cập nhật kế hoạch, chưa có candidate/mô phỏng/STA mới,
+chưa sửa production/SPEC và chưa tuyên bố đạt OPT-17.

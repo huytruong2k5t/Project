@@ -1,14 +1,18 @@
 # Điểm mơ hồ và quyết định thiết kế Posit MAC
 
-Cập nhật 08/10/2026, đồng bộ SPEC v1.5. [SPEC §11](../SPEC_Posit_MAC_IP.md#11-quyết-định-rủi-ro-và-điều-kiện-triển-khai) giữ bảng trạng thái đầy đủ; tài liệu này tóm tắt quyết định và giới hạn, không sao chép thuật toán packer để tránh hai nguồn hợp đồng khác nhau.
+Cập nhật29/10/2026,đồng bộ SPEC v1.23. Hợp đồng approximate mục tiêu ưu tiên
+[SPEC §4.3](../SPEC_Posit_MAC_IP.md#full-term-contract).
+L1/RTL/TB/freeze chưa chuyển khỏi FLOOR;không đánh dấu đã chạy hoặc sửa kết quả cũ.
 
 ## 1. Quyết định dùng cho baseline RTL
 
 | Nội dung | Quyết định | Căn cứ |
 | --- | --- | --- |
-| Profile | L1 normative v0/v1; cfg_ops=0/1, hidden khởi tạo riêng, cfg_n đếm fraction. Predictor n=2/7-bit và paper_source_config là nghiên cứu riêng | SPEC §5.4–§5.6 |
-| Width/cut | Approx ACC_W=FRAC_W+4 là lựa chọn dự án, không phải width paper công bố. FLOOR cắt tại FRAC_W; STICKY_ACC giữ G/R và sticky riêng. Exact giữ đầy đủ tích | SPEC §5.6 |
-| Rounding | ROUND_MODE=RNE/TRUNC ở packer; ROUND_SCHEME=FLOOR/STICKY_ACC ở SBM. TRUNC về0, lỗi không luôn âm. Sticky OR không bảo toàn tổng phần dư | SPEC §4.1/§5.9 |
+| Profile | FULL_TERM Q24/26 bit,n0..12,cfg_ops0/1,hidden riêng;L1 thực thi cũ còn FLOOR.Predictor/paper_source_config vẫn là nghiên cứu riêng | SPEC §4.3 |
+| Width/cut | Approx FULL_TERM26 bit/Q24,Y13 bit được đặt Y<<12 trước dịch S≤12;không cắt term,không padding2bit.NF exact có thể giữ bank54,Q52 | SPEC §4.3.2;không suy width RTL gốc tác giả |
+| Rounding | Không FLOOR/JAM/RNE trong vòng;RNE tại product/final packer NF và final packer F.Input/iteration loss là flags,không OR vào numerical sticky | SPEC §4.3.3–4 |
+| Giới hạn vòng | cfg_n0..12 hợp lệ,13..15 invalid ở approx;hidden riêng,early-stop.Exact NF bỏ cfg_n và xử lý hết26 bit | Người dùng đã xác nhận12 vòng29/10;code cũ còn chặn n>8 |
+| Giao diện F | p_magnitude26 bit/Q24,carry25,base scale signed11;W32/Q29 mục tiêu cần kiểm lại.NF frac_norm53 giữ đủ bit khi carry | SPEC §4.3.3;chưa sửa RTL/L1/TB |
 | Non-fused | v1 dùng round_unpacked tương đương parse(pack(u)); tích đã làm tròn trước Adder. Yêu cầu đối chuẩn SoftPosit áp cho exact/RNE ở format hỗ trợ | SPEC §5.9-C/§6 |
 | Latency | E0=input handshake. H là ngân sách lần chốt; không bubble thì L_valid=H-1, L_handshake=H. Parser H=2: valid E1, handshake E2 | SPEC §5.1/§5.2 |
 | n=0 / drain | Token init_only đi SAC L1→shift L2→acc L3, nạp Y một lần. n>=1, last chỉ hoàn tất ở accumulator; core launch→done=q+2, q=max(1,n) | SPEC §5.5 |
@@ -17,6 +21,12 @@ Cập nhật 08/10/2026, đồng bộ SPEC v1.5. [SPEC §11](../SPEC_Posit_MAC_I
 | Pipeline mục tiêu | Parser hai hạng đã kiểm; packer TRUNC1/RNE2 đã chốt ranh giới: P1 mã hóa/dịch/G-R-S, P2 RNE/carry/dấu (§5.9-D). RNE hai slot/TRUNC một slot đã có RTL; F_IN=2*FRAC_MAX+1 và adapter theo §5.9-D, nghiệm thu theo results/packer/summary.json. STA khảo sát riêng, không tự bảo đảm100MHz | SPEC §4.1/§5.1 |
 
 ## 2. Tối ưu và giới hạn kết luận
+
+- Chốt “không FLOOR” là quyết định đồ án tham khảo [P],không phải xác nhận thuật toán,
+  width/cut hoặc baseline tác giả.Fixture paper/FLOOR0x1ae34000 giữ nguyên;FT-05 FULL_TERM
+  mục tiêu0x1ae34800 là vector hợp đồng mới,không sửa expected cũ để gọi tái dựng thành công.
+- Sửa RTL/testbench do sinh viên thực hiện.Sai khác với golden FLOOR sau khi đổi arithmetic
+  là không cùng profile,không được sửa oracle cũ hoặc freeze cũ để che mismatch.Cần model mới trước main.
 
 - FIFO/tag giữ C_eff, sign, sf, cfg và flags; độ sâu suy từ in-flight và sức chứa. Skid2 không bảo đảm lưu mọi kết quả đang bay. Pop/commit theo handshake và hợp đồng §4.2/§5.11.
 - Mục tiêu II=max(1,n) chỉ áp cho giao dịch độc lập sau khi lịch khởi tạo/drain/tài nguyên đã chứng minh. Hồi tiếp v1 có cận dưới II_acc>=max(II_core,4) theo ngân sách hiện hành; chưa có số đo RTL chứng minh equality.

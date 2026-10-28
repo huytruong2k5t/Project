@@ -1,4 +1,12 @@
-## Luồng hiện hành: posit(32,3) cố định — 23/10/2026
+## Lưu ý hợp đồng FULL_TERM — 29/10/2026
+
+SPEC v1.23 §4.3 đã chốt mục tiêu approximate12 bit,**không FLOOR**,M26/Q24,n0..12.
+RTL,L1 thực thi,testbench,runner và freeze **chưa sửa**. Các lệnh phía dưới chỉ replay
+release FLOOR/n≤8;không sinh golden FULL_TERM hoặc xác nhận n9..12.Sinh viên tự sửa RTL/TB.
+Sau khi đổi arithmetic,cần model/vector mới đúng FULL_TERM và study/release mới;không chạy
+helper FLOOR rồi sửa expected/hash để ép qua kiểm.Không ghi PASS profile mới từ log cũ.
+
+## Luồng tái chạy release FLOOR fixed32/3 — 23/10/2026
 
 **Sau dọn cache23/10:** binary,thư viện work và tmp đã được xóa; các báo cáo,vector,
 snapshot và hash vẫn giữ. Chạy lại bước build nf/f với nhãn POSIT32_BUILD_TAG mới

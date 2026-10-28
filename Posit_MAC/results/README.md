@@ -1,5 +1,13 @@
 # Kết quả kiểm chứng và đo tài nguyên
 
+**Giới hạn từ29/10/2026:** SPEC v1.23 §4.3 đã đổi hợp đồng mục tiêu sang FULL_TERM Q24/26 bit,
+n0..12.Các summary/hash/accuracy/timing trong thư mục này vẫn thuộc profile nguồn ghi trên
+từng report,không trở thành bằng chứng FULL_TERM.Ví dụFig.4 FLOOR0x1ae34000 giữ lịch sử;
+vector FULL_TERM mục tiêu0x1ae34800 chưa có lượt RTL/L1 mới.Phiên này chỉ cập nhật tài liệu,
+không sửa report,dataset,fixture hoặc freeze để đổi nhãn kết quả.
+README này được bổ sung có chủ đích29/10 nên không còn cùng SHA với ảnh chụp README
+trong biên bản dọn23/10;giữ nguyên hash/receipt lịch sử,không sửa chúng để khớp tài liệu mới.
+
 ## Đối chứng chính và dọn cache — 23/10/2026
 
 | Nhóm cần giữ | Nơi tra cứu |

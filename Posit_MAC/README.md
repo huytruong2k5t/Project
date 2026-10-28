@@ -6,12 +6,20 @@ cấu hình xấp xỉ và hai kiến trúc MAC để so sánh nội bộ.
 
 **Phạm vi chốt22/10/2026: duy nhất posit(32 bit, ES=3)** cho cả NF và F.
 Các format khác giữ bằng chứng lịch sử, không thuộc nghiệm thu mới.
-Giữ profile nhân FW12/FLOOR/RNE/OPS1/n0..8 và fused W32/Q29.
+**Hợp đồng mục tiêu29/10/2026:** approximate FW12,**FULL_TERM không FLOOR**,giữ đủ
+tích26 bit/Q24,cfg_n0..12,OPS0/1,RNE ở packer theo NF/F. Chi tiết bắt buộc ở
+[SPEC §4.3](SPEC_Posit_MAC_IP.md#full-term-contract).
+F giữ mục tiêu W32/Q29 nhưng cần nghiệm thu lại với prepack26 bit.
 RTL production hiện đã cố định32/3:54 module không còn public parameter,
 cổng có độ rộng literal; build không truyền NB/ES hoặc feature override.
 Exact32/3 vẫn theo AC02 với oracle độc lập; không dùng SoftPosit ES2 làm chuẩn.
 
 ## 1. Bản dùng hiện tại
+
+**Chưa chuyển đổi số học:** RTL,L1 thực thi,testbench và runner dưới đây vẫn là
+FLOOR/n≤8. Sinh viên tự sửa RTL/testbench;phiên29/10 chỉ chốt hợp đồng/tài liệu.
+Không dùng PASS,accuracy hoặc timing cũ để kết luận FULL_TERM đã chạy đúng.
+Freeze/manifest nguồn cũ giữ nguyên;chỉ tạo release mới sau khi có kiểm chứng mới.
 
 Release đã khóa chức năng: **`POSIT_MAC_RTL_20261022_FIXED32_3`** (`FIXED32_3_FUNCTION_VERIFIED`).
 Build bằng [`rtl/production.f`](rtl/production.f), gồm54 module cố định.
@@ -95,8 +103,9 @@ runner production dùng file list hiện hành.
 - [Optimization — quyết định tối ưu và kết quả STA](../doc/Optimization.md).
 - [Hướng dẫn WSL và ModelSim](docs/HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
-NF làm tròn tích trước phép cộng; fused cộng tích prepack với `C_eff` trong
-cửa sổ quy định rồi làm tròn cuối. Hai bản dùng hợp đồng và profile trong SPEC.
+NF làm tròn tích trước phép cộng;fused cộng cùng P_hat FULL_TERM với `C_eff`
+trước RNE cuối. Code hiện tại còn P_hat FLOOR;hợp đồng mới không phải exact của
+fraction Posit26 bit và không phải quire tích lũy cả chuỗi chỉ làm tròn một lần.
 Provenance và Table I của paper là nghiên cứu phụ, chưa được coi là baseline tác giả đã xác nhận.
 
 ## 4. Lệnh kiểm tra khi cần chạy lại

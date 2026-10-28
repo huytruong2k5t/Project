@@ -1,5 +1,12 @@
 # Tầng L1: Mô hình Thuật toán C++ (`l1/`)
 
+**Hợp đồng mục tiêu29/10/2026 — SPEC v1.23 §4.3:** approximate giữ12 bit fraction cao,
+FULL_TERM không FLOOR,accumulator26 bit/Q24,n0..12,OPS0/1,RNE theo NF/F.
+L1 thực thi,API `floor_rne_profile`,RTL,testbench,runner và freeze vẫn giữ nguyên profile
+FLOOR/n≤8 để tái lập. Chưa có golden/vector/PASS FULL_TERM;mọi mốc có ngày bên dưới là
+bằng chứng của hợp đồng tương ứng. Xem [PLAN §3.1](PLAN.md#31-hợp-đồng-p_hat) để chuyển đổi.
+Không dùng STICKY_ACC hoặc chỉ bỏ mask2 bit ở16 bit thay cho giữ đủ tích26/Q24.
+
 **Trạng thái kiểm chứng18/10/2026:** W14-01..11 đã đạt18/10:350M completed RTL/0 mismatch (F90M+NF250M+NF-EX010M),AC04 main và9M paired standalone accuracy. W14-12/AC02 và matched PPA/Gate4 còn mở;Optimization8.34/results/week14/handoff.json. Không đổi hợp đồng số học,source release hoặc timing. Các mô tả/tiến độ có ngày cũ bên dưới giữ lịch sử.
 
 **Tài liệu hiện hành:** [PLAN — kiến trúc/build L1/NF/F](../l1/PLAN.md), [Optimization — tối ưu và kiểm chứng/STA](../../doc/Optimization.md), [tiến độ — việc còn mở](../docs/TIEN_DO_DO_AN.md).

@@ -1,10 +1,17 @@
 # Xây dựng L1, baseline nội bộ và MAC non-fused/fused
 
-**Cập nhật:** 23/10/2026 — RTL fixed32/3 đã kiểm chức năng; tài liệu kiến trúc, mapping và build.
+**Cập nhật:** 29/10/2026 — chốt hợp đồng FULL_TERM;L1/RTL/TB thực thi vẫn là profile FLOOR đã khóa.
+
+**Hợp đồng mục tiêu:** SPEC v1.23 §4.3 thay profile so sánh bằng approximate12 bit đầu vào,
+FULL_TERM M26/Q24,n0..12,OPS0/1 và RNE tại các packer NF/F. Không FLOOR/JAM hoặc RNE từng term.
+Mã L1/RTL/TB/runner/freeze hiện không sửa;mọi API và kết quả kiểm bên dưới chỉ đúng profile
+đã công bố. Sinh viên tự sửa RTL/testbench;golden FULL_TERM độc lập và vector mới còn phải làm.
 
 **Release hiện hành:** `POSIT_MAC_RTL_20261022_FIXED32_3`,54 module không có public parameter,cổng literal,localparam số cụ thể. Luồng hiện hành dùng scripts/verify_fixed32_3.py và hai runner ModelSim fixed32_3; không truyền -GNB/-GES. NF/F mỗi bản10M completed/0 mismatch,37 biến thể tổ hợp740k so sánh và ModelSim đạt; giữ cfg_mode/cfg_n/cfg_ops và lịch giao dịch. L1/oracle không sửa. Những mô tả parameter/default ES2,release38 module,candidate và build cũ bên dưới là lịch sử kiến trúc; không phải API top hiện tại. Chưa đo lại STA/PPA hoặc đóng AC02/final per-n/AC04 mới. Bằng chứng results/fixed32_3_20261022/summary.json; tái chạy theo hướng dẫn fixed ở docs.
 
-**Phạm vi chốt với giảng viên:** chỉ posit32/ES3. Giữ FW12/FLOOR/RNE/OPS1/n0..8,F W32/Q29; không bỏ exact NF hoặc thay số học. Format khác chỉ giữ lịch sử. Exact32/3 theo AC02 dùng oracle độc lập; top hiện tại không nhận NB/ES/feature override. Ngưỡng vector/coverage không giảm; không cộng kết quả format khác vào32/3.
+**Phạm vi:** chỉ posit32/ES3;không bỏ exact NF/Q52. Approx mục tiêu FULL_TERM Q24,n0..12,
+F W32/Q29 cần kiểm lại seed26 bit và residual/borrow. Ngưỡng vector/coverage không giảm.
+SoftPosit ES2 không phải oracle ES3;không cộng lượt profile/format cũ vào nghiệm thu mới.
 
 RTL production hiện khóa tại `rtl/production_freeze.json` (release `POSIT_MAC_RTL_20261022_FIXED32_3`). Chạy `python scripts/audit_rtl_release.py --self-test` trước build. Manifest54 module; L1/oracle không đổi. Release OPT12/W14 giữ snapshot và bằng chứng lịch sử riêng.
 
@@ -22,7 +29,8 @@ Baseline chính của đồ án là MAC NF normative; biến thể so sánh là 
 | Nhánh | Profile / vai trò | Nguồn chính |
 | --- | --- | --- |
 | Exact32/3 | Nghiệm thu AC02 bằng oracle độc lập; SoftPosit8/0,16/1,32/2 giữ kiểm lịch sử | parser/packer, l1_multiplier_exact, posit_adder |
-| Nhân lặp normative | Chỉ32/3; profile so sánh FW12,FLOOR/RNE,OPS1,n0..8 | l1_multiplier_iter.hpp, floor_rne_profile.hpp |
+| Nhân lặp FULL_TERM mục tiêu |32/3,FW12 đầu vào,M26/Q24,n0..12,OPS0/1,RNE;chưa có code/golden đã kiểm | SPEC §4.3;việc chuyển đổi còn mở |
+| Nhân lặp FLOOR đã khóa |32/3,FW12,FLOOR/RNE,OPS1,n0..8;chỉ replay lịch sử | l1_multiplier_iter.hpp, floor_rne_profile.hpp giữ nguyên |
 | NF legacy | MAC v0/v1 và API cũ giữ nguyên checkpoint | posit_mac.hpp, l1_api.h/src/l1_api.cpp |
 | NF so sánh | Bảo toàn P_hat rồi làm tròn tích trước cộng C_eff | exporter prepack, tb/week11_model.hpp, RTL mac_nf |
 | F profile chính |32/3,FW12,W32/Q29, approximate-only; signed residual/borrow và RNE cuối | posit_fused_window.hpp, RTL mac_f |
@@ -48,7 +56,7 @@ RNE: xử lý special, pre-clamp đúng biên, mã hóa regime/exponent, dịch 
 
 `round_unpacked` phải tương đương parse(pack(u)) với cùng rounding,specials và metadata; không chỉ cắt fraction theo sf. RTL NF giữ ba bank product của lịch OPT-03: `posit_product_pack` RNE P1/P2 lưu magnitude/sign sau clamp,`posit_magnitude_parse` decode rồi product bank riêng. Không bỏ R(P_hat),không thêm latency/II. L1 giữ mô hình cũ vì giá trị/flags không đổi.
 
-### 2.3. OPS, SAC và SBM
+### 2.3. OPS, SAC và SBM — mã đã khóa;chuyển FULL_TERM theo §3.1
 
 - OPS0 giữ X=A,Y=B. OPS1 đếm bit1 của fraction thực dùng; chọn ít bit1 hơn làm X, hòa giữ A. Approximate chỉ dùng FRAC_W bit cao; exact dùng FRAC_MAX. X không hidden; Y có hidden. cfg_ops2/3 bị từ chối theo top contract.
 - SAC mỗi term: sa=clz(fx)+1, S+=sa, fx=(fx<<sa)&mask(W). Giữ width/carry khi kiểm lỗi scale. Dừng khi fx0 hoặc hết n; n đếm fraction, không tính hidden.
@@ -69,9 +77,16 @@ So độ lớn theo sf rồi fraction, chọn dấu/base; căn toán hạng nh�
 P_hat = (-1)^sign * magnitude * 2^(scale - fractional_bits)
 ```
 
-Exporter lấy trước normalize/pack. Profile so sánh gọi tường minh `floor_rne_profile(n)`; hàm khóa approximate/FLOOR/RNE/OPS1 và n<=8, không đổi IterConfig mặc định. `FloorRneMultiplier` là32/3/FW12/N_MAX8, feature exact/OPS còn theo template.
+Exporter mục tiêu phải lấy M26/Q24 trước normalize/pack. Khởi tạo Y_base=Y<<12,
+term=Y_base>>S với S≤12;M=sum giữ đủ,term_cut/numerical_sticky=0. input_cut/iteration_cut
+còn là metadata. n12 cho tích chính xác của hai significand12 bit đã cắt,không phải A×B exact.
+Normalize carry25 bảo toàn mọi bit;NF frac_norm53,F nhận p_magnitude26 như SPEC §4.3.3.
 
-FLOOR cắt định nghĩa chính P_hat trên lưới hữu hạn; input_cut/iteration_cut/term_cut báo tổn thất so phép nhân lý tưởng. Không OR chúng vào numerical sticky để đổi P_hat. Normalize tích có carry phải bảo toàn giá trị trước RNE; không dùng legacy normalize như một giả định tương đương nếu chưa có hợp đồng phù hợp.
+**API hiện có không phải golden mới:** `floor_rne_profile(n)` và `FloorRneMultiplier`
+vẫn khóa FLOOR/n≤8;không đổi default IterConfig,helper,oracle hay hash của chúng trong phiên này.
+Không dùng ShiftRound::STICKY_ACC hoặc chỉ bỏ clear2 bit trên bus16 để gọi FULL_TERM.
+Việc bổ sung profile L1 riêng cần kiểm M/Q/term cùng oracle dyadic trước khi sinh vector
+người dùng dùng để sửa RTL;runner mới và ma trận n9..12 chưa được triển khai.
 
 ### 3.2. NF legacy và NF so sánh
 
@@ -96,7 +111,11 @@ parser A/B/C_eff P1/P2 (song song)
 
 NF có14 tầng datapath; core ba tầng lặp theo term. q=max(1,t thực tế); E0 nhận input, product P1 ở E(q+5), P2 ở E(q+6), product bank E(q+7), A1/A2/A3 ở E(q+8/9/10), final P1/P2 ở E(q+11/12). L_valid=q+12,H=q+13,II_min=q+14 khi không stall. Không cộng bank C/context/commit thành tầng số học mới. A1 production chưa áp OPT-02b candidate.
 
-## 4. L1 và RTL fused W12-F-1
+## 4. L1 và RTL fused W12-F-1 — hiện thực FLOOR lịch sử
+
+Profile FULL_TERM mục tiêu giữ W32/Q29 vì product có tối đa25 fraction và C26,
+nhưng p_magnitude phải đổi14→26 bit và seed phải giữ đủ M/Q24. Các hàm C++ và RTL nêu
+bên dưới còn mapping FLOOR;chưa được gọi là F_FULL_TERM hoặc dùng PASS cũ làm bằng chứng.
 
 ### 4.1. Cửa sổ và phần dư
 

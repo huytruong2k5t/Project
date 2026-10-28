@@ -1,6 +1,6 @@
 # Optimization — Tối ưu RTL và hồ sơ kiểm chứng Posit MAC
 
-**Cập nhật:** 29/10/2026. Chuyển từ `Posit_MAC/l1/PLAN.md` theo yêu cầu sinh viên; giữ lịch hai Parser ở8.37,bổ sung lịch ba Parser và phân tích số chu kỳ chuỗi tích lũy lớn ở8.38. Chưa triển khai RTL tối ưu.
+**Cập nhật:** 29/10/2026. Chốt approximate FULL_TERM không FLOOR,M26/Q24,n0..12 ở8.39/SPEC v1.23 §4.3.Giữ lịch hai/ba Parser8.37/8.38 như kế hoạch có điều kiện.Chưa sửa RTL/L1 thực thi/testbench hoặc chạy lại số học/PPA.
 
 Tài liệu này giữ các phương án tối ưu, thay đổi RTL, kết quả mô phỏng/lint, synthesis và STA/PPA, gồm cả ứng viên không được chọn và giới hạn bằng chứng. Mọi đường dẫn code/results và lệnh trong phần lịch sử được hiểu từ gốc `Posit_MAC`, trừ liên kết Markdown đã ghi rõ. Không di chuyển hoặc sửa mã nguồn, kết quả, seed hay hash của checkpoint.
 
@@ -27,6 +27,7 @@ Các mã mục cũ `7.x`/`8.x` được giữ để truy vết report và liên 
 | Release 120 MHz đối chứng | OPT-12 negate đã promote và khóa `POSIT_MAC_RTL_20261018_OPT12_120`; OPT-13/14 chưa triển khai | Mục8.31.8 |
 | Ứng viên OPT-15/16 lịch sử | NF `combined`, F `parser2`/`shared_add` đã có kiểm/đo riêng; chưa promote vào release fixed32/3. Quyết định ngày19/10 và kết quả ngày20/10 giữ theo mốc, cần rebase/qualification riêng nếu dùng tiếp | Mục8.35.5/8.36 |
 | Production fixed32/3 |54 module, chức năng đã kiểm trên release cố định; chưa suy STA/PPA của nguồn mới từ release120MHz lịch sử | `rtl/production_freeze.json`, SPEC v1.22 |
+| Hợp đồng arithmetic mục tiêu29/10 | FULL_TERM thay FLOOR:12 fraction đầu vào,26 bit/Q24 tích,n0..12,RNE NF/F.Chỉ tài liệu;production/L1/TB cũ chưa đáp ứng | SPEC v1.23 §4.3,mục8.39 |
 | So hai/ba Parser — OPT-17 | Giữ2P-OPS theo lịch E0–E4;thêm3P-P2 dùng OPS tổ hợp như gốc và3P-OPS làm đối chứng cùng số tầng. Một bank C,hai credit cho independent;accumulator giữ tuần tự. Có bảng chu kỳ tích lũy theo lịch,chưa mô phỏng candidate/STA | Mục8.37/8.38 |
 
 Các script report/prepare gắn checkpoint cũ là producer lịch sử, không chạy lại để tái chèn nhật ký vào PLAN hiện hành. Dùng snapshot/README của study khi tái lập; không sửa các script đã khóa hash chỉ để đổi nhãn báo cáo. Collector bảng toàn tầng hiện hành đã được đổi sang vùng báo cáo giới hạn trong tài liệu này.
@@ -2546,8 +2547,10 @@ quy tắc stall/bàn giao. Chưa có kiểm chứng cho tổ hợp mới trên r
 
 - Nền bắt đầu: release fixed32/3 đang khóa; lưu hash nguồn parent và filelist trước thử.
   Không dùng trực tiếp source/candidate OPT-15/16 chưa rebase; không sửa bằng chứng cũ.
-- Giữ định dạng posit32/ES3, precision FW12 ở approx, FLOOR/RNE, OPS0/1 và n0..8;
-  NF giữ khả năng exact, F vẫn approximate-only. Không đổi SAC recurrence hoặc width/cut.
+- Theo quyết định arithmetic29/10 §8.39/SPEC4.3,giữ posit32/ES3,FW12 đầu vào nhưng dùng
+  FULL_TERM26 bit/Q24,n0..12,OPS0/1 và RNE NF/F.NF exact vẫnQ52,F approximate-only.
+  Trước tối ưu pipeline phải có model/golden FULL_TERM và RTL arithmetic người dùng sửa;
+  không đòi bit-exact với FLOOR parent hoặc đồng thời sửa precision để ép candidate khớp.
 - Giữ public I/O và thứ tự trả kết quả. Được thay lịch ready/valid trong candidate theo hợp đồng mới;
   không đòi candidate và reference khớp từng chu kỳ khi latency/accept schedule đã thay đổi.
 - Điểm bắt đầu đề xuất: tối đa **hai giao dịch đã nhận nhưng chưa retire** trên toàn top,
@@ -2687,7 +2690,8 @@ Tất cả bước triển khai bên dưới hiện **chưa thực hiện**. Sau
 Pilot dự kiến seed20261028; seed chính và mọi lệnh/công cụ phải ghi trước khi chạy main.
 Đây là seed/lượng chạy dự kiến, không phải log đã thực thi. Nếu pilot có mismatch,
 mất token, kẹt ready hoặc C_eff sai, dừng mở rộng corpus/PPA và sửa nguyên nhân trước.
-Không đổi model, precision hoặc điều kiện kiểm để làm candidate khớp.
+Chuyển model sang FULL_TERM là hạng mục riêng của quyết định8.39,chưa thực hiện trong phiên này.
+Khi đã khóa model mới,không đổi precision/oracle/điều kiện kiểm để ép candidate pipeline khớp.
 
 #### 8.37.6. Kiểm chứng cần có
 
@@ -2711,9 +2715,9 @@ Các bằng chứng bắt buộc của study:
    core-context≤1; mỗi slot/context chỉ có một chủ sở hữu; xả hết phải về0.
 5. **Reset:** reset khi C-raw pending,A/C đang ở P1/P2,stall E4,đang lặp/chờ bàn giao/đuôi MAC/output stall;
    hủy đúng hai credit và mọi role/valid, xóa trạng thái tích lũy,startup barrier,không xuất lại token cũ.
-6. **Số học/phụ thuộc:** exact NF,approx n0..8/OPS0/1,carry/term-cut,Zero/NaR,cancellation,
-   trạng thái NaR tích lũy,clear và chuyển acc_mode. Phần FLOOR mất đi vẫn chỉ là metadata,
-   không OR vào numerical sticky hoặc đổi giá trị P_hat.
+6. **Số học/phụ thuộc:** exact NF,approx FULL_TERM n0..12/OPS0/1,carry25,các bit thấp Q24,
+   Zero/NaR,cancellation,NaR tích lũy,clear và chuyển acc_mode.term_tail/term_cut phải0;
+   input/iteration cut vẫn là metadata,không OR vào numerical sticky để đổi P_hat.
 7. **Không treo:** watchdog cho luồng có out_ready công bằng; không đòi tiến triển nếu consumer
    giữ out_ready=0 vô hạn. Khi còn downstream stall thì không hứa launch ngay core_done.
 
@@ -2761,6 +2765,7 @@ Mỗi biến thể phải khớp L1/oracle đúng loại NF hoặc F của nó.
 | Mã phương án | Parser và đường tới lõi | Chỗ chờ giao dịch independent kế tiếp | Vai trò |
 | --- | --- | --- | --- |
 | 3P-R0 | Production hiện tại: A/B/C ba Parser P1/P2,OPS tổ hợp→core context | Wrapper chưa cho prefetch | Reference nguồn fixed32/3,không sửa |
+| 3P-FT-REF | Mục tiêu arithmetic FULL_TERM26/Q24,n0..12 trên lịch ba Parser gốc;chưa tối ưu prefetch | Một giao dịch | Reference arithmetic mới cần có sau người dùng sửa/kiểm RTL;chưa tồn tại như release đã kiểm |
 | 2P-OPS | Hai Parser A/C–B như8.37;OPS có slot thanh ghi riêng trước core | Một slot OPS;C kế tiếp có thể giữ ở P2 | Candidate theo ý tưởng sinh viên,giữ stall E4 |
 | 3P-P2 | Giữ ba Parser A/B/C độc lập,OPS tổ hợp→core context như gốc | Dùng chính bank P2 của A/B để chờ;C chờ tại P2 Parser C nếu bank C còn bận | Candidate ba Parser tối giản,không thêm slot OPS riêng |
 | 3P-OPS | Ba Parser độc lập nhưng thêm slot OPS riêng giống2P-OPS | Một slot OPS;C chờ tại P2 riêng | Đối chứng để tách ảnh hưởng số Parser khỏi thêm một tầng OPS |
@@ -2770,7 +2775,9 @@ chốt X/Y/config ở launch. Trong lúc chưa launch,P2 và config phải giữ
 logic tổ hợp “chạy một lần” theo nghĩa ngừng chuyển mức; chỉ có một lần nhận context mỗi phép nhân.
 3P-P2 cần context active/pending và credit dù không có slot OPS dữ liệu riêng.
 
-Các candidate giữ cùng posit32/ES3,FW12/FLOOR/RNE,OPS,n,tail NF/F và một bank C.
+Các candidate mục tiêu phải cùng posit32/ES3,FW12/FULL_TERM Q24/RNE,n0..12,OPS,tail NF/F
+và một bank C theo quyết định8.39.So numeric với model/3P-FT-REF cùng arithmetic;
+3P-R0 FLOOR chỉ giữ vai trò lịch sử/bank-count,không phải expected bit-exact cho FULL_TERM.
 Independent tối đa hai giao dịch chưa retire,một context đang ở lõi;acc_mode=1 vẫn có
 hàng rào tuần tự như8.37.4. Mọi nhánh giữ nguyên lệnh/định dạng production bên ngoài.
 
@@ -2805,6 +2812,11 @@ launch ở E3. Chênh một chu kỳ này đến từ bank OPS bổ sung,không 
 thêm/bớt Parser. So2P-OPS với3P-OPS mới tách riêng ảnh hưởng số Parser.
 
 #### 8.38.3. Cơ sở đếm chu kỳ cho giao dịch đơn và chuỗi tuần tự
+
+**Điều kiện sau quyết định FULL_TERM:** bảng dưới là phân tích số bank của lịch cũ và
+candidate,không xác nhận timing hay arithmetic mới. Chỉ tái dùng công thức q khi RTL26 bit
+giữ nguyên số stage/bubble. Nếu cần thêm thanh ghi để đạt timing,phải tính lại latency/II
+trước so sánh. q approximate nay có thể tới12;không dùng kết quả FLOOR làm expected numeric.
 
 Đếm khoảng clock từ accept đầu tiên E0 sau startup,không tính reset/startup. Nguồn liên tục
 có yêu cầu hợp lệ,out_ready luôn1,không reset,không có stall nội bộ ngoài lịch đã mô tả.
@@ -2882,6 +2894,7 @@ hoặc completed/giây,không lấy riêng tỷ lệ chu kỳ làm kết luận 
 |2 |15.999.999 |16.999.999 |14.999.999 |15.999.999 |
 |4 |17.999.999 |18.999.999 |16.999.999 |17.999.999 |
 |8 |21.999.999 |22.999.999 |20.999.999 |21.999.999 |
+|12,FULL_TERM nếu giữ số stage |25.999.999 |26.999.999 |24.999.999 |25.999.999 |
 
 Các số đã kiểm lại bằng cộng số bank và số học nguyên khi lập tài liệu29/10;
 không chạy bộ nhân,không sinh corpus MAC và không có mismatch/coverage mới để báo.
@@ -2900,7 +2913,7 @@ phép cộng vì sẽ thay thứ tự làm tròn của bài toán.
 | --- | --- | --- |
 | O17-3P-01 | Chốt3P-P2 và3P-OPS đối chứng,cùng credit/C-bank/tail với2P-OPS;giữ bảng8.37 và ranh giới OPS khác nhau được công bố | Lịch startup/steady-state/feedback và ownership C/config,không tự đổi SPEC production |
 | O17-3P-02 | Candidate cố định32/3,source-list riêng;strict lint và pilot100k completed mỗi NF/F/kiến trúc cần thử |0 mismatch theo giao dịch,reset/stall/tag/credit đúng;reference giữ nguyên |
-| O17-3P-03 | Đếm clock chuỗi tích lũy N=1/2/1.024 trước,sau pilot chạy N=1.000.000;thử t thực tế0/1/2/4/8 với q=max(1,t) và q biến thiên,exact NF riêng | Log accept/launch/core_done/add_accept/commit/first-valid/retire;so số cộng từ q_i,không dùng cfg_n làm q_i |
+| O17-3P-03 | Đếm clock chuỗi tích lũy N=1/2/1.024 trước,sau pilot chạy N=1.000.000;thử t thực tế0/1/2/4/8/9/10/11/12 với q=max(1,t),exact NF riêng | Log accept/launch/core_done/add_accept/commit/first-valid/retire;so số cộng từ q_i,không dùng cfg_n làm q_i |
 | O17-3P-04 | Benchmark independent riêng,lặp n0/1/2/4/8,early-exit và output stall;so3P-P2,2P-OPS rồi3P-OPS khi cần tách nguyên nhân | Đo completed/chu kỳ,phân bố II,Parser/OPS/C-bank/tail stalls và credit-bound;không lấy II_acc trong bảng làm II_independent |
 | O17-3P-05 | Qualification nguồn được giữ:≥10M completed mới mỗi NF/F/candidate được chọn,coverage theo SPEC;ModelSim CK2Q | Numeric/flags khớp đúng model NF/F,không drop/duplicate/reorder;không thay nghiệm thu final bằng ví dụ1M |
 | O17-3P-06 | Matched A35T STA/PPA trên cùng clock/I/O/uncertainty và≥3 run/config của các bản đi tiếp | LUT/FF/CARRY/DSP/BRAM,setup/hold,throughput thực;chi phí thêm Parser trừ phần bỏ OPS-bank/C-raw/tag phải đo tổng |
@@ -2914,3 +2927,55 @@ không đòi khớp từng chu kỳ giữa các lịch khác nhau hoặc NF bằ
 Trước thực thi phải kiểm source parent và cập nhật SPEC candidate cho lịch mới.
 Giữ nguyên2P-OPS đã lên lịch,không tự thay lựa chọn của sinh viên bằng3P-P2. Hiện chỉ có
 kế hoạch và con số phân tích để review,chưa có lợi thế tài nguyên/timing/throughput đã đo.
+
+### 8.39. Chốt approximate không FLOOR,12 vòng — hợp đồng29/10/2026
+
+**Quyết định trực tiếp của sinh viên:** chọn approximate không FLOOR và đã xác nhận
+tối đa12 vòng fraction.Canonical là **SPEC v1.23 §4.3,FULL_TERM**,không phải phương án
+16 bit/FLOOR/n12 được gợi ý như một lựa chọn PPA trước đó.
+
+| Nội dung | Hợp đồng mục tiêu |
+| --- | --- |
+| Posit và precision đầu vào |32 bit,ES3;giữ12 fraction cao,input_cut báo14 bit thấp bị bỏ |
+| OPS/SAC | OPS0/1,min-popcount/tie-A;SAC bỏ qua bit0,hidden khởi tạo riêng,early-stop |
+| Số vòng | cfg_n0..12;approx13..15 bị từ chối;n12 hết fraction đã giữ,không biến thành exact26 bit |
+| SBM/accumulator | Y13 bit,base=Y<<12;term=base>>S,S≤12;M26/Q24,không FLOOR/JAM/RNE từng term |
+| Normalize/prepack | Carry25;không bỏ2 bit thấp.NF frac_norm53,F p_magnitude26/Q24 và scale11 |
+| RNE và MAC | NF R(R(P_hat)+C_eff),F R(P_hat+C_eff);F W32/Q29 còn phải kiểm lại,không phải quire |
+| Status mất bit | term_cut/term_tail/numerical_sticky từ vòng nhân bằng0;input/iteration cut còn là metadata |
+| Exact NF | Giữ fraction26,Q52,bank54 nếu hỗ trợ;approx zero-extend M26 trong bank54 không đổi Q24 |
+
+Chọn này tham khảo ý tưởng nhân lặp của [P],**không chứng minh accumulator26/Q24 là RTL gốc
+tác giả**. Fixture research paper/FLOOR Fig.4 force-X0x1ae34000 không sửa.Cùng toán hạng
+ở profile FULL_TERM,FT-05 mục tiêu cho0x1ae34800;đây là expected hợp đồng mới.
+
+**Ranh giới công việc của phiên chốt:** chỉ sửa SPEC,hợp đồng/mapping L1 dạng tài liệu,
+README,hướng dẫn và tiến độ/Optimization.Không sửa bất kỳ file trong rtl/,tb/,tests/,
+L1 include/src/test hoặc runner;người dùng tự sửa RTL và testbench riêng nếu cần.
+`floor_rne_profile.hpp`,L1/oracle cũ,production_freeze và mọi report/fixture giữ nguyên.
+Chưa build/simulation/STA hoặc tạo PASS mới.Những lệnh hiện có vẫn replay FLOOR/n≤8.
+
+Thứ tự chuyển đổi trước khi tiếp tục OPT-17:
+
+1. **Hợp đồng — đã ghi:** đọc SPEC4.3,ma trận0..12,FT-01..05,các trường hợp invalid và
+   phân biệt metadata với numerical residual.Các vector là tính tay,chưa chạy RTL.
+2. **Golden — còn mở:** thêm model FULL_TERM có tên/phiên bản riêng,so oracle integer/dyadic
+   độc lập từng M/Q/scale và n12 so tích significand12 bit.Không đổi expected của FLOOR hoặc
+   dùng STICKY_ACC thay precision24 bit.Không đánh dấu bước này đã làm trong phiên tài liệu.
+3. **RTL — người dùng thực hiện:** chuyển base/dịch/acc26,carry25,prepack53/26,seed F,
+   cfg_n0..12 và guards.NF exact đường52 bit phải giữ chức năng;không chỉ xóa term[1:0].
+4. **Testbench — người dùng tự chỉnh:** chọn golden FULL_TERM,vectors/corner/counters mới,
+   n9..12 và invalid13..15,reset/stall/order/accumulation;giữ fixture/profile cũ riêng.
+5. **Nghiệm thu lại — chưa chạy:** pilot trước,main từng n/OPS theo SPEC,accuracy standalone
+   và chuỗi dài,matched STA/PPA trên source mới.Sau đó mới khóa release/hash mới và triển
+   khai prefetch2P/3P trên cùng arithmetic;không dùng source FLOOR làm đối chứng bit-exact.
+
+Đây là thay đổi precision/P_hat,chứ không chỉ retiming nên không kế thừa0 mismatch,
+accuracy,coverage hoặc Fmax cũ như kết quả profile mới.Mọi phép đo hai/ba Parser phải
+cùng FULL_TERM,n và hợp đồng làm tròn;thay precision khác nhau chỉ báo như study riêng.
+
+**Kiểm toán phiên chốt hợp đồng:** FT-01..05,normalize53 bit và seed Q29 được đối chiếu
+bằng số nguyên/hữu tỉ;FT-05 packed code đúng là0x1ae34800,mã0x1ae34200 nêu lúc đầu là
+tính tay nhầm và đã sửa trước commit.Kiểm SHA256 của554 file trong rtl/,tb/,tests/,
+L1 include/src/test và scripts không có thay đổi. Đây không phải lượt chạy L1/RTL hay
+nghiệm thu profile mới;không có mismatch/coverage/STA mới để công bố.

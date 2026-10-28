@@ -352,6 +352,7 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
 | --- | --- | --- | --- |
 | 1 | Soạn mục 3.2 và sơ đồ kiến trúc tổng thể | Nội dung báo cáo và một slide PowerPoint native mô tả hai top NF/F riêng, giao tiếp và tích lũy; không vẽ thanh ghi. Đối chiếu RTL production32/3, kiểm hình và cấu trúc PPTX; không sửa RTL hoặc chạy lại kiểm chứng số học | ✅ |
+| 2 | Lập phương án Parser chuẩn bị trước — OPT-17 | Ghi kế hoạch tại Optimization8.37: prefetch, bàn giao tích để giải phóng lõi, context/credit và phụ thuộc C_eff; chỉ hoàn thành đề xuất để sinh viên review. Chưa sửa RTL/SPEC, chưa tạo candidate hoặc chạy kiểm/STA | ✅ lập kế hoạch / không triển khai |
 
 ### 4.23. Mẫu cập nhật tiếp theo
 

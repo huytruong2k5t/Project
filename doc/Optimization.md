@@ -1,6 +1,6 @@
 # Optimization — Tối ưu RTL và hồ sơ kiểm chứng Posit MAC
 
-**Cập nhật:** 18/10/2026. Chuyển từ `Posit_MAC/l1/PLAN.md` theo yêu cầu sinh viên.
+**Cập nhật:** 28/10/2026. Chuyển từ `Posit_MAC/l1/PLAN.md` theo yêu cầu sinh viên; bổ sung đề xuất OPT-17 ở mục8.37, chưa triển khai.
 
 Tài liệu này giữ các phương án tối ưu, thay đổi RTL, kết quả mô phỏng/lint, synthesis và STA/PPA, gồm cả ứng viên không được chọn và giới hạn bằng chứng. Mọi đường dẫn code/results và lệnh trong phần lịch sử được hiểu từ gốc `Posit_MAC`, trừ liên kết Markdown đã ghi rõ. Không di chuyển hoặc sửa mã nguồn, kết quả, seed hay hash của checkpoint.
 
@@ -14,6 +14,8 @@ Tài liệu này giữ các phương án tối ưu, thay đổi RTL, kết quả
 
 Các mã mục cũ `7.x`/`8.x` được giữ để truy vết report và liên kết; đây là mã hồ sơ, không phải thứ tự công việc hiện hành. Ghi chép có ngày giữ trạng thái tại thời điểm đo: câu “chưa triển khai” trong một mốc cũ không phủ nhận kết quả mới hơn. Công việc chưa làm/processing được quản lý tập trung tại tiến độ §3.1–§3.4. Checklist tuần đã hoàn thành được gỡ khỏi PLAN, không dùng lại như lệnh thực thi.
 
+**Mốc nguồn cho đề xuất ngày28/10:** production hiện là `POSIT_MAC_RTL_20261022_FIXED32_3`, trạng thái `FIXED32_3_FUNCTION_VERIFIED`,54 module cố định posit32/ES3 theo `rtl/production.f` và `rtl/production_freeze.json`. Các số đo100/120,48MHz và ứng viên OPT-15/16 bên dưới thuộc nguồn lịch sử tương ứng, không phải phép đo mới của release fixed32/3. OPT-17 phải tạo study/candidate mới từ nguồn fixed hiện hành sau khi kiểm hash; không ghép thẳng candidate đa tham số cũ vào filelist production. Mục8.37 hiện chỉ là kế hoạch để sinh viên xem xét, không thay SPEC hoặc cho phép tự triển khai.
+
 | Nhóm | Quyết định hiện hành | Bằng chứng |
 | --- | --- | --- |
 | Primitive và parser | LOD nhóm4 chỉ MODE0,N31/32; parser XOR một detector; shifter giữ gốc | Mục8.18/8.19 |
@@ -21,8 +23,11 @@ Các mã mục cũ `7.x`/`8.x` được giữ để truy vết report và liên 
 | Prepack OPT-01 | Không promote; production normalizer giữ gốc | Mục8.20 |
 | NF OPT-03 | Production dùng product RNE P1/P2 và parse/product bank riêng | Mục8.21 |
 | A1 OPT-02c | Đã promote và khóa; A1 Default+2,144ns,0 FF thêm | Mục8.30 |
-| SAC/packer/parse | Production OPT-02c + OPT-05 abc_tree + OPT-09 + OPT-10A; LOCKED_FOR_W14,38 module; cả3 strategy đạt100MHz | Mục8.30 |
-| Hướng tối ưu sâu 120+ MHz | OPT-12 negate đã qua10M NF+10M F/0 mismatch,STA120,48MHz theo flow có PASS; chờ chọn/promote/khóa mới. OPT-13/14 chưa triển khai | Mục8.31.7 |
+| Release100MHz đối chứng | OPT-02c + OPT-05 abc_tree + OPT-09 + OPT-10A; LOCKED_FOR_W14,38 module tại thời điểm khóa; cả3 strategy đạt100MHz | Mục8.30 |
+| Release 120 MHz đối chứng | OPT-12 negate đã promote và khóa `POSIT_MAC_RTL_20261018_OPT12_120`; OPT-13/14 chưa triển khai | Mục8.31.8 |
+| Ứng viên OPT-15/16 lịch sử | NF `combined`, F `parser2`/`shared_add` đã có kiểm/đo riêng; chưa promote vào release fixed32/3. Quyết định ngày19/10 và kết quả ngày20/10 giữ theo mốc, cần rebase/qualification riêng nếu dùng tiếp | Mục8.35.5/8.36 |
+| Production fixed32/3 |54 module, chức năng đã kiểm trên release cố định; chưa suy STA/PPA của nguồn mới từ release120MHz lịch sử | `rtl/production_freeze.json`, SPEC v1.22 |
+| Parser chuẩn bị trước và bàn giao sớm lõi nhân — OPT-17 | Chỉ đề xuất: tách nhận đầu vào, context đang nhân và quyền giữ kết quả; xử lý riêng phụ thuộc tích lũy. Chưa sửa RTL, chưa chạy thử | Mục8.37 |
 
 Các script report/prepare gắn checkpoint cũ là producer lịch sử, không chạy lại để tái chèn nhật ký vào PLAN hiện hành. Dùng snapshot/README của study khi tái lập; không sửa các script đã khóa hash chỉ để đổi nhãn báo cáo. Collector bảng toàn tầng hiện hành đã được đổi sang vùng báo cáo giới hạn trong tài liệu này.
 
@@ -2157,3 +2162,521 @@ không sửa dữ liệu hoặc RTL. Không có mismatch RTL bị che.
 matched PPA NF EXACT_EN1/NF EXACT_EN0/F trên A35T với≥3 run/config ở W15;
 hồ sơ/demo W16. Không có STA mới trong phiên này,khóa timing8,3ns120,48MHz giữ nguyên.
 Không tiếp tục paper baseline/TableI hoặc XCVU9P trong W14.
+
+### 8.35. OPT-15 — chia sẻ parser/packer để giảm LUT NF — 19/10/2026
+
+**Trạng thái: đã hoàn thành thử nghiệm OPT-15; chưa promote hoặc mở khóa production.**
+Reference là `POSIT_MAC_RTL_20261018_OPT12_120`. Nguồn/bằng chứng mới ở
+`results/opt15_share_20261019`; snapshot ứng viên ở `rtl/candidates/mac_nf/opt15/`.
+Không sửa RTL production, L1/oracle, file list hoặc constraints đã khóa.
+
+| Bản | Nội dung | Điều kiện giữ |
+| --- | --- | --- |
+| reference | NF production, 3 parser input và 2 packer | Giữ nguyên byte release |
+| parser2 | Lane A/C dùng chung parser hai tầng, lane B riêng | C_eff chốt ở accept; C nạp sau A một chu kỳ; phát hiện C NaR sớm; tag đi cùng elastic stages |
+| combined | parser2 + một RNE packer P1/P2 dùng lần lượt cho tích/tổng | Tag PRODUCT/FINAL điều khiển sign, đích, backpressure; chỉ FINAL commit accumulator |
+
+**Hợp đồng:** public I/O và parameter không đổi. Không thêm tầng số học; phải so trực tiếp
+in_ready/out_valid/data/flags theo từng chu kỳ với reference trên cùng stimulus.
+Giữ `L_valid=q+12`, `H=q+13` và `II_min=q+14` khi không stall.
+Không bỏ round tích hoặc mag parse, không đổi thành fused. C nguyên tử kể cả khi input/control
+đổi ngay sau handshake; Zero/NaR, exact/approx, n0..8, OPS0/1, accumulator/clear và reset/stall phải kiểm.
+Các helper mới theo guideline: một module/file, port mapping có tên, CK2Q, reset release đồng bộ,
+không latch, không tạo clock gating hoặc false-path/multicycle để làm đẹp số đo.
+
+**Thứ tự:** lint/kiểm cycle-equivalence + L1/oracle → ModelSim bốn trạng thái → matched STA/PPA.
+Vivado/A35T `xc7a35tcpg236-1`, Explore, 8,300 ns; I/O min/max 2,500 ns;
+output min0/max0,500 ns; uncertainty0,100 ns giữ giống reference.
+Đo cả global và Internal R2R setup/hold, LUT/FF/DSP, đường găng và unconstrained paths.
+Một lượt mỗi bản chỉ là sàng lọc ứng viên, không thay matched PPA ≥3 run của W15 hoặc nghiệm thu AC02.
+Chỉ chốt kết luận sau khi có bằng chứng; không push GitHub trong phiên thử này.
+
+#### 8.35.1. Kết quả kiểm chức năng và lịch giao dịch
+
+Hai ứng viên giữ đúng byte đã kiểm ở `rtl/candidates/mac_nf/opt15/parser2/`
+và `combined/`; helper RNE mới là `posit_nf_shared_pack.sv`. Chỉ có hai parser
+**đầu vào**; mag parse của tích vẫn giữ nguyên. Product pack vẫn RNE trước phép cộng,
+không biến NF thành fused. Các public parameter và cổng của wrapper giữ nguyên.
+
+Ba bản nhận cùng stimulus ở mỗi cạnh clock: so `in_ready` mọi chu kỳ, so `out_valid`,
+và so data/flags khi valid. Scoreboard NF dùng L1 và các kiểm độc lập dyadic product,
+adder integer/grid, exact product đúng ES; không dùng SoftPosit ES2 làm oracle ES3.
+Thay toàn bộ input/control sau handshake để kiểm C_eff nguyên tử; invalid config,
+reset đang chạy/đang stall, output giữ ổn định, accumulator/clear và commit một lần đều được kiểm.
+Assertion xác nhận C đã được chốt trước adder, hai yêu cầu packer không tranh chấp và
+core_done không bị backpressure làm mất token.
+
+| Phép kiểm mới | Mẫu hoàn tất trên mỗi bản | Seed | Kết quả |
+| --- | ---: | --- | --- |
+| Pilot 8/0, 16/1, 32/2, 32/3 | 4 × 20.000 | 20261019 | 0 mismatch; 72/72 bin config/mode/OPS/acc trên mỗi format |
+| Main 32/3 | 1.000.000 | 20261020 | 0 mismatch; 2.783 reset-aborted tách riêng |
+| Stress 32/3 | 10.000.000 | 20261021 | 0 mismatch; 28.054 reset-aborted tách riêng |
+| ModelSim, bốn format, corner + protocol, mỗi ứng viên | 111.456 | Fixture lịch sử có SHA256 riêng | 0 mismatch; 288 reset-aborted/ứng viên |
+
+Tổng native **11.080.000 completed trên mỗi bản**, 31.057 reset-aborted trên mỗi bản;
+**200.538.223 chu kỳ** so trực tiếp reference/parser2/combined. Không cộng ba bản dùng chung
+stimulus thành số vector độc lập. Exact và approx trộn trong main; đây không phải exhaustive AC02
+hoặc final per-n matrix/AC04 mới. `L_valid=q+12`, `H=q+13`, khả năng nhận giao dịch và stall
+không đổi trong các lượt so từng chu kỳ; không thêm tầng pipeline. Exact có thể q>8.
+
+Verilator 5.032, GCC 15.2.0; strict `--timing --assert -Wall` bốn format sạch.
+Native functional replay dùng `--no-timing -Wno-ASSIGNDLY` chỉ để bỏ CK2Q #1 theo mục đích
+mô phỏng chu kỳ, không tắt các warning khác. ModelSim 10.1d kiểm bốn trạng thái với
+clock **8,300 ns**, CK2Q **1,000 ns**; không phải SDF. Hai cast tương thích ModelSim cũ
+được giữ ở `event/*/compat/`, không sửa leaf production.
+
+**Sửa lỗi trước nghiệm thu:** lượt đầu lint phát hiện vòng ready từ shared pack → adder →
+product bank → shared pack và một warning reset của checker. Đã tách product-bank ready thành
+`!norm_valid_q` dựa trên một giao dịch đang xử lý, và sửa reset checker. Không thay ready bằng
+false-path hoặc bỏ kiểm. Nguồn/log lỗi giữ ở `repairs/initial_ready_loop/`.
+Log cảnh báo CK2Q của build native đầu cũng được giữ; không có mismatch số học bị bỏ qua.
+
+#### 8.35.2. Matched post-route STA và tài nguyên trên A35T
+
+Vivado **2026.1 build 6511674**, `xc7a35tcpg236-1`, **Explore**, clock **8,300 ns ≈120,48 MHz**.
+NF **32/3, FW12, EXACT_EN1, OPS_EN1**, mode/n/OPS là cổng động như reference.
+Clock và I/O XDC đọc trước synthesis; giữ input min=max2,500 ns, output min0/max0,500 ns,
+user uncertainty setup/hold0,100 ns. Không giảm I/O delay, đổi speed grade hoặc thêm exception.
+Mỗi bản một run mới; reference giữ nguyên byte release và tái hiện WNS/WHS đã khóa.
+
+| Bản | LUT sau route | Thay đổi LUT | FF | Thay đổi FF | WNS toàn thiết kế ns | WHS ns | R2R setup ns | R2R hold ns | 120,48 MHz |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| NF reference | 2.424 | — | 931 | — | +0,227 | +0,053 | +0,309 | +0,053 | PASS |
+| Hai parser input | 2.354 | −70 / −2,89% | 887 | −44 / −4,73% | +0,465 | +0,062 | +0,531 | +0,062 | PASS |
+| Hai parser + một packer | **2.104** | **−320 / −13,20%** | **806** | **−125 / −13,43%** | **+0,224** | **+0,025** | **+0,224** | **+0,025** | **PASS** |
+
+Cả ba: TNS=THS=0, DSP=0, BRAM=0, latch=0, unrouted=0, unclassified register=0;
+không có register không clock hoặc pin thiếu max-delay constraint trong report.
+Không có ERROR hoặc CRITICAL WARNING. Cả ba cùng có warning OOC `Route 35-198`
+về phần route tới cổng chưa có HD.PARTPIN_LOCS; timing I/O vẫn là budget giả định,
+không phải board-interface signoff. Internal R2R được báo riêng.
+
+Ước lượng từ slack R2R của netlist đã route, **không phải sweep đo tại tần số cao hơn**:
+`1000/(8,3−slack_R2R)` lần lượt **125,14 / 128,72 / 123,82 MHz**.
+Vì vậy không nói combined tăng Fmax: lợi ích chính là giảm LUT/FF và vẫn qua mốc 120,48 MHz.
+Global setup chỉ giảm0,003 ns so reference nhưng R2R setup giảm0,085 ns; hold margin còn0,025 ns.
+Một run chưa chứng minh tính ổn định qua nhiều strategy hoặc timing trên kit.
+
+#### 8.35.3. Phân tầng và đường găng sau khi chia sẻ
+
+| Bank đích | Reference setup/hold ns | Parser2 setup/hold ns | Combined setup/hold ns |
+| --- | --- | --- | --- |
+| Parser A/C P1 | +1,405 / +0,174 | +1,255 / +0,134 | +1,023 / +0,184 |
+| Parser A/C P2 | +2,764 / +0,173 | +3,202 / +0,193 | +3,488 / +0,115 |
+| Parser B P1 | +1,470 / +0,298 | +1,836 / +0,203 | +1,553 / +0,129 |
+| Parser B P2 | +3,103 / +0,113 | +3,771 / +0,062 | +3,467 / +0,142 |
+| C context | +3,817 / +0,074 | +2,515 / +0,129 | +3,285 / +0,080 |
+| Product pack P1 | +0,309 / +0,091 | +0,531 / +0,140 | Dùng shared P1 |
+| Final pack P1 | +1,335 / +0,165 | +1,094 / +0,091 | Dùng shared P1 |
+| Shared pack P1 | — | — | +0,224 / +0,099 |
+| Shared pack P2 | — | — | +2,095 / +0,122 |
+
+Đây là slack **tới bank**, có thể gồm input-to-register; không gọi mọi hàng là R2R.
+Danh mục toàn bộ bank và endpoints ở `ppa/*/p8300/Explore_r1/stages.csv` và từng `*_setup/hold.rpt`.
+
+Reference/parser2 găng R2R từ `u_core/mode_o_reg_rep__0/C` tới
+`u_product_pack/g_rne.p1_flags_q_reg[1]/D`. Combined chuyển sang
+`u_core/u_acc/acc_reg[13]/C` → normalization/shared fraction MUX/prepare GRS →
+`u_shared_pack/p1_sticky_q_reg/D`: **8 LUT levels, data7,977 ns** gồm logic1,704 ns,
+route6,273 ns (~78,64%). Synthesis đã trộn logic qua hierarchy nên tên cell dưới u_add
+không có nghĩa đường tổ hợp đi xuyên các FF adder. MUX parser chưa thành đường găng.
+
+**Kết luận ứng viên:** combined phù hợp mục tiêu giảm LUT ở mốc120 MHz;
+parser2 riêng tiết kiệm ít hơn nhưng giữ margin timing lớn hơn trong run này.
+Nếu chọn combined để promote, cần change review, matched ≥3 strategy/run cùng điều kiện,
+kiểm phạm vi derivative cần dùng và khóa release mới; không thay lock cũ bằng hash ứng viên.
+Fused không được sửa trong phiên này; chưa có kết quả chia sẻ parser của F hoặc NF EXACT_EN0 mới.
+
+#### 8.35.4. Nguồn, lệnh và khả năng tái lập
+
+Canonical trial: [summary.json](../Posit_MAC/results/opt15_share_20261019/summary.json).
+Nguồn theo từng bản, source/binary/fixture hashes, compiler/simulator, lint, replay và STA
+giữ ở `results/opt15_share_20261019/`; `manifest.json` ràng buộc snapshot reference/candidate.
+Archive/retention nếu có chỉ dọn sản phẩm sinh lại; không sửa bằng chứng PASS/FAIL hoặc nguồn đã kiểm.
+
+Lệnh đã dùng từ gốc Posit_MAC (WSL dùng bash --noprofile --norc):
+
+```sh
+python scripts/prepare_opt15.py
+bash scripts/verify_opt15.sh
+bash scripts/verify_opt15.sh stress
+```
+
+```powershell
+powershell -NoProfile -File scripts/verify_opt15_modelsim.ps1 -Variant parser2
+powershell -NoProfile -File scripts/verify_opt15_modelsim.ps1 -Variant combined
+powershell -NoProfile -File scripts/run_opt15_ppa.ps1 -Variant reference -Strategy Explore -Period 8.300 -Attempt r1
+powershell -NoProfile -File scripts/run_opt15_ppa.ps1 -Variant parser2 -Strategy Explore -Period 8.300 -Attempt r1
+powershell -NoProfile -File scripts/run_opt15_ppa.ps1 -Variant combined -Strategy Explore -Period 8.300 -Attempt r1
+python scripts/report_opt15.py
+python scripts/audit_rtl_release.py --self-test
+```
+
+Producer từ chối study/output đã hoàn tất để tránh ghi đè; tái lập ở checkout/output mới
+và giữ đầy đủ fixture đã ràng buộc. Không chạy W15/Gate4, không promote, commit hoặc push GitHub.
+
+**Lưu trữ cuối phiên:** `scripts/retain_opt15.ps1` tạo `evidence.zip` gồm986 entry,
+đối chiếu SHA256 từng entry và ghi `archive_manifest.json`. Đã dọn495 file compiler
+intermediate/ModelSim work/wave, giải phóng161,91 MiB; giữ native binary và DCP tại máy
+để debug nhưng không đưa chúng vào archive/Git. Nguồn, fixture, counter, mọi log/report,
+và bằng chứng lỗi ban đầu được giữ. Collector và audit release chạy lại sau dọn đều PASS.
+Windows PowerShell5 cần nạp cả assembly Compression và FileSystem; lần đóng gói đầu
+thiếu assembly dừng trước khi tạo archive hoặc xóa file, đã sửa rồi mới dọn.
+
+#### 8.35.5. Chọn OPT-15 làm nền ứng viên phát triển chung NF/F
+
+**Quyết định của sinh viên ngày19/10/2026:** tiếp tục phát triển cả NF và F theo
+phương pháp chia sẻ tài nguyên OPT-15. Các tối ưu sau lấy gói ứng viên này làm điểm xuất phát,
+không bắt đầu lại từ nhánh NF trước OPT-15. Đây là chọn nền làm việc, chưa promote hoặc khóa release mới.
+
+| Bản | Nền ứng viên được chọn | Trạng thái đúng theo bằng chứng |
+| --- | --- | --- |
+| NF | `rtl/candidates/mac_nf/opt15/combined/mac_nf_wrapper.sv` cùng helper `posit_nf_shared_pack.sv`: hai parser input, một packer RNE dùng hai lượt | Đã kiểm11,08M completed/bản,ModelSim và một run Explore120,48MHz; được chọn làm nền tối ưu tiếp |
+| F | Hai parser input: lane A/C và lane B; giữ packer cuối duy nhất cùng F1–F5 | Đã chốt hướng áp dụng; **chưa có RTL ứng viên F OPT-15, chưa kiểm hoặc đo STA cho F với thay đổi này** |
+
+F hiện không pack/parse tích giữa phép nhân và phép cộng. Vì vậy không chèn thêm lượt pack tích,
+mag parse hoặc MUX PRODUCT/FINAL của NF vào F. Phần dùng chung phương pháp là chốt C_eff tại accept,
+cho C đi sau A trên cùng parser, tag A/C, phát hiện C NaR sớm và chốt context trước tầng F1 cần C.
+Hai bản vẫn có thuật toán riêng; số instance được chia sẻ phù hợp nhu cầu từng bản.
+
+Quyết định này **không chuyển sang exact-only**, không cắt thêm fraction hoặc giảm giới hạn vòng lặp.
+NF giữ hợp đồng exact/approx hiện hành; F giữ profile approximate W32 hiện hành.
+Không suy từ việc chọn OPT-15 rằng đã có fused exact hoặc đã hoàn tất AC02/Gate4.
+
+**Trình tự tiếp theo:**
+
+1. Triển khai riêng F với hai parser input, giữ I/O/profile,F1–F5,reset/stall và lịch q+11/q+12/q+13.
+2. So F candidate với F reference theo từng chu kỳ và với L1/oracle hiện hành; kiểm C thay ngay sau accept,
+   NaR/Zero,n0..8,OPS0/1,feedback/clear,stall và reset. Không kế thừa PASS của NF cho F.
+3. Kiểm source/profile và tạo manifest gói ứng viên NF/F chung; derivative NF EXACT_EN0 nếu dùng trong
+   so sánh phải được kiểm riêng trên nguồn OPT-15,không chỉ trỏ về kiểm của release cũ.
+4. Đo matched ≥3 strategy/config trên A35T cùng clock8,300ns và budget I/O giữ nguyên,
+   báo global/R2R setup/hold,LUT/FF/DSP/II. Dùng dữ liệu này cho quyết định promote và W15 phù hợp phạm vi.
+
+Mỗi tối ưu tiếp tạo revision/study mới từ nền đã chọn, ghi parent source SHA256 và so với mốc ngay trước đó.
+Không sửa `source/combined`,summary,archive hoặc các snapshot đã ràng buộc hash ở mục8.35.1–4.
+Bản `parser2` riêng của NF giữ như ứng viên đối chiếu lịch sử,không phải nền mặc định phát triển tiếp.
+Release OPT12_120 và bằng chứng W14 giữ nguyên để rollback/đối chứng cho đến khi có promote được kiểm riêng.
+
+### 8.36. F hai parser và dùng bộ cộng NF ba tầng — OPT-16, 20/10/2026
+
+**Yêu cầu của sinh viên:** tạo candidate riêng để đồng nhất bộ cộng NF/F,
+giữ hai parser đầu vào và một packer cuối nhằm giảm tài nguyên. Không promote,
+không sửa release `POSIT_MAC_RTL_20261018_OPT12_120`, L1/oracle hoặc constraint production.
+Mục 8.35.5 là quyết định trước đó; kết quả triển khai F được cập nhật tại mục này.
+
+#### 8.36.1. Hai bước thử và phạm vi số học
+
+| Bản | Parser đầu vào | Bộ cộng | Packer | Nguồn wrapper candidate |
+| --- | ---: | --- | ---: | --- |
+| F reference | 3 | F1–F5, signed residual/ABS/borrow | 1 cuối | Production đã khóa |
+| F OPT-15 `parser2` | 2: A/C dùng chung, B riêng | Giữ F1–F5 | 1 cuối | `rtl/candidates/mac_f/opt15/parser2/mac_f_wrapper.sv` |
+| F OPT-16 `shared_add` | 2: A/C dùng chung, B riêng | Reuse nguyên `posit_add` và A1/A2/A3 production | 1 cuối | `rtl/candidates/mac_f/opt16/shared_nf_add/mac_f_wrapper.sv` |
+
+F vốn đã có một packer; lượt này không loại một packer F thừa. C được chốt nguyên tử
+tại accept, đi sau A trên cùng parser cùng tag A/C; phát hiện C NaR sớm để giữ bypass
+và số vòng nhân. C context sẵn sàng trước khi tích vào adder, kể cả n=0.
+
+Profile duy nhất giữ nguyên: Posit(32,3), FW12, N_MAX8, EXACT_EN0, OPS_EN1,
+FLOOR ở nhân, RNE cuối. `P_hat` vẫn là tích xấp xỉ của core đã kiểm.
+Không tạo fused exact/quire, không tăng hoặc giảm số bit fraction/vòng lặp.
+
+Adapter không có FF và không làm tròn: lấy `p=acc[15:2]`. Khi p[13]=0,
+fraction26=`{p[11:0],14'b0}`, sf=core_sf; khi p[13]=1,
+fraction26=`{p[12:0],13'b0}`, sf=core_sf+1. Tối đa13 bit fraction hữu hiệu
+được giữ đủ. Dấu, Zero/NaR và metadata loss đi đúng token; loss FLOOR là trạng thái,
+không OR vào numerical sticky của tích. Không pack/parse hoặc clamp tích trước cộng C.
+
+Mục tiêu cuối vẫn `RNE(P_hat+C_eff)`, khác NF `RNE(RNE(P_hat)+C_eff)`.
+A1 so đủ scale/fraction để chọn độ lớn; A2 trừ không âm; A3 normalize.
+Jam/GRS của adder NF thay biểu diễn signed residual/borrow của F cũ ở candidate này.
+Đây là thí nghiệm ngoài mapping normative W32 tại SPEC/PLAN; không lấy việc đủ width
+để tự suy tương đương, và không sửa oracle cho khớp candidate. So **bits/cờ cuối**,
+không đòi intermediate jam giống intermediate signed residual.
+
+#### 8.36.2. Kiểm chứng chức năng và lịch
+
+| Kiểm | Phạm vi | Kết quả |
+| --- | --- | --- |
+| Strict Verilator lint | Ba wrapper trong cùng test top; `--timing --assert -Wall`, không waiver rộng | 0 warning/error |
+| Pilot | 100.000 completed/bản, seed20261020 | 0 mismatch |
+| Main | 10.000.000 completed/bản, seed20261021, ba bản cùng input/state/oracle | 0 mismatch;20.151 reset-aborted/bản tách riêng |
+| ModelSim CK2Q | 8.192 completed +24 reset-aborted cho mỗi candidate;clock8ns,CK2Q1ns | 0 mismatch;giữ output khi stall và kiểm latency |
+| Luồng không stall riêng OPT-16 | 100.000 completed,seed20261022,out_ready=1 | 0 mismatch;99.999 khoảng nhận liên tiếp đúng II |
+
+So L1 `FusedWindow<32,3,12,32>` và oracle integer full-grid độc lập
+`week12_reference::Oracle<32,3>` cho toàn bộ main, gồm tất cả5 cờ.
+Main có36/36 ô n0..8×OPS0/1×acc_mode0/1, ít nhất265.778 completed/ô;
+4.846.175 near-cancellation (48,46175%),3.700.633 residual và1.186.230 borrow
+theo trace mô hình F cũ. Có315.596 lần kiểm cấu hình cấm,34.323.230 chu kỳ có output
+valid bị chặn,25.020 clear và4.813.947 commit. Raw `stalled_observations` đếm44.323.230
+lượt any-valid,gồm10M cạnh release;collector giữ raw và tách số chu kỳ bị chặn.
+External A/B/C/cfg thay ngay sau accept;
+reset ở lúc đang tính và đang giữ output đều được kiểm. Cờ/giá trị không đổi theo lịch mới.
+
+Quy ước q=max(1,số vòng thực tế),special dùng số vòng bypass thực tế:
+
+| Bản | Tầng datapath | First-valid từ E0 | Handshake không stall | II tối thiểu |
+| --- | ---: | --- | --- | --- |
+| Reference / OPT-15 parser2 | 13 | q+11,quan sát12..19 | q+12 | q+13 |
+| OPT-16 shared_add | 11 | q+9,quan sát10..17 | q+10 | q+11,đã kiểm trực tiếp |
+
+Đếm bank C/context/commit riêng, không cộng thành tầng số học nối tiếp.
+Main giữ các output tới khi cả ba bản valid để so giao dịch; phép đo II riêng tránh
+dùng lịch giữ chung đó làm throughput của OPT-16. Tổng replay10,1M completed/bản,
+cộng100k luồng không stall riêng OPT-16; chưa formal/vét cạn miền Posit32.
+
+#### 8.36.3. Matched A35T post-route
+
+Vivado2026.1 build6511674,xc7a35tcpg236-1,OOC,Explore place/route,
+**một run/bản**,period8,300ns≈120,48MHz. Nạp XDC trước synthesis;
+input min=max2,500ns,output min0/max0,500ns,uncertainty setup/hold0,100ns giữ nguyên.
+
+| Bản | LUT | FF | CARRY4 | Global setup/hold ns | Internal R2R setup/hold ns | Đạt120,48MHz |
+| --- | ---: | ---: | ---: | --- | --- | --- |
+| Reference F,3 parser,F1–F5 | 1362 | 815 | 69 | +0,093 / +0,040 | +0,608 / +0,040 | Có |
+| OPT-15 parser2,F1–F5 | 1262 | 771 | 61 | +0,320 / +0,050 | +0,496 / +0,050 | Có |
+| OPT-16 parser2,NF-adder3 | 1345 | 645 | 55 | +0,139 / +0,052 | +0,236 / +0,052 | Có |
+
+Cả ba DSP0/BRAM0/latch0,không có endpoint nội bộ thiếu clock/max-delay,
+không có net nội bộ unrouted hoặc register chưa phân loại. Có cảnh báo OOC
+Route35-198 về partial I/O như flow trước; budget-I/O không thay board/interface signoff.
+Global slack không được dùng thay R2R hoặc kết luận đo board.
+
+So reference, OPT-15 giảm100LUT (−7,34%)/44FF (−5,40%). OPT-16 giảm17LUT
+(−1,25%)/170FF (−20,86%),và giảm hai chu kỳ. **So với parser2 riêng, dùng NF adder
+tăng83LUT (+6,58%),đổi lại giảm126FF (−16,34%) và hai chu kỳ.** Vì vậy OPT-16
+đạt mục tiêu đồng nhất bộ cộng,FF/latency; không gọi nó là bản F có LUT thấp nhất.
+
+R2R găng OPT-16: core accumulator `acc_reg[15]` → adapter carry/scale → A1
+align → `u_add/a1_q_reg[y][8]`,data7,933ns,logic2,682ns,route5,251ns,9 levels.
+Bank A1/A2/A3 có setup/hold lần lượt +0,236/+0,187; +3,065/+0,085;
++0,544/+0,131ns. Packer P1/P2: +1,103/+0,120 và +2,418/+0,129ns.
+Vẫn đạt120,48MHz nhưng margin R2R giảm so F1–F5; không tuyên bố Fmax tăng.
+Ước lượng R2R từ slack lần lượt130,01/128,14/124,01MHz chỉ là suy từ một implementation,
+không phải sweep đã đạt ở các clock đó. NF OPT-15 kết quả cũ là bối cảnh,
+không gọi ba lượt F này là matched PPA NF-EX0/F của Gate4.
+
+#### 8.36.4. Nguồn, lệnh, trạng thái bàn giao
+
+[summary.json](../Posit_MAC/results/f_shared_add_20261020/summary.json) ràng buộc
+nguồn snapshot,runner,binary,seed,compiler/simulator và toàn bộ stage timing.
+[opt15_sources.json](../Posit_MAC/rtl/candidates/opt15_sources.json) có hai entry
+`f_opt15` và `f_opt16_shared_add`; từng candidate có `production.f` riêng.
+Không compile glob candidates hoặc nạp cả wrapper candidate lẫn wrapper production.
+
+Lệnh đã dùng từ gốc Posit_MAC:
+
+```sh
+python scripts/prepare_f_shared_add.py
+bash scripts/verify_f_shared_add.sh
+bash scripts/verify_f_shared_add.sh stress
+bash scripts/verify_f_shared_add_fast.sh
+```
+
+```powershell
+powershell -NoProfile -File scripts/verify_f_shared_add_modelsim.ps1 -Variant parser2
+powershell -NoProfile -File scripts/verify_f_shared_add_modelsim.ps1 -Variant shared_add
+powershell -NoProfile -File scripts/run_f_shared_add_ppa.ps1 -Variant reference
+powershell -NoProfile -File scripts/run_f_shared_add_ppa.ps1 -Variant parser2
+powershell -NoProfile -File scripts/run_f_shared_add_ppa.ps1 -Variant shared_add
+python scripts/report_f_shared_add.py
+python scripts/update_f_shared_sources.py
+python scripts/audit_rtl_release.py --self-test
+```
+
+WSL dùng bash không nạp profile; mọi binary/work/tmp/log trong study của dự án.
+Verilator5.032,G++15.2.0; cycle replay `--no-timing` chỉ bỏ CK2Q trong native run,
+lint `--timing` và ModelSim kiểm delay riêng. Helper fast lần đầu thiếu include
+`vltstd/svdpi.h`,collector lần đầu cần đọc UTF16 log PowerShell; đã sửa runner,
+không sửa RTL/oracle để vượt kiểm. Runner từ chối ghi đè output hoàn tất.
+Khi tái chạy,chọn study mới bên trong `results/`: prepare nhận `--study`,
+ba runner bash nhận biến `F_SHARED_STUDY`,hai runner PowerShell nhận `-StudyRoot`,
+collector nhận `--study`. Candidate có sẵn chỉ được dùng lại khi nội dung trùng,
+không ghi đè chỉnh sửa mới. Lệnh trên là lượt gốc đã chạy,không xóa study cũ để replay.
+
+**Kết luận:** cả hai candidate F đã kiểm và đo riêng; OPT-16 đủ để xem xét chọn
+theo ưu tiên đồng nhất thiết kế/giảm FF/latency,OPT-15 parser2 tốt hơn nếu ưu tiên LUT.
+Giữ cả hai ở nhánh thử nghiệm,chưa chọn thay production,chưa sửa normative SPEC,
+chưa promote/khóa lại,chưa đóng matched ≥3-run Gate4. Không commit/push GitHub trong phiên này.
+
+### 8.37. OPT-17 — Parser chuẩn bị trước và bàn giao sớm lõi nhân — đề xuất28/10/2026
+
+**Trạng thái: ĐỀ XUẤT, CHƯA TRIỂN KHAI — chờ sinh viên xem và duyệt kế hoạch.**
+Yêu cầu hiện tại chỉ cho phép ghi ý tưởng, phân rã công việc và tiêu chí đánh giá.
+Không sửa RTL, testbench, SPEC normative, filelist/freeze, L1/oracle hoặc constraint;
+không tạo candidate/build/simulation/STA trong phiên lập kế hoạch này.
+
+#### 8.37.1. Mục tiêu và vấn đề của nguồn hiện tại
+
+Ý tưởng của sinh viên: trong lúc bộ nhân lặp xử lý giao dịch T0, Parser nhận và giải mã
+trước T1; nếu lõi chưa sẵn sàng thì giữ dữ liệu T1. Khi lõi đã bàn giao tích T0 an toàn,
+T1 được đưa vào ở cạnh clock sớm nhất được phép, không phải đợi quay lại giải mã từ đầu.
+“Ngay” là tại ranh giới clock hợp lệ, không phải truyền dữ liệu bất đồng bộ hoặc bỏ thanh ghi.
+
+Nguồn production đã có nền tảng elastic ở `rtl/parser/posit_parser.sv`:
+hai tầng, mỗi tầng một slot; P2 giữ toàn bộ kết quả khi downstream chưa nhận.
+Tuy nhiên, các wrapper hiện chỉ cho phép một giao dịch từ accept đến retire:
+
+| Điểm chặn | Hành vi RTL hiện tại | Hệ quả |
+| --- | --- | --- |
+| Wrapper NF/F và multiplier standalone | `in_ready` có điều kiện `!busy_q`; Parser nhận `pair_accept=in_valid&&in_ready` | Không nhận T1 vào Parser trong khi T0 còn bận |
+| Lõi nhân | `launch_ready=run_ready&&!busy_q` | Không khởi động context mới khi lõi còn giữ T0 |
+| Quyền giữ lõi | Wrapper nối `release_result` với `retire=out_valid&&out_ready` | `core_done` chưa giải phóng lõi; còn chờ product pack/adder/final pack và stall đầu ra |
+| Context | cfg, C, Zero/NaR và trạng thái giao dịch đang dùng bank đơn | Chỉ bỏ điều kiện busy sẽ làm ghi đè dữ liệu giữa T0/T1 |
+
+Điểm cải tiến cần khảo sát là sử dụng khả năng lưu giữ của Parser và tách thời gian
+chiếm lõi nhân khỏi thời gian giữ toàn bộ kết quả MAC. Đây là tối ưu thông lượng/II;
+không mặc định làm tăng Fmax, giảm latency của một giao dịch hoặc tái hiện lịch paper.
+
+#### 8.37.2. Phạm vi và các ràng buộc giữ nguyên
+
+- Nền bắt đầu: release fixed32/3 đang khóa; lưu hash nguồn parent và filelist trước thử.
+  Không dùng trực tiếp source/candidate OPT-15/16 chưa rebase; không sửa bằng chứng cũ.
+- Giữ định dạng posit32/ES3, precision FW12 ở approx, FLOOR/RNE, OPS0/1 và n0..8;
+  NF giữ khả năng exact, F vẫn approximate-only. Không đổi SAC recurrence hoặc width/cut.
+- Giữ public I/O và thứ tự trả kết quả. Được thay lịch ready/valid trong candidate theo hợp đồng mới;
+  không đòi candidate và reference khớp từng chu kỳ khi latency/accept schedule đã thay đổi.
+- Điểm bắt đầu đề xuất: tối đa **hai giao dịch đã nhận nhưng chưa retire** trên toàn top,
+  kể cả giao dịch đang ở Parser, lõi hoặc đuôi MAC. Chỉ cho một giao dịch nằm trong lõi lặp.
+  Không nhận T2 nếu T0/T1 đã dùng hết hai credit, dù một bank vật lý còn trống.
+- Dùng P1/P2 sẵn có của Parser làm nơi chờ nếu đủ, bổ sung context metadata tối thiểu.
+  Không mặc định thêm FIFO dữ liệu lớn hoặc FF cho toàn datapath; kiểm từng quyền sở hữu slot.
+- Giữ mã dễ đọc, cổng theo từng dòng, một module mỗi file, reset/enable theo bundle và guideline.
+  Không nối ready thành vòng tổ hợp; không thêm false path/multicycle chỉ để che đường ready dài.
+
+Giới hạn hai credit là điểm thử để giảm độ phức tạp, không phải khẳng định đủ để che mọi bubble
+ở n0/n1 hoặc mọi độ dài đuôi NF/F. Nếu thiếu credit là nguyên nhân giới hạn throughput,
+phải ghi nhận rồi đề xuất tăng độ sâu ở revision sau, không tự mở rộng trong cùng study.
+
+#### 8.37.3. Phương án kiến trúc theo hai bước độc lập
+
+**Bước A — chỉ chuẩn bị trước ở Parser, giữ cách giải phóng lõi cũ.**
+
+1. Thử trước trên giao dịch độc lập `acc_mode=0,acc_clr=0` của NF, sau đó áp dụng F.
+   Đây là phạm vi thử trung gian, chưa đủ thay production có chế độ tích lũy.
+2. Khi còn credit và các Parser nhận được cùng giao dịch, cho nhận T1 dù T0 đang chạy.
+   A/B/C bên ngoài và toàn bộ cfg/acc metadata phải được chốt theo accept của T1.
+3. Kết quả Parser T1 giữ ổn định đến handshake bàn giao cho OPS/lõi. A/B/C phải đi cùng
+   giao dịch; không được lấy config của T1 để tính T0 hoặc ghép C của giao dịch khác.
+4. Tách context đang chờ với context đang nhân; chỉ kích hoạt config của T1 khi launch T1.
+   Hai tầng Parser có thể chứa token ở các thời điểm khác nhau nhưng phải có metadata
+   tương ứng, không chỉ thêm một thanh ghi cfg global rồi cho phép nhận tùy ý.
+5. Vẫn giải phóng lõi ở retire T0 trong bước A. T1 lúc đó đã giải mã xong, có thể launch
+   ở cạnh đủ điều kiện tiếp theo. Bước này mới che thời gian Parser, chưa nhận lõi ngay core_done.
+
+**Bước B — bàn giao tích an toàn rồi tái sử dụng lõi, không chờ retire cuối.**
+
+1. Tạo hợp đồng bàn giao kết quả nội bộ có valid/ready hoặc cơ chế giữ tương đương.
+   `result_accept=result_valid&&result_ready` phải xác nhận độ lớn, scale, dấu, mode,
+   Zero/NaR, các cờ cut và context liên quan đã được tầng sau lưu đầy đủ.
+2. Nếu tầng sau chưa sẵn sàng, giữ kết quả/context T0; không dùng xung core_done một chu kỳ
+   làm bằng chứng kết quả đã được nhận. Chỉ cho lõi bắt đầu T1 sau khi quyền sở hữu T0 đã chuyển an toàn.
+3. NF: điểm bàn giao có thể là accept của product P1 nếu toàn bộ context C/flags đi theo
+   product P1/P2 và product-parse tới adder. Bank C/context đơn hiện tại không đủ khi T1
+   được launch trước lúc product T0 vào adder; phải bổ sung sideband theo slot/token.
+4. F: điểm bàn giao có thể là accept ở đầu `fused_add_pipe` nếu P_hat, C_eff và metadata
+   đã được chốt trong cùng giao dịch. Không thay P_hat hoặc thêm product RNE.
+5. Dùng lại credit đã dự trữ; chỉ giải phóng credit toàn top khi retire hoặc reset hủy giao dịch.
+   Bàn giao khỏi lõi giải phóng tài nguyên nhân, không giải phóng quyền giữ kết quả cuối.
+6. Với T1 đã sẵn sàng và tài nguyên đủ, mục tiêu đầu là launch ở cạnh kế tiếp sau
+   result_accept. Nhận/nhả lõi cùng một cạnh chỉ khảo sát sau nếu cần và có bằng chứng;
+   không đặt yêu cầu zero-bubble làm lý do kéo dài ready xuyên toàn datapath.
+
+Lõi vẫn SAC→shift→acc theo context của một phép nhân. Có thể chồng các số hạng của cùng
+giao dịch trong ba tầng như cũ, nhưng không xen kẽ số hạng của hai context vào cùng accumulator.
+
+#### 8.37.4. Chế độ tích lũy và phụ thuộc dữ liệu
+
+Prefetch độc lập và prefetch chuỗi MAC có phụ thuộc là hai trường hợp khác nhau.
+Khi `acc_mode=1`, C_eff phải là trạng thái Posit đã làm tròn do giao dịch cập nhật trước
+tạo ra. Core_done của phép nhân trước không chứng minh tổng tích lũy đã sẵn sàng.
+
+Phương án an toàn cho revision đầu:
+
+- Có thể nhận/lưu A/B và cfg của giao dịch kế tiếp theo credit; không chốt sẵn
+  `C_eff=accumulator_q` nếu giao dịch trước còn chưa commit tổng.
+- Khi kích hoạt giao dịch tích lũy, mới bind C_eff đúng thứ tự và giải mã C_eff cần dùng;
+  phải có valid/tag để ghép với A/B đã chờ. Không giữ nguyên giả định ba parser cùng accept
+  nếu C_eff được tạo ở thời điểm muộn hơn.
+- Giao dịch có `acc_clr=1` dùng C_eff=0 cho chính giao dịch đó. Không xóa accumulator ngay
+  tại prefetch nếu điều này có thể phá giao dịch cũ đang hoạt động. Quy định thời điểm hiệu lực
+  theo thứ tự giao dịch trong hợp đồng candidate trước khi sửa RTL.
+- Chỉ cập nhật trạng thái tích lũy một lần khi kết quả giao dịch được commit; không lặp theo
+  out_valid khi stall. Giao dịch độc lập không tự cập nhật trạng thái tích lũy.
+- Mặc định chưa launch giao dịch tích lũy phụ thuộc trước khi tổng trước đã commit và có đủ
+  slot downstream; nếu chưa đủ điều kiện thì tiếp tục chờ. Tối ưu tính A×B sớm rồi đợi C_eff
+  là một bước riêng, không bắt buộc cho revision đầu và không được làm mất thứ tự/cờ NaR.
+- Kiểm chuỗi trộn independent/accumulate, acc_clr, Zero/NaR và reset; không chỉ thử dot product
+  thuần. Khả năng prefetch không biến accumulator Posit thành quire.
+
+Không hứa cùng II cho chuỗi phụ thuộc và các phép MAC độc lập. Chính sách stall hợp lệ
+theo phụ thuộc phải được ghi rõ trong SPEC candidate và đo riêng.
+
+#### 8.37.5. Công việc và điểm dừng để review
+
+Tất cả bước triển khai bên dưới hiện **chưa thực hiện**. Sau khi sinh viên duyệt mới tạo study.
+
+| Mã | Công việc dự kiến | Sản phẩm / điều kiện đi tiếp |
+| --- | --- | --- |
+| O17-01 | Chốt hợp đồng hàng chờ, hai credit, context ownership, thời điểm C_eff/acc_clr và lịch accept/launch/result_accept/commit/retire; thống nhất với SPEC/guideline | Bảng lịch cho T0/T1, sơ đồ slot/reset và invariant; chưa sửa production |
+| O17-02 | Candidate bước A trên NF independent, rồi F; dùng Parser elastic sẵn có và context chờ | Directed + pilot100k completed mỗi bản,0 mismatch, không đổi oracle; chứng minh T1 đã ở Parser trong khi T0 bận |
+| O17-03 | Candidate bước B, tách bàn giao tích khỏi retire và truyền đủ C/context ở đuôi NF/F | Directed + pilot100k mỗi bản,0 mismatch; chứng minh T1 launch khi T0 chưa retire nếu đủ credit/slot |
+| O17-04 | Hoàn thiện giao dịch tích lũy và chuỗi trộn; bind C_eff, acc_clr theo thứ tự | Pilot100k mỗi bản và case S cũ/S mới phân biệt,0 mismatch; mọi chế độ production được giữ trước qualification |
+| O17-05 | Strict lint, ModelSim CK2Q và regression đầy đủ theo giao dịch, trace/coverage | ≥10M completed mới mỗi NF/F cho qualification kiến trúc,0 mismatch; bins và bằng chứng nguồn riêng; không tự thay ma trận final của SPEC |
+| O17-06 | Đo II/latency/throughput và matched STA/PPA so parent fixed32/3 | Tách độc lập/tích lũy, stall/no-stall; ≥3 run/strategy mỗi cấu hình trên cùng A35T/constraint; chỉ số đo mới mới được kết luận |
+| O17-07 | Review lợi ích/chi phí và quyết định giữ candidate, sửa revision hoặc promote | Bảng quyết định, cập nhật SPEC/plan/progress/freeze nếu được chọn; giữ nguyên checkpoint và kết quả lịch sử |
+
+Pilot dự kiến seed20261028; seed chính và mọi lệnh/công cụ phải ghi trước khi chạy main.
+Đây là seed/lượng chạy dự kiến, không phải log đã thực thi. Nếu pilot có mismatch,
+mất token, kẹt ready hoặc C_eff sai, dừng mở rộng corpus/PPA và sửa nguyên nhân trước.
+Không đổi model, precision hoặc điều kiện kiểm để làm candidate khớp.
+
+#### 8.37.6. Kiểm chứng cần có
+
+Scoreboard nhận một bản chụp input/config tại từng accept của DUT, đối chiếu L1/oracle
+theo thứ tự giao dịch và kiểm đủ d/5flags. Reference và candidate có lịch accept khác nhau
+nên không dùng so output cùng chu kỳ hoặc buộc cả hai cùng ready làm phép đo throughput.
+Corpus phải có cùng chuỗi giao dịch theo chỉ số; mỗi DUT có lịch cấp/nhận riêng.
+
+Các bằng chứng bắt buộc của study:
+
+1. **Prefetch thực sự hoạt động:** T1 accept/Parser-valid trong khi T0 đang nhân; bus ngoài
+   đổi sau accept không làm thay đổi token đã nhận; cấu hình OPS/mode/n khác nhau ở T0/T1.
+2. **Bàn giao đúng:** last ở SAC chưa được coi là done; result_accept chỉ sau commit accumulator.
+   Không ghi đè acc/sf/C/flags T0 khi T1 khởi động, kể cả n0/n1,early-exit hoặc exact26bit.
+3. **Backpressure/credit:** giữ output lâu, hết hai credit, consumer nhận trở lại;
+   không drop/duplicate/reorder. Kiểm đồng thời accept/retire, Parser advance/hold và result_accept/launch.
+4. **Bất biến số giao dịch:** accepted−completed−reset_aborted=outstanding, luôn từ0 đến2;
+   core-context≤1; mỗi slot/context chỉ có một chủ sở hữu; xả hết phải về0.
+5. **Reset:** reset khi queued/đang lặp/chờ bàn giao/đuôi MAC/output stall; hủy đúng token,
+   xóa trạng thái tích lũy, startup barrier và không xuất lại kết quả trước reset.
+6. **Số học/phụ thuộc:** exact NF,approx n0..8/OPS0/1,carry/term-cut,Zero/NaR,cancellation,
+   trạng thái NaR tích lũy,clear và chuyển acc_mode. Phần FLOOR mất đi vẫn chỉ là metadata,
+   không OR vào numerical sticky hoặc đổi giá trị P_hat.
+7. **Không treo:** watchdog cho luồng có out_ready công bằng; không đòi tiến triển nếu consumer
+   giữ out_ready=0 vô hạn. Khi còn downstream stall thì không hứa launch ngay core_done.
+
+ModelSim kiểm CK2Q/reset/hold/order; Verilator phục vụ pilot/main và probe. Coverage/counter
+phải phân biệt token chờ Parser, token đang nhân, token ở tail và completed với reset-aborted.
+Kiểm nguồn mới bằng release/study hash; số liệu10M cũ không dùng thay bằng chứng OPT-17.
+
+#### 8.37.7. Cách đánh giá hiệu quả và tiêu chí chọn
+
+| Chỉ tiêu | Cách đo / kết luận được phép |
+| --- | --- |
+| II và throughput | Đo khoảng cách accept,launch,result_accept,retire và số completed/chu kỳ ở steady state. Quét n0/1/2/4/8,early-exit,exact NF; tách independent và accumulator dependency |
+| Latency | Đo accept→first-valid và accept→retire, min/median/max; tách thời gian chờ hàng đợi và output stall. Prefetch có thể làm latency từ accept tăng dù throughput tốt hơn |
+| Slot giới hạn | Ghi số chu kỳ core rỗi vì thiếu queued token, thiếu credit, tail full hoặc chờ C_eff; từ đó mới cân nhắc tăng độ sâu |
+| Fmax/STA | So parent và candidate fixed32/3 mới tổng hợp trên cùng A35T, cùng clock/I/O/uncertainty/strategy; kiểm cả global và R2R setup/hold, ready/credit fanout. Không gán120,48MHz lịch sử cho candidate |
+| Tài nguyên | LUT/FF/CARRY/DSP/BRAM và bank context tăng thêm; throughput cải thiện có thể phải đổi bằng FF/LUT |
+| Đúng chức năng |0 mismatch theo giao dịch, giữ flags/precision/config/reset và các chế độ được công bố; không lấy số học đúng để bỏ qua lỗi giao thức |
+
+Chỉ xem xét chọn khi có cải thiện đo được về completed/giây hoặc II trên workload công bố,
+timing đạt ràng buộc và chi phí tài nguyên chấp nhận được. Nếu Fmax giảm, phải báo throughput
+tại clock đạt thực tế, không chỉ báo ít chu kỳ hơn. Bước A có thể được giữ riêng nếu bước B
+phức tạp hoặc không có lợi; không bắt buộc promote toàn bộ để gọi study thành công.
+
+**Phần cần sinh viên xem trước khi thực hiện:** thứ tự A→B→accumulation, giới hạn hai credit,
+và chính sách chưa launch chuỗi tích lũy phụ thuộc khi tổng trước chưa commit. Hiện mới hoàn
+thành việc ghi kế hoạch; chưa có candidate, số đo cải thiện hoặc tuyên bố đạt OPT-17.

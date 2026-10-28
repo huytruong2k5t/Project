@@ -1,0 +1,64 @@
+3.2. Kiến trúc tổng thể và giao diện
+
+3.2.1. Kiến trúc tổng thể
+
+Bộ MAC được thiết kế cho định dạng Posit 32 bit với ES = 3, thực hiện phép nhân hai toán hạng A, B và cộng với toán hạng C. Đồ án xây dựng hai phương án: MAC non-fused (NF) và MAC fused (F). Hai phương án có giao diện ngoài thống nhất, được hiện thực bằng hai top RTL riêng biệt là posit_mac_nf và posit_mac_f.
+
+Hình 3.x trình bày luồng dữ liệu tổng thể của hai phương án. Các khối màu xanh biểu thị các chức năng có mặt trong cả hai kiến trúc, gồm Parser, bộ nhân lặp và Packer đầu ra. Màu cam thể hiện phần xử lý riêng của NF, còn màu tím thể hiện phần xử lý riêng của F. Việc dùng cùng màu chỉ thể hiện sự tương ứng về chức năng, không hàm ý hai top dùng chung một tài nguyên phần cứng vật lý. Sơ đồ lược bỏ thanh ghi pipeline và các đường điều khiển chi tiết để làm rõ luồng dữ liệu.
+
+Các Parser chuyển mã Posit của A, B và toán hạng cộng hiệu dụng C_eff thành biểu diễn nội bộ gồm dấu, hệ số tỷ lệ, fraction và thông tin Zero/NaR. Dữ liệu A, B sau giải mã đi qua OPS để lựa chọn vai trò toán hạng trước khi đưa vào bộ nhân lặp. Bộ nhân phối hợp các khối tính lượng dịch, dịch số hạng và cộng dồn để tạo tích trước pack.
+
+Ở phương án NF, tích đi qua chuẩn hóa và pack với quy tắc RNE, sau đó được giải mã trở lại để đưa vào bộ cộng cùng C_eff. Tổng được chuẩn hóa và đưa qua Packer đầu ra. Vì vậy, luồng NF có hai vị trí làm tròn: sau phép nhân và sau phép cộng.
+
+Ở phương án F, tích trước pack được đưa trực tiếp vào khối căn chỉnh và cộng với C_eff. Kết quả được chuẩn hóa rồi mới đi qua Packer đầu ra. Cách tổ chức này loại bỏ bước làm tròn tích trung gian về Posit. Tuy nhiên, phép nhân gần đúng vẫn có thể mất thông tin do giới hạn precision, cắt FLOOR và giới hạn số bước lặp. Một vị trí RNE ở đầu ra không đồng nghĩa với phép nhân chính xác hoàn toàn.
+
+Nếu ký hiệu P_hat là tích trước pack do bộ nhân tạo ra và R là phép đóng gói/làm tròn về Posit theo hợp đồng đầu ra, hai luồng có thể viết:
+
+    D_NF = R(R(P_hat) + C_eff)
+    D_F  = R(P_hat + C_eff)
+
+Các biểu thức trên mô tả vị trí làm tròn. Phép căn chỉnh, phần dư và cửa sổ hữu hạn của nhánh F được quy định cụ thể ở phần thiết kế khối fused, không mặc định đây là FMA chính xác toàn miền.
+
+Chú thích hình đề xuất: Hình 3.x. Kiến trúc tổng thể của MAC Posit(32,3) theo hai phương án non-fused và fused.
+
+3.2.2. Toán hạng và chế độ hoạt động
+
+Các cổng a, b và c đều rộng 32 bit, chứa mã Posit tương ứng với A, B và C. Cổng d rộng 32 bit chứa mã Posit của kết quả D. Khối đồng thời xuất flags[4:0] để cung cấp trạng thái của phép tính.
+
+Tín hiệu acc_mode lựa chọn nguồn toán hạng cộng. Khi acc_mode = 0, mỗi giao dịch tính độc lập với C_eff = C. Khi acc_mode = 1, khối bỏ qua c và sử dụng kết quả tích lũy đã lưu làm C_eff. Nếu acc_clr = 1 trong một giao dịch tích lũy hợp lệ, C_eff của chính giao dịch đó bằng 0, cho phép bắt đầu chuỗi mới mà không cần reset toàn bộ mạch.
+
+    C_eff = C       khi acc_mode = 0 và acc_clr = 0
+    C_eff = S_k     khi acc_mode = 1 và acc_clr = 0
+    C_eff = 0       khi acc_mode = 1 và acc_clr = 1
+
+Trong đó, S_k là kết quả Posit đã làm tròn của giao dịch tích lũy trước. Tổ hợp acc_mode = 0, acc_clr = 1 không hợp lệ. acc_clr chỉ có tác dụng khi giao dịch được chấp nhận, không phải tín hiệu xóa độc lập.
+
+Cả NF và F hiện đều phản hồi kết quả Posit 32 bit đã làm tròn sau mỗi giao dịch. Vì vậy, chế độ tích lũy của F không tương đương quire giữ tổng chưa làm tròn xuyên suốt cả chuỗi.
+
+3.2.3. Giao tiếp valid/ready và xử lý stall
+
+Khối sử dụng giao tiếp valid/ready đồng bộ với clk. Giao dịch đầu vào được chấp nhận tại cạnh lên của clk khi in_valid = 1 và in_ready = 1. Tại thời điểm này, các toán hạng và tín hiệu cấu hình được tiếp nhận như một giao dịch thống nhất. Khi đã đưa một yêu cầu hợp lệ lên giao diện nhưng chưa được chấp nhận, phía phát phải giữ ổn định dữ liệu và cấu hình cho đến khi bắt tay xảy ra hoặc reset hủy yêu cầu.
+
+Khi kết quả sẵn sàng, khối đưa out_valid lên mức 1. Giao dịch đầu ra hoàn tất tại cạnh clk có out_valid = 1 và out_ready = 1. Nếu out_ready = 0, khối giữ out_valid cùng d và flags ổn định cho đến khi phía nhận chấp nhận hoặc reset hủy kết quả đang chờ. Cơ chế này cho phép đầu ra chịu backpressure mà không làm mất kết quả.
+
+Wrapper hiện chỉ cho phép một giao dịch đang xử lý tại một thời điểm. Sau khi nhận đầu vào, khối hạ in_ready trong thời gian bận và khi kết quả chưa được nhận. Cấu hình được chốt theo giao dịch nên thay đổi ở cổng cfg_* trong thời gian bận không làm thay đổi phép tính đã nhận. Độ trễ phụ thuộc chế độ nhân, số bước xử lý thực tế và stall, không mặc định là một hằng số cho mọi giao dịch.
+
+Trong chế độ tích lũy, trạng thái được cập nhật một lần khi kết quả được ghi vào nơi lưu đầu ra. Việc giữ out_valid = 1 qua nhiều chu kỳ do stall không gây cộng hoặc cập nhật lặp lại.
+
+3.2.4. Reset và trạng thái khởi động
+
+Cổng rst_n là reset đồng bộ tích cực thấp tại top. Khi rst_n = 0 được lấy mẫu tại cạnh clk, khối hủy giao dịch đang xử lý hoặc đang chờ xuất, xóa trạng thái tích lũy và trạng thái điều khiển liên quan. Kết quả của giao dịch trước reset không được xuất trở lại sau khi khởi động.
+
+Reset bridge và cơ chế đồng bộ nhả reset bên trong bảo đảm các khối con khởi động theo hợp đồng của chúng. Sau khi rst_n được nhả, in_ready và out_valid tiếp tục bị khóa cho đến khi điều kiện khởi động nội bộ hoàn tất. Phía phát phải theo dõi in_ready để xác định thời điểm có thể gửi giao dịch đầu tiên.
+
+3.2.5. Tín hiệu cấu hình phép nhân và trạng thái đầu ra
+
+Cấu hình giao dịch không thay đổi định dạng Posit(32,3). Các tín hiệu chỉ lựa chọn cách thực hiện phép nhân trong phạm vi được hỗ trợ:
+
+- cfg_mode, 1 bit: giá trị 0 chọn nhân exact tại NF; giá trị 1 chọn nhân gần đúng. Top F hiện chỉ nhận cfg_mode = 1.
+- cfg_n, 4 bit: trong chế độ gần đúng, chọn giới hạn số bước xử lý phần fraction trong khoảng 0 đến 8. Thành phần bit ẩn được khởi tạo riêng, vì vậy n = 0 không đồng nghĩa tích bằng 0. Chế độ exact của NF bỏ qua cfg_n.
+- cfg_ops, 2 bit: giá trị 0 giữ A ở vai trò toán hạng điều khiển lặp; giá trị 1 chọn fraction có ít bit 1 hơn, hòa thì giữ A. Các mã 2 và 3 chưa được hỗ trợ.
+
+Profile so sánh chính giữa NF và F sử dụng nhân gần đúng, giữ 12 bit fraction cao, cắt FLOOR bên trong bộ nhân và RNE khi đóng gói kết quả. Cấu hình không hợp lệ làm in_ready = 0, nên không tạo giao dịch.
+
+Các cờ trạng thái có thứ tự flags[4:0] = {nar, sat_max, sat_min, inexact, approx_cut}. Chúng lần lượt báo NaR, kẹp ở biên lớn nhất, kẹp ở biên nhỏ nhất, mất thông tin số học và còn bit chưa được xử lý khi đạt giới hạn cfg_n. Flags được giữ ổn định cùng kết quả khi đầu ra bị stall.

@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-28",
+  "format": "posit(32,3)",
+  "artifact": "presentation/CHUONG3_KIEN_TRUC_TONG_THE_20261028/KIEN_TRUC_TONG_THE_NF_F.pptx",
+  "artifact_sha256": "7ad5a78f38a03adbaa59359a13a44ada4136a14bb60353b71358e21787d4b3ef",
+  "slide_count": 1,
+  "native_shapes": 36,
+  "native_connectors": 17,
+  "raster_pictures": 0,
+  "register_symbols": 0,
+  "visual_review": "Final PPTX imported, rendered and visually checked",
+  "structure_validation": "PASS",
+  "layout_validation": "PASS",
+  "source_rtl_modified": false,
+  "new_numerical_verification": false,
+  "inputs": [
+    {
+      "path": "SPEC_Posit_MAC_IP.md",
+      "sha256": "be2453beaf1ee23715e37279e7389e37bbe080225eafb754859f1aa5b622b86d"
+    },
+    {
+      "path": "Digital_Design_Guidelines.md",
+      "sha256": "71e24384c5018e3d8a8614e44c1c6845a22dee017b80ddf6477a807492316af6"
+    },
+    {
+      "path": "rtl/mac_nf/posit_mac_nf.sv",
+      "sha256": "8751bad947d47e82d2df0338c2f4ba874804c384c55dfc1814a125f4c6a2ec19"
+    },
+    {
+      "path": "rtl/mac_nf/mac_nf_wrapper.sv",
+      "sha256": "5265e4059750af937e05e82a1eb6101a332fd9f065aef34c15f807ecfa0a11c1"
+    },
+    {
+      "path": "rtl/mac_f/posit_mac_f.sv",
+      "sha256": "830e9929257adcd453216882020b3486e153f29ac6bcbaba67dd19d11610f815"
+    },
+    {
+      "path": "rtl/mac_f/mac_f_wrapper.sv",
+      "sha256": "62627290b14c29f3faed008a3da9a85e9841adecae326b7e701a9e0ac26b91e0"
+    },
+    {
+      "path": "rtl/multiplier/ops_sel_comb.sv",
+      "sha256": "410dd76bc0b5bfb2b1befc58471b60f625ae479b5f173149d43b7499fc877dde"
+    }
+  ]
+}

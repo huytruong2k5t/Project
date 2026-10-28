@@ -347,7 +347,13 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | 2 | Hoàn thiện tái chạy và tài liệu | Build lại từ production,pilot100k mỗi NF/F,ModelSim NF/F và740k so sánh tổ hợp lặp lại đạt0 mismatch;runner không cần format generic. Bổ sung phục hồi comparator từ ZIP có SHA256,giữ mọi kết quả cũ;hướng dẫn luồng fixed tách khỏi lệnh đa format lịch sử | ✅ |
 | 3 | Dọn cache và bảo toàn đối chứng | Xóa2.777 file build/library/cache,giải phóng616,5 MiB;34.725 file giữ lại được kiểm SHA256 sau xóa. Giữ fixture,raw coverage,bảng CSV/JSON,report/log,snapshot và hash. Không sửa RTL/L1/oracle hoặc chạy lại corpus;biên bản ở results/cleanup_cache_20261023 | ✅ |
 
-### 4.22. Mẫu cập nhật tiếp theo
+### 4.22. Ngày 28/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Soạn mục 3.2 và sơ đồ kiến trúc tổng thể | Nội dung báo cáo và một slide PowerPoint native mô tả hai top NF/F riêng, giao tiếp và tích lũy; không vẽ thanh ghi. Đối chiếu RTL production32/3, kiểm hình và cấu trúc PPTX; không sửa RTL hoặc chạy lại kiểm chứng số học | ✅ |
+
+### 4.23. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

@@ -354,7 +354,13 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | 1 | Soạn mục 3.2 và sơ đồ kiến trúc tổng thể | Nội dung báo cáo và một slide PowerPoint native mô tả hai top NF/F riêng, giao tiếp và tích lũy; không vẽ thanh ghi. Đối chiếu RTL production32/3, kiểm hình và cấu trúc PPTX; không sửa RTL hoặc chạy lại kiểm chứng số học | ✅ |
 | 2 | Lập và tinh gọn OPT-17 theo ý tưởng sinh viên | Optimization8.37 giữ lịch E0–E4:hai Parser A/C–B,một slot OPS,một bank C;cho stall kéo dài tại E4,tối đa hai independent,tích lũy giữ tuần tự. Chỉ cập nhật kế hoạch;chưa sửa RTL/SPEC,tạo candidate hoặc chạy kiểm/STA | ✅ lập kế hoạch / không triển khai |
 
-### 4.23. Mẫu cập nhật tiếp theo
+### 4.23. Ngày 29/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+|1 | Lập đối chứng ba Parser và chu kỳ chuỗi tích lũy | Optimization8.38 thêm3P-P2/3P-OPS đối chiếu2P-OPS,giữ lịch E0–E4;phân tích q thực tế,N1.024/1M và phụ thuộc tổng trước. Chỉ tính lịch/chỉnh tài liệu,chưa sửa RTL/SPEC hoặc chạy mô phỏng/STA | ✅ lập kế hoạch / không triển khai |
+
+### 4.24. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

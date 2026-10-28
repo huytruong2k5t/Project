@@ -1,6 +1,6 @@
 # Optimization — Tối ưu RTL và hồ sơ kiểm chứng Posit MAC
 
-**Cập nhật:** 28/10/2026. Chuyển từ `Posit_MAC/l1/PLAN.md` theo yêu cầu sinh viên; OPT-17 mục8.37 đã sửa theo ý tưởng hai Parser P1/P2, tầng chờ OPS và stall từ E4, chưa triển khai.
+**Cập nhật:** 29/10/2026. Chuyển từ `Posit_MAC/l1/PLAN.md` theo yêu cầu sinh viên; giữ lịch hai Parser ở8.37,bổ sung lịch ba Parser và phân tích số chu kỳ chuỗi tích lũy lớn ở8.38. Chưa triển khai RTL tối ưu.
 
 Tài liệu này giữ các phương án tối ưu, thay đổi RTL, kết quả mô phỏng/lint, synthesis và STA/PPA, gồm cả ứng viên không được chọn và giới hạn bằng chứng. Mọi đường dẫn code/results và lệnh trong phần lịch sử được hiểu từ gốc `Posit_MAC`, trừ liên kết Markdown đã ghi rõ. Không di chuyển hoặc sửa mã nguồn, kết quả, seed hay hash của checkpoint.
 
@@ -27,7 +27,7 @@ Các mã mục cũ `7.x`/`8.x` được giữ để truy vết report và liên 
 | Release 120 MHz đối chứng | OPT-12 negate đã promote và khóa `POSIT_MAC_RTL_20261018_OPT12_120`; OPT-13/14 chưa triển khai | Mục8.31.8 |
 | Ứng viên OPT-15/16 lịch sử | NF `combined`, F `parser2`/`shared_add` đã có kiểm/đo riêng; chưa promote vào release fixed32/3. Quyết định ngày19/10 và kết quả ngày20/10 giữ theo mốc, cần rebase/qualification riêng nếu dùng tiếp | Mục8.35.5/8.36 |
 | Production fixed32/3 |54 module, chức năng đã kiểm trên release cố định; chưa suy STA/PPA của nguồn mới từ release120MHz lịch sử | `rtl/production_freeze.json`, SPEC v1.22 |
-| Hai Parser và tầng chờ OPS — OPT-17 | Kế hoạch mới theo sinh viên: lane A/C và lane B, mỗi Parser P1/P2; một bank C, một slot OPS, giữ lịch E0–E4 và cho stall tại E4. Tối đa hai giao dịch; tích lũy giữ tuần tự ở revision đầu. Chưa sửa RTL/chạy thử | Mục8.37 |
+| So hai/ba Parser — OPT-17 | Giữ2P-OPS theo lịch E0–E4;thêm3P-P2 dùng OPS tổ hợp như gốc và3P-OPS làm đối chứng cùng số tầng. Một bank C,hai credit cho independent;accumulator giữ tuần tự. Có bảng chu kỳ tích lũy theo lịch,chưa mô phỏng candidate/STA | Mục8.37/8.38 |
 
 Các script report/prepare gắn checkpoint cũ là producer lịch sử, không chạy lại để tái chèn nhật ký vào PLAN hiện hành. Dùng snapshot/README của study khi tái lập; không sửa các script đã khóa hash chỉ để đổi nhãn báo cáo. Collector bảng toàn tầng hiện hành đã được đổi sang vùng báo cáo giới hạn trong tài liệu này.
 
@@ -2508,6 +2508,10 @@ phương án prefetch tổng quát ban đầu trong cùng mục; yêu cầu hi�
 Không sửa RTL, testbench, SPEC normative, filelist/freeze, L1/oracle hoặc constraint;
 không tạo candidate/build/simulation/STA trong phiên lập kế hoạch này.
 
+**Bổ sung29/10:** mục8.38 lập phương án ba Parser để so với lịch hai Parser bên dưới.
+Giữ nguyên bảng E0–E4; trước triển khai phải chốt cả hai lịch đối chứng và cách đếm chuỗi
+tích lũy. Chưa mặc định chọn hai Parser hoặc suy lợi ích thông lượng cho acc_mode=1.
+
 **Quy ước tên:** “OBS” trong trao đổi được hiểu là khối chọn toán hạng **OPS** hiện có,
 không tạo một module số học OBS mới. Khi hiện thực sẽ chốt kết quả OPS vào một slot chờ
 để dùng đúng một lần cho mỗi phép nhân, không lặp OPS theo từng bước SAC.
@@ -2737,3 +2741,176 @@ giảm hiệu quả, báo rõ mức đánh đổi; không tự mở thành FIFO 
 giữ lịch E0–E4 và được stall thêm tại E4, tối đa hai giao dịch độc lập; accumulator giữ
 tuần tự ở revision đầu. Hiện chỉ cập nhật kế hoạch, chưa có candidate/mô phỏng/STA mới,
 chưa sửa production/SPEC và chưa tuyên bố đạt OPT-17.
+
+### 8.38. OPT-17 — Lịch ba Parser và so chu kỳ chuỗi MAC tích lũy lớn — 29/10/2026
+
+**Trạng thái: ĐÃ LẬP LỊCH/PHÂN TÍCH, CHƯA TRIỂN KHAI HOẶC MÔ PHỎNG CANDIDATE.**
+Yêu cầu mới là lập thêm phương án ba Parser mặc định và so số chu kỳ với hai Parser.
+Mục8.37 vẫn giữ lịch đã chọn E0–E4 và stall kéo dài. Các con số dưới đây được suy từ
+lịch nguồn hiện hành và ranh giới thanh ghi dự kiến,không phải log thực thi OPT-17.
+Không sửa RTL/SPEC,không build/simulation/STA hoặc mở rộng thành quire trong phiên này.
+
+#### 8.38.1. Tách mục tiêu so sánh và chọn các phương án
+
+“Chuỗi MAC lớn” ở đây hiểu là N giao dịch theo thứ tự `S_next=MAC(A_i,B_i,S_previous)`;
+trạng thái S là Posit đã làm tròn của giao dịch trước. Đây là recurrence acc_mode=1,
+không phải N phép A_i×B_i+C_i độc lập và không được đảo thứ tự/chia thành nhiều tổng con
+để làm đẹp throughput. NF và F có hợp đồng làm tròn khác nhau,không buộc kết quả NF=F.
+Mỗi biến thể phải khớp L1/oracle đúng loại NF hoặc F của nó.
+
+| Mã phương án | Parser và đường tới lõi | Chỗ chờ giao dịch independent kế tiếp | Vai trò |
+| --- | --- | --- | --- |
+| 3P-R0 | Production hiện tại: A/B/C ba Parser P1/P2,OPS tổ hợp→core context | Wrapper chưa cho prefetch | Reference nguồn fixed32/3,không sửa |
+| 2P-OPS | Hai Parser A/C–B như8.37;OPS có slot thanh ghi riêng trước core | Một slot OPS;C kế tiếp có thể giữ ở P2 | Candidate theo ý tưởng sinh viên,giữ stall E4 |
+| 3P-P2 | Giữ ba Parser A/B/C độc lập,OPS tổ hợp→core context như gốc | Dùng chính bank P2 của A/B để chờ;C chờ tại P2 Parser C nếu bank C còn bận | Candidate ba Parser tối giản,không thêm slot OPS riêng |
+| 3P-OPS | Ba Parser độc lập nhưng thêm slot OPS riêng giống2P-OPS | Một slot OPS;C chờ tại P2 riêng | Đối chứng để tách ảnh hưởng số Parser khỏi thêm một tầng OPS |
+
+Không thêm stage OPS riêng ở3P-P2: lúc P2 có A/B hợp lệ,logic OPS tính tổ hợp và lõi
+chốt X/Y/config ở launch. Trong lúc chưa launch,P2 và config phải giữ ổn định. Không yêu cầu
+logic tổ hợp “chạy một lần” theo nghĩa ngừng chuyển mức; chỉ có một lần nhận context mỗi phép nhân.
+3P-P2 cần context active/pending và credit dù không có slot OPS dữ liệu riêng.
+
+Các candidate giữ cùng posit32/ES3,FW12/FLOOR/RNE,OPS,n,tail NF/F và một bank C.
+Independent tối đa hai giao dịch chưa retire,một context đang ở lõi;acc_mode=1 vẫn có
+hàng rào tuần tự như8.37.4. Mọi nhánh giữ nguyên lệnh/định dạng production bên ngoài.
+
+#### 8.38.2. Lịch khởi động ba Parser và vị trí stall
+
+Các ô ghi trạng thái **sau cạnh clock**. Bảng là luồng independent,ban đầu trống và đủ credit;
+A/B/C của mỗi giao dịch được nhận nguyên tử. Với acc_mode=1,không nạp C1 theo bảng này
+khi tổng trước chưa tồn tại; dùng lịch feedback ở8.38.4.
+
+**Candidate3P-P2,không thêm tầng OPS riêng:**
+
+| Cạnh | P1 của ba Parser | P2 của ba Parser | OPS và lõi | Bank C |
+| --- | --- | --- | --- | --- |
+| E0 | A0,B0,C0 | Trống | Chưa launch | Trống |
+| E1 | A1,B1,C1 nếu nhận T1 | A0,B0,C0 | OPS tổ hợp chuẩn bị T0 từ P2 sau cạnh | Trống |
+| E2 | Không nhận T2 khi hết hai credit | A1,B1,C1 | Lõi chốt OPS T0 và bắt đầu context T0 | Chốt C0 |
+| E3… | Stall theo chỗ trống/credit | Giữ A1/B1 và C1 nếu chưa chuyển được | T0 vẫn chạy SAC/shift/acc;OPS tổ hợp của T1 chờ tại P2 | Giữ C0 tới add_accept T0 |
+| Khi đủ điều kiện | Nhận thêm nếu còn credit | Chuyển A1/B1 vào lõi và C1 vào bank theo handshake | T1 launch khi tích T0 đã bàn giao,C1/context an toàn và tail đủ chỗ | Không ghi đè C0 chưa được dùng |
+
+Ba Parser cho phép nạp bộ A/B/C tiếp theo sớm hơn lane A/C dùng chung,nhưng bảng không
+khẳng định toàn MAC nhận mỗi chu kỳ. Đủ hai credit thì phải dừng,đầu ra/tail/C bank bận
+vẫn kéo dài stall. P2 A/B cần chuyển cùng giao dịch và config;C không bị khóa theo busy
+chung khi cần tiến tới adder của giao dịch đang hoạt động.
+
+**Đối chứng3P-OPS:** E0=P1 A0/B0/C0;E1=P2 T0,có thể nạp P1 T1;E2=slot OPS giữ T0,
+bank C giữ C0,P2 có T1;E3=core launch T0. Nếu slot OPS hỗ trợ nhận/thả đồng thời,
+T1 có thể vào slot ngay E3; nếu không thì chờ E4. C1 tiếp tục giữ ở P2 khi bank C đầy.
+Lịch2P-OPS vẫn chính xác như bảng8.37.3:E2 chốt OPS T0,E3 core launch,E4 giữ OPS T1/C1.
+
+Điểm khác phải ghi trong báo cáo:3P-P2 launch T0 ở E2,còn hai phương án có slot OPS riêng
+launch ở E3. Chênh một chu kỳ này đến từ bank OPS bổ sung,không được gán toàn bộ cho việc
+thêm/bớt Parser. So2P-OPS với3P-OPS mới tách riêng ảnh hưởng số Parser.
+
+#### 8.38.3. Cơ sở đếm chu kỳ cho giao dịch đơn và chuỗi tuần tự
+
+Đếm khoảng clock từ accept đầu tiên E0 sau startup,không tính reset/startup. Nguồn liên tục
+có yêu cầu hợp lệ,out_ready luôn1,không reset,không có stall nội bộ ngoài lịch đã mô tả.
+Giữ một cạnh từ retire tới accept tiếp theo trong chế độ tích lũy tuần tự như wrapper gốc;
+chưa thêm accept/retire bypass cùng cạnh hoặc đường forward D→C.
+
+Gọi t_i là số số hạng fraction **thực tế** của giao dịch i và q_i=max(1,t_i).
+n0/init-only dùng q=1;early-exit có thể làm t_i<cfg_n,exact NF có thể tới26.
+Không thay q_i bằng cfg_n cho mọi mẫu. Bảng số cố định q giả sử mọi giao dịch cùng q,
+không có bypass/NaR làm thay đổi lịch số vòng.
+
+Cơ sở từ SPEC5.11-B và5.12-e,đối chiếu wrapper/core:
+
+- Reference NF: H=2+1+(q+2)+3+3+2=q+13;first-valid=q+12;II_acc=q+14.
+- Reference F: H=2+1+(q+2)+5+2=q+12;first-valid=q+11;II_acc=q+13.
+-2P-OPS và3P-OPS thêm đúng một bank OPS trên đường tới core so reference;
+  ở luồng tuần tự,không có nghẽn credit,bank C sẵn theo lịch đã chọn,chi phí này là+1.
+-3P-P2 giữ số bank trên đường số học như reference;prefetch chưa dùng trong acc tuần tự.
+
+| Phương án | First-valid NF | Retire NF H | II_acc NF | First-valid F | Retire F H | II_acc F |
+| --- | --- | --- | --- | --- | --- | --- |
+| 3P-R0 hiện tại | q+12 | q+13 | q+14 | q+11 | q+12 | q+13 |
+| 3P-P2 dự kiến | q+12 | q+13 | q+14 | q+11 | q+12 | q+13 |
+| 2P-OPS dự kiến | q+13 | q+14 | q+15 | q+12 | q+13 | q+14 |
+| 3P-OPS dự kiến | q+13 | q+14 | q+15 | q+12 | q+13 | q+14 |
+
+H là khoảng cách input/output handshake khi không stall,khác first-valid một cạnh.
+Các cột candidate là dự kiến từ bank-count,phải kiểm n0/1/2/8,early-exit,exact và CK2Q.
+Nếu code cần thêm bubble C/refill hoặc điều khiển thì phải cộng vào số đo,không ép log khớp bảng.
+
+Với N giao dịch,q cố định,số khoảng clock từ E0 tới retire cuối:
+
+`C_total = H + (N-1)*II_acc = N*II_acc-1`.
+
+Với q_i biến thiên,dùng `C_total=sum(II_acc_i)-1`. Nếu chỉ cần thời điểm kết quả cuối
+bắt đầu valid,trừ thêm1. Đếm số cạnh gồm cả E0 thì cộng1;không trộn các quy ước.
+Thời gian chạy thực tế còn phụ thuộc clock đạt timing;các bảng không quy đổi theo
+120,48MHz lịch sử và không tuyên bố đã đo Fmax của candidate fixed32/3.
+
+#### 8.38.4. Lịch feedback và ví dụ chuỗi tích lũy lớn
+
+Gọi R_i là cạnh retire giao dịch i. Khi out_ready=1,wrapper commit trạng thái tích lũy
+ở cạnh này nếu chưa commit;không nhận giao dịch sau ở cùng cạnh. Giao dịch sau dùng đúng
+S_i đã làm tròn,chỉ nạp khi nó đã có giá trị hợp lệ.
+
+| Cạnh sau R_i | 3P-P2 / đường gốc | 2P-OPS | 3P-OPS |
+| --- | --- | --- | --- |
+| R_i+1 | P1 nhận A_next,B_next,S_i | P1 nhận A_next/B_next;lưu S_i dạng mã | P1 nhận A_next,B_next,S_i |
+| R_i+2 | P2 có A_next/B_next/S_i | P2 A_next/B_next;P1 nhận S_i | P2 có A_next/B_next/S_i |
+| R_i+3 | Core launch từ OPS tổ hợp;chốt C_eff | Slot OPS giữ X/Y;P2 có S_i | Slot OPS giữ X/Y;chốt C_eff |
+| R_i+4 | Core đã tiến vòng tiếp theo | Core launch;chốt C_eff | Core launch |
+
+Đây là lý do thêm Parser thứ ba **không tự che được toàn bộ thời gian hồi tiếp tổng**.
+Nếu ba Parser cũng có bank OPS riêng thì chu kỳ tuần tự dự kiến bằng2P-OPS.
+3P-P2 nhanh hơn hai bản có bank OPS riêng đúng một cạnh mỗi MAC trong lịch đang chọn,
+nhưng chưa nhanh hơn reference3P-R0 đối với chuỗi tích lũy tuần tự.
+
+**Ví dụ chọn q=4 cố định,không early-exit,không stall:**
+
+| Độ dài chuỗi N | NF3P-R0 /3P-P2 | NF2P-OPS /3P-OPS | F3P-R0 /3P-P2 | F2P-OPS /3P-OPS |
+| --- | ---: | ---: | ---: | ---: |
+|1.024 |18.431 |19.455 |17.407 |18.431 |
+|1.000.000 |17.999.999 |18.999.999 |16.999.999 |17.999.999 |
+
+Với một triệu MAC,q=4,giữ OPS tổ hợp ở3P-P2 tiết kiệm dự kiến một triệu chu kỳ so2P-OPS;
+đó là một chu kỳ mỗi giao dịch,không phải tăng tốc một triệu lần. NF giảm khoảng5,26%
+số chu kỳ,F giảm khoảng5,56% so phương án2P-OPS,cùng clock. Nếu clock khác phải so thời gian
+hoặc completed/giây,không lấy riêng tỷ lệ chu kỳ làm kết luận PPA.
+
+**Một triệu giao dịch,các số vòng thực tế cố định khác:**
+
+| q thực tế | NF3P-P2 | NF2P-OPS | F3P-P2 | F2P-OPS |
+| --- | ---: | ---: | ---: | ---: |
+|1,bao gồm init-only/t1 |14.999.999 |15.999.999 |13.999.999 |14.999.999 |
+|2 |15.999.999 |16.999.999 |14.999.999 |15.999.999 |
+|4 |17.999.999 |18.999.999 |16.999.999 |17.999.999 |
+|8 |21.999.999 |22.999.999 |20.999.999 |21.999.999 |
+
+Các số đã kiểm lại bằng cộng số bank và số học nguyên khi lập tài liệu29/10;
+không chạy bộ nhân,không sinh corpus MAC và không có mismatch/coverage mới để báo.
+Miền q=26 chỉ NF exact hỗ trợ;không áp dụng công thức số vòng đó cho F approximate-only.
+
+**Giới hạn cần nêu trước khi lựa chọn:** mục tiêu prefetch ở8.37/8.38 chủ yếu giúp MAC
+independent. Đối với một chuỗi acc_mode=1 dài,cả hai candidate đang giữ hàng rào tuần tự,
+nên chưa có tăng tốc tích lũy lớn so nguồn hiện hành. Muốn vượt giới hạn này cần một
+revision riêng cho A/B đi trước,C_eff bind sau khi tổng cũ commit,và product/context chờ
+đúng thứ tự. Chưa chọn hoặc triển khai revision đó;không dùng nhiều accumulator/tái liên kết
+phép cộng vì sẽ thay thứ tự làm tròn của bài toán.
+
+#### 8.38.5. Kế hoạch đối chứng và tiêu chí quyết định
+
+| Mã | Công việc dự kiến | Bằng chứng cần có |
+| --- | --- | --- |
+| O17-3P-01 | Chốt3P-P2 và3P-OPS đối chứng,cùng credit/C-bank/tail với2P-OPS;giữ bảng8.37 và ranh giới OPS khác nhau được công bố | Lịch startup/steady-state/feedback và ownership C/config,không tự đổi SPEC production |
+| O17-3P-02 | Candidate cố định32/3,source-list riêng;strict lint và pilot100k completed mỗi NF/F/kiến trúc cần thử |0 mismatch theo giao dịch,reset/stall/tag/credit đúng;reference giữ nguyên |
+| O17-3P-03 | Đếm clock chuỗi tích lũy N=1/2/1.024 trước,sau pilot chạy N=1.000.000;thử t thực tế0/1/2/4/8 với q=max(1,t) và q biến thiên,exact NF riêng | Log accept/launch/core_done/add_accept/commit/first-valid/retire;so số cộng từ q_i,không dùng cfg_n làm q_i |
+| O17-3P-04 | Benchmark independent riêng,lặp n0/1/2/4/8,early-exit và output stall;so3P-P2,2P-OPS rồi3P-OPS khi cần tách nguyên nhân | Đo completed/chu kỳ,phân bố II,Parser/OPS/C-bank/tail stalls và credit-bound;không lấy II_acc trong bảng làm II_independent |
+| O17-3P-05 | Qualification nguồn được giữ:≥10M completed mới mỗi NF/F/candidate được chọn,coverage theo SPEC;ModelSim CK2Q | Numeric/flags khớp đúng model NF/F,không drop/duplicate/reorder;không thay nghiệm thu final bằng ví dụ1M |
+| O17-3P-06 | Matched A35T STA/PPA trên cùng clock/I/O/uncertainty và≥3 run/config của các bản đi tiếp | LUT/FF/CARRY/DSP/BRAM,setup/hold,throughput thực;chi phí thêm Parser trừ phần bỏ OPS-bank/C-raw/tag phải đo tổng |
+| O17-3P-07 | Review chọn hai Parser tiết kiệm tài nguyên hay ba Parser phù hợp timing/chu kỳ;quyết định riêng nếu cần tối ưu feedback tích lũy | Bảng lợi ích/chi phí,giữ tất cả evidence và không tự promote |
+
+Không đồng bộ accept của mọi DUT bằng một tín hiệu all-ready khi đo throughput;cấp cùng
+chuỗi theo chỉ số nhưng cho mỗi DUT tiến theo ready của nó. Ghi tổng clock elapsed,completed,
+reset-aborted,q_i,histogram,các stall và số credit. Xác minh d/5flags theo giao dịch,
+không đòi khớp từng chu kỳ giữa các lịch khác nhau hoặc NF bằng F.
+
+Trước thực thi phải kiểm source parent và cập nhật SPEC candidate cho lịch mới.
+Giữ nguyên2P-OPS đã lên lịch,không tự thay lựa chọn của sinh viên bằng3P-P2. Hiện chỉ có
+kế hoạch và con số phân tích để review,chưa có lợi thế tài nguyên/timing/throughput đã đo.

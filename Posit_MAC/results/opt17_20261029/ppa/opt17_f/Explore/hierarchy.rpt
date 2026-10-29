@@ -1,0 +1,46 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Thu Oct 29 21:13:33 2026
+| Host         : MSI running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file Explore/hierarchy.rpt
+| Design       : opt17_ppa_top
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++---------------------+------------------+------------+------------+---------+------+-----+--------+--------+------------+
+|       Instance      |      Module      | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
++---------------------+------------------+------------+------------+---------+------+-----+--------+--------+------------+
+| opt17_ppa_top       |            (top) |       1417 |       1417 |       0 |    0 | 860 |      0 |      0 |          0 |
+|   (opt17_ppa_top)   |            (top) |          0 |          0 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   u_dut             |          opt17_f |       1417 |       1417 |       0 |    0 | 860 |      0 |      0 |          0 |
+|     u_wrapper       |  opt17_f_wrapper |       1415 |       1415 |       0 |    0 | 860 |      0 |      0 |          0 |
+|       u_tail        |     opt17_f_tail |        602 |        602 |       0 |    0 | 384 |      0 |      0 |          0 |
+|         u_fused     | opt17_fused_pipe |        517 |        517 |       0 |    0 | 301 |      0 |      0 |          0 |
+|           (u_fused) | opt17_fused_pipe |        448 |        448 |       0 |    0 | 301 |      0 |      0 |          0 |
+|         u_pack      |       posit_pack |         86 |         86 |       0 |    0 |  83 |      0 |      0 |          0 |
+|           (u_pack)  |       posit_pack |         56 |         56 |       0 |    0 |  83 |      0 |      0 |          0 |
+|       u_core        |     opt17_core_f |        197 |        197 |       0 |    0 | 125 |      0 |      0 |          0 |
+|         (u_core)    |     opt17_core_f |          1 |          1 |       0 |    0 |  59 |      0 |      0 |          0 |
+|         u_acc       |    opt17_accum_f |         88 |         88 |       0 |    0 |  30 |      0 |      0 |          0 |
+|           (u_acc)   |    opt17_accum_f |         88 |         88 |       0 |    0 |  30 |      0 |      0 |          0 |
+|         u_ctrl      | iter_ctrl_fixed2 |        109 |        109 |       0 |    0 |  36 |      0 |      0 |          0 |
+|       u_front       |   opt17_front_2p |        618 |        618 |       0 |    0 | 345 |      0 |      0 |          0 |
+|         (u_front)   |   opt17_front_2p |         83 |         83 |       0 |    0 | 179 |      0 |      0 |          0 |
+|         u_ac        |     opt17_parser |        309 |        309 |       0 |    0 |  84 |      0 |      0 |          0 |
+|         u_b         |   opt17_parser_0 |        236 |        236 |       0 |    0 |  82 |      0 |      0 |          0 |
++---------------------+------------------+------------+------------+---------+------+-----+--------+--------+------------+
+* Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
+
+

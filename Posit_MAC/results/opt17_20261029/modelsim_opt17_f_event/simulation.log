@@ -1,0 +1,33 @@
+# vsim {+STIMULUS=C:\HCMUT\HK261\Do an 2\Posit_MAC\results\opt17_20261029\build_opt17_f_r2\event_event.txt} -do run.do -l simulation.log -c -wlf events.wlf work.tb_opt17_f_event 
+# Loading sv_std.std
+# Loading work.tb_opt17_f_event
+# Loading work.opt17_f
+# Loading work.opt17_f_wrapper
+# Loading work.opt17_front_2p
+# Loading work.opt17_parser
+# Loading work.lod_lzd_core_fixed2
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.opt17_core_f
+# Loading work.iter_ctrl_fixed2
+# Loading work.sac_step_comb_fixed3
+# Loading work.dyn_left_shifter_fixed5
+# Loading work.opt17_shift_f
+# Loading work.opt17_accum_f
+# Loading work.opt17_accum_comb_f
+# Loading work.opt17_f_tail
+# Loading work.opt17_fused_pipe
+# Loading work.opt17_fused_prepare
+# Loading work.fused_align_comb
+# Loading work.fused_arith_comb
+# Loading work.fused_abs_borrow_comb
+# Loading work.fused_norm_comb
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter_fixed2
+# Loading work.lod_lzd_core_fixed4
+# Loading work.posit_pack_finish
+# do run.do 
+# OPT17_EVENT_PASS top=opt17_f completed=8192 reset_aborted=19 cycles=107664 output_stalls=5907 mismatch=0 CK2Q=1ns
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/opt17_20261029/modelsim_opt17_f_event/source/tb_opt17_f_event.sv(98)
+#    Time: 1076640 ns  Iteration: 0  Instance: /tb_opt17_f_event

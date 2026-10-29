@@ -229,3 +229,24 @@ RTL so đúng model/oracle và checkpoint. Kiểm mọi output/flags, width/carr
 | W13-06/07 còn thiếu, W14–16, tối ưu chưa chạy và nghiên cứu phụ | Tiến độ mục2,3.1–3.4 |
 
 Việc tách tài liệu không đổi số học, RTL, phiên bản SPEC, kết quả kiểm chứng hoặc trạng thái nghiệm thu. Không chạy lại mô phỏng/build/STA chỉ vì đổi nơi lưu tài liệu. Không chạy các script report/prepare lịch sử để tái chèn nhật ký vào PLAN; đọc README/snapshot của study và dùng collector hiện hành đúng vùng báo cáo.
+
+
+### OPT-17 — kiểm chứng candidate29/10/2026, chưa promote
+
+Study riêng ở experiments/opt17_20261029;giữ lịch2P-OPS,A/C–B,một bank C,hai credit,
+accumulation tuần tự và core release theo result handshake.Đã dựng FULL_TERM Q24/26 bit
+cùng reference3P;không sửa arithmetic của production trong phiên này.
+Golden C++ mới đối chiếu oracle raw decoder/selected-bit product/full-grid integer:
+2.053.248 checks đạt.Cả8 top lint và pilot100k đạt;candidate2P NF/F mỗi bản10M
+completed,0 mismatch,tích từng vòng/d/5flags,credit tối đa2,reset/stall/accumulation đạt.
+ModelSim CK2Q1ns:mỗi bản8.192 completed,0 mismatch.
+Nguồn/testbench từng lượt được giữ trong source_bundle.zip và build manifests.
+Chưa đóng toàn OPT-17:benchmark96 điểm bị chặn trước thực thi vì automatic approval
+reviewer hết hạn mức;matched PPA reference/3P chưa chạy.PPA chỉ candidate2P đã chạy
+3strategy trên A35T8,3ns,không phải bằng chứng cải thiện so parent.
+Phát hiện4 file parent thay đổi trong lúc chạy:SAC fixed2/fixed3,OPS fixed2 và F wrapper.
+Không ghi đè các thay đổi đó;20M chỉ áp dụng snapshot đã build,không tự áp dụng live mới.
+Các phiên bản live khác được giữ dưới nhãn unverified_live_parent trong source bundle.
+Chi tiết số liệu,phạm vi và phần còn thiếu:results/opt17_20261029/summary.json.
+Không dùng SoftPosit ES2 làm oracle cho32/3;không claim Python/C++SoftPosit tương đương
+hoặc nghiệm thu AC02/per-n10M,power,board hay production promotion.

@@ -1,0 +1,49 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Thu Oct 29 21:08:03 2026
+| Host         : MSI running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file Default/hierarchy.rpt
+| Design       : opt17_ppa_top
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++------------------------+---------------------+------------+------------+---------+------+-----+--------+--------+------------+
+|        Instance        |        Module       | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
++------------------------+---------------------+------------+------------+---------+------+-----+--------+--------+------------+
+| opt17_ppa_top          |               (top) |       2351 |       2351 |       0 |    0 | 984 |      0 |      0 |          0 |
+|   (opt17_ppa_top)      |               (top) |          0 |          0 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   u_dut                |            opt17_nf |       2351 |       2351 |       0 |    0 | 984 |      0 |      0 |          0 |
+|     u_wrapper          |    opt17_nf_wrapper |       2347 |       2347 |       0 |    0 | 984 |      0 |      0 |          0 |
+|       u_tail           |       opt17_nf_tail |        896 |        896 |       0 |    0 | 389 |      0 |      0 |          0 |
+|         u_product_pack |  posit_product_pack |        189 |        189 |       0 |    0 |  84 |      0 |      0 |          0 |
+|         u_add          |           posit_add |        602 |        602 |       0 |    0 | 175 |      0 |      0 |          0 |
+|           (u_add)      |           posit_add |        337 |        337 |       0 |    0 | 175 |      0 |      0 |          0 |
+|           u_align      |     posit_add_align |        229 |        229 |       0 |    0 |   0 |      0 |      0 |          0 |
+|         u_pack         |          posit_pack |        104 |        104 |       0 |    0 |  84 |      0 |      0 |          0 |
+|           (u_pack)     |          posit_pack |         74 |         74 |       0 |    0 |  84 |      0 |      0 |          0 |
+|       u_core           |       opt17_core_nf |        782 |        782 |       0 |    0 | 216 |      0 |      0 |          0 |
+|         (u_core)       |       opt17_core_nf |          2 |          2 |       0 |    0 | 103 |      0 |      0 |          0 |
+|         u_acc          |      opt17_accum_nf |        421 |        421 |       0 |    0 |  58 |      0 |      0 |          0 |
+|           (u_acc)      |      opt17_accum_nf |        380 |        380 |       0 |    0 |  58 |      0 |      0 |          0 |
+|           u_add        | opt17_accum_comb_nf |         53 |         53 |       0 |    0 |   0 |      0 |      0 |          0 |
+|         u_ctrl         |           iter_ctrl |        362 |        362 |       0 |    0 |  55 |      0 |      0 |          0 |
+|       u_front          |      opt17_front_2p |        683 |        683 |       0 |    0 | 373 |      0 |      0 |          0 |
+|         (u_front)      |      opt17_front_2p |        121 |        121 |       0 |    0 | 207 |      0 |      0 |          0 |
+|         u_ac           |        opt17_parser |        349 |        349 |       0 |    0 |  84 |      0 |      0 |          0 |
+|         u_b            |      opt17_parser_0 |        223 |        223 |       0 |    0 |  82 |      0 |      0 |          0 |
++------------------------+---------------------+------------+------------+---------+------+-----+--------+--------+------------+
+* Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
+
+

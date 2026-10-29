@@ -1,0 +1,40 @@
+# vsim {+STIMULUS=C:\HCMUT\HK261\Do an 2\Posit_MAC\results\opt17_20261029\build_opt17_nf_r2\event_event.txt} -do run.do -l simulation.log -c -wlf events.wlf work.tb_opt17_nf_event 
+# Loading sv_std.std
+# Loading work.tb_opt17_nf_event
+# Loading work.opt17_nf
+# Loading work.opt17_nf_wrapper
+# Loading work.opt17_front_2p
+# Loading work.opt17_parser
+# Loading work.lod_lzd_core_fixed2
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.opt17_core_nf
+# Loading work.iter_ctrl
+# Loading work.sac_step_comb
+# Loading work.dyn_left_shifter_fixed3
+# Loading work.sac_step_comb_fixed2
+# Loading work.dyn_left_shifter_fixed5
+# Loading work.opt17_shift_nf
+# Loading work.opt17_accum_nf
+# Loading work.opt17_accum_comb_nf
+# Loading work.opt17_nf_tail
+# Loading work.opt17_norm_nf
+# Loading work.posit_product_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter_fixed2
+# Loading work.posit_magnitude_parse
+# Loading work.posit_add
+# Loading work.posit_add_align
+# Loading work.dyn_right_shifter
+# Loading work.posit_add_arith
+# Loading work.posit_add_normalize
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter_fixed2
+# Loading work.posit_pack
+# Loading work.lod_lzd_core_fixed3
+# Loading work.lod_lzd_core_fixed4
+# Loading work.posit_pack_finish
+# do run.do 
+# OPT17_EVENT_PASS top=opt17_nf completed=8192 reset_aborted=22 cycles=124313 output_stalls=6343 mismatch=0 CK2Q=1ns
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/opt17_20261029/modelsim_opt17_nf_event/source/tb_opt17_nf_event.sv(98)
+#    Time: 1243130 ns  Iteration: 0  Instance: /tb_opt17_nf_event

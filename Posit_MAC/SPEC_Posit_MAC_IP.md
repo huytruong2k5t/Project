@@ -1913,3 +1913,24 @@ Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.jso
 `rtl/common/lod_lzd_core.sv` dùng cây chọn nhóm4 khi MODE=0,N=31 hoặc32,S=clog2(N); mọi cấu hình khác giữ cây nhị phân gốc. Đây là lựa chọn hiện thực đã kiểm bit-exact, không thay quy ước K/vld, parameter/ports, latency, precision hoặc hợp đồng số học v1.18. MODE1 và parser posit32 N30 vẫn dùng cây gốc. Hai dynamic shifter giữ nguyên sau khi khảo sát timing/LUT trên A35T và A100T; không chọn bản giảm LUT nếu đánh đổi timing không phù hợp.
 
 Bằng chứng nguồn và tổ hợp LOD–shifter ở `results/primitive_v2_20261016/adoption.json`, chi tiết [Optimization §8.18](../doc/Optimization.md#legacy-8-18). Kiểm tích hợp NF32 ES2/ES3 và F32 ES3 mỗi bản10.000 giao dịch đạt0 mismatch; đây là smoke cho checkpoint hiện thực mới, không thay ma trận nghiệm thu cuối hoặc số đo Fmax toàn MAC. Checkpoint số học và hash nguồn cũ giữ nguyên ý nghĩa lịch sử; không sửa các báo cáo cũ để khớp nguồn mới. Mục11.16 dành cho nghiệm thu tuần14 theo kế hoạch hiện hành.
+
+
+### OPT-17 — kiểm chứng candidate29/10/2026, chưa promote
+
+Study riêng ở experiments/opt17_20261029;giữ lịch2P-OPS,A/C–B,một bank C,hai credit,
+accumulation tuần tự và core release theo result handshake.Đã dựng FULL_TERM Q24/26 bit
+cùng reference3P;không sửa arithmetic của production trong phiên này.
+Golden C++ mới đối chiếu oracle raw decoder/selected-bit product/full-grid integer:
+2.053.248 checks đạt.Cả8 top lint và pilot100k đạt;candidate2P NF/F mỗi bản10M
+completed,0 mismatch,tích từng vòng/d/5flags,credit tối đa2,reset/stall/accumulation đạt.
+ModelSim CK2Q1ns:mỗi bản8.192 completed,0 mismatch.
+Nguồn/testbench từng lượt được giữ trong source_bundle.zip và build manifests.
+Chưa đóng toàn OPT-17:benchmark96 điểm bị chặn trước thực thi vì automatic approval
+reviewer hết hạn mức;matched PPA reference/3P chưa chạy.PPA chỉ candidate2P đã chạy
+3strategy trên A35T8,3ns,không phải bằng chứng cải thiện so parent.
+Phát hiện4 file parent thay đổi trong lúc chạy:SAC fixed2/fixed3,OPS fixed2 và F wrapper.
+Không ghi đè các thay đổi đó;20M chỉ áp dụng snapshot đã build,không tự áp dụng live mới.
+Các phiên bản live khác được giữ dưới nhãn unverified_live_parent trong source bundle.
+Chi tiết số liệu,phạm vi và phần còn thiếu:results/opt17_20261029/summary.json.
+Không dùng SoftPosit ES2 làm oracle cho32/3;không claim Python/C++SoftPosit tương đương
+hoặc nghiệm thu AC02/per-n10M,power,board hay production promotion.

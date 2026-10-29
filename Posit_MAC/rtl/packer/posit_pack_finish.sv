@@ -21,9 +21,7 @@ module posit_pack_finish (
     output logic [4:0] flags
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // NB: 32 (original).
     localparam int NB = 32;
-    // ROUND_MODE: "RNE" (original).
     localparam [39:0] ROUND_MODE = 40'h524e45;
 
     // TRUNC intentionally ignores G/R/S for increment; keep explicit consumption.

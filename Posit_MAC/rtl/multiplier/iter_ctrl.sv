@@ -25,17 +25,11 @@ module iter_ctrl (
     output wire state_error
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // FRAC_MAX: 27 (original).
     localparam int FRAC_MAX = 26;
-    // FRAC_W: 12 (original).
     localparam int FRAC_W = 12;
-    // N_MAX: 8 (original).
     
-    // S_W: (FRAC_MAX > 1) ? $clog2(FRAC_MAX+1) : 1 (original).
     localparam int S_W = 5;
-    // N_W: (N_MAX > 1) ? $clog2(N_MAX+1) : 1 (original).
     
-    // I_W: $clog2(((FRAC_MAX > N_MAX) ? FRAC_MAX : N_MAX)+1) (original).
     localparam int I_W = 5;
 
     (* ASYNC_REG="TRUE" *) logic meta_sync1,meta_sync2;

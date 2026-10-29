@@ -33,7 +33,6 @@ module fused_add_pipe (
     output wire [4:0] flags_out
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // SF_W: 11 (original).
     localparam int SF_W = 11;
 
     typedef struct packed {
@@ -182,13 +181,14 @@ module fused_add_pipe (
     assign f5_d.nar = f4_q.nar;
     assign f5_d.sticky = f4_q.residual;
     assign f5_d.loss = f4_q.loss;
-    assign sign = f5_q.sign;
-    assign is_zero = f5_q.zero;
+    // NaR has priority over the arithmetic zero and residual metadata.
+    assign sign = f5_q.nar || f5_q.sign;
+    assign is_zero = !f5_q.nar && f5_q.zero;
     assign is_nar = f5_q.nar;
-    assign sf = f5_q.sf;
-    assign frac = f5_q.frac;
-    assign sticky = f5_q.sticky;
-    assign flags_out = {f5_q.nar, 2'b00, f5_q.loss};
+    assign sf = f5_q.nar ? '0 : f5_q.sf;
+    assign frac = f5_q.nar ? '0 : f5_q.frac;
+    assign sticky = !f5_q.nar && f5_q.sticky;
+    assign flags_out = f5_q.nar ? 5'b10000 : {3'b000, f5_q.loss};
     always_ff @(posedge clk or negedge meta_sync2) begin
         if (!meta_sync2) begin
             valid_q[0] <= 1'b0;

@@ -23,9 +23,7 @@ module sac_step_comb_fixed2 (
     output logic state_error
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // W_X: 12 (original).
     localparam int W_X = 12;
-    // S_W: (W_X > 1) ? $clog2(W_X + 1) : 1 (original).
     localparam int S_W = 5;
 
     typedef logic [S_W:0] scale_limit_t;
@@ -106,9 +104,9 @@ module sac_step_comb_fixed2 (
         end
     endgenerate
 
-    dyn_left_shifter_fixed4  u_shift (
+    dyn_left_shifter_fixed5  u_shift (
         .in(pre_shifted),
-        .b(leading_count_extended),
+        .b(leading_count),
         .out(shifted)
     );
 

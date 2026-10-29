@@ -1,3 +1,26 @@
+> **Phân biệt nguồn trước khi replay:** đối chiếu Git ngày29/10 phát hiện51/54 file RTL
+> và manifest tại máy đã khác commit `c4fe1f7` trước phiên đóng gói;ví dụ F đổi N_MAX8→12.
+> Hash manifest hiện tại không trùng hash trong summary release cũ.Vì vậy số10M/0 mismatch
+> lịch sử chỉ áp dụng checkpoint Git gốc,không tự áp dụng nguồn hiện tại.
+> `manage_rtl_support_archive.py restore` phục hồi các file của **snapshot hiện tại**,không rollback
+> mã của bạn về bản gốc.Bản gốc được giữ riêng trong `archive/rtl_release_git_c4fe1f7_20261029.zip`;
+> muốn replay đúng bản đã nghiệm thu,cần giải nén checkpoint đó vào thư mục mới và cung cấp
+> đúng runtime/dependency theo hướng dẫn lịch sử.Audit hash không thay mô phỏng chức năng.
+
+## Cây MAC sau lưu trữ — 29/10/2026
+
+12 testbench/checker chuyên cho standalone,comb hoặc paper cũ đã chuyển vào
+[`archive/rtl_support_20261029.zip`](../archive/rtl_support_20261029.zip).
+ZIP cũng chứa bản sao toàn bộ testbench tại thời điểm đóng gói để giữ đối chứng.
+Testbench NF/F,harness/oracle đang dùng và `tb_fixed32_3_units.sv` được giữ bản rời.
+
+Bộ unit dùng chung vẫn cần8 module hỗ trợ:chạy
+`python3 -B scripts/manage_rtl_support_archive.py restore` trước runner release54.
+Không áp dụng generic đa format của testbench lịch sử vào RTL fixed32/3.
+Danh mục và cách khôi phục ở [`archive/README.md`](../archive/README.md).
+
+---
+
 # Thư mục Môi trường Kiểm chứng (`tb/`)
 
 Thư mục này chứa toàn bộ hệ thống testbench phục vụ xác minh tính đúng đắn của lõi IP Posit MAC từ mức module đơn vị (Unit TB) đến mức tích hợp toàn hệ thống (System TB) theo 3 tầng đối chiếu (§6 SPEC).

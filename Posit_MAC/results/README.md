@@ -1,4 +1,18 @@
+> **Phân biệt nguồn trước khi replay:** đối chiếu Git ngày29/10 phát hiện51/54 file RTL
+> và manifest tại máy đã khác commit `c4fe1f7` trước phiên đóng gói;ví dụ F đổi N_MAX8→12.
+> Hash manifest hiện tại không trùng hash trong summary release cũ.Vì vậy số10M/0 mismatch
+> lịch sử chỉ áp dụng checkpoint Git gốc,không tự áp dụng nguồn hiện tại.
+> `manage_rtl_support_archive.py restore` phục hồi các file của **snapshot hiện tại**,không rollback
+> mã của bạn về bản gốc.Bản gốc được giữ riêng trong `archive/rtl_release_git_c4fe1f7_20261029.zip`;
+> muốn replay đúng bản đã nghiệm thu,cần giải nén checkpoint đó vào thư mục mới và cung cấp
+> đúng runtime/dependency theo hướng dẫn lịch sử.Audit hash không thay mô phỏng chức năng.
+
 # Kết quả kiểm chứng và đo tài nguyên
+
+**Bố cục nguồn29/10/2026:**46 module MAC hiện hữu ở `rtl/mac_active.f`;checkpoint54
+và8 module hỗ trợ được bảo toàn bằng `archive/rtl_support_20261029.zip`.
+Chạy `python3 -B scripts/manage_rtl_support_archive.py restore` trước runner release54.
+Report/hash lịch sử trong results không thay đổi;kiểm bố cục ở `archive/rtl_support_20261029.json`.
 
 **Giới hạn từ29/10/2026:** SPEC v1.23 §4.3 đã đổi hợp đồng mục tiêu sang FULL_TERM Q24/26 bit,
 n0..12.Các summary/hash/accuracy/timing trong thư mục này vẫn thuộc profile nguồn ghi trên

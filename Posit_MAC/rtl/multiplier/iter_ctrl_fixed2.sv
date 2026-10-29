@@ -25,31 +25,20 @@ module iter_ctrl_fixed2 (
     output wire state_error
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // FRAC_MAX: 27 (original).
     localparam int FRAC_MAX = 12;
-    // FRAC_W: 12 (original).
-    localparam int FRAC_W = 12;
-    // N_MAX: 8 (original).
     
-    // S_W: (FRAC_MAX > 1) ? $clog2(FRAC_MAX+1) : 1 (original).
     localparam int S_W = 4;
-    // N_W: (N_MAX > 1) ? $clog2(N_MAX+1) : 1 (original).
     
-    // I_W: $clog2(((FRAC_MAX > N_MAX) ? FRAC_MAX : N_MAX)+1) (original).
     localparam int I_W = 4;
 
     (* ASYNC_REG="TRUE" *) logic meta_sync1,meta_sync2;
     logic emitting_q;
-    logic mode_q;
     logic [FRAC_MAX-1:0] fx_q;
     logic [S_W-1:0] scale_q;
     logic [I_W-1:0] count_q,limit_q;
     typedef logic [I_W-1:0] iteration_value_t;
-    typedef logic [FRAC_MAX-1:0] fraction_value_t;
-    wire [FRAC_MAX-1:0] fx_next_exact;
-    wire [FRAC_W-1:0] fx_approx,fx_next_approx;
-    wire [S_W-1:0] scale_exact,scale_approx,unused_sa_exact,unused_sa_approx;
-    wire unused_valid_exact,unused_valid_approx,exhausted_exact,exhausted_approx,error_exact,error_approx;
+    wire [S_W-1:0] unused_sa;
+    wire unused_valid,step_error;
     wire [FRAC_MAX-1:0] fx_next;
     wire [S_W-1:0] next_scale;
     wire is_init,is_last;
@@ -57,33 +46,20 @@ module iter_ctrl_fixed2 (
     wire [I_W-1:0] next_count;
     localparam logic [I_W-1:0] EXACT_LIMIT=iteration_value_t'(FRAC_MAX);
     assign run_ready=meta_sync2;
-    assign fx_approx=fx_q[FRAC_W-1:0];
-    assign fx_next=mode_q ? fraction_value_t'(fx_next_approx) : fx_next_exact;
-    assign next_scale=mode_q ? scale_approx : scale_exact;
-    assign state_error=emitting_q && (mode_q ? error_approx : error_exact);
+    assign state_error=emitting_q && step_error;
     assign is_init=(fx_q=='0) || (limit_q=='0);
     assign next_count=count_q+1'b1;
-    assign exhausted_selected = mode_q ? exhausted_approx : exhausted_exact;
     assign is_last = is_init || exhausted_selected || (next_count >= limit_q);
-    sac_step_comb_fixed3  u_exact (
+    // Both modes use the same 12-bit fraction; only the iteration limit differs.
+    sac_step_comb_fixed3  u_step (
         .fx(fx_q),
         .scale(scale_q),
-        .term_valid(unused_valid_exact),
-        .sa(unused_sa_exact),
-        .scale_next(scale_exact),
-        .fx_next(fx_next_exact),
-        .exhausted(exhausted_exact),
-        .state_error(error_exact)
-    );
-    sac_step_comb_fixed3  u_approx (
-        .fx(fx_approx),
-        .scale(scale_q),
-        .term_valid(unused_valid_approx),
-        .sa(unused_sa_approx),
-        .scale_next(scale_approx),
-        .fx_next(fx_next_approx),
-        .exhausted(exhausted_approx),
-        .state_error(error_approx)
+        .term_valid(unused_valid),
+        .sa(unused_sa),
+        .scale_next(next_scale),
+        .fx_next(fx_next),
+        .exhausted(exhausted_selected),
+        .state_error(step_error)
     );
     always_ff @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
@@ -97,7 +73,6 @@ module iter_ctrl_fixed2 (
     always_ff @(posedge clk or negedge meta_sync2) begin
         if (!meta_sync2) begin
             emitting_q <= 1'b0;
-            mode_q <= 1'b0;
             fx_q <= '0;
             scale_q <= '0;
             count_q <= '0;
@@ -113,7 +88,6 @@ module iter_ctrl_fixed2 (
             token_valid <= `CK2Q emitting_q;
             if (launch) begin
                 emitting_q <= `CK2Q 1'b1;
-                mode_q <= `CK2Q cfg_mode;
                 fx_q <= `CK2Q x_frac;
                 scale_q <= `CK2Q '0;
                 count_q <= `CK2Q '0;

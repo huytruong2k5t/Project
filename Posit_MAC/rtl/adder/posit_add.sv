@@ -38,15 +38,10 @@ module posit_add (
     output logic [4:0] flags_out
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // NB: 32 (original).
     
-    // ES: 2 (original).
     
-    // F: NB - 3 - ES (original).
     localparam int F = 26;
-    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1 (original).
     localparam int SF_W = 11;
-    // F_OUT: 2 * F + 1 (original).
     localparam int F_OUT = 53;
 
 

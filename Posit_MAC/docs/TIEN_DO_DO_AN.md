@@ -360,6 +360,7 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | --- | --- | --- | --- |
 |1 | Lập đối chứng ba Parser và chu kỳ chuỗi tích lũy | Optimization8.38 thêm3P-P2/3P-OPS đối chiếu2P-OPS,giữ lịch E0–E4;phân tích q thực tế,N1.024/1M và phụ thuộc tổng trước. Chỉ tính lịch/chỉnh tài liệu,chưa sửa RTL/SPEC hoặc chạy mô phỏng/STA | ✅ lập kế hoạch / không triển khai |
 |2 | Chốt hợp đồng approximate không FLOOR | SPEC v1.23 §4.3 và Optimization8.39 chốt FULL_TERM26 bit/Q24,n0..12,RNE NF/F;đồng bộ README/PLAN/hướng dẫn.L1/RTL/TB/runner/freeze giữ nguyên,người dùng tự sửa RTL/TB.Chưa có mô phỏng/accuracy/PPA profile mới | ✅ hợp đồng / không triển khai |
+| 3 | Lưu trữ module hỗ trợ và làm gọn cây RTL | ZIP ngoài rtl giữ nguyên byte nguồn/TB và hash;54 đường dẫn đã chuyển,46 module MAC còn lại lint NF/F đạt.Thử giải nén/audit hai checkpoint54 đạt.Phát hiện51 RTL/manifest đã khác Git gốc từ trước;giữ cả hai bản,không kế thừa kết quả10M cho nguồn hiện tại.Không sửa nội dung RTL/TB | ✅ |
 
 ### 4.24. Mẫu cập nhật tiếp theo
 

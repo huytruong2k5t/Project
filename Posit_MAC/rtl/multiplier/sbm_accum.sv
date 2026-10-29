@@ -30,11 +30,8 @@ module sbm_accum (
     output wire carry_error
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // ACC_W: 56 (original).
     localparam int ACC_W = 54;
-    // I_W: 5 (original).
     
-    // ROUND_SCHEME: 0 (original).
     
 
     (* ASYNC_REG="TRUE" *) logic meta_sync1,meta_sync2;

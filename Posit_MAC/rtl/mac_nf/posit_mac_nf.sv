@@ -25,19 +25,12 @@ module posit_mac_nf (
     output wire [4:0] flags
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // NB: 32 (original).
     
-    // ES: 2 (original).
     
-    // FRAC_W: (NB-3-ES<12)?NB-3-ES:12 (original).
     
-    // N_MAX: 8 (original).
     
-    // EXACT_EN: 1'b1 (original).
     
-    // OPS_EN: 1'b1 (original).
     
-    // N_W: (N_MAX>1)?$clog2(N_MAX+1):1 (original).
     
 
     mac_nf_wrapper  u_wrapper (

@@ -26,15 +26,10 @@ module posit_add_normalize (
     output logic [4:0] flags_out
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // NB: 32 (original).
     localparam int NB = 32;
-    // ES: 2 (original).
     localparam int ES = 3;
-    // F: NB - 3 - ES (original).
     localparam int F = 26;
-    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1 (original).
     localparam int SF_W = 11;
-    // F_OUT: 2 * F + 1 (original).
     localparam int F_OUT = 53;
 
     localparam int Q = 29; // F + 3

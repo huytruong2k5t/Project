@@ -1,3 +1,12 @@
+> **Phân biệt nguồn trước khi replay:** đối chiếu Git ngày29/10 phát hiện51/54 file RTL
+> và manifest tại máy đã khác commit `c4fe1f7` trước phiên đóng gói;ví dụ F đổi N_MAX8→12.
+> Hash manifest hiện tại không trùng hash trong summary release cũ.Vì vậy số10M/0 mismatch
+> lịch sử chỉ áp dụng checkpoint Git gốc,không tự áp dụng nguồn hiện tại.
+> `manage_rtl_support_archive.py restore` phục hồi các file của **snapshot hiện tại**,không rollback
+> mã của bạn về bản gốc.Bản gốc được giữ riêng trong `archive/rtl_release_git_c4fe1f7_20261029.zip`;
+> muốn replay đúng bản đã nghiệm thu,cần giải nén checkpoint đó vào thư mục mới và cung cấp
+> đúng runtime/dependency theo hướng dẫn lịch sử.Audit hash không thay mô phỏng chức năng.
+
 # Posit MAC — NF và fused
 
 Đồ án chuyên ngành HK261, HCMUT — Đan Huy.
@@ -22,7 +31,12 @@ Không dùng PASS,accuracy hoặc timing cũ để kết luận FULL_TERM đã c
 Freeze/manifest nguồn cũ giữ nguyên;chỉ tạo release mới sau khi có kiểm chứng mới.
 
 Release đã khóa chức năng: **`POSIT_MAC_RTL_20261022_FIXED32_3`** (`FIXED32_3_FUNCTION_VERIFIED`).
-Build bằng [`rtl/production.f`](rtl/production.f), gồm54 module cố định.
+Cây MAC hiện hữu dùng [`rtl/mac_active.f`](rtl/mac_active.f),46 module.
+[`rtl/production.f`](rtl/production.f) giữ danh sách54 module của checkpoint cũ;
+chạy `python3 -B scripts/manage_rtl_support_archive.py restore` trước runner/Makefile release54.
+8 module hỗ trợ và candidate/research/benchmark đã nén ngoài rtl;
+xem [`kho lưu trữ/cách phục hồi`](archive/README.md).
+Kiểm bố cục hiện tại bằng `python3 -B scripts/manage_rtl_support_archive.py audit`.
 Thông tin khóa nguồn ở [`rtl/production_freeze.json`](rtl/production_freeze.json).
 
 NF/F mỗi bản10M completed/0 mismatch,740k so sánh trên37 biến thể tổ hợp,
@@ -34,7 +48,7 @@ không truyền tham số vào DUT. AC02 exact>=100M,final per-n/AC04 và STA/PP
 chưa được nghiệm thu bằng lượt aggregate này.
 
 Gói đã chọn gồm OPT-02c, OPT-05 abc_tree, OPT-09, OPT-10A và OPT-12.
-Các bản trong `rtl/candidates/` chỉ là snapshot đối chiếu; mã chạy chính nằm ở
+Các bản candidate đã chuyển vào `archive/rtl_support_20261029.zip`; mã chạy chính nằm ở
 các thư mục chức năng của `rtl/`. Không compile đệ quy toàn bộ RTL vì có tên module trùng.
 
 Kết quả OOC lịch sử của release OPT12, chưa đo lại trên fixed32/3: Artix-7 `xc7a35tcpg236-1`, Explore, chu kỳ 8,3 ns

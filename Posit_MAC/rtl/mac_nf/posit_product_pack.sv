@@ -30,15 +30,10 @@ module posit_product_pack (
     output wire sign_o
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // NB: 32 (original).
     localparam int NB = 32;
-    // ES: 2 (original).
     
-    // F_IN: 2 * (NB - 3 - ES) + 1 (original).
     
-    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1 (original).
     
-    // ROUND_MODE: "RNE" (original).
     localparam [39:0] ROUND_MODE = 40'h524e45;
 
     wire [NB-2:0] p1_mag_trunc_d;
@@ -199,7 +194,7 @@ module posit_product_pack (
                 end
             end
         end else begin : g_invalid
-            initial $fatal(1, "posit_pack: unsupported ROUND_MODE");
+            initial $fatal(1, "posit_product_pack: unsupported ROUND_MODE");
         end
     endgenerate
 endmodule

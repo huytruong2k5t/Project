@@ -1,3 +1,24 @@
+> **Phân biệt nguồn trước khi replay:** đối chiếu Git ngày29/10 phát hiện51/54 file RTL
+> và manifest tại máy đã khác commit `c4fe1f7` trước phiên đóng gói;ví dụ F đổi N_MAX8→12.
+> Hash manifest hiện tại không trùng hash trong summary release cũ.Vì vậy số10M/0 mismatch
+> lịch sử chỉ áp dụng checkpoint Git gốc,không tự áp dụng nguồn hiện tại.
+> `manage_rtl_support_archive.py restore` phục hồi các file của **snapshot hiện tại**,không rollback
+> mã của bạn về bản gốc.Bản gốc được giữ riêng trong `archive/rtl_release_git_c4fe1f7_20261029.zip`;
+> muốn replay đúng bản đã nghiệm thu,cần giải nén checkpoint đó vào thư mục mới và cung cấp
+> đúng runtime/dependency theo hướng dẫn lịch sử.Audit hash không thay mô phỏng chức năng.
+
+## Cây MAC sau lưu trữ — 29/10/2026
+
+46 module MAC hiện hữu được chọn bằng `rtl/mac_active.f`.
+Release đã khóa vẫn54 module;8 module hỗ trợ và các candidate/research/benchmark
+được bảo toàn trong `archive/rtl_support_20261029.zip`.
+Trước các lệnh audit/Makefile/runner release54 phía dưới,chạy
+`python3 -B scripts/manage_rtl_support_archive.py restore`.
+Kiểm bố cục hiện tại bằng subcommand `audit`;chi tiết ở `archive/README.md`.
+L1/oracle và nội dung46 module/testbench dùng chung không đổi;FULL_TERM vẫn chờ triển khai.
+
+---
+
 # Xây dựng L1, baseline nội bộ và MAC non-fused/fused
 
 **Cập nhật:** 29/10/2026 — chốt hợp đồng FULL_TERM;L1/RTL/TB thực thi vẫn là profile FLOOR đã khóa.

@@ -32,13 +32,9 @@ module posit_add_align (
     output logic [4:0] flags_o
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // NB: 32 (original).
     localparam int NB = 32;
-    // ES: 2 (original).
     localparam int ES = 3;
-    // F: NB - 3 - ES (original).
     localparam int F = 26;
-    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1 (original).
     localparam int SF_W = 11;
 
     localparam int ADD_W = 31; // F + 5

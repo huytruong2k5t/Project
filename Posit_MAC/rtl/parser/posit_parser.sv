@@ -31,13 +31,9 @@ module posit_parser (
     output wire [25:0] frac
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // NB: 32 (original).
     localparam int NB = 32;
-    // ES: 2 (original).
     localparam int ES = 3;
-    // FRAC_MAX: NB - 3 - ES (original).
     localparam int FRAC_MAX = 26;
-    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1 (original).
     localparam int SF_W = 11;
 
 
@@ -61,6 +57,7 @@ module posit_parser (
     wire s_d;
     wire is_zero_d;
     wire is_nar_d;
+    wire rest_is_zero_d;
 
     // P1 registers: metadata must stall together with count and payload seed.
     logic p1_valid_q;
@@ -88,13 +85,6 @@ module posit_parser (
     wire p1_ready;
     wire p2_ready;
 
-    generate
-        if (NB < 4 || NB > 32 || ES < 0 || ES > NB - 4 ||
-            FRAC_MAX != NB - 3 - ES || SF_W < REG_W + ES) begin : g_invalid
-            initial $fatal(1, "posit_parser: unsupported parameters");
-        end
-    endgenerate
-
     //=========================================================================
     // Reset: asynchronous assertion, synchronous release after two clk edges.
     //=========================================================================
@@ -113,9 +103,10 @@ module posit_parser (
     //=========================================================================
     // P1 combinational logic: decode magnitude and select regime count.
     //=========================================================================
-    assign s_d       = p[NB-1];
-    assign is_zero_d = (p == {NB{1'b0}});
-    assign is_nar_d  = (p == {1'b1, {(NB-1){1'b0}}});
+    assign s_d            = p[NB-1];
+    assign rest_is_zero_d = ~(|p[NB-2:0]);
+    assign is_zero_d      = !s_d && rest_is_zero_d;
+    assign is_nar_d       =  s_d && rest_is_zero_d;
 
     assign magnitude = (p ^ {NB{s_d}})
                      + {{(NB-1){1'b0}}, s_d};
@@ -181,16 +172,10 @@ module posit_parser (
         .out (payload)
     );
 
-    generate
-        if (ES == 0) begin : g_es0
-            assign finite_sf = sf_value_t'(regime);
-        end else begin : g_exponent
-            wire [ES-1:0] exponent;
+    wire [ES-1:0] exponent;
 
-            assign exponent  = payload[NB-4 -: ES];
-            assign finite_sf = sf_value_t'($signed({regime, exponent}));
-        end
-    endgenerate
+    assign exponent  = payload[NB-4 -: ES];
+    assign finite_sf = sf_value_t'($signed({regime, exponent}));
 
     assign sf_d = (p1_is_zero_q || p1_is_nar_q)
                 ? {SF_W{1'b0}}

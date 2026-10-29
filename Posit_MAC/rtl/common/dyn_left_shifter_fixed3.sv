@@ -22,9 +22,7 @@ module dyn_left_shifter_fixed3 (
     output logic [25:0] out
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // N: 32 (original).
     localparam int N = 26;
-    // SHIFT_W: (N > 1) ? $clog2(N) : 1 (original).
     localparam int SHIFT_W = 5;
 
 

@@ -27,11 +27,8 @@ module dyn_right_shifter_fixed2 (
     output logic [58:0] out
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // N: 32 (original).
     localparam int N = 59;
-    // SHIFT_W: (N > 1) ? $clog2(N) : 1 (original).
     localparam int SHIFT_W = 5;
-    // ARITH: 1'b0  // 0: Logical (or custom fill_val) (original).
     localparam bit ARITH = 1'h0;
 
 

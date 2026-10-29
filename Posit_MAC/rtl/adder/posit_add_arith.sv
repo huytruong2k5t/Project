@@ -16,7 +16,6 @@ module posit_add_arith (
     output wire [30:0] magnitude
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // F: 27 (original).
     
 
     assign magnitude = subtract ? x - y : x + y;

@@ -2979,3 +2979,37 @@ bằng số nguyên/hữu tỉ;FT-05 packed code đúng là0x1ae34800,mã0x1ae34
 tính tay nhầm và đã sửa trước commit.Kiểm SHA256 của554 file trong rtl/,tb/,tests/,
 L1 include/src/test và scripts không có thay đổi. Đây không phải lượt chạy L1/RTL hay
 nghiệm thu profile mới;không có mismatch/coverage/STA mới để công bố.
+
+
+## 8.40. Lưu trữ RTL hỗ trợ và đối chiếu checkpoint — 29/10/2026
+
+Theo yêu cầu sinh viên,chỉ sắp xếp/nén nguồn,không chỉnh nội dung RTL/testbench.
+Đóng gói `Posit_MAC/archive/rtl_support_20261029.zip` với510 file dữ liệu và index/hash;
+đã kiểm CRC/SHA từng entry trước khi gỡ54 đường dẫn:8 module standalone/reference,
+30 SV candidate/research/benchmark,4 file phụ trợ và12 testbench chuyên biệt lịch sử.
+46 module MAC còn lại giữ nguyên byte;chọn bằng `rtl/mac_active.f`.
+Testbench NF/F và unit dùng chung được giữ bản rời,có bản sao trong ZIP.
+Manifest và danh sách54 module tại máy không bị sửa trong phiên này.
+
+**Phát hiện nguồn thay đổi từ trước:** so với commit `c4fe1f7`,51/54 file RTL và manifest
+hiện tại khác byte;F wrapper N_MAX đã đổi8→12.Hash manifest hiện tại4309dca2…
+khác dfff720b… được ghi trong summary release cũ.Không kết luận toàn bộ thay đổi chỉ
+là comment hoặc tương đương số học;không sửa hay rollback thay đổi sẵn có của sinh viên.
+Giữ checkpoint Git gốc riêng ở `archive/rtl_release_git_c4fe1f7_20261029.zip`.
+Gói gốc có hash manifest đúng summary và kiểm toàn bộ hash frozen/report đạt.
+Báo cáo10M/0 mismatch lịch sử thuộc checkpoint gốc;không kế thừa cho nguồn hiện tại.
+
+**Kiểm lần này:**108 hash đầu vào của manifest hiện tại đạt nhờ đối chiếu file còn lại/ZIP;
+510 file được thử giải nén riêng rồi audit54 module gốc của snapshot hiện tại đạt;
+checkpoint Git gốc cũng thử giải nén và audit54 module/anti-tamper4/4 đạt.
+Dọn đúng dữ liệu tạm sau kiểm.Lint strict hai top NF/F bằng Verilator5.032 với
+`rtl/mac_active.f` đạt;không chạy mô phỏng chức năng,accuracy,STA hoặc PPA mới.
+Không nghiệm thu FULL_TERM hoặc n9..12 bằng các kết quả này.
+
+**Cách dùng:** ở gốc Posit_MAC,chạy
+`python3 -B scripts/manage_rtl_support_archive.py audit` để kiểm bố cục lưu trữ.
+`restore` chỉ khôi phục54 đường dẫn của snapshot hiện tại,không ghi đè file khác nội dung
+và không rollback46 module MAC đang làm việc.Trước runner/Makefile54 cũ cần đủ nguồn;
+để tái lập đúng checkpoint đã chạy lịch sử phải dùng gói Git gốc vào thư mục riêng
+và runtime/dependency phù hợp.Không sửa hash lịch sử để làm audit qua.
+Chi tiết ở `archive/README.md` và `archive/rtl_support_20261029.json`.

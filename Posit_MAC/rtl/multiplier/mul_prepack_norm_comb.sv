@@ -14,39 +14,19 @@ module mul_prepack_norm_comb (
     output logic [52:0] frac_norm
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // FRAC_MAX: 26 (original).
-    localparam int FRAC_MAX = 26;
-    // FRAC_W: 12 (original).
-    localparam int FRAC_W = 12;
-    // EXACT_EN: 1'b1 (original).
     
-    // ACC_W: EXACT_EN ? ((2*FRAC_MAX+2 > FRAC_W+4) ? 2*FRAC_MAX+2 : FRAC_W+4) : FRAC_W+4 (original).
-    localparam int ACC_W = 54;
-    // SF_W: 11 (original).
     localparam int SF_W = 11;
-    // F_IN: 2*FRAC_MAX+1 (original).
-    localparam int F_IN = 53;
-
-    logic [ACC_W-1:0] grid;
-    integer q;
-    integer hidden_position;
     typedef logic signed [SF_W-1:0] sf_t;
 
     always_comb begin
-        grid = cfg_mode ? acc >> 2 : acc;
-        q = cfg_mode ? FRAC_W : 2*FRAC_MAX;
-        hidden_position = q;
-        sf_norm = sf;
-        if (grid[q+1]) begin
-            hidden_position = q+1;
-            sf_norm = sf + sf_t'(1);
-        end
-        // Keep the original grid. Changing the hidden-bit position costs no bit.
-        frac_norm = '0;
-        for (int bit_index = 0; bit_index < ACC_W; bit_index++) begin
-            if (bit_index < hidden_position && bit_index+F_IN >= hidden_position) begin
-                frac_norm[bit_index+F_IN-hidden_position] = grid[bit_index];
-            end
+        // Preserve every prepack bit; a carry changes only the hidden position.
+        if (cfg_mode) begin
+            sf_norm = sf + sf_t'(acc[15]);
+            frac_norm = acc[15] ? {acc[14:2], 40'b0}
+                                : {acc[13:2], 41'b0};
+        end else begin
+            sf_norm = sf + sf_t'(acc[53]);
+            frac_norm = acc[53] ? acc[52:0] : {acc[51:0], 1'b0};
         end
     end
 endmodule

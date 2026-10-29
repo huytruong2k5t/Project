@@ -1,3 +1,31 @@
+> **Phân biệt nguồn trước khi replay:** đối chiếu Git ngày29/10 phát hiện51/54 file RTL
+> và manifest tại máy đã khác commit `c4fe1f7` trước phiên đóng gói;ví dụ F đổi N_MAX8→12.
+> Hash manifest hiện tại không trùng hash trong summary release cũ.Vì vậy số10M/0 mismatch
+> lịch sử chỉ áp dụng checkpoint Git gốc,không tự áp dụng nguồn hiện tại.
+> `manage_rtl_support_archive.py restore` phục hồi các file của **snapshot hiện tại**,không rollback
+> mã của bạn về bản gốc.Bản gốc được giữ riêng trong `archive/rtl_release_git_c4fe1f7_20261029.zip`;
+> muốn replay đúng bản đã nghiệm thu,cần giải nén checkpoint đó vào thư mục mới và cung cấp
+> đúng runtime/dependency theo hướng dẫn lịch sử.Audit hash không thay mô phỏng chức năng.
+
+## Cây MAC sau lưu trữ — 29/10/2026
+
+**File list cho cây MAC đang làm việc:** [`mac_active.f`](mac_active.f),46 module.
+Hai top `posit_mac_nf` và `posit_mac_f` đã lint đạt với danh sách này.
+8 module standalone/reference và toàn bộ thư mục candidates,research,benchmarks đã
+chuyển vào [`gói ZIP ngoài rtl`](../archive/rtl_support_20261029.zip),không sửa nội dung.
+
+**Checkpoint lịch sử:** `production.f` vẫn liệt kê54 module đã khóa;manifest giữ nguyên.
+Chạy `python3 -B scripts/manage_rtl_support_archive.py restore` ở gốc Posit_MAC trước
+khi chạy audit/Makefile/runner release54 cũ. Muốn kiểm bố cục lưu trữ hiện tại,dùng
+`python3 -B scripts/manage_rtl_support_archive.py audit`.
+Xem [`hướng dẫn và danh mục`](../archive/README.md).
+
+Các bảng/đường dẫn candidate và mô tả54/38 module bên dưới là lịch sử trước lưu trữ.
+`specialization.json` còn ghi SAC fixed2→shifter fixed4;nguồn đã khóa thực tế dùng
+fixed5.Không sửa bản đồ lịch sử để giả lập một lần kiểm mới.
+
+---
+
 ## RTL hiện hành — fixed posit32/ES3, hoàn tất23/10/2026
 
 Release `POSIT_MAC_RTL_20261022_FIXED32_3`:54 module trong `rtl/production.f`,

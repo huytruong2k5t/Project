@@ -27,13 +27,9 @@ module posit_pack_prepare (
     output logic [4:0] flags_o
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // NB: 32 (original).
     localparam int NB = 32;
-    // ES: 2 (original).
     localparam int ES = 3;
-    // F_IN: 2 * (NB - 3 - ES) + 1 (original).
     localparam int F_IN = 53;
-    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1 (original).
     localparam int SF_W = 11;
 
     localparam int SF_MAX = 240; // int'((longint'(NB) - 64'd2) * (64'd1 << ES))
@@ -92,13 +88,8 @@ module posit_pack_prepare (
     // with the barrel shifter. Include exponent and regime bits, not only frac.
     generate
         for (genvar j = 0; j < OFFSETS; j++) begin : g_sticky_prefix
-            if (LOW_W + j <= PAYLOAD_W) begin : g_payload_only
-                assign sticky_lookup[j] = |payload[LOW_W+j-1:0];
-            end else begin : g_with_fill
-                // Preserve raw combinational behavior even for oversized
-                // offsets that the normal finite encoding does not use.
-                assign sticky_lookup[j] = (|payload) | first_regime_bit;
-            end
+            // Fixed32/3: LOW_W+j <= 57 < PAYLOAD_W=59 for every offset.
+            assign sticky_lookup[j] = |payload[LOW_W+j-1:0];
         end
     endgenerate
     assign payload_sticky = sticky_lookup[offset];

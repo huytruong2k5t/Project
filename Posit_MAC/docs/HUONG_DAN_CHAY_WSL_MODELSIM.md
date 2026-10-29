@@ -1,3 +1,50 @@
+> **Phân biệt nguồn trước khi replay:** đối chiếu Git ngày29/10 phát hiện51/54 file RTL
+> và manifest tại máy đã khác commit `c4fe1f7` trước phiên đóng gói;ví dụ F đổi N_MAX8→12.
+> Hash manifest hiện tại không trùng hash trong summary release cũ.Vì vậy số10M/0 mismatch
+> lịch sử chỉ áp dụng checkpoint Git gốc,không tự áp dụng nguồn hiện tại.
+> `manage_rtl_support_archive.py restore` phục hồi các file của **snapshot hiện tại**,không rollback
+> mã của bạn về bản gốc.Bản gốc được giữ riêng trong `archive/rtl_release_git_c4fe1f7_20261029.zip`;
+> muốn replay đúng bản đã nghiệm thu,cần giải nén checkpoint đó vào thư mục mới và cung cấp
+> đúng runtime/dependency theo hướng dẫn lịch sử.Audit hash không thay mô phỏng chức năng.
+
+## Cây MAC sau lưu trữ — 29/10/2026
+
+Cây làm việc dùng `rtl/mac_active.f`:46 module cho hai top NF/F.
+8 module standalone/reference không thuộc cây MAC,30 file RTL candidate/research/benchmark,
+4 file phụ trợ và12 testbench lịch sử đã chuyển vào `archive/rtl_support_20261029.zip`.
+Các file RTL/TB được giữ nguyên byte trong ZIP;không thay đổi số học hoặc thêm FULL_TERM.
+Testbench NF/F và `tb_fixed32_3_units.sv` dùng chung vẫn giữ bản rời.
+
+`rtl/production.f` và `rtl/production_freeze.json` vẫn là checkpoint54 module đã khóa.
+**Trước khi dùng Makefile hoặc runner release54 cũ,phải chạy lệnh restore bên dưới.**
+Các runner đó không tự đọc ZIP;thiếu8 file sau lưu trữ không phải lỗi số học.
+Không sửa/xóa entry hay hash trong manifest cũ để làm audit qua.
+
+```bash
+# Kiểm bố cục hiện tại,ZIP,46 module và108 hash đầu vào đã khóa:
+python3 -B scripts/manage_rtl_support_archive.py audit
+# Khôi phục54 đường dẫn đã lưu trữ;không ghi đè file khác nội dung:
+python3 -B scripts/manage_rtl_support_archive.py restore
+# Sau restore,các lệnh audit/build release54 phía dưới dùng lại như trước.
+```
+
+Trên Windows CMD thay `python3` bằng `python`. Danh mục,SHA256 và kết quả thử khôi phục
+ở `archive/rtl_support_20261029.json`;hướng dẫn thêm ở `archive/README.md`.
+
+Lint hai top mà không cần khôi phục các module hỗ trợ:
+
+```bash
+verilator --lint-only --timing --assert -Wall -Irtl --top-module posit_mac_nf -f rtl/mac_active.f
+verilator --lint-only --timing --assert -Wall -Irtl --top-module posit_mac_f -f rtl/mac_active.f
+```
+
+Hai lệnh lint đã đạt trên Verilator5.032,29/10/2026. Đây là kiểm cấu trúc nguồn sau
+lưu trữ,không phải lượt mô phỏng mới hoặc nghiệm thu profile FULL_TERM.
+Testbench đa format/tham số hóa cũ vẫn cần đúng snapshot lịch sử sau restore;
+không truyền generic cũ vào các module fixed32/3.
+
+---
+
 ## Lưu ý hợp đồng FULL_TERM — 29/10/2026
 
 SPEC v1.23 §4.3 đã chốt mục tiêu approximate12 bit,**không FLOOR**,M26/Q24,n0..12.

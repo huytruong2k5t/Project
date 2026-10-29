@@ -27,21 +27,11 @@ module mac_f_wrapper (
     output wire [4:0] flags
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // NB: 32 (original).
     localparam int NB = 32;
-    // ES: 3 (original).
     localparam int ES = 3;
-    // FRAC_W: 12 (original).
     localparam int FRAC_W = 12;
-    // N_MAX: 8 (original).
-    localparam int N_MAX = 8;
-    // EXACT_EN: 1'b0 (original).
-    localparam bit EXACT_EN = 1'h0;
-    // OPS_EN: 1'b1 (original).
-    localparam bit OPS_EN = 1'h1;
-    // ACC_WIN: 32 (original).
+    localparam int N_MAX = 12;
     localparam int ACC_WIN = 32;
-    // N_W: (N_MAX > 1) ? $clog2(N_MAX+1) : 1 (original).
     localparam int N_W = 4;
 
     localparam int F = 26; // NB - 3 - ES
@@ -52,8 +42,8 @@ module mac_f_wrapper (
     localparam logic MODE_APPROX = 1'b1;
     generate
         if (NB != 32 || ES != 3 || FRAC_W != 12 || ACC_WIN != 32
-            || EXACT_EN || !OPS_EN || N_MAX != 8 || N_W != 4) begin : g_invalid
-            initial $fatal(1, "posit_mac_f: only W12-F-1 32/3 FW12 W32 is admitted");
+            || N_MAX != 12 || N_W != 4) begin : g_invalid
+            initial $fatal(1, "posit_mac_f: only W12-F-1 32/3 FW12 N12 W32 is admitted");
         end
     endgenerate
     logic reset_bridge_q;
@@ -102,15 +92,12 @@ module mac_f_wrapper (
     wire signed [SF_W-1:0] sf_b;
     wire [F-1:0] frac_a;
     wire [F-1:0] frac_b;
-    wire [F-1:0] ops_x;
+    wire [FRAC_W-1:0] ops_x;
     wire [FRAC_W-1:0] x;
-    wire [F:0] ops_y;
+    wire [FRAC_W:0] ops_y;
     wire [FRAC_W:0] y;
-    wire [$clog2(F+1)-1:0] unused_active_width;
     wire ops_sign;
     wire ops_cut;
-    wire unused_ops_swapped;
-    wire ops_error;
     wire signed [SF_W-1:0] ops_sf;
     wire cfg_valid;
     wire core_ready;
@@ -148,8 +135,8 @@ module mac_f_wrapper (
     assign pair_accept = in_valid && in_ready;
     assign pair_retire = valid_a && valid_b && valid_c && core_ready;
     assign bypass = nar_a || nar_b || nar_c || z_a || z_b;
-    assign x = bypass ? '0 : ops_x[FRAC_W-1:0];
-    assign y = bypass ? '0 : ops_y[FRAC_W:0];
+    assign x = bypass ? '0 : ops_x;
+    assign y = bypass ? '0 : ops_y;
     assign retire = out_valid && out_ready;
     assign out_valid = rst_n && meta_sync2 && pack_out_valid;
     always_ff @(posedge clk) begin
@@ -213,16 +200,12 @@ module mac_f_wrapper (
         .s_b (s_b),
         .sf_a (sf_a),
         .sf_b (sf_b),
-        .cfg_mode (MODE_APPROX),
         .cfg_ops (ops_q),
         .x_frac (ops_x),
         .y_mant (ops_y),
-        .active_width (unused_active_width),
         .sign_o (ops_sign),
         .sf_o (ops_sf),
-        .swapped (unused_ops_swapped),
-        .input_cut (ops_cut),
-        .cfg_error (ops_error)
+        .input_cut (ops_cut)
     );
     mul_iter_core_fixed2  u_core (
         .clk (clk),
@@ -336,11 +319,6 @@ module mac_f_wrapper (
         if (!meta_sync2) begin
         end else if (meta_sync2) begin
             assert (!core_error) else $fatal(1, "F: multiplier state/carry error");
-            if (pair_retire) begin
-                assert (ops_x[F-1:FRAC_W] == 0 && ops_y[F:FRAC_W+1] == 0)
-                    else $fatal(1, "F: OPS did not right-align approximate operands");
-                assert (!ops_error) else $fatal(1, "F: invalid OPS context");
-            end
             if (core_done) begin
                 assert (add_ready) else $fatal(1, "F: prepack lost to backpressure");
                 assert (core_mode && !sticky_acc && acc[1:0] == 0)

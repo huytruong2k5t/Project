@@ -27,29 +27,17 @@ module mac_nf_wrapper (
     output wire [4:0] flags
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // NB: 32 (original).
     localparam int NB = 32;
-    // ES: 2 (original).
     
-    // FRAC_W: 12 (original).
     
-    // N_MAX: 8 (original).
     localparam int N_MAX = 8;
-    // EXACT_EN: 1'b1 (original).
     localparam bit EXACT_EN = 1'h1;
-    // OPS_EN: 1'b1 (original).
     localparam bit OPS_EN = 1'h1;
-    // F: NB-3-ES (original).
     localparam int F = 26;
-    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2)*(64'd1<<ES)+64'd4)+1 (original).
     localparam int SF_W = 11;
-    // N_W: (N_MAX>1)?$clog2(N_MAX+1):1 (original).
     localparam int N_W = 4;
-    // I_W: $clog2(((F>N_MAX)?F:N_MAX)+1) (original).
     localparam int I_W = 5;
-    // ACC_W: EXACT_EN?((2*F+2>FRAC_W+4)?2*F+2:FRAC_W+4):FRAC_W+4 (original).
     localparam int ACC_W = 54;
-    // FIN: 2*F+1 (original).
     localparam int FIN = 53;
 
     logic reset_bridge_q;

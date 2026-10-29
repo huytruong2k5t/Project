@@ -17,11 +17,8 @@ module lod_lzd_core_fixed4 (
     output logic         vld              // 1 if matching bit is found, 0 if all 0s (LOD) or all 1s (LZD)
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // N: 32 (original).
     localparam int N = 12;
-    // MODE: 0 (original).
     localparam int MODE = 0;
-    // S: (N > 1) ? $clog2(N) : 1 (original).
     localparam int S = 4;
 
 

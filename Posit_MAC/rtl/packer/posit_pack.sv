@@ -29,15 +29,10 @@ module posit_pack (
     output wire [4:0] flags
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // NB: 32 (original).
     localparam int NB = 32;
-    // ES: 2 (original).
     
-    // F_IN: 2 * (NB - 3 - ES) + 1 (original).
     
-    // SF_W: $clog2(64'd4 * (longint'(NB) - 64'd2) * (64'd1 << ES) + 64'd4) + 1 (original).
     
-    // ROUND_MODE: "RNE" (original).
     localparam [39:0] ROUND_MODE = 40'h524e45;
 
     wire [NB-2:0] p1_mag_trunc_d;

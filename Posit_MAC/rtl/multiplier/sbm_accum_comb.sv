@@ -22,9 +22,7 @@ module sbm_accum_comb (
     output logic carry_error
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // ACC_W: 56 (original).
     localparam int ACC_W = 54;
-    // ROUND_SCHEME: 0 (original).
     localparam int ROUND_SCHEME = 0;
 
     logic [ACC_W:0] sum;

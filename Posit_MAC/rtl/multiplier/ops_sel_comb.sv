@@ -32,17 +32,11 @@ module ops_sel_comb (
     output logic cfg_error
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // FRAC_MAX: 27 (original).
     localparam int FRAC_MAX = 26;
-    // FRAC_W: 12 (original).
     localparam int FRAC_W = 12;
-    // SF_W: 11 (original).
     localparam int SF_W = 11;
-    // EXACT_EN: 1'b1 (original).
     localparam bit EXACT_EN = 1'h1;
-    // OPS_EN: 1'b1 (original).
     localparam bit OPS_EN = 1'h1;
-    // WIDTH_W: (FRAC_MAX > 1) ? $clog2(FRAC_MAX + 1) : 1 (original).
     localparam int WIDTH_W = 5;
 
     localparam int COUNT_W = 5; // WIDTH_W

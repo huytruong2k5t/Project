@@ -24,7 +24,6 @@ module fused_prepare_comb (
     output wire subtract
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    // SF_W: 11 (original).
     localparam int SF_W = 11;
 
     typedef logic signed [SF_W-1:0] sf_t;

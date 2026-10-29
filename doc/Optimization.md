@@ -3034,3 +3034,17 @@ Các phiên bản live khác được giữ dưới nhãn unverified_live_parent
 Chi tiết số liệu,phạm vi và phần còn thiếu:results/opt17_20261029/summary.json.
 Không dùng SoftPosit ES2 làm oracle cho32/3;không claim Python/C++SoftPosit tương đương
 hoặc nghiệm thu AC02/per-n10M,power,board hay production promotion.
+
+
+### 8.41. Chỉ approximate NF/F — quyết định30/10/2026
+
+Sinh viên bỏ exact hardware,chỉ32/3,FW12,FULL_TERM26/Q24,n0..12,khôngFLOOR/JAM/RNE
+trong vòng nhân.12 là giới hạn fraction terms mỗi tích,không phải số giao dịch MAC.
+CảNF/F cần core/bank26;các số đo NF54exact-capable không dùng như pairedPPA NF26.
+Top target bỏ chọnmode;adapterlegacy nếu giữ chỉ nhậncfg_mode1 vàtừchối0.
+AC02 exacthardware đãrút;AC01/AC04và oracleinteger/rational chínhxác vẫn giữ.
+Danh mục ởSPEC4.4:SACexact26+LOD26+shifter26 không cần trong target,nhưng chưa gỡ
+vìiter_ctrl/NF hiện còncaller.Model/headeroracles chia sẻ vàL0 lịch sử không xóa.
+Bước triển khai sau:tách/reuse coreF FULL_TERM26 choNF,adapterNF→53 giữ đủbits,
+cốđịnh model/harness approximate-only,chốtparentdrift,rồipilot/main vàmatchedbenchmark/PPA.
+Lượt này chỉ tài liệu;không đổi/xóa RTL/L1/TB/runner/freeze,không tạoPASS mới.

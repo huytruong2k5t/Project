@@ -1,3 +1,20 @@
+## Quyết định30/10/2026 — chỉ approximate32/3
+
+SPEC v1.24 §4.3–4.4 chốt một profile nhân duy nhất:12 fraction đầu vào,FULL_TERM26/Q24,
+0..12 vòng fraction,early-stop,không FLOOR/JAM/RNE từng term.Cả NF/F đều approximate;
+NF/F chỉ khác vị trí RNE.Không exact NF/Q52,không exact F/quire.Cfg_mode không thuộc
+I/O target;adapter cũ nếu cần chỉ nhận1,từ chối0.Acc_mode/acc_clr và số giao dịch chuỗi
+không bị giới hạn12.Oracle số nguyên/hữu tỉ chính xác vẫn giữ,AC02 exacthardware retired.
+Danh mục file exact-only,mixed và shared cần giữ nằm trong SPEC §4.4.
+
+Phiên30/10 chỉ sửa tài liệu,không sửa/xóa code hoặc chạy verification.CandidateOPT17
+và các runner cũ chưa tự thành cặpapprox-only mới.NF cũ có bank54/exact branch phải
+được thay bằngcore26trước đoPPA.NgưỡngAC01/AC04 và từng n/OPS không giảm;không gán
+PASS hoặc số đo lịch sử cho source sau thay đổi.Các mô tả exact/FLOOR có ngày phía dưới
+chỉ giữ để truy vết;không ghi đè quyết định này.
+
+---
+
 # Tầng L1: Mô hình Thuật toán C++ (`l1/`)
 
 **Hợp đồng mục tiêu29/10/2026 — SPEC v1.23 §4.3:** approximate giữ12 bit fraction cao,

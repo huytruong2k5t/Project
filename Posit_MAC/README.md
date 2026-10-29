@@ -1,3 +1,20 @@
+## Quyết định30/10/2026 — chỉ approximate32/3
+
+SPEC v1.24 §4.3–4.4 chốt một profile nhân duy nhất:12 fraction đầu vào,FULL_TERM26/Q24,
+0..12 vòng fraction,early-stop,không FLOOR/JAM/RNE từng term.Cả NF/F đều approximate;
+NF/F chỉ khác vị trí RNE.Không exact NF/Q52,không exact F/quire.Cfg_mode không thuộc
+I/O target;adapter cũ nếu cần chỉ nhận1,từ chối0.Acc_mode/acc_clr và số giao dịch chuỗi
+không bị giới hạn12.Oracle số nguyên/hữu tỉ chính xác vẫn giữ,AC02 exacthardware retired.
+Danh mục file exact-only,mixed và shared cần giữ nằm trong SPEC §4.4.
+
+Phiên30/10 chỉ sửa tài liệu,không sửa/xóa code hoặc chạy verification.CandidateOPT17
+và các runner cũ chưa tự thành cặpapprox-only mới.NF cũ có bank54/exact branch phải
+được thay bằngcore26trước đoPPA.NgưỡngAC01/AC04 và từng n/OPS không giảm;không gán
+PASS hoặc số đo lịch sử cho source sau thay đổi.Các mô tả exact/FLOOR có ngày phía dưới
+chỉ giữ để truy vết;không ghi đè quyết định này.
+
+---
+
 > **Phân biệt nguồn trước khi replay:** đối chiếu Git ngày29/10 phát hiện51/54 file RTL
 > và manifest tại máy đã khác commit `c4fe1f7` trước phiên đóng gói;ví dụ F đổi N_MAX8→12.
 > Hash manifest hiện tại không trùng hash trong summary release cũ.Vì vậy số10M/0 mismatch
@@ -22,6 +39,10 @@ F giữ mục tiêu W32/Q29 nhưng cần nghiệm thu lại với prepack26 bit.
 RTL production hiện đã cố định32/3:54 module không còn public parameter,
 cổng có độ rộng literal; build không truyền NB/ES hoặc feature override.
 Exact32/3 vẫn theo AC02 với oracle độc lập; không dùng SoftPosit ES2 làm chuẩn.
+
+**Cập nhật tối giản `ops_sel_comb_fixed2` & `sac_step_comb_fixed2/3` (29/10/2026):**
+- **OPS 12-bit:** Nhận trực tiếp `frac_a[11:0]` và `frac_b[11:0]` (tương ứng `Frac[11:0]` trích xuất sau giải mã theo Norris & Kim Fig. 5a); loại bỏ logic cắt bit và cờ `input_cut` bên trong khối OPS; thu gọn `cfg_ops` về 1 bit (`0`: cố định A, `1`: min-popcount).
+- **Tối ưu hóa khối SAC (`sac_step_comb_fixed2/3`):** Thay thế toàn bộ cây generate 4 tầng phức tạp (mảng 2 chiều `zero_tree`/`one_tree` và chỉ thị `split_var`) bằng biểu thức boolean chuẩn `single_one = ((fx & (fx - 1'b1)) == 12'd0)`. Đơn giản hóa biểu thức tính `step_amount`, `scale_sum` và loại bỏ hoàn toàn các lỗi/cảnh báo lint (unpacked array, out-of-bounds, unused bits). Khớp bit-exact 100% với golden reference trên toàn bộ không gian trạng thái.
 
 ## 1. Bản dùng hiện tại
 

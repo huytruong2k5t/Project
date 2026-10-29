@@ -138,3 +138,11 @@ Giữ nguồn snapshot, generated C++/header/makefile, raw coverage `.dat`, log,
 Kiểm metadata 32923 file được giữ nguyên: PASS (độ dài và thời điểm sửa). Kiểm SHA256 66 file RTL/header/file list/freeze còn lại: PASS. Đây là kiểm toàn vẹn file, không phải một lần chạy mô phỏng/STA mới.
 
 Thư mục rỗng cũng đã gỡ: `-p`, `results/nf_all_stages_20261017/.Xil`, `results/nf_all_stages_20261017/tmp`.
+
+
+## Chốt approximate-only — 30/10/2026
+
+`spec_before_approx_only_20261030.zip` giữ nguyên SPEC trước quyết định v1.24.
+Danh mục file exact-only/mixed/shared nằm ở SPEC §4.4.Chỉ chỉnh tài liệu,chưa gỡ file
+hoặc sửa RTL/L1/TB/runner;577 file nguồn được đối chiếu hash không đổi.
+Biên bản tính toàn vẹn:`approx_only_doc_guard_20261030.json`;không phải kết quả simulation.

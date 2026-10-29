@@ -362,7 +362,13 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 |2 | Chốt hợp đồng approximate không FLOOR | SPEC v1.23 §4.3 và Optimization8.39 chốt FULL_TERM26 bit/Q24,n0..12,RNE NF/F;đồng bộ README/PLAN/hướng dẫn.L1/RTL/TB/runner/freeze giữ nguyên,người dùng tự sửa RTL/TB.Chưa có mô phỏng/accuracy/PPA profile mới | ✅ hợp đồng / không triển khai |
 | 3 | Lưu trữ module hỗ trợ và làm gọn cây RTL | ZIP ngoài rtl giữ nguyên byte nguồn/TB và hash;54 đường dẫn đã chuyển,46 module MAC còn lại lint NF/F đạt.Thử giải nén/audit hai checkpoint54 đạt.Phát hiện51 RTL/manifest đã khác Git gốc từ trước;giữ cả hai bản,không kế thừa kết quả10M cho nguồn hiện tại.Không sửa nội dung RTL/TB | ✅ |
 
-### 4.24. Mẫu cập nhật tiếp theo
+### 4.24. Ngày30/10/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Chốt approximate-only và phạm vi bỏ exact | SPEC v1.24:32/3,FW12,FULL_TERM26/Q24,n0..12;NF/F cùngapprox,AC02 exacthardware không áp dụng.Đã lập danh mục exact-only/mixed/shared.Chưa sửa/xóa RTL/L1/TB hoặc chạy verification;core NF26 và runner mới còn phải triển khai | ✅ hợp đồng / processing hiện thực |
+
+### 4.25. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

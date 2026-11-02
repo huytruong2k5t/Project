@@ -368,7 +368,13 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | --- | --- | --- | --- |
 | 1 | Chốt approximate-only và phạm vi bỏ exact | SPEC v1.24:32/3,FW12,FULL_TERM26/Q24,n0..12;NF/F cùngapprox,AC02 exacthardware không áp dụng.Đã lập danh mục exact-only/mixed/shared.Chưa sửa/xóa RTL/L1/TB hoặc chạy verification;core NF26 và runner mới còn phải triển khai | ✅ hợp đồng / processing hiện thực |
 
-### 4.25. Mẫu cập nhật tiếp theo
+### 4.25. Ngày 02/11/2026
+
+| STT | Mốc / nhóm công việc | Kết quả chính / phần còn lại | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Chốt spec approximate12 và mở rộng quire | SPEC v1.26:OPS1/n12 mặc định,FULL_TERM26/Q24 không FLOOR,block/prepack/adder5/testbench/52 điểm giữ ngưỡng;thêm hợp đồng quire,bounds,clear/MAC/READ và gate riêng. Đồng bộ tài liệu,lưu bản trước sửa/hash;chỉ kiểm công thức/tài liệu,không sửa RTL/L1/TB hoặc chạy nghiệm thu mới. Live còn FLOOR;quire chưa triển khai | ✅ đặc tả / processing hiện thực |
+
+### 4.26. Mẫu cập nhật tiếp theo
 
 Thêm mục `Ngày DD/MM/YYYY` trước phần mẫu này; đánh số STT từ1 cho mỗi ngày.
 

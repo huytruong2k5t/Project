@@ -1,1895 +1,492 @@
-# SPEC ĐỒ ÁN CHUYÊN NGÀNH — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
+# SPEC lõi IP Posit MAC xấp xỉ dạng lặp
 
-| Mục | Nội dung |
+**v1.26 — 02/11/2026.** Sinh viên: Đan Huy. Hợp đồng approximate12/FULL_TERM, mặc định OPS1/n12, kiến trúc các khối, testbench và mở rộng MAC quire. Tài liệu quy định thiết kế mục tiêu và nghiệm thu; nhật ký, số đo và PASS của từng snapshot nằm riêng trong `results/`, [tiến độ](docs/TIEN_DO_DO_AN.md) và [Optimization](../doc/Optimization.md).
+
+## 1. Mục tiêu và phạm vi
+
+Thiết kế bằng SystemVerilog hai lõi **non-fused (NF)** và **fused (F)** cho duy nhất **Posit(32,3)**. Cả hai dùng bộ nhân dịch–cộng approximate, giữ 12 bit fraction đầu vào, tích FULL_TERM 26 bit/Q24 và tối đa 12 vòng fraction. NF/F khác vị trí làm tròn tích, không phải hai chế độ exact/approximate.
+
+- Bắt buộc: Parser, OPS, SAC/SBM/core, bộ cộng, Packer RNE, valid/ready, reset, cờ trạng thái, tích lũy và kiểm chứng tự động.
+- Không có nhân exact phần cứng, `cfg_mode`, `EXACT_EN`, TRUNC hoặc lựa chọn FLOOR/STICKY_ACC trong cấu hình nghiệm thu. Độ rộng cố định; top không có public parameter đổi format/feature.
+- NF/F là phạm vi nghiệm thu chính. Giao diện tích trước pack MUST cho phép mở rộng MAC quire theo §4.5; hợp đồng phần mở rộng ở §9, chưa yêu cầu triển khai RTL quire trong lần cập nhật này. Chia/căn, chuyển đổi FP bằng phần cứng, ASIC và tái hiện toàn bộ số liệu bài báo ngoài mục tiêu. Chồng lấn giao dịch/đối chứng FP là mở rộng; baseline chỉ có một giao dịch đang xử lý.
+- Oracle tính chính xác bằng phần mềm vẫn bắt buộc để kiểm thiết kế approximate và đo sai số; không tạo thêm mode của DUT.
+
+**Profile mặc định MUST:** `cfg_ops=1`, `cfg_n=12`, approximate-only. Giữ lựa chọn runtime OPS0 và n0..11 để kiểm/đánh giá đánh đổi; đây không phải mode exact. n giới hạn số số hạng fraction, không giới hạn chiều dài chuỗi MAC. Early-stop khi hết bit 1 vẫn bắt buộc; không phát đủ 12 vòng rỗng chỉ để đạt số đếm.
+
+**Quan hệ với bài báo:** Norris–Kim2021 §III-A/B/D chọn nb32/es3 và 12 bit fraction cao (không tính hidden), fraction thiếu được đệm 0. Đồ án kế thừa phạm vi này và kiến trúc dịch–cộng. FULL_TERM26/Q24 không cắt từng term, OPS min-popcount, RNE và NF/F/quire là hợp đồng được chốt của đồ án; không suy chúng là RTL gốc hoặc đã tái hiện Table I. Packer paper mô tả ghép 12 fraction; Packer đồ án dùng đầy đủ dữ liệu trước pack và RNE theo §2.
+
+Phiên này chỉ sửa hợp đồng/tài liệu và kiểm tính nhất quán công thức; không đổi RTL, L1/golden thực thi, testbench, runner hoặc manifest, không cấp PASS số học mới. Khoảng cách giữa nguồn hiện tại và mục tiêu ở §8.
+
+## 2. Định dạng số
+
+Đây là cấu hình tổng quát `n=32, es=3`, không đồng nhất với posit32 exponent hai bit của Posit Standard 2022. Với hữu hạn khác 0, giải mã **mã độ lớn** sau bù hai nếu đầu vào âm:
+
+```text
+X = (-1)^s × (1+f) × 2^sf; sf = 8k+e; useed = 256
+k = run-1 nếu regime bắt đầu bằng 1; k = -run nếu bắt đầu bằng 0
+```
+
+`run` không tính terminator. Exponent tối đa 3 bit, thiếu thì đệm 0 phía thấp; fraction tối đa 26 bit, căn Q26. Scale đầu vào thuộc [-240,240], tổng scale tích thuộc [-480,480], giữ bằng signed11; hiệu scale mở rộng dấu trước phép trừ.
+
+| Giá trị | Mã 32 bit |
 | --- | --- |
-| Tên đề tài | Thiết kế và kiểm chứng lõi IP Posit MAC xấp xỉ, lặp (Approximate & Iterative Posit MAC) trên FPGA, có mở rộng ASIC |
-| Sinh viên | Đan Huy |
-| Tài liệu tham chiếu chính | [P] C. J. Norris, S. Kim, *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS 2021 |
-| Tài liệu liên quan | [15] Kim & Rutenbar, GLSVLSI 2019; [18] Babic et al. 2011; [23] Jaiswal & So, PACoGen, IEEE Access 2019; [4] Gustafson & Yonemoto 2017; [F] Murillo, Del Barrio & Botella, *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, FPL 2020 |
-| Phiên bản | v1.24 — 2026-10-30 — chỉ approximate32/3, FULL_TERM26/Q24, tối đa12 vòng fraction; không exact phần cứng |
-| Quy ước từ khóa | **MUST** = bắt buộc; **SHOULD** = nên làm; **MAY** = tùy chọn/mở rộng |
-| Quy ước ID | `FR-xx` yêu cầu chức năng; `NFR-xx` phi chức năng; `AC-xx` tiêu chí nghiệm thu; `TC-xx` test case; `TV-xx` test vector; `EXT-x` mở rộng |
+| Zero / NaR | `0x00000000` / `0x80000000` |
+| +1 / -1 | `0x40000000` / `0xC0000000` |
+| minpos / -minpos; minpos=2^-240 | `0x00000001` / `0xFFFFFFFF` |
+| maxpos / -maxpos; maxpos=2^240 | `0x7FFFFFFF` / `0x80000001` |
 
-Các số tham chiếu `[4]`, `[15]`, `[18]`, `[23]`, `[24]` giữ theo danh mục của [P]. `[F]` là bài báo FloPoCo bổ sung; `[19]` trong [P] là DRUM, không phải nguồn thuật toán đóng gói. SPEC mô tả yêu cầu và kiến trúc mục tiêu; kết quả thực hiện được ghi trong `results/` và nhật ký tiến độ. Nguồn local đã đối chiếu: [P](An%20Approximate%20and%20Iterative%20Posit%20Multiplier%20Architecture%20for%20FPGAs.pdf), [F](Customized%20Posit%20Adders%20and%20Multipliers%20using%20the%20FloPoCo%20Core%20Generator.pdf).
+`R(x)` là chuẩn hóa và mã hóa Posit(32,3), tạo regime/exponent/fraction, RNE theo dòng bit G/R/S rồi bù hai nếu âm. Điều kiện tăng mã độ lớn: `G && (LSB || R || S)`. Hữu hạn vượt dải kẹp ±maxpos, khác 0 dưới minpos kẹp ±minpos; zero thật giữ Zero. Carry làm tròn không sinh NaR. Oracle phải xét cả bit regime/exponent bị loại ở biên, không chỉ fraction hoặc khoảng cách cố định quanh 1.
 
-**Quyết định hiện hành30/10/2026 — APPROX_ONLY:** chỉ thiết kế Posit(32,3),phép nhân lặp
-xấp xỉ theo luồng kiến trúc tham khảo [P],giữ12 bit fraction cao của mỗi thừa số và
-FULL_TERM26 bit/Q24,không FLOOR/JAM/RNE từng số hạng. Cả NF và F đều approximate;
-NF/F là hai vị trí làm tròn MAC,không phải hai chế độ exact/approx.
-`cfg_n=0..12` đếm số hạng fraction;hidden khởi tạo riêng,early-stop khi fx=0.
-12 vòng là giới hạn **mỗi phép nhân**,không giới hạn số giao dịch trong chuỗi tích lũy.
-Không triển khai đường nhân fraction26/Q52,không có exact NF hoặc exact fused.
-Oracle số nguyên/hữu tỉ tính chính xác vẫn giữ để kiểm P_hat và đo accuracy.
-§4.3–4.4 và §6 hiện hành có ưu tiên hơn các snapshot/nhật ký có ngày phía dưới.
-Phiên này chỉ sửa hợp đồng và danh mục;không đổi RTL,L1,testbench,runner,filelist hoặc freeze.
-Các candidate OPT-17 cũ và kết quả20M vẫn thuộc đúng snapshot trước quyết định;
-chưa có nghiệm thu mới cho cặp NF/F đã tinh gọn cùng datapath approximate-only.
+## 3. Yêu cầu chức năng
 
-### Lịch sử thay đổi (Changelog)
+Các yêu cầu sau bắt buộc khi nghiệm thu. Giữ ID để truy vết báo cáo cũ.
 
-**Checkpoint23/10 — lịch sử,không phải mục tiêu APPROX_ONLY:** release `POSIT_MAC_RTL_20261022_FIXED32_3`,54 module không có public parameter, cổng có độ rộng literal; các hằng nội bộ dùng localparam số cụ thể, kèm công thức tham khảo. Các biến thể fixed2/fixed3 là độ rộng của khối dùng chung trong cùng posit32/ES3, không phải format Posit khác. Genvar và biểu thức kết nối bit vẫn giữ khi cần mô tả cấu trúc. NF/F mỗi bản10M completed/0 mismatch,37 biến thể tổ hợp740k so sánh/0 mismatch,ModelSim và54 strict lint đạt. Nguồn cũ và các candidate tham số hóa lưu lịch sử,không thuộc file list mới. Đây là kiểm chức năng aggregate,không thay final per-n/AC02/AC04 hoặc STA/PPA của release mới; bằng chứng `results/fixed32_3_20261022/summary.json`.
-
-| Phiên bản | Ngày | Thay đổi |
-| --- | --- | --- |
-| v1.0 | 2026-09-30 | Phác thảo mục tiêu, yêu cầu và lộ trình. |
-| v1.1 | 2026-10-02 | Chuẩn hóa non-fused v0/v1, bypass giữ thứ tự, FIFO/credit, round_unpacked và lộ trình baseline trước tối ưu. |
-| v1.2 | 2026-10-02 | Bổ sung kiến trúc fused v2, vector kiểm tay và kiểm chứng tùy chọn ngoài đường găng. |
-| v1.3 | 2026-10-03 | Gom mô tả lặp; sửa nguồn FloPoCo, parser và số liệu PPA; phân biệt exact/approx và yêu cầu/mục tiêu; làm rõ backpressure, tích lũy, phạm vi kiểm chứng và các giới hạn v2. |
-| v1.4 | 2026-10-06 | Phân biệt số hạng thanh ghi/latency/handshake; khóa profile RTL và n; chốt reset bridge, lịch core n=0/early termination; cập nhật mục 11 và tài liệu phụ. Bổ sung ranh giới packer RNE P1/P2 ở §5.9-D; chưa nghiệm thu RTL tích hợp hoặc PPA. |
-| v1.5 | 2026-10-07 | Triển khai packer tổ hợp và pipeline RNE2/TRUNC1; khóa F_IN/adapter; sửa pre-clamping minpos thành sf<-SF_MAX theo L1 để giữ RNE tại đúng biên. Bằng chứng tuần8 tại results/packer/; khảo sát PPA packer riêng tại results/packer_ppa/, chưa nghiệm thu MAC tích hợp hoặc Gate4. |
-| v1.6 | 2026-10-11 | Chuyển mục tiêu so sánh sang baseline nội bộ MAC v1 vs fused v2; AC03/AC06 cập nhật, fused trở thành hạng mục chính; bảo toàn hợp đồng số học đã nghiệm thu và ma trận kiểm cuối. |
-| v1.7 | 2026-10-11 | Chốt profile nhân FLOOR/RNE, exporter tích prepack và metadata; kiểm độc lập Linux/Windows/UBSan, đóng băng L1 hiện có; fused signed residual còn theo mốc riêng. |
-| v1.8 | 2026-10-11 | Đồng bộ fused profile chính thành MUST trong latency/top/matrix/PPA/rủi ro; giữ exact fused và cấu hình phụ là MAY. Thêm matrix NF/F32/3 FLOOR/RNE n0..8, phân biệt sketch với hợp đồng chưa nghiệm thu; checklist tuần10 đặt tạm trong tiến độ. |
-| v1.9 | 2026-10-12 | Chốt posit_add NF: input exact unpacked, output fraction mở rộng/sticky/flags, width và adapter; ba tầng elastic A1/A2/A3 với lịch cạnh/reset/stall; review mapping L1, chưa triển khai RTL adder. |
-| v1.10 | 2026-10-12 | Hiện thực comb/pipeline adder ba tầng, oracle integer độc lập; ModelSim/pilot/20M lượt lớn đạt0 mismatch. Chốt input corpus NF/F và bàn giao tuần10; coverage AC04, MAC/Gate3, fused và PPA còn mở. |
-| v1.11 | 2026-10-13 | Kiểm carry xác nhận legacy khác R(P_hat); thêm adapter bảo toàn prepack và MAC NF đơn giao dịch RNE/FLOOR, Gate3 đạt. Giữ freeze/Gate2 legacy; fused full-sum mới pilot, chưa RTL/coverage cuối/PPA. |
-| v1.12 | 2026-10-13 | Gom khác biệt paper/NF tại §5.10-G; sửa mapping module, unsigned shift, metadata register và carry adapter. Chỉ làm rõ tài liệu, không đổi RTL hoặc hợp đồng số học đã kiểm. |
-| v1.13 | 2026-10-14 | Đồng nhất profile/params, normalize/carry, ngoại lệ, feedback/latency và trạng thái fused; sửa pseudocode G/R/S, oracle ES3, luồng công cụ/PPA và truy vết. Phát hiện W11 chưa đạt tỷ lệ near-cancellation30%; giữ ngưỡng và mở lại phần coverage Gate3, không đổi RTL hoặc kết quả lịch sử. |
-| v1.14 | 2026-10-14 | Bổ sung corpus/counters/probe NF: main10M/0 mismatch,near52,55548%,run/polarity và packer bins đạt; ModelSim corner82.944/0 mismatch. Đóng Gate3 tuần11,giữ checkpoint cũ và các yêu cầu final/F/PPA còn mở. |
-| v1.15 | 2026-10-14 | Tách masked-popcount/data candidates và hidden trước swap; interface/M0 giữ nguyên. Matrix1,334M và NF10M0 mismatch;398 lint sạch;OPS216→196LUT4,median108,08→112,01MHz trên3seed/cấu hình. Giữ source-bound checkpoints cũ và giới hạn PPA toàn MAC. |
-| v1.16 | 2026-10-15 | Chốt F post-prepack W32/Q29 với residual có dấu/borrow,flags/state và L1 đã kiểm. Oracle p8 exhaustive/FMA smoke; main phân tầng2.208.768 trên Linux/Windows/UBSan0 mismatch. Toàn NF post-route median45,07MHz trên CycloneIV,chưa đạt100MHz; bàn giao pipeline F dự kiến,giữ nguyên RTL NF và các ứng viên riêng. |
-| v1.17 | 2026-10-15 | Theo lựa chọn sinh viên, phép đo PPA mới dùng Vivado/Xilinx D2; giữ các số đo CycloneIV làm lịch sử. Thử riêng shifter/LOD trước SAC/parser/MAC; giữ giao diện, parameter và tổ hợp. A35T/A100T có sẵn, Zynq7020 chưa được cài. Phân biệt R2R của benchmark, ước lượng Fmax từ STA và kiểm trên board. Không đổi hợp đồng số học/pipeline NF/F. |
-| v1.18 | 2026-10-15 | Triển khai posit_mac_f 32/3 FW12 W32/Q29, F1–F5 và RNE cuối; 10M giao dịch/0 mismatch với oracle và trace, pipeline đầy/stall/reset và XSim CK2Q đạt. Core approximate thu hẹp12 bit, ABS/borrow một adder. Vivado A35T một run đạt100MHz R2R; giữ final per-n/AC04, CDC/RDC và paired NF/F PPA mở. |
-| v1.19 | 2026-10-17 | NF tách normalize+product P1 → P2 → parse/product bank. L_valid=q+12, H=q+13, II_min=q+14; kiểm chứng/STA riêng tại §11.16. Không đổi L1 hoặc fused. |
-| v1.20 | 2026-10-18 | Promote OPT-02c, SAC abc_tree, product magnitude P2 và sticky prefix;38 module trong production.f. Khóa source/model/build bằng production_freeze.json; không đổi public I/O/parameter, precision, flags hoặc lịch NF/F. Đây là đầu vào tuần14, chưa nghiệm thu final/Gate4. |
-| v1.21 | 2026-10-22 | Chọn duy nhất32/3; chuyển8/0,16/1,32/2 thành bằng chứng lịch sử ngoài phạm vi nghiệm thu mới. AC02 exact32/3 dùng oracle độc lập; cập nhật matrix và kế hoạch. Chỉ sửa tài liệu, không đổi hash RTL/model/constraint hoặc kết quả kiểm cũ. |
-| v1.22 | 2026-10-23 | Hiện thực fixed32/3:54 module không public parameter,cổng literal;NF/F mỗi bản10M/0 mismatch,740k kiểm tổ hợp và ModelSim đạt. Khóa nguồn mới,giữ L1/oracle,snapshot cũ và giới hạn chưa STA/PPA/final per-n/AC02/AC04. Hoàn thiện runner tái chạy riêng. |
-| v1.23 | 2026-10-29 | Chốt FULL_TERM cho approximate12 bit: accumulator hữu ích26 bit/Q24,n0..12,bảo toàn số hạng sau dịch;RNE NF/F giữ nguyên. Chỉ cập nhật hợp đồng/tài liệu theo yêu cầu;người dùng tự sửa RTL/testbench. L1/runner/freeze và mọi kết quả cũ giữ nguyên,chưa kiểm profile mới. |
-| v1.24 | 2026-10-30 | Chỉ approximate32/3 cho cả NF/F;FULL_TERM26/Q24,n0..12,không FLOOR hoặc exact hardware.Bỏ yêu cầu AC02 exact khỏi nghiệm thu mới;chốt giao diện không chọn mode và lập danh mục exact-only/mixed/shared.Chỉ tài liệu,không sửa/xóa nguồn hoặc chạy verification. |
-
-
-**Nơi quy định chính:** độ trễ/ngữ nghĩa MAC ở §5.1; Zero/NaR ở §5.3; làm tròn ở §5.9; chồng lấn/backpressure ở §5.11; fused ở §5.12; phạm vi nghiệm thu ở §6. Profile hiện thực và giới hạn bằng chứng được tóm tắt tại §1.6/§11.10–§11.16. Nhật ký có ngày ở phụ lục là lịch sử, không ghi đè hợp đồng hiện hành hoặc tự mở rộng một mốc PASS thành toàn bộ AC.
-
----
-
-## 1. Mục tiêu, phạm vi, đóng góp
-
-### 1.1 Mục tiêu
-
-Xây dựng một lõi IP Posit MAC (`D = A × B + C`) bằng SystemVerilog với định dạng duy nhất posit(32,3), trong đó phép nhân là **nhân xấp xỉ dạng lặp dịch-cộng** (theo [P], kế thừa [15]) với số vòng lặp `n` chọn được lúc chạy, kèm môi trường kiểm chứng tự động bit-accurate với oracle integer/rational độc lập đúng32/3 (SoftPosit giữ kiểm lịch sử đúng format), và bộ số liệu accuracy/PPA tái lập giữa MAC v1 non-fused (baseline nội bộ) và MAC v2 fused. FP32/FP16 là đối chứng bổ sung khi có thời gian; không yêu cầu tái hiện RTL gốc tác giả để đóng mục tiêu này.
-
-### 1.2 Phạm vi
-
-**Trong phạm vi (In-scope)**
-
-- **Định dạng duy nhất MUST: posit(32,3)**, với `NB=32`, `ES=3`, `FRAC_MAX=26`, `SF_MAX=240`; exponent có tối đa3 bit tùy độ dài regime. Tham số nội bộ có thể được giữ để tái sử dụng mã, nhưng không tạo cam kết hỗ trợ/đo PPA các format khác.
-- Profile mục tiêu NF/F dùng `FRAC_W=12`, **FULL_TERM Q24/26 bit**,RNE,OPS1 và n0..12 theo §4.3;OPS0 được kiểm riêng. F giữ mục tiêu cửa sổ W32/Q29 nhưng phải kiểm lại với prepack rộng hơn. `FRAC_W=12` là precision đầu vào nhân approximate,không phải độ rộng fraction accumulator. Không hỗ trợ nhân exact26 fraction/Q52 ở cả NF và F.
-- File list nghiệm thu mới chỉ chọn datapath approximate-only của cả NF/F,sau khi được hiện thực và kiểm riêng.
-  `rtl/mac_active.f`,`rtl/production.f` và candidate OPT-17 trước30/10 vẫn thuộc snapshot cũ;
-  không tự coi chúng là release đã bỏ exact.Top mục tiêu không có override format/feature hoặc cổng chọn exact;
-  cfg_n,cfg_ops,acc_mode,acc_clr vẫn giữ,không truyền -GNB/-GES vào DUT fixed.
-- Các khối: Parser, Operand Selector (OPS), Shift Amount Calculator (SAC), Shift-Based Multiplier (SBM) + bộ điều khiển lặp, Posit Adder, Rounder/Packer, MAC top.
-- **Hai bản bắt buộc:** MAC v1 non-fused làm baseline nội bộ và MAC v2 fused profile §11.8; hoàn thành NF/Gate3 trước, hoàn thành fused trước nghiệm thu đề tài. Exact fused nằm ngoài phạm vi;cấu hình F phụ cần hợp đồng riêng.
-- L1 FULL_TERM,oracle32/3 độc lập và Ideal theo §6.1;L0 SoftPosit chỉ hỗ trợ hồi quy lịch sử đúngformat.RTL là thiết kế được kiểm chứng.
-- Testbench tự động, coverage, hồi quy, thống kê sai số (Error Rate, MSE, max error).
-- Tổng hợp/P&R Vivado theo **chính sách bậc thang thiết bị (§7.6)**: nền tảng khảo sát tiếp theo từ17/10 chỉ là Artix-7 D2 A35T (`xc7a35tcpg236-1`); D0 (`xcvu9p`) dành cho đối chiếu cùng device bài báo khi có điều kiện, D1/D3/D4 là phương án bổ sung. So sánh công bằng giữa NF/F; FP32/FP16 MAC là đối chứng bổ sung.
-- **Chiến lược phân kỳ hiện thực (Staged Implementation Strategy)**:
-  - *Giai đoạn 1 (Baseline - Hoàn thành trước Gate 3)*: Hoàn thiện lõi MAC **đơn lẻ cô lập**; approximate FULL_TERM/RNE khớp L1 và oracle độc lập đúng32/3. Bắt tay, giữ đầu ra khi bị chặn và xử lý Zero/NaR đúng là bắt buộc từ giai đoạn này.
-  - *Giai đoạn 2 (Advanced Optimization - Tích hợp sau Gate 3)*: Khảo sát chồng lấn giao dịch (mục tiêu $\text{II} \approx n$), bypass Zero/NaR với Order FIFO khi cần giữ thứ tự, Output Skid Buffer và tối ưu Clock Enable (CE). Early-stop khi fraction hết bit 1 đã có trong baseline; không coi đây là chức năng chưa triển khai.
-
-**Ngoài phạm vi (Out-of-scope)**
-
-- Chia, căn bậc hai, chuyển đổi FP↔posit bằng phần cứng (chỉ làm trong phần mềm để sinh vector).
-- Quire phần cứng toàn miền và tích lũy cả chuỗi với một lần làm tròn cuối. Chỉ đề cập như hướng phát triển; không đồng nhất software full-sum của một giao dịch với quire RTL.
-- Chip tape-out thật. (Phần ASIC chỉ dừng ở luồng RTL-to-GDSII mô phỏng bằng công cụ mã nguồn mở, xem EXT-A.)
-
-### 1.3 Đóng góp dự kiến
-
-| ID | Đóng góp | Ghi chú |
-| --- | --- | --- |
-| C1 | Hiện thực và kiểm chứng MAC trên cấu trúc nhân lặp tham khảo [P], thêm đường cộng C và điều khiển | Đây là phần tích hợp của đồ án; không tuyên bố phát minh thuật toán MAC/FMA. Paper có bộ cộng nội bộ SBM nhưng không có đường Posit add C của MAC |
-| C2 | Golden model 3 tầng và phương pháp kiểm chứng phân tầng theo độ dài regime | Vá điểm yếu "random đều" |
-| C3 | Đối chiếu kiến trúc với [P], ghi rõ giả định và giới hạn tái dựng | TableI/provenance là nghiên cứu phụ, không chặn baseline nội bộ |
-| C4 | So accuracy/PPA MAC v1 non-fused vs v2 fused cùng cấu hình và corpus | Xem §11.8; FP32/FP16 bổ sung |
-| C5 (chọn) | Luồng ASIC (EXT-A) hoặc khảo sát không gian thiết kế (EXT-B) | Xem §8 |
-
-### 1.4 Tiêu chí nghiệm thu (Acceptance Criteria)
-
-| ID | Tiêu chí | Ngưỡng đo được |
-| --- | --- | --- |
-| AC-01 | RTL khớp L1 bit-exact | **0 mismatch** trên ≥ 10^7 vector cho mỗi điểm approx bắt buộc của §6.7, gồm từng OPS, n, ROUND_MODE và ROUND_SCHEME đã chọn; không còn hàng exact phần cứng. Các hàng MAY/EXT chỉ áp dụng khi triển khai |
-| AC-02 | **Không áp dụng từ30/10/2026** — nghiệm thu exact phần cứng đã rút khỏi phạm vi | Giữ ID và kết quả cũ để truy vết;không yêu cầu thêm100M exact,không dùng bỏ AC02 để giảm AC01/AC04 hoặc bỏ oracle toán học |
-| AC-03 | Đánh giá paired accuracy NF/F theo §11.8 | Pilot10^5, phép đo chính≥10^6 triple/profile; oracle độc lập, seed/corpus/ngoại lệ đóng băng, báo cả kết quả bất lợi. Không thay AC01/AC04 |
-| AC-04 | Bao phủ | Line ≥ 95%, branch ≥ 90%, toggle ≥ 85%; functional coverage 100% các bin hợp lệ của §6.6. Bin không thể đạt do cấu hình phải có giải thích và loại trừ được truy vết |
-| AC-05 | Tổng hợp | Báo cáo LUT/FF/CARRY/DSP/BRAM, WNS, fmax post-route cho ≥ 3 cấu hình; DSP = 0, BRAM = 0. Nền tảng theo chính sách bậc thang §7.6 (có phương án khi không có `xcvu9p`) |
-| AC-06 | So sánh PPA | MAC v1 NF vs v2 F cùng device/tool/ràng buộc/config; ≥3 run/config, latency/II/throughput và tài nguyên; FP32/FP16 là MAY |
-| AC-07 | Tái lập | Luồng build/generate/sim/audit/PPA được tài liệu hóa và chạy từ nguồn đóng băng; chỉ gọi make all là đầy đủ sau khi orchestration triển khai thực sự |
-| AC-08 | Truy vết | Ma trận FR → TC → kết quả đầy đủ (Phụ lục D) |
-
-### 1.5 Mức độ hoàn thành
-
-Các Tier là định nghĩa mức nghiệm thu, không phải tự đánh dấu đã đạt theo số tuần.
-
-| Mức | Điều kiện | Hiện trạng18/10/2026 |
-| --- | --- | --- |
-| Tier1 — nền tảng | Parser/packer, multiplier và adder đúng ở profile công bố; hoàn tất AC01/AC04/AC05 áp dụng | Các mốc đơn vị/Gate1/Gate2 đạt;final approximate W14 đạt;AC02 exhaustive và matched PPA vẫn mở |
-| Tier2 — NF | MAC NF đúng số học/giao thức và coverage tích hợp theo SPEC; baseline nội bộ có nguồn đóng băng | Gate3 tuần11 và final NF250M/AC04 W14 đạt;AC02 exact và matched PPA còn mở,không gọi toàn Tier đạt |
-| Tier3 — mục tiêu đầy đủ | Tier2 cùng fused profile chính, paired accuracy/PPA và toàn bộ AC01..08 áp dụng | Chưa đạt toàn Tier;F RTL90M,final approximate/AC04 và9M paired standalone accuracy đã đạt;AC02,matched PPA/Gate4 và hồ sơ vẫn mở |
-
-Các Tier không bảo đảm xếp loại hội đồng. Một report PASS có phạm vi riêng không thay chứng cứ của các AC chưa chạy.
-
-### 1.6 Profile và bằng chứng hiện hành
-
-| Nhánh | Hợp đồng và hiện trạng |
+| ID | Yêu cầu |
 | --- | --- |
-| Mục tiêu30/10 APPROX_ONLY | Cả NF/F chỉ12 fraction đầu vào,M26/Q24,n0..12,FULL_TERM/RNE;chưa tinh gọn/kiểm mới nguồn theo quyết định này |
-| Candidate OPT-1729/10 | FULL_TERM model và8 top đã có bằng chứng riêng;NF còn exact-capable/bank54,F approximate-only/bank26.Hai bản10M/0 mismatch,ModelSim8.192/bản thuộc snapshot đã build;không phải nghiệm thu cặp approximate-only mới.Nguồn live có drift,parent phải được chốt lại |
-| Legacy FLOOR/đa format/exact | L0/L1,Gate1/2/3,W14 và fixed32/3 giữ nghĩa lịch sử,không dùng expected FLOOR cho FULL_TERM hoặc gán PPA exact-capable cho NF đã bỏ exact |
-| Paper research | Predictor/OPS,width-cut,Fig.4 và TableI là nghiên cứu riêng;không khẳng định có RTL tác giả hoặc đạt provenance/TableI |
+| FR-01, FR-03 | Cố định (32,3); Parser trả dấu, Zero/NaR, sf signed11 và fraction Q26 đúng mọi mã. |
+| FR-02, FR-04 | NaR ưu tiên Zero; Packer RNE/kẹp biên theo §2. |
+| FR-05, FR-06 | Chỉ approximate FULL_TERM §4.3; không đường exact hay cắt từng term. |
+| FR-07, FR-08 | Early-stop; OPS0/1; hòa popcount chọn A. |
+| FR-09 | Adder/adapter khớp oracle (32,3), kể cả carry, cancellation, phần dư và cờ. |
+| FR-10, FR-11 | NF/F theo §4.4, cùng P_hat. |
+| FR-12, FR-14 | Tích lũy, acc_clr và 5 cờ theo §4.2/§4.4. |
+| FR-13, FR-15 | Valid/ready, giữ output khi stall, reset flush/startup an toàn. |
+| FR-16 | Nếu chồng lấn: kiểm thêm thứ tự, capacity, phụ thuộc trạng thái; không mặc định II=n. |
+| FR-17 | Prepack có định nghĩa giá trị/width/Q, không product RNE; nối được NF, F và quire theo §4.5. |
+| FR-18 | Wrapper tích hợp/driver/model/TB mặc định OPS1/n12; cổng cấu hình phải được lái hợp lệ, không dựa vào X/Z. |
+| EXT-Q | Khi triển khai MAC quire: tổng không làm tròn mỗi MAC, một RNE tại READ, có bounds/reset/NaR/overflow và kiểm riêng §9. Không thay điều kiện đạt NF/F. |
 
-Kết quả và hash lịch sử giữ nguyên.NF/F mới phải dùng cùng FULL_TERM/precision/n/OPS;
-đối chiếu transaction/5flags với L1 và oracle độc lập,sau đó mới đo accuracy/PPA matched.
+## 4. Cấu hình và hợp đồng số học
 
----
+### 4.1 Hằng số thiết kế
 
-## 2. Nền tảng Posit dùng trong spec
-
-### 2.1 Định nghĩa
-
-Posit `(NB, ES)`: bit `NB-1` là dấu `s`; tiếp theo là **regime** (chuỗi bit giống nhau độ dài `m`, kết thúc bằng một bit đối); tiếp theo tối đa `ES` bit **exponent** `e`; phần còn lại là **fraction** `f`. Giá trị:
-
-```
-x = (-1)^s × useed^k × 2^e × (1.f),   useed = 2^(2^ES)
-```
-
-- Regime toàn 0 (m số 0, kết thúc bằng 1): `k = -m`. Regime toàn 1 (m số 1, kết thúc bằng 0): `k = m-1`.
-- **Scale factor** `sf = k × 2^ES + e`, khi đó `x = (-1)^s × 2^sf × (1.f)`. Toàn bộ datapath làm việc trên bộ ba `(s, sf, 1.f)`.
-- `0…0` là **zero**; `1 0…0` là **NaR** (Not a Real). Với kết quả hữu hạn khác 0, vượt dải thì bão hòa độ lớn về `maxpos`/`minpos`; zero vẫn được xuất khi tích bằng 0 hoặc tổng triệt tiêu chính xác. NaR chỉ xuất theo quy tắc lan truyền ngoại lệ.
-- Số âm biểu diễn bằng bù hai của toàn bộ chuỗi bit.
-
-### 2.2 Cấu hình thiết kế duy nhất
-
-| Cấu hình | NB | ES | useed | FRAC_MAX = NB−3−ES | maxpos | minpos | Ghi chú |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| posit32/ES3 | 32 | 3 | 256 | 26 | 2^240 ≈ 1.8×10^72 | 2^-240 ≈ 5.6×10^-73 | Duy nhất cho NF/F; cùng định dạng với [P], không chứng minh cùng RTL tác giả |
-
-Tham chiếu IEEE-754: FP32 có max ≈ 3.4×10^38, subnormal nhỏ nhất ≈ 1.4×10^-45; FP16 có max = 65504, subnormal nhỏ nhất ≈ 6.0×10^-8.
-
-Hai nhận xét cần đưa vào báo cáo:
-
-1. posit32 `ES=2` có `maxpos ≈ 1.3×10^36` **nhỏ hơn** FP32 max (3.4×10^38, lớn hơn khoảng 262 lần); muốn dải rộng hơn FP32 thì phải dùng `ES=3` như [P].
-2. Ở quanh giá trị 1.0 (regime 2 bit), posit32 `ES=2` có 27 bit fraction, FP32 có 23 bit, tức mịn hơn 2^4 = 16 lần. Độ chính xác giảm dần khi ra xa 1.0.
-
-### 2.3 Độ rộng scale factor
-
-```
-SF_MAX = (NB-2) × 2^ES            // ES=3, NB=32: 240;  ES=2: 120
-SF_W   = $clog2(4×SF_MAX + 4) + 1 // dư 1 bit an toàn cho adder; ES=3: 11 bit, ES=2: 10 bit
-```
-
-Tích hai posit có `sf ∈ [-2·SF_MAX, 2·SF_MAX+1]`.
-
-### 2.4 Ví dụ giải mã (posit16, ES=2, để minh họa thuật toán tổng quát)
-
-Chuỗi bit `0000 1101 1011 1011` (`0x0DBB`):
-
-| Bước | Kết quả |
+| Thành phần | Giá trị cố định |
 | --- | --- |
-| Dấu | `s = 0` |
-| Regime | `x[14:0] = 000110110111011`; bit đầu 0, có 3 số 0 rồi bit 1 nên `m=3`, `k=-3`, regime chiếm `m+1 = 4` bit |
-| Dịch trái `m+1 = 4` bit | `10110111011 0000` |
-| Exponent | 2 bit đầu `10` nên `e = 2` |
-| Fraction | 9 bit kế tiếp `110111011` = 443 nên `1.f = 1 + 443/512 = 1.865234375` |
-| Scale | `sf = 4×(-3) + 2 = -10` |
-| Giá trị | `2^-10 × 1.865234375 ≈ 1.8215×10^-3` |
+| Format / fraction giải mã | NB=32, ES=3, FRAC_MAX=26 |
+| Nhân approximate | FRAC_W=12, N_MAX=12, APP_ACC_W=26, APP_Q=24 |
+| Cấu hình mặc định | OPS_DEFAULT=1, N_DEFAULT=12; không EXACT_EN/cfg_mode trong top mục tiêu |
+| Scale / tổng dịch / số vòng | signed11 / unsigned4 / unsigned4 |
+| Fraction chuẩn hóa tới Packer | 53 bit, không hidden; đệm 0 không tăng precision |
+| Adder dùng chung NF/F | Độ lớn 31 bit/Q29: carry1, hidden1, fraction26, ba vị trí thấp; chênh scale signed12 |
+| F adapter tới adder | Fraction26 không hidden, scale signed11; giữ đủ tối đa25 fraction của tích FULL_TERM chuẩn hóa |
+| Pipeline mục tiêu | Parser2; core context/OPS + SAC/shift/accumulator; adder5; Packer RNE2 tầng |
 
-Số đối `-0x0DBB` là `0xF245` (bù hai). Parser thấy `s=1`, lấy bù hai trở lại `0x0DBB` rồi giải mã như trên và gắn dấu.
+Độ rộng và pipeline là lựa chọn phần cứng, không thay golden full-grid. Bộ cộng F W32/Q29 và F1–F5 riêng trong các checkpoint cũ không còn là kiến trúc bắt buộc: mục tiêu hiện dùng chung `posit_add`5 tầng với adapter không suy hao. Nếu residual/jam khi cộng làm khác oracle, sửa datapath thay vì đổi expected. Quire có tổng rộng riêng, không dùng cửa sổ31/Q29 làm state.
 
-### 2.5 Ví dụ mã hóa và làm tròn RNE (posit8, ES=0)
+### 4.2 Cổng và giao thức
 
-Quy tắc: xây chuỗi `regime | exponent | fraction` đầy đủ, cắt tại bit thứ `NB-1`; **guard** = bit ngay sau điểm cắt, **sticky** = OR của mọi bit sau guard; làm tròn về chẵn (round-to-nearest-even) theo chuỗi bit; làm tròn trên độ lớn rồi mới bù hai nếu âm.
+Hai top riêng `posit_mac_nf`, `posit_mac_f` có cùng giao diện mục tiêu:
 
-| TV | Giá trị vào | Phân tích | Kết quả mong đợi |
+| Cổng | Hướng | Bit | Ý nghĩa |
 | --- | --- | --- | --- |
-| TV-RND-00 | 0.1 = 1.6×2^-4 | `sf=-4`, `k=-4` → regime `00001`; còn 2 bit fraction: 0.6 = `.1001…` → `10`, guard = 0 | `0x06` (=0.09375) |
-| TV-RND-01 | 1 + 2^-6 = 1.015625 | k=0 → regime `10`, 5 bit fraction `00000`, guard=1, sticky=0 → hòa, LSB chẵn nên giữ | `0x40` (=1.0) |
-| TV-RND-02 | 1 + 3×2^-6 = 1.046875 | 5 bit fraction `00001`, guard=1, sticky=0 → hòa, LSB lẻ nên làm tròn lên | `0x42` (=1.0625) |
-| TV-RND-03 | 100 | vượt `maxpos = 64` | `0x7F` (bão hòa) |
-| TV-RND-04 | 0.001 | dưới `minpos = 2^-6` | `0x01` (không về 0) |
+| clk, rst_n | in | 1,1 | Clock; reset đồng bộ tích cực thấp tại top |
+| in_valid, in_ready | in,out | 1,1 | Nhận tại cạnh lên khi cùng bằng 1 |
+| a, b, c | in | 32 mỗi cổng | Hai thừa số và số hạng cộng |
+| cfg_n | in | 4 | 0..12 số hạng fraction; mặc định12; hidden khởi tạo riêng |
+| cfg_ops | in | 2 | Mặc định1: min-popcount fraction12, hòa chọn A; 0: X=A |
+| acc_mode, acc_clr | in | 1,1 | Chọn tích lũy; bắt đầu chuỗi mới |
+| out_valid, out_ready | out,in | 1,1 | Trả tại cạnh lên khi cùng bằng 1 |
+| d, flags | out | 32,5 | Mã kết quả; {nar,sat_max,sat_min,inexact,approx_cut} |
 
-(Các giá trị mong đợi phải được xác nhận lại bằng SoftPosit ở tuần 2 và đưa vào regression như test cố định.)
-
----
-
-## 3. Yêu cầu chức năng và phi chức năng
-
-### 3.1 Chức năng (FR)
-
-| ID | Ưu tiên | Yêu cầu |
-| :--- | :---: | :--- |
-| FR-01 | MUST | Chỉ posit(32,3) ở §2.2; RTL production không có public parameter, localparam là hằng số cụ thể và cổng có độ rộng literal; dùng biến thể khối riêng khi các vị trí cần độ rộng khác nhau |
-| FR-02 | MUST | Xử lý Zero/NaR và giữ thứ tự theo §5.3. Đúng chức năng là MUST; bypass rút ngắn độ trễ và CE là tối ưu SHOULD sau Gate 3 |
-| FR-03 | MUST | Parser giải mã đúng `(s, is_zero, is_nar, sf, frac)` với mọi chuỗi bit, gồm cả số âm và trường hợp regime chiếm hết `NB-1` bit |
-| FR-04 | MUST | Packer làm tròn RNE, bão hòa về maxpos/minpos, không sinh NaR/zero từ phép toán khác NaR/zero (trừ khi hai số hạng triệt tiêu chính xác cho ra 0) |
-| FR-05 | MUST | Chỉ nhân approximate12-bit fraction theo §4.3;không có selector/nhánh chạy exact26 fraction. Cấu hình exact cũ chỉ được phát hiện là không hỗ trợ qua adapter tương thích nếu còn tồn tại |
-| FR-06 | MUST | Approximate FULL_TERM §4.3: giữ12 fraction cao,`cfg_n=0..12`,accumulator hữu ích26 bit/Q24;mọi số hạng dịch được giữ đủ,không FLOOR/JAM/RNE trong vòng. Phải khớp model FULL_TERM/oracle mới,không dùng L1 FLOOR cũ để nghiệm thu |
-| FR-07 | MUST | Dừng sớm (early termination) khi SAC không còn bit 1 trong fraction toán hạng X |
-| FR-08 | SHOULD | OPS chọn toán hạng làm X: cố định A, hoặc chọn toán hạng có ít bit 1 hơn (popcount) theo `cfg_ops` |
-| FR-09 | MUST | Adder32/3 khớp oracle cộng integer/rational độc lập bit-exact (RNE), không dùng p32_add ES2 làm chuẩn |
-| FR-10 | MUST | MAC NF:D=R(R(P_hat)+C_eff);P_hat là tổng FULL_TERM Q24 của các số hạng được chọn,không dùng A×B đầy đủ hoặc FLOOR làm expected |
-| FR-11 | MUST | MAC F:D=R(P_hat+C_eff),P_hat cùng hợp đồng NF;W32/Q29 với residual/borrow phải khớp oracle full-grid.Không có exact fused từ A×B hoặc quire |
-| FR-12 | SHOULD | `acc_mode=1` dùng trạng thái tích lũy làm C, bỏ qua c bên ngoài; làm tròn sau từng giao dịch, duy trì ngữ nghĩa NaR trong accumulator (mã Posit hoặc cờ tương đương, không bắt buộc FF acc_nar_q riêng). Thứ tự cập nhật và ngữ nghĩa `acc_clr` theo §4.2 |
-| FR-13 | MUST | Giao tiếp valid/ready, chịu backpressure, độ trễ thay đổi theo `n` |
-| FR-14 | SHOULD | Cờ trạng thái: `nar`, `sat_max`, `sat_min`, `inexact`, `approx_cut` (bị cắt do đạt `cfg_n`) |
-| FR-15 | MUST | MAC top dùng rst_n đồng bộ tích cực thấp; reset bridge và startup barrier theo §4.2. Sau reset out_valid=0, không phát sinh X; leaf giữ hợp đồng reset riêng |
-| FR-16 | SHOULD | Chồng lấn giao dịch sau Gate 3; mục tiêu II và điều kiện áp dụng ở §5.10-E, §5.11. Baseline xử lý từng giao dịch và luôn chịu được backpressure; II thực tế phải được đo |
-
-### 3.2 Phi chức năng (NFR)
-
-| ID | Yêu cầu | Tối thiểu | Mục tiêu | Xuất sắc |
-| --- | --- | --- | --- | --- |
-| NFR-01 | Chất lượng RTL | Verilator `-Wall` không cảnh báo nghiêm trọng, không latch | + Verible lint sạch | + CI tự chạy |
-| NFR-02 | Tài nguyên khối nhân (ES=3, FRAC_W=12) | ≤ 1000 LUT | ≤ 800 LUT | ≤ 700 LUT (bằng [P]: 698) |
-| NFR-03 | fmax khối nhân, post-route | ≥ 350 MHz | ≥ 450 MHz | ≥ 575 MHz (bằng [P]) |
-| NFR-04 | fmax MAC top | ≥ 250 MHz | ≥ 350 MHz | ≥ 450 MHz |
-| NFR-05 | DSP/BRAM | 0/0 | 0/0 | 0/0 |
-| NFR-06 | Tái lập | Có Makefile | Một lệnh chạy hết | + ghi phiên bản công cụ vào log |
-
-NFR02..04 là mục tiêu khảo sát ban đầu, chưa phải số đo hoặc thành tựu của RTL hiện tại; chốt cùng GVHD sau tổng hợp/P&R sơ bộ NF tuần12. Tối ưu pipeline ở tuần12–13, kiểm lại ở tuần14 và xác nhận post-route tuần15; tăng Fmax phải báo cả FF,latency,II/throughput. Ngưỡng tuyệt đối NFR-02..04 chỉ đối chiếu ở D0; NFR-02/03 có mốc tỉ lệ §7.6 cho nền tảng khác. NFR-04 chưa có baseline MAC tương đương để quy đổi, nên báo số đo và chốt mục tiêu riêng theo part đã chọn.
-
----
-
-## 4. Tham số và giao diện
-
-### 4.1 Hằng số kiến trúc
-
-Các giá trị sau là hằng cố định của thiết kế mục tiêu,không phải public parameter.
-Code cũ chưa được sửa trong lượt chốt này;không dùng bảng để suy release mới đã tồn tại.
-
-| Hằng | Giá trị | Ý nghĩa |
-| --- | --- | --- |
-| NB / ES | 32 / 3 | Định dạng duy nhất |
-| FRAC_MAX | 26 | Fraction parser và toán hạng C;không phải precision nhân |
-| FRAC_W | 12 | Fraction giữ lại trước OPS/nhân |
-| N_MAX / N_W | 12 / 4 | cfg_n0..12,không tính hidden |
-| APP_ACC_W / APP_Q | 26 / 24 | Cả NF/F dùng cùng magnitude nhân26 bit,Q24 |
-| S_W / I_W | 4 / 4 | Tổng dịch0..12 và số vòng0..12 |
-| SF_W | 11 | Scale signed,giữ đủ tổng scale và normalize |
-| F_IN | 53 | Interface fraction mở rộng tới packer/adder;đệm0 không tăng precision |
-| ACC_WIN / Q_WIN | 32 / 29 | Cửa sổ cộng F với residual riêng;không phải accumulator nhân26 bit |
-| ROUND_SCHEME | FULL_TERM cố định | Không FLOOR/JAM/RNE từng term |
-| ROUND_MODE / PIPE_PACK | RNE / 2 | NF RNE tích và tổng;F RNE tổng cuối |
-| PIPE_PARSE | 2 | Parser elastic P1/P2 |
-| EXACT_EN / cfg_mode | Không có trong giao diện mục tiêu | Adapter legacy nếu cần chỉ nhận cfg_mode1,từ chối0;không cho switch exact |
-
-OPS0 giữ X=A;OPS1 min-popcount12,hòa chọn A;OPS2/3 invalid.
-Hai top NF/F là hai kiến trúc riêng,không có tham số FUSED trên top NF.
-Số giao dịch tích lũy không bị giới hạn ở12;vẫn round state Posit sau mỗi giao dịch.
-Khối packer có thể dùng fraction interface53 bit và adder có thể giữ độ rộng mở rộng;
-việc bỏ exact không cho phép cắt các bit cần cho RNE của NF/F.
-
-### 4.2 Cổng
-
-| Tín hiệu | Hướng | Độ rộng | Mô tả |
-| --- | --- | --- | --- |
-| `clk` | in | 1 | Xung nhịp |
-| `rst_n` | in | 1 | Reset đồng bộ, tích cực thấp |
-| `in_valid` / `in_ready` | in / out | 1 | Bắt tay đầu vào |
-| `a`, `b` | in | NB | Hai thừa số |
-| `c` | in | NB | Số hạng cộng (bỏ qua nếu `acc_mode=1`) |
-| `acc_mode`, `acc_clr` | in | 1, 1 | Chế độ tích lũy |
-| `cfg_mode` legacy | Không thuộc top mục tiêu | — | Nếu giữ adapter tương thích:nối/chấp nhận1,request0 invalid;không có đường exact |
-| `cfg_n` | in | 4 | 0..12 vòng fraction;13..15 invalid;hidden khởi tạo riêng.Số vòng thực tế còn phụ thuộc early-stop |
-| `cfg_ops` | in | 2 | Chính sách OPS |
-| `out_valid` / `out_ready` | out / in | 1 | Bắt tay đầu ra |
-| `d` | out | NB | Kết quả |
-| `flags` | out | 5 | `{nar, sat_max, sat_min, inexact, approx_cut}` |
-
-**Giao thức và cơ chế Backpressure**:
-
-- Bắt tay chuẩn `valid && ready`. Khi giao dịch hoàn tất, `out_valid` được kéo lên. Nếu `!out_ready` (downstream consumer bận), mạch phải giữ nguyên dữ liệu ngõ ra `d` và `flags` không đổi cho đến khi `out_ready=1`.
-- **Sức chứa đầu ra:** baseline giữ một giao dịch và hạ in_ready khi chưa có chỗ. Nếu chồng lấn, dùng cơ chế dự trữ slot/credit theo §5.11-A; skid buffer là một phần sức chứa, không thay cho kiểm soát tất cả kết quả đang bay.
-- Cấu hình (`cfg_*`) được chốt tại thời điểm handshake ngõ vào (`in_valid && in_ready`) và cố định trong toàn bộ chu trình xử lý của giao dịch đó. Đầu ra trả kết quả tuần tự theo đúng thứ tự nạp vào (in-order).
-
-- `acc_mode` và `acc_clr` được chốt cùng giao dịch. `acc_clr=1` chỉ hợp lệ khi `acc_mode=1`: xóa trạng thái tích lũy trước khi tính giao dịch đó, nên C hiệu dụng bằng 0. Khi stalled ở đầu vào, tín hiệu này không gây xóa độc lập. Reset hủy mọi giao dịch đang chờ và xóa accumulator/NaR.
-- Trạng thái tích lũy cập nhật một lần khi kết quả đã được chốt vào nơi lưu đầu ra, không cập nhật lặp theo `out_valid`. Giao dịch sau phải dùng trạng thái của giao dịch tích lũy trước; không cho đọc một C cũ khi các giao dịch chồng lấn.
-- `flags[4:0]={nar,sat_max,sat_min,inexact,approx_cut}`; NaR ưu tiên và xóa bốn cờ còn lại. `sat_max/min` báo kẹp kết quả hữu hạn vượt dải; `inexact` báo phần dư/làm tròn bị mất; `approx_cut` báo còn bit 1 sau giới hạn n. Chỉ cắt fraction về FRAC_W có thể làm `inexact=1` dù `approx_cut=0`.
-- Trong v0/v1, bốn cờ số học được OR qua bước nhân/làm tròn tích và bước cộng/đóng gói tổng; vì vậy cờ bão hòa có thể phản ánh tích trung gian dù kết quả cuối không ở biên. Bypass không thực hiện số học thì bốn cờ bằng 0.
-- Cấu hình reserved/không hợp lệ bị từ chối bằng in_ready=0; không tạo giao dịch hoặc tự xuất NaR cho request đó. Người gửi phải cung cấp cấu hình hợp lệ để handshake.
-- Top hiện là MAC; multiplier standalone là module/harness riêng. Trong MAC, đặt C=0 không thay thế hoàn toàn giao diện multiplier vì NaR và cờ vẫn xử lý theo ngữ cảnh giao dịch.
-
-**Reset bridge của RTL tích hợp (standalone multiplier và MAC NF đã triển khai; hợp đồng NF hiện thực tại §11.10):** rst_n ở top chỉ được lấy mẫu tại cạnh clk. Một thanh ghi reset bridge nhận 0 khi rst_n=0 và 1 khi rst_n=1; ngõ ra thanh ghi này cấp cùng nguồn reset_n cho các leaf có assert bất đồng bộ/deassert đồng bộ. Không nối trực tiếp rst_n đồng bộ vào chân reset bất đồng bộ của leaf. Khi top lấy mẫu reset=0, top flush valid, pending, credit, metadata và accumulator; leaf được assert sau cạnh đó. Không có handshake hợp lệ tại cạnh reset.
-
-Sau nhả reset, startup barrier giữ in_ready=out_valid=0 cho đến khi tất cả leaf đã nhả reset; phải tính cả cạnh bridge nhả và hai FF của leaf, không mặc định toàn MAC chỉ chờ hai cạnh như parser đơn vị. Barrier dùng các trạng thái init_done hoặc bộ đếm startup bảo thủ phù hợp số tầng reset của mọi leaf; điều kiện và số cạnh thực tế phải được TB kiểm trước Gate3. A/B/C chỉ nhận đồng thời khi cả ba parser sẵn sàng và top có slot: top_in_ready=run_ready && slot_free && ready_A && ready_B && ready_C; valid vào mỗi parser chỉ phát cùng một handshake top. Reset lúc rỗng/đang tính/đang stall phải hủy giao dịch cũ và không được xuất lại kết quả trước reset.
-
----
+- Chốt đồng thời toán hạng hiệu dụng/cấu hình tại accept. Nguồn giữ payload/config khi `in_valid && !in_ready`; DUT giữ d/flags/out_valid khi `out_valid && !out_ready`, tới handshake hoặc reset.
+- Invalid gồm n13..15, OPS2/3, hoặc `acc_clr && !acc_mode`: in_ready=0, không accept, không phát kết quả thay thế.
+- Với trạng thái Posit32 S: C_eff=c nếu standalone; C_eff=S nếu tích lũy; C_eff=0 nếu tích lũy kèm clear. C ngoài cổng bị bỏ qua khi tích lũy, kể cả C=NaR.
+- Chỉ giao dịch tích lũy cập nhật S, đúng một lần khi kết quả chốt vào output storage. Stall không cộng lại; lần sau dùng S mới. Clear chỉ có hiệu lực tại accept. Chuỗi không bị giới hạn 12 giao dịch; S làm tròn sau từng giao dịch, không là quire.
+- Cạnh lấy mẫu rst_n=0 không có handshake; xóa valid/pending/S. Reset bridge và startup barrier giữ in_ready=out_valid=0 tới khi mọi leaf sẵn sàng, không trả lại giao dịch trước reset. Leaf giữ hợp đồng reset theo guideline.
+- Adapter legacy nếu cần chỉ nhận cfg_mode=1 và từ chối 0; tách khỏi top approximate-only, không giữ nhánh exact trong lõi nghiệm thu.
+- cfg_ops và cfg_n là đầu vào, không tự nhận giá trị reset từ DUT. Wrapper cố định/CSR reset và driver/TB MUST đặt OPS1/n12; API/model mới có cùng default. Giữ top cfg_ops2 bit để kiểm reserved2/3, leaf OPS có thể dùng1 bit đã được wrapper kiểm. Không thả nổi cfg hoặc âm thầm thay request invalid bằng default.
 
 <a id="full-term-contract"></a>
 
-### 4.3 Hợp đồng approximate FULL_TERM — chốt29/10/2026
+### 4.3 Nhân approximate FULL_TERM
 
-**Trạng thái30/10: hợp đồng arithmetic dùng lại cho APPROX_ONLY;candidate29/10 đã có kiểm riêng nhưng chưa tinh gọn NF bỏ exact.** Mục này là hợp đồng
-mục tiêu ưu tiên khi khác các mô tả FLOOR/n≤8 của nguồn và checkpoint có ngày trước29/10.
-Quyết định30/10 chỉ chỉnh tài liệu;không sửa mã nguồn,oracle,runner hoặc freeze.
-
-#### 4.3.1. Precision,số vòng và phạm vi approximate
-
-- Chỉ posit32/ES3;parser giữ fraction26 bit. Approx lấy12 bit cao của từng fraction,
-  bỏ14 bit thấp và đặt input_cut nếu có bit1 bị bỏ. Đây vẫn là một nguồn xấp xỉ.
-- OPS0 giữ A làm X;OPS1 min-popcount trên12 bit đã giữ,hòa giữ A. X chỉ có fraction,
-  Y có hidden1 và12 fraction nên là số nguyên13 bit. Dấu tích XOR,base scale b=sfA+sfB.
-- cfg_n nhận0..12 và chỉ đếm số hạng fraction. n0 đóng góp hidden một lần;early-stop khi
-  fx hết bit1. Số bước thực tế t=min(popcount(F_X),cfg_n),không quét thêm các bit0.
-- Không cắt/làm tròn/JAM từng term. Không gọi STICKY_ACC hoặc chỉ giữ thêm hai bit G/R là
-  FULL_TERM. Bỏ thao tác clear hai bit thấp trên bus16 bit vẫn chưa giữ đủ tích.
-- n12 xử lý hết fraction12 bit nên thu tích chính xác của hai significand **đã cắt**,
-  không phải exact của đầu vào Posit có tối đa26 fraction. Nhân exact đầu vào đầy đủ không nằm trong thiết kế mục tiêu.
-
-#### 4.3.2. Recurrence và độ rộng cố định
-
-Gọi F_X,F_Y là số nguyên fraction12 bit,Y=4096+F_Y,S_i là vị trí bit1 được xử lý theo
-thứ tự từ cao xuống thấp. SAC giữ sa=clz(fx)+1,S_i=S_previous+sa và fx_next=fx<<sa
-trên12 bit. Luôn0≤S_i≤12,không lấy cfg_n làm giới hạn lượng dịch S.
+Với A/B hữu hạn khác 0, lấy F_A=frac_A[25:14], F_B=frac_B[25:14]; input_cut=OR các bit [13:0] bị bỏ. OPS chọn X/Y theo §4.2; Y=4096+F_Y, sign=s_A XOR s_B, b=sf_A+sf_B. SAC xử lý các bit 1 của F_X từ cao xuống thấp; S_i là vị trí sau dấu chấm, thuộc 1..12. Số vòng thực tế t=min(popcount(F_X),cfg_n).
 
 ```text
-Q_approx = 24
-APP_ACC_W = 26
-Y_base = zero_extend_26(Y) << 12
+Y_base = Y << 12                    // mở rộng 26 bit, Q24
+M_0 = Y_base                        // đóng góp hidden, không tính vào t
 term_i = Y_base >> S_i
-M_0 = Y_base
-M_i = M_previous + term_i
-P_hat = (-1)^sign * M_t * 2^(b-24)
+M_i = M_(i-1) + term_i
+P_hat = (-1)^sign × M_t × 2^(b-24)
 ```
 
-Y_base có12 bit0 thấp nên khi S_i≤12,không bit có trọng số nào rơi ra ngoài lưới Q24.
-M giữ2 bit nguyên [25:24] và24 bit fraction [23:0],không có padding2 bit kiểu FLOOR.
-Không mask term[1:0],không dịch bỏ2 bit của M trước normalize/pack.
-Phép cộng dùng mở rộng27 bit để kiểm tràn;carry vào bit25 là carry chuẩn hóa hợp lệ,
-carry vượt bit25 là lỗi width/state. Max M khi đủ12 bước là8191²=67.092.481<2²⁶.
+Y_base có 12 bit 0 thấp nên dịch S_i≤12 không mất bit số học. M có 2 bit nguyên/24 fraction; M≤8191²=67,092,481<2²⁶. Cộng mở rộng 27 bit để kiểm tràn; bit25 là carry chuẩn hóa hợp lệ. Không clear bit thấp, FLOOR/JAM/RNE trong vòng; term_tail/numerical_tail luôn 0 trên miền hợp lệ.
 
-Cả NF và F dùng bank/magnitude nhân26 bit,Q24,carry normalize ở bit25.
-Bỏ bank nhân54 bit và selector Q52 khỏi mục tiêu;không dùng bit15 của FLOOR cũ làm carry.
-Adapter tạm có thể zero-extend M26 tới cổng53/54 bit dùng chung nhưng không được gọi đó
-là precision nhân54 bit hoặc lý do giữ đường exact;phải khai báo đây là adapter tương thích.
+n0 vẫn cho M_0; dừng khi hết bit 1 hoặc đạt n. iteration_cut/approx_cut chỉ đúng khi còn bit 1 chưa xử lý. n12 cho tích đầy đủ của hai significand **đã giữ 12 fraction**, không phục hồi 14 bit đầu vào bị cắt.
 
-#### 4.3.3. Normalize và giao diện NF/F
-
-Với hữu hạn khác0,c=M[25],sf_norm=b+c,hidden ở vị trí24+c. Mọi bit dưới hidden phải
-được giữ khi đổi biểu diễn. Đầu ra NF frac_norm53 bit:
+Không FLOOR từng term khác với việc chọn 12 bit fraction đầu vào: việc bỏ `frac[13:0]` vẫn là xấp xỉ được yêu cầu. Không gọi n12 là phép nhân exact của toàn bộ Posit32. Với OPS1 và n12, tích cuối không phụ thuộc vai X/Y; với n nhỏ hơn, đổi vai có thể đổi P_hat. Từng magnitude checkpoint phải không giảm trên đường hữu hạn, nhưng không bắt buộc sai số MAC sau cancellation giảm đơn điệu theo n.
 
 ```text
-c=0: frac_norm = {M[23:0],29'b0}
-c=1: frac_norm = {M[24:0],28'b0}
+carry = M[25]; sf_norm = b+carry
+NF carry=0: frac_norm[52:0] = {M[23:0],29'b0}
+NF carry=1: frac_norm[52:0] = {M[24:0],28'b0}
 ```
 
-NF tiếp tục RNE tích→decode→cộng C_eff→RNE tổng. F nhận p_magnitude26 bit **Q24**,p_scale=b
-signed11 bit,p_sign,p_zero/NaR và loss metadata trước product RNE;không dùng acc[15:2]
-hoặc cổng14 bit của profile cũ. F tiếp tục cộng C_eff rồi RNE cuối,không trở thành quire.
+F nhận magnitude26/Q24, base scale signed11, dấu và cờ trước product RNE. Không dùng acc[15:2]/magnitude14 của FLOOR cũ thay FULL_TERM.
 
-Mục tiêu cửa sổ F vẫn W32/Q29. Product sau normalize có tối đa25 fraction,C có26;
-Q29≥max(26,25)+3. Cách tạo seed31 bit cho cửa sổ Q29 được xác định bằng nối bit:
+### 4.4 NF/F, ngoại lệ và cờ
 
 ```text
-M[25]=0: p_seed = {1'b0,M[24:0],5'b0}; p_sf=b
-M[25]=1: p_seed = {1'b0,M[25:0],4'b0}; p_sf=b+1
+NF: D = R(R(P_hat) + C_eff)
+F : D = R(P_hat + C_eff)
 ```
 
-Đây là mapping mục tiêu,không phải RTL đã sửa. Cận precision cho phép giữ W32 nhưng
-residual/borrow/cancellation/flags vẫn phải đối chiếu oracle full-grid mới trước PASS.
-Nếu cần thêm stage do timing26 bit,phải cập nhật lịch/metadata trước khi công bố số chu kỳ.
+NF có hai lần RNE; F giữ tích approximate tới phép cộng rồi RNE cuối, không phải FMA của A×B đầy đủ. NF/F không bắt buộc cùng kết quả.
 
-#### 4.3.4. Phần dư,cờ và làm tròn
+NaR của A/B/C_eff ưu tiên mọi bypass, kể cả 0×NaR: d=NaR, flags=10000. Nếu không NaR và A hoặc B=0, trả C_eff với cờ 0. Triệt tiêu đúng hai số hạng của từng profile trả Zero; phần dư căn chỉnh phải xét dấu/borrow, không chỉ OR sticky vào phép trừ.
 
-Trên miền term hợp lệ,FULL_TERM có term_tail=term_cut=numerical_tail=0 và không sinh
-sticky do nhân. Phát hiện đuôi khác0 tại đây là lỗi width/shift hoặc dùng nhầm profile,
-không sửa bằng OR sticky. input_cut và iteration_cut vẫn là metadata inexact;
-approx_cut chỉ báo fx còn bit1 khi hết cfg_n. n12 hợp lệ luôn hết fraction đang dùng.
-Packer tự tạo G/R/S từ toàn bộ fraction prepack. Không OR input_cut/iteration_cut vào
-numerical sticky để đổi giá trị P_hat. Các phần dư từ căn chỉnh cộng NF/F là việc riêng
-của adder và vẫn xử lý theo dấu/borrow như hợp đồng. Zero/NaR ưu tiên,cờ saturation,
-acc_mode/acc_clr,commit một lần và reset/stall/order không đổi ngữ nghĩa.
-
-#### 4.3.5. Vector phân biệt và điều kiện chuyển đổi
-
-Các giá trị sau là kiểm tay bằng số nguyên/hữu tỉ cho **hợp đồng mới**,chưa phải testbench đã chạy:
-
-| Vector | Điều kiện | Kết quả phải có |
-| --- | --- | --- |
-| FT-01 | F_X=0,Y=4096,n bất kỳ | t0,M=16.777.216,Q24,không iteration_cut |
-| FT-02 | F_X=1,Y=8191,n0 | M=33.550.336,t0,iteration_cut1 |
-| FT-03 | F_X=1,Y=8191,n1 | S1=12,term=8191,M=33.558.527,carry25=1;giữ đủ các bit thấp |
-| FT-04 | F_X=F_Y=4095,n12 | t12,M=67.092.481,không iteration_cut hoặc term_cut |
-| FT-05 | A=0x1c900000,B=0x3c820000,OPS0/1,n≥2,C=0 | M=24.224.768,b=-11,Q24;t2;P_hat=1,44390869140625×2^-11;NF/F RNE dự kiến0x1ae34800 |
-
-FT-05 dùng cùng toán hạng ví dụ Fig.4 để phân biệt profile. Fixture nghiên cứu paper/FLOOR
-force-X0x1ae34000 giữ nguyên lịch sử;không sửa nó thành0x1ae34800 rồi gọi khớp tác giả.
-Hai kết quả thuộc hai hợp đồng khác nhau. Kiểm thêm n9/10/11/12,mask thưa/dày,carry,
-input_cut,Zero/NaR,near-cancellation,accumulation,stall/reset và từ chối n13..15 ở approx.
-
-Model/oracle mới phải so M/Q/scale từng vòng và d/5flags theo giao dịch;không sửa expected
-của FLOOR để ép PASS. Các ngưỡng AC01/AC04 giữ nguyên;AC02 exact không còn áp dụng,từng điểm n0..12 của ma trận
-mục tiêu cần bằng chứng mới. L1 helper floor_rne_profile và freeze hiện tại chỉ tái chạy
-profile lịch sử,không phải golden FULL_TERM. Trước tiên phải có golden FULL_TERM độc lập,
-rồi mới sinh vector cho RTL người dùng sửa;chưa có runner mới trong phiên này.
-
-### 4.4 APPROX_ONLY và danh mục exact ngừng sử dụng — 30/10/2026
-
-Đây là quyết định phạm vi,không phải biên bản đã xóa/chuyển code.
-Không sửa RTL,L1,testbench,runner,filelist hoặc freeze trong phiên này.
-File chỉ được gỡ sau khi đã thay mọi caller,cập nhật source list và kiểm candidate mới;
-không xóa theo tên exact đơn thuần hoặc làm mất checkpoint đã chạy.
-
-#### 4.4.1 Phần chuyên cho đường exact,không cần trong target mới
-
-| File | Phần ngừng dùng | Caller hiện tại / điều kiện gỡ |
-| --- | --- | --- |
-| `rtl/multiplier/sac_step_comb.sv` | SAC fraction26 bit cho nhân exact | `iter_ctrl.u_exact`;chỉ gỡ sau khi controller NF chuyển hoàn toàn sang SAC12 |
-| `rtl/common/lod_lzd_core_fixed3.sv` | LOD26 dùng trong SAC exact | `sac_step_comb.u_lod`;không nhầm với LOD31 của parser/adder |
-| `rtl/common/dyn_left_shifter_fixed3.sv` | Shifter26 dùng trong SAC exact | `sac_step_comb.u_shift`;giữ các shifter12/29/31 dùng chung khác |
-| `l1/test/test_mul_exact.cpp` | Test nghiệm thu multiplier exact cũ | Rút khỏi gate mandatory mới;giữ hồi quy lịch sử và chứng cứ L0/L1 |
-| `l1/include/l1_multiplier_exact.hpp` | Implementation nhân exact đầy đủ | Không là đường tính expected cho approximate target.Nhưng `posit_mac.hpp` còn include trực tiếp;chưa được xóa header trước khi tách include |
-
-#### 4.4.2 File dùng chung hoặc chứa cả hai chế độ:phải tinh gọn,không xóa nguyên file
-
-| Nhóm file | Công việc sau khi chốt spec |
+| Cờ | Ngữ nghĩa trong một giao dịch |
 | --- | --- |
-| `rtl/multiplier/iter_ctrl.sv`, `mul_iter_core.sv` | Bỏ selector exact/approx,fx26,limit26;dùng controller12 và core26/Q24 chung cho cảNF/F |
-| `rtl/multiplier/sbm_shift_comb.sv`, `sbm_accum.sv`, `sbm_accum_comb.sv` | Thay đường dual54bit/FLOOR bằng FULL_TERM26bit;không chỉ giữ nguyênfile rồiđổi tên mode |
-| `rtl/multiplier/ops_sel_comb.sv` | Bỏ nhánh full-fraction26;vẫn cần OPS12,sign,scale,input_cut và tieA |
-| `rtl/multiplier/mul_prepack_norm_comb.sv` | Bỏ normalize Q52/carry53;giữ ánh xạ M26→fraction53 cho NF RNE |
-| `rtl/mac_nf/mac_nf_wrapper.sv`, `posit_mac_nf.sv` | Không nhận exact;đổi wiring/control và width theo core approximate-only.Cổng cũ nếu giữ chỉ làadapter |
-| `l1/include/l1_multiplier_iter.hpp`, `posit_mac.hpp`, `l1/src/l1_api.cpp` | Model/API legacy còn exact vàFLOOR;không dùng trực tiếp cho golden mới FULL_TERM;giữ replay hoặc tách interface |
-| `l1/include/posit_mac_full_term.hpp` | Giữ thuật toán FULL_TERM;loại/bất hoạt Config.approximate=false/width26 khỏi API target,hợp đồng chỉwidth12 |
-| `experiments/opt17_20261029/rtl/opt17_core_nf.sv`, `opt17_shift_nf.sv`, `opt17_accum_nf.sv`, `opt17_accum_comb_nf.sv`, `opt17_norm_nf.sv` | Candidate NF cũ vẫn dual54/Q52;chuyển sang core approximate26 như nhánhF và adapter NF phù hợp,không gán kết quả20M cũ cho source mới |
-| Wrapper/frontend/ref NF trong studyOPT17 | Bỏ exact_enabled1 và mode selector;giữ hai credit,role/id,C-bank,commit/stall/reset và prefetch đã chốt |
-| `tb/fixed32_3_nf_harness.cpp`, `tb/week11_model.hpp`, `tb/opt17/harness.cpp`, các runner fixed32/3/OPT17 | Loại exact stimulus/bin/check-mode khỏi regression target;không bỏ scoreboard,independent oracle hoặc special/flags.Các runner/harness cũ giữ đúng snapshot |
+| nar | NaR ở toán hạng thực sự tham gia, xóa 4 cờ còn lại |
+| sat_max, sat_min | Kẹp hữu hạn tại biên; NF OR qua product pack và final pack |
+| inexact | input_cut hoặc iteration_cut hoặc mất thông tin ở cộng/pack; NF OR qua hai lần làm tròn |
+| approx_cut | Còn bit 1 của fraction12 khi đạt n; n12 hợp lệ luôn bằng 0 |
 
-#### 4.4.3 Các file cần giữ hoặc có thể tái sử dụng
+Loss do xấp xỉ là metadata, không OR input_cut/iteration_cut vào numerical sticky để đổi P_hat. Cờ không tự OR dồn qua cả chuỗi; state hồi tiếp là mã S. Luôn so cả d và đủ 5 cờ.
 
-- `experiments/opt17_20261029/rtl/opt17_core_f.sv`, `opt17_shift_f.sv`,
-  `opt17_accum_f.sv`, `opt17_accum_comb_f.sv`:điểm xuất phát approximate26/Q24 để dùng chungNF/F;
-  vẫn phải rà adapter/mode/reset và kiểm trên source mới,không tự promote.
-- SAC12,LOD12,shifter12,parser26 fraction,packer RNE,adder và signed-residual/borrow F vẫn cần.
-  Fraction parser26,adder hoặc packer53 không đồng nghĩa đang giữ chế độ nhân exact.
-- `tb/week12_fused_reference.hpp`, `tb/week10_add_reference.hpp`,
-  `tb/opt17/full_term_reference.hpp`:oracle số nguyên/full-grid để kiểm P_hat/NF/F và flags,phải giữ.
-- `tb/week9_exact_reference.hpp`:oracle nhân Posit đầy đủ đã được `week11_model.hpp` include;
-  không là DUT mode mới,có thể giữ choIdeal/kiểm bổ trợ/lịch sử;chỉ gỡ khi đã tách dependency.
-- `l1/include/prepack_product.hpp`, `posit_fused_window.hpp`:struct/giao diện dyadic và window add
-  còn đượcmodel FULL_TERM dùng;không xóa chỉ vìcomment hoặc API cũ nhắc FLOOR/exact.
-- L0 SoftPosit và các ZIP/freeze/report lịch sử giữ lại;không là oracle trực tiếp32/3 vàkhông tạo nghĩa vụ
-  dựng exact hardware.
+<a id="prepack-interface"></a>
 
-**Nghĩa của không FLOOR:** không cắt số hạng trong vòng nhân.Khối căn chỉnh cộng hữu hạn
-vẫn có thể dịch bỏ bit và phải giữ signed residual/borrow để quyết định RNE;không được
-xóa residual chỉ vì quyết định bỏ FLOOR ở SBM.NF/F vẫn làm tròn state mỗi giao dịch,
-không trở thành quire và không giới hạn chuỗi ở12 MAC.
+### 4.5 Giao diện tích dùng chung và khả năng nối quire
 
-## 5. Vi kiến trúc
+`mul_iter_core` mục tiêu xuất một token nội bộ cùng context, giữ đến khi downstream nhận. Giao diện logic có thể dùng tên khác nếu mapping được ghi trong manifest:
 
-Các lịch pipeline đã đo bên dưới thuộc release FLOOR đã khóa. FULL_TERM giữ số bank
-làm mục tiêu ban đầu nhưng widening26 bit/adapter mới có thể yêu cầu đổi stage để đạt timing;
-mọi công thức q chỉ tái dùng khi bank/bubble thực tế giữ nguyên.Chưa có số đo FULL_TERM.
-
-### 5.1 Tổng quan luồng dữ liệu (dạng bảng)
-
-| Tầng | Khối | Vai trò | Chu kỳ mục tiêu |
-| --- | --- | --- | --- |
-| P | `posit_parser` × 3 (A, B, C) | Bù hai theo dấu, LOD/LZD, dịch, tách `(s, sf, frac)` (`PIPE_PARSE = 2`) | 2 |
-| M0 | `ops_sel_comb` + context trong core/wrapper | Chọn X (điều khiển vòng lặp) và Y (bị dịch); cộng `sf`, xor dấu | 1 |
-| M1..Mq+2 | `iter_ctrl`/`sac_step_comb` → `sbm_shift_comb` → `sbm_accum` | Ba tầng SAC → Shifter → Accumulator, token khởi tạo khi n=0; q=max(1,n) | q+2 |
-| MN/P1 | `mul_prepack_norm_comb` + product `posit_pack_prepare` | Chuẩn hóa bảo toàn prepack, mã hóa và G/R/S; chốt P1 | 1 |
-| MP2 | `posit_product_pack` / `posit_pack_finish(sign=0)` | RNE/clamp; chốt mã magnitude NB bit,sign1,flags5 và valid; không lưu thêm signed code | 1 |
-| MR | `posit_magnitude_parse` | Decode magnitude đã RNE,canonical Zero/NaR/sign; chốt product unpacked/flags,giữ parse(pack(u)) | 1 |
-| A1 | `posit_add` (Stage 1) | So sf,hoán đổi,dịch/jam; nếu Δsf>FRAC_MAX+2 ghi đè y=1/tail=1. OPT-02c không đặt clamp trên đường shift-control | 1 |
-| A2 | `posit_add` (Stage 2) | Cộng/trừ số học mantissa ($m_1 \pm m_2$), xử lý dấu và bit nhớ | 1 |
-| A3 | `posit_add` (Stage 3) | LZC (Leading Zero Counter), Normalization Shifter và cập nhật scale factor | 1 |
-| K | `posit_pack` | Chèn regime, dịch, làm tròn RNE, bù hai (`PIPE_PACK = 1 hoặc 2 tùy ROUND_MODE`) | 1 hoặc 2 |
-
-Quy ước duy nhất: E0 là cạnh handshake đầu vào. `L_valid` là số khoảng clock từ E0 đến cạnh sau đó dữ liệu và out_valid xuất hiện; `L_handshake` là số khoảng clock đến handshake đầu ra đầu tiên, khi out_ready luôn bằng 1. Với chuỗi H hạng thanh ghi cập nhật bằng non-blocking, không có bubble điều khiển: `L_valid=H-1`, `L_handshake=H`. Tầng sau nhận dữ liệu ở cạnh kế tiếp, không nhận giá trị vừa chốt ở cùng cạnh. Stall và startup reset được báo cáo riêng. INIT/ITER/DONE chỉ thêm latency nếu thực sự tạo bubble.
-
-Bảng dưới là **ngân sách H theo lịch mục tiêu**, không phải số đo RTL hoặc trực tiếp là L_valid. Với baseline v0/v1, gọi n là số hạng fraction thực tế và `q=max(1,n)`; token khởi tạo cho n=0 vẫn đi qua ba tầng core (§5.5). Với n>=1, các công thức q+... giữ nguyên ngân sách n+... trước đây.
-
-| Đường dữ liệu | Ngữ nghĩa | H, TRUNC (PIPE_PACK=1) | H, RNE (PIPE_PACK=2) |
-| --- | --- | --- | --- |
-| Multiplier | parse → OPS → core → norm/pack | q+6 | q+7 |
-| MAC v0 | mul → pack → parse → add → pack | q+12 | q+14 |
-| MAC v1 | core → norm/product P1 → P2 → parse → add → pack | Chưa hỗ trợ ở top hiện hành | q+13 |
-| MAC v2 (profile chính32/3 đã kiểm) | core prepack → F1..F5 → pack | Chưa hỗ trợ trong profile chính | q+12, kiểm tại §11.15 |
-
-Multiplier giữ lịch riêng. NF hiện hành OPT-03 dùng RNE tại cả tích và tổng: H=q+13, L_valid=q+12, L_handshake=q+13, II_min=q+14. Ví dụ t=2: first-valid sau E14, handshake E15, nhận mới sớm nhất E16. q=max(1,t), t là số vòng thực tế kể cả early-stop; special/init-only dùng q=1. Lịch cũ W11 q+10/q+11/q+12 giữ trong bằng chứng lịch sử §11.10, không áp dụng top mới. Các dòng v0/TRUNC là ngân sách chưa có top tương ứng. F giữ H=q+12 và valid=q+11 (§11.15).
-
-**Ngữ nghĩa:** v0/v1 đều làm tròn tích trước khi cộng; v1 bảo đảm round_unpacked tương đương (§5.9-C); OPT-03 hiện thực pack pipeline rồi parse tổ hợp. V2 làm tròn một lần nhưng cửa sổ approx vẫn có sai số cắt/căn chỉnh (§5.12). Cả NF/F so model và oracle đúng P_hat32/3;không so trực tiếp SoftPosit ES2. Độ trễ bypass được quy định ở §5.3.
-
-### 5.2 Parser (`posit_parser`)
-
-Ngõ vào `p[NB-1:0]`; ngõ ra `s`, `is_zero`, `is_nar`, `sf[SF_W-1:0]`, `frac[FRAC_MAX-1:0]` (căn MSB, không chứa hidden bit).
-
-**Hợp đồng parser tổ hợp chốt ngày 05/10/2026:** `rtl/parser/posit_parser_comb.sv` không có clock/reset/handshake; đầu ra có hiệu lực sau khi logic tổ hợp ổn định với đầu vào nhị phân đã biết. `s=p[NB-1]`; `sf` là vector **signed**, rộng theo §2.3; `FRAC_MAX=NB-3-ES` và fraction thiếu bit đệm 0 phía LSB. Zero trả `(s,is_zero,is_nar,sf,frac)=(0,1,0,0,0)`; NaR trả `(1,0,1,0,0)`. Đầu ra giữ toàn bộ fraction, chưa cắt về `FRAC_W`; hidden bit được khôi phục ở khối số học khi toán hạng hữu hạn khác 0. Đối chiếu L1 bằng `frac_RTL=(frac_L1 >> (63-FRAC_MAX)) & ((1ULL<<FRAC_MAX)-1)`.
-
-Phạm vi module hiện tại: `4<=NB<=32`, `0<=ES<=NB-4` để có ít nhất một bit fraction, phù hợp ràng buộc `FRAC_W>=1` của IP. Không hỗ trợ ghi đè `FRAC_MAX` khác công thức; `SF_W` phải đủ chứa `Rgm` ghép exponent. Biểu thức tính độ rộng dùng hằng 64-bit để tránh tràn tại elaboration. Phạm vi nghiệm thu hiện tại là `(NB,ES)=(8,0),(16,1),(32,2),(32,3)`; các cấu hình khác cần kiểm thêm trước khi dùng. `PIPE_PARSE=2` là số hạng của parser pipeline hiện tại, không phải latency của module tổ hợp.
-
-**Hợp đồng pipeline `rtl/parser/posit_parser.sv`:** hai tầng elastic, hai slot lưu giao dịch. P1 chốt dấu, cờ, `cnt`, bit regime đầu `r` và payload seed sau chọn regime; P2 tạo `Rgm=k` từ `cnt/r` song song với dịch payload, tách exponent/fraction, ghép scale factor rồi chốt đầu ra. Không cần chốt thêm vector `k` trong P1, theo Fig.5(a). Với NB32, phần trạng thái regime giảm từ `cnt5+k6=11` bit xuống `cnt5+r1=6` bit trong RTL. Chỉ nhận dữ liệu khi `in_valid && in_ready`; nguồn giữ `p` và `in_valid` trong lúc bị chặn. Khi `out_valid && !out_ready`, toàn bộ dấu/cờ/sf/fraction và `out_valid` giữ nguyên. Hai tầng có enable độc lập; có thể nhận và trả một giao dịch đồng thời, luôn theo thứ tự. Dữ liệu khi `out_valid=0` không mang ý nghĩa giao dịch, nhưng vẫn là giá trị xác định sau reset.
-
-Parser dùng cổng reset cục bộ `reset_n` theo Digital Design Guidelines: assert bất đồng bộ, deassert qua hai flip-flop trên `clk`; `in_ready=out_valid=0` trong reset/startup. Reset xóa toàn bộ dữ liệu/cờ và hủy các giao dịch còn trong hai slot. Khi tích hợp, dùng reset bridge và startup barrier §4.2; không thay reset leaf đã kiểm chứng. Chờ hai cạnh từ lúc reset_n cục bộ nhả để synchronizer nhả reset không tính vào latency dữ liệu. Mọi bank dữ liệu đều dùng cùng reset đã đồng bộ, không chia cờ và datapath sang các miền reset khác nhau.
-
-**Quy ước đếm chu kỳ:** gọi cạnh nhận đầu vào là E0. P1 chốt tại E0, P2 chốt và `out_valid` lên sau E1; handshake đầu ra sớm nhất tại E2. Vì vậy có hai hạng thanh ghi, khoảng cách input/output handshake không stall là hai chu kỳ, còn từ cạnh nhận đầu vào đến cạnh bắt đầu valid là một chu kỳ. `II=1` khi không stall. Quy ước này làm rõ mục tiêu hai tầng ở §5.1; không cộng một tầng chỉ để làm số chu kỳ từ E0 đến valid bằng 2. Khi ghép MAC phải dùng lịch cạnh thực tế thay vì cộng latency theo hai quy ước khác nhau.
-
-**Hiện thực parser tiết kiệm diện tích — 16/10/2026:** cả tổ hợp và pipeline chia sẻ một detector LOD sau XOR theo `r`, thay cho hai cây LOD/LZD và MUX chọn count. Đây là chia sẻ tổ hợp, không dùng luân phiên theo clock và không thêm tầng. Chỉ XOR tail sau FRB; payload seed luôn lấy từ magnitude gốc. Giữ `cnt=NB-2` khi không có terminator, canonical Zero/NaR, scale signed, enable/reset và lịch cạnh ở trên. Sinh viên chấp nhận đánh đổi timing P1 để ưu tiên diện tích; mức giảm LUT và thay đổi STA phải đo theo [Optimization §8.19](../doc/Optimization.md#legacy-8-19), không mặc định giảm một nửa parser. Kiểm 0/1 và smoke mới có bằng chứng riêng; các checkpoint NF/F trước đó vẫn gắn với hash nguồn cũ. Phiên bản hợp đồng số học vẫn v1.18 vì không đổi giao diện hoặc ngữ nghĩa.
-
-Thuật toán Parser (theo Fig. 5a của [P], tối ưu bỏ bước cộng +1 trong lượng dịch):
-
-1. `s = p[NB-1]`; `t1 = s ? (~p + 1) : p` (XOR + bộ cộng bù hai, như [P] Fig. 5a).
-   - **Nhận diện 2 giá trị đặc biệt**:
-     - Số 0: `is_zero = (p == {NB{1'b0}})`
-     - NaR (Not-a-Real): `is_nar = (p[NB-1] == 1'b1) && (p[NB-2:0] == {(NB-1){1'b0}})`
-2. `r = t1[NB-2]`                               // bit regime đầu
-3. `terminator_bits = t1[NB-3:0] ^ {(NB-2){r}}`; dùng duy nhất một `lod_lzd_core`, `MODE=0`, `N=NB-2`.
-   `cnt = terminator_valid ? terminator_count : NB-2`      // đếm sau FRB; r=0 tìm 1, r=1 tìm 0 qua XOR
-                                                      // cnt ∈ [0, NB-2], rộng $clog2(NB-1) bit
-                                                      // nếu cả chuỗi giống nhau (không có bit kết thúc): cnt = NB-2
-                                                      // vld=0 của detector: thay K=0 bằng cnt=NB-2
-4. `Rgm = ~({1'b0, cnt} ^ {($clog2(NB-1)+1){r}})`    // XNOR, Rgm rộng $clog2(NB-1)+1 bit, bù hai
-                                                      // r=1: k = cnt;  r=0: k = ~cnt = -(cnt+1) = -m
-5. `t2 = t1[NB-4:0] << cnt`                           // vector NB-3 bit như t1[28:0] trong Fig. 5(a)
-                                                      // bỏ FRB và một bit kế; dịch cnt đưa hết regime/terminator ra ngoài
-6. `e = t2[NB-4 -: ES]`; `frac = t2[NB-4-ES -: FRAC_MAX]`
-                                                      // ES=0: không tạo part-select độ rộng 0; frac=t2
-7. `sf = k * (1 << ES) + e`                           // RTL có thể ghép {Rgm,e} rồi sign-extend
-
-Zero/NaR được xử lý riêng trước các bước 2–7. Exponent/fraction thiếu bit được đệm 0 ở phía thấp; regime toàn 1 không có terminator vẫn phải giải mã maxpos đúng. Tầng pipeline sau mux regime theo Fig. 5(a), PIPE_PARSE=2. Có thể dùng cách dễ kiểm chứng hơn: bỏ FRB, dịch cnt, rồi bỏ terminator bằng một phép dịch cố định thêm 1; hai cách phải cho cùng payload. Trong C++ không dịch trái một số k âm; dùng phép nhân số nguyên có dấu ở bước 7.
-
-Ở chế độ approx, `frac` được rút về `FRAC_W` bit MSB (cắt bỏ phần thấp), hoặc chèn thêm 0 nếu ngắn hơn, theo [P] Fig. 2 và §III-B.
-
-### 5.3 Giá trị đặc biệt và bypass
-
-C_eff=c khi acc_mode0,accumulator khi acc_mode1,0 khi acc_clr của giao dịch được nhận (§4.2). NaR ưu tiên Zero; xét C_eff, không xét c bên ngoài bị bỏ qua trong acc_mode.
-
-| Điều kiện | Kết quả bắt buộc | Hiện thực NF tuần11 |
+| Trường | Width / giá trị | Hợp đồng |
 | --- | --- | --- |
-| A/B/C_eff là NaR | d=NaR,flags10000 | Mask x/y core, phát token init_only; vẫn đi qua các bank, không có bypass rút ngắn |
-| A=0 hoặc B=0, không NaR | d=C_eff,flags0 | ProductZero qua adder/packer, bảo toàn C_eff |
-| C_eff=0, tích hữu hạn khác0 | d=R(P_hat),giữ flags của tích | Adder vẫn nhận operandZero; không bỏ ba tầng adder trong top hiện tại |
-| Hai operand cộng triệt tiêu | d=0; không tạo sat_min vì triệt tiêu | NF xét R(P_hat)+C_eff. Approx không chứng minh A×B+C_eff thật bằng0 |
+| pre_valid/pre_ready | 1/1 | Truyền đúng một lần; payload ổn định khi stalled |
+| magnitude | unsigned26 | M_t của §4.3, chưa pack/RNE/kẹp theo dải Posit |
+| base_scale | signed11 | b=sf_A+sf_B, [-480,480]; chưa cộng carry chuẩn hóa |
+| sign, is_zero, is_nar | 1 mỗi trường | NaR ưu tiên; Zero/NaR canonical magnitude0,base_scale0 |
+| input_cut, iteration_cut | 1 mỗi trường | Loss metadata, không cộng vào magnitude/sticky số học |
+| iterations | unsigned4 | t thực tế0..12; hidden không tính một vòng fraction |
+| Q | Hằng24 | Không cần port/FF riêng; giá trị hữu hạn=(-1)^sign×magnitude×2^(base_scale-24) |
 
-Giá trị ngoại lệ đúng là MUST; ngừng hoạt động datapath hoặc bypass rút ngắn là tối ưu SHOULD sau baseline, không phải điều kiện value của FR02. Khi bypass được triển khai phải chốt lịch/token,giữ thứ tự và regression. Ngân sách khảo sát riêng: dùng trực tiếp bank parser có H2/validE1/handshakeE2; bypass C_eff0 bỏ adder có thể giảm3 hạng. Chưa dùng ngân sách đó làm latency đo của NF hiện tại.
+Đây là token trước cộng C; NaR/Zero của C_eff do MAC wrapper xử lý. Metadata bypass không được làm mất nguồn gốc hoặc sai thứ tự giao dịch. Nếu fanout nhiều consumer phải có phân phối/slot rõ ràng; không nối ready tùy tiện để một consumer làm mất token của consumer khác. Không bắt buộc thêm cổng prepack lên public top NF/F; quire là top riêng sử dụng lại core.
 
-Khi chồng lấn, bypass phải tuân thứ tự FIFO/tag; CE chỉ ngừng bank không còn token. Packer cuối vẫn phải giữ d/flags khi out_ready0.
-
-### 5.4 OPS và precision đầu vào
-
-Parser giữ26 fraction;trước OPS lấy12 bit cao,bỏ14 bit thấp và tạo input_cut.
-OPS chỉ đếm12 bit đã giữ,cfg_ops0 chọnA làmX,cfg_ops1 chọn popcount nhỏ hơn,hòaA.
-X12 không hidden,Y13 gồm hidden1 và12 fraction;sign=sA xor sB,b=sfA+sfB signed11.
-Hai MUX chọn các bus X/Y đã chuẩn bị;không chạy lại OPS ở từng vòng SAC.
-Không có nhánh min-popcount26 hoặc mode selector exact.
-So paper,chỉ kế thừa phân rã OPS/SAC/SBM;predictor prefix của tác giả chưa được xác minh
-thành cùng baseline,min-popcount vẫn là hợp đồng của đồ án.
-
-### 5.5 SAC và điều khiển vòng lặp
-
-Trạng thái fx12,S4,i4. Hidden khởi tạo riêng;cfg_n là số hạng fraction tối đa.
+Adapter F chuẩn hóa không suy hao vào `posit_add`:
 
 ```text
-sa = clz12(fx) + 1
-S_next = S + sa
-fx_next = (fx << sa) giữ12 bit thấp
-i_next = i + 1
+carry = magnitude[25]
+product_sf = base_scale + carry
+carry=0: product_frac[25:0] = {magnitude[23:0],2'b0}
+carry=1: product_frac[25:0] = {magnitude[24:0],1'b0}
 ```
 
-Chỉ phát term khi fx khác0 và i<cfg_n.Dừng khi hết fx hoặc đạt giới hạn;
-actual_iterations=min(popcount(X),cfg_n).cfg_n0 hoặc X0 phát token init_only,
-không cộng hidden hai lần.N_MAX12 không phải lượng dịch cho mỗi vòng:
-S là vị trí bit1 tích lũy và có thể bằng12 dù cfg_n=1.
-first/last/init_only cùng đi qua các bank SAC→shift→acc,done chỉ sau last commit;
-không thêm stage trong feedback khi áp OPT-17.Khi OPS kế tiếp stall,lõi hiện tại vẫn chạy.
+Sau chuẩn hóa chỉ cần tối đa25 fraction, vừa bus26. Phải giữ bit thấp nhất trong cả hai nhánh; không lấy 12 fraction để pack lại và không RNE ở adapter F. Kiểm giá trị trước/sau bằng số nguyên chính xác. Quire tiêu thụ magnitude26/base_scale gốc; không tiêu thụ mã Posit đã RNE hoặc sticky-only thay số hạng.
 
-### 5.6 SBM và accumulator nhân
+## 5. Tổ chức RTL
 
-Cả NF/F dùng chung hợp đồng §4.3.2:
+### 5.1 Parser và tín hiệu đặc biệt
+
+Parser nhận Posit32, xuất sign/Zero/NaR, sf signed11 và frac26/Q26 không hidden. P1 nhận biết Zero/NaR, tạo magnitude không dấu, phát hiện run regime và lưu bundle. P2 bỏ regime/terminator, lấy exponent tối đa3 bit, đệm exponent thiếu ở phía thấp và fraction ở phía thấp, tính sf=8k+e. Regime dài/no terminator phải có kết quả xác định; không dùng vị trí detector invalid làm shift tùy ý. Zero/NaR có sf/frac0; NaR sign1, Zero sign0.
+
+Hai tầng có valid/ready và giữ toàn bộ bundle khi stall. Các topology LOD/prefix/negation khác nhau được phép nếu equivalent; parser riêng cho F là lựa chọn timing, không được đổi giá trị giải mã. Parser C giữ đủ26 fraction, không cắt thành12 như đường nhân.
+
+### 5.2 OPS và khởi tạo context
+
+Sau Parser, chọn 12 fraction cao; phần thiếu thực tế đã được Parser đệm0. `input_cut=|(frac_A[13:0] | frac_B[13:0])` được tính tại biên cắt, không bắt buộc trong leaf OPS. OPS nhận hai frac12, trả X12 không hidden, Y13 có hidden, dấu XOR và tổng scale. OPS1 so popcount của12 bit, hòa giữ A; OPS0 không swap. Chuẩn bị hai ứng viên X/Y và hidden song song rồi chọn bằng MUX. Không dùng predictor E/M/prefix của nhánh paper thay min-popcount mà không có revision hợp đồng.
+
+Context lưu Y, sign, b, input_cut, cfg_n và vai OPS tại launch; không đổi trong vòng nhân. Có thể tính trước b+1 để giảm carry-chain ở adapter, nhưng token vẫn mang b đúng định nghĩa §4.5. Không nhân đôi register chỉ để debug; checker dùng tap/bind hoặc trace phù hợp tool.
+
+### 5.3 SAC và phát số hạng
+
+SAC nhận fraction còn lại fx12 và tổng dịch S4. Với fx khác0, detector trả số0 đầu c, tạo sa=c+1, S_next=S+sa và fx_next=(fx<<sa) trên12 bit. Shift cập nhật có thể tách nối dây <<1 và barrel shift <<c. Cây kiểm zero/single-one hoặc `(fx & (fx-1))==0` được phép; fx0 phải được phân biệt với một term thật.
+
+Điều khiển xử lý hidden riêng, phát tối đa cfg_n số hạng fraction; dừng khi fx cạn hoặc đạt giới hạn. Nếu n0/fx0, phát một token init_only mang hidden, không giả lập một vòng fraction. Mỗi token giữ first/last/init_only, S_i, iterations và loss của đúng giao dịch. Không phát S>12; state_error là lỗi invariant/checker, không tạo sản phẩm gần đúng tùy ý. approx_cut phản ánh fx còn lại tại điểm dừng, không đồng nghĩa đã có input_cut.
+
+### 5.4 SBM và accumulator FULL_TERM
+
+SBM tạo Y_base={1'b0,Y13,12'b0} rộng26; dịch phải logical theo S_i4, không xóa bit thấp. init_only làm term=0, hidden vẫn đi vào accumulator. Mỗi S hợp lệ1..12 phải có `(Y_base & ((1<<S)-1))==0`; vì vậy term_tail=0. Không dùng term16 hay `{shifted[15:2],2'b00}` của FLOOR cũ.
+
+Accumulator26 lưu M. Token first ghi Y_base+term; token tiếp theo ghi M+term; init_only chỉ ghi Y_base. Adder tạm27 bit kiểm bit26 tràn; bit25 là carry normalization hợp lệ. Có thể hợp nhất controller/register vào parent sequential, giữ các leaf SAC/shift/accum tổ hợp. Parent phải truyền t1/t2 metadata cùng term, không bỏ/nhân đôi first/last. core_done chỉ khi token last được cộng và commit; không sớm hơn kết quả cuối.
+
+Khi core không có stall giữa các term, wrapper MUST dự trữ slot downstream trước launch và giữ result/context tới release. Nếu thêm elastic stall nội bộ phải kiểm lại first/last/counters, không dùng enable làm term được cộng hai lần.
+
+### 5.5 Hai nhánh NF/F và bộ cộng dùng chung
+
+| Nhánh | Đường dữ liệu mục tiêu |
+| --- | --- |
+| NF | Prepack26/Q24 → normalize53 → product Packer RNE2 tầng → magnitude decode → `posit_add`5 tầng với C_eff → Packer RNE2 tầng |
+| F | Prepack26/Q24 → adapter lossless frac26/sf theo §4.5 → cùng `posit_add`5 tầng với C_eff → Packer RNE2 tầng |
+| Quire mở rộng | Prepack26/Q24 → đổi lưới số nguyên không mất bit → cộng vào state rộng → chỉ normalize/Packer khi READ (§9) |
+
+NF không được bỏ product RNE dù tích nội bộ có thể vừa một số mã Posit. F không có product RNE, saturation/clamp trước cộng; ví dụ tích vượt maxpos vẫn phải được cộng với C_eff trước khi quyết định kẹp cuối. Dấu/Zero/NaR và flags đi cùng magnitude. Dùng chung module không có nghĩa NF/F cùng netlist instance hoặc cùng kết quả.
+
+| Tầng `posit_add` | Phần cứng/chức năng bắt buộc |
+| --- | --- |
+| A1 Prepare | Hiệu scale mở rộng signed12, so sf rồi fraction khi hòa, MUX magnitude lớn/nhỏ, chọn dấu/scale cơ sở và subtract; NaR có ưu tiên |
+| A2 Align | Dịch phải31 bit và jam/tail. Δsf≤28 xử lý đúng phần giữ/phần bị loại; Δsf≥29 trả small=1 dạng jam với tail1 cho hai số khác0, không để lượng dịch wrap modulo32 |
+| A3 Arithmetic | X±Y unsigned31, giữ carry; tính trước sf_inc=sf_base+1 nếu dùng đường timing hiện tại |
+| A4 LOD | Detector trên magnitude31, chuẩn bị norm_seed/count và lost_carry; giữ đúng thông tin triệt tiêu |
+| A5 Normalize | Shift chuẩn hóa, sf=sf_inc-count, ghi dấu/Zero/NaR; xuất frac53 bằng dữ liệu thật và nối0, sticky không bị mất |
+
+Kết quả MUST bằng R(P+C_eff) theo full-grid, kể cả dấu đối nhau, cancellation và tail. Chuỗi A1–A5 là kiến trúc mục tiêu theo nguồn hiện tại; không bắt buộc F4 Abs/Borrow riêng đã archive. Nếu chọn datapath signed/residual khác, phải đặc tả chiều phần dư/borrow và chứng minh bằng cùng golden. Không coi cờ input_cut/iteration_cut là phần dư số học để sửa giá trị P.
+
+### 5.6 Packer và cờ
+
+P1 prepare tái tạo regime từ signed sf, ghép exponent/fraction, dịch mã hóa và tạo G/R/S theo đúng vị trí cắt; tính trường hợp Zero/NaR/min/max. P2 finish quyết định RNE bằng G&&(LSB||R||S), xử lý carry/kẹp và bù hai nếu âm. Cho phép gộp rounding/two's-complement trong carry-chain; giá trị và flags phải bằng golden.
+
+Flags mất thông tin được OR qua các bước của một giao dịch theo §4.4, nhưng không OR vào dữ liệu số. Product Packer của NF còn phải trả sign riêng nếu chỉ lưu magnitude; decode sau product RNE phải tương đương parse(pack(P)). Không giữ đồng thời nhiều bản mã tương đương nếu không phục vụ hợp đồng thực tế.
+
+### 5.7 Top, pipeline và guideline
+
+Top PNR chỉ nối named instances; wrapper/parent xử lý context, config, S và sức chứa. Mỗi file một module, cổng literal, localparam hằng rõ width/Q; công thức đặt trong chú thích. Tổ hợp có gán mặc định không latch, blocking; sequential non-blocking với CK2Q chung. Không delay trong logic tổ hợp, không clock gating tự phát, không reset data bằng clock domain khác. Leaf reset assert bất đồng bộ/deassert đồng bộ theo guideline; top synchronous rst_n nối qua reset bridge và barrier, không nối trực tiếp vào mọi async pin.
+
+Mọi tầng mang dữ liệu và metadata đồng bộ, valid/ready giữ khi stall. Baseline một outstanding; nếu mở rộng credit/prefetch, phải giữ thứ tự, flush và dependency của S. Không cần giữ các mode exact, port mode chết hoặc tham số format tùy ý để tái sử dụng.
+
+Khi khóa RTL, ghi first-valid, retire và II không stall theo t, gồm n0/early-stop. Không lấy công thức pipeline cũ hoặc n+6 của paper áp cho MAC mới. Đổi số tầng phải kiểm lại lịch/metadata; số tầng không chứng minh Fmax.
+
+## 6. Golden model và kiểm chứng Posit(32,3)
+
+### 6.1 Golden, model và Ideal
+
+| Thành phần | Nguồn và vai trò |
+| --- | --- |
+| **Golden độc lập** | [`opt17_reference::product/mac`](tb/opt17/full_term_reference.hpp) dùng [`week12_reference::Oracle<32,3>`](tb/week12_fused_reference.hpp): raw decoder, tích chọn bit dạng đóng, cộng/trừ full-grid và encoder RNE riêng. Tạo expected d/5flags của DUT. |
+| **Model thuật toán L1** | [`full_term32::multiply/mac`](l1/include/posit_mac_full_term.hpp): recurrence SAC/SBM, checkpoint M, NF và cửa sổ F; phục vụ trace/debug, phải khớp golden trước sinh fixture. |
+| **Ideal đo sai số** | `Oracle<32,3>::product(a,b)` rồi `Oracle::add(...,C_eff)`: giữ toàn bộ giá trị A/B để tính A×B+C_eff. Full-grid trước encode là chuẩn hữu tỉ; bits là chuẩn Posit đã RNE. Không làm expected bit-exact của DUT approximate. |
+| **SoftPosit L0 hiện có** | [`softposit_api.c`](l0/softposit_api.c) gọi p8/es0, p16/es1, p32/es2. Chỉ hồi quy đúng format; l0_p32_*, ctypes và API L1 p32/es2 không là golden (32,3). |
+
+Khi kiểm DUT, bắt buộc `full_term32::Config{true,n,ops}` (approximate=true); fused=false cho NF, true cho F. Nhánh approximate=false còn trong header chỉ là phần mềm hỗ trợ nghiên cứu, không là mode nghiệm thu RTL. Harness quản lý C_eff/S riêng từng kiến trúc; hàm mac() nhận C_eff, không tự quản lý chuỗi.
+
+Golden tính M độc lập với vòng SAC: chọn tối đa n bit 1 cao nhất của F_X thành mask F_sel, rồi tính `M=(4096+F_sel)×(4096+F_Y)` bằng số nguyên. Với n0, F_sel=0; n12, F_sel=F_X. Từ M/Q24 và b, golden thực hiện đúng hai phương trình NF/F ở §4.4, gồm cả ngoại lệ và 5 cờ.
+
+Golden có thể chung kiểu dữ liệu nhưng không gọi Parser/Packer/adder/recurrence L1 tạo expected. Full-grid hiện là số nguyên 1024 bit trên lưới 2^-532 cho (32,3), có kiểm bounds/tràn. Double/long double chỉ hiển thị/thống kê khi đủ miền, không quyết định tie, saturation, Zero hoặc cancellation. Python gọi lại cùng thư viện C không phải oracle độc lập thứ hai.
+
+### 6.2 Kiểm model trước RTL
+
+Đối chiếu dấu, sf, M/Q, t, loss metadata và d/5flags cho n0..12, OPS0/1, NF/F. Mỗi checkpoint i kiểm bằng tổng chọn i bit 1, không chỉ kết quả cuối. Decoder/encoder cần roundtrip raw32/3 và kiểm tay regime dài, dấu, G/R/S, biên.
+
+| Vector | Đầu vào sau chọn vai X/Y | Expected FULL_TERM |
+| --- | --- | --- |
+| FT-01 | F_X=0,Y=4096,n bất kỳ | t0,M=16,777,216; không iteration_cut |
+| FT-02 | F_X=1,Y=8191,n0 | M=33,550,336; iteration_cut=1 |
+| FT-03 | F_X=1,Y=8191,n1 | S1=12,term=8191,M=33,558,527; carry25=1 |
+| FT-04 | F_X=F_Y=4095,n12 | t12,M=67,092,481; không iteration_cut |
+| FT-05 | A=0x1c900000,B=0x3c820000,C_eff=0,OPS0/1,n≥2 | t2,b=-11,M=24,224,768/Q24; NF/F d=0x1ae34800 |
+| FT-06 | F_X=F_Y=4095,n12,base_scale0 | M=67,092,481; F adapter sf1,frac26=67,076,098; giữ bit thấp ở nhánh carry |
+
+FT-01..04 là input nội bộ **sau OPS**, không áp lại min-popcount lên bảng. FT-05 phân biệt với trace FLOOR cũ 0x1ae34000; không sửa fixture lịch sử để đổi nhãn PASS.
+
+<a id="verification-coverage"></a>
+
+### 6.3 Phân tầng vector
+
+Ngoài raw random/corner, chia run regime trên mã độ lớn thành `[1,3],[4,7],[8,11],[12,15],[16,17],[18,22],[23,27],[28,31]`. Mỗi điểm nghiệm thu phủ 256 ô group_A×group_B×sign_pair, ≥4,000 completed/ô. A/B hữu hạn khác 0; run0 dài31 là Zero, kiểm riêng. Mỗi polarity/run hữu hạn hợp lệ đạt ≥10,000 lượt toán hạng trong suite tổng hợp.
+
+Phủ popcount fraction12: 0,1,2,3–4,5–8,9–12; từng n9/10/11/12; OPS hòa/swap; input_cut độc lập iteration_cut. ≥30% completed mỗi điểm MAC có hai số hạng cộng hữu hạn khác 0, trái dấu, |Δsf|≤4. NF đo R(P_hat)/C_eff; F đo P_hat chuẩn hóa/C_eff trước window cut. Lưu counters Δsf0..4, tách standalone/accumulation; reset-abort không tính completed. Tỷ lệ corpus phân tầng không mặc nhiên đại diện dữ liệu ứng dụng.
+
+<a id="corner-cases"></a>
+
+### 6.4 Corner bắt buộc
+
+- Mã §2, NaR×0/0×NaR, NaR của C_eff/S và C bị bỏ qua; tích Zero với C_eff khác 0.
+- Hai dấu, min/maxpos và lân cận, fraction 0/1/xen kẽ, carry, regime đổi độ dài/exponent thiếu bit.
+- n0, early-stop, hết n, đủ 12 bước; invalid n13..15/OPS2..3/clear trái phép.
+- RNE up/down, tie-even/odd, sticky-only, carry làm tròn, kẹp min/max; roundtrip parser→packer.
+- Triệt tiêu đúng số hạng của từng profile, near-cancellation, hai mốc căn chỉnh, hai phía ngưỡng dịch 28/29, phần giữ bằng 0 nhưng residual khác 0.
+- Chuỗi >12 giao dịch, clear giữa chuỗi/NaR trong S rồi clear, standalone xen kẽ, bubble/stall dài/reset khi rỗng/đang tính/giữ output.
+
+### 6.5 Scoreboard và bằng chứng
+
+Chụp input/config tại accept, tạo expected bằng golden, so d/flags tại retire. Model state cập nhật đúng một lần theo giao dịch tích lũy; NF/F có S riêng. Reset hủy pending/xóa S. Cuối suite: accepted=completed+reset_aborted, queue rỗng, không output dư. Kiểm ổn định payload/valid khi stall, timeout/deadlock và done sau last commit.
+
+Thứ tự: model/oracle → unit/fixture → pilot ≥10^5 completed/điểm → main §6.7 → audit. Verilator/C++ chạy lượt lớn; ModelSim replay fixture đã được oracle kiểm và kiểm 4-state/CK2Q/reset/stall. So comb RTL với pipeline RTL chỉ xác nhận refactor, không thay golden độc lập.
+
+Mỗi kết quả kèm file list, SHA256 RTL/model/oracle/harness/fixture, config/seed, tool version, lệnh/exit code, counts, coverage và raw log. Thiếu bằng chứng, RUNNING, mismatch, timeout hoặc mất/nhân đôi giao dịch đều FAIL. Không cộng mẫu giữa các snapshot/profile; không mặc định make regress hoặc runner legacy đã bao đủ ma trận mới.
+
+### 6.6 Assertion và coverage
+
+Assertion tối thiểu: output không X sau startup; giữ payload/valid khi stall; invalid không accept; t≤n≤12; term không mất bit/overflow; done sau last commit; NaR/Zero/flags theo golden; mỗi accept có một retire hoặc reset-abort; S commit một lần; occupancy không vượt capacity.
+
+Functional coverage 100% bin hợp lệ của §6.3–6.4: n/OPS/t/cut, dấu/mốc/Δsf/LOD, carry/RNE/biên, acc_mode/clear, reset/stall. Structural coverage trên **nguồn approximate-only nghiệm thu**: line≥95%, branch≥90%, toggle≥85%. Unreachable chỉ loại bằng giải thích gắn nguồn; không dùng exact còn sót để giảm mẫu số hoặc miễn n9..12.
+
+<a id="acceptance-matrix"></a>
+
+### 6.7 Ma trận nghiệm thu
+
+Chỉ profile `(32,3), FW12, FULL_TERM26/Q24, RNE`; bỏ các trục exact, format khác, TRUNC và ROUND_SCHEME tùy chọn.
+
+| Nhóm | Cấu hình | Ngưỡng/kiểm tra |
+| --- | --- | --- |
+| AC-01 bit-exact | NF/F × OPS0/1 × từng n0..12: **52 điểm** | ≥10^7 completed/điểm, 0 mismatch d/5flags; ≥520 triệu completed toàn ma trận, không đếm pilot hai lần |
+| Control trong mỗi điểm AC-01 | Standalone và chuỗi tích lũy | Mỗi loại ≥10% completed; đủ corner, input/output stall, reset-abort; counters riêng |
+| Unit/4-state | Parser, OPS/SAC/SBM, adder, Packer, hai top | Đạt kiểm tay/fixture/assertion; không áp 10^7 cho từng invalid hay từng unit |
+| AC-03 paired accuracy | OPS1, từng n0..12, NF/F cùng A/B/C_eff | Pilot≥10^5 rồi main≥10^6 triple/n trên corpus đóng băng; báo cả trường hợp F kém NF |
+
+OPS1 là cấu hình so sánh chính; OPS0 vẫn kiểm chức năng bắt buộc. Standalone/accumulation nằm trong số đếm mỗi điểm, không nhân đôi thành 104 điểm. Với accuracy chuỗi, S_NF/S_F có thể phân kỳ: báo suite riêng và quy tắc Ideal state; không gọi C_eff của hai DUT giống nhau sau phân kỳ.
+
+### 6.8 Sai số
+
+Với paired standalone, dùng cùng corpus/P_hat; r=A×B+C_eff là giá trị hữu tỉ từ toàn bộ đầu vào, y=decode(d):
 
 ```text
-Y_base26 = zero_extend26(Y13) << 12
-M0 = Y_base26
-term_i26 = Y_base26 >> S_i
-Mi = M_previous + term_i26
-P_hat = (-1)^sign * Mt * 2^(b-24)
+Err(%) = 100 × |y-r|/|r|
+Relative MSE = mean(((y-r)/r)^2)
+Code-distance = |signed_code(d)-signed_code(R(r))|
 ```
 
-Y_base có12 zero thấp,S_i≤12 nên không rơi bit có trọng số.Phải giữ đủ term,
-không mask[1:0],không FLOOR/JAM/RNE từng term;term_tail/term_cut/numerical_tail bằng0.
-Cộng mở rộng27 bit để kiểm carry vượt bit25;carry vào bit25 là hợp lệ.
-Mmax=8191²=67.092.481<2²⁶.Nhân hết12 fraction không phục hồi14 bit đầu vào đã cắt.
+Báo tỷ lệ Err<0.1/0.5/1/5%, Relative MSE, max error, code-distance và số mẫu mỗi miền. r=0 báo zero-match/sai số tuyệt đối riêng; NaR tách riêng. Hiệu mã dùng số nguyên đủ rộng, không gọi là ULP có độ dài cố định. Giữ seed/phân bố, độ biến thiên và kết quả bất lợi; không yêu cầu F tốt hơn NF trên mọi vector. Ideal không làm tròn hồi tiếp của chuỗi cần số hữu tỉ/độ rộng được chứng minh đủ cho chiều dài chuỗi.
 
-### 5.7 Chuẩn hóa và prepack
+### 6.9 Cấu trúc testbench và lộ trình chạy
 
-Hữu hạn khác0,c=M[25],sf_norm=b+c:
+Testbench mới tách rõ sáu thành phần; không yêu cầu UVM nếu driver/monitor/scoreboard hiện tại đã đáp ứng:
+
+| Thành phần | Nhiệm vụ |
+| --- | --- |
+| Config/corpus | Manifest format/profile/default OPS1/n12, seed cố định, danh sách bin và expected số completed trước chạy |
+| Driver | Phát theo valid/ready; giữ payload/config khi stall; thay C/config sau accept để kiểm DUT đã chốt context; invalid kiểm riêng |
+| Input monitor | Chụp a/b/c_eff/config đúng accept, gắn transaction ID ở TB, phân loại bins; không lấy tín hiệu đã đổi sau accept |
+| Oracle/scoreboard | Golden độc lập tạo d/5flags, pending queue, model S riêng NF/F, xử lý abort theo reset epoch |
+| Trace checker | Đối chiếu vai OPS, mỗi S_i/M_i, t/cut, token last, prepack, adapter F và input/output của adder; trace sai không được bỏ qua dù d cuối trùng |
+| Output/assertion/coverage monitor | So đúng retire, đồng thời kiểm stable lúc valid stall, unknown4-state, latency/II, counts, coverage và timeout |
+
+S của scoreboard có thể cập nhật theo retire trong baseline một outstanding vì request sau không được accept trước retire. Nếu probe/credit cho phép accept sớm, phải model đúng internal commit và dependency, không đổi expected bằng output DUT. Reset chỉ hủy pending của epoch cũ; output sau reset không được khớp nhầm request cũ.
+
+**Unit:** Parser roundtrip/raw/corner; OPS popcount/swap/tie và bit cắt; SAC quét đủ4096 fx và trạng thái scale hợp lệ; SBM toàn bộ Y13=4096..8191 với S0..12/init_only; accumulator first/middle/last/carry và overflow invariant; adapter lossless hai nhánh carry; adder/Packer G/R/S, cancellation và stall. OPS có thể exhaustive16,777,216 cặp12 bit; nếu chưa chạy phải ghi scope thực tế, không ghi exhaustive. Legacy reference đã chuyển vào `tb/reference/rtl/files.f` chỉ là đối chiếu implementation, không thay golden32/3.
+
+**Integration:** NF/F chạy cùng nguồn/corpus cho paired standalone, scoreboard state riêng cho accumulation. Đủ early-stop/n0/n12, cfg mặc định, raw đặc biệt, run dài, magnitude max, n13..15/OPS2..3 bị từ chối, clear/reset lúc mọi vị trí pipeline và output đang stalled. Source vi phạm giao thức input được kiểm ở suite assertion riêng, không tính thành dữ liệu hợp lệ.
+
+**Trình tự bắt buộc:** review contract/manifest → kiểm golden và L1 → unit/FT-01..06 → smoke default OPS1/n12 → pilot≥10^5 completed cho52 điểm → freeze → main52×10^7 → accuracy/coverage → PPA. Nếu n0 hoặc early-stop không nhận đủ completed vì timeout, đó là FAIL, không tự tăng timeout mà bỏ điều tra. Main dùng seed đã công bố trước; đổi RTL/model/golden/harness có ảnh hưởng phải tái chạy phạm vi bị tác động, không cộng counts snapshot cũ.
+
+Verilator dùng `--timing` hoặc `--no-timing` phù hợp CK2Q và harness, khai báo rõ; không bỏ delay âm thầm. ModelSim10.1d chạy fixture có expected độc lập và checking 4-state; mọi compatibility cast chỉ đổi cú pháp, kèm hash gốc/bản biên dịch. Toàn bộ binary/work/wave/log/file tạm đặt trong dự án; không cần sửa cài đặt/license để đóng spec.
+
+### 6.10 Bảng truy vết tối thiểu
+
+| Test ID | FR liên quan | Điều kiện đạt |
+| --- | --- | --- |
+| TC-AP12-DEFAULT | FR-18 | Wrapper/driver/model mặc định OPS1/n12; request không lái không tạo giao dịch giả |
+| TC-AP12-PARSE | FR-01/03 | Raw sign/regime/exponent thiếu/fraction26, Zero/NaR và metadata đúng |
+| TC-AP12-CORE | FR-05..08 | Vai OPS/SAC/term/M/checkpoints/t/cut đúng golden; term_tail0, bit26 overflow0 |
+| TC-AP12-PREPACK | FR-17 | M26/Q24 và adapter giá trị bằng nhau; cả carry0/1, không product RNE trên F |
+| TC-AP12-NF, TC-AP12-F | FR-09..11 | d và5flags đúng hai công thức, kể cả cancellation/biên/RNE |
+| TC-AP12-STATE | FR-12/14 | Chuỗi/reset/clear/NaR và commit một lần đúng, không nhầm state NF/F |
+| TC-AP12-PROTOCOL | FR-13/15/16 | Stable/abort/thứ tự/capacity/latency đúng manifest |
+| TC-AP12-MATRIX | AC-01/03/04 | Đủ52 điểm, accuracy và bins/counts/coverage theo §6.3–6.8 |
+| TC-Q-* | EXT-Q | Chỉ khi mở rộng quire; điều kiện riêng §9.5 |
+
+Tên testcase cụ thể của runner được map vào bảng, không bắt buộc đổi tên mọi fixture cũ. Không ghi TC-Q PASS trước khi có model/RTL quire thực thi.
+
+## 7. Điều kiện nghiệm thu và báo cáo
+
+| ID | Điều kiện đạt |
+| --- | --- |
+| AC-01 | Đủ 52 điểm/số completed §6.7, 0 mismatch; protocol/control/unit đạt. |
+| AC-02 | Retired: không nghiệm thu exact phần cứng; giữ ID để đọc báo cáo cũ. Oracle toán học vẫn bắt buộc. |
+| AC-03 | Đủ paired accuracy §6.7–6.8; báo phân bố/ngoại lệ/seed/giới hạn. |
+| AC-04 | Functional/structural coverage đạt §6.3/§6.6, đủ giải thích unreachable. |
+| AC-05 | RTL không latch; lint không còn cảnh báo nghiêm trọng chưa giải thích; có tài nguyên/setup/hold post-route đúng nguồn khóa; DSP=0, BRAM=0. |
+| AC-06 | Paired NF/F trên Artix-7 xc7a35tcpg236-1, cùng tool/constraints/profile, ≥3 run/cấu hình tĩnh; LUT/FF/CARRY/DSP/BRAM, clock đạt, latency/II/throughput đo thực tế. |
+| AC-07, AC-08 | Tái lập và truy vết FR→testcase→log/count/coverage; manifest khóa đúng nguồn/model/fixture; PASS đúng phạm vi đã chạy. |
+
+PPA là bước riêng sau kiểm chức năng. n là cấu hình runtime: không tổng hợp lặp cùng netlist cho 13 n; đo latency/II từng n và dùng n2/n4/n12 trình bày accuracy–throughput. Netlist chuyên biệt theo n phải khai báo và kiểm riêng.
+
+Giữ profile A35T đã chọn: input min=max2.5ns, output min0/max0.5ns, uncertainty setup/hold0.1ns; khóa clock mục tiêu/constraints trước chạy. Clock công bố phải đạt setup/hold sau route; ước lượng từ slack không là Fmax đã sweep hay board signoff. Không lấy mốc 575MHz/698LUT của multiplier paper làm ngưỡng bắt buộc cho MAC A35T. Giữ raw report, min/median/max các run; power chỉ kết luận khi có phương pháp/activity phù hợp. Không phát sinh yêu cầu chạy PPA trong lần sửa tài liệu này.
+
+## 8. Trạng thái nguồn và tham chiếu
+
+Đối chiếu đọc file 02/11/2026 cho thấy nguồn hiện tại chưa đồng nhất với mục tiêu v1.26. Các số đo/PASS cũ vẫn theo snapshot riêng:
+
+| Thành phần | Hiện trạng |
+| --- | --- |
+| rtl/mac_nf/mac_nf_wrapper.sv | Còn cfg_mode, EXACT_EN=1, N_MAX8 và bank54; chưa là top approximate-only FULL_TERM. |
+| rtl/mac_f/mac_f_wrapper.sv | N_MAX12 nhưng cổng ngoài còn cfg_mode; core/bank16/prepack14 FLOOR. Đã dùng adapter tới `posit_add`5 tầng, chưa magnitude26/Q24. |
+| Parser/adder/Packer active | 42 module theo `rtl/mac_active.f`, NF/F dùng chung adder5/Packer2, F có parser riêng p00. Refactor tương đương/timing synthesis không thay nghiệm thu FULL_TERM. |
+| L1/golden FULL_TERM §6.1 | Header đã có; API còn nhánh phần mềm mixed. Khóa approximate=true và kiểm lại cùng manifest trước nghiệm thu. |
+| tb/opt17/harness.cpp / candidate OPT17 | Còn stimulus exact/mixed, không tự thành regression 52 điểm approximate-only. |
+| mac_active.f, production.f, freeze/report cũ | Các danh mục/snapshot riêng; không đổi nhãn PASS hay gán kết quả cũ cho nguồn đang refactor. |
+| OPS1/n12 mặc định | Phải khóa trong wrapper/driver/API/test mới; không gán default cho cổng input bằng cách thả X/Z. |
+| MAC quire | Mới chốt hợp đồng mở rộng §9; chưa có release RTL/model/coverage quire được nghiệm thu. W/L_max phải được khóa trước triển khai. |
+
+Chỉ công bố release mới khi top, model/harness và ma trận cùng đúng hợp đồng. Thứ tự hiện thực: khóa golden/default và prepack → core26/Q24 + bỏ mode exact → adapter NF/F dùng chung adder → unit/pilot → freeze/main/coverage → accuracy/PPA → mở rộng quire nếu được triển khai. Không cần quire hoàn thành để nghiệm thu NF/F; không gọi NF/F hiện tại là MAC quire.
+
+Thiếu hụt hiện thực không là lý do đổi FULL_TERM thành FLOOR trong spec. Giữ [bản trước rút gọn](archive/spec_v1_24_before_compact_20261101.zip) và [snapshot8 tài liệu trước v1.26](archive/spec_v1_25_before_approx12_quire_20261102.zip) có SHA256. Không tạo thêm Markdown hoặc ghi đè bằng chứng lịch sử trong lần sửa này.
+
+<a id="mac-quire-extension"></a>
+
+## 9. Hợp đồng mở rộng MAC quire
+
+### 9.1 Phạm vi và phép toán
+
+Tên profile mở rộng: **MAC_Q12_FULL_TERM**. Dùng cùng Parser/OPS1 mặc định/core12 FULL_TERM, nhận token §4.5. Với trạng thái rộng Q và chuỗi K tích:
 
 ```text
-c=0: frac_norm53 = {M[23:0],29'b0}
-c=1: frac_norm53 = {M[24:0],28'b0}
+Q_0 = 0
+Q_(k+1) = Q_k + P_hat_k       // không RNE, pack, saturation hoặc mất bit mỗi MAC
+READ: D = R(Q_K)              // chỉ tại đây mới RNE/kẹp về Posit32/ES3
 ```
 
-Không bỏ bit thấp M và không nhân/cộng scale lần nữa.NF đưa raw P_hat qua product RNE,
-decode rồi cộng C_eff và RNE cuối.F chuyển nguyên M26/Q24,b,sign,special/loss tới F1,
-không RNE tích trước cộng.Seed W32/Q29 theo §4.3.3;residual/borrow của căn chỉnh cộng
-vẫn phải giữ đúng.NF/F không có nhánh normalize Q52/carry53 của nhân exact.
-input_cut/iteration_cut là metadata inexact,không OR vào sticky số học của tích.
-Các mô tả FLOOR/Q12 và nhánh exact của snapshot cũ chỉ phục vụ hồi quy lịch sử §11.9.
+Đây là tích lũy chính xác **các tích approximate đã định nghĩa**, không phải exact dot-product của A/B nguyên vẹn26 fraction. Ở n12 hết iteration_cut nhưng input_cut vẫn có thể1. Giữ hai đối chứng riêng: oracle tổng các P_hat cho bit-exact; Ideal tổng A×B đầy đủ để đo sai số approximate. Không dùng kết quả NF/F đã RNE làm số hạng quire.
 
-### 5.8 Adder (`posit_add`)
+NF/F tích lũy hiện tại làm tròn S sau từng giao dịch. Không chỉ mở rộng bus `accumulator_q` rồi gọi quire; phải bỏ Packer khỏi đường hồi tiếp và giữ đúng toàn bộ tổng rộng. Không tự bật đường exact26 fraction để phục vụ profile Q12.
 
-Ngõ vào hai bộ ba unpacked `(s, sf, m)` với `m = 1.f` rộng `W = FRAC_MAX + 1`; ngõ ra unpacked chưa làm tròn; G/R nằm trong fraction mở rộng, sticky ngoài giữ numerical tail. GRS cuối do packer quyết định theo regime (§5.8-B/§5.9).
+### 9.2 Phân rã phần cứng
 
-**Đặc tả chi tiết và giới hạn Alignment Shifter**:
-
-- Chọn số hạng có độ lớn lớn hơn theo (sf,m); đặt $d=sf_L-sf_S\ge0$, dấu kết quả theo số hạng lớn khi trừ. Alignment phải giữ G/R và phần dư; khi trừ không được xử lý phần dư như một số hạng cộng dương.
-- **Cơ chế Kẹp Cứng (Clamping)**: Do dải scale factor $sf$ rất rộng ($[-240, 240]$ với posit32/ES3; ES2 là $[-120,120]$), dịch theo toàn bộ dải sf cần datapath/control lớn hơn; tác động LUT/timing phải đo. Nhận xét rằng nếu $d > \text{FRAC\_MAX} + 2$, toàn bộ mantissa $m_2$ sẽ bị dịch trôi hoàn toàn ra ngoài vùng bit có nghĩa (ngoài cả bit Guard và Round). Khi đó:
-  - Mạch kích hoạt cơ chế kẹp cứng: $d_{clamp} = \min(d, \text{FRAC\_MAX} + 2)$.
-  - Nếu $d > \text{FRAC\_MAX} + 2$, toàn bộ $m_2$ được bypass/dồn thẳng vào bit Sticky: $S = |m_2| \ne 0$.
-  - Nhờ vậy, bộ Alignment Barrel Shifter chỉ cần độ rộng dịch tối đa là $\text{FRAC\_MAX} + 2$ vị trí (ví dụ: với posit32, $\text{FRAC\_MAX}=27$, shifter chỉ cần 5 bit điều khiển cho tối đa 29 vị trí dịch).
-
-#### A. Hợp đồng giao diện W10-01 — chốt 12/10/2026
-
-**Phạm vi:** posit_add cho NF/v0/v1 và cộng hai Posit độc lập; format nghiệm thu hiện hành32/3; bốn format từng kiểm (8,0),(16,1),(32,2),(32,3) là bằng chứng lịch sử. F=FRAC_MAX=NB-3-ES là fraction đầy đủ của format, khác FRAC_W12 của multiplier approximate. NB32/ES3 dùng F26, không cắt đầu vào adder còn12 bit. Các cấu hình khác chưa nghiệm thu; adapter baseline yêu cầu F>=2, không tuyên bố hỗ trợ toàn bộ tuple hợp lệ của IP. Không đổi mô hình L1 đóng băng.
-
-Đầu vào hữu hạn khác0 là exact normalized 1.f: `a_frac/b_frac` chỉ chứa F bit sau hidden, scale signed trong[-SF_MAX,SF_MAX]; parser hoặc round_unpacked cung cấp. Không nhận prepack P_hat, GRS/đuôi của tích chưa round, hay sticky_input; metadata flags không thay giá trị toán hạng. Hai toán hạng, special và flags_in được nhận nguyên tử tại cùng handshake. Không có cfg_n/cfg_ops hoặc acc_mode bên trong adder; MAC quản lý C_eff/config/feedback theo §4.2.
-
-| Cổng posit_add | Hướng / độ rộng | Hợp đồng |
-| --- | --- | --- |
-| clk / reset_n | in / 1 | Leaf reset assert bất đồng bộ, release qua hai FF theo guideline; top rst_n qua bridge/barrier §4.2 |
-| in_valid / in_ready | in / out,1 | Handshake nhận cả A/B/flags; nguồn giữ toàn bộ payload khi valid và chưa ready |
-| a_sign / b_sign | in / 1 | Dấu từng toán hạng |
-| a_is_zero / b_is_zero | in / 1 | Khi1, sf/frac bị bỏ qua |
-| a_is_nar / b_is_nar | in / 1 | NaR ưu tiên Zero và dữ liệu hữu hạn |
-| a_sf / b_sf | in / signed SF_W | SF_W theo §2.3; không dùng ES làm độ rộng sf |
-| a_frac / b_frac | in / F | Không chứa hidden; hữu hạn khác0 khôi phục hidden1 |
-| flags_in | in / 5 | Metadata từ bước nhân/round; thứ tự §4.2; không OR vào sticky số học |
-| out_valid / out_ready | out / in,1 | Xuất unpacked, chưa làm tròn; giữ cả payload khi stalled |
-| sign / is_zero / is_nar | out / 1 | Canonical special theo mục C dưới |
-| sf | out / signed SF_W | Scale sau normalize; không clamp về Posit tại adder |
-| frac | out / F_OUT=2F+1 | Fraction mở rộng, không hidden; nối frac của packer F_IN=F_OUT |
-| sticky | out / 1 | Numerical tail theo L1 `!sum.exact`; không phải OR của metadata approximate |
-| flags_out | out / 5 | Metadata qua adder; packer nhận qua flags_in để hoàn thiện flags cuối |
-
-F, F_OUT, SF_W là kích thước suy từ NB/ES theo công thức hiện hành; ghi đè sai phải bị chặn lúc elaboration. Module tổ hợp posit_add_comb dùng cùng cổng số học (không clk/reset/valid/ready); pipeline posit_add và comb phải cho cùng output. Mỗi module một file, named ports, mỗi cổng một dòng, always_comb có default, bank dùng always_ff/enable/CK2Q theo guideline. Không tạo stub RTL chưa có chức năng để gọi là triển khai.
-
-**Khảo sát hiện thực OPT-02b ngày17/10:** candidate A1 giữ nguyên hợp đồng bên dưới (signed delta, tie, clamp/jam và specials), không đổi I/O hoặc H_ADD3. Không thêm C-prefix register hoặc thuộc tính fanout. Leaf/NF kiểm bit-exact và một lượt A35T đạt100MHz; chưa promote production, không thay AC/Gate4. Bằng chứng [Optimization §8.23](../doc/Optimization.md#legacy-8-23) và results/opt02b_20261017.
-
-#### B. Độ rộng, alignment và adapter packer
-
-Q=F+3; x=unsigned({1,a_frac})<<3, y=unsigned({1,b_frac})<<3 sau chọn lớn theo(sf,m); tie độ lớn giữ A. Word sum/carry rộng Q+2=F+5; magnitude đã normalize rộng Q+1=F+4. Khôi phục hidden và zero-extend vào ADD_W trước khi dịch trái3; không dịch trong biểu thức hẹp F+1 bit làm mất MSB. Delta scale được tính bằng sign-extension rộng SF_W+1 rồi chuyển unsigned sau bảo đảm d>=0; không wrap subtraction trước clamp.
-
-| NB/ES | F | Q | Word sum/carry | F_OUT | SF_W |
-| --- | --- | --- | --- | --- | --- |
-| 8/0 | 5 | 8 | 10 | 11 | 6 |
-| 16/1 | 12 | 15 | 17 | 25 | 8 |
-| 32/2 | 27 | 30 | 32 | 55 | 10 |
-| 32/3 | 26 | 29 | 31 | 53 | 11 |
-
-Ở d<=F+2: dịch y, gom mọi bit mất vào tail và jam bit0 như L1; ở d>F+2: y=1,tail=1 với toán hạng nhỏ hữu hạn khác0. Đây là clamp F+2 của mô hình đã kiểm, không lấy y sau dịch ở F+2 rồi OR1 cho nhánh vượt ngưỡng. Khác dấu tính x-y trên độ lớn đã chọn; không cộng tail dương vào tổng âm. Carry dịch phải1, jam bit rơi, tăng sf1; nếu nhỏ hơn hidden thì LZD/dịch trái và giảm sf đúng số vị trí; zero kiểm trước LZD.
-
-Mapping hữu hạn: `frac={magnitude[Q-1:0], {(F-2){1'b0}}}`; `sticky=alignment_tail | carry_lost_bit` đúng L1 !sum.exact. Q bit fraction đã gồm F bit fraction, G=mag[2],R=mag[1],bit jam=mag[0]; S_trace=mag[0]|tail. G/R/S_trace là quan sát nội bộ, không thêm port G/R riêng và không OR mag[0] tùy tiện vào sticky ngoài: bit jam vẫn nằm trong frac, có thể được dịch lên khi normalize. Packer tự dịch regime và tính GRS cuối; không bỏ G/R trước pack, không round tại A3. Bypass zero operand đệm F_OUT-F bit0 vào fraction của operand còn lại. Các special trả frac/sticky0.
-
-flags_out hữu hạn giữ flags_in[3:0] và OR numerical tail vào inexact; không tạo approx_cut mới. Các G/R và fraction thấp được packer dùng xác định inexact cuối theo §5.9; không báo saturation trước khi có kết quả normalized. Packer OR các flags trung gian, xác định sat_max/sat_min và final inexact; kết quả NaR luôn flags10000. Hòa/rounding/clamp cuối do ROUND_MODE của packer, không cần ROUND_MODE trong adder.
-
-#### C. Special và giao thức ba tầng elastic
-
-NaR nếu a_is_nar|b_is_nar|flags_in[4]: sign1,is_nar1,is_zero0,sf0,frac0,sticky0,flags_out10000. Hai Zero hoặc triệt tiêu exact: sign0,is_zero1,is_nar0,sf0,frac0,sticky0; giữ metadata hữu hạn flags_in[3:0]. Một Zero: giữ giá trị operand hữu hạn còn lại, frac đệm0, sticky0; vẫn qua pipeline. Không bypass special vượt thứ tự. Payload vô nghĩa khi out_valid0, nhưng dữ liệu/flags xác định sau reset.
-
-| Tầng / cạnh không stall | Công việc và trạng thái cần giữ |
+| Khối | Hợp đồng |
 | --- | --- |
-| A1 / E0 nhận input | Special/flags; chọn độ lớn/dấu/phép cộng-trừ; delta/clamp/dịch-jam; chốt x,y,tail,sf_base và context |
-| A2 / E1 | Cộng/trừ magnitude, carry/zero candidate; chốt kết quả và context |
-| A3 / E2 | Carry hoặc LZD-normalize, scale, adapter frac/sticky và flags; chốt output unpacked |
+| Core/Prepack | Dùng lại token M26/Q24/sign/b; flags xấp xỉ tách khỏi dữ liệu |
+| Quire alignment | Đổi P_hat sang lưới cố định, không jam/truncation; mọi bit rơi ra phải chứng minh bằng0 trên miền được hỗ trợ |
+| Signed accumulator | Cộng/trừ vào thanh ghi Q rộng với carry/headroom, commit một lần, kiểm overflow |
+| Context/status | Count, NaR/invalid và OR loss của chuỗi; giữ khi READ stalled |
+| Read normalizer/Packer | Chỉ READ mới dò dấu/LOD/scale/fraction/GRS của toàn Q rồi RNE theo §2 |
 
-Ba slot elastic, enable độc lập: ready3=!valid3|out_ready; ready2=!valid2|ready3; ready1=!valid1|ready2. in_ready bị gate bởi reset/startup; stage chỉ cập nhật khi ready của chính stage và startup đã nhả. Không dùng enable chung làm mất giao dịch dưới backpressure. Không có CE ngoài ở giao diện đã chốt; clock enable là load-enable nội bộ. Có thể push/pop đồng thời, II=1 không stall; không nhân đôi handshake nếu downstream giữ ready.
+Có thể dùng carry-propagate, carry-save hoặc cộng chia word nhiều chu kỳ nếu tương đương và công bố latency/throughput. Không bắt buộc một carry-chain gần1000 bit trong một clock. READ trên carry-save phải resolve carry trước khi pack; không làm tròn riêng hai vector rồi cộng.
 
-Input handshake E0 → out_valid sau E2 → output handshake sớm nhất E3: H_ADD=3,L_valid=2,L_handshake=3. Startup chờ hai cạnh synchronizer release, stall báo riêng. Reset xóa cả3 valid/data/context và hủy giao dịch đang chờ; in_ready=out_valid0 khi reset/startup. Khi out_valid&&!out_ready, toàn bộ output giữ đến handshake hoặc reset. Reset ưu tiên handshake. RNE packer tiếp theo hai slot theo §5.9-D: giao dịch đầu vào adder E0 sang packer ở E3, packer valid sau E4 và handshake E5 nếu không stall; TRUNC packer valid sau E3 và handshake E4. Không tính hai lần bank A3/P1. Lịch feedback round_unpacked và C/context NF đã kiểm ở §11.10; ba tầng adder không tự nghiệm thu II_acc.
+Read adapter phải dò toàn bộ magnitude Q: giữ các bit cao cần cho frac53 và OR toàn phần thấp còn lại vào sticky **sau khi đã có tổng chính xác**. Scale READ tính bằng signed width đủ cho E_LSB và W/headroom; kiểm biên ±240 trước khi thu hẹp sang sf11, không cast làm wrap một tổng lớn thành số nhỏ. Không dùng sticky của từng MAC thay việc giữ bit trong Q.
 
-#### D. Điều kiện bàn giao W10-01
+### 9.3 Miền giá trị, lưới và headroom
 
-Hợp đồng W10-01 đã chốt trước hiện thực; RTL adder hiện đã kiểm theo §5.8-E. Review/projection365.836 cặp trên bốn format (posit8 exhaustive),23.413.504 kiểm metadata/mode, Linux và UBSan cùng PASS/0 mismatch,seed20261012; bằng chứng tại results/week10_contract; kiểm mapping L1 sang giao diện/packer không thay nghiệm thu số học L0 hoặc pipeline. W10-02 khóa vector/oracle/flags/control và counts trước chạy; W10-03..06 hiện thực/kiểm comb, pipeline, timing và assertions. Không coi interface PASS là RTL PASS, STA hoặc Gate3. Cửa sổ/residual fused tiếp tục §5.12, không đưa prepack vào giao diện NF này.
+Không lấy số bit của cửa sổ cộng F, 84 bit hoặc quire512 của chuẩn es2 áp trực tiếp cho (32,3). Release quire MUST ghi rõ miền đầu vào, `L_max` số MAC tối đa giữa CLEAR, lưới E_LSB và W thực tế. Chưa khóa L_max/W là blocker của phần mở rộng, không chặn NF/F.
 
-#### E. Nghiệm thu adder đơn vị tuần10 — 12/10/2026
+Với **toàn miền Posit(32,3)**: minpos=2^-240,maxpos=2^240. Mọi toán hạng hữu hạn và bản fraction12/selected-bit của nó là bội nguyên của2^-240. Điều này cần chứng minh từ run regime/số bit fraction thực có, không suy chỉ từ sf_min và width26. Tích P_hat là bội2^-480, |P_hat|≤2^480. Chọn E_LSB=-480, U=Q×2^480 là signed integer.
 
-Đã hiện thực posit_add_align → posit_add_arith → posit_add_normalize dùng chung ở posit_add_comb và posit_add ba tầng elastic. ModelSim10.1d: comb143.976 vector (posit8 có toàn65.536 cặp), pipeline143.376 completed/600 reset-aborted,0 mismatch; so từng khối, output unpacked, RNE/TRUNC và flags. Kiểm E2/E3, ba slot, input/output stall, reset/startup và thứ tự. Strict Verilator5.032 --timing -Wall8/8 format/top sạch.
+Với H=ceil(log2(L_max)), một **cận đủ bảo thủ** là `W=962+H` bit signed, q_nar/q_overflow lưu riêng. Lý do: mỗi tích có hệ số nguyên độ lớn≤2^960; sau≤2^H tích, |U|≤2^(960+H), nằm trong signed W này. W962 đủ cho một tích; ví dụ L_max1024,H10 cần cận đủ972 bit. Đây là suy ra cho cấu hình đồ án, không là tuyên bố độ rộng quire chuẩn hay độ rộng tối thiểu đã tối ưu.
 
-Harness coverage/scoreboard trực tiếp: ES2 10.000.003 completed/9.787 reset-aborted; ES3 10.000.001/9.862;0 mismatch. Mỗi input nhận được đối chiếu L1, oracle integer/bit-list độc lập (decode/add/pack không dùng L1); SoftPosit RNE ở format hỗ trợ, không gán ES3 cho L0 ES2. Kiểm cả unpacked/packed RNE/TRUNC và flags; pilot bốn format chạy trước lượt lớn. UBSan generator đạt. Seed_base20261012, seed format=base+100NB+ES; compilerGCC15.2.0, SoftPosit0.4.1/hash/lệnh/source/binary/fixture cùng report.
+Quire alignment tính `u_term=(-1)^sign × M × 2^(b-24-E_LSB)`. Với E_LSB=-480, shift=b+456 có thể âm ở biên nhỏ; chỉ được dịch phải nếu các bit loại đều0 do ràng buộc mã Posit thực, phải assert/kiểm oracle. Không wrap lượng dịch hoặc OR sticky thay bit bị loại. Nếu muốn giao diện prepack tổng quát nhận mọi tuple M/b không có tương quan Posit, phải chọn lưới rộng hơn/chứng minh lại bounds.
 
-Bằng chứng canonical results/week10_adder/summary.json; matrix.json, raw coverage và structural_coverage.json giữ tất cả unhit points. Coverage raw toàn verification hierarchy: line80,00–80,95%,branch92,31–96,15%,toggle75,18–84,74%; không loại point và **chưa đạt final AC04**, không dùng milestone tuần10 thay signoff coverage. Tại checkpoint tuần10 ngày12/10, P16 exhaustive RTL2^32, P32 final>=10^8 theo AC02, tích hợp MAC/feedback/Gate3 và STA/PPA còn mở. Mốc NF và phần coverage bổ sung đã đạt được cập nhật tại §11.10–§11.13. L1 frozen source hashes giữ nguyên; không gọi pipeline này là MAC fused.
+Một quire hẹp theo **miền scale giới hạn** được phép là profile nghiên cứu riêng, phải công bố miền và hành vi từ chối ngoài miền; không gọi là quire toàn miền32/3. Fraction12 tự nó không làm mất nhu cầu dải scale rộng. Final output vẫn clamp theo Posit32, còn state Q không clamp theo maxpos của Posit mỗi MAC.
 
-Corpus NF/F common100.000 triple đầu vào đã đóng băng/replay byte-exact ở paired/manifest.json; chưa đo accuracy, oracle F/Ideal full-sum và window/residual vẫn theo tuần12. Tham chiếu software1024 bit trên grid2^-532 đủ bảo thủ cho32/3 (4SF_MAX+2F+4=1016 bit); không phải width RTL. Checklist tuần10 đã nghiệm thu phạm vi đơn vị và gỡ khỏi tiến độ, giữ nhật ký/report; tiếp tuần11 NF/Gate3. Ghép NF với packer pipeline/round_unpacked/feedback đã kiểm toàn MAC ở §11.10; kết quả đó không suy từ testbench packer tổ hợp.
+### 9.4 Giao thức đề xuất và ngoại lệ
 
-### 5.9 Packer (`posit_pack`)
+Top mở rộng riêng `posit_mac_quire`, không thêm mode vào hai top NF/F. Lệnh dùng `q_cmd[1:0]`: 00=CLEAR,01=MAC,10=READ,11=reserved. Có in_valid/in_ready, clk/rst_n; A/B/cfg_n/cfg_ops có ý nghĩa trên MAC, defaults OPS1/n12. Không có toán hạng C trong profile này; khởi tạo bằng CLEAR. LOAD-C là mở rộng khác nếu cần, phải có hợp đồng riêng.
 
-#### A. Thuật toán đóng gói RNE, phỏng theo Algorithm 2 của [F]
+Mỗi lệnh hợp lệ nhận một response in-order qua out_valid/out_ready, trả `out_cmd`, d32, flags5 và q_overflow1. CLEAR/MAC là acknowledge với d=0, **không pack Q để trả ack**; READ trả R(Q). Ban đầu một lệnh outstanding: chỉ nhận lệnh tiếp theo khi response trước được retire; không đọc Q khi cộng chưa commit. READ không xóa Q; CLEAR xóa Q/count/NaR/overflow/loss. Reset flush mọi pending, Q/status về0 và startup như top chính. Dữ liệu/status response giữ ổn định khi stalled; MAC commit một lần trước ack và không lặp do out_valid kéo dài.
 
-Khối đóng gói chuyển `(sign,sf,frac)` thành Posit NB bit. Pseudocode dưới đây là bản diễn giải của đề tài từ Algorithm 2 của [F], bổ sung tiền kẹp và ràng buộc biên; không phải nguyên văn hay mã RTL hoàn chỉnh. `normf` là phần fraction sau hidden bit; nếu đầu vào mang mantissa 1.f thì bỏ hidden bit khi ghép inshift.
+MAC đủ L_max thì từ chối nhận MAC tiếp theo bằng in_ready=0; CLEAR/READ vẫn được nhận khi slot rỗng. Reserved/invalid n/OPS chỉ từ chối, không hỏng Q. Count tính mọi MAC được commit, kể cả zero/NaR, không tính READ/CLEAR/reset-abort.
 
-```text
-Input: sign,is_zero,is_nar,sf,normf[F_IN-1:0],sticky_in,flags_in
-Output: out[NB-1:0],flags; normf excludes hidden
+Nếu MAC đã commit nhưng ack chưa retire rồi reset, count/Q của epoch đó bị xóa; monitor vẫn ghi nhận commit nội bộ để debug, song giao dịch thuộc reset-aborted, không được cộng vào completed nghiệm thu. Luôn kiểm accepted_commands=retired_responses+reset_aborted, tách thống kê theo q_cmd.
 
-1. NaR (including flags_in[4]) overrides Zero and range.
-   Zero returns0. Finite sf>=SF_MAX returns signed maxpos;
-   sf<-SF_MAX returns signed minpos. sf==-SF_MAX stays on normal path.
-   Range/inexact flags depend on the actual input,not only the selected code.
-2. k = floor(sf / 2^ES); e = sf-k*2^ES.
-   ES=0: omit exponent field; do not create a zero-width slice.
-3. first_regime_bit=(k>=0); offset=k if k>=0 else -k-1.
-   payload={first_regime_bit,!first_regime_bit,e,normf,1'b0}.
-   P=2+ES+F_IN+1; payload/shifted indices are [P-1:0].
-4. shifted=shift_right_fill(payload,offset,first_regime_bit).
-   lost_sticky=OR(original payload bits discarded by this shift).
-5. mag_trunc=shifted[P-1 -: NB-1]; L=mag_trunc[0].
-   G=shifted[P-NB]; Rb=shifted[P-NB-1].
-   S=sticky_in | lost_sticky | OR(shifted[P-NB-2:0]).
-6. round_up=G & (L | Rb | S) for RNE; round_up=0 for TRUNC.
-   For nonzero finite input,clamp mag_trunc+round_up to [1,maxpos].
-   Apply sign with NB-bit two's complement; never wrap carry into NaR.
-7. OR incoming finite flags with range/inexact from this pack;
-   inexact includes G|Rb|S. NaR flags are10000.
-```
+NaR của A/B ưu tiên 0; q_nar sticky tới CLEAR/reset. Nếu overflow nội bộ ngoài bound xảy ra, MUST set q_overflow/q_invalid, giữ trạng thái lỗi tới CLEAR/reset, READ trả NaR và flags10000; không silent wrap/saturate Q. Kiểm overflow bằng carry mở rộng/W+1 hoặc chứng minh tương đương, không dùng cờ sat_max của Posit thay q_overflow.
 
+Loss của chuỗi OR input_cut/iteration_cut từng MAC. READ flags: nar ưu tiên; sat_max/min chỉ theo pack tổng cuối; inexact=chain_loss hoặc mất thông tin tại final pack; approx_cut=OR iteration_cut. CLEAR/MAC ack trả status/loss hiện tại, sat bits0; q_nar/q_invalid thì flags10000. Ngữ nghĩa OR cả chuỗi chỉ thuộc quire, không đổi flags từng giao dịch NF/F.
 
-#### B. Khác biệt giữa FloPoCo (RNE) [F] và Bộ nhân xấp xỉ [P]
+### 9.5 Testbench và nghiệm thu mở rộng
 
-| Đặc điểm | Profile TRUNC theo [P] | RNE phỏng theo [F], đối chiếu L0 |
-| :--- | :--- | :--- |
-| **Cơ chế** | Cắt magnitude trước range clamp; underflow khác 0 vẫn ra minpos, nên không thuần round-to-zero | **Round-to-Nearest-Even (RNE)** với cùng range clamp |
-| **Độ phức tạp phần cứng** | Không cần tie/increment RNE; vẫn thu phần bỏ để tạo inexact và cần mã hóa dấu. RTL shared prepare vẫn tính G/R/S cho flags | G/R/S tham gia quyết định tăng; P2 gộp tăng RNE và dấu trong một carry chain |
-| **Diện tích (Area)** | Bỏ logic RNE chuyên biệt khi tổng hợp cấu hình TRUNC | Thêm logic làm tròn/sticky và bank pipeline; mức chênh LUT/FF phải đo |
-| **Sai số** | Trong miền chưa clamp, cắt độ lớn gây bias về 0; range clamp có thể đổi xu hướng ở biên | Hòa chọn chẵn; đúng RNE không tự bảo đảm sai số trung bình bằng 0 cho mọi phân phối |
+Golden Q dùng bigint/rational, cộng P_hat chọn bit độc lập từ raw Posit, không cửa sổ cố định nhỏ hoặc double. Scoreboard quản lý queue lệnh, count và Q/status ở commit/response; reset-abort không được cập nhật Q vào epoch sau. Probe so Q **mỗi MAC**, không chỉ d ở READ.
 
-Fig. 5(b) của [P] (chế độ TRUNC) chỉ có một hạng thanh ghi ở ngõ ra:
-```
-  m = Rgm[NB_R-2:0] XOR {Rgm[NB_R-1]}      // k>=0: m = k;  k<0: m = |k|-1
-  FRB = ~Rgm[NB_R-1]                       // bit đầu regime
-  Out = arith_shift_right({~FRB, FRB, Exp, Frac, zeros}, m) rồi cộng bit Sign
-```
-`ROUND_MODE="RNE"` dùng thuật toán mục A và chia hai hạng P1/P2 theo §5.9-D. Đây là cấu hình baseline đã chốt, không phải chứng minh mọi mục tiêu fmax đều cần hoặc chỉ cần hai hạng.
+Oracle1024/grid2^-532 của MAC đơn lẻ không tự chứng minh đủ cho mọi L_max của quire. Phải chọn bigint không giới hạn hoặc kiểm lại cả lưới và carry/headroom cho oracle chuỗi, độc lập với width DUT.
 
-Packer và standalone legacy hỗ trợ hai chế độ qua ROUND_MODE; top NF tuần11 chỉ hardwire RNE:
-
-- `ROUND_MODE="RNE"`: chỉ nghiệm thu approximate FULL_TERM theo AC01 và oracle đúng32/3. PIPE_PACK=2 theo §5.9-D; cần xác nhận timing.
-- `ROUND_MODE="TRUNC"`: profile local tham khảo encoder của [P], PIPE_PACK=1; range handling theo hợp đồng đồ án. Chọn TRUNC không xác nhận đã tái hiện toàn bộ baseline paper; số liệu diện tích/độ chính xác phải đo.
-
-#### C. round_unpacked cho MAC v1
-
-Hợp đồng bắt buộc: round_unpacked(u, mode) tương đương parse(pack(u, mode)) về giá trị, dấu, sf và fraction chuẩn hóa, bao gồm Zero/NaR, regime dài, exponent thiếu bit, carry làm tròn và bão hòa. Không chỉ cắt fraction theo sf ban đầu: carry có thể thay đổi sf và số bit khả dụng.
-
-Đầu ra thuộc đúng lưới Posit; các bit thấp dưới lưới bằng0; NF hiện dùng pack→parse tổ hợp chung với packer/parser đã kiểm, không chuyển phần dư G/R/S của tích chưa làm tròn sang Adder. Nhờ hợp đồng này v1 giữ ngữ nghĩa non-fused của §5.1. Cờ inexact của bước làm tròn vẫn phải được lưu trong metadata dù phần dư số học đã bỏ.
-
-#### D. Hợp đồng phân tầng packer RNE P1/P2 — chốt 06/10/2026
-
-**Phạm vi:** baseline ROUND_MODE="RNE", PIPE_PACK=2, cùng clk, hai slot elastic. Lõi tổ hợp và pipeline dùng cùng hai module posit_pack_prepare/posit_pack_finish, đối chiếu độc lập với L1. Đầu vào hữu hạn khác 0 đã chuẩn hóa thành sign, sf signed và fraction của 1.f; phần dư thấp chuyển thành sticky của độ lớn đúng. Packer không chuẩn hóa mantissa chưa chuẩn hóa và không diễn giải phần dư có dấu của fused bằng một sticky OR chung.
-
-**Giao diện chốt07/10/2026:** rtl/packer/posit_pack_comb.sv và rtl/packer/posit_pack.sv dùng NB, ES, F_IN, SF_W, ROUND_MODE. F_IN mặc định 2*FRAC_MAX+1: posit8/0=11, posit16/1=25, posit32/2=55, posit32/3=53. Điều kiện F_IN>=FRAC_MAX+2 và <=63 cho adapter/oracle L1 hiện tại; chỉ32/3 là phạm vi nghiệm thu hiện hành; các format còn lại giữ như kiểm lịch sử. frac[F_IN-1:0] không hidden, giá trị fraction=frac/2^F_IN; frac=0 cùng is_zero=0 biểu diễn mantissa1.0, không phải số0. F_IN mặc định giữ đủ tích của hai fraction FRAC_MAX bit sau chuẩn hóa, kể cả bit thấp thêm do tích>=2 được dịch phải một vị trí.
-
-Ports số học: sign, is_zero, is_nar, sf signed, frac, sticky, flags_in[4:0]. Đầu ra d[NB-1:0], flags[4:0]; wrapper tuần tự thêm clk/reset_n/in_valid/in_ready/out_valid/out_ready. flags_in[4]=1 cũng buộc NaR, không cho mất NaR từ phép toán trước. Các bit cờ theo §4.2.
-
-Adapter parser: frac_pack={frac_parser, zeros}, sticky=0, flags_in=0, giữ sign/sf/is_zero/is_nar. Adapter nhân/cộng chỉ sau chuẩn hóa: nếu fraction ngắn hơn F_IN thì đệm0 phía LSB; nếu dài hơn thì lấy F_IN bit cao và OR phần bỏ với sticky sẵn có. Không làm tròn thêm ở adapter; việc chuẩn hóa dấu/phần dư do khối số học chịu trách nhiệm. Với L1 u.frac hidden ở bit63: frac_pack=(u.frac>>(63-F_IN)) & mask_F_IN; sticky_pack=!u.exact OR các bit thấp bị bỏ. Test fixture packer đặt những bit thấp ngoài F_IN bằng0 và u.exact=!sticky để biểu diễn cùng đầu vào.
-
-**Pre-clamping tại minpos:** chỉ kẹp sớm khi sf<-SF_MAX. sf=-SF_MAX phải đi qua mã hóa/RNE vì phần fraction vẫn có thể đổi mã, đặc biệt ES=0: posit8 giá trị1.5*minpos là tie giữa0x01/0x02, RNE chọn0x02. Dùng <= sẽ sai trường hợp này. Tại maxpos, sf=SF_MAX vẫn xuất maxpos, nhưng sat_max/inexact chỉ lên nếu fraction hoặc sticky làm giá trị vượt biên.
-
-| Hạng thanh ghi | Logic tổ hợp trước bank | Dữ liệu chốt |
-| --- | --- | --- |
-| **P1 — mã hóa và chuẩn bị RNE** | Nhận diện NaR/Zero, pre-clamping; tách sf thành k/e; tạo regime, ghép payload và dịch có bit điền. Lấy magnitude chưa làm tròn và G/R/S; S bao gồm cả bit mất do dịch/điểm cắt và sticky đầu vào | mag_trunc[NB-2:0], G, R, S, sign, special_sel, flags_in và cờ range/inexact phát sinh; p1_valid |
-| **P2 — làm tròn và xuất kết quả** | NORMAL: round_up=G AND (mag_trunc[0] OR R OR S); về số học, tăng magnitude rồi kẹp vào [1,maxpos] và áp dụng dấu NB bit. RTL được gộp làm tròn/dấu thành một bộ cộng tương đương; kiểm biên song song trước bộ cộng. Trường hợp đặc biệt chọn mã tương ứng; hợp nhất flags theo §4.2 | d[NB-1:0], flags[4:0], p2_valid; đây là bank đầu ra, không thêm bank thứ ba ngầm |
-
-Ranh giới bắt buộc: bộ dịch payload và cây gom sticky nằm trước P1; quyết định round_up, bộ cộng làm tròn và bù hai ngõ ra nằm giữa P1/P2. LSB lấy từ mag_trunc[0], không cần một FF LSB trùng dữ liệu. Kết quả phải tương đương magnitude mở rộng/kẹp rồi áp dụng dấu, không cho carry tràn thành NaR. Không bắt buộc hai bộ cộng nối tiếp trong RTL. Không chốt lại sf, k/e, toàn bộ fraction hoặc vector đã dịch trong P1 nếu P2 chỉ cần bundle ở bảng trên; đây là chủ đích giảm trạng thái giữa tầng, không phải kết quả đo FF.
-
-**Tối ưu P2 ngày07/10:** đặt m=zero_extend(mag_trunc), r=round_up. Khi không cần kẹp, d=((m XOR {NB{sign}})+(sign XOR r)) mod 2^NB: sign=0 cho m+r; sign=1 cho ~m+1-r=-(m+r). m=0 luôn chọn minpos; m=maxpos luôn chọn maxpos, cả hai giữ dấu. Hai kiểm biên chỉ phụ thuộc mag_trunc, chạy song song với bộ cộng; specials chọn các mã hằng đã có dấu. Đây là phép biến đổi logic tương đương, không thay đổi bundle P1, flags, latency hoặc handshake; TRUNC vẫn r=0.
-
-special_sel có ý nghĩa NORMAL/ZERO/NAR/MAXPOS/MINPOS. NaR ưu tiên Zero và range; P2 xuất NaR với flags=10000. ZERO xuất 0; MAXPOS/MINPOS giữ dấu và bỏ phép tăng RNE. Các giá trị bằng đúng biên không tự bị gắn cờ vượt dải; cờ phải xét giá trị/phần dư thực và khớp L1. Metadata có flags_in để giữ cờ phép toán trước; sat/inexact được OR theo §4.2, approx_cut truyền nguyên, ngoại lệ NaR xóa bốn cờ còn lại. Trường không dùng của token đặc biệt phải được gán giá trị xác định, không dùng X làm don't-care trong RTL.
-
-**Enable và handshake:**
-
-```text
-p2_ready = !p2_valid_q || out_ready
-p1_ready = !p1_valid_q || p2_ready
-in_ready = run_ready && p1_ready
-out_valid = run_ready && p2_valid_q
-```
-
-run_ready chỉ có hiệu lực sau reset/startup. P1 nhận bundle mới khi in_valid && in_ready; nguồn giữ toàn bộ input bundle trong stall. P2 chuyển token khi p1_valid_q && p2_ready; khi p2_ready mà P1 rỗng thì tạo bubble, không lặp token cũ. Mọi trường của cùng bank dùng chung enable; out_valid && !out_ready giữ d/flags/out_valid. Hai slot cho phép nhận/trả đồng thời nhưng không tăng sức chứa dự trữ của MAC baseline ở §4.2/§5.5.
-
-**Reset và lịch cạnh:** leaf packer dùng reset_n assert bất đồng bộ, deassert qua hai FF riêng theo Guidelines, tích hợp qua reset bridge/startup barrier §4.2. Reset flush cả hai valid, xóa dữ liệu/cờ và chặn in_ready/out_valid; không trả token trước reset. Với input nhận E0, P1 chốt E0, P2 chốt và valid sau E1, output handshake sớm nhất E2; H=2, L_valid=1, L_handshake=2, II=1 khi không stall. Token Zero/NaR/range đi qua cùng hai slot, không có đường vượt thứ tự. Startup và số chu kỳ stall báo riêng.
-
-**TRUNC và timing:** ROUND_MODE là tham số elaboration. Baseline TRUNC một bank đầu ra (H=1, L_valid=0, handshake E1 cho input E0), loại logic chuyên biệt RNE; cờ inexact vẫn phải phản ánh phần bị cắt. Không ép TRUNC qua hai hạng của RNE. P1 có đường dịch/sticky; P2 dùng bộ cộng gộp làm tròn/dấu và mux biên; hai hạng không tự bảo đảm fmax. Nếu STA yêu cầu tầng thứ ba hoặc ranh giới khác, cập nhật contract PIPE_PACK, ngân sách §5.1/§5.11 và TB trước khi nghiệm thu, không âm thầm thêm latency.
-
-**Nghiệm thu tuần8:** tổ hợp khớp L1, parser→packer đồng nhất exhaustive posit8/16 và corner/phân tầng posit32 ES2/ES3; thêm đầu vào có phần dư cho round-down/up, ties-even/odd, sticky-only, carry/regime dài và hai biên, cả hai dấu. Pipeline kiểm E0/E1/E2, II không stall, hai slot đầy, stall dài, bubble, nhận/trả đồng thời, reset rỗng/một slot/hai slot và thứ tự/không mất/không nhân đôi. Lưu log/seed/version/hash; nghiệm thu chức năng và STA/PPA báo riêng. Nghiệm thu07/10/2026: ModelSim10.1d đạt5.947.048 lượt fixture RNE/TRUNC (tổ hợp và pipeline),4.931.624 lượt chain parser→packer,0 mismatch; reset/stall/order/II/latency đạt. Generator2.973.524 dòng kiểm L1 và bit-list oracle độc lập. Vivado2026.1 compile/elaborate đạt. Bằng chứng results/packer/summary.json, logs, compiler/seed/hash. Nghiệm thu tuần8 đơn vị, chưa là Gate2/3 toàn MAC.
-
-**Khảo sát PPA packer riêng07/10 — sau tối ưu P2:** Quartus13.0.1 Web, CycloneIV EP4CE22F17C6, NB32/ES2/F_IN55, cùng boundary input/output có thanh ghi, clock10ns, seed1/2/3. RNE537 LUT4/196 FF, fmax122,50–124,42MHz, WNS1,837–1,963ns; TRUNC522 LUT4/152 FF, fmax100,67–101,01MHz, WNS0,067–0,100ns. Cả sáu run đạt setup100MHz trong benchmark này; TRUNC có dư nhỏ. So với bản P2 hai bộ cộng: RNE giảm54 LUT4 (9,14%), TRUNC giảm40 LUT4 (7,12%), FF không đổi. RNE thêm15 LUT4 và44 FF so với TRUNC, II vẫn1; không thêm tầng. Đường setup xấu nhất RNE seed3 chuyển từ P1.mag_trunc[0]→P2.d[31] sang input.sf[9]→P1.flags[1]. Số FF gồm boundary benchmark; I/O auto-assigned, chỉ timing register-register, chưa board/power/full MAC. Export shifter chỉ thêm generate tường minh cho Quartus13, kiểm tương đương9120 basis, không đổi RTL gốc. Báo cáo/hash hiện tại tại results/packer_ppa/; bản trước và comparison.json tại results/packer_p2_optimization/. Chưa là Gate4 hoặc tái hiện PPA xcvu9p của paper.
-
-### 5.10 Đối chiếu vi kiến trúc với Block Diagram Fig. 3 của [P]
-
-**Phạm vi:** bảng và trace có ngày sau đây mô tả quá trình hình thành baseline trước30/10.
-Nhánh exact/Q52/bank54 và ví dụ FLOOR không là hợp đồng target;target chỉ §4.3–4.4.
-OPS min-popcount và FULL_TERM là các quyết định của đồ án,chưa chứng minh bit-exact RTL tác giả.
-
-Fig.3 của [P] là nguồn tham khảo cấu trúc Parser → OPS → SAC → SBM shifter → SBM accumulator → Packer. Bảng dưới ánh xạ chức năng sang RTL hiện thực, không chứng minh RTL, vị trí thanh ghi, LUT/FF hoặc kết quả Table I giống tác giả. Các khác biệt có chủ đích và giới hạn bằng chứng được tập hợp tại §5.10-G; hợp đồng NF hiện hành tại §11.10.
-
-#### A. Bảng ánh xạ khối Fig.3 ↔ Module RTL hiện thực
-
-| Khối/chức năng trên Fig.3 | Module RTL hiện tại | Chức năng và giới hạn tương đương |
-| --- | --- | --- |
-| Parser X/Y | `posit_parser` ×2; thêm parser C_eff cho MAC | Tách dấu, sf, fraction không hidden và Zero/NaR; hidden được khôi phục trong đường số học. Parser hai tầng theo §5.2 |
-| OPS và hai mux chọn X/Y | `ops_sel_comb` | Chọn X/Y; cfg_ops0 giữ A, cfg_ops1 min-popcount/tie-A. Không dùng prefix predictor của paper trong NF hiện tại |
-| XOR dấu, Rgm/Exp adder | `ops_sel_comb` | sign=sA XOR sB, sf=sfA+sfB. Scale gộp tương đương số học theo §5.10-B; Fig.3 không công bố logic cổng bên trong Rgm/Exp adder |
-| First mux trước SAC và feedback | `iter_ctrl` | Launch nạp fraction X; các vòng sau dùng fx_next. Config/sign/sf giữ nguyên trong context của giao dịch |
-| SAC | `sac_step_comb` + bank token trong `iter_ctrl` | Tìm bit1 tiếp theo, sa=clz(fx)+1, cộng tổng S và dịch loại bit đã xử lý. Hợp đồng normative ở §5.5, không mặc định đồng nhất mọi recurrence nghiên cứu của tác giả |
-| SBM shifter | `sbm_shift_comb` | Mục tiêu FULL_TERM:Y<<12 rồi dịch phải S≤12 trên26 bit;code cũ còn FLOOR. Scale signed không biến dịch magnitude thành arithmetic shift |
-| First mux trước accumulator | `sbm_accum_comb` | Token đầu chọn y_base thay acc; cộng term nếu không init_only. Token init_only nạp Y đúng một lần |
-| SBM accumulator | `sbm_accum` + `sbm_accum_comb` | Mục tiêu M26/Q24;term_cut/numerical_tail=0 trên miền hợp lệ,input/iteration cut vẫn là metadata. Report bank FLOOR cũ giữ riêng |
-| Chuẩn hóa tích, không vẽ thành khối riêng trong Fig.3 | NF mới: `mul_prepack_norm_comb`; standalone legacy: `mul_norm_comb` | Khi carry, NF mới tăng sf và đổi vị trí hidden, giữ nguyên grid/bit thấp. Khác đường legacy dịch bỏ một bit; xem §11.9 |
-| Packer của multiplier / làm tròn tích để ghép NF | Standalone:`posit_pack`; NF:`posit_product_pack` P1/P2 → `posit_magnitude_parse` → `posit_add` → `posit_pack` cuối | Giữ parse(pack(u)); P2 đổi biểu diễn thành magnitude/sign sau RNE,không bỏ làm tròn tích. Ba bank product và adder/packer tổng giữ lịch ngoài Fig.3 |
-
-#### B. Scale factor gộp
-
-sf_A+sf_B=(k_A+k_B)·2^ES+(e_A+e_B). Nếu tổng exponent ≥2^ES thì carry tăng k thêm 1, phần exponent còn lại là (e_A+e_B) mod 2^ES. Đây là cùng phép tính với các bộ cộng/điều chỉnh Rgm/Exp của Fig. 3, miễn SF_W đủ rộng.
-
-RTL có thể dùng một bộ cộng sf có dấu thay các khối điều chỉnh riêng. Diện tích và timing có cải thiện hay không phải đo; sự tương đương số học không chứng minh tiết kiệm LUT.
-
-#### C. Chức năng 5 đường thanh ghi (Reg) và hai bộ Mux First trong Fig. 3
-
-Fig.3 đánh dấu năm ranh giới Reg ở mức sơ đồ tổng. Danh sách dưới giải thích vị trí chức năng của các ranh giới đó; không suy ra toàn multiplier/NF có đúng năm tầng vật lý, vì parser/packer còn có thanh ghi bên trong. Lịch RTL đo được theo §5.2, §5.5 và §11.10:
-
-1. **Reg 1 (sau Parser)**: dấu, Rgm/Exp, Frac của x và y.
-2. **Reg 2 (sau OPS, mux, XOR, Rgm/Exp adder)**: X và Y đã chọn, sf và dấu đầu ra.
-3. **Reg 3 (sau SAC)**: tổng lượng dịch S và fx còn lại.
-4. **Reg 4 (sau SBM shifter)**: Y >> S.
-5. **Reg 5 (sau SBM accumulator)**: acc kèm Rgm/Exp, rồi vào Packer. Packer có thanh ghi riêng ở ngõ ra.
-
-**Vai trò của hai bộ Multiplexer First (`first`)**:
-
-- **First Mux 1 (tại ngõ vào SAC)**:
-  - Khi bắt đầu một giao dịch mới (`first = 1`): Mux chọn fraction X đã qua OPS từ Reg 2.
-  - Trong các chu kỳ lặp kế tiếp (`first = 0`): Mux chọn ngõ ra hồi tiếp của SAC ($fx$ đã loại bỏ bit 1 vừa xử lý).
-- **First Mux 2 (tại ngõ vào Accumulator)**:
-  - Khi bắt đầu một giao dịch mới (`first = 1`): Mux chọn trực tiếp mantissa $1.f_Y$ (đây chính là giá trị tương ứng với bit ẩn $1.0$ của toán hạng $X$, vì $1.0 \times Y = Y$).
-  - Trong các chu kỳ lặp kế tiếp (`first = 0`): Mux chọn giá trị tích lũy hiện tại của thanh ghi Accumulator để cộng dồn thêm $1.f_Y \gg S$.
-
-#### D. Trace lịch sử FLOOR cho Test Vector TV-PAPER-01 ($n = 2$)
-
-Xét test vector mẫu TV-PAPER-01 từ bài báo [P] (Fig. 4):
-
-- Toán hạng $X$ có $fx =$ `12'b0100_1000_0000` (hai bit 1 tại vị trí 2 và 5 sau dấu chấm), $n = 2$.
-- Bảng dưới là lịch mục tiêu của tám lần chốt (H=n+6=8), không phải số đo RTL. CK1=E0, CK8=E7: out_valid sau E7, handshake sớm nhất E8. Giá trị khớp Fig.4 có sai số cắt 12 bit, không phải tích exact.
-
-| Chu kỳ | Tầng | Diễn biến | Ghi chú |
-| :---: | :---| :---| :---|
-| **CK 1** | Parser, hạng 1 | LOD/LZD, mux cnt; chốt cnt/FRB, metadata và payload seed | Giải mã regime toán hạng ngõ vào |
-| **CK 2** | Parser, hạng 2 | Tạo Rgm song song với dịch trái, tách exponent/fraction, ghép sf. Chốt Reg 1 | Hoàn tất Parse (`PIPE_PARSE = 2`, quy ước cạnh tại §5.2) |
-| **CK 3** | OPS | Chọn X, Y; sf = -11; dấu = 0. Chốt Reg 2 | Đặt ngõ vào cho SAC và Accumulator |
-| **CK 4** | SAC vòng 1 | first = 1, sa = 2, S = 2, fx ← 0010…. Chốt Reg 3 | SAC xử lý bit 1 đầu tiên |
-| **CK 5** | SAC vòng 2, Shifter vòng 1 | sa = 3, S = 5; Y >> 2. Chốt Reg 4 | Shifter nhận S=2; SAC xử lý bit 1 thứ hai |
-| **CK 6** | Shifter vòng 2, Accum vòng 1 | Y >> 5; acc = Y + (Y >> 2) | Shifter nhận S=5; Accumulator cộng vòng 1 |
-| **CK 7** | Accum vòng 2 | acc += Y >> 5 = 1.011100011010. Chốt Reg 5 | Accumulator hoàn tất tích mantissa; Normalizer chưa rõ nằm trong accumulator hay packer (Fig. 3 chỉ cho thấy Rgm/Exp đi vào khối accumulator) |
-| **CK 8 = E7** | Packer (TRUNC, 1 hạng) | out_valid sau E7, handshake sớm nhất E8. RNE có H=9, valid sau E8, handshake E9 | Mục tiêu lịch, chưa đo RTL tích hợp |
-
-#### E. Điều kiện chồng lấn giao dịch
-
-Các tầng SAC/Shifter/Accumulator có thể xử lý phần khác nhau của nhiều giao dịch. Với v0/v1, mục tiêu II=max(1,n_thực_tế) chỉ áp dụng khi tài nguyên khởi tạo/n=0 đã được lịch hóa, không stalled, FIFO đủ chỗ và giao dịch độc lập. Đây là mục tiêu kiến trúc của đề tài, không phải II đã được bài báo đo.
-
-Trong TV-PAPER-01 (§5.10-D), SAC dùng CK4..CK5, Shifter CK5..CK6 và Accumulator CK6..CK7. Giao dịch sau chỉ được bắt đầu nếu token first/last và metadata không làm ghi đè trạng thái trước. Hồi tiếp tích lũy làm tăng II (§5.11-A5).
-
-Mỗi giao dịch mang {tag, sign, sf, C_eff, cfg, flags}; độ sâu FIFO phải suy ra từ số giao dịch đang bay và sức chứa đầu ra, không ấn định 6–8 phần tử như bảo đảm cho mọi n/backpressure.
-
-#### F. Các điểm chưa rõ trong Fig. 3 của paper [P] và Quyết định xử lý của Đề tài
-
-Qua việc đối chiếu sâu bản vẽ Fig. 3, đề tài ghi nhận các điểm mơ hồ kỹ thuật mà tác giả [P] chưa công bố chi tiết:
-
-1. **Thiếu cơ chế điều khiển FSM khi $n$ biến thiên động**: Fig. 3 không mô tả mạch tạo xung `first` và bộ đếm lặp khi các giao dịch liên tiếp có số bit 1 khác nhau ($n_1 \ne n_2$). *Xử lý*: Đề tài thiết kế bộ điều khiển lặp `iter_ctrl` với bộ đếm bit 1 động và cờ `first_q` được pipeline hóa.
-2. **Đường truyền trễ của Rgm và Exp (Scale Factor)**: Trong Fig. 3, đường tín hiệu từ Rgm Exp Processing đi qua các Reg rồi vào khối accumulator, nhưng bản vẽ không vẽ rõ số tầng thanh ghi trễ bên trong để đồng bộ nhịp với mantissa. *Xử lý*: baseline NF hiện tại giữ sf/sign/config trong thanh ghi context của một giao dịch; các bundle đi qua bank cùng dữ liệu. Metadata FIFO/tag chỉ áp dụng khi triển khai chồng lấn sau baseline (§5.11), chưa có trong NF tuần11.
-3. **Early termination**: khi fx=0 không còn số hạng fraction để phát; vẫn phải xả các tầng còn token. TV-PAPER-01 hết bit 1 sau hai vòng nhưng vẫn có sai số cắt 12 bit (§5.6), nên không coi là exact toàn độ rộng.
-4. **Bypass Zero/NaR chưa được thể hiện trong Fig. 3**: không suy ra paper đã mô tả đầy đủ đường ngoại lệ từ sơ đồ này. *Xử lý*: kết quả ngoại lệ đúng là bắt buộc; bypass rút ngắn và Order FIFO là tối ưu sau baseline, với ngân sách hạng và quy ước cạnh tại §5.3.
-
-#### G. Các khác biệt giữa paper và baseline MAC NF — 13/10/2026
-
-Bảng đối chiếu bên dưới ghi thiết kế/checkpoint FLOOR tại ngày13/10. Quyết định29/10
-thay arithmetic mục tiêu bằng FULL_TERM §4.3;không suy từ nhãn “theo tác giả” rằng Q24/26 bit
-đã được xác minh là width/cut của [P]. Giữ dữ liệu lịch sử để phân biệt hai profile.
-
-| Nội dung | Bài báo [P] / Fig.3–5 | Đồ án hiện thực `posit_mac_nf` | Ý nghĩa khi báo cáo |
-| --- | --- | --- | --- |
-| OPS | Paper mô tả predictor dựa trên prefix fraction; LUT, tie và toàn bộ hợp đồng nguồn chưa được xác nhận. PT2/prefix7 là nhánh nghiên cứu tái dựng riêng | Profile chính cfg_ops1 đếm toàn bộ fraction đang dùng:12 bit cao ở approx32/3, toàn F bit ở exact; chọn ít bit1 hơn, hòa giữ A. cfg_ops0 giữ A | Khác chính sách chọn X/Y; có thể đổi số vòng thực tế và sai số khi giới hạn n. Không gọi min-popcount là predictor của tác giả |
-| Làm tròn | Fig.5(b) lấy12 fraction bit, đệm0 và mã hóa dấu; nguồn không mô tả tầng RNE G/R/S như đồ án | FLOOR cắt từng term trong SBM; sau đó RNE(P_hat) trước cộng và RNE tổng ở cuối NF. Metadata cut không tham gia GRS của P_hat | Phân biệt ROUND_SCHEME nội bộ và ROUND_MODE đóng gói (§4.1/§5.9). RNE không khôi phục các term đã bị cắt |
-| Width/carry | Fig.3 không công bố đủ width/bit carry/cut để xác nhận RTL nguyên bản; không lấy nhãn fraction12 làm width toàn accumulator | Approx FLOOR32/3: P_hat Q12,14 bit hữu ích; bank vật lý54 bit khi EXACT_EN1 để hỗ trợ exact Q52. Adapter NF giữ cả bit thấp khi carry, không dùng sticky thay trọng số bit đó | Kết quả W11 khác biệt carry là của legacy địa phương so với hợp đồng prepack; không suy thành lỗi RTL paper. Chi tiết/bằng chứng §5.6/§11.9 |
-| Scale | Khối Rgm/Exp adder xử lý regime/exponent | Dùng sf signed và cộng sfA+sfB; carry mantissa tăng sf thêm1 | Tương đương về giá trị; chưa chứng minh giảm LUT hoặc tăng Fmax (§5.10-B) |
-| Pipeline/control | Fig.3 thể hiện Reg/feedback/First nhưng không đủ quy tắc valid/ready/reset/order hoặc số tầng bên trong mọi khối | Parser2 tầng; core SAC→shift→acc; product P1/P2 và một bank parse/product; adder3 tầng; packer RNE2 tầng. Context một giao dịch, reset bridge, stall và output holding theo §11.10 | L_valid=max(1,t)+12; handshake không stall thêm1; II baseline tối thiểumax(1,t)+14. Không suy số này từ năm Reg của hình; timing/Fmax còn cần STA |
-| Mở rộng MAC | Fig.3 dừng ở tích A×B | NF thêm C_eff, adder, packer tổng và trạng thái acc_mode/acc_clr | NF=R(R(P_hat)+C_eff), F_ref=R(P_hat+C_eff). Fused RTL chưa được nghiệm thu; xem §5.12/§11.10 |
-
-**Cách mô tả phạm vi:** lõi nhân kế thừa cấu trúc dịch–cộng lặp của Fig.3; đồ án chọn hợp đồng số học/OPS/pipeline riêng và mở rộng thành MAC NF. Gate3 chứng minh RTL mới khớp mô hình/oracle của đồ án trong phạm vi đã kiểm, không chứng minh đã có baseline RTL tác giả hoặc tái hiện Table I. So sánh NF/F dùng cùng P_hat, corpus và điều kiện PPA theo §11.8–§11.10; lợi ích về tài nguyên/timing phải đo, không suy từ bảng mapping.
-
-### 5.11 Vi kiến trúc Pipeline MAC tích hợp Adder và Chồng lấn giao dịch
-
-Khác với bài báo tham chiếu [P] chỉ dừng lại ở phép nhân hai toán hạng ($A \times B$), đóng góp trọng tâm C1 của đề tài là xây dựng hoàn chỉnh lõi **Posit MAC** ($D = A \times B + C$) với vi kiến trúc pipeline thông suốt và hiệu năng cần đo bằng STA/PPA và throughput thực tế.
-
-#### A. Các hợp đồng tích hợp
-
-1. **C và metadata:** baseline giữ trong thanh ghi giao dịch; khi chồng lấn dùng FIFO/tag giữ đúng {C_eff, sign, sf, cfg, flags} theo §5.10-E. Chỉ pop khi bên nhận handshake; mul_done khi Adder chưa nhận không được làm mất C.
-2. **Non-fused:** giữa bộ nhân và Adder dùng hợp đồng round_unpacked ở §5.9-C. Với FULL_TERM/RNE,adapter phải giữ R(P_hat) đúng oracle32/3.
-3. **Backpressure:** baseline có thanh ghi đầu ra giữ d/flags. Với core không thể stall, mỗi handshake đầu vào phải đặt trước một slot lưu kết quả và chỉ trả credit khi đầu ra handshake. Số giao dịch chưa trả không vượt sức chứa kết quả đã bảo đảm. Skid buffer 2 phần tử chỉ đủ hấp thụ 2 kết quả, không thay cho lưu trữ của mọi giao dịch đang bay. Registered in_ready phải tính cả giao dịch nhận ở cạnh hiện tại khi quyết định credit tiếp theo.
-4. **Thứ tự:** first/last, tag và metadata đi cùng mọi số hạng; giao dịch sau không được khởi tạo accumulator dùng chung trước khi số hạng cuối của giao dịch trước đã được chốt. Zero/NaR bypass theo §5.3. FIFO, credit và lịch hóa là điều kiện bắt buộc nếu chọn chồng lấn.
-5. **Tích lũy NF hiện tại:** tổng đi qua A1/A2/A3→packer RNE P1/P2; bank P2 chứa kết quả Posit,không có round_unpacked thứ hai sau adder. Wrapper commit accumulator ở cạnh đầu quan sát pack_out_valid&&!committed_q,dù out_ready0,giữ busy tới retire. Với một giao dịch,II_acc như II standalone: tối thiểumax(1,t)+14 không stall; không dùng cận4 để mô tả top đã kiểm. V2 cộng C_eff sau prepack; II_min=q+13 đã kiểm tại §11.15. Không dùng lịch stream cũ hoặc giả định fused luôn ít chu kỳ hơn NF.
-
-#### B. Lịch NF RNE hiện hành — lịch OPT-03, release OPT-02c/05/09/10A
-
-E0 là cạnh accept. q=max(1,t), t là số vòng fraction thực tế.
-
-| Cạnh / bank | Công việc / token |
+| Test / Gate | Điều kiện đạt trước khi công bố quire |
 | --- | --- |
-| E0, E1 | Parser A/B/C_eff P1/P2 |
-| E2 | OPS/core launch; lưu C_eff và context |
-| sau E(q+4) | core_done cùng acc, core_sf/sign/mode và trạng thái cut |
-| E(q+5) | Product P1 chốt kết quả normalize + encode/GRS/flags |
-| E(q+6) | Product P2 chốt magnitude đã RNE/clamp NB bit,sign1,flags5 và valid1; Zero/NaR mã hóa trong magnitude |
-| E(q+7) | Decode magnitude/sign từ P2, chốt product unpacked/flags tương đương parse(pack(u)) |
-| E(q+8)..E(q+10) | Adder A1/A2/A3 |
-| E(q+11), E(q+12) | Final packer P1/P2; first-valid sau E(q+12) |
-| E(q+13) | Handshake không stall; commit accumulator nếu chưa commit |
-| E(q+14) | Cạnh accept sớm nhất giao dịch kế tiếp |
+| TC-Q-BOUND | Chứng minh E_LSB/W/L_max; đủ biên minpos²,maxpos², dấu và chuỗi cùng dấu L_max; không bit mất/overflow trên miền hợp lệ |
+| TC-Q-STATE | CLEAR/MAC/READ/reset/stall, NaR persistent/clear, invalid và capacity, count/commit một lần; 0 lost/duplicate |
+| TC-Q-NOROUND | Ví dụ tổng1 rồi ba tích2^-28: Q giữ1+3×2^-28, READ trả1+2^-26 (code0x40000001); không trả1 do RNE từng bước. Có thể tạo1 bằng MAC1×1 và phần nhỏ bằng2^-14×2^-14 với dữ liệu đúng32/3 |
+| TC-Q-CANCEL | Số hạng lớn rồi phần nhỏ rồi số hạng lớn đối dấu; exact cancel, hoán vị thứ tự cùng tập P_hat; Q cuối phải giống khi không overflow |
+| TC-Q-CONVERT | READ nhiều lần không đổi Q, sticky-only/tie-even/odd/biên min/max, cả dấu, shift âm nhưng suffix0 và mọi headroom boundary |
+| Q-MODEL | L1 quire khớp golden mọi checkpoint/status và final RNE; giữ Ideal nguyên đầu vào riêng để đo sai số |
+| Q-RTL | Pilot≥10^5 rồi main≥10^7 MAC committed và ack đã retire với OPS1/n12; ≥10^4 chuỗi có cả dài>12 và L_max trong corner; OPS0/n0..12 quét chức năng riêng, chưa gọi đây là ma trận52 điểm quire |
+| Q-COVER/PPA | Functional bins100% hợp lệ, line≥95/branch≥90/toggle≥85; reset/stall4-state; báo LUT/FF/BRAM/DSP và post-route/latency thật của quire riêng, không mượn số NF/F |
 
-H=2+1+(q+2)+3+3+2=q+13; L_valid=q+12, L_handshake=q+13, II_min=q+14. Tất cả đường special/early-stop đi cùng pipeline; không có bypass rút ngắn lịch. Core_done chỉ phát một chu kỳ; wrapper chỉ nhận giao dịch nếu product packer sẵn sàng, giữ reservation tới retire. Với một transaction, P1/P2 product luôn có credit khi core_done đến. Product P2 giữ data/flags nếu product bank chưa sẵn sàng; product_capture=product_pack_valid && (!norm_valid_q || add_ready). Product bank giữ tới adder handshake, cờ và C_eff không lấy lại từ input ngoài. Reset/startup dùng bridge và reset synchronizer sẵn có của packer; không thêm clock gating hoặc timing exception. Accumulator commit đúng một lần ở cạnh quan sát final valid, kể cả out_ready=0.
+Số MAC có thể bằng0 ở một chuỗi CLEAR→READ; scoreboard vẫn phải kiểm READ zero. Nếu L_max≤12 thì không thể đạt bin dài>12: chọn L_max≥13 cho release nghiên cứu này, không miễn bin âm thầm. Sequence permutations chỉ so khi từng product config/OPS giữ nguyên, không đổi vai/chọn bit giữa các thứ tự.
 
-Product numerical sticky luôn0: FLOOR/cut/tail của iterative approximation là flags/status, không được đưa lại làm phần dư số học của P_hat. Normalize/width/F_IN và RNE không đổi. `round_unpacked_comb` vẫn là reference/unit module; top NF không đi qua nó. Standalone multiplier và fused không đổi lịch.
+Gate NF/F AC-01..08 giữ nguyên. Chỉ khi Q-MODEL/Q-RTL/Q-COVER và bounds đạt mới gắn nhãn MAC_Q12_VERIFIED; không đổi tên kết quả20M/350M hoặc fixture FLOOR thành bằng chứng quire.
 
-Release18/10 dùng `posit_product_pack` nội bộ, giữ ready/CE/reset/holding như packer gốc; sign được chốt cùng data/flags trong P2. `posit_magnitude_parse` không bù hai lại: finite lấy sign đã chốt, Zero trả sign0,NaR trả sign1. Product P2 tăng1 FF metadata,không thêm bank. Public `posit_pack` và `posit_parser_comb` giữ nguyên API. SAC dịch cố định1 bit trước shift theo clz,gộp scale+clz+1,cây zero/one-hot cấp exhausted cho controller; P1 packer dùng prefix OR toàn payload. Đây là thay hiện thực,không đổi các phương trình normative,FRAC_W12 hoặc hợp đồng NF/F.
+## 10. Lịch sử revision và nguồn tham khảo
 
-#### C. Tối ưu sau baseline
+v1.26: khóa mặc định OPS1/n12, phân biệt12 fraction với13 significand; mở rộng block contracts, prepack26/Q24 và adapter F không suy hao; đồng nhất adder5 tầng; bổ sung testbench/truy vết và hợp đồng MAC_Q12 với bounds/giao thức/nghiệm thu riêng. Không sửa RTL/model/testbench chạy được hoặc tái nghiệm thu số học/PPA.
 
-Áp dụng bypass (§5.3), round_unpacked (§5.9-C), chồng lấn và credit (§5.11-A) theo từng bước có regression. Trên FPGA dùng Clock Enable của thanh ghi, không dùng LUT để gate clock. CE giảm hoạt động thanh ghi được khóa; muốn kết luận công suất toàn khối phải đo theo §7.1.
+Tham khảo chính:
 
-#### D. Kiểm chứng pipeline
-
-SVA tập trung ở §6.6. Yêu cầu kiểm gửi liên tục ít nhất10^6 giao dịch, chấp nhận mỗi giao dịch chỉ khi in_ready1 (không đồng nghĩa nhận mỗi chu kỳ), với n thay đổi, n=0, Zero/NaR, acc_mode/acc_clr và out_ready ngẫu nhiên/kéo thấp dài; scoreboard kiểm thứ tự, không mất/nhân đôi giao dịch. Đo riêng II khi không stalled để đánh giá mục tiêu throughput; backpressure có thể làm II lớn hơn. NF hiện chưa có FIFO transaction; nếu triển khai FIFO/chồng lấn sau này,không ép khoảng ready cố định khi FIFO đầy. W11 đã kiểm mốc numeric/protocol và phân bố coverage tại §11.12; các yêu cầu final vẫn mở.
-
-### 5.12 MAC v2 fused — approximate-only bắt buộc
-
-CùngP_hat FULL_TERM26/Q24 vớiNF,F cộng C_eff trước RNEcuối:
-NF=R(R(P_hat)+C_eff),F_ref=R(P_hat+C_eff).Cảhai chỉFW12,n0..12,OPS0/1,Posit32/3;
-không có exact NF hoặc exact fused hoặc quire.F không pack/saturate tích trước cộng.
-W32/Q29 là cửa sổ F cần so oracle full-grid giữ đúng residual/borrow/flags.
-RNE của F chỉ là một lần mỗi giao dịch;acc_mode vẫn roundstatePosit mỗi giao dịch.
-
-SnapshotFLOOR/Q12 trước29/10 và candidateFULL_TERM29/10 có bằng chứng theo nguồn riêng.
-CandidateNF còn dual/exact/bank54 nên20Mtrướcđó không nghiệm thu cặpapprox-only mới.
-Bản tinh gọn theo30/10 phải kiểm mới từng n/OPS,cancellation,flags/reset/stall và PPA matched;
-AC02 exacthardware không áp dụng,nhưng AC01/AC04 và kiểm toán học củaoracle không giảm.
-
-#### a. Căn chỉnh Scale Factor và Chọn Mốc (Scale Alignment & Anchor Selection)
-Với P_hat=M×2^(scale-q),đặt h_P=msb(M),e_P=scale+h_P-q và m_P=M/2^h_P∈[1,2). Đây là chuẩn hóa bảo toàn giá trị,không round hoặc bỏ bit carry. C_eff có m_C=1.f và scale sf_C. Chênh lệch dùng **scale tích đã chuẩn hóa**:
-$$\Delta SF = sf_P - sf_C$$
-
-Trong công thức này sf_P≡e_P; không dùng trực tiếp sf_A+sf_B khi tích có carry. Bỏ qua toán hạng zero khi chọn anchor=max(e_P,sf_C). Với W32,Q29,đơn vị lưới là2^(anchor-Q); mỗi magnitude sau căn chỉnh được floor trên độ lớn,trước khi áp dấu. Không dùng arithmetic-right-shift của số âm thay floor magnitude.
-
-Căn cứ vào giá trị $\Delta SF$, mạch điều khiển xác định toán hạng làm mốc (Anchor) và cấu hình lượng dịch:
-
-| Điều kiện | Mốc Scale Factor ($sf_{\text{base}}$) | Căn chỉnh toán hạng $C'$ nạp vào Accumulator | Lượng dịch thêm cho số hạng tích (`shift_extra`) |
-| :--- | :---: | :--- | :---: |
-| $\Delta SF \ge 0$ | **Tích** (anchor=e_P) | Dịch seed C phải ΔSF | Seed P không dịch thêm |
-| $\Delta SF < 0$ | **C** (anchor=sf_C) | Seed C không dịch thêm | Dịch seed P phải −ΔSF |
-
-Không có shortcut bỏ term/vòng chỉ từ |ΔSF|>F+2 trong hợp đồng fused hiện hành. Với cửa sổ hữu hạn,phải mô hình residual có dấu và chứng minh quyết định cuối trước khi áp clamp hoặc early termination.
-
-#### b. Hậu xử lý
-
-Sau căn chỉnh,cộng/trừ retained magnitude và xử lý residual theo mục c. Với magnitude dương đã sửa borrow,đặt h=msb(mag),sf_final=anchor+h-Q. Chuyển phần fraction dưới hidden và positive numerical tail sang packer cuối; giữ G/R và các bit thấp còn trong magnitude. Cửa sổ gồm1 sign+2 integer+29 fraction; không dùng số leading-zero toàn vector làm lượng giảm sf trực tiếp. Nếu chuyển về mantissa64 bit của L1,mọi bit bỏ khi thích nghi độ rộng phải OR vào numerical tail.
-
-Adapter W32→F_IN53 có thể normalize magnitude31 bit về hidden30,rồi nối23 bit0 sau30 fraction bit. Residual ngoài word là mô tả nonzero,không phải giá trị dyadic chính xác. Cận ở mục c đảm bảo nó luôn dưới G/R cuối khi có tail,nên ánh xạ này bảo toàn quyết định RNE/flags;không gọi padding/sticky là khôi phục đầy đủ giá trị phần dư.
-
-Sau chuẩn hóa, Packer làm tròn theo §5.9. Phần dư phải được chuyển sang thông tin G/R/S của độ lớn theo chính sách có dấu đã kiểm chứng; không gắn một sticky OR chung vào tổng khác dấu rồi tuyên bố RNE exact.
-
-#### c. Phần dư có dấu và bảo toàn quyết định RNE
-
-Viết mỗi số hạng magnitude y=y_trunc+δ, với 0≤δ<2^-Q; sticky chỉ cho biết δ khác 0, không phải δ=2^-Q. Với số hạng âm: -y=-y_trunc-δ. Do đó không OR đuôi rồi coi tất cả là phần dư dương, cũng không trừ một LSB tùy tiện ở mọi vòng. Tổng nhiều δ có thể tạo carry và triệt tiêu có thể đưa đuôi trở thành bit có nghĩa.
-
-**Policy mục tiêu FULL_TERM:** Q≥max(F,2FW+1)+3;F26,product có tối đa25 fraction,
-Q29 đáp ứng cận width. Toán hạng lớn fit chính xác và chỉ toán hạng nhỏ có thể sinh một
-residualδ∈(0,1) theo đơn vị lưới. Cắt có thể xảy ra từ |ΔSF|≥4;khác dấu có residual chỉ
-normalize trái tối đa1 bit,còn đủ G/R dưới fraction26. Đây là cơ sở tái dùng W32,
-**chưa phải kiểm chứng RTL/L1 FULL_TERM**. Proof/trace cũ thuộc FLOOR với product tối đa13 fraction;
-phải kiểm lại seed26 bit,residual/borrow/cancellation và flags với oracle độc lập.
-Cận chỉ cho hai toán hạng sau prepack,không bao quát stream nhiều term hoặc tích exact52 fraction.
-
-Nếu residual cùng dấu với retained sum,giữ magnitude và positive tail. Nếu ngược dấu,đổi |Z|−δ thành (|Z|−1)+(1−δ): trừ đúng1 đơn vị lưới khỏi magnitude và giữ tail dương. Không jam1 vào số nhỏ trước trừ,không trừ1 ở mọi vòng. Trường hợp retained sum0 nhưng residual≠0 phải assertion/fail; theo cận trên nó không xuất hiện trong profile đã nhận. Triệt tiêu exact không có residual. Đổi width,precision,topology hoặc hỗ trợ exact cần chứng minh/kiểm mới.
-
-Flags: NaR ưu tiên10000; sat_max/min chỉ từ tổng fused cuối. inexact gồm metadata input/term/iteration và mất mát số học cuối; approx_cut chỉ iteration còn bỏ. Zero giữ metadata hữu hạn trước đó. C_eff lấy từ c hoặc accumulator riêng của F; acc_clr chỉ tại request được nhận. Accumulator làm tròn sau từng giao dịch FMA và commit một lần; không giữ lịch sử flags của các giao dịch cũ như một quire.
-
-Exact fused từ tích đầu vào đầy đủ nằm ngoài phạm vi;oracle full-grid vẫn giữ để kiểm R(P_hat+C_eff) và Ideal.Những phép căn chỉnh magnitude có cắt bit chỉ thuộc adder và phải kèm residual có dấu;điều này không đưa FLOOR trở lại vòng nhân.
-
-#### d. Các Trường hợp Đặc biệt (Special Corner Cases)
-- **$C_eff = 0$**: có thể dùng đường nhân với cùng profile chính xác và dấu; lịch vòng hidden bit/độ trễ phải ghi rõ.
-- **Tích bằng 0 ($A = 0$ hoặc $B = 0$)**: kết quả C_eff nếu không có NaR; posit_mac_f dùng init-only rồi F1–F5/packer, L_valid=12 và H=13 khi không stall; đã kiểm §11.15.
-- **NaR**: A/B/C_eff là NaR thì xuất NaR ưu tiên; latency bypass theo §5.3; posit_mac_f hiện chạy init-only với t=0 rồi F1–F5/packer, L_valid=12 và H=13, không bypass hai chu kỳ.
-- **Triệt tiêu**: zero của kết quả nội bộ phải xét cả phần dư theo §5.12-c. Approx không được suy ra đã triệt tiêu chính xác tích thật chỉ từ acc=0.
-
-#### e. Máy trạng thái điều khiển (FSM) của MAC v2
-Pipeline đã hiện thực và kiểm tại §11.15: parse2 → OPS/init1 → core q+2 → F1(anchor/seeds/delta) → F2(shift/tail) → F3(signed add/sub) → F4(abs/borrow) → F5(normalize/scale/adapter) → packer RNE P1/P2. q=max(1,t) với t số iteration thực tế. H_handshake=q+12,L_valid=q+11,II tối thiểuq+13 cho top một giao dịch và chỉ nhận lại sau retire. n0/t1 đã kiểm valid sauE12,handshakeE13,nhận lạiE14. Thay stage khi timing yêu cầu phải sửa lịch,metadata/valid/reset/scoreboard và SPEC trước công bố. Không gắn thêm FF vào hồi tiếp SAC rồi giữ nguyên công thức số vòng/II.
-
-#### f. Hai Ví dụ Số Kiểm Chứng Chi Tiết (Golden Test Vectors)
-Hai ví dụ toán học dưới đây không mất bit ở Q12,n đủ hoàn tất fraction đã chọn; diễn giải bằng topology post-prepack,không gán chu kỳ stream cho RTL F chưa có.
-1. **TV-FUSE-01 (Mốc Tích, $\Delta SF \ge 0$)**:
-   - $A = 10 = 1.25 \times 2^3$ ($sf_A = 3, m_A = 1.01_2$); $B = 0.34375 = 1.375 \times 2^{-2}$ ($sf_B = -2, m_B = 1.011_2$).
-   - $sf_P = 3 + (-2) = 1$. $C = 0.5 = 1.0 \times 2^{-1}$ ($sf_C = -1, m_C = 1.0_2$).
-   - $\Delta SF = 1 - (-1) = 2 \ge 0 \implies$ Mốc = Tích ($sf_{\text{base}} = 1$), $\text{shift\_extra} = 0$.
-   - $C$ căn chỉnh: $C' = 1.0 \gg 2 = 0.25$.
-   - Tích prepack: $P=1.25\times1.375\times2^1=1.71875\times2^1$.
-   - Cộng theo anchor1: $1.71875+0.25=1.96875$; không round tích trước phép cộng.
-   - Vì $\text{acc} = 1.96875 \in [1, 2)$, không cần dịch chuẩn hóa. Giá trị kết quả: $1.96875 \times 2^1 = \mathbf{3.9375}$.
-2. **TV-FUSE-02 (Mốc C, $\Delta SF < 0$)**:
-   - Cùng $A, B \implies sf_P = 1$. $C = -8 = -1.0 \times 2^3$ ($sf_C = 3, s_C = 1, m_C = 1.0$).
-   - $\Delta SF = 1 - 3 = -2 < 0 \implies$ Mốc = $C$ ($sf_{\text{base}} = 3$). Lượng dịch thêm: $\text{shift\_extra} = -\Delta SF = 2$.
-   - P căn anchor3: $1.71875\times2^{-2}=0.4296875$.
-   - Cộng hai magnitude có dấu: $0.4296875-1=-0.5703125$; residual0 nên không sửa borrow.
-   - Hậu xử lý: $\text{acc} < 0 \implies sign = 1, |\text{acc}| = 0.5703125 = 1.140625 \times 2^{-1}$ (LZC = 1).
-   - Chuẩn hóa: dịch trái 1 bit $\implies 1.140625$, cập nhật scale factor: $sf_{\text{final}} = 3 - 1 = 2$.
-   - Kết quả: $-1.140625 \times 2^2 = \mathbf{-4.5625}$.
-
-### 5.13 MAC top và điều khiển
-
-**Mục tiêu30/10:** cả NF/F chỉapproximate;không cổng chọn exact.Các mô tả busy/committed
-của wrapper cũ dưới đây là lịch sử;OPT17 giữ role/id,credit≤2,một bankC và rào tích lũy
-đã chốt,nhưng phải rà lại khi đổiNFsangcore26.Không suy số stage/Fmax hoặc PASS từ nguồn cũ.
-
-Top đã có là posit_mac_nf structural; điều khiển ở mac_nf_wrapper bằng busy/valid/committed và handshake giữa leaf. iter_ctrl có state/register riêng cho phát token/drain. Không có FSM tuần tự top mang các state ADD_A1/ADD_A2/ADD_A3 như mô tả hành vi cũ; ba tầng adder tự chuyển token.
-
-Luồng hành vi: nhận A/B/C_eff/config nguyên tử → parse → OPS launch → core/drain → norm/round bank → adder → packer → giữ output tới retire. Một bank norm/round,packer P2 là output bank; không thêm HOLD_OUTPUT register hoặc skid buffer ngầm. Output-commit và startup/reset theo §4.2/§11.10. V0 và fused top chưa hiện thực trong nhánh NF này; tối ưu bypass/chồng lấn cần contract/lịch mới và regression trước công bố.
-
----
-
-## 6. Golden model và kiểm chứng
-
-### 6.1 L1,oracle độc lập và Ideal
-
-| Thành phần | Phạm vi hiện hành |
-| --- | --- |
-| L1 FULL_TERM | P_hat theo12 fraction,26/Q24,n0..12,OPS0/1.NF/F dùng hàm làm tròn tương ứng;không chọn exact26 fraction |
-| Oracle độc lập32/3 | Raw decoder,selected-bit product và full-grid integer/rational;so M/Q/scale/iterations/cut rồi d/5flags.Công thức khác L1 để tránh lỗi chung |
-| Ideal | A×B+C_eff chính xác từ toàn bộ giá trị Posit32/3 đầu vào;chỉ làm chuẩn đo sai số,không biến thành chế độ RTL |
-| L0 SoftPosit | Wrapper hiện có p32 ES2;giữ hồi quy lịch sử/kiểm bổ trợ đúngformat,không là golden trực tiếp của32/3 |
-
-L1 hiện dùng `l1/include/posit_mac_full_term.hpp`,oracle ở `tb/opt17/full_term_reference.hpp`
-và full-grid helper `tb/week12_fused_reference.hpp`.Các file còn nhánh exact/mixed phải
-được cố định approximate hoặc tách API trước nghiệm thu target mới,không tự sửa model để ép PASS.
-Hai đường phần mềm phải khớp đúng cùng P_hat;NF và F không buộc bằng nhau.
-Python L0 gọi cùng thư viện C qua ctypes,không phải oracle độc lập thứ hai.
-Python Fraction có thể kiểm chéo hữu tỉ;chỉ ghi đã chạy khi có log tương ứng.
-Đầu tiên kiểm model/oracle và vector FT-01..05,sau đó pilot RTL,rồi main từng profile.
-Không yêu cầu khôi phục test exact phần cứng hoặc exhaustive8/16 để mở gate approximate-only.
-
-### 6.2 Quy tắc golden và làm tròn
-
-Bit-exact là yêu cầu RTL khớp hợp đồng approximate,không có nghĩa A×B là tích exact
-của toàn bộ fraction26 bit.Khi n12,M phải bằng tích hai significand đã giữ12 fraction.
-Giữ oracle adder/packer,flags,special và signed residual;không dùng double53 bit làm
-chân lý cho mọi tích Posit32/3 hoặc cho summed full-grid có scale xa nhau.
-Gate/AC02 exact lịch sử không thuộc nghiệm thu mới;không xóa report/hash hoặc đổi nhãn PASS.
-
-### 6.3 Sinh vector và Phân tầng kiểm chứng (Stratified Sampling)
-
-**Vấn đề bão hòa thống kê khi dùng Uniform Random**:
-
-- Cấu trúc số Posit phân bổ độ dài regime theo quy luật hình học: xác suất một chuỗi ngẫu nhiên 32-bit có regime dài $m$ giảm dần theo $2^{-m}$. Nếu chỉ dùng phân phối đều theo bit (Uniform bit distribution), trên 87.5% số vector sinh ra sẽ có $m \le 3$ (quanh giá trị 1.0), trong khi xác suất rơi vào các số cực nhỏ hoặc cực lớn ($m \ge 20$) là gần như bằng 0 (ví dụ $m=28$ có xác suất $2^{-28} \approx 3.7 \times 10^{-9}$).
-- Hậu quả: Quá trình test dù chạy hàng chục triệu vector ngẫu nhiên vẫn tạo ra **cảm giác an toàn giả tạo (false confidence)**, vì các mạch dò dấu (LOD/LZD) ở độ sâu lớn, các tầng dịch barrel shifter quy mô lớn, và các trường hợp fraction bị cắt ngắn cạn kiệt bit hoàn toàn chưa hề được kích thích.
-
-**Chiến lược Phân tầng bắt buộc (Stratified Sampling trong C++/SV)**:
-
-1. **Phân chia nhóm regime (quy định của đề tài)**: Chia độ dài regime $m$ thành 8 nhóm: $G_1=[1,3], G_2=[4,7], G_3=[8,11], G_4=[12,15], G_5=[16,17], G_6=[18,22], G_7=[23,27], G_8=[28,31]$.
-   - Lưới phân tầng: mỗi ô $(nhóm\ m_A, nhóm\ m_B, cặp\ dấu) = 8 \times 8 \times 4 = 256$ ô; mỗi ô bắt buộc $\ge 4000$ vector $\rightarrow \approx 1.02 \times 10^6$ vector cho một cấu hình cơ sở.
-2. **Kích hoạt các trường hợp biên cấu trúc (Structural Edge Cases)**:
-   - **Regime tối đa**: Ép sinh $m = NB - 1$ (chuỗi bit chỉ có sign và regime, không còn exponent và fraction) và $m = NB - 2$ (run và terminator đã chiếm hết payload; không còn exponent/fraction).
-   - **Mantissa đặc thù**: Ép sinh các toán hạng có fraction toàn 1 (`1.111...1`), fraction toàn 0 (`1.000...0`), và các mẫu bit xen kẽ (`1.0101...`, `1.1010...`).
-   - **Bao phủ regime**: trên độ lớn sau bù hai, mỗi polarity và độ dài run hữu hạn hợp lệ phải đạt ≥10^4 lượt toán hạng trong suite nghiệm thu posit32. Run 0 dài NB-1 là Zero, không phải số hữu hạn khác 0; kiểm riêng bằng corner. cnt ở parser bằng m-1, không nhầm với m. TB LOD/LZD độc lập phải phủ vị trí và nhánh invalid.
-3. **Phân tầng theo số bit 1 của FracX**: (0, 1, 2, 3–4, 5–8, > 8) để phủ mọi kịch bản dừng sớm (early termination) và cắt xấp xỉ của vòng lặp $n$.
-4. **Kích hoạt đường triệt tiêu (chỉ suite Adder/MAC)**: Tối thiểu 30% giao dịch hoàn tất trong suite nghiệm thu phải có hai toán hạng cộng hữu hạn khác 0, trái dấu và $|\Delta sf| \le 4$. Với NF, đo ở đầu vào adder thực tế: tích đã làm tròn `R(P_hat)` và `C_eff`; với adder đơn vị, đo hai input unpacked. Với F, đo tích prepack chuẩn hóa và `C_eff` trước cut của cửa sổ, đồng thời kiểm thêm sau cut. Đây là kích thích near-cancellation, không yêu cầu mọi cặp phải triệt tiêu ra zero.
-
-   Lưu trực tiếp các counters Δsf=0,1,2,3,4 và mẫu số; báo riêng standalone/acc_mode, specials và reset-abort. Specials không được tính vào tử số, reset-abort không được tính như giao dịch hoàn tất. Không dùng raw port C khi acc_mode bỏ qua nó, hoặc dùng bucket2–7 để khẳng định tỷ lệ nhóm≤4 đã đạt.
-
-**Tách hai profile**: phân tầng trên dùng kiểm chứng cấu trúc, không thay phân bố tái hiện Table I/II. Theo Fig. 6, Table I sinh FP32 rồi chuyển sang Posit (32,3), giới hạn m≤15; Table II sinh FP64 rồi chuyển sang Posit (32,3), m≥18, chuẩn là bộ nhân Posit exact. Ghi thuật toán chuyển đổi, seed, miền, cách chọn mA/mB và phân bố ở Phụ lục B. [P] chưa công bố đủ phân bố của 200 triệu cặp; N lớn không tự bảo đảm khớp tỷ lệ paper.
-
-### 6.4 Corner list bắt buộc (posit32; tương tự cho posit8/16)
-
-| Mã | Giá trị |
-| --- | --- |
-| zero | `0x00000000` |
-| NaR | `0x80000000` |
-| +1 / -1 | `0x40000000` / `0xC0000000` |
-| minpos / -minpos | `0x00000001` / `0xFFFFFFFF` |
-| maxpos / -maxpos | `0x7FFFFFFF` / `0x80000001` |
-
-Tổ hợp bắt buộc: `NaR×0`, `0×NaR`, `maxpos×maxpos → maxpos`, `minpos×minpos → minpos`, `(-maxpos)×(-maxpos) → maxpos`, `maxpos×minpos` (ES=2: đúng bằng 1 = `0x40000000`), `maxpos + maxpos → maxpos`, `x + (-x) → 0`, `1 + minpos`, các cặp hòa RNE (TV-RND-01/02), và mọi cặp thuộc "regime tối đa" (m = NB-1).
-
-**Tập vector kiểm chứng đặc thù cho Fused MAC (v2, §5.12)**:
-- Vector kiểm tay mẫu: **TV-FUSE-01** (mốc Tích, $\Delta SF = 2$) và **TV-FUSE-02** (mốc C, $\Delta SF = -2$).
-- Các trường hợp biên chênh lệch scale: $|\Delta SF| = \text{FRAC\_MAX} + 2$ và $|\Delta SF| = \text{FRAC\_MAX} + 3$ (kích hoạt ngưỡng rơi rụng bit hoàn toàn thành sticky).
-- Triệt tiêu chính xác ($C = -A \times B$ cho kết quả 0): kiểm tra cơ chế triệt tiêu hoàn toàn và cờ zero.
-- Triệt tiêu gần đúng ($C \approx -A \times B$ với dấu ngược nhau): sinh ra mantissa rất nhỏ, kích hoạt các mức LZC lớn (LZC > 15) để kiểm tra bộ dịch chuẩn hóa trái.
-- Các trường hợp ranh giới: $C = 0$ và Tích $= 0$ ($A=0$ hoặc $B=0$).
-
-### 6.5 Kiến trúc testbench
-
-Verilator+harness C++ kiểm theo giao dịch và từng vòng,snapshot input/config tại accept;
-scoreboard chọn NF hoặc F nhưng cùng FULL_TERM/precision/OPS/n,không chọn exact.
-ModelSim replay fixture đã được oracle kiểm để xác nhận4-state/CK2Q/reset/stall/order.
-Top đã tinh gọn không có cfg_mode;adapter cũ nếu có chỉ cấp1 và kiểm request0bị từ chối.
-Không dùng API l1_p32_mul/l1_p32_mac ES2 hoặc mặc định exact của L1 cũ cho target.
-C++golden mới,fixture,harness và source phải được đóng băng cùng nhau;không trộn FLOOR,
-FULL_TERM hoặc nguồn đã sửa saubuild.SoftPosit/reference code exact vẫn có thể link
-cho kiểm bổ trợ/Ideal,nhưng không xuất hiện như một mode chức năng của DUT.
-
-### 6.6 Kiểm tra khẳng định và bao phủ chức năng
-
-**Khẳng định (SVA)**
-
-| ID | Nội dung |
-| --- | --- |
-| A-01 | Không có X trên `d`, `flags`, `out_valid` sau reset |
-| A-02 | out_valid && !out_ready ⇒ d, flags và out_valid giữ nguyên chu kỳ kế, trừ cạnh reset hủy giao dịch |
-| A-03 | Số vòng fraction thực tế ≤cfg_n≤12;hidden không tính thành vòng fraction |
-| A-04 | Done chỉ sau last commit;kết thúc do fx=0 hoặc hết cfg_n;cfg_n12 hợp lệ phải xử lý hết fraction12 bit;term_tail luôn0 |
-| A-05 | Đầu ra NaR ⇔ A/B/C_eff là NaR; xét NaR của C_eff/accumulator và acc_clr theo giao dịch, ưu tiên NaR hơn Zero |
-| A-06 | Đầu ra là zero chỉ khi (có A=0 hoặc B=0 với C_eff=0) hoặc triệt tiêu đúng hai operand của profile (NF: R(P_hat)+C_eff; F: P_hat+C_eff trước window cut) |
-| A-07 | Giữa hai lần reset: mỗi input nhận có đúng một output đúng thứ tự khi downstream cuối cùng sẵn sàng; reset hủy pending và không trả lại giao dịch cũ |
-| A-08 | Không ghi đè token/metadata/accumulator; occupancy không vượt capacity. Kiểm điều kiện first/last/credit, không dùng II>=n thay chứng minh an toàn |
-| A-09 | in_ready chỉ lên khi run_ready và đủ slot/tài nguyên; baseline tối đa một giao dịch. Khi tối ưu, đo II từ handshake không stall và kiểm lịch đã chốt thay vì coi mục tiêu II là kết quả |
-| A-10 | MAC v2: cộng tích lũy không tràn signed ACC_WIN; kiểm bằng phép cộng mở rộng 1 bit, không chỉ nhìn hai bit nguyên |
-| A-11 | MAC v2: quyết định zero xét cả accumulator và phần dư có dấu theo hợp đồng §5.12-c; không lấy acc==0 đơn độc khi còn đuôi |
-
-**Covergroup (rút gọn)**
-
-- `cross(nhóm mA, nhóm mB, cặp dấu)` = 256 bin, tất cả phải trúng.
-- `n_thuc_te ∈ {0,1,2,3,4,5–8,9,10,11,12}` × OPS0/1;không có bin exact/>12.Có bin cfg_n9..12 và invalid13/14/15.
-- Adder (v0/v1): `d = sfΔ ∈ {0, 1, 2–7, 8–FRAC_MAX, > FRAC_MAX}` × `cùng dấu/khác dấu` × `{tràn, không đổi, triệt tiêu LZC ∈ {1, 2–4, 5–15, >15}}`.
-- Fused MAC (v2): `cross(mốc ∈ {tích, C}, dấu ∈ {cùng, khác}, |ΔSF| ∈ {0, 1, 2–7, 8–FRAC_MAX+2, > FRAC_MAX+2})` × `{triệt tiêu LZC ∈ {0, 1, 2–4, 5–15, >15}}`.
-- Packer: `{làm tròn lên, xuống, hòa-lên, hòa-giữ, bão hòa max, bão hòa min, carry sang regime}`.
-
-Nghiệm thu mới chỉ32/3. Approx9..12 là bin bắt buộc hợp lệ,không loại do N_MAX8 của
-code cũ. Kiểm actual iterations đạt12,term_tail luôn0 và input_cut độc lập iteration_cut.
-Bin không thể đạt phải có lý do truy vết;coverage FLOOR hoặc format khác không thay FULL_TERM.
-
-### 6.7 Ma trận cấu hình hồi quy
-
-| Nhóm | (NB, ES) | FRAC_W | Profile / n | OPS | Số vector | Kiểm |
-| --- | --- | --- | --- | --- | --- | --- |
-| Approx32/3 FULL_TERM | (32,3) | 12 đầu vào,Q24/26 bit tích | n0..12 | 0,1 | ≥10^7 mỗi điểm bắt buộc | Model FULL_TERM/oracle32/3 mới;không dùng bits FLOOR làm expected |
-| NF/F profile so sánh chính (MUST,cả hai bản) | (32,3) | 12 đầu vào,Q24/26 bit tích | approx;n0..12 | 1 | ≥10^7 mỗi n và mỗi bản,FULL_TERM/RNE | NF=R(R(P_hat)+C_eff);F_W so oracle full-grid cùng P_hat,kiểm lại W32;accuracy/PPA mới |
-| Quét FRAC_W (MAY) | (32,3) | 8, 12, 16, 23 | n = 3 | 1 | ≥ 10^6 | Cho EXT-B; không đổi định dạng Posit |
-
-**Phạm vi hiện hành30/10:** chỉ32/3;FULL_TERM/RNE thay FLOOR làm profile mục tiêu,
-OPS1 từng n0..12 cho cả NF/F,OPS0 theo hàng hồi quy riêng;giữ ngưỡng AC01/AC04;AC02 exact đã rút khỏi phạm vi.
-Chưa có dòng nào PASS cho cặp NF/F APPROX_ONLY30/10 sau tinh gọn.Những lượt FULL_TERM29/10 giữ phạm vi snapshot riêng. W14/fixed32/3 và các format cũ giữ nguồn gốc report,
-không cộng vào nghiệm thu mới. Không còn exact NF hoặc exact F trong phạm vi thiết kế.
-Giữ kiểm acc_mode/control/flags,seed/corpus đóng băng trước chạy và n0/corner.
-Các hàng ma trận chồng cùng OPS1 có thể dùng cùng bằng chứng đúng điểm,cùng nguồn;
-không cộng hai lần số completed khi tổng hợp báo cáo.
-
-### 6.8 Chỉ số sai số
-
-Gọi `y` là kết quả xấp xỉ (giải mã sang số thực chính xác), `r` là chuẩn (Ideal hoặc L0 tùy bảng).
-
-```
-Err(%)        = |r - y| / |r| × 100                       // theo [P]/[15]/[18]
-CorrectRate(θ)= tỉ lệ vector có Err < θ, θ ∈ {0.1, 0.5, 1.0, 5.0} (%)
-NMSE          = (1/N) Σ ((r - y)/r)^2                     // MSE tương đối, ghi chú bên dưới
-MaxErr        = max Err
-ULP-distance  = |signed_code(y) - signed_code(RNE(r))|        // số bậc Posit giữa hai mã cùng NB/ES
-```
-
-Loại NaR khỏi các chỉ số số thực và báo riêng số lượng ngoại lệ. Khi r=0, không chia cho r: nếu y=0 ghi zero-match, nếu y≠0 báo số ca sai và sai số tuyệt đối riêng. N trong Err/NMSE là số mẫu hữu hạn có r≠0; không tính NaR/zero bị loại như mẫu đạt. RNE(r) là mã reference cùng NB/ES; r Ideal có thể không biểu diễn được trực tiếp. signed_code là mã Posit diễn giải bù hai, tính hiệu bằng số nguyên đủ rộng; ULP-distance là khoảng cách mã, không phải độ dài ULP cố định trên toàn dải.
-
-ES=3 có dải xấp xỉ 10^±72, ES=2 xấp xỉ 10^±36; MSE tuyệt đối dễ bị các giá trị lớn chi phối. Báo cáo cửa sổ/miền và phân bố mẫu. Table I dùng Ideal theo Fig. 6(a). Table II của [P] dùng posit exact ES=3, nên p32 SoftPosit ES=2 không dùng trực tiếp; cần oracle Posit (32,3) độc lập đủ chính xác.
-
-**Độ tin cậy thống kê** (khoảng tin cậy 95% của một tỉ lệ `p`, `±1.96·√(p(1-p)/N)`):
-
-| N | p = 0.50 | p = 0.95 |
-| --- | --- | --- |
-| 10^6 | ±0.098% | ±0.043% |
-| 10^7 | ±0.031% | ±0.0135% |
-| 10^8 | ±0.0098% | ±0.0043% |
-
-Với sai khác giữa "Proposed" và "Kim" ở Table I chỉ 0.0 đến 0.8 điểm phần trăm, N=10^7 là mốc mẫu của kế hoạch,không tự bảo đảm khác biệt có ý nghĩa thống kê; cần effect size,khoảng tin cậy và paired comparison đúng corpus.
-
-Công thức khoảng tin cậy trên giả định mẫu Bernoulli độc lập cùng phân phối. Khi ép các tầng có trọng số khác nhau, báo cáo theo từng tầng hoặc dùng ước lượng có trọng số; không suy rộng tỷ lệ gộp 256 ô cân bằng thành tỷ lệ của dữ liệu ứng dụng.
-
-### 6.9 Quy trình hồi quy và tiêu chí đạt/hỏng
-
-| Luồng đã có | Lệnh/nguồn thực tế | Giới hạn |
-| --- | --- | --- |
-| Legacy Gate2 | make lint/smoke/regress/cov và scripts/audit_gate2_acceptance.py | Chỉ multiplier16 profile; không tự chạy NF/F final |
-| Adder W10 | prepare_week10_adder.sh,verify_week10_adder_verilator.sh,runner ModelSim,audit_week10_adder.py | Scope đơn vị theo report |
-| NF W11 checkpoint13/10 | verify_week11_mac.sh,verify_week11_modelsim.ps1,audit_week11_mac.py | 10M aggregate/main,fixture4-state,raw coverage; chưa phân bố near30% hoặc final per-n matrix |
-| NF W11 coverage14/10 | prepare_nf_coverage.sh,verify_nf_coverage.sh,verify_nf_coverage_modelsim.ps1,audit_nf_completion.py; suite nf_corners riêng | Main mới10M/0 mismatch,near52,55548%,coverage chức năng/corner đạt; chưa final per-n/F/PPA |
-| F pilot | test_week11_fused.cpp,check_week11_fused.py | Full-sum software100k,không RTL/window F |
-
-Build/generate fixtures trước audit sau cleanup; lệnh cụ thể tại [Optimization §8.4](../doc/Optimization.md#legacy-8-4)/8.6 và docs/HUONG_DAN_CHAY_WSL_MODELSIM.md. Audit phải từ chối RUNNING,thiếu log/fixture hoặc nguồn/hash đổi. --no-timing dùng kiểm chu kỳ; ModelSim giữCK2Q/4-state; strict lint dùng --timing -Wall. Các luồng này không thay STA/CDC/RDC.
-
-FAIL khi mismatch RTL/L1 hoặc P_hat/NF/F so oracle đúng32/3; giữ seed/input/config và kết quả để tái lập. Harness13/10 in serial/expected/actual; harness coverage14/10 xuất thêm A/B/C_port/C_eff/config và expected/actual/flags vào failure JSON khi mismatch số học. Tự tạo regression và artifact cho mọi lỗi protocol vẫn còn mở. make all/syn/ppa/report/asic hiện chưa là orchestration đầy đủ (§10),không dùng echo/header CSV làm PASS AC07.
-
----
-
-## 7. Tổng hợp và đánh giá PPA
-
-### 7.1 Môi trường
-
-- Công cụ: Vivado (ghi rõ phiên bản; [P] dùng 2020.1). Thiết bị: chọn theo **chính sách bậc thang ở §7.6**. Ưu tiên `xcvu9p` (part đầy đủ ví dụ `xcvu9p-flgb2104-2-i`) để cùng nền với [P]; nếu không có được thì dùng bậc thấp hơn và **so theo tỉ lệ thay vì số tuyệt đối**. Ghi rõ part đầy đủ, speed grade và phiên bản công cụ trong log.
-- Chế độ: out-of-context, hạn chế DSP về 0 (ví dụ `-max_dsp 0` hoặc thuộc tính `use_dsp="no"`; kiểm tra cú pháp theo phiên bản), không BRAM.
-- Ràng buộc: quét chu kỳ đích 1.6 ns, 2.0 ns, 2.5 ns, 3.3 ns; chạy ≥ 3 chiến lược/seed, báo min/median/max. `1/(T-WNS)` chỉ là ước lượng từ đường setup một clock tương ứng; không dùng WNS của đường I/O/false/multicycle khác để suy fmax. Tần số công bố phải đạt WNS≥0 và kiểm hold sau route với ràng buộc đầy đủ.
-- Công suất: `report_power` có file SAIF từ mô phỏng post-route (MAY, khó); nếu không có thì ghi rõ là ước lượng vectorless và không dùng để kết luận năng lượng/phép tính.
-
-### 7.2 Đối tượng đo
-
-| Nhóm | Thiết kế |
-| --- | --- |
-| Đề tài | MAC NF và F cùngapproximate-only32/3,FW12,FULL_TERM26/Q24,RNE,n0..12,OPS1;OPS0 kiểm riêng.NF/F đều dùng core/bank nhân26 bit,không so NF exact-capable54 bit với F26 bit |
-| Đối chứng posit bổ sung (MAY) | PACoGen multiplier ([23], mã nguồn [24]) sinh ra cho **cùng** `(NB, ES)` với thiết kế của bạn, DSP thay bằng LUT |
-| Đối chứng FP32/FP16 bổ sung (MAY) | (B1) Xilinx Floating-Point Operator IP: bộ nhân + bộ cộng, không dùng DSP, độ trễ chọn để fmax gần nhất với thiết kế của bạn; (B2, MAY) bộ FP sinh bởi FloPoCo hoặc tự viết |
-| Đối chiếu bài báo | Multiplier riêng lẻ (không adder), `(32,3)`, `FRAC_W=12` để so với 698 LUT / 289 FF / 575 MHz của [P] (so tuyệt đối chỉ khi ở bậc D0; nếu không thì so tỉ lệ theo §7.6) |
-
-Lưu ý: [P] ghi so sánh với PACoGen dùng `es=6` mặc định, trong khi thiết kế của [P] dùng `es=3`. Phải so sánh cùng `ES` và ghi chú sự khác biệt này.
-
-### 7.3 Chỉ số báo cáo
-
-LUT, FF, CARRY8, DSP, BRAM, WNS, fmax, độ trễ (chu kỳ, cố định + n), tích Diện tích×Trễ, số phép/giây, phép/giây trên mỗi LUT, (nếu có SAIF) năng lượng/phép.
-
-### 7.4 Chỉ số công bằng (phân tích trung thực)
-
-Phép nhân lặp không xuất kết quả mỗi chu kỳ. Khi đánh giá hiệu năng trên diện tích (throughput / LUT), cần phân biệt rõ hai chế độ vận hành:
-
-#### A. Chế độ đơn lẻ cô lập (Isolated mode — giả định minh họa)
-
-Để minh họa từ số liệu paper, bảng giả định khoảng khởi phát bằng độ trễ được công bố ($\text{II} = \text{độ trễ}$), input luôn sẵn và output không stall. Đây không phải II đã đo của paper hoặc MAC NF hiện tại:
-
-| Thiết kế | fmax | Độ trễ / II | Phép/giây | LUT | Phép/giây/LUT |
-| --- | --- | --- | --- | --- | --- |
-| [P], n = 3 | 575 MHz | 9 chu kỳ (n+6) | 63.9 M | 698 | 0.092 M |
-| [P], n = 1 | 575 MHz | 7 chu kỳ | 82.1 M | 698 | 0.118 M |
-| PACoGen pipelined | 380 MHz | II = 1 (độ trễ 5) | 380 M | 1247 | 0.305 M |
-
-Số LUT/fmax/latency từ Table III của [P]; phép/giây là tính toán theo giả định trên. Theo giả định này, PACoGen cao hơn khoảng 2.6–3.3 lần về phép/giây/LUT. Không gọi đây là cận worst-case của một hệ thống: thời gian idle hoặc stall tùy ý có thể làm throughput thấp hơn nữa.
-
-NF hiện tại có q=max(1,t), t là số vòng thực tế: first-valid=q+12, handshake không stall=q+13 và II không stall tối thiểu=q+14 vì chỉ nhận giao dịch tiếp ở cạnh sau retire (§11.10). PPA phải dùng II đo của chính top đang tổng hợp; không thế n+6 hoặc II=n vào công thức cho NF.
-
-#### B. Mục tiêu chồng lấn và độ chính xác
-
-Bảng dưới dùng LUT/fmax Table III để tính minh họa với giả định II=n, không phải phép đo throughput của [P] hay RTL đề tài. Tỷ lệ chính xác lấy đúng cột Proposed của Table I (Phụ lục A); không áp các tỷ lệ này cho phân bố phân tầng toàn miền.
-
-| n | II giả định | Phép/giây | Phép/giây/LUT | So PACoGen II=1 | Err<0.1% | Err<0.5% |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | 1 | 575,0 M | 0,824 M | 2,70× | [P] không báo cáo | [P] không báo cáo |
-| 2 | 2 | 287,5 M | 0,412 M | 1,35× | 9,87% | 32,19% |
-| 3 | 3 | 191,7 M | 0,275 M | 0,90× | 44,69% | 83,17% |
-| 4 | 4 | 143,8 M | 0,206 M | 0,68× | 87,09% | 99,79% |
-
-Không gắn 698 LUT/575 MHz của bộ nhân fraction 12 bit với tuyên bố exact posit32: xử lý hết bit 1 chỉ hết sai số lặp, không phục hồi fraction đã cắt. Nhánh exact rộng thuộc snapshot lịch sử,không là đối tượng tổng hợp/nghiệm thu mới.
-
-Báo cáo phải kèm (format, miền/phân bố đầu vào, ROUND_MODE/SCHEME, sai số, II đo thực tế, độ trễ và LUT). So multiplier với multiplier, MAC với MAC; đối chiếu FP32/FP16 non-fused cho v1, fused cho v2 nếu có. Mã ngoại lệ/range khác nhau của FP và Posit phải được tách khỏi thống kê sai số hữu hạn. Chỉ kết luận lợi thế throughput/LUT khi cùng điều kiện và mức accuracy phù hợp.
-
-### 7.5 Đóng gói kết quả
-
-Giữ raw report công cụ,part/speed grade,constraints,tool/source hash,seed và lệnh mỗi run; bảng NF/F phải truy vết được từng số. Script scripts/collect_ppa.py hiện mới tạo header CSV,không parse report hoặc xuất ppa.md như docstring; make syn/asic/report còn stub. Chưa nghiệm thu collector/PPA automation. Các khảo sát OPS/packer trước đây dùng report/JSON riêng trong results/ops_ppa và results/packer_ppa,không gọi header ppa.csv là số liệu đo toàn MAC.
-
-Khi triển khai collector thật,thiếu report hoặc parse lỗi phải FAIL thay vì điền0; synthesis-only,post-route và power estimates có nhãn riêng. Không tạo thêm Markdown kết quả trong phiên rà soát này.
-
-Tuần12 có collector chuyên biệt `scripts/collect_week12_nf.py` đã parse report Quartus thật vào results/week12/nf_ppa/{summary,stages}.json vàstages.csv;thiếu report/parse lỗi đều FAIL. Nó không thay scaffold collect_ppa.py hoặc chứng minh hỗ trợ tự động Vivado/ASIC/power. Phạm vi và số đo tại §11.14.
-
-### 7.6 Chính sách thiết bị và phương án khi không có xcvu9p
-
-Chọn part mà phiên bản Vivado và license hiện có hỗ trợ; ghi kết quả kiểm tra part/license vào log trước khi chốt nền tảng. Không cần board vật lý để tổng hợp/P&R. D0 dùng cùng device family như [P]; các bậc khác chỉ so trong cùng nền tảng và ghi rõ giới hạn đối chiếu. Không cố định tên gói miễn phí hay công nghệ chế tạo cho cả họ thiết bị vì hỗ trợ thay đổi theo part/phiên bản.
-
-**Các bậc nền tảng**
-
-| Bậc | Nền tảng | Điều kiện | Số liệu thu được | Giá trị so với [P] |
-| --- | --- | --- | --- | --- |
-| D0 | Vivado + xcvu9p | Phiên bản/license và constraints đã chốt | LUT/FF/fmax đo tại device này | Đối chiếu mốc công bố [P],không tự gọi tái hiện khi chưa có RTL/config tác giả |
-| D1 | Vivado + UltraScale+ được bản cài/license hỗ trợ | Xác nhận theo part | LUT/FF/CARRY8, timing đo riêng | Chỉ so tỉ lệ đo cùng nền tảng |
-| D2 | Vivado + 7-series (Artix-7 `xc7a35t`/`xc7a100t`, Zynq-7000 `xc7z020`) | Xác nhận part trong bản đã cài | LUT6/CARRY4; timing phải đo riêng | Chỉ so tỉ lệ |
-| D3 | Yosys `synth_xilinx` (không cần Vivado; chọn family theo phiên bản Yosys) + số tầng LUT trên đường dài nhất (`ltp`) | Mã nguồn mở | LUT/FF/CARRY, độ sâu logic làm đại lượng thay cho fmax | Bằng chứng chéo, chỉ tỉ lệ |
-| D4 | Yosys + OpenROAD (EXT-A), Nangate45 hoặc SKY130HD | Mã nguồn mở | Diện tích µm², WNS, fmax, công suất ước tính | Không so số của [P]; so xu hướng và tỉ lệ |
-
-**Quy tắc để kết quả vẫn có giá trị**
-
-**Phạm vi thực thi hiện hành —17/10/2026:** sinh viên chọn chỉ A35T `xc7a35tcpg236-1` cho các khảo sát mới, tối ưu/candidate và so paired NF/F. Không chạy A100T hoặc part khác trong kế hoạch tiếp theo; các hàng thiết bị và số đo cũ giữ vai trò tham chiếu/lịch sử. Các chiến lược P&R matched thực hiện trên cùng A35T; chưa tuyên bố độc lập nền tảng và không tự mở kiểm cross-part. Không đổi hợp đồng số học hoặc ngưỡng kiểm đúng.
-
-**Constraint hiện hành A35T-C2 —17/10/2026:** theo yêu cầu sinh viên, mọi benchmark10ns/100MHz giữ input min=max2,500ns, output min0/max0,500ns và uncertainty setup/hold0,100ns. Clock và I/O nằm trong syn/constraints/a35t_clock.xdc và a35t_benchmark_100mhz.xdc, đọc trước synthesis. Khi quét clock cao hơn, ưu tiên đánh giá Internal R2R và báo I/O riêng; nếu giảm input budget theo chu kỳ thì phải công bố profile sweep mới, áp cùng baseline/candidate, không gọi I/O slack âm theo budget cũ là âm giả hoặc suy board signoff từ R2R. Ngoại lệ thứ hai chưa được mô tả, không tự mở. C1 clock-only chỉ là hồ sơ trước điều chỉnh. Xem [syn/README](syn/README.md) và [Optimization§8.27](../doc/Optimization.md#legacy-8-27). Không đổi số học/pipeline; chưa có Fmax mới.
-
-**Lựa chọn lịch sử 15/10/2026:** sinh viên yêu cầu chuyển các phép đo mới sang Xilinx, bắt đầu bằng hai dynamic shifter và LOD/LZD riêng lẻ; chưa ghép SAC/parser/MAC. Vivado2026.1 build6511674 đã nhận license synthesis/implementation và các part `xc7a35tcpg236-1` (Basys3), `xc7a100tcsg324-1` (ArtyA7-100T/NexysA7-100T). `get_parts *7z020*` trả rỗng; chưa đo PYNQ-Z2/Zynq7020. Không cần cài board-file cho benchmark theo part. Tài liệu part: [Basys3](https://digilent.com/shop/basys-3-amd-artix-7-fpga-trainer-board-recommended-for-introductory-users/), [ArtyA7](https://digilent.com/shop/arty-a7-100t-artix-7-fpga-development-board/).
-
-Ứng viên primitive giữ riêng tại `rtl/candidates/primitives/`, không đưa đồng thời với bản cùng tên trong `rtl/` vào một source list. Snapshot và điều kiện đo nằm ở `results/primitive_xilinx_20261015/manifest.json`; so N12/26/32, right custom-fill và LOD MODE0; ARITH1/MODE1 kiểm chức năng riêng, chưa suy PPA. Benchmark OOC có input/output bank giống nhau, BUFG, clock5ns/uncertainty0,1ns, ba cặp place/route `Default/Default`, `Explore/Explore`, `RuntimeOptimized/Default`, cùng chính sách DSP0/BRAM0. Bank đo không sở hữu valid/state nên ghi đè mỗi cạnh, không có reset/protocol; primitive vẫn thuần tổ hợp, không thay latency giao dịch NF/F.
-
-Số LUT chính lấy **Slice LUTs vật lý** từ `report_utilization`, không dùng tổng số logical LUT cells vì hai cell có thể dùng chung O5/O6. Kiểm setup/hold R2R sau route ở clock thử; `1000/(T−slack)` chỉ là **ước lượng STA** tại clock đó, không gọi là Fmax đã sweep/đạt trên kit. I/O delays của benchmark là ngân sách tổng hợp giả định; cổng OOC chưa có `HD.PARTPIN_LOCS`, không phải timing/bitstream của board. Giữ các báo cáo CycloneIV trước đây làm lịch sử; không so trực tiếp LUT4 với Slice LUTs hoặc quy Fmax leaf thành Fmax MAC. Hai part hiện có cùng Artix7/speed−1, chưa đáp ứng bằng chứng độc lập khác family. Kết quả/giới hạn nghiệm thu cụ thể tại [Optimization §8.16.9](../doc/Optimization.md#legacy-8-16-9).
-
-1. **Cùng điều kiện.** Mọi thiết kế được so sánh (posit, PACoGen, FP32, FP16) dùng cùng công cụ, phiên bản, thiết bị, ràng buộc, chế độ out-of-context, không DSP.
-2. **Báo cáo tỉ lệ** `R_LUT = LUT_đề_tài / LUT_baseline`, `R_FF`, `R_fmax = fmax_đề_tài / fmax_baseline`. Mốc của [P] với PACoGen: `R_LUT = 698/1247 = 0.56`, `R_fmax = 575/380 = 1.51`.
-3. **Kiểm chéo hai nền tảng khác bậc (SHOULD, cần nếu kết luận độc lập nền tảng)** (ví dụ D1 hoặc D2 cùng D3 hoặc D4). Một khẳng định về thứ hạng hay tỉ lệ chỉ được đưa vào kết luận nếu giữ nguyên trên cả hai; nếu chỉ đúng trên một nền tảng thì ghi rõ là phụ thuộc nền tảng.
-4. **Phân rã theo module** (parser, packer, nhân, cộng) bằng `report_utilization -hierarchical`. Tỉ lệ đóng góp của từng module ổn định hơn số tuyệt đối; [P] nói phần lớn tài nguyên nằm ở parser/packer, nên đây là điểm dễ kiểm chứng.
-5. **Độ nhạy.** ≥ 3 seed/chiến lược; nếu fmax giữa các seed chênh quá 10% thì coi là nhiễu và báo cáo khoảng min–max, không báo cáo một điểm.
-6. **Dùng từ đúng.** D0 chỉ đủ cùng device; tái hiện TableIII còn cần source/profile/ràng buộc và số liệu tương ứng. Khi chưa có provenance,chỉ gọi đối chiếu mốc [P]. Các bậc khác báo NF/F cùng nền tảng; không gọi trùng tỷ lệ là bằng chứng tái hiện tác giả.
-
-**Ví dụ số (giả định minh họa, không phải số đo thật).** Ở D2, PACoGen ra 1,410 LUT / 210 MHz, thiết kế của bạn ra 790 LUT / 330 MHz. Khi đó `R_LUT = 790/1410 = 0.560` (trùng mốc 0.56) và `R_fmax = 330/210 = 1.571`, lệch +3.8% so với mốc 1.513. Đây là kết quả tái hiện xu hướng tốt dù số tuyệt đối khác hẳn [P].
-
-**Ngưỡng NFR quy đổi sang tỉ lệ** (quy từ NFR-02/03 với baseline 1247 LUT / 380 MHz):
-
-| Mức | NFR-02 (tuyệt đối → `R_LUT`) | NFR-03 (tuyệt đối → `R_fmax`) |
-| --- | --- | --- |
-| Tối thiểu | ≤ 1000 LUT → ≤ 0.80 | ≥ 350 MHz → ≥ 0.92 |
-| Mục tiêu | ≤ 800 LUT → ≤ 0.64 | ≥ 450 MHz → ≥ 1.18 |
-| Xuất sắc | ≤ 700 LUT → ≤ 0.56 | ≥ 575 MHz → ≥ 1.51 |
-
-Ngoài D0, dùng cột tỉ lệ. **Tiêu chí AC05/AC06 hiện hành:** đo NF/F trên ít nhất một nền tảng P&R hợp lệ,cùng device/tool/constraints/config và>=3 run/config; đủ raw report,setup/hold,latency/II và tài nguyên theo AC05/06. Cross-platform là kiểm bổ trợ; D3 depth/synthesis-only không thay timing post-route. Mốc±20% tỷ lệ paper chỉ là khảo sát lịch sử,không phải điều kiện chặn NF/F khi chưa có RTL tác giả. D4 dùng metric ASIC,không so LUT FPGA; lựa chọn nền tảng ghi trước chạy,không chọn lại chỉ vì kết quả bất lợi.
-
----
-
-## 8. Các mở rộng EXT-A/B/C (Tier 3 theo §1.5)
-
-### EXT-A. Luồng ASIC RTL-to-GDSII (khuyến nghị)
-
-- Công cụ: Yosys + OpenROAD-flow-scripts, platform mã nguồn mở (Nangate45 hoặc SKY130HD), GDS xem bằng KLayout.
-- Bước: `config.mk` và `constraint.sdc` → tổng hợp → floorplan → placement → CTS → routing → STA (đủ setup/hold) → kiểm tra DRC của platform (nếu có).
-- Đối tượng: cùng RTL Posit MAC (v1) và FP32 MAC baseline (B2, cần bản RTL công khai); quét chu kỳ đích 3 mức.
-- Chỉ số: diện tích (µm²), utilization, WNS/TNS, công suất từ báo cáo công cụ (ghi rõ điều kiện), số cell.
-- Sản phẩm: thư mục `asic/` tái lập bằng `make asic`, bảng PPA ASIC cạnh bảng FPGA, phân tích đường tới hạn (parser LOD/LZD, packer shifter) và các biện pháp cải thiện đã thử (thêm pipeline, chia nhỏ shifter).
-- Lý do đề xuất: cho số liệu diện tích/timing thực hơn LUT của FPGA và tận dụng trực tiếp kỹ năng thiết kế vật lý. Nếu không có Vivado hoặc thiết bị phù hợp, EXT-A được nâng thành đường PPA chính (bậc D4 ở §7.6).
-
-### EXT-B. Khảo sát không gian thiết kế (DSE)
-
-Quét `FRAC_W ∈ {8,12,16,23}`, `n ∈ {1..6}`, `ES ∈ {2,3}`, `ops ∈ {0,1}`; mỗi điểm cho `(LUT, fmax, CorrectRate@0.1%, NMSE, độ trễ trung bình)`. Xuất đồ thị Pareto (LUT × độ trễ trung bình × NMSE) và khuyến nghị 2–3 cấu hình cho các kịch bản (nhẹ, cân bằng, chính xác).
-
-### EXT-C. Đánh giá mức ứng dụng
-
-Dùng L1 thay phép nhân trong (i) bộ lọc FIR có hệ số biết trước, hoặc (ii) suy luận MLP nhỏ trên MNIST; báo cáo SNR/độ chính xác phân loại theo `n`, `FRAC_W` so với FP32 và FP16.
-
----
-
-## 9. Kế hoạch 16 tuần — lịch sử trước quyết định30/10
-
-| Tuần | Công việc | Sản phẩm | Cổng kiểm |
-| --- | --- | --- | --- |
-| 1 | Đọc [P], [4], [15], [18]; lập bảng "điểm mơ hồ" (§11); dựng repo, Makefile, lint | `docs/ambiguity.md`, repo khung | |
-| 2 | Cài SoftPosit; script gọi `p8/p16/p32`; xác nhận toàn bộ TV-RND và corner list bằng SoftPosit | `l0/` chạy được | Corner list khớp tay |
-| 3 | L1: parser/packer/round + exact multiplier; đối chiếu L1 với SoftPosit ở `ES=2` | L1 parser, pack, mul exact | **Gate 1**: Parser $\rightarrow$ Packer đồng nhất; L1 mul exact = L0 ($2^{16}$ posit8, $2^{32}$ posit16, corner list + $\ge 10^7$ posit32) |
-| 4 | L1 nhân lặp,OPS/SAC/SBM và hợp đồng prepack FLOOR/RNE | L1/prepack đóng băng; trace kiểm | Profile local/oracle đạt; TableI/provenance nghiên cứu phụ,không chặn NF/F |
-| 5 | L1: Posit Adder (`l1_add`); kiểm tra bit-exact với SoftPosit `p<N>_add` | L1 adder | L1 adder = L0 ($2^{16}$ posit8, $2^{32}$ posit16, corner list + $\ge 10^7$ posit32) |
-| 6 | L1: Posit MAC non-fused (`l1_mac`), `round_unpacked`, `acc_mode` | L1 mac hoàn chỉnh | **Gate 1B**: L1 MAC = L0 ($2^{24}$ posit8, corner list + $\ge 10^7$ posit32) trước khi code RTL |
-| 7 | RTL parser + LOD/LZD + barrel shifter + testbench đơn vị | `posit_parser` | Exhaustive posit8/16 |
-| 8 | RTL packer + RNE + pre-clamping; kiểm parser→packer đồng nhất | `posit_pack` | Corner list, exhaustive posit8/16 |
-| 9 | RTL OPS + SAC + SBM + `iter_ctrl`; multiplier top | `posit_mul_iter` | **Gate 2**: RTL Multiplier = L1, $10^7$ vector, mọi n; exact mode khớp L0 |
-| 10 | 12–18/10: chốt contract/corpus NF/F và RTL adder | posit_add, testbench và matrix | Adder=L1/L0, control/flags đạt |
-| 11 | 19–25/10: MAC v1 non-fused, bắt đầu L1 F | Baseline NF có tag/hash, L1 F pilot | Gate3 NF; không gọi L1 F đã nghiệm thu |
-| 12 | 26/10–01/11: L1 F/oracle,width/cut/cancellation,PPA sơ bộ NF và xác định critical path | Hợp đồng F đóng băng, corpus đối chuẩn | G-F-L1; xác nhận công cụ P&R |
-| 13 | 02–08/11: RTL F theo model đã kiểm;tối ưu/chốt pipeline NF/F trước regression lớn | MAC v2 và checker | Pilot RTL F=L1 F, protocol/corner đạt |
-| 14 | 09–15/11: regression, coverage và paired accuracy | Report NF/F cùng corpus | G-F-RTL, AC01/AC04 và phép đo AC03 mới |
-| 15 | 16–22/11: P&R hai bản, ≥3 run/config, bản thảo | Bảng accuracy/PPA và hồ sơ | Gate4, AC05/AC06 |
-| 16 | 23–29/11: báo cáo/slide/demo/tái lập; đệm30/11–04/12 | Hồ sơ chính hoàn tất29/11 | AC07/AC08; hoàn tất trước05/12 |
-
-**Phân cấp lộ trình và quản lý rủi ro tiến độ**:
-- **Đường găng dự án (Critical Path - Bắt buộc)**: Gate 1 (Tuần 3) $\rightarrow$ Gate 1B (Tuần 6) $\rightarrow$ Gate 2 (Tuần 9) $\rightarrow$ Gate 3 (Tuần 11) là các mốc nền tảng bộ nhân lặp và **MAC v1 Non-fused**. Đường hoàn tất mục tiêu đầy đủ tiếp tục qua L1 F → RTL F → kiểm paired/coverage → PPA NF/F → hồ sơ tuần16; NF/Gate3 riêng chưa hoàn thành đề tài.
-- **MAC fused v2 (FR11)**: hạng mục so sánh chính của kế hoạch11/10; vẫn không chặn việc đóng NF/Gate3. L1 tuần11–12, RTL tuần13–14 sau oracle; lịch và phạm vi bắt buộc hiện hành tại §11.8.
-- Nếu chậm tiến độ: giảm EXT-A/B/C, FP32/FP16, chồng lấn và cấu hình F phụ; giữ NF, fused profile chính và AC01/AC02/AC04. Báo rủi ro thay vì tuyên bố đạt khi còn mismatch.
-
----
-
-
-## 10. Repo, chuẩn code, công cụ
-
-| Đường dẫn hiện có | Vai trò |
-| --- | --- |
-| SPEC_Posit_MAC_IP.md,Digital_Design_Guidelines.md | Hợp đồng/chuẩn code |
-| l0/ | SoftPosit wrapper,format và library hash |
-| l1/ | Legacy model/freeze,test và PLAN/README |
-| rtl/ | Một module/file; posit_mac_nf và các leaf |
-| tb/ | Harness C++,oracle độc lập,testbench SV thủ tục; chưa UVM-lite integrated |
-| scripts/ | Runner/generator/audit và tiện ích; chức năng thực theo §6.9 |
-| syn/,asic/ | Script khảo sát và scaffold; không suy đã có flow MAC cuối |
-| results/ | Canonical JSON,raw coverage/trace/report công cụ,version/seed/hash; binaries/fixture lớn tái sinh |
-| ../doc/ | TIEN_DO_DO_AN.md và hướng dẫn chạy đã có |
-
-Guideline áp dụng cho RTL mới: một module/file,named ports,mỗi port một dòng,no latch,blocking combinational/nonblocking sequential,always_ff/enable/CK2Q; reset bridge top và2FF release leaf. Initial $fatal trong generate chỉ kiểm cấu hình elaboration/simulation,không dùng initial khởi tạo phần cứng thay reset. Reset top rst_n theo giao diện SPEC; reset leaf reset_n theo guideline.
-
-Makefile hiện lint/smoke/regress/cov cho Gate2 multiplier; syn/asic/report còn echo,ppa collector còn header. make all chưa đủ AC07. Các target/demo/summary.md mới là kế hoạch nếu chưa có code. Git giữ lịch sử nguồn,commit+manifest/tag ở mốc đã kiểm; không đưa token/license/binary/wave/cache vào commit. Checkout backup scratch/github_week9_backup giữ cấu trúc repository Posit_MAC/ và doc/,không đổi remote hoặc dùng force/reset/clean.
-
-## 11. Quyết định, rủi ro và điều kiện triển khai
-
-**Phạm vi30/10:** các checkpoint exact/FLOOR/đa format có ngày bên dưới giữ lịch sử;
-không tạo nghĩa vụ triển khai exact.NF/F so sánh mới phải theo APPROX_ONLY §4.3–4.4,
-cùng26/Q24,n0..12 và RNE;không kế thừa PPA của NF54bit exact-capable.
-
-Cập nhật29/10/2026. SPEC là hợp đồng;§4.3 ưu tiên cho FULL_TERM,các checkpoint có ngày
-giữ profile nguồn gốc. “Đã chốt” không đồng nghĩa đã triển khai RTL/L1/TB hoặc đã PASS.
-
-### 11.1 Điểm mơ hồ và quyết định hiện hành
-
-| # | Vấn đề | Quyết định / hợp đồng | Trạng thái và phần còn lại |
-| --- | --- | --- | --- |
-| 1 | OPS, recurrence và rounding của [15]/[P] | RTL baseline dùng cfg_ops=0/1 và profile normative §5.4–§5.6. Predictor n=2/7-bit, RND/complement và paper_source_config là nghiên cứu riêng | PT2 PASS128 prefix dưới giả định đệm Q12; LUT/tie gốc còn mở. README L1 mục20 loại source Q24 không cut khỏi baseline bit-exact2021 bằng output Fig.4; muốn đưa profile paper vào RTL phải bổ sung contract/API và oracle riêng |
-| 2 | Phân bố, seed và ngoại lệ Table I/II | Table I tái dựng dùng grid24 [0,1), FP32 RNE Ideal, seed271828, 200 triệu accepted. Generator/seed/filter là giả định dự án; phân tầng dùng coverage, không thay corpus paper | Source lịch sử đạt max0,984213 điểm % nhưng không khớp output Fig.4; không dùng kết quả này để nghiệm thu baseline gốc. Đối chiếu profile cut12 ở README L1 mục20; generator gốc và Table II còn mở |
-| 3 | Cut/sticky trong SBM | Mục tiêu FULL_TERM giữ đủ term ởQ24;không FLOOR/JAM/RNE từng vòng,term_tail0.Input/iteration cut là metadata | Code cũ FLOOR,n≤8 chưa sửa;golden/fixture mới còn mở,không relabel scheme hoặc PASS cũ |
-| 4 | Độ rộng accumulator | Approx magnitude26 bit/Q24;NF exact-capable có thể giữ bank54,exactQ52.F nhận prepack26 bit,carry25 | Hợp đồng dự án §4.3,không xác nhận width paper.Bằng chứng fig3/guard lịch sử giữ nguyên;W32/Q29 cần kiểm mới |
-| 5 | m của hai toán hạng Table II | Giả định cả hai thuộc nhóm khảo sát; ideal là posit32 ES3 exact, không dùng L0 ES2 thay thế (§6.3) | Cần corpus, seed, conversion/filter và oracle ES3 trong báo cáo Table II |
-| 6 | Baseline PACoGen/FP32/FP16 | Cùng ES, part, ràng buộc và tài nguyên khi so trực tiếp; khác thiết bị thì báo riêng theo §7.6 | Toàn NF đã post-route sơ bộ trên CycloneIV (§11.14); chưa paired NF/F,đối chiếu D0 hoặc Gate4 |
-| 7 | TRUNC và RNE | ROUND_MODE là đóng gói; ROUND_SCHEME là cut/sticky nội bộ. TRUNC cắt độ lớn về 0; lỗi có dấu phụ thuộc dấu toán hạng | L1/round_unpacked và packer RTL RNE/TRUNC đã nghiệm thu đơn vị07/10; results/packer/summary.json |
-| 8 | Số tầng và latency | H,L_valid,L_handshake theo §5.1; tách benchmark riêng với toàn hệ thống | Parser/packer và NF numeric đã kiểm; packer riêng122,50–124,42MHz không phải Fmax MAC. Toàn NF CycloneIV median45,07MHz,setup100MHz chưa đạt (§11.14). F pipeline q+12 mới là ngân sách |
-| 9 | Ý nghĩa n | cfg_n mục tiêu0..12 đếm fraction,hidden riêng;n12 hết fraction12 bit.SAC dừng sớm khi fx0 | Người dùng xác nhận12 vòng29/10;RTL/L1 cũ giới hạn8,n13..15 phải bị từ chối ởapprox sau chuyển đổi |
-| 10 | Reset và lịch core | Reset bridge/startup barrier §4.2; n=0/init_only, first/last và drain theo §5.5. Baseline giữ một giao dịch, dự trữ một slot đầu ra | Core/bridge/standalone đã kiểm Gate2; NF numeric/protocol W11 đạt. Coverage Gate3 bổ sung đạt tại §11.12; final vẫn mở |
-
-### 11.2 Rủi ro hiện tại
-
-| Rủi ro | Ảnh hưởng | Cách xử lý / điều kiện đóng |
-| --- | --- | --- |
-| Packer hoặc Adder RTL lệch L1 tại ties/clamp/cancellation | Cao | Packer đã kiểm tuần8; adder RTL đã kiểm mốc đơn vị tuần10. Gate1B là bằng chứng L1, không thay nghiệm thu RTL. Còn ma trận final và coverage tích hợp |
-| Lệch một cạnh khi cộng số tầng | Cao | TB dùng E0, H, L_valid, L_handshake; kiểm n=0/1/2, early termination, bypass và bubble; không ép số đo vào công thức cũ |
-| A/B/C hoặc metadata nhả reset/nhận giao dịch khác nhau | Cao | Reset bridge và startup barrier; nhận A/B/C nguyên tử; test reset rỗng, đang tính và output stall |
-| Core_done sớm, khởi tạo hai lần hoặc mất token khi drain | Cao | Kiểm lịch §5.5; done chỉ sau last tại accumulator, init_only n=0 không cộng Y hai lần |
-| Chồng lấn ghi đè accumulator, FIFO thiếu chỗ hoặc đọc C cũ | Cao | Baseline một giao dịch trước; sau đó chứng minh credit/capacity, ordering và hồi tiếp. Không ấn định FIFO6–8 hoặc II=max(1,n) như bảo đảm |
-| Table I khớp corpus nhưng thiếu provenance/độ ổn định | Trung bình | Giữ nhãn tái dựng, công bố seed/profile và sensitivity; không chọn seed/width chỉ để ép khớp |
-| Vivado không chạy tổng hợp/STA vì thiếu license | Cao đối với PPA | ModelSim dùng kiểm chức năng; Vivado compile/elaborate đã chạy cho parser nhưng không thay STA. Khôi phục license hoặc dùng luồng §7.6 và ghi rõ thiết bị/công cụ |
-| Hết thời gian hoặc so PPA thiếu công bằng | Cao | Giữ NF và fused profile chính; cắt khảo sát phụ theo §9; so cùng điều kiện và phân biệt OPS riêng với toàn MAC |
-| Fused v2 mất đuôi có dấu/triệt tiêu sâu, ABS/LZC hoặc carry dài | Cao đối với mục tiêu đầy đủ | Chốt oracle/hợp đồng §5.12-c trước RTL v2; đo STA/PPA. Không chặn NF/Gate3, nhưng bắt buộc trên đường hoàn tất tuần12–16 |
-
-### 11.3 Điều kiện sẵn sàng và thứ tự thực hiện
-
-1. **Đã nghiệm thu mô hình số học:** Gate1, round_unpacked tương đương parse(pack(u)), Adder và MAC L1 v0/v1 Gate1B. Bằng chứng tại README L1 mục15 và results/week6_*; ES3 dùng oracle riêng, không gọi là L0 SoftPosit ES3.
-2. **Đã nghiệm thu parser RTL đơn vị:** comb và pipeline bốn format, 2.465.812 fixture, 0 mismatch; reset/stall/ordering/II được kiểm ở parser. Bằng chứng results/parser_comb/, results/parser_pipeline/ và rtl/README.md mục5. Không suy thành Gate2/3 toàn MAC.
-3. **Đã nghiệm thu packer RTL tuần8:** tổ hợp/pipeline RNE2/TRUNC1 và parser→packer đạt0 mismatch trên bốn format; F_IN/adapter theo §5.9-D. Tuần9 đã chốt giao diện §5.5-A và kiểm OPS/SAC tổ hợp327.440 vector ModelSim,0 mismatch; SBM/core/top standalone đã triển khai và kiểm pilot 09/10; Gate2 multiplier đã nghiệm thu10/10: strict lint16 cấu hình, scoreboard trực tiếp và16.815.920 so sánh/0 mismatch; bằng chứng [hồ sơ Gate2](../doc/Optimization.md#legacy-7-11) và gate2_acceptance.json. Paper RTL843 commit/Fig.4 đạt trong profile tái dựng, không xác nhận baseline gốc. Sau tối ưu P2, packer benchmark riêng đạt setup100MHz ở ba seed mỗi mode; tiếp tục STA khi tích hợp, không gọi là Gate4 hoặc fmax toàn MAC.
-4. **Trước nghiệm thu tích hợp:** thực hiện reset bridge, startup barrier và lịch core §4.2/§5.5; TB đối chiếu cạnh, config, flags, metadata và slot output. Multiplier standalone đã có reset bridge, startup barrier và kiểm pilot; Gate2 multiplier đã nghiệm thu; RTL adder đơn vị đã nghiệm thu§5.8-E; MAC NF/C/context và Gate3 đã kiểm theo §11.10; final matrix và fused còn mở.
-5. **Chồng lấn sau baseline:** thêm FIFO/credit và chứng minh lịch first/last, n=0/drain, acc feedback trước khi kết luận II/throughput. Sức chứa phải suy ra, không dùng skid2 để bảo đảm mọi giao dịch đang bay.
-6. **Tái hiện/PPA và v2:** provenance Table I, corpus Table II và PPA toàn khối còn mở; ghi đúng giới hạn. Fused v2 là mục tiêu so sánh chính theo §11.8; không thay bằng chứng tuần8 hoặc điều kiện đóng NF/Gate3.
-
----
-
-Các mục11.4–11.7 dưới đây giữ kết luận **tại ngày của từng phiên**; câu “Gate2 processing” ở09/10 không phải trạng thái hiện hành. Gate2 hiện đã nghiệm thu10/10; trạng thái NF/F và coverage hiện hành ở §11.10–§11.13.
-
-### 11.4 Bằng chứng RTL tuần9 — 09/10/2026
-
-SBM/normalize/adapter đã kiểm252.455 lượt; core đạt39.580 giao dịch và420 reset hủy; standalone multiplier pilot31.840 giao dịch và160 reset hủy. Cả ba suite0 mismatch. Nghiên cứu paper riêng đạt843 commit/293 bản ghi, Fig.4 force-X=0x1ae34000; không xác nhận tie/padding/guard hoặc RTL gốc. Hợp đồng normative giữ §5.5-A/§5.7/§5.9-D.
-
-ModelSim đối chiếu 16.815.920 giao dịch, hủy 80.080 giao dịch bằng reset,0 mismatch.
-
-Gate2/tuần9 processing: cần lint/harness Verilator chính thức ; coverage chức năng §6.3 đã kiểm đạt, line/branch/toggle chưa đo. Quartus13 Analysis & Synthesis NB32/ES2 đạt0 lỗi,14 warning đã phân loại, không có cảnh báo latch; không thay STA/CDC/PPA. TableI không chạy lại vì chưa có thay đổi có căn cứ. Kế hoạch/bằng chứng chi tiết: PLAN L1 §7.4 và results/week9_implementation/summary.json. GitHub đã push checkpoint 0ae39c4 lên main bằng checkout riêng trong Posit_MAC; kết quả lượt lớn được bổ sung cuối phiên.
-
-### 11.5 Top paper tự hồi tiếp — 09/10/2026
-
-`paper_mul_iter`/`paper_mul_wrapper`/`paper_norm_comb` đã tự chạy từ A/B đến kết quả; ModelSim17.181 giao dịch và65.710 commit đạt0 mismatch,843 commit corpus cũ giữ nguyên, Fig.4=0x1ae34000. Linux/Windows/UBSan fixture MATCH; reset/stall/context/early-stop/special đạt trong suite. Hợp đồng research cố định posit32ES3/Q12, n_terms1..8, outputTRUNC; chi tiết PLAN L1 §7.5 và results/paper_top/{windows/summary,audit}.json. Không có nguồn mới hoặc thay đổi số học nên không chạy TableI; provenance baseline gốc và Gate2 vẫn processing.
-
-### 11.6 Rà soát SAC/n và packer theo nguồn — 09/10/2026
-
-Audit trực tiếp nguồn2019/2021 và kiểm deterministic163.840 cặp cho thấy RND/complement và quét bit1 không tương đương. Fig4 khớp n_fraction2/n_total3 (0x1ae34000), nhưng n_total2 cho0x1ad14000; TableI Proposed chưa khóa cách đếm/recurrence từ nguồn. Giữ nguyên profile normative và top RND nghiên cứu, không đổi n/seed để ép bảng.
-
-Reference cổng Fig5 độc lập khớp L1 trên3.940.352 trường hợp; ModelSim155.648 trường hợp đạt0 mismatch, Linux/Windows/UBSan MATCH.8.448 raw/clamped differences nằm ngoài miền sf−240..240, do range handling đồ án bổ sung; không phải lỗi RTL hoặc xác nhận clamp tác giả. Không chạy pilotTableI, baseline gốc/Gate2 vẫn processing. Chi tiết duy nhất tại README L1 §24; bằng chứng/lệnh/hash/compiler tại results/paper_contract_audit/{summary.json,windows/summary.json}.
-
-### 11.7 Pilot nguồn Posit journal2024 — 09/10/2026
-
-Pilot journal2024 dùng Posit32 ES2/Q12/PT2 tuyệt đối, oracle SoftPosit0.4.1; n đếm tổng số hạng. Self-test600.127 đối chiếu/lượt đạt0 mismatch, smoke Linux/Windows MATCH và UBSan đạt. Hai phân bố địa phương10M mỗi loại chưa khớp Fig9: rawPosit n2 Err<0,1%=8,954950%, cột nguồn khoảng53–57%. Cận OPS lý tưởng trong cùng hợp đồng chỉ9,667460%. TableVI khớp output n2 nhưng còn dư; lời văn nói t2=0 bất nhất với bảng. Không kết luận số liệu2021/2024 sai; không đổi n/cut/seed để ép bảng, không chạy full200M hoặc RTL ES2. Baseline gốc/tuần4 và Gate2 vẫn processing. Chi tiết tại README L1 §25, kết quả/compiler/seed/lệnh/hash tại results/paper_journal2024/measurement/summary.json.
-
-### 11.8. Baseline nội bộ và lịch NF/F — quyết định11/10/2026
-
-Quyết định này cập nhật ưu tiên các phần kế hoạch cũ: TableI không còn là AC03 bắt buộc, bài báo không được gọi là baseline đã tái hiện; fused không còn là hạng mục có thể cắt khỏi mục tiêu đầy đủ. Logs/Phụ lục B mang nhãn AC03 cũ giữ ý nghĩa lịch sử paper, không đổi kết quả. Các hợp đồng số học §4–§5, ngưỡng kiểm đúng AC01/AC02/§6.7 và coverage AC04 cuối không được hạ vì thay timeline.
-
-Lịch hiện hành tập trung tại §9 và PLAN8; ngày là kế hoạch,không phải status nghiệm thu. Hạn hồ sơ29/11,đệm30/11–04/12,trước05/12/2026. Tối ưu pipeline tuần12–13,chốt trước regression tuần14,xác nhận post-route tuần15.
-
-### Hợp đồng baseline nội bộ và so sánh — chốt lại30/10/2026
-
-Hai bản duy nhất là NF và F,đều approximate-only32/3,FW12,FULL_TERM26/Q24,n0..12,RNE.
-NF=R(R(P_hat)+C_eff);F_ref=R(P_hat+C_eff).Ideal vẫn là tích/tổng toán học của đầu vào gốc
-để đánh giá approximation,không là một chế độ RTL.Exact fused và quire ngoài phạm vi.
-NF/F phải dùng cùng core/bank nhân26 bit và chính sách OPS,min-popcount hòaA.
-Khác biệt diện tích chủ yếu từ vị trí làm tròn/product pack/adder/điều khiển,không từ việc
-NF còn giữ core54 bit exact-capable còn F chỉ26 bit.
-
-Oracle32/3 độc lập xác minh L1 trước pilot100k rồi main≥10M cho từng điểm bắt buộc §6.7.
-Paired accuracy pilot100k/main≥1M triple/profile cùngseed,corpus và C_eff;đánh giá independent
-và chuỗi tích lũy riêng.NF không là chân lý của F;zero/near-zero báo riêng,không chia cho0.
-Giữ ngưỡng AC01/AC04,không giảm profile khi thấyFAIL.AC02 exact phần cứng không áp dụng.
-PPA cùngdevice,tool,I/O/clock,n/OPS/precision,ít nhất3run/config;báo LUT/FF/CARRY/DSP/BRAM,
-latency,II,throughput và setup/hold.Không dùng số đo của NF54 để kết luận NF26 hoặc dùng
-candidate-only PPA làm matched comparison.Power cần activity phù hợp;không claim từvectorless.
-
-Source,oracle,runner,fixture và report của cặpapprox-only mới cần đóng băng/kiểm riêng.
-Kết quảOPT-1729/10 và W14 không tự chuyển thànhPASS cho thay đổi cấu hình30/10.
-
-### 11.9. Hợp đồng tích prepack FLOOR/RNE và checkpoint L1 — 11/10/2026
-
-**Checkpoint lịch sử,không phải mục tiêu từ29/10:** `L1_FLOOR_RNE_PREPACK_V1`,NB32/ES3,
-FRAC_W12,N_MAX8,OPS1,FLOOR/RNE. API `floor_rne_profile(n)` và `FloorRneMultiplier`,
-mặc định legacy/profile research giữ nguyên để tái lập. Không đổi helper/freeze cũ thành
-FULL_TERM;hợp đồng mới ở §4.3,chưa có mã L1 tương ứng.
-
-Với hữu hạn khác0: P_hat=(-1)^sign * magnitude * 2^(scale-fractional_bits). `scale=sf_A+sf_B` trước normalization; magnitude chứa hidden/carry, chưa pack, chưa saturate và chưa round về Posit. Scale signed11 bit đủ cho cấu hình32/3 (tổng scale hữu hạn[-480,480]); L1 lưu int32_t. Không suy ES3 là scale3 bit.
-
-| Trường PrepackProduct | Nghĩa và quy tắc |
-| --- | --- |
-| magnitude | Accumulator unsigned trước mul_norm; FLOOR giữ tổng từng số hạng đã cắt. Không lấy lại từ parse(bits) |
-| fractional_bits / magnitude_bits | Q và độ rộng hữu ích Q+2. FLOOR Q12/14 bit; exact Q52/54 bit ở32/3; JAM Q14/16 bit là profile phụ, không đóng băng cho fused |
-| sign / scale | Dấu A XOR B và scale chưa chuẩn hóa; mantissa không bắt buộc trong[1,2) |
-| is_nar / is_zero | NaR ưu tiên Zero; special magnitude=0,scale=0,sign=0,sticky=0; Q/width vẫn mô tả config nhưng công thức hữu hạn không áp cho NaR |
-| numerical_sticky | Với FLOOR luôn0: phần đã bỏ trong thuật toán không còn thuộc P_hat. JAM sticky chỉ thông báo, không định lượng residual; không được dùng nó để suy exact fused |
-| input_cut / iteration_cut / term_cut | Ba loại mất thông tin: cut input, fraction còn sau n, cut từng term. Là metadata, không đưa vào GRS của P_hat. `IterResult.approx_cut` legacy vẫn chỉ phần iteration, không tự đổi semantics flags |
-| iterations / remaining_fx | Giữ trong IterResult; đếm và trace kiểm trước/sau mỗi term |
-
-Mapping RTL hiện hành: FLOOR export magnitude=acc>>2,Q12 vì hai bit thấp là padding0; exact export acc,Q52; JAM acc,Q14. ACC_W vật lý32/3 với EXACT_EN1 là54 bit (EXACT_EN0 approximate-only16 bit), khác độ rộng hữu ích14 bit FLOOR. Giới hạn64 bit của L1 an toàn cho các format đã nghiệm thu; không tuyên bố arbitrary NB/ES.
-
-**Kết quả kiểm tích hợp — 13/10/2026:** W11-01 xác nhận238.906/900.000 cặp ngẫu nhiên khác giữa pack(mul_norm legacy) và R(P_hat); thêm344.064 phép kiểm magnitude/scale/sign biên, tổng1.244.064 kiểm adapter mới với oracle dyadic độc lập,0 mismatch. `mul_prepack_norm_comb` giữ grid nguyên, đổi vị trí hidden từ Q sang Q+1 khi carry; không dịch bỏ bit thấp hoặc dùng metadata cut làm sticky. Legacy L1/RTL/Gate2 và hash freeze giữ nguyên. MAC so sánh mới dùng `week11::Model`/`posit_mac_nf`, không tuyên bố approximate bit-exact với PositMac legacy.
-
-NF=R(R(P_hat)+C); reference F=R(P_hat+C). FLOOR loss được ghi vào metadata và không khôi phục bằng numerical_tail. Phần dư phát sinh khi căn C với P_hat phải có dấu và oracle integer/rational giữ đủ; `acc=0` chưa bảo đảm sum0 khi còn residual. Cửa sổ F hữu hạn phải có hợp đồng riêng trước RTL; chưa chốt ACC_WIN/jam/borrow của F trong checkpoint này. Nếu stream term thẳng vào C, phải chứng minh cùng P_hat và đúng thứ tự cut; cut sau căn chỉnh không tự tương đương cut trước căn chỉnh. Các shortcut chọn mốc/sticky §5.12 còn là sketch cần kiểm, không nghiệm thu bằng checkpoint prepack.
-
-Kiểm đã chạy: Linux và Windows mỗi bản17.184.416 kiểm,2.097.703 kiểm trace từng term,99.641 exact/RNE so oracle integer/bit-list độc lập; trong đó16.777.216 cặp Q12 vét cạn ở n2/OPS1. Random/corner bốn format bao n0..8,OPS0/1,FLOOR/JAM,RNE/TRUNC,exact/approx; không phải vét cạn tất cả config. UBSan smoke51.296 kiểm đạt; MAC regression264.000 và round_unpacked4.954.184 kiểm đạt. Replay32.000 payload dòng pilot lịch sử khớp hoàn toàn sau chuẩn hóa LF/CRLF. Mismatch0; seed test20261011, generator20261009.
-
-Checkpoint đóng băng **L1 hiện có và giao diện tích**, không phải L1 fused đã hoàn thiện hoặc RTL fused. Bằng chứng/hash/source/compiler/commands tại `results/l1_floor_rne_freeze/{summary.json,frozen_sources.sha256}`; code `prepack_product.hpp`, `floor_rne_profile.hpp`, exporter trong `l1_multiplier_iter.hpp`. Không sửa RTL/số học/default; Gate2 lịch sử giữ checkpoint nguồn cũ, không gọi đây là rerun16,8M RTL. Sau thay source phải kiểm lại trước tạo checkpoint mới; audit mặc định từ chối source hash đổi, `--refreeze` chỉ dùng sau review/test và giữ lịch sử Git.
-
-
-
-### 11.10. Hợp đồng hiện thực NF tuần11 — 13/10/2026
-
-`posit_mac_nf` là top structural mới; `mac_nf_wrapper` chứa điều khiển một giao dịch, không sửa standalone multiplier đã nghiệm thu. Profile hiện thực RNE/FLOOR, EXACT_EN=OPS_EN=1, NB/ES8/0,16/1,32/2,32/3; FRAC_W=min(F,12), N_MAX8, cfg_ops0/1, approximate n0..8. TRUNC/JAM/fused và feature-disable chưa được nghiệm thu trong top này. Profile so sánh chính32/3 OPS1 giữ cùng P_hat cho NF/F; OPS0 và exact là kiểm bổ trợ.
-
-**Checkpoint lịch sử W11; top hiện hành thay bằng OPT-03 §11.16.** Luồng thực: parser A/B/C_eff hai tầng → OPS/core → normalize bảo toàn prepack + round_unpacked_comb → thanh ghi product/context → adder A1/A2/A3 → packer RNE P1/P2. round_unpacked_comb dùng pack/parse **tổ hợp**, kiểm đúng parse(pack(u)); không có thanh ghi Posit trung gian như v0. Đây là hiện thực đúng chức năng ban đầu; đường tổ hợp norm/pack/parse dài cần STA trước tuyên bố fmax. Với t=iterations thực tế,q=max(1,t): E0 nhận→L_valid=q+10→L_handshake=q+11 khi out_ready luôn1; early-stop/special dùng t thực tế, không luôn dùng cfg_n. Không có bypass rút ngắn latency. Top không nhận lại tại cạnh retire: II không stall tối thiểuq+12, khác II1 của riêng adder.
-
-A/B/C_eff/config/acc_mode/acc_clr được nhận cùng handshake. C_eff=c nếu acc_mode0, accumulator nếu acc_mode1, và0 nếu acc_clr1. NaR được lưu ngay trong mã accumulator; parser C_eff suy is_nar, không cần bank acc_nar độc lập có thể lệch dữ liệu. Cổng rst_n đồng bộ đi qua bridge; leaf nhả bằng hai FF; startup gate đợi core_run, ba parser, adder và packer sẵn sàng. Không dùng tên reset top làm lý do bỏ bridge theo guideline.
-
-Output-commit của wrapper là cạnh đầu tiên quan sát pack_out_valid && !committed_q; cập nhật accumulator đúng một lần nếu acc_mode_q, dù output đang stall. Kết quả giữ trong bank P2 của packer tới retire; busy chỉ nhả sau retire, nên giao dịch sau không đọc trạng thái cũ. acc_clr chỉ xóa khi input handshake; reset hủy pending và xóa accumulator/valid/context. Invalid cfg_ops2/3,n>N_MAX khi approximate hoặc acc_clr1 khi acc_mode0 không được nhận. Exact bỏ qua cfg_n; dataset W11 cấp n0..8. Giữ flags OR qua tích và tổng, NaR ưu tiên/xóa bốn cờ khác; Zero product không đưa metadata cut vào flags.
-
-Mốc số học/protocol Gate3 đã lưu13/10 (không phải đóng toàn coverage §6.3): native32/3 10.000.000 completed/75.801 reset-aborted,0 mismatch; ModelSim28.512 completed/288 aborted, bốn format; strict lint4/4 sạch. Native bốn pilot20k/format; scoreboard gọi mô hình NF mới, oracle dyadic/full-grid add độc lập và exact product oracle; SoftPosit đúng format cho pilot8/0,16/1,32/2.72 config/control bins và256/256 regime–dấu ở main, min34944/bin;24/24 reachable adder bins và7/7 iteration bins; latency, reset/stall/context/flags/accumulation đã kiểm. Raw coverage ghép: line/branch từ pilot+main, toggle từ pilot; line96.92%,branch94.26%,toggle88.71%; giữ unhit, chưa thay final AC02/AC04/§6.7. Bằng chứng/hash/tool/seed/lệnh tại results/week11/summary.json và baseline_nf_manifest.json. Rà soát14/10 phát hiện thiếu phân bố near-cancellation30%; Phát hiện tại §11.11 đã được xử lý bằng checkpoint mới14/10 ở §11.12. Không sửa hoặc xóa report/manifest lịch sử.
-
-L1 fused full-sum pilot100.000 mẫu32/3,FLOOR/Q12,OPS1,n0..8 đã đối chiếu Python integer độc lập0 mismatch;24.996 triệt tiêu chính xác. Software grid2^-532 và16 limb64 bit giữ tổng có dấu; chưa chốt cửa sổ RTL, flags hoặc state acc_mode F. Chưa gọi pilot này là oracle/L1 fused cuối, paired accuracy, baseline paper hoặc RTL F. Tuần12 tiếp tục oracle/width/residual và PPA sơ bộ NF; final NF/F matrix, coverage và STA/PPA còn ở các mốc sau.
-
-### 11.11. Rà soát toàn SPEC và phạm vi nghiệm thu — 14/10/2026
-
-Phát hiện dưới đây giữ lịch sử rà soát; phần coverage NF đã được đóng bằng checkpoint mới ở §11.12 trong cùng ngày.
-
-Đã đối chiếu các mục 1–12 và phụ lục với RTL, model, Makefile và canonical reports. Phiên này chỉ sửa tài liệu; nguồn số học, L1 frozen, reset và pipeline đã kiểm giữ nguyên. Gate1/Gate1B legacy, Gate2, W10 unit và W11 numeric/protocol vẫn có bằng chứng **0 mismatch**.
-
-**Gate3 đầy đủ còn processing do thiếu coverage theo §6.3:**
-
-- W11 lưu `adder_bins` theo Δsf=0,1,2–7,... Tổng bin trái dấu thuộc ba nhóm này là **420.303 / 10.000.000 completed = 4,20303%**. Vì nhóm2–7 còn chứa5–7, đây chỉ là **cận trên** của nhóm≤4 tại đầu vào adder NF. Kể cả lấy mẫu số7.936.965 phép cộng hữu hạn có counters, tỷ lệ vẫn dưới30%.
-- Coverage256/256 regime–dấu và24/24 reachable adder crosses không chứng minh đã đạt tỷ lệ near-cancellation30%. Không hạ ngưỡng hoặc sửa counters lịch sử.
-- Counters từng run/polarity≥10k và các bin packer chuyên biệt chưa được report W11 đủ để ký signoff tích hợp. Cần thu và lưu riêng; không suy đã đạt từ các bin gộp.
-
-**Việc bổ sung để đóng coverage Gate3:** đóng băng corpus đạtnear≥30% với `C_eff` thực tế; tách standalone/acc_mode, specials và reset-abort; đo trực tiếp Δsf=0..4, run/polarity và packer bins. Chạy pilot rồi regression/oracle0 mismatch, audit nguồn/hash và lưu checkpoint mới. Giữ checkpoint13/10; không đổi label nghiệm thu để giữ lịch. Có thể chuẩn bị L1 F độc lập trong khi bổ sung coverage NF.
-
-Các yêu cầu chưa đạt khác vẫn mở: ma trận final AC01/AC02 theo n/profile, AC04 toàn phạm vi, hợp đồng và RTL F_W (width/residual/flags/acc_mode), paired accuracy, STA/CDC/RDC và PPA toàn top. Collector/orchestration còn scaffold. NFR MHz/LUT là mục tiêu khảo sát, chưa phải số đo.
-
-Khác biệt carry giữa legacy và R(P_hat) đã có adapter riêng và bằng chứng ở §5.7/§11.9; không suy thành lỗi RTL tác giả. Báo cáo phiên rà soát tại `results/spec_review_20261014/summary.json`; bằng chứng thực thi ở `results/week9_implementation`, `week10_adder` và `week11`. Cập nhật SPEC không phải chạy lại10M hoặc nghiệm thu thêm F/PPA.
-
-### 11.12. Đóng coverage NF/Gate3 tuần11 — 14/10/2026
-
-**Tuần11 hoàn thành trong phạm vi Gate3 NF của [hồ sơ tuần đã chuyển](../doc/Optimization.md#legacy-8-9).** Checkpoint mới tại `results/nf_coverage_20261014/completion.json`; giữ nguyên report/manifest13/10 và proofgap tại §11.11. Chỉ bổ sung bộ kiểm/corpus/probes chỉ đọc, không sửa datapath RTL hoặc L1 frozen. Không suy Gate3 thành nghiệm thu toàn bộ AC, fused hoặc timing.
-
-- Main mới32/3,FRAC_W12,FLOOR/RNE: **10.000.000 completed,75.379 reset-aborted,0 mismatch**; oracle độc lập và đối chiếu trực tiếp product/C_eff tại handshake adder. Near-cancellation **5.255.548/10.000.000=52,55548%**, vượt30%; đo trực tiếp Δsf0..4, tách standalone/acc_mode. Specials không vào tử số; reset-abort và corner bổ sung không vào mẫu số.
-- **256/256** cross regime–dấu,min30.114/bin; **61/61** run/polarity hữu hạn,min199.470 operands;72/72 control,24/24 adder reachable,6/6 popcount và13/13 iteration×mode reachable. Approx>8 không thể đạt vì N_MAX8; p8 không có popcount/iteration>8.
-- Packer7/7 loại đã quan sát ở P1 trong RTL tích và tổng; lưu counts riêng. Sat-min tại packer cuối NF không thể đạt: hai toán hạng đã là mã Posit, tổng khác0 là bội nguyên của minpos. Kiểm underflow ở packer tích; giữ điểm chưa hit trong raw coverage, không xóa điểm để tăng tỷ lệ.
-- Pilot native20.000/format8/0,16/1,32/2,32/3; ModelSim fixture mới28.512 completed/288 abort,0 mismatch. Corner ModelSim riêng **82.944 completed,0 mismatch**, phủ8 mã biên^3×exact/approx×n0..8×OPS0/1 và fraction0/ones/AA/55 theo4 cặp dấu. Exact chạy tới F=5/12/27/26 vòng; kiểm latency tới36 ở32/3. UBSan generator đạt, strict lint4/4 sạch; kiểm reset/stall/context/flags/feedback và audit source/fixture/counters đã đạt.
-- Verilator5.032,GCC15.2.0,SoftPosit0.4.1,ModelSim10.1d; seedbase20261014+100·NB+ES,mt19937_64. Source/corpus khóa sau pilot và kiểm lại trước main; audit từ chối RUNNING,hash đổi hoặc near<30%. Lệnh tái chạy tại [Optimization §8.9](../doc/Optimization.md#legacy-8-9). Coverage main32/3 line96,9231%,branch94,2623%,toggle88,7136%; toggle từ pilot, không phải finalAC04 toàn ma trận.
-
-**Còn mở, chuyển tuần12–15:** oracle/L1 F_W và hợp đồng signed residual/window/flags/acc_mode; RTL F; paired accuracy; final AC01/AC02 theo n/profile và exhaustive; AC04 đầy đủ, STA/CDC/RDC/PPA toàn MAC. Không có thay đổi số học hoặc nguồn paper mới nên không chạy lại TableI. W12-01 đã được xử lý trong phiên đóng tuần11; W12-02..07 chưa thực hiện.
-
-### 11.13. OPS parallel-path refactor — 14/10/2026
-
-Đã refactor ops_sel_comb theo §5.4, giữ toàn bộ parameter/default/port và số học; bản trước lưu tại results/ops_refactor_20261014/before/ops_sel_comb.sv. Audit so public header,source hashes và oracle; không sửa L1 hoặc M0/SAC/SBM/reset. X vẫn không hidden; Y có hidden trước Swap MUX. No-cut guard hợp lệ ở FRAC_W=FRAC_MAX.
-
-ModelSim so RTL mới/cũ và oracle bit-count độc lập đạt **1.334.048 kiểm/0 mismatch**:378 cặp F1..27/FW1..F,4 feature combinations EXACT_EN/OPS_EN,4 profile SF_W2/WIDTH_W tăng. F<=5 vét cạn cặp fraction,mode0/1 và cfg_ops0..3; F>5 directed/random,không tuyên bố vét cạn2^54 hoặc formal HDL proof. Verilator strict lint398 profile0 warning; không latch. NF pilot20k/format và main32/3 mới10M/0 mismatch cùng seed/corpus; near52,55548%;ModelSim tích hợp28.512 completed/288 reset-abort,0 mismatch. Đã kiểm pipeline/control/flags và adapter theo oracle đúng format; không đổi latency/II.
-
-Benchmark OPS toàn I/O,cùng bank input/output,dynamic mode/OPS,F26/FW12/SF_W11,ba seed mỗi bản,Quartus13.0sp1/EP4CE30F23C6/LUT4: **216→196 LUT4 (-9,2593%)**,151 FF giữ nguyên; Fmax trung vị **108,08→112,01MHz (+3,6362%)**. Cả6 run setup/hold R2R đạt ở10ns. Path seed1 từcfg_mode_q:before→y_mant[12],data9,045ns;after→x_frac[8],data8,866ns. Path control vẫn là ứng viên critical; không kết luận đã tối ưu tuyệt đối hoặc Fmax MAC đạt112MHz. Pins vật lý;không có I/O delay/board signoff. Package F17 ban đầu thiếu pins và virtual-pin không có license; đã dùng cùng partF23 hợp lệ cho cả6 run,không sửa license.
-
-Canonical results/ops_refactor_20261014/summary.json; raw timing/top10 ở ppa/critical_paths.json và report STA. Checkpoint13/10 và coverage NF14/10 trước refactor giữ nguyên; audit lịch sử sẽ từ chối nguồn OPS mới do hash khác,đây là đúng cơ chế freeze. Dùng snapshot/commit nguồn cũ khi tái chạy lịch sử; dùng checkpoint refactor NF khi kiểm RTL hiện hành. Gate3 tuần11 vẫn đạt phạm vi đã kiểm;final per-n/AC02/AC04,F_W/F RTL,paired accuracy và STA/PPA toàn MAC còn mở. Không chạy TableI vì không có thay đổi hợp đồng hoặc nguồn paper mới.
-
-### 11.14. Hoàn thành tuần12 — oracle/L1 F và timing NF,15/10/2026
-
-**W12-01..07 đạt phạm vi kế hoạch; G-F-L1 ✅;đã sao lưu GitHub.** Không có thay đổi logic RTL NF hoặc legacy L1; freeze mới chỉ cho model/corpus/contract F. Các ghi chép trước đây nói F_W/oracle/flags/state chưa chốt là trạng thái lịch sử,được cập nhật bằng mục này. Canonical results/week12/{summary,freeze}.json; chi tiết [Optimization §8.14](../doc/Optimization.md#legacy-8-14).
-
-Oracle số nguyên full-grid decode/encode độc lập: posit8 exhaustive2^24=16.777.216 bộ ba so SoftPosit FMA; p16/1,p32/2 mỗi format100k smoke; F_ref32/3 cùng prepack100k so full-sum limb cũ. Tất cả0 mismatch; Windows/UBSan smoke cũng đạt. SoftPosit0.4.1/hash thư viện,compiler Linux GCC15.2.0,Windows GCC13-win32,lệnh và seed20261014 lưu cùng kết quả. ES3 không dùng SoftPosit ES2 làm oracle.
-
-Chọn W32 từ bốn pilot32/48/64/96,mỗi bản100k,quy tắc chọn smallest admitted W với0 khác F_ref và thỏa cận precision đã khóa trước chạy. W32/Q29 đáp ứng profile approx32/3,FW12,n0..8,OPS0/1. Main ban đầu1m rồi suite phân tầng bổ sung **2.208.768 ca trên mỗi nền tảng Linux/Windows/UBSan,0 mismatch** bits/flags/state/retained magnitude/residual với oracle full-grid; corpus Windows/Linux byte-exact. Near trước/sau cut **1.160.774/2.208.768=52,55300693%**;256 cross min4128,61 run/polarity min26161,mỗi n ít nhất245418. Có counters Δsf0..4 tách standalone/acc_mode,popcount,iteration,540 reset state,2724 acc_clr,264193 giao dịch acc_mode; reset ở đây là model giao dịch,không phải bằng chứng waveform RTL F.
-
-Corner6402 mỗi lượt kiểm,bốn pilot,các tie even/odd,borrow,underflow/overflow,NaR/Zero và six invalid requests đã kiểm; Python integer kiểm138 trace đầy đủ/0 mismatch. F_W/F_ref0 khác trên miền đã kiểm; F_ref/Ideal tại cùng C_eff khác1.377.327 bit-result trong corpus phân tầng vì phép nhân còn xấp xỉ. Đây là số ca khác mã,không phải sai số tương đối hoặc kết luận F luôn tốt hơn NF. Corpus cố ý kích near-cancellation,không thay phân bố ứng dụng/accuracy cuối tuần14.
-
-**Toàn NF post-route:** Quartus13.0sp1/TimeQuest,EP4CE30F23C6,LUT4,32/3 FW12,EXACT_EN=OPS_EN=1,FLOOR/RNE,seed1/2/3. **3926 LUT4,823 FF,442 arithmetic-mode LE,DSP0/memory0**; Fmax47,10/45,07/44,65MHz,median45,07. Clock10ns,ngân sách I/O giả định max0,5/min0,1ns,derive_clock_uncertainty; không false-path/multicycle. Không có đường setup/hold unconstrained;hold/recovery/removal đạt mọi corner đã báo. **Setup100MHz chưa đạt**,không đạt Gate4 hay ngưỡng D0 của paper. Mô hình/chip Intel không quy đổi trực tiếp sang LUT6/CARRY8; không board/power signoff. Quartus13 bỏ qua ASYNC_REG nên còn review CDC/RDC/synchronizer riêng. Parser chỉ thêm generate/endgenerate trong source copy riêng để tương thích compiler; audit xác nhận không đổi logic.
-
-Đường chậm nhất cả ba seed từ acc core qua normalize→round_unpacked(pack+parse) tới product_frac_q. Seed1 data21,477ns,63 logic levels,logic9,669ns/routing11,609ns,WNS−11,233ns. A1 align WNS−7,642ns; SAC−2,383ns; A3normalize−2,216ns; A2arith+5,031ns. Đề xuất ưu tiên: constant slices trong mul_prepack_norm_comb; sau đó chọn bank tách norm/pack/parse; đánh giá align candidate ở toàn NF; cân nhắc chuyển LOD từ A3 sang A2 còn slack; rút ngắn điều khiển hồi tiếp SAC. Chi tiết/đánh đổi FF,H,II tại results/week12/pipeline_recommendations.json. **Chưa áp dụng các đề xuất hoặc thay baseline**.
-
-Bàn giao tuần13 theo §5.12-e và results/week12/handoff.json. F approximate-only cần comparator NF với EXACT_EN tương ứng đã kiểm/freeze trước paired PPA; số đo NF EXACT_EN1 tuần12 không tự tạo phép so công bằng với F EXACT_EN0. Còn F RTL/protocol/coverage,ma trận final theo n,accuracy ứng dụng,CDC/RDC và paired PPA; không chạy TableI hoặc mở lại baseline tác giả trong phiên này.
-
-### 11.15. RTL fused W12-F-1 — 15/10/2026
-
-**Đã hiện thực profile chính**, chưa đóng toàn bộ final/Gate4. Module mới: posit_mac_f (structural), mac_f_wrapper, fused_add_pipe và năm leaf fused_prepare_comb/fused_align_comb/fused_arith_comb/fused_abs_borrow_comb/fused_norm_comb. NF và L1 frozen giữ nguyên. Ngữ nghĩa vẫn fused trên P_hat xấp xỉ, không exact tích A×B và không quire.
-
-**Mapping chốt:** core instance approximate dùng FRAC_MAX=FRAC_W12, ACC_W16, I_W4; OPS vẫn nhận fraction26 để phát hiện input_cut, xuất hai ứng viên right-aligned trước core. P_hat magnitude=acc[15:2], q12, scale=core_sf, sign=core_sign. Hai bit acc[1:0] phải0 với FLOOR. numerical_tail của core là metadata term_cut, không gắn vào numerical sticky của F. loss[1]=input_cut|approx_cut|term_cut,loss[0]=approx_cut; zero/NaR đầu vào xóa loss như L1. C_eff/context giữ riêng tới retire; NaR bất kỳ toán hạng hữu hiệu ưu tiên10000.
-
-**Tối ưu đã dùng:** normalize carry bằng fixed slices; seed và dual delta chạy song song ởF1; mask/lost reduction song song với right shifter ởF2; F3 dùng XOR/carry-in cho add/sub; F4 tính abs(Z)-borrow bằng một adder với correction=negative-borrow; F5 chỉ giữ30 bit fraction hữu hiệu trước padding. Không mang shift/base_sign/subtract qua các bank sau khi hết dùng. Cổng diagnostic bắt buộc của module dùng chung không tạo register phụ; synthesis loại dây/padding hằng không dùng. Strict lint không có waiver rộng; 0 latch ở netlist. Không khẳng định phần trăm cải thiện Fmax/LUT nếu chưa có cặp F trước/sau đo cùng điều kiện.
-
-**Control:** top giữ một giao dịch; five-stage fused_add_pipe elastic có thể chứa5 giao dịch khi kiểm riêng. Invalid cfg_mode0/n>8/ops2,3/acc_clr không cùng acc_mode không được accept. Reset bridge và release đồng bộ2FF; commit accumulator một lần khi output lần đầu valid, output giữ tới handshake; không nhận mới trước retire. E0 là accept, L_valid=q+11 (12..19 trong test), H=q+12, II_min=q+13; q=max(1,t), special zero/NaR dùng init-only t0. Stall kéo dài retire, không tạo commit lặp.
-
-**Bằng chứng results/week13/summary.json:**
-
-- Verilator5.032 strict --timing --assert -Wall:0 warning/error. Cycle harness --no-timing bỏ CK2Q, được bổ sung XSim có timing thực; không dùng cycle test thay kiểm delay.
-- Pilot100.000 và main10.000.000 completed,0 mismatch với L1 F_W và independent full-grid oracle; main59.356.752 stage observations kiểm raw prepack, anchor, retained operands, tail, sum, magnitude/borrow, normalize trước pack. Near48,46403%;256 regime/sign cross và n0..8/ops0,1/acc_mode đều có hits. Main20.151 reset-aborted tách khỏi completed; hai lịch reset trùng được tính theo trạng thái thực, không cộng hai yêu cầu reset thành hai abort; counters/seed20261015 trong report.
-- Unit fused_add_pipe100.005 completed/190 reset-aborted,0 mismatch; max5 inflight,74.524 consecutive retires,58.221 stalled cycles; seed20261016. Synthetic prepack đúng miền bổ sung các scale lớn và borrow, ngoài A/B corpus tích hợp.
-- XSim2026.1:8192 completed,24 reset-aborts theo tuổi pipeline,0 mismatch với CK2Q1ns; invalid config, thay input lúc busy và output stall96 chu kỳ được kiểm. Assertion startup đã sửa để chỉ enable sau reset release biết chắc1 trong mô phỏng4-state; không sửa số học.
-- Raw coverage points của module mới, gộp pilot+unit, không loại trừ: line20/21,branch39/40,toggle2168/2392. Đây là instrumented points, không tự đồng nhất với final AC04 theo toàn thiết kế. Coverage chi tiết tại coverage.json; đã bổ sung counters61 run/polarity,6 nhóm popcount và delta0..4 theo standalone/acc_mode trước/sau cut. Matrix cuối vẫn theo tuần14.
-
-**STA sơ bộ toàn F:** Vivado2026.1 build6511674,xc7a35tcpg236-1,Default,một run OOC,period10ns/uncertainty0,1ns.1520 Slice LUT,815 FF,DSP0/BRAM0/latch0. R2R setup+1,678ns,hold+0,039ns; synthetic whole-design setup+1,082ns. F_STA suy từ slack khoảng120,16MHz, không phải sweep đã chạy120MHz hoặc đo board. Critical path accumulator_q→parserC/p1_cnt_q,logic2,985ns/routing5,236ns. F1..F5 data delay lần lượt7,660/4,861/4,733/4,009/7,528ns. Inputmin=max2,5ns/outputmax0,5,min0 là budget tổng hợp khảo sát; XDCH-2,CFGBVS và OOC PARTPIN warnings được lưu, chưa board signoff. Không có routing error hoặc unconstrained endpoint nội bộ theo reports. Không so trực tiếp với NF45,07MHz CycloneIV.
-
-**Còn mở:** final >=10^7 vector/n/bản, AC04 và coverage counters đầy đủ; CDC/RDC/formal; comparator NF EXACT_EN0 đã kiểm trên cùng Xilinx và >=3 run; paired accuracy/PPA/Gate4. Lần tối ưu tiếp nên xem accumulator→parser C và F1/F5; mọi retiming phải cập nhật latency/II và kiểm lại. Commands, tool/compiler, source/evidence hashes và giới hạn trong summary.json; audit_week13_fused.py từ chối nguồn/report không đồng nhất. Không tạo lại baseline tác giả hoặc chạy TableI trong mốc này.
-
-## 12. Báo cáo và bảo vệ
-
-**Cấu trúc báo cáo đề xuất**
-
-1. Mở đầu: động lực, bài toán, đóng góp (C1..C5).
-2. Cơ sở lý thuyết: posit, Mitchell/Babic, nhân lặp, các công trình liên quan.
-3. Thiết kế: kiến trúc từng khối (theo §5), quyết định thiết kế và lý do.
-4. Kiểm chứng: golden model 3 tầng, testbench, kết quả AC-01..AC-04, thống kê sai số.
-5. Kết quả tổng hợp: PPA FPGA, so sánh baseline, phân tích §7.4, (EXT-A ASIC).
-6. Thảo luận: sai khác so với paper, hạn chế, hướng phát triển (quire,chồng lấn,ứng dụng khác); fused là mục tiêu chính còn phải hoàn thành,không chuyển thành hướng tương lai để bỏ nghiệm thu.
-7. Kết luận. Phụ lục theo SPEC: A (số liệu gốc [P]), B (giả định vector), C (kết quả tái hiện), D (truy vết), E (thuật ngữ); giao diện và log công cụ là phụ lục bổ sung của báo cáo.
-
-**Bảng và đồ thị dữ liệu cần xuất từ script**: Correct Rate và Err theo n và nhóm regime; NMSE theo n; phân bố số vòng lặp thực tế; bảng PPA; Pareto (EXT-B); bảng tài nguyên theo module (hierarchical).
-
-**Kịch bản demo mục tiêu:** ví dụ NF/F trên cùng A/B/C,n0/1/2/3/8 và exact; chạy runner smoke của đúng top,hiển thị canonical JSON và PPA đo. make demo/results/summary.md hiện chưa có; không trình bày scaffold như demo hoàn tất.
-
----
-
-<!-- OPT03_REPORT_START:SPEC_Posit_MAC_IP.md -->
-### 11.16. NF OPT-03 — pipeline làm tròn tích, 17/10/2026
-
-Hợp đồng hiện hành tại §5.1/§5.11-B: product RNE P1/P2 trước parse/product bank; L_valid=q+12,H=q+13,II_min=q+14. R(P_hat), flags, width và fused giữ nguyên. Chi tiết reset/credit/sticky và cạnh clock tại §5.11-B; kết quả/commands tại [Optimization §8.21](../doc/Optimization.md#legacy-8-21).
-
-| Part | Median STA MHz trước → sau | Thay đổi | Median LUT trước → sau | FF trước → sau |
-| --- | --- | --- | --- | --- |
-| xc7a35tcpg236-1 | 52.31 → 78.41 | +49.90% | 2464 → 2462 | 847 → 930 |
-| xc7a100tcsg324-1 | 53.69 → 79.28 | +47.66% | 2458 → 2449 | 847 → 930 |
-
-Native main10M/85316 abort,0 mismatch;4 strict lint sạch. ModelSim82.944 corner+28.512 protocol/288 abort và284 reset-age đạt. chưa đạt R2R setup100MHz ở tất cả run; chưa board signoff/final per-n/AC04 hoặc matched NF/F. Baseline reference source-identical được tái dùng và Default được kiểm lại2 part. Không xác nhận baseline gốc paper hoặc chạy Table I.
-<!-- OPT03_REPORT_END:SPEC_Posit_MAC_IP.md -->
-
-### 11.17. Khóa RTL trước tuần14 — 18/10/2026
-
-Release `POSIT_MAC_RTL_20261018_OPT02C` đã promote38 module,khóa bằng `rtl/production_freeze.json`. L1/oracle,public I/O/parameter,14 tầng NF/13 tầng F và latency/II giữ nguyên. Bằng chứng/lệnh/matched PPA tại [Optimization8.30](../doc/Optimization.md#legacy-8-30),`results/opt02c_20261018/summary.json` và `lock_receipt.json`.
-
-NF10M/0 mismatch,ModelSim bốn format và active NF/F replay đạt;F100k smoke mới và tái dùng bằng chứng10M do mọi dependency F byte-identical với8.28. Active production.f đạt37 strict lint profiles. NF100MHz setup/hold đạt ba chiến lược matched C2 với production OPT-03;F chỉ có một phép đo kiểm release,không phải paired PPA. Không đồng nhất F_STA ước lượng với clock đã chạy trên board.
-
-Kiểm khóa trước chạy tuần14: `python scripts/audit_rtl_release.py`. Nếu hash nguồn/model/constraint đổi hoặc test final phát hiện mismatch: dừng,lưu failure,review release mới; không sửa RTL/oracle để hợp thức hóa checkpoint. Defined-clock CDC và reset review trước khóa đã có;review RDC/interface chi tiết W14-01,final per-n,AC04,paired accuracy và Gate4 vẫn mở. Không chạy matrix tuần14 trong đợt promote này.
-
-**Workflow khóa120MHz18/10:** theo lựa chọn sinh viên, đã promote đúng byte OPT-12 negate vào production và khóa `POSIT_MAC_RTL_20261018_OPT12_120`. A35T/Explore8,3ns≈120,48MHz, NF WNS/WHS+0,227/+0,053ns, F+0,093/+0,040ns; giữ I/O và uncertainty. Recipe `syn/opt12_120mhz_release.json`, clock120MHz riêng; XDC100MHz và lock OPT02C lưu làm lịch sử. 10M NF+10M F/0 mismatch, ModelSim và hash nguồn tại Optimization8.31.8. Hợp đồng số học/I/O/precision/latency không đổi. W14-01..11 đã đạt18/10:350M completed RTL/0 mismatch (F90M+NF250M+NF-EX010M),AC04 main và9M paired standalone accuracy. W14-12/AC02 và matched PPA/Gate4 còn mở;Optimization8.34/results/week14/handoff.json. Không đổi hợp đồng số học,source release hoặc timing. Chưa paired PPA/board signoff. Lint EX0 có1 scoped feature-unused waiver;AC04 chính không bao gồm toggle closure riêng EX0.
-
-## Phụ lục A. Tóm tắt số liệu của [P] để đối chiếu
-
-**Table I — độ chính xác trong dải SPFP** (tỉ lệ đúng, Err < ngưỡng)
-
-| n | Thuật toán | <0.1% | <0.5% | <1.0% | <5.0% |
-| --- | --- | --- | --- | --- | --- |
-| 2 | Babic | 19.14 | 47.37 | 65.13 | 99.13 |
-| 2 | Kim | 9.30 | 32.12 | 50.01 | 95.58 |
-| 2 | Proposed | 9.87 | 32.19 | 50.03 | 95.57 |
-| 3 | Babic | 70.52 | 95.52 | 99.43 | 100.00 |
-| 3 | Kim | 43.94 | 83.01 | 95.03 | 100.00 |
-| 3 | Proposed | 44.69 | 83.17 | 95.05 | 99.99 |
-| 4 | Babic | 98.03 | 100.00 | 100.00 | 100.00 |
-| 4 | Kim | 86.69 | 99.81 | 100.00 | 100.00 |
-| 4 | Proposed | 87.09 | 99.79 | 99.99 | 99.99 |
-
-**Table II — ngoài dải SPFP** (so với posit multiplier chính xác)
-
-| n | m | <0.1% | <0.5% | <1.0% | <5.0% |
-| --- | --- | --- | --- | --- | --- |
-| 2 | > 22 | 92.13 | 92.13 | 92.13 | 92.33 |
-| 2 | 18–22 | 26.41 | 31.17 | 45.85 | 95.56 |
-| 3 | > 22 | 98.71 | 98.71 | 98.71 | 98.76 |
-| 3 | 18–22 | 68.96 | 76.43 | 89.87 | 99.95 |
-| 4 | > 22 | 99.73 | 99.73 | 99.73 | 99.74 |
-| 4 | 18–22 | 92.53 | 95.69 | 98.61 | 99.95 |
-
-**Table III — FPGA (xcvu9p)**
-
-| | Babic† | Kim | Jaiswal (PACoGen) | Proposed |
-| --- | --- | --- | --- | --- |
-| Định dạng | SPFP | SPFP | posit32 | posit32 |
-| Kiến trúc | Lặp | Lặp | Pipeline | Lặp |
-| Thiết bị | xcvu190 | xcvu190 | xcvu9p | xcvu9p |
-| fmax (MHz) | 450 | 500 | 380 | 575 |
-| LUT | 685 | 308 | 1247 | 698 |
-| FF | 241 | 100 | 303 | 289 |
-| Độ trễ | n+4 | n+2 | 5 | n+6 |
-
-Kiểm tra số học: (1247 − 698)/1247 = 44.0% (giảm LUT); 575/380 = 1.51 (tăng 51% fmax).
-
-## Phụ lục B. Ghi nhận giả định (điền trong quá trình làm)
-
-Mỗi giả định về phân phối vector, cách sinh, cách tính Err và cách so sánh ghi thành một dòng: `ID | mô tả | lý do | ảnh hưởng dự kiến | ngày`.
-
-| ID | Mô tả | Lý do | Ảnh hưởng / giới hạn | Ngày |
-| --- | --- | --- | --- | --- |
-| W4-01 | FP32 normal dương, sf đều [-120,119], fraction 23 bit đều; đổi posit32 ES3 bằng RNE, loại m>15; không lọc scale tích | Diễn giải điều kiện đầu vào Fig. 6(a), phân bố gốc chưa đủ chi tiết | Ideal là tích FP32 gốc chưa làm tròn; tích có thể ngoài dải FP32, nên đây là giả định cần xác minh | 04/10/2026 |
-| W4-02 | 900 ô mA/mB=1..15 × hai polarity regime mỗi toán hạng, exponent/fraction đều; input dương, Ideal là tích posit giải mã chưa làm tròn | Kiểm độ nhạy trên phân bố phân tầng | Không phải bộ dữ liệu gốc [P]; không dùng L0 posit32 ES2 để chuẩn ES3 | 04/10/2026 |
-| W4-03 | FRAC_W=12, OPS=0/1 theo §5.4, FLOOR/TRUNC theo §5.6/5.9; STICKY_ACC là phép đo bổ sung riêng | Giữ thuật toán normative và phân biệt các profile | Chưa xác minh profile Table I gốc dùng cùng OPS, width, rounding; vector Fig. 4 khớp chưa chứng minh thống kê Table I khớp | 04/10/2026 |
-| W4-04 | Seed 314159, 10 triệu cặp/hàng n=1..6, cùng đầu vào giữa các n; strict Err<ngưỡng | So sánh lặp lại được | Không suy rằng khác biệt phân bố là nguyên nhân duy nhất; cần đối chiếu [15] và điều kiện dải của tích | 04/10/2026 |
-
-
-### Bổ sung sau khi đọc [15] và triển khai baseline — 04/10/2026
-
-Các W4-01..04 ở trên mô tả thí nghiệm lịch sử. W4-01 không dùng miền 0..1 của [15], Ideal chưa làm tròn; không dùng log đó làm phép tái hiện baseline mới.
-
-| ID | Quyết định / nguồn | Giới hạn |
-| --- | --- | --- |
-| PB-01 | [15] §4.1: 200 triệu phép nhân trên SPFP ngẫu nhiên 0..1. Dự án chọn mt19937_64 seed 314159 và grid k/2^24 trong [0,1); đây là giả định uniform-value, không phải seed/phân bố paper công bố | Chạy thêm uniform-bits một triệu cặp để kiểm độ nhạy; không thay phân bố để ép khớp |
-| PB-02 | Baseline RND: threshold 1,5, số hạng có dấu, complement fraction; OPS LUT n=2/7-bit tái dựng, tie A; acc Q12 FLOOR từng số hạng, pack TRUNC | Paper không cung cấp LUT gốc/chi tiết toàn bộ cut; chưa tuyên bố RTL gốc bit-exact. PaperOps và POLICY của module khảo sát không đổi ngữ nghĩa cfg_ops §5.4 |
-| PB-03 | Ideal là FP32 multiply đã round RNE; loại input zero/Ideal=0/m>15, N đếm cặp hợp lệ | Chính sách đếm zero là của dự án; oracle có ties/subnormal tests và conversion identity |
-| PB-04 | Algorithm 1 [15] n đếm toàn bộ số hạng; API profile cũ tính hidden riêng. Fig.4 [P] hai bước fraction tái hiện bằng ba tổng số hạng của profile mới | Giữ nghĩa cfg_n normative cho RTL theo §5.5; n_terms=n_fraction+1 chỉ đổi bộ đếm cùng chuỗi, không chứng minh tương đương recurrence/cut |
-| PB-05 | Variant chỉ đổi OPS sang min-popcount12; RTL popcount cây cân bằng. Quartus EP4CE22F17C6, clock 10ns, seed 1/2/3, same registered boundary | OPS riêng, chưa là full MAC, cùng LUT4 của device khảo sát; chưa đo I/O board/sign-off |
-
-## Phụ lục C. Kết quả tái hiện (điền trong quá trình làm)
-
-Bảng ba cột song song `[P] | L1 | RTL` cho Table I/II/III, kèm sai lệch và giải thích.
-
-**Thí nghiệm L1 tuần 4 ngày 04/10/2026, chưa nghiệm thu tái hiện Table I.** Các ô tỷ lệ theo thứ tự Err<0.1% / 0.5% / 1% / 5%. L1 dưới đây dùng FP32 (W4-01), OPS=1, FLOOR/TRUNC, FRAC_W=12, 10 triệu cặp/hàng:
-
-| n | [P] Proposed (%) | L1 (%) | RTL | Sai lệch tối đa (điểm %) |
-| --- | --- | --- | --- | ---: |
-| 2 | 9,87 / 32,19 / 50,03 / 95,57 | 8,325190 / 28,306250 / 42,170570 / 82,548550 | Chưa triển khai | 13,021450 |
-| 3 | 44,69 / 83,17 / 95,05 / 99,99 | 24,316250 / 58,613290 / 73,548700 / 95,142350 | Chưa triển khai | 24,556710 |
-| 4 | 87,09 / 99,79 / 99,99 / 99,99 | 47,330050 / 80,897990 / 88,906170 / 95,893540 | Chưa triển khai | 39,759950 |
-
-Phân tầng W4-02 cũng chưa đạt (max 39,766460 điểm %), STICKY_ACC trên W4-01 max 34,582500 điểm %. TV-ITER-01/TV-PAPER-01 đã khớp trace; oracle approximate, iterative exact và UBSan đạt. Các kết quả chức năng không thay tiêu chí Table I ≤1 điểm %. Lệnh, giả định và toàn bộ n=1..6 xem `l1/README.md`, `results/week4_table1_floor.log`, `week4_table1_ops1.log`, `week4_table1_stratified.log`, `week4_table1_sticky.log`. Table II/III và RTL chưa đo.
-
-
-### Kết quả baseline mới và biến thể — 04/10/2026
-
-Thí nghiệm lịch sử ở trên được giữ để truy vết. Dưới đây là baseline RND/SEL mới, FP32_RNE Ideal, uniform-value [0,1), 200 triệu cặp/hàng; các tỷ lệ theo thứ tự Err<0,1/0,5/1/5%.
-
-| n | [P] Proposed (%) | Baseline mới (%) | RTL multiplier | Max lệch Proposed (điểm %) |
-| --- | --- | --- | --- | ---: |
-| 2 | 9,87 / 32,19 / 50,03 / 95,57 | 8,714937 / 31,177290 / 49,285731 / 95,463330 | Chưa triển khai | 1,155063 |
-| 3 | 44,69 / 83,17 / 95,05 / 99,99 | 43,337090 / 82,859994 / 94,981795 / 100 | Chưa triển khai | 1,352910 |
-| 4 | 87,09 / 99,79 / 99,99 / 99,99 | 86,286286 / 99,797782 / 100 / 100 | Chưa triển khai | 0,803714 |
-
-Max lệch so **Kim [15]** là 0,942710 điểm %, còn **Proposed [P] chưa đạt <=1 điểm %**. 200.000.023 cặp thử, 23 input-zero loại, N=200 triệu cặp hợp lệ. Min-popcount có tỷ lệ Err<0,1% n=2/3/4 lần lượt 4,076841 / 26,717347 / 72,468581; thấp hơn baseline.
-
-OPS RTL đơn vị đã kiểm ModelSim 116.384 cặp. Quartus ba seed/policy: predictor 73 LUT4/15 FF, fmax 198,18–206,06 MHz; minpop cây cân bằng 63 LUT4/25 FF, fmax 200,40–220,90 MHz. Giảm LUT4 **13,70%**, tăng FF, fmax range chồng lấn và variant nhiễu >10%; chỉ kết luận đánh đổi giảm LUT ở thiết bị này, không suy full MAC/PPA của paper. I/O pin tự gán và chưa ràng buộc board; timing khảo sát register-register.
-
-Bằng chứng: `results/paper_table1_200m.log`, `paper_baseline_verified.log`, `paper_baseline_ubsan.log`, `ops_ppa_summary.csv`, `ops_ppa/sim/verified.log`. Công thức, giả định và lệnh tại README L1 mục 5/6. Tuần 4 giữ processing.
-
-## Phụ lục D. Ma trận truy vết hiện thực
-
-| Yêu cầu | Suite hiện có | Bằng chứng / phần mở |
-| --- | --- | --- |
-| FR01,FR03 | parser_comb/parser_pipeline và tests tuple hỗ trợ | results/parser_comb,results/parser_pipeline; tuple khác chưa nghiệm thu |
-| FR02,FR04 | packer unit/chain và NF special/context tests | results/packer/summary.json,results/week11/summary.json; bypass rút ngắn chưa có |
-| FR05..FR08 | Gate2 standalone16 profile,OPS/SAC/core suites | results/week9_implementation/gate2_acceptance.json;final approximate MAC profiles results/week14/completion.json,không thay AC02 |
-| FR09 | W10 comb/pipeline + independent integer oracle | results/week10_adder/summary.json;AC04 tích hợp main đạt tại results/week14/coverage_closure.json;exact/AC02 vẫn mở |
-| FR10,FR12..FR15 | W11 direct NF model/oracle,harness và ModelSim replay | results/week11/summary.json,results/nf_coverage_20261014/summary.json;W14 NF250M/0 mismatch,near≥30% mỗi điểm và AC04 main đạt;AC02 riêng |
-| FR11 | Oracle full-grid độc lập,L1 F_W32 và state/flags | results/week12/{summary,freeze}.json;W14 F90M/0 mismatch,AC04 main,9M paired standalone accuracy;matched PPA còn mở |
-| FR16 | Chồng lấn/FIFO/credit | Chưa triển khai; cần protocol/II coverage sau thiết kế |
-| NFR01 | Strict lint Gate2/W10/W11 | Logs canonical;W14 reset/interface review và ModelSim đạt,EX0 có1 scoped lint waiver;không formal RDC/board signoff |
-| NFR02..05,AC05/06 | OPS/packer PPA riêng | results/ops_ppa,results/packer_ppa; chưa NF/F whole-top PPA |
-| AC07/08 | Runner/source/fixture/library hashes và manifest | W14 audit35 điểm,15 mutant,replay4 pilot vàarchive CRC/SHA đạt;backup theo Git push cuối phiên. Toàn SPEC/AC02 vẫn riêng |
-
-Tên TC-* chuẩn và fail-vector tự động sẽ gắn với suite/case cụ thể khi triển khai. Không dẫn tới các results/mac.csv/fused.csv/ppa.csv placeholder như bằng chứng tồn tại.
-
-## Phụ lục E. Bảng thuật ngữ
-
-| Thuật ngữ | Nghĩa |
-| --- | --- |
-| NaR | Not a Real, giá trị đặc biệt của posit (chuỗi `1 0…0`) |
-| maxpos / minpos | Posit dương lớn nhất / nhỏ nhất |
-| useed | `2^(2^ES)` |
-| sf | Scale factor `= k·2^ES + e` |
-| FRB | First Regime Bit, bit đầu của regime |
-| LOD / LZD / LZC | Lead-One Detector / Lead-Zero Detector / Leading-Zero Counter |
-| OPS / SAC / SBM | Operand Selector / Shift Amount Calculator / Shift-Based Multiplier |
-| RNE | Round to Nearest, ties to Even |
-| SPFP / DPFP | Single / Double-precision floating point |
-| PPA | Power, Performance, Area |
-
-### Bổ sung kiểm chứng bộ đo bước 3 — 04/10/2026
-
-Profile nghiên cứu Table I dùng bộ đo `l1/include/paper_measurement.hpp` và quy tắc README L1 mục 8: Ideal FP32 RNE từ input gốc; loại ngoài miền, input zero, m>15, Ideal zero/nonfinite theo thứ tự; nhận subnormal khác 0. Bốn ngưỡng dùng so sánh số nguyên chính xác với dấu <. Grid24, PRNG và seed là lựa chọn tái lập của đồ án, không phải thông tin đã công bố của paper. Suite Linux/Windows/UBSan đạt 1.900.058 đối chiếu; smoke 100.000 accepted mỗi phân bố khớp counters/fingerprint. Chưa nghiệm thu lại 200 triệu bằng bộ đo mới; không đổi yêu cầu normative của MAC.
-
-### Khảo sát giả định OPS — 04/10/2026
-
-Công cụ nghiên cứu riêng test_paper_sensitivity khảo sát 7 profile, 5 seed x 10 triệu mẫu/hàng. Baseline không giải quyết sai lệch bằng đổi seed/tie/pack. Biến thể score predictor E/M (n=2, 7-bit) xác nhận 200 triệu mẫu seed 271828 có max lệch Proposed 0,976696 điểm %, baseline cùng corpus 1,347652. Đây là kết quả số học của biến thể, chưa chứng minh LUT gốc và chưa đo PPA; không thay cấu hình normative cfg_ops hay baseline hiện hành. Xem README L1 mục 10.
-
-### Profile nghiên cứu E/M tích hợp L1 — 04/10/2026
-
-PaperOps::PredictN2Relative chọn toán hạng theo E/(128+index7), LUT n=2/7-bit giữ nguyên; nhân chéo nguyên, tie-A. Chỉ áp dụng profile PaperMultiplier, không thay cfg_ops kiến trúc hoặc các mã reserved. API mặc định vẫn PredictN2. Kiểm chứng 35.503.586 đối chiếu Linux/Windows/UBSan; bộ đo chính thức --profile relative/--require-match đạt PASS trên 200 triệu accepted seed 271828, max Proposed 0,976696 điểm %. Baseline cùng corpus 1,347652. Đây là nghiệm thu chức năng/số học của biến thể với giả định generator địa phương, chưa xác nhận LUT gốc hoặc PPA. Xem README L1 mục 11.
-
-### Nghiệm thu L1 adder tuần 5 — 04/10/2026
-
-posit_adder.hpp hiện thực SPEC §5.8 với clamp F+2, jam đuôi/cộng-trừ theo độ lớn, carry/LZC và normalized unpacked output; API unpacked yêu cầu ngõ vào exact <=F bits (MAC v1 phải round_unpacked trước). Tuần 5 đã đạt 65.536 cặp posit8, toàn 4.294.967.296 cặp posit16 và 10 triệu posit32 ES2 so SoftPosit, 0 mismatch. ES3 thêm 10 triệu so oracle integer rộng; không suy ra đã đối chuẩn SoftPosit ES3. Linux/Windows/UBSan và regression đạt. Không đổi yêu cầu normative và không công bố Gate 1B vì chưa triển khai MAC. Xem README L1 mục 12 và results/week5_adder_acceptance.log.
-
-
-### Baseline tái dựng theo nguồn và comparator Babic — 04/10/2026
-
-PaperOps::PredictN2Pattern dùng prefix7 mở rộngQ12 trước complement; so lỗi tuyệt đối/tie-A. paper_source_config có anchor_first=true, accumulator_guard=12, inputfraction12 và packTRUNC. Đây là profile nghiên cứu có provenance, không thay cfg_ops §5.4, mặc định PaperConfig hoặc độ rộng normative §5.6; LUT n2/tie và width gốc chưa xác minh.
-
-Bộ đo chính thức200 triệu accepted seed271828/grid24 đạt PASS maxProposed0,984213 điểm %, fingerprint04478e811a897da7; baseline cùngcorpus1,347652. API kiểm29.878.945 đối chiếu Linux/Windows/UBSan, regression đạt;24 ô baseline/relative cũ giữ nguyên. Pilot5seed có hai max hơi vượt1 (1,000560/1,006150), không tuyên bố mọi phân bố/seed đạt.
-
-Paired FP32/Posit200 triệu có conversion/cut unchanged và12 tỷ lệ khớp ở độ chính xác log; maxKim0,801969. Comparator Babic riêng recurrence2010/full FP32 significand/no cut11/outputRNE đạt max0,009091 điểm % trên200 triệu cùngcorpus. Không thay core Proposed bằng recurrence hai toán hạng. Bản Babic2011 đầy đủ/code/generator chưa kiểm được. Nghiệm thu TableI số học của baseline tái dựng đạt; khẳng định thuật toán gốc bit-exact chưa đạt. Chi tiết API/lệnh/provenance/log tại README L1 mục14.
-
-### Nghiệm thu MAC L1 tuần6 — 04/10/2026
-
-MAC v0/v1 non-fused, flags OR qua hai bước làm tròn, bypass và trạng thái acc_mode/acc_clr đã triển khai. Gate1B Linux/Windows đạt36.841.216 đối chiếu/nền tảng: 2^24 bộ ba posit8, 10 triệu posit32 ES2 so L0 non-fused, 10 triệu ES3 so oracle integer, corner/state; 0 mismatch và coverage §6.3 đạt. API C/ctypes/client C, UBSan và regression đạt. Tuần6/Gate1B hoàn thành về mô hình số học; không suy ra đã nghiệm thu handshake, latency/II, stall hoặc RTL/DPI harness. README L1 mục15 và results/week6_* ghi bằng chứng. Phần mô tả tuần5 chưa có MAC ở trên là lịch sử tại thời điểm nghiệm thu tuần5.
-
-### Đối chiếu nguồn journal2024 — 08/10/2026
-
-Nguồn, các trang đã đối chiếu, giả định và lệnh kiểm ở README L1 mục18; `results/paper_journal2024/summary.json` ghi PASS128 entry PT2/0 mismatch, hai entry khác legacy. Chỉ nghiệm thu diễn giải predictor trên miền prefix7 đệm0 Q12; không xác nhận LUT/tie/width/generator gốc. Kết quả TableI200M trước đây không thay đổi; tuần4 giữ processing. Không thay §4–§6, profile normative, ES hoặc lịch RTL bằng cấu hình journal2024.
-
-### Hợp đồng width/cut tái dựng Fig.3 — 08/10/2026
-
-README L1 mục19 là mô tả/lệnh chi tiết; `paper_fig3_config()` và `paper_fig3_accumulator.hpp` thực thi fraction12, payload13 + carry riêng (tổng Q2.12/14 bit), guard thấp0. Tk=floor(Y/2^(p1−pk)) với Y có hidden; áp dấu ck sau cut rồi cập nhật A. Dịch>=13 trả0, carry đi cùng feedback, không wrap/borrow; normalize sau vòng cuối, fraction đầu ra12 và TableI packTRUNC. Đây là mã hóa địa phương cho mạch cờ bị lược khỏi hình; không thay ACC_W, ROUND_SCHEME hoặc cfg_ops normative.
-
-Chức năng PASS Windows/Linux/UBSan, vét cạn16.777.216 cặp Q12, raw/corner đến n8, trace và regression liên quan; xem `results/paper_fig3/summary.json`. TableI200M cùng seed271828/fingerprint cũ cho max1,292319 điểm %, **chưa đạt AC-03**; source guard12 cùng lượt vẫn0,984213. Năm pilot10M đều vượt1. Mốc kiểm width/cut tái dựng hoàn thành, xác minh baseline gốc và tuần4 vẫn processing ở provenance/tie/generator cùng tiêu chí số học. Không suy ra gap do một giả định cụ thể khi chưa có nguồn xác nhận.
-
-### Kiểm bằng vector phân biệt — 08/10/2026
-
-README L1 mục20/`results/paper_discriminators/summary.json` ghi bốn bước đã hoàn thành:292 bản ghi/206 trường hợp,10 ứng viên,205.882 kiểm/nền tảng Windows/Linux/UBSan PASS và đối chiếu Fig.4/5 trực tiếp. Source không cut output trả0x1ae34800 thay0x1ae34000 nên bị loại khỏi baseline bit-exact2021; nghiệm thu source TableI trước đây chỉ giữ ý nghĩa thống kê lịch sử. Fraction đầu ra12 bit có căn cứ hình packer, guard nội bộ chưa được xác minh.
-
-Đo200M accepted seed271828/fingerprint04478e811a897da7, cùng corpus cho fig3/guard12-pack12/source-uncut: maxgap1,2923195 /1,3387730 /0,9842130 điểm %. Hai profile khớp output chưa đạt ngưỡng TableI; source chỉ đạt thống kê. Baseline gốc vẫn processing ở tiêu chí số học và provenance tie/PT2 padding/normalize/cờ/generator. Không thay hợp đồng normative §4–§6 hoặc chọn cấu hình nhờ khớp tỷ lệ đơn thuần.
-
-
-### Gate2 tool availability recheck - 10/10/2026
-
-Rechecked 2026-10-10: WSL PATH contains g++ and make, but no Verilator or yosys. No installation is authorized. Official Verilator lint/harness remain unrun; Gate2 stays processing. No RTL changes, no simulation rerun, no Table I rerun. Historical stratified ModelSim evidence remains 16,815,920 completed transactions, 80,080 reset aborts, 0 mismatch. W9-03/R1/R2/04/05 evidence is retained; W9-06 is not accepted. No new source evidence justifies W9-R3.
-
-
-### Verilator installed; lint timing option corrected - 10/10/2026
-
-Verilator 5.032 (Debian 5.032-1) is now installed by the user. Makefile lint explicitly uses --timing, preserving CK2Q delays. Re-run make lint: NEEDTIMINGOPT removed, exit 2 from make, 60 warnings remain (including MULTITOP, width and UNOPTFLAT diagnostics). No warning suppression, no RTL arithmetic changes, no functional harness run or Table I rerun; Gate2 remains processing. Raw output/version appended to results/week9_implementation/lint.log. Earlier missing-tool entry is historical.
-
-
-### Harness Verilator pilot — 10/10/2026
-
-Pilot Verilator5.032 đã build/chạy đủ16 profile từ final_pilot:32.000 dòng,31.840 so sánh,160 reset hủy,336 stall96 chu kỳ,0 mismatch. Hash fixture và counters khớp ModelSim parallel_pilot; kiểm config reserved/n>8, startup/reset, latency, đổi context lúc busy, stall/order. Runner mặc định chuyển sang final_pilot còn giữ; preflight16 fixture, snapshot nguồn và make với đường dẫn tương đối/CURDIR=. xử lý thư mục có khoảng trắng, không sửa cài đặt. --no-timing bỏ delay CK2Q cho mô phỏng chu kỳ; warning giữ trong build.log, -Wno-fatal chỉ dùng build chức năng, không thay strict lint. Đây là fixture replay, chưa phải scoreboard gọi trực tiếp L1/L0. Gate2/W9-06 vẫn processing: lint còn cảnh báo, cần scoreboard trực tiếp, corpus phân tầng>=10^7 và coverage; line/branch/toggle chưa đo. Vector lớn đã dọn, phải sinh lại và kiểm hash trước replay. Không sửa RTL số học hoặc chạy TableI. Bằng chứng results/week9_multiplier/verilator/final_pilot/summary.json; lệnh bash --noprofile --norc scripts/verify_week9_verilator.sh final_pilot, audit scripts/audit_week9_verilator.py. Seed20261009; compiler/make/version và hash lưu cùng kết quả.
-
-### Gate2 normative multiplier — nghiệm thu10/10/2026
-
-
-Gate2 multiplier **✅** theo mốc tuần9 (10/10/2026):16.815.920 giao dịch phân tầng/0 mismatch; scoreboard trực tiếp L1/L0 và oracle ES3; strict lint16/16 sạch; corner114.656/0 mismatch trên ModelSim và Verilator. Seed20261009, SoftPosit0.4.1, GCC15.2.0, Verilator5.032 và ModelSim10.1d; lệnh/hash/phiên bản lưu với bằng chứng.
-
-Coverage chức năng đạt256/256 bin posit32, min4104 mẫu/bin,26241 operands/run/polarity và36 ô config/profile; structural coverage sau ghép corner: line 91.67–96.23%; branch 91.84–94.79%; toggle 73.10–87.33%, giữ các điểm chưa hit. Mốc này không quy định ngưỡng phần trăm structural coverage và không phải coverage100% hoặc signoff vật lý.
-
-Trạng thái canonical tại `results/week9_implementation/gate2_acceptance.json`; hướng dẫn tái lập và giải thích phạm vi tại [hồ sơ Gate2](../doc/Optimization.md#legacy-7-11). Những mục processing trước đây là lịch sử. Ma trận cuối SPEC§6.7, tuần10 adder/tuần11 MAC-Gate3 và PPA/Gate4 còn mở; provenance/TableI giữ processing, không chạy lại TableI trong phiên này.
-
-
-### Ghi chú tổ chức nguồn — 15/10/2026
-
-Đường dẫn hiện hành phân nhóm theo `rtl/README.md` và `rtl/production.f`; thư mục `research`, `candidates`, `benchmarks` tách khỏi file list production.
-Đợt di chuyển không đổi phiên bản hợp đồng v1.18, nội dung RTL, giao diện hoặc lịch pipeline. Hash và số đo trong báo cáo cũ vẫn tham chiếu checkpoint gốc; bản đồ đường dẫn/hash ở `results/layout_cleanup_20261015/rtl_migration.json`.
-
-
-### Ghi chú hiện thực primitive — 16/10/2026
-
-`rtl/common/lod_lzd_core.sv` dùng cây chọn nhóm4 khi MODE=0,N=31 hoặc32,S=clog2(N); mọi cấu hình khác giữ cây nhị phân gốc. Đây là lựa chọn hiện thực đã kiểm bit-exact, không thay quy ước K/vld, parameter/ports, latency, precision hoặc hợp đồng số học v1.18. MODE1 và parser posit32 N30 vẫn dùng cây gốc. Hai dynamic shifter giữ nguyên sau khi khảo sát timing/LUT trên A35T và A100T; không chọn bản giảm LUT nếu đánh đổi timing không phù hợp.
-
-Bằng chứng nguồn và tổ hợp LOD–shifter ở `results/primitive_v2_20261016/adoption.json`, chi tiết [Optimization §8.18](../doc/Optimization.md#legacy-8-18). Kiểm tích hợp NF32 ES2/ES3 và F32 ES3 mỗi bản10.000 giao dịch đạt0 mismatch; đây là smoke cho checkpoint hiện thực mới, không thay ma trận nghiệm thu cuối hoặc số đo Fmax toàn MAC. Checkpoint số học và hash nguồn cũ giữ nguyên ý nghĩa lịch sử; không sửa các báo cáo cũ để khớp nguồn mới. Mục11.16 dành cho nghiệm thu tuần14 theo kế hoạch hiện hành.
-
-
-### OPT-17 — kiểm chứng candidate29/10/2026, chưa promote
-
-Study riêng ở experiments/opt17_20261029;giữ lịch2P-OPS,A/C–B,một bank C,hai credit,
-accumulation tuần tự và core release theo result handshake.Đã dựng FULL_TERM Q24/26 bit
-cùng reference3P;không sửa arithmetic của production trong phiên này.
-Golden C++ mới đối chiếu oracle raw decoder/selected-bit product/full-grid integer:
-2.053.248 checks đạt.Cả8 top lint và pilot100k đạt;candidate2P NF/F mỗi bản10M
-completed,0 mismatch,tích từng vòng/d/5flags,credit tối đa2,reset/stall/accumulation đạt.
-ModelSim CK2Q1ns:mỗi bản8.192 completed,0 mismatch.
-Nguồn/testbench từng lượt được giữ trong source_bundle.zip và build manifests.
-Chưa đóng toàn OPT-17:benchmark96 điểm bị chặn trước thực thi vì automatic approval
-reviewer hết hạn mức;matched PPA reference/3P chưa chạy.PPA chỉ candidate2P đã chạy
-3strategy trên A35T8,3ns,không phải bằng chứng cải thiện so parent.
-Phát hiện4 file parent thay đổi trong lúc chạy:SAC fixed2/fixed3,OPS fixed2 và F wrapper.
-Không ghi đè các thay đổi đó;20M chỉ áp dụng snapshot đã build,không tự áp dụng live mới.
-Các phiên bản live khác được giữ dưới nhãn unverified_live_parent trong source bundle.
-Chi tiết số liệu,phạm vi và phần còn thiếu:results/opt17_20261029/summary.json.
-Không dùng SoftPosit ES2 làm oracle cho32/3;không claim Python/C++SoftPosit tương đương
-hoặc nghiệm thu AC02/per-n10M,power,board hay production promotion.
+- Norris, C. J. và Kim, S. (2021), *An Approximate and Iterative Posit Multiplier Architecture for FPGAs*, ISCAS: cơ sở kiến trúc dịch–cộng; [PDF local](An%20Approximate%20and%20Iterative%20Posit%20Multiplier%20Architecture%20for%20FPGAs.pdf).
+- Murillo, R., Del Barrio, A. A. và Botella, G. (2020), *Customized Posit Adders and Multipliers using the FloPoCo Core Generator*, ISCAS: giải mã/cộng/đóng gói; [PDF local](Customized%20Posit%20Adders%20and%20Multipliers%20using%20the%20FloPoCo%20Core%20Generator.pdf).
+- [Digital Design Guidelines](Digital_Design_Guidelines.md): quy tắc RTL/clock/reset. Spec hiện hành ưu tiên về format/profile/nghiệm thu so với các nhật ký có ngày cũ.
+- [Posit Standard2022 §5.11](https://posithub.org/docs/posit_standard-2.pdf): tham khảo nguyên lý qMulAdd và qToP cho quire. Chuẩn2022 dùng exponent2 bit; ES3/Q12 và cận width ở §9 là cấu hình/mở rộng riêng của đồ án, không tuyên bố tuân thủ toàn chuẩn.

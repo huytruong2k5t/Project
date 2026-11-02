@@ -1,3 +1,13 @@
+## Dọn dẹp RTL/results — 02/11/2026
+
+RTL đang làm việc chỉ giữ **42 module MAC**; 7 module reference cho verification đã chuyển sang **tb/reference/rtl/**. Các candidate/benchmark/research và module đã thay thế được lưu ngoài RTL. Results giữ8 mốc cần kiểm chứng/đối chiếu; F đã chọn vẫn6.602ns/1265LUT/820FF. Nội dung active RTL và bằng chứng giữ lại không thay đổi.
+
+[Kết quả hiện dùng](results/README.md) · [Biên bản](docs/DON_DEP_RTL_RESULTS_20261102.md) · [Archive và phục hồi](archive/cleanup_20261102/INDEX.md).
+
+Các mục lịch sử bên dưới giữ ngày/scope của snapshot tương ứng; đường dẫn cũ đã archive cần restore trước khi replay.
+
+---
+
 # Posit MAC — NF và fused
 
 Đồ án chuyên ngành HK261, HCMUT — Đan Huy. Thiết kế SystemVerilog cho `D = A × B + C_eff`, duy nhất **Posit(32,3)**; NF là baseline nội bộ để so sánh với F. NF làm tròn tích trước cộng; F cộng tích trước pack rồi RNE đầu ra. Tích lũy hiện lưu kết quả Posit đã làm tròn mỗi giao dịch, không phải quire.
@@ -6,7 +16,7 @@
 
 | Nội dung | Trạng thái |
 | --- | --- |
-| Hợp đồng | [SPEC v1.25](SPEC_Posit_MAC_IP.md): approximate-only, fraction đầu vào12 bit, **FULL_TERM26/Q24**, n0..12, OPS0/1, RNE; không exact hardware/cfg_mode/TRUNC/FLOOR trong cấu hình nghiệm thu |
+| Hợp đồng | [SPEC v1.26](SPEC_Posit_MAC_IP.md): approximate-only, fraction đầu vào12 bit, **FULL_TERM26/Q24**, n0..12, OPS0/1 (mặc định **OPS1/n12**), RNE; không exact hardware/cfg_mode/TRUNC/FLOOR trong cấu hình nghiệm thu |
 | Nguồn hiện tại | Đang refactor, **vẫn có đường nhân FLOOR**. NF còn exact-capable, n≤8 và `cfg_mode`; F approximate-only, n≤12, top còn `cfg_mode`. Chưa đáp ứng trọn hợp đồng FULL_TERM |
 | File list đang dùng | [`rtl/mac_active.f`](rtl/mac_active.f), **42 module**; không compile đệ quy toàn bộ RTL |
 | Kiến trúc hiện tại | NF/F cùng dùng bộ cộng `posit_add`5 tầng và Packer RNE2 tầng. F dùng parser riêng `posit_parser_f`, core phẳng `mul_iter_core_fixed2`; NF vẫn dùng `mul_iter_core` |
@@ -29,6 +39,8 @@ Mỗi PASS/số đo chỉ áp dụng đúng nguồn, manifest và recipe của l
 Ứng viên OPT-15/16 chia sẻ parser/packer và các lựa chọn tối ưu cũ vẫn được giữ để đối chiếu tại [Optimization](../doc/Optimization.md), [kết quả](results/README.md) và [archive](archive/README.md); chưa mặc định là release đã promote. Provenance/Table I của paper vẫn là nghiên cứu phụ, chưa xác nhận baseline tác giả.
 
 ## 3. Công việc còn mở
+
+Hợp đồng [MAC quire mở rộng](SPEC_Posit_MAC_IP.md#mac-quire-extension) đã được bổ sung: dùng cùng prepack FULL_TERM, tổng rộng không làm tròn từng MAC, RNE khi READ. Chưa triển khai/nghiệm thu quire; width và chiều dài chuỗi phải khóa riêng. Xem §5 và §6.9 của SPEC cho cấu trúc khối/testbench mới.
 
 - Đồng bộ NF/F, prepack adapter, L1/golden, API và runner về FULL_TERM26/Q24, n0..12, approximate-only theo SPEC.
 - Nghiệm thu **52 điểm NF/F×OPS×n**, mỗi điểm≥10M completed cùng coverage theo SPEC §6.7. Regression nhỏ/aggregate cũ không thay ma trận này.

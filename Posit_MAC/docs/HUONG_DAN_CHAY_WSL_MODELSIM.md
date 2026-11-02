@@ -1,17 +1,21 @@
-## Quyết định30/10/2026 — chỉ approximate32/3
+## Hợp đồng hiện hành ngày 02/11/2026
 
-SPEC v1.24 §4.3–4.4 chốt một profile nhân duy nhất:12 fraction đầu vào,FULL_TERM26/Q24,
-0..12 vòng fraction,early-stop,không FLOOR/JAM/RNE từng term.Cả NF/F đều approximate;
-NF/F chỉ khác vị trí RNE.Không exact NF/Q52,không exact F/quire.Cfg_mode không thuộc
-I/O target;adapter cũ nếu cần chỉ nhận1,từ chối0.Acc_mode/acc_clr và số giao dịch chuỗi
-không bị giới hạn12.Oracle số nguyên/hữu tỉ chính xác vẫn giữ,AC02 exacthardware retired.
-Danh mục file exact-only,mixed và shared cần giữ nằm trong SPEC §4.4.
+[SPEC v1.26](../SPEC_Posit_MAC_IP.md) chốt Posit(32,3), approximate12 fraction,
+FULL_TERM26/Q24 không FLOOR từng term, mặc định **OPS1/n12**; vẫn khảo sát OPS0/n0..12
+và early-stop. Parser2, adder dùng chung5, Packer RNE2 tầng; adapter F giữ đủ tích trước RNE.
+Không exact hardware/cfg_mode trong top mục tiêu. Quire là mở rộng riêng theo
+[§9](../SPEC_Posit_MAC_IP.md#mac-quire-extension): nhận prepack, giữ tổng rộng, chỉ RNE khi READ;
+chưa có RTL quire được nghiệm thu, không gán PASS NF/F sang quire.
 
-Phiên30/10 chỉ sửa tài liệu,không sửa/xóa code hoặc chạy verification.CandidateOPT17
-và các runner cũ chưa tự thành cặpapprox-only mới.NF cũ có bank54/exact branch phải
-được thay bằngcore26trước đoPPA.NgưỡngAC01/AC04 và từng n/OPS không giảm;không gán
-PASS hoặc số đo lịch sử cho source sau thay đổi.Các mô tả exact/FLOOR có ngày phía dưới
-chỉ giữ để truy vết;không ghi đè quyết định này.
+Golden32/3 độc lập và L1 phải khớp trước fixture/pilot; mặc định driver/model OPS1/n12,
+không thả nổi input cfg. Giữ [ma trận52 điểm](../SPEC_Posit_MAC_IP.md#acceptance-matrix),
+≥10M completed/điểm (≥520M), coverage và paired accuracy; không giảm ngưỡng.
+Nguồn live vẫn có FLOOR, NF exact-capable/N_MAX8 và F prepack14; header FULL_TERM có API mixed.
+Đây là cập nhật tài liệu, không sửa RTL/model/TB/runner hoặc cấp nghiệm thu mới.
+
+Các lệnh, thông số và mục có ngày cũ bên dưới là hướng dẫn/snapshot lịch sử khi khác v1.26;
+không ghi đè hợp đồng hiện hành. Chọn đúng source/dependency khi replay, không dùng
+SoftPosit p32/ES2 làm oracle32/3. Trình tự triển khai và khoảng cách xem SPEC §8.
 
 ---
 

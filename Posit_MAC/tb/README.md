@@ -1,3 +1,24 @@
+## Hợp đồng hiện hành ngày 02/11/2026
+
+[SPEC v1.26](../SPEC_Posit_MAC_IP.md) chốt Posit(32,3), approximate12 fraction,
+FULL_TERM26/Q24 không FLOOR từng term, mặc định **OPS1/n12**; vẫn khảo sát OPS0/n0..12
+và early-stop. Parser2, adder dùng chung5, Packer RNE2 tầng; adapter F giữ đủ tích trước RNE.
+Không exact hardware/cfg_mode trong top mục tiêu. Quire là mở rộng riêng theo
+[§9](../SPEC_Posit_MAC_IP.md#mac-quire-extension): nhận prepack, giữ tổng rộng, chỉ RNE khi READ;
+chưa có RTL quire được nghiệm thu, không gán PASS NF/F sang quire.
+
+Golden32/3 độc lập và L1 phải khớp trước fixture/pilot; mặc định driver/model OPS1/n12,
+không thả nổi input cfg. Giữ [ma trận52 điểm](../SPEC_Posit_MAC_IP.md#acceptance-matrix),
+≥10M completed/điểm (≥520M), coverage và paired accuracy; không giảm ngưỡng.
+Nguồn live vẫn có FLOOR, NF exact-capable/N_MAX8 và F prepack14; header FULL_TERM có API mixed.
+Đây là cập nhật tài liệu, không sửa RTL/model/TB/runner hoặc cấp nghiệm thu mới.
+
+Các lệnh, thông số và mục có ngày cũ bên dưới là hướng dẫn/snapshot lịch sử khi khác v1.26;
+không ghi đè hợp đồng hiện hành. Chọn đúng source/dependency khi replay, không dùng
+SoftPosit p32/ES2 làm oracle32/3. Trình tự triển khai và khoảng cách xem SPEC §8.
+
+---
+
 > **Phân biệt nguồn trước khi replay:** đối chiếu Git ngày29/10 phát hiện51/54 file RTL
 > và manifest tại máy đã khác commit `c4fe1f7` trước phiên đóng gói;ví dụ F đổi N_MAX8→12.
 > Hash manifest hiện tại không trùng hash trong summary release cũ.Vì vậy số10M/0 mismatch

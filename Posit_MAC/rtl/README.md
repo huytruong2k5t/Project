@@ -1,3 +1,44 @@
+## Dọn dẹp RTL/results — 02/11/2026
+
+- [mac_active.f](mac_active.f): **42 module** cho hai top MAC hiện tại; mọi nội dung giữ nguyên byte.
+- [tb/reference/rtl/files.f](../tb/reference/rtl/files.f): **7 module** ngoài DUT nhưng còn dùng cho reference bộ cộng; đã chuyển khỏi RTL và cập nhật runner.
+- [multiplier/README.md](multiplier/README.md): đã kiểm tra14 SV; tất cả còn dùng bởi NF/F, không có file dư; kèm caller và hash đối chiếu snapshot đã đo.
+- [common/README.md](common/README.md): common đã giảm14→10 SV; cả10 còn lại đều có caller trong MAC, kèm độ rộng và bảng truy vết/hash.
+- Các fused adder/controller cũ, standalone không dùng trong luồng hiện tại, candidate/benchmark/research đã vào [archive có hash](../archive/cleanup_20261102/INDEX.md).
+
+Dùng file list mac_active.f cho DUT và thêm reference file list khi kiểm tương đương bộ cộng. rtl/adder chỉ còn posit_add.sv cùng Prepare/Align/Arithmetic/LOD/Normalize của pipeline5 tầng. production.f/production_freeze.json là mốc lịch sử, không thay thế danh sách42 module đang làm việc. Các số46/54 trong mục lịch sử bên dưới không mô tả cây sau dọn.
+
+---
+
+## Tối ưu MAC F sau refactor — 01/11/2026
+
+Đã chọn `p00`: F2F sau synthesis **7,697 → 6.602 ns**, LUT **1374 → 1265**, FF **820 → 820** trên A35T, cùng constraints10ns. F dùng `posit_parser_f`/`posit_parser_f_regime_lod` riêng; parser NF và LOD của bộ cộng giữ nguyên. Không thêm pipeline, không đổi số học FLOOR/Q12 hoặc cổng top. MAC F50k accepted, parser4M magnitude, LOD500063 và parser streaming đều PASS. Đây là regression hiện hành, chưa là nghiệm thu FULL_TERM; WHS vẫn −0,055ns trước route.
+
+[Báo cáo F2F và các candidate](../results/f_timing_optimization_20261101/summary.md). Dùng `rtl/mac_active.f` (42 module) cho cây đang làm việc.
+
+---
+
+## Hợp đồng hiện hành ngày 02/11/2026
+
+[SPEC v1.26](../SPEC_Posit_MAC_IP.md) chốt Posit(32,3), approximate12 fraction,
+FULL_TERM26/Q24 không FLOOR từng term, mặc định **OPS1/n12**; vẫn khảo sát OPS0/n0..12
+và early-stop. Parser2, adder dùng chung5, Packer RNE2 tầng; adapter F giữ đủ tích trước RNE.
+Không exact hardware/cfg_mode trong top mục tiêu. Quire là mở rộng riêng theo
+[§9](../SPEC_Posit_MAC_IP.md#mac-quire-extension): nhận prepack, giữ tổng rộng, chỉ RNE khi READ;
+chưa có RTL quire được nghiệm thu, không gán PASS NF/F sang quire.
+
+Golden32/3 độc lập và L1 phải khớp trước fixture/pilot; mặc định driver/model OPS1/n12,
+không thả nổi input cfg. Giữ [ma trận52 điểm](../SPEC_Posit_MAC_IP.md#acceptance-matrix),
+≥10M completed/điểm (≥520M), coverage và paired accuracy; không giảm ngưỡng.
+Nguồn live vẫn có FLOOR, NF exact-capable/N_MAX8 và F prepack14; header FULL_TERM có API mixed.
+Đây là cập nhật tài liệu, không sửa RTL/model/TB/runner hoặc cấp nghiệm thu mới.
+
+Các lệnh, thông số và mục có ngày cũ bên dưới là hướng dẫn/snapshot lịch sử khi khác v1.26;
+không ghi đè hợp đồng hiện hành. Chọn đúng source/dependency khi replay, không dùng
+SoftPosit p32/ES2 làm oracle32/3. Trình tự triển khai và khoảng cách xem SPEC §8.
+
+---
+
 > **Phân biệt nguồn trước khi replay:** đối chiếu Git ngày29/10 phát hiện51/54 file RTL
 > và manifest tại máy đã khác commit `c4fe1f7` trước phiên đóng gói;ví dụ F đổi N_MAX8→12.
 > Hash manifest hiện tại không trùng hash trong summary release cũ.Vì vậy số10M/0 mismatch

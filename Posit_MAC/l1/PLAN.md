@@ -1,3 +1,38 @@
+## Triển khai MAC quire Q12-1024 — 03/11/2026
+
+**Kết quả:** Q-MODEL/Q-RTL đã đạt: main10M retired/0 mismatch,19428 chuỗi>12,
+38 chuỗi1024; proof447 geometry/199809 cặp,unit và ModelSim đạt. Coverage
+line/branch/toggle sau3 loại trừ nguồn96.04/95.12/97.05%; thô line93.27%.
+OOC route100MHz setup−12.016ns,hold+0.015ns,10339 LUT/4453 FF. Chưa timing
+signoff; chưa gắn MAC_Q12_VERIFIED. [Summary](../results/quire_20261103/summary.json).
+
+**Tiếp theo riêng quire:** tách pipeline/giảm fanout scale/align/term-zero/error
+tới bank CE. Giữ checkpoint chức năng; thay đổi ở khối nào phải kiểm lại unit,
+checkpoint/reset/stall tương ứng rồi main/PPA theo ảnh hưởng. Không sửa clock
+hoặc false-path để che vi phạm; không suy Fmax từ một slack. NF/F gates riêng.
+
+Phạm vi: top riêng posit_mac_quire, cùng core approximate12 FULL_TERM, không C,
+CLEAR/MAC/READ, một lệnh outstanding. L_max1024/W972/grid2^-480; chỉ READ RNE.
+Không sửa/đổi nhãn PASS của NF/F. Giữ bộ kiểm chứng hiện hành; TB/runner cũ
+được kiểm hash và lưu ZIP trước khi bỏ khỏi thư mục làm việc, cache xóa.
+
+Trình tự và tiêu chí kiểm trước khi cấp nghiệm thu:
+
+1. Model quire và oracle bigint độc lập từ raw32: min/max, suffix0 khi shift âm,
+   chuỗi1024 cùng dấu, đảo dấu/cancellation, loss và NaR; so mọi checkpoint.
+2. RTL align/bank/read adapter và wrapper: invalid cfg/reserved/capacity,
+   ACK d0, giữ response khi stall, reset trước/sau commit, clear/read không
+   đổi count sai, không mất/nhân đôi lệnh, không cập nhật Q sau reset-abort.
+3. Unit READ: tie-even/odd, sticky-only, sf±240 và headroom, word boundary;
+   TC-Q-NOROUND phải ra0x40000001. Unit bank fault overflow phải sticky/NaR,
+   Q cuối hợp lệ giữ nguyên, CLEAR hồi phục.
+4. Verilator pilot≥100k rồi main≥10M MAC committed+retired,≥10k chuỗi có dài>12
+   và corner L_max; OPS0/1×n0..12 quét riêng. ModelSim4-state reset/stall/corner.
+5. Báo coverage line95/branch90/toggle85 và PPA riêng; mục chưa chạy/chưa đạt
+   ghi mở, không vay coverage/timing NF/F. Lưu seed/lệnh/tool/source SHA.
+
+---
+
 ## Mốc triển khai FULL_TERM — 02/11/2026
 
 1. **Đã kiểm pilot:** model FULL_TERM mặc định OPS1/n12; shared OPS/SAC/SBM/core26/normalizer; NF product RNE, F lossless prepack.31 module/68 instance đủ cổng, không cfg_mode. Unit143934016 và MAC7.2M completed đều0 mismatch; ModelSim cuối đạt.

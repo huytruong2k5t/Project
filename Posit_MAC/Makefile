@@ -22,10 +22,11 @@ ASIC_DIR    := asic
 SCRIPTS_DIR := scripts
 RESULTS_DIR := results
 
-.PHONY: all help build lint smoke regress cov syn ppa asic report clean
+.PHONY: all help build lint smoke regress cov syn ppa asic report clean quire-build quire-lint quire-smoke quire-main quire-summary
 
 FIXED_RUN ?= manual
 SHARED_COUNT ?= 100000
+QUIRE_TAG ?= manual
 
 all: lint smoke ## Current shared FULL_TERM flow; build first, run matrix explicitly
 
@@ -52,6 +53,21 @@ regress: ## 52-point matrix; pilot100k default, main uses SHARED_COUNT=10000000
 
 cov: ## Summarize source-bound evidence; does not silently close Gate/AC04
 	$(PYTHON) $(SCRIPTS_DIR)/summarize_shared_multiplier.py
+
+quire-lint: ## Audit current19-module quire hierarchy and strict lint
+	$(PYTHON) $(SCRIPTS_DIR)/audit_quire.py
+
+quire-build: ## Build quire; choose a fresh QUIRE_TAG
+	$(PYTHON) $(SCRIPTS_DIR)/verify_quire.py build --tag $(QUIRE_TAG)
+
+quire-smoke: ## Quire smoke with directed/state tests plus10k mixed MACs
+	$(PYTHON) $(SCRIPTS_DIR)/verify_quire.py run --tag $(QUIRE_TAG) --label smoke_$(FIXED_RUN) --count 10000
+
+quire-main: ## Default-only10M retired MAC,4 independent-seed shards; build first
+	$(PYTHON) $(SCRIPTS_DIR)/run_quire_main.py --tag $(QUIRE_TAG) --label main_$(FIXED_RUN) --total 10000000 --shards 4
+
+quire-summary: ## Validate recorded03/11 quire evidence; timing remains separate
+	$(PYTHON) $(SCRIPTS_DIR)/summarize_quire.py
 
 syn: ## Run FPGA synthesis and implementation via Vivado / Yosys
 	@echo "==> Running FPGA synthesis..."

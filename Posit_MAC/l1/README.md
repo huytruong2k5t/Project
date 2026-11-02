@@ -1,3 +1,19 @@
+## Model quire Q12-1024 — 03/11/2026
+
+`include/posit_quire.hpp`: state signed972/grid2^-480,count≤1024; gọi cùng
+FULL_TERM recurrence, không RNE trong mac(), chỉ read() mới pack RNE.
+Golden `tb/quire_reference.hpp` dùng raw decoder/selected-bit product độc lập,
+sign/magnitude1024 bit grid2^-532. Bounds xác nhận hệ số tổng≤2^1022 nên đủ
+cho L_max1024; không suy đủ cho độ dài tùy ý. Python generator dùng bigint
+không giới hạn và đối chiếu4881 fixture với cả L1/golden.
+
+94727 checkpoint+READ,unit và RTL main10M đều0 mismatch; chuẩn ES3 không dùng
+SoftPosit p32/ES2 làm oracle. [Summary](../results/quire_20261103/summary.json).
+Chức năng đã kiểm; timing100MHz còn mở. Ideal full-input dot-product là nhánh
+đối chứng riêng, chưa có bảng accuracy quire trong phiên này.
+
+---
+
 ## Hợp đồng hiện hành ngày 02/11/2026
 
 [SPEC v1.27](../SPEC_Posit_MAC_IP.md) chốt Posit(32,3), approximate12 fraction,

@@ -1,4 +1,79 @@
-## Chạy nguồn hiện tại — shared FULL_TERM31 module,02/11/2026
+## Chạy quire Q12-1024 — 03/11/2026
+
+Nguồn: `rtl/quire_active.f`19 module; top `posit_mac_quire`.
+W972/grid2^-480,L_max1024,Posit32/ES3,approximate12; chỉ READ mới RNE.
+Tool cần sẵn: Python3,G++17,make,Verilator; ModelSim/Vivado cho các lượt riêng.
+Không dùng SoftPosit32/ES2 làm oracle. Các tag/label dưới là ví dụ tái chạy,
+phải chọn tên chưa tồn tại. Binary/cache đã dọn nên cần build lại.
+
+Trong WSL:
+
+```sh
+cd '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC'
+python3 -B scripts/verify_quire_bounds.py
+python3 -B scripts/gen_quire_vectors.py results/quire_20261103/python_vectors
+python3 -B scripts/verify_quire.py model
+python3 -B scripts/audit_quire.py
+python3 -B scripts/verify_quire.py build --tag replay_unit01 --kind units --coverage
+python3 -B scripts/verify_quire.py run --tag replay_unit01 --label replay_unit01
+python3 -B scripts/verify_quire.py build --tag replay_rtl01
+python3 -B scripts/verify_quire.py run --tag replay_rtl01 --label replay_pilot01 --count 100000
+python3 -B scripts/run_quire_main.py --tag replay_rtl01 --label replay_main01 --total 10000000 --shards 4
+python3 -B scripts/verify_quire.py build --tag replay_cov01 --coverage
+python3 -B scripts/verify_quire.py run --tag replay_cov01 --label replay_cov01 --count 100000
+```
+
+Pilot quét OPS0/1,n0..12; main chỉ OPS1/n12 trên4 seed độc lập.
+Main đếm MAC đã commit **và ACK retire**, không tính CLEAR/READ/preamble/abort.
+`run_quire_main.py` giữ báo cáo từng shard, kiểm tổng10M và quota chuỗi;
+không trộn các snapshot hoặc tính lượt dở. Model/harness/source thay đổi thì
+source guard từ chối dùng binary cũ; build với tag mới.
+
+Từ Windows CMD (đổi đường dẫn tool nếu máy khác):
+
+```bat
+cd /d "C:\HCMUT\HK261\Do an 2\Posit_MAC"
+python -B scripts\verify_quire_modelsim.py --bin "C:\altera\13.0sp1\modelsim_ase\win32aloem" --label modelsim_replay01
+python -B scripts\verify_quire_ppa.py --vivado "C:\AMDDesignTools\2026.1\Vivado\bin\vivado.bat" --label ppa_replay01
+```
+
+Có thể bỏ --bin/--vivado nếu tool đã có trên PATH. Runner snapshot nguồn,
+đặt work/log/temp/appdata trong RunRoot, không sửa thư mục cài tool/license.
+Một OOC route A35T10ns chưa là Fmax sweep/board signoff hoặc timing PASS.
+
+Lượt đã chạy thực tế: pilot_final100k mixed; main_final_s0..s3 mỗi bản2.5M
+default với seed20261103/20262112/20263121/20264130; units_final và
+modelsim_signoff đều0 mismatch. Main có19428 chuỗi>12,38 chuỗi1024.
+ModelSim4876 completed+5 reset-aborted; latency trước giữ output
+CLEAR1,MAC7..42,READ3..57 chu kỳ. Vivado ppa_final route xong nhưng setup
+−12.016ns ở100MHz,hold+0.015ns;10339 LUT/4453 FF. Timing còn mở.
+
+```sh
+python3 -B scripts/summarize_quire_coverage.py
+python3 -B scripts/summarize_quire.py
+```
+
+Hai lệnh summary kiểm đúng **bằng chứng gốc03/11** với hash; không tự gộp
+label replay mới. Nếu raw log/dat đã được nén để sao lưu, giải nén
+verified_evidence.zip về một bản checkout riêng trước khi tái kiểm summary.
+Coverage gốc thô93.269/95.122/97.050%; line sau3 loại trừ có giải thích
+96.040%, không loại branch/toggle. Xem coverage_review.json để đối chiếu.
+
+TB/runner cũ nằm trong archive/legacy_tb_runners_before_quire_20261103.zip;
+chỉ phục hồi vào thư mục riêng với matching snapshot nếu cần lịch sử.
+Bộ NF/F hiện hành vẫn được giữ; runner ModelSim của nó nay nhận tham số:
+
+```bat
+powershell.exe -NoProfile -File scripts\run_refactored_mac.ps1 -Stage Verify -RunRoot results/nf_f_replay01 -VectorCount 5000 -ModelSimBin "C:\altera\13.0sp1\modelsim_ase\win32aloem" -PythonExecutable python
+```
+
+Runner02/11 có đường dẫn home cứng đã archive trước khi sửa; receipt cũ chỉ
+áp dụng snapshot cũ. NF/F DUT nguyên hash và đã kiểm lại4970 completed mỗi
+bản/0 mismatch sau thay đổi runner. Không xem main quire là ma trận520M NF/F.
+
+---
+
+## Chạy nguồn NF/F — shared FULL_TERM31 module,02/11/2026
 
 Các lệnh ở mục này chạy từ gốc `Posit_MAC`. Build lại sau khi source guard báo
 đổi nguồn; không xóa manifest/hash để bỏ qua kiểm. Luôn chọn tag/label/RunRoot
@@ -28,13 +103,13 @@ Từ Windows **Command Prompt**, dùng runner gọi ModelSim đã cài sẵn:
 
 ```bat
 cd /d "C:\HCMUT\HK261\Do an 2\Posit_MAC"
-powershell.exe -NoProfile -File scripts\run_refactored_mac.ps1 -Stage Verify -RunRoot results/shared_multiplier_20261102/modelsim_replay01 -VectorCount 30000
+powershell.exe -NoProfile -File scripts\run_refactored_mac.ps1 -Stage Verify -RunRoot results/shared_multiplier_20261102/modelsim_replay01 -VectorCount 30000 -ModelSimBin "C:\altera\13.0sp1\modelsim_ase\win32aloem" -PythonExecutable python
 ```
 
 Không cần mở GUI; runner tạo work/transcript/temp và snapshot trong RunRoot.
-ModelSim10.1d được gọi ở `C:/altera/13.0sp1/modelsim_ase/win32aloem`.
-Nếu máy khác, cập nhật đường dẫn tool trong bản runner riêng và lưu version;
-không sửa license hoặc thư mục cài đặt. Runner dừng nếu RunRoot đã tồn tại.
+Ví dụ dùng ModelSim10.1d ở `C:/altera/13.0sp1/modelsim_ase/win32aloem`.
+Máy khác truyền ModelSimBin/PythonExecutable hoặc dùng PATH; lưu version,
+không sửa license/thư mục cài đặt. Runner dừng nếu RunRoot đã tồn tại.
 
 Lượt đã chạy thực tế: `modelsim_signoff`,30000 accepted mỗi NF/F;
 29820 completed+180 reset-aborted,0 mismatch. Core53249 cases/231437 checkpoints,

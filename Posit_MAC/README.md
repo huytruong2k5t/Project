@@ -1,3 +1,29 @@
+## MAC quire Q12-1024 — 03/11/2026
+
+Đã build `posit_mac_quire`: Posit(32,3), cùng multiplier approximate12,
+quire signed972/grid2^-480, tối đa1024 MAC giữa CLEAR. Không C; lệnh CLEAR/MAC/READ,
+một lệnh outstanding; chỉ READ mới RNE. Đây là tổng chính xác các tích
+approximate, không là exact dot-product của toàn fraction26.
+
+**Chức năng đạt:** model/unit,100k pilot và **10M MAC retired/0 mismatch**;
+19428 chuỗi>12 và38 chuỗi1024. ModelSim4876 completed+5 reset-aborted/0 mismatch.
+19 strict lint,26 instance+1 BUFG đủ cổng; core dùng chung NF/F giữ nguyên hash.
+Coverage thô line/branch/toggle93.269/95.122/97.050%; line sau3 loại trừ có
+giải thích nguồn theo SPEC6.6 là96.040%.
+
+**Timing còn mở:** A35T OOC route10ns dùng10339 LUT/4453 FF,BRAM0/DSP0;
+setup−12.016ns,hold+0.015ns. Chưa đạt100MHz/Fmax/board signoff;
+không gắn MAC_Q12_VERIFIED. [Summary](results/quire_20261103/summary.json),
+[SPEC §9](SPEC_Posit_MAC_IP.md#9-hợp-đồng-mở-rộng-mac-quire),
+[file list](rtl/quire_active.f),[cách chạy](docs/HUONG_DAN_CHAY_WSL_MODELSIM.md).
+
+Đã lưu400 TB/runner cũ vào [archive có hash](archive/legacy_tb_runners_before_quire_20261103.zip)
+trước khi bỏ khỏi cây làm việc; giữ một bộ verification hiện hành. Cache,
+binary,work,wave/transcript sinh lại được đã dọn; phải build lại khi replay.
+Runner mới nhận tool qua PATH/tham số, không gắn home người dùng.
+
+---
+
 ## Dọn dẹp RTL/results — 02/11/2026
 
 RTL hiện có **31 module MAC**, **8 module reference** ngoài DUT. NF/F dùng chung một thiết kế bộ nhân FULL_TERM26/Q24; bỏ đường exact và `cfg_mode`. Nguồn trước sửa được bảo toàn trong [ZIP có hash](archive/shared_multiplier_before_20261102.zip). Số6.602ns/1265LUT/820FF thuộc snapshot FLOOR cũ, chưa đo PPA nguồn mới.

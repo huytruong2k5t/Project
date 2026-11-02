@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "profile": "Q12-1024",
+  "E_LSB": -480,
+  "W": 972,
+  "L_max": 1024,
+  "geometry_cases": 447,
+  "geometry_pair_checks": 199809,
+  "negative_alignment_shift_geometry_pairs": 16,
+  "positive_magnitude_codes_partitioned": 2147483647,
+  "raw_codes_partitioned_including_sign_zero_NaR": 4294967296,
+  "proof": [
+    "Each finite operand and its selected12-bit version is an integer multiple of2^-240",
+    "Selection only clears existing fraction bits and cannot introduce a lower nonzero bit",
+    "Every product is a multiple of2^-480; any negative alignment shift discards zeros",
+    "|P_hat|<=2^480 and1024 terms give |U|<=2^970 within signed972",
+    "Reference grid2^-532 gives magnitude<=2^1022 within1024 unsigned bits"
+  ],
+  "limits": "Symbolic partition/inequality proof, not enumeration of4.29B simulations or a claim of minimal width",
+  "script_sha256": "4a82e05f8d6c8e1b3754b6d5d849f1492f125a38c64cb2311ffbdd297d01592a"
+}

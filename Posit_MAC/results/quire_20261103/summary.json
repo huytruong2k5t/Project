@@ -1,0 +1,318 @@
+{
+  "date": "2026-11-03",
+  "profile": "MAC_Q12_FULL_TERM_Q12_1024",
+  "status": "FUNCTION_VERIFIED_TIMING_OPEN",
+  "MAC_Q12_VERIFIED": false,
+  "configuration": {
+    "posit_bits": 32,
+    "es": 3,
+    "fraction_bits": 12,
+    "M_bits": 26,
+    "M_Q": 24,
+    "E_LSB": -480,
+    "quire_bits": 972,
+    "L_max": 1024,
+    "word_bits": 36,
+    "word_steps": 27,
+    "default_n": 12,
+    "default_ops": 1
+  },
+  "source_guards": "PASS",
+  "main": {
+    "status": "PASS",
+    "mismatches": 0,
+    "main_mac_retired": 10000000,
+    "long_sequences": 19428,
+    "capacity_sequences": 38,
+    "clear_sequences": 20064,
+    "seeds": [
+      20261103,
+      20262112,
+      20263121,
+      20264130
+    ],
+    "shards": [
+      "main_final_s0",
+      "main_final_s1",
+      "main_final_s2",
+      "main_final_s3"
+    ],
+    "build_manifest": "build_rtl_final.json",
+    "claim": "Independent-seed default OPS1/n12 shards; directed/mixed preambles excluded from main_mac_retired",
+    "main_volume_met": true,
+    "sequence_quota_met": true
+  },
+  "pilot": {
+    "main_mac_retired": 100000,
+    "config_bins": [
+      3881,
+      3897,
+      3802,
+      3860,
+      3876,
+      3863,
+      3937,
+      3838,
+      3963,
+      3853,
+      3882,
+      3801,
+      3775,
+      3791,
+      3912,
+      3890,
+      3650,
+      3802,
+      3822,
+      3850,
+      3810,
+      3927,
+      3821,
+      3916,
+      3745,
+      8096
+    ],
+    "seed": 20261103,
+    "mismatches": 0
+  },
+  "models": {
+    "status": "PASS",
+    "mismatches": 0,
+    "seed": 20261103,
+    "mac_checks": 94727,
+    "read_checks": 94727,
+    "python_fixture_rows": 4881,
+    "grid": -480,
+    "width": 972,
+    "L_max": 1024
+  },
+  "bounds": {
+    "status": "PASS",
+    "profile": "Q12-1024",
+    "E_LSB": -480,
+    "W": 972,
+    "L_max": 1024,
+    "geometry_cases": 447,
+    "geometry_pair_checks": 199809,
+    "negative_alignment_shift_geometry_pairs": 16,
+    "positive_magnitude_codes_partitioned": 2147483647,
+    "raw_codes_partitioned_including_sign_zero_NaR": 4294967296,
+    "proof": [
+      "Each finite operand and its selected12-bit version is an integer multiple of2^-240",
+      "Selection only clears existing fraction bits and cannot introduce a lower nonzero bit",
+      "Every product is a multiple of2^-480; any negative alignment shift discards zeros",
+      "|P_hat|<=2^480 and1024 terms give |U|<=2^970 within signed972",
+      "Reference grid2^-532 gives magnitude<=2^1022 within1024 unsigned bits"
+    ],
+    "limits": "Symbolic partition/inequality proof, not enumeration of4.29B simulations or a claim of minimal width",
+    "script_sha256": "4a82e05f8d6c8e1b3754b6d5d849f1492f125a38c64cb2311ffbdd297d01592a"
+  },
+  "units": {
+    "align_checks": 32768,
+    "read_checks": 21948,
+    "normalizer_checks": 21948,
+    "bank_checks": 1041,
+    "mismatches": 0
+  },
+  "modelsim": {
+    "version": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+    "seed": 20261103,
+    "marker": "# QUIRE_MODELSIM_PASS accepted=4881 completed=4876 aborted=5 commits=4833 stalls=19512 invalid_checks=72 mismatches=0",
+    "response_latency": [
+      "# QUIRE_RESPONSE_LATENCY cmd=0 min=1 max=1 cycles; accept to first valid, before imposed hold",
+      "# QUIRE_RESPONSE_LATENCY cmd=1 min=7 max=42 cycles; accept to first valid, before imposed hold",
+      "# QUIRE_RESPONSE_LATENCY cmd=2 min=3 max=57 cycles; accept to first valid, before imposed hold"
+    ]
+  },
+  "audit": {
+    "active_modules": 19,
+    "named_instances": 26,
+    "clock_primitive_bindings": 1,
+    "shared_nf_f_rtl_unchanged": true
+  },
+  "coverage": {
+    "raw": {
+      "v_toggle": {
+        "hit": 3718,
+        "total": 3831,
+        "percent": 97.05037849125554,
+        "threshold": 85,
+        "met": true
+      },
+      "v_line": {
+        "hit": 97,
+        "total": 104,
+        "percent": 93.26923076923077,
+        "threshold": 95,
+        "met": false
+      },
+      "v_branch": {
+        "hit": 78,
+        "total": 82,
+        "percent": 95.1219512195122,
+        "threshold": 90,
+        "met": true
+      }
+    },
+    "adjusted": {
+      "v_toggle": {
+        "hit": 3718,
+        "total": 3831,
+        "percent": 97.05037849125554,
+        "threshold": 85,
+        "met": true
+      },
+      "v_line": {
+        "hit": 97,
+        "total": 101,
+        "percent": 96.03960396039604,
+        "threshold": 95,
+        "met": true
+      },
+      "v_branch": {
+        "hit": 78,
+        "total": 82,
+        "percent": 95.1219512195122,
+        "threshold": 90,
+        "met": true
+      }
+    },
+    "source_exclusions": 3,
+    "review": "coverage_review.json",
+    "scope": "Module-source-point union of100k mixed integration and exhaustive-domain/sampled unit tests, same RTL SHA. Not per-instance or formal coverage."
+  },
+  "PPA": {
+    "result": {
+      "scope": "single A35T OOC route; not board or Fmax sweep",
+      "period_ns": 10.0,
+      "setup_slack_ns": -12.016,
+      "hold_slack_ns": 0.015,
+      "vivado": "2026.1"
+    },
+    "resources": {
+      "LUT": 10339,
+      "FF": 4453,
+      "BRAM_tiles": 0,
+      "DSP": 0
+    },
+    "timing_met_at_100MHz": false,
+    "scope": "Single A35T OOC route, not board signoff or measured Fmax",
+    "worst_path": "u_core.sf_o_reg[0]/C -> u_bank.sum_work_q_reg[824]/CE",
+    "data_path_delay_ns": 21.575,
+    "logic_levels": 32,
+    "route_delay_ns": 15.505
+  },
+  "gates": {
+    "Q_MODEL": "PASS",
+    "TC_Q_BOUND": "PASS",
+    "Q_RTL": "PASS",
+    "Q_COVER_STRUCTURAL": "PASS_WITH_3_SOURCE_EXPLAINED_LINE_EXCLUSIONS",
+    "Q_PPA_100MHz": "FAIL_SETUP"
+  },
+  "remaining": [
+    "Close setup on scale/align/term-zero/error to bank-enable path, then rerun affected tests/PPA",
+    "Full quire timing signoff and any board validation remain open",
+    "Ideal full-input dot-product accuracy comparison is separate and not measured in this session",
+    "NF/F main520M/paired accuracy and timing are separate gates; quire results do not close them"
+  ],
+  "limits": [
+    "Exact accumulation of selected approximate products, not full26-fraction exact Posit dot-product",
+    "No exhaustive2^64 A/B simulation claim; bounds use447 symbolic field geometries",
+    "Interrupted main_v2 and preliminary builds are excluded from main counts",
+    "All commands receive one response; MAC/CLEAR acknowledge d0, READ RNE only"
+  ],
+  "cleanup": {
+    "deleted_cache_files": 24,
+    "deleted_generated_directories": 23,
+    "archive": "archive/legacy_tb_runners_before_quire_20261103.zip",
+    "archived_source_files": 400,
+    "date": "2026-11-03",
+    "status": "APPLIED",
+    "archive_sha256": "c2a0e417e9755e6d4568fff39f6691dedf0b2dbfbfdade8367d4f21dc86e06eb"
+  },
+  "generated_cleanup": {
+    "date": "2026-11-03",
+    "status": "APPLIED",
+    "deleted_compiled_wave_files": 130,
+    "source_and_reports_preserved": true,
+    "deleted_generated_directories": 35
+  },
+  "preliminary_archive": {
+    "archive": "archive/quire_preliminary_20261103.zip",
+    "archive_sha256": "900cd0b5b6d4740af83df002c874b8952caa0518c54a74ba3821bc4440bcbce9",
+    "files": [
+      "results/quire_20261103/build_coverage_v2.json",
+      "results/quire_20261103/build_coverage_v2.log",
+      "results/quire_20261103/build_coverage_v3.json",
+      "results/quire_20261103/build_coverage_v3.log",
+      "results/quire_20261103/build_rtl_v2.json",
+      "results/quire_20261103/build_rtl_v2.log",
+      "results/quire_20261103/build_rtl_v3.json",
+      "results/quire_20261103/build_rtl_v3.log",
+      "results/quire_20261103/build_units_cov_v2.json",
+      "results/quire_20261103/build_units_cov_v2.log",
+      "results/quire_20261103/build_units_cov_v3.json",
+      "results/quire_20261103/build_units_cov_v3.log",
+      "results/quire_20261103/build_units_v1.json",
+      "results/quire_20261103/build_units_v1.log",
+      "results/quire_20261103/build_v1.json",
+      "results/quire_20261103/build_v1.log",
+      "results/quire_20261103/coverage_v2.json",
+      "results/quire_20261103/coverage_v2.json.dat",
+      "results/quire_20261103/coverage_v2.json.reads",
+      "results/quire_20261103/coverage_v2.log",
+      "results/quire_20261103/generate_coverage_v2.log",
+      "results/quire_20261103/generate_coverage_v3.log",
+      "results/quire_20261103/generate_cov_final.log",
+      "results/quire_20261103/generate_rtl_final.log",
+      "results/quire_20261103/generate_rtl_v2.log",
+      "results/quire_20261103/generate_rtl_v3.log",
+      "results/quire_20261103/generate_units_cov_v2.log",
+      "results/quire_20261103/generate_units_cov_v3.log",
+      "results/quire_20261103/generate_units_final.log",
+      "results/quire_20261103/generate_units_v1.log",
+      "results/quire_20261103/generate_v1.log",
+      "results/quire_20261103/main_v2.json.reads",
+      "results/quire_20261103/main_v2.log",
+      "results/quire_20261103/pilot_v2.json",
+      "results/quire_20261103/pilot_v2.json.reads",
+      "results/quire_20261103/pilot_v2.log",
+      "results/quire_20261103/smoke_v1.json",
+      "results/quire_20261103/smoke_v1.json.reads",
+      "results/quire_20261103/smoke_v1.log",
+      "results/quire_20261103/units_cov_v2.json",
+      "results/quire_20261103/units_cov_v2.json.dat",
+      "results/quire_20261103/units_cov_v2.log",
+      "results/quire_20261103/units_v1.json",
+      "results/quire_20261103/units_v1.log"
+    ],
+    "directories": [
+      "results/quire_20261103/modelsim_v1",
+      "results/quire_20261103/modelsim_final",
+      "results/quire_20261103/ppa_v1",
+      "results/quire_20261103/ppa_v2",
+      "results/quire_20261103/ppa_v3"
+    ],
+    "limits": "Exploratory attempts only, not main acceptance. Interrupted main_v2 excluded; final proof uses *_final and modelsim_signoff."
+  },
+  "retained_nf_f_checks": [
+    "# ADDER_REFACTOR_PASS accepted=39535 completed=39534 aborted=1 stalls=20310",
+    "# PACKER_REFACTOR_PASS completed=10851 stalls=3552 errors=0",
+    "# SHARED_CORE_PASS cases=53249 checkpoints=231437 mismatches=0",
+    "# MAC_REFACTOR_PASS F=0 rows=5000 accepted=5000 completed=4970 aborted=30 stalls=18115 latency_observed=15..26",
+    "# MAC_REFACTOR_PASS F=1 rows=5000 accepted=5000 completed=4970 aborted=30 stalls=18115 latency_observed=12..23"
+  ],
+  "commands": [
+    "python3 -B scripts/verify_quire_bounds.py",
+    "python3 -B scripts/gen_quire_vectors.py results/quire_20261103/python_vectors",
+    "python3 -B scripts/verify_quire.py model",
+    "python3 -B scripts/audit_quire.py",
+    "python3 -B scripts/verify_quire.py build --tag <fresh> --kind units --coverage",
+    "python3 -B scripts/verify_quire.py run --tag <unit-tag> --label <fresh>",
+    "python3 -B scripts/verify_quire.py build --tag <fresh>",
+    "python3 -B scripts/verify_quire.py run --tag <rtl-tag> --label <fresh> --count 100000",
+    "python3 -B scripts/run_quire_main.py --tag <rtl-tag> --label <fresh> --total 10000000 --shards 4",
+    "python scripts/verify_quire_modelsim.py --bin <ModelSim-bin> --label <fresh>",
+    "python scripts/verify_quire_ppa.py --vivado <Vivado-executable> --label <fresh>"
+  ]
+}

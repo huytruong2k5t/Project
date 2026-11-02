@@ -1,3 +1,28 @@
+## Bộ kiểm chứng sau dọn — 03/11/2026
+
+Chỉ giữ bộ NF/F hiện hành bên dưới,8 reference module và bộ quire mới:
+
+| File | Phạm vi |
+| --- | --- |
+| quire_model_test.cpp |L1 vs golden94727 checkpoint/READ,4881 fixture Python bigint |
+| quire_reference.hpp |Raw decoder/selected product và signed-magnitude grid rộng,encoder độc lập |
+| quire_units.sv/.cpp |32768 align,21948 READ/normalizer/GRS,1041 bank gồm overflow/capacity |
+| quire_checker.sv + quire_harness.cpp |Scoreboard Q từng commit,ACK/READ,reset/stall/config;100k pilot và10M main retired |
+| tb_posit_mac_quire.sv |4-state4881 accepted=4876 completed+5 aborted;latency CLEAR1/MAC7..42/READ3..57 trước hold |
+| quire_ppa_top.sv |BUFG+structural top cho A35T OOC; không đổi số học |
+
+19 strict lint/26 named instance+1 BUFG đủ cổng. Coverage thô93.269/95.122/97.050%;
+line sau3 loại trừ có giải thích96.040%,xem [review](../results/quire_20261103/coverage_review.json).
+Không exhaustive toàn bộ raw A/B hoặc mọi972-bit state. Main10M đạt chức năng,
+setup100MHz chưa đạt; không gắn MAC_Q12_VERIFIED.
+
+400 file TB/runner cũ đã lưu nguyên byte trong
+[archive](../archive/legacy_tb_runners_before_quire_20261103.zip),kiểm hash trước
+khi bỏ khỏi thư mục làm việc. Các mô tả/recipe lịch sử ở dưới cần matching
+snapshot, không phục hồi đè lên cây hiện tại. Cache đã xóa, replay phải build.
+
+---
+
 ## Testbench hiện hành — shared FULL_TERM,02/11/2026
 
 | Testbench/harness | Phạm vi và bằng chứng |

@@ -1,5 +1,13 @@
 # Kết quả được giữ sau dọn dẹp — 02/11/2026
 
+**Mới nhất03/11:** [quire_20261103/summary.json](quire_20261103/summary.json),
+Q12-1024 signed972/grid2^-480. Main10M MAC retired/4 seed,0 mismatch;
+19428 chuỗi>12 và38 chuỗi1024. Model/unit/Python/ModelSim đạt; coverage sau3
+loại trừ có giải thích96.04/95.12/97.05% (line thô93.27%). A35T route100MHz
+chưa đạt:10339 LUT/4453 FF,setup−12.016ns,hold+0.015ns. Giữ source/report/vector
+và ZIP bằng chứng gọn; cache/binary/work/wave đã xóa. Không gắn MAC_Q12_VERIFIED
+và không gán kết quả quire sang Gate NF/F.
+
 **Nguồn mới nhất:** [shared_multiplier_20261102/summary.json](shared_multiplier_20261102/summary.json): bộ nhân FULL_TERM dùng chung NF/F,31 module.143934016 unit và7.2M MAC completed/0 mismatch; ModelSim cuối mỗi bản29820 completed+180 aborted. Audit cổng,seed,tool,source guards và coverage raw được giữ. **Main520M/AC04/paired accuracy/PPA mới còn mở.** Các tám nhóm dưới là snapshot lịch sử, không phải kết quả nguồn mới.
 
 Giữ tám nhóm có nguồn/manifest hoặc bằng chứng hữu ích để kiểm chứng và so sánh. Log, report, vector, golden profile, DCP/constraints và snapshot của các lượt hoàn tất được bảo toàn. Thư viện/cache sinh lại được, lượt chạy dở và nhóm lịch sử khác được lưu ngoài results, không xóa mất bằng chứng.

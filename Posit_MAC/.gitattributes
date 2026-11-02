@@ -338,3 +338,45 @@ results/week14/** -text
 /tb/tb_posit_add_5stage_equiv.sv -text
 /tb/tb_posit_pack_equiv.sv -text
 /tb/tb_refactored_mac.sv -text
+
+# Q12-1024 source/evidence hashes are byte-stable.
+/.gitignore -text
+/rtl/mac_quire/** -text
+/rtl/quire_active.f -text
+/rtl/quire_checkpoint.json -text
+/l1/include/posit_quire.hpp -text
+/tb/quire* -text
+/tb/tb_posit_mac_quire.sv -text
+/scripts/*quire*.py -text
+/syn/quire_ooc.tcl -text
+/results/quire_20261103/** -text
+
+# Exact bytes of all packaged quire source and reproduction documents.
+/rtl/mac_quire/mac_quire_wrapper.sv -text
+/rtl/mac_quire/posit_mac_quire.sv -text
+/rtl/mac_quire/quire_align_comb.sv -text
+/rtl/mac_quire/quire_bank.sv -text
+/rtl/mac_quire/quire_read.sv -text
+/scripts/.gitattributes -text
+/scripts/README.md -text
+/scripts/audit_quire.py -text
+/scripts/build_datapath_ops_sac_sbm.mjs -text
+/scripts/collect_ppa.py -text
+/scripts/gen_quire_vectors.py -text
+/scripts/package_quire.py -text
+/scripts/rebuild_l0_l1.sh -text
+/scripts/run_quire_main.py -text
+/scripts/summarize_quire.py -text
+/scripts/summarize_quire_coverage.py -text
+/scripts/verify_quire.py -text
+/scripts/verify_quire_bounds.py -text
+/scripts/verify_quire_modelsim.py -text
+/scripts/verify_quire_ppa.py -text
+/tb/quire_checker.sv -text
+/tb/quire_harness.cpp -text
+/tb/quire_model_test.cpp -text
+/tb/quire_ppa_top.sv -text
+/tb/quire_reference.hpp -text
+/tb/quire_units.cpp -text
+/tb/quire_units.sv -text
+/tb/reference/README.md -text

@@ -1,9 +1,9 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 02/11/2026 (giờ Việt Nam)
+**Ngày cập nhật:** 03/11/2026 (giờ Việt Nam)
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.27](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
+**Tài liệu chi tiết:** [SPEC v1.28](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -12,6 +12,13 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 **Trạng thái:** `✅` = hoàn thành phạm vi của dòng và có kiểm chứng; `processing` = đã làm một phần hoặc còn thiếu tiêu chí; `không` = chưa thực hiện.
 
 ## 1. Tổng quan
+
+**Mở rộng03/11:** quire Q12-1024 đã build và kiểm chức năng: W972/grid2^-480,
+cùng core approximate12;10M MAC retired/0 mismatch,ModelSim và unit đạt.
+Coverage sau3 loại trừ có giải thích nguồn đạt96.04/95.12/97.05%.
+A35T OOC route100MHz còn setup−12.016ns (hold+0.015ns),10339 LUT/4453 FF.
+Trạng thái **processing về timing**, chưa MAC_Q12_VERIFIED. [Bằng chứng](../results/quire_20261103/summary.json).
+Quire không đóng thay ma trận/gate NF/F còn mở bên dưới.
 
 **Hiện hành02/11:** approximate12, FULL_TERM26/Q24, mặc định OPS1/n12; NF/F dùng chung mã bộ nhân và adder.31 module active, không cfg_mode/exact.143934016 so sánh unit và7.2M MAC completed/0 mismatch; ModelSim mỗi NF/F29820 completed+180 reset-aborted.31 strict lint/68 instance đủ cổng. Đây là pilot đã kiểm chức năng, **chưa nghiệm thu cuối**: main520M, quota regime, coverage nhánh/line, paired accuracy và PPA nguồn mới còn mở. [Bằng chứng](../results/shared_multiplier_20261102/summary.json).
 
@@ -27,6 +34,7 @@ MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng ch�
 
 | Mốc lớn | Trạng thái | Phần cần hoàn thiện |
 | --- | --- | --- |
+| MAC quire Q12-1024 | processing | Model/RTL main10M/4-state/coverage đạt phạm vi; còn timing100MHz. Ưu tiên pipeline/giảm fanout sf→align/zero/error→bank CE, kiểm lại phần bị tác động |
 | Đồng bộ NF/F approximate FULL_TERM | ✅ phạm vi refactor/pilot | Core/OPS/normalizer dùng chung; bỏ tín hiệu/đường exact dư; unit,ModelSim và pilot mới0 mismatch. Không đồng nghĩa đóng Gate cuối |
 | Nghiệm thu FULL_TERM nguồn mới | processing | Main520M chưa chạy; pilot min188/189<4000/cell. NF line/branch/toggle96.05/89.13/93.67%; F76.06/89.74/93.11%; chưa waiver RTL. PPA/paired accuracy chưa đo lại |
 | Khóa cấu hình duy nhất32/3 | ✅ phạm vi chức năng |54 module fixed,runner/mapping và wrapper synthesis đã đồng bộ;NF/F20M completed,ModelSim và kiểm tổ hợp0 mismatch. Còn STA/PPA mới,AC02 exact và final per-n/AC04;candidate lịch sử cần rebase riêng |
@@ -43,6 +51,7 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 
 | Tuần | Mốc cần đạt | Trạng thái | Kết quả chính / phần còn lại |
 | --- | --- | --- | --- |
+| 03/11 — mở rộng quire | Không RNE trong chuỗi, READ mới RNE | processing | Chức năng/10M/ModelSim✅; signed972,L_max1024; setup100MHz chưa đạt, không suy nghiệm thu NF/F |
 | 02/11 — chuyển hợp đồng | Dùng chung multiplier FULL_TERM và kiểm nguồn mới | processing | Refactor/pilot✅; main52 điểm×10M,AC04,accuracy/PPA còn mở; không kế thừa PASS FLOOR |
 | 1 | Tài liệu và nền tảng dự án | processing | Đã có đặc tả, kế hoạch và khung dự án; còn hoàn thiện lint/luồng tự động |
 | 2 | Mô hình tham chiếu L0 | ✅ | SoftPosit đã build và kiểm thử đạt |
@@ -148,6 +157,14 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | **7. Mở rộng tùy chọn ngoài đề cương chính** | Exact fused rộng, format phụ ngoài ma trận §6.7, TRUNC/JAM F, quire hoặc ASIC synthesis | **Đóng (Không thực hiện)** | Ngoài profile chính; dừng hoàn toàn để tập trung 100% cho nghiệm thu NF/F và viết báo cáo |
 
 ## 4. Nhật ký theo ngày
+
+### Ngày 03/11/2026 — mốc mới nhất
+
+| Mốc / nhóm công việc | Kết quả chính | Trạng thái |
+| --- | --- | --- |
+| Dọn TB/runner và file local |400 file cũ đã archive/hash rồi bỏ khỏi cây làm việc; cache/binary/work/wave dọn; giữ bộ verification tái lập, bỏ đường dẫn home khỏi runner hiện hành | ✅ phạm vi dọn |
+| Model/RTL quire Q12-1024 |Main10M/4 seed,19428 chuỗi>12,38 chuỗi1024; unit/model/Python/ModelSim0 mismatch.19 strict lint/26 instance+1 BUFG đầy đủ; nguồn dùng chung NF/F nguyên hash | ✅ chức năng |
+| Timing quire và nghiệm thu cuối |OOC A35T10ns:10339 LUT/4453 FF;setup−12.016ns,hold+0.015ns. Cần pipeline/giảm fanout align→bank; chưa Fmax/board hoặc MAC_Q12_VERIFIED | processing |
 
 ### 4.0. Ngày 02/11/2026 — mốc mới nhất
 

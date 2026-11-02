@@ -1,3 +1,55 @@
+## Runner giữ lại sau dọn — 03/11/2026
+
+Luồng quire portable: verify_quire.py (model/build/run),run_quire_main.py
+(shard seed riêng),gen_quire_vectors.py (Python bigint),verify_quire_bounds.py,
+audit_quire.py,verify_quire_modelsim.py,verify_quire_ppa.py,
+summarize_quire_coverage.py và summarize_quire.py. Tool qua PATH/CLI; output,
+temp,snapshot trong project. ModelSim/Vivado dùng --bin/--vivado, không sửa
+home/license hoặc cài tool. [Hướng dẫn](../docs/HUONG_DAN_CHAY_WSL_MODELSIM.md).
+
+Giữ runner NF/F hiện hành và các script kiểm/build tái lập; run_refactored_mac.ps1
+nhận ModelSimBin/PythonExecutable/VivadoExecutable thay đường dẫn cứng.
+Sau thay đổi runner,ModelSim NF/F mỗi bản4970 completed+30 aborted,0 mismatch;
+adder/packer/core đạt. Không dùng receipt runner cũ như hash cây mới.
+
+400 TB/runner cũ có trong
+[ZIP có manifest](../archive/legacy_tb_runners_before_quire_20261103.zip);
+bản runner trước portable có trong archive/current_modelsim_runner_before_portable_20261103.zip.
+Mọi mô tả/script benchmark cũ bên dưới là lịch sử; muốn replay cần khôi phục
+matching snapshot vào thư mục riêng. Không phụ thuộc binary/work/cache đã xóa.
+
+---
+
+## Dọn dẹp RTL/results — 02/11/2026 (lịch sử)
+
+Luồng của snapshot02/11 gồm run_refactored_mac.ps1, run_f_parser_equiv.ps1,
+report_refactored_mac_f2f.ps1,query_mac_critical_paths.ps1. Các runner cũ này
+đã được phân loại/lưu archive trong đợt03/11; không còn là toàn bộ luồng hiện tại.
+
+```powershell
+python scripts/cleanup_rtl_results_20261102.py audit
+python scripts/cleanup_rtl_results_20261102.py restore --prefix results/week12/ --destination scratch/restore_cleanup_20261102
+```
+
+Xem [index/receipt](../archive/cleanup_20261102/INDEX.md). Các script benchmark/release cũ có thể trỏ tới file đã archive: phục hồi đúng prefix/snapshot trước khi dùng. Chọn RunRoot mới để build thư viện mô phỏng từ nguồn; không phụ thuộc cache đã dọn. Không chạy lại apply: mốc dọn đã hoàn tất và archive được giữ bất biến.
+
+---
+
+## Hợp đồng hiện hành ngày 01/11/2026
+
+[SPEC v1.25](../SPEC_Posit_MAC_IP.md) quy định duy nhất Posit(32,3), approximate FULL_TERM26/Q24,
+fraction đầu vào12 bit, n0..12, OPS0/1 và RNE cho NF/F; không mode exact phần cứng.
+Golden độc lập và model L1 được phân biệt tại [§6.1](../SPEC_Posit_MAC_IP.md#61-golden-model-và-ideal),
+ma trận nghiệm thu tại [§6.7](../SPEC_Posit_MAC_IP.md#acceptance-matrix): 52 điểm NF/F×OPS×n,
+≥10 triệu completed/điểm, giữ ngưỡng coverage; không có trục exact/format/TRUNC.
+
+Nguồn hiện tại vẫn còn NF exact-capable/N_MAX8 và đường nhân FLOOR; xem §8 của SPEC.
+Header FULL_TERM đã có nhưng API/harness còn mixed, phải khóa approximate=true và kiểm riêng.
+Các lệnh, số đo và mốc có ngày bên dưới thuộc snapshot ghi kèm, không tự nghiệm thu
+nguồn đang refactor hoặc thay golden32/3 bằng SoftPosit p32/es2. Lần cập nhật này chỉ sửa tài liệu.
+
+---
+
 ## Luồng hiện hành fixed32/ES3 — 23/10/2026
 
 Dùng `verify_fixed32_3.py`, `verify_fixed32_3_modelsim.ps1`,

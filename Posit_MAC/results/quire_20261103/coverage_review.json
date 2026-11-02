@@ -1,0 +1,945 @@
+{
+  "status": "PASS",
+  "scope": "Module-source-point union of100k mixed integration and exhaustive-domain/sampled unit tests, same RTL SHA. Not per-instance or formal coverage.",
+  "raw": {
+    "v_toggle": {
+      "hit": 3718,
+      "total": 3831,
+      "percent": 97.05037849125554,
+      "threshold": 85,
+      "met": true
+    },
+    "v_line": {
+      "hit": 97,
+      "total": 104,
+      "percent": 93.26923076923077,
+      "threshold": 95,
+      "met": false
+    },
+    "v_branch": {
+      "hit": 78,
+      "total": 82,
+      "percent": 95.1219512195122,
+      "threshold": 90,
+      "met": true
+    }
+  },
+  "adjusted": {
+    "v_toggle": {
+      "hit": 3718,
+      "total": 3831,
+      "percent": 97.05037849125554,
+      "threshold": 85,
+      "met": true
+    },
+    "v_line": {
+      "hit": 97,
+      "total": 101,
+      "percent": 96.03960396039604,
+      "threshold": 95,
+      "met": true
+    },
+    "v_branch": {
+      "hit": 78,
+      "total": 82,
+      "percent": 95.1219512195122,
+      "threshold": 90,
+      "met": true
+    }
+  },
+  "exclusions": [
+    {
+      "point": {
+        "S": "55",
+        "f": "rtl/common/lod_lzd_core_fixed2.sv",
+        "l": "55",
+        "n": "13",
+        "o": "case",
+        "page": "v_line/lod_lzd_core_fixed2"
+      },
+      "source_sha256": "4d56d69bfcea828f76c01b95e62b0413a29b314b4c331e00fede59e7d2de144c",
+      "reason": "Quire hierarchy uses this module only in posit_parser: detector_in LSB is a hardwired1 sentinel. Therefore input can never be all zero and this default arm is unreachable, independently of raw A/B."
+    },
+    {
+      "point": {
+        "S": "128",
+        "f": "rtl/mac_quire/quire_read.sv",
+        "l": "128",
+        "n": "17",
+        "o": "case",
+        "page": "v_line/quire_read"
+      },
+      "source_sha256": "435152c6e6271234942a00cc0415b48706718c7f5018cb8bbea92456cf542267",
+      "reason": "State is2 bits and all four binary values0/1/2/3 have explicit case arms. This default is only a four-state X/Z recovery arm, unreachable in two-state Verilator. ModelSim startup/reset/stall checked separately."
+    },
+    {
+      "point": {
+        "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+        "l": "292",
+        "n": "19",
+        "o": "else",
+        "page": "v_line/mac_quire_wrapper"
+      },
+      "source_sha256": "8e51edf6bbdf5af82f79bbba8950e1fd743ab4f97c6b92fd0fb74132bc2babb8",
+      "reason": "Empty implicit else of assertion-only guard: binary meta_sync2=0 takes if(!meta_sync2);1 takes else-if(meta_sync2). Only X/Z can take the implicit else. Not synthesized datapath;4-state reset checked in ModelSim."
+    }
+  ],
+  "unhit_retained": [
+    {
+      "f": "rtl/common/dyn_left_shifter_fixed5.sv",
+      "l": "20",
+      "n": "25",
+      "o": "in[0]",
+      "page": "v_toggle/dyn_left_shifter_fixed5"
+    },
+    {
+      "f": "rtl/common/dyn_left_shifter_fixed5.sv",
+      "l": "22",
+      "n": "25",
+      "o": "out[0]",
+      "page": "v_toggle/dyn_left_shifter_fixed5"
+    },
+    {
+      "f": "rtl/common/dyn_right_shifter_fixed2.sv",
+      "l": "14",
+      "n": "25",
+      "o": "in[0]",
+      "page": "v_toggle/dyn_right_shifter_fixed2"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "25",
+      "n": "25",
+      "o": "q_overflow",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "S": "284",
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "284",
+      "n": "17",
+      "o": "case",
+      "page": "v_line/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "40",
+      "n": "25",
+      "o": "z_b",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "40",
+      "n": "30",
+      "o": "nar_a",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "47",
+      "n": "43",
+      "o": "core_error",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "53",
+      "n": "10",
+      "o": "align_error",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "55",
+      "n": "10",
+      "o": "bank_invalid",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "58",
+      "n": "17",
+      "o": "q_invalid",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "58",
+      "n": "43",
+      "o": "bank_overflow",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "63",
+      "n": "16",
+      "o": "read_flags[2]",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "63",
+      "n": "16",
+      "o": "read_flags[3]",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "67",
+      "n": "16",
+      "o": "status_flags[2]",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "l": "67",
+      "n": "16",
+      "o": "status_flags[3]",
+      "page": "v_toggle/mac_quire_wrapper"
+    },
+    {
+      "f": "rtl/mac_quire/posit_mac_quire.sv",
+      "l": "24",
+      "n": "25",
+      "o": "q_overflow",
+      "page": "v_toggle/posit_mac_quire"
+    },
+    {
+      "f": "rtl/mac_quire/quire_align_comb.sv",
+      "l": "20",
+      "n": "18",
+      "o": "discarded_mask[25]",
+      "page": "v_toggle/quire_align_comb"
+    },
+    {
+      "S": "116-119",
+      "f": "rtl/mac_quire/quire_read.sv",
+      "l": "116",
+      "n": "30",
+      "o": "if",
+      "page": "v_line/quire_read"
+    },
+    {
+      "f": "rtl/mac_quire/quire_read.sv",
+      "l": "126",
+      "n": "22",
+      "o": "else",
+      "page": "v_branch/quire_read"
+    },
+    {
+      "f": "rtl/mac_quire/quire_read.sv",
+      "l": "28",
+      "n": "32",
+      "o": "flags_in[2]",
+      "page": "v_toggle/quire_read"
+    },
+    {
+      "f": "rtl/mac_quire/quire_read.sv",
+      "l": "28",
+      "n": "32",
+      "o": "flags_in[3]",
+      "page": "v_toggle/quire_read"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "101",
+      "n": "23",
+      "o": "t2_term[24]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "101",
+      "n": "23",
+      "o": "t2_term[25]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "105",
+      "n": "22",
+      "o": "carry_raw",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "32",
+      "n": "31",
+      "o": "state_error",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "57",
+      "n": "10",
+      "o": "step_error",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "58",
+      "n": "25",
+      "o": "fx_next[0]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[0]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[10]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[11]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[1]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[25]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[2]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[3]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[4]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[5]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[6]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[7]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[8]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "22",
+      "o": "y_base[9]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/mul_iter_core.sv",
+      "l": "85",
+      "n": "30",
+      "o": "term[25]",
+      "page": "v_toggle/mul_iter_core"
+    },
+    {
+      "f": "rtl/multiplier/sac_step_comb.sv",
+      "l": "16",
+      "n": "25",
+      "o": "fx_next[0]",
+      "page": "v_toggle/sac_step_comb"
+    },
+    {
+      "f": "rtl/multiplier/sac_step_comb.sv",
+      "l": "18",
+      "n": "18",
+      "o": "state_error",
+      "page": "v_toggle/sac_step_comb"
+    },
+    {
+      "f": "rtl/multiplier/sac_step_comb.sv",
+      "l": "24",
+      "n": "17",
+      "o": "pre_shifted[0]",
+      "page": "v_toggle/sac_step_comb"
+    },
+    {
+      "f": "rtl/multiplier/sac_step_comb.sv",
+      "l": "25",
+      "n": "17",
+      "o": "shifted[0]",
+      "page": "v_toggle/sac_step_comb"
+    },
+    {
+      "f": "rtl/multiplier/sac_step_comb.sv",
+      "l": "44",
+      "n": "16",
+      "o": "scale_sum[4]",
+      "page": "v_toggle/sac_step_comb"
+    },
+    {
+      "f": "rtl/multiplier/sac_step_comb.sv",
+      "l": "47",
+      "n": "10",
+      "o": "scale_out_of_range",
+      "page": "v_toggle/sac_step_comb"
+    },
+    {
+      "f": "rtl/multiplier/sac_step_comb.sv",
+      "l": "48",
+      "n": "10",
+      "o": "sum_out_of_range",
+      "page": "v_toggle/sac_step_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[0]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[10]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[11]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[1]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[25]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[2]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[3]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[4]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[5]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[6]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[7]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[8]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "11",
+      "n": "25",
+      "o": "y_base[9]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "12",
+      "n": "25",
+      "o": "term[24]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "12",
+      "n": "25",
+      "o": "term[25]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "15",
+      "n": "24",
+      "o": "carry_error",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_accum_comb.sv",
+      "l": "18",
+      "n": "17",
+      "o": "extended_sum[26]",
+      "page": "v_toggle/sbm_accum_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[0]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[10]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[11]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[1]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[25]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[2]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[3]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[4]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[5]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[6]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[7]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[8]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "13",
+      "n": "25",
+      "o": "y_base[9]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "14",
+      "n": "25",
+      "o": "term[25]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[0]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[10]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[1]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[25]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[2]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[3]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[4]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[5]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[6]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[7]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[8]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "16",
+      "n": "17",
+      "o": "stage0[9]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "17",
+      "n": "17",
+      "o": "stage1[0]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "17",
+      "n": "17",
+      "o": "stage1[1]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "17",
+      "n": "17",
+      "o": "stage1[25]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "17",
+      "n": "17",
+      "o": "stage1[2]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "17",
+      "n": "17",
+      "o": "stage1[3]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "17",
+      "n": "17",
+      "o": "stage1[4]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "17",
+      "n": "17",
+      "o": "stage1[5]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "17",
+      "n": "17",
+      "o": "stage1[6]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "17",
+      "n": "17",
+      "o": "stage1[7]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "17",
+      "n": "17",
+      "o": "stage1[8]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "18",
+      "n": "17",
+      "o": "stage2[0]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "18",
+      "n": "17",
+      "o": "stage2[1]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "18",
+      "n": "17",
+      "o": "stage2[25]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "18",
+      "n": "17",
+      "o": "stage2[2]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "18",
+      "n": "17",
+      "o": "stage2[3]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "18",
+      "n": "17",
+      "o": "stage2[4]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/multiplier/sbm_shift_comb.sv",
+      "l": "19",
+      "n": "17",
+      "o": "stage3[25]",
+      "page": "v_toggle/sbm_shift_comb"
+    },
+    {
+      "f": "rtl/packer/posit_pack.sv",
+      "l": "129",
+      "n": "19",
+      "o": "else",
+      "page": "v_branch/posit_pack"
+    },
+    {
+      "f": "rtl/packer/posit_pack.sv",
+      "l": "26",
+      "n": "32",
+      "o": "flags_in[2]",
+      "page": "v_toggle/posit_pack"
+    },
+    {
+      "f": "rtl/packer/posit_pack.sv",
+      "l": "26",
+      "n": "32",
+      "o": "flags_in[3]",
+      "page": "v_toggle/posit_pack"
+    },
+    {
+      "S": "71",
+      "f": "rtl/packer/posit_pack_finish.sv",
+      "l": "71",
+      "n": "17",
+      "o": "elsif",
+      "page": "v_line/posit_pack_finish"
+    },
+    {
+      "S": "75-77",
+      "f": "rtl/packer/posit_pack_finish.sv",
+      "l": "75",
+      "n": "13",
+      "o": "case",
+      "page": "v_line/posit_pack_finish"
+    },
+    {
+      "f": "rtl/packer/posit_pack_prepare.sv",
+      "l": "22",
+      "n": "32",
+      "o": "flags_in[2]",
+      "page": "v_toggle/posit_pack_prepare"
+    },
+    {
+      "f": "rtl/packer/posit_pack_prepare.sv",
+      "l": "22",
+      "n": "32",
+      "o": "flags_in[3]",
+      "page": "v_toggle/posit_pack_prepare"
+    },
+    {
+      "f": "rtl/packer/posit_pack_prepare.sv",
+      "l": "50",
+      "n": "26",
+      "o": "payload[0]",
+      "page": "v_toggle/posit_pack_prepare"
+    },
+    {
+      "f": "rtl/packer/posit_pack_prepare.sv",
+      "l": "72",
+      "n": "17",
+      "o": "sticky_masked[30]",
+      "page": "v_toggle/posit_pack_prepare"
+    },
+    {
+      "f": "rtl/parser/posit_parser.sv",
+      "l": "116",
+      "n": "17",
+      "o": "lower_any[0]",
+      "page": "v_toggle/posit_parser"
+    },
+    {
+      "f": "rtl/parser/posit_parser.sv",
+      "l": "157",
+      "n": "19",
+      "o": "else",
+      "page": "v_branch/posit_parser"
+    },
+    {
+      "f": "rtl/parser/posit_parser.sv",
+      "l": "207",
+      "n": "19",
+      "o": "else",
+      "page": "v_branch/posit_parser"
+    }
+  ],
+  "inputs": {
+    "coverage_final.json.dat": "b45874294d9ee9740b4ef499b87fd8c7396d92eceabe1de191d85b1601d14506",
+    "units_final.json.dat": "07956ac7d0e3afc6f858b5f7cf5a4da9640201c6ae18dde4489304092801d8c0"
+  },
+  "limits": "Thresholds unchanged. Only three source-explained line points excluded under SPEC6.6; no toggle/branch exclusions. No borrowed NF/F coverage."
+}

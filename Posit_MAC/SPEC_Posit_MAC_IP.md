@@ -1,6 +1,6 @@
 # SPEC lõi IP Posit MAC xấp xỉ dạng lặp
 
-**v1.27 — 02/11/2026.** Sinh viên: Đan Huy. Hợp đồng approximate12/FULL_TERM, mặc định OPS1/n12; cập nhật hiện thực bộ nhân dùng chung và bằng chứng pilot. Không đổi số học hoặc ngưỡng nghiệm thu v1.26. Nhật ký, số đo và PASS của từng snapshot nằm riêng trong `results/`, [tiến độ](docs/TIEN_DO_DO_AN.md) và [Optimization](../doc/Optimization.md).
+**v1.28 — 03/11/2026.** Sinh viên: Đan Huy. Giữ hợp đồng approximate12/FULL_TERM của NF/F; khóa quire Q12-1024 (W972/grid2^-480), hiện thực và kiểm chức năng. Không hạ ngưỡng nghiệm thu. Quire10M MAC/0 mismatch; timing100MHz chưa đạt, chưa gắn nhãn MAC_Q12_VERIFIED. Nhật ký, số đo và PASS riêng từng snapshot ở `results/`, [tiến độ](docs/TIEN_DO_DO_AN.md) và [Optimization](../doc/Optimization.md).
 
 ## 1. Mục tiêu và phạm vi
 
@@ -396,7 +396,7 @@ Nguồn ngày 02/11/2026 đã chuyển sang bộ nhân approximate dùng chung. 
 | Coverage/nghiệm thu | Lượt20k mixed: NF line96.053%,branch89.130%,toggle93.674%; F line76.056%,branch89.744%,toggle93.110%. Chưa waiver RTL; branch/line chưa đủ. Main520M và quota≥4000/cell/điểm chưa chạy/đạt (pilot min188/189). Gate/AC04 vẫn mở. |
 | mac_active.f, production.f, freeze/report cũ | Checkpoint mới chỉ khóa nguồn pilot. production.f/production_freeze.json giữ lịch sử; recipe54 không dùng trên cây31. PPA/paired accuracy FULL_TERM chưa chạy lại. |
 | OPS1/n12 mặc định | Reset cấu hình wrapper và model/driver/TB dùng OPS1/n12; input ngoài vẫn phải được lái hợp lệ, không dựa vào X/Z. Runtime OPS0/n0..11 vẫn được kiểm. |
-| MAC quire | Mới chốt hợp đồng mở rộng §9; chưa có release RTL/model/coverage quire được nghiệm thu. W/L_max phải được khóa trước triển khai. |
+| MAC quire | Đã triển khai Q12-1024/W972 theo §9; model/unit/4-state và main10M MAC đạt0 mismatch. Coverage có3 loại trừ gắn nguồn theo §6.6. OOC route100MHz setup−12.016ns,hold+0.015ns: chưa nghiệm thu timing, không gắn nhãn MAC_Q12_VERIFIED. [Summary](results/quire_20261103/summary.json). |
 
 Chỉ công bố release mới khi top, model/harness và ma trận cùng đúng hợp đồng. Thứ tự hiện thực: khóa golden/default và prepack → core26/Q24 + bỏ mode exact → adapter NF/F dùng chung adder → unit/pilot → freeze/main/coverage → accuracy/PPA → mở rộng quire nếu được triển khai. Không cần quire hoàn thành để nghiệm thu NF/F; không gọi NF/F hiện tại là MAC quire.
 
@@ -442,6 +442,22 @@ Với **toàn miền Posit(32,3)**: minpos=2^-240,maxpos=2^240. Mọi toán hạ
 
 Với H=ceil(log2(L_max)), một **cận đủ bảo thủ** là `W=962+H` bit signed, q_nar/q_overflow lưu riêng. Lý do: mỗi tích có hệ số nguyên độ lớn≤2^960; sau≤2^H tích, |U|≤2^(960+H), nằm trong signed W này. W962 đủ cho một tích; ví dụ L_max1024,H10 cần cận đủ972 bit. Đây là suy ra cho cấu hình đồ án, không là tuyên bố độ rộng quire chuẩn hay độ rộng tối thiểu đã tối ưu.
 
+**Cấu hình hiện thực Q12-1024,03/11/2026:** khóa toàn miền Posit(32,3),
+`L_max=1024`, `E_LSB=-480`, `W=972`, count11 bit. Hằng số literal, không public
+parameter thay format/width. Bank dùng27 bước cộng word36 bit có carry37,
+commit Q một lần sau word cuối; không cộng972 bit trong một clock. READ chuyển
+trị tuyệt đối theo27 word, scan từ word cao, giữ53 fraction và sticky toàn
+phần thấp; kiểm scale trước khi đưa về sf11 của Packer RNE2 tầng. Latency/II
+đo từ mô phỏng, chưa là timing/STA. Đây là chốt kiến trúc triển khai, chưa
+cấp nhãn MAC_Q12_VERIFIED.
+
+Tổ chức nguồn: `rtl/quire_active.f`19 module, top structural `posit_mac_quire`,
+`mac_quire_wrapper`, `quire_align_comb`, `quire_bank`, `quire_read`; dùng lại
+Parser/core/Packer của NF/F nguyên hash. Align đổi dấu hệ số27 bit trước
+sign-extension/dịch, không suy bộ cộng đổi dấu972 bit. Bank dùng thanh ghi
+Q kiến trúc cùng hai thanh ghi làm việc; Q chỉ cập nhật sau word cuối.
+READ dùng snapshot riêng nên không thay đổi Q hoặc count.
+
 Quire alignment tính `u_term=(-1)^sign × M × 2^(b-24-E_LSB)`. Với E_LSB=-480, shift=b+456 có thể âm ở biên nhỏ; chỉ được dịch phải nếu các bit loại đều0 do ràng buộc mã Posit thực, phải assert/kiểm oracle. Không wrap lượng dịch hoặc OR sticky thay bit bị loại. Nếu muốn giao diện prepack tổng quát nhận mọi tuple M/b không có tương quan Posit, phải chọn lưới rộng hơn/chứng minh lại bounds.
 
 Một quire hẹp theo **miền scale giới hạn** được phép là profile nghiên cứu riêng, phải công bố miền và hành vi từ chối ngoài miền; không gọi là quire toàn miền32/3. Fraction12 tự nó không làm mất nhu cầu dải scale rộng. Final output vẫn clamp theo Posit32, còn state Q không clamp theo maxpos của Posit mỗi MAC.
@@ -479,9 +495,36 @@ Oracle1024/grid2^-532 của MAC đơn lẻ không tự chứng minh đủ cho m�
 
 Số MAC có thể bằng0 ở một chuỗi CLEAR→READ; scoreboard vẫn phải kiểm READ zero. Nếu L_max≤12 thì không thể đạt bin dài>12: chọn L_max≥13 cho release nghiên cứu này, không miễn bin âm thầm. Sequence permutations chỉ so khi từng product config/OPS giữ nguyên, không đổi vai/chọn bit giữa các thứ tự.
 
+**Bằng chứng Q12-1024 ngày03/11:** proof447 hình học field/199809 cặp xác nhận
+lưới và bounds; model94727 checkpoint/READ cùng4881 fixture Python bigint độc
+lập; unit32768 align,21948 READ/normalization,1041 bank; pilot100k mixed và
+main10M MAC retired OPS1/n12 trên4 seed đều0 mismatch. Main có19428 chuỗi>12,
+38 chuỗi1024; không tính preamble mixed hoặc lượt dở vào10M. ModelSim4-state:
+4881 accepted=4876 completed+5 reset-aborted,0 mismatch; giữ response lúc stall,
+kiểm Q từng commit. Latency accept→first valid trước giữ output: CLEAR1,
+MAC7..42,READ3..57 chu kỳ; phụ thuộc bypass/iteration/scan, không là Fmax/II.
+
+Coverage hợp module-point cùng hash: thô line93.269%,branch95.122%,toggle97.050%;
+sau3 loại trừ line có giải thích/source SHA theo §6.6: line96.040%; không
+loại toggle/branch. [Review](results/quire_20261103/coverage_review.json) giữ
+đầy đủ tỷ lệ thô, lý do và điểm chưa hit; không vay coverage NF/F.
+
+A35T OOC route đơn10ns: LUT10339,FF4453,BRAM0,DSP0,setup−12.016ns,
+hold+0.015ns. Đường găng core.sf_o→align/zero/error→bank.sum_work.CE,
+delay21.575ns (route15.505ns),32 mức logic. **Không đạt100MHz**; chưa sweep
+Fmax hoặc board. Trạng thái `FUNCTION_VERIFIED_TIMING_OPEN`; bước tiếp theo
+là tách pipeline/giảm fanout đường align và điều khiển bank, kiểm lại phạm
+vi bị tác động. Giữ nguồn đã kiểm trong `rtl/quire_checkpoint.json` và ZIP
+bằng chứng; không đổi nhãn cũ hoặc xem synth/route exit0 là timing PASS.
+
 Gate NF/F AC-01..08 giữ nguyên. Chỉ khi Q-MODEL/Q-RTL/Q-COVER và bounds đạt mới gắn nhãn MAC_Q12_VERIFIED; không đổi tên kết quả20M/350M hoặc fixture FLOOR thành bằng chứng quire.
 
 ## 10. Lịch sử revision và nguồn tham khảo
+
+v1.28: triển khai Q12-1024 với signed972/grid2^-480, cộng27 word36, READ RNE;
+bổ sung proof/bằng chứng model/unit/pilot/main10M/ModelSim/coverage và ghi rõ
+setup100MHz chưa đạt. Dọn TB/runner cũ vào archive có hash; xóa cache/binary;
+giữ bộ kiểm chứng tái lập, không đổi hợp đồng hay nghiệm thu NF/F.
 
 v1.27: cập nhật trạng thái hiện thực31 module/core dùng chung, bỏ cfg_mode/exact, kết quả unit/pilot/ModelSim và coverage còn thiếu; giữ nguyên ngưỡng main/AC04, chưa cấp nghiệm thu cuối hoặc PPA mới.
 

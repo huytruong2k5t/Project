@@ -1,3 +1,21 @@
+## Quire Q12-1024 — 03/11/2026
+
+Top `mac_quire/posit_mac_quire.sv`, file list **quire_active.f19 module**;
+NF/F tiếp tục dùng mac_active.f31 module. Hợp hai danh sách là36 module;
+14 dependency quire dùng lại nguyên hash, không nhân bản bộ nhân.
+
+Năm module mới: structural top,wrapper lệnh,align hệ số27 bit→972,
+bank cộng27 word36 và READ abs/scan→frac53/sticky→Packer dùng chung.
+Fixed32/3,FW12,M26/Q24,W972,E_LSB−480,L_max1024,OPS1/n12 mặc định.
+Chỉ READ làm tròn; ACK MAC/CLEAR d0,giữQ khi stall/READ.
+
+Main10M/0 mismatch,ModelSim và unit đạt;19 strict lint/26 instance+1 BUFG đủ
+cổng. [Summary](../results/quire_20261103/summary.json),
+[checkpoint](quire_checkpoint.json). Setup OOC100MHz còn−12.016ns;
+đường sf→align/zero/error→bank CE cần pipeline/giảm fanout. Chưa timing signoff.
+
+---
+
 ## Dọn dẹp RTL/results — 02/11/2026
 
 - [mac_active.f](mac_active.f): **31 module** cho hai top MAC FULL_TERM; không public parameter/cfg_mode.

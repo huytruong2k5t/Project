@@ -4,13 +4,21 @@ param(
     [ValidatePattern('^[A-Za-z0-9_]*$')][string]$SynthSuffix='',
     [ValidateRange(1000,1000000)][int]$VectorCount=5000,
     [string]$SourceRoot='',
-    [ValidateSet('All','F')][string]$VerifyScope='All'
+    [ValidateSet('All','F')][string]$VerifyScope='All',
+    [string]$ModelSimBin=$env:MODELSIM_BIN,
+    [string]$PythonExecutable='python',
+    [string]$VivadoExecutable='vivado'
 )
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
 $inputRoot=if($SourceRoot){(Resolve-Path -LiteralPath $SourceRoot).Path}else{$root}
 $run=Join-Path $root $RunRoot
-$bin='C:/altera/13.0sp1/modelsim_ase/win32aloem'
+if(!$ModelSimBin) {
+    $simCommand=Get-Command vsim -ErrorAction SilentlyContinue
+    if(!$simCommand){throw 'Set MODELSIM_BIN or pass -ModelSimBin; installation is not modified'}
+    $ModelSimBin=Split-Path -Parent $simCommand.Source
+}
+$bin=(Resolve-Path -LiteralPath $ModelSimBin).Path
 function Get-VerificationReferences([string]$tree) {
     foreach($relative in @('adder/posit_add_comb.sv','adder/posit_add_align.sv','adder/posit_add_arith.sv','adder/posit_add_normalize.sv',
             'common/dyn_right_shifter.sv','common/lod_lzd_core.sv','common/dyn_left_shifter_fixed2.sv','packer/ref_posit_pack_comb.sv')) {
@@ -49,7 +57,7 @@ foreach($entry in $manifest.sha256.PSObject.Properties) {
 }
 $env:TEMP="$run/tmp";$env:TMP=$env:TEMP
 if($Stage -eq 'Verify') {
-    $py='C:/Users/This PC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe'
+    $py=(Get-Command $PythonExecutable -ErrorAction Stop).Source
     & $py "$run/source/scripts/gen_refactored_mac_vectors.py" "$run/vectors" --count $VectorCount
     if($LASTEXITCODE){throw 'Vector generation failed'}
     Push-Location "$run/verify"
@@ -96,7 +104,7 @@ if($Stage -eq 'Verify') {
     @{runner_sha256=(Get-FileHash $PSCommandPath).Hash;tcl_sha256=(Get-FileHash "$target/run_synth.tcl").Hash;verified_manifest_sha256=(Get-FileHash "$run/manifest.json").Hash;variant=$variant;stage='synthesis only'}|ConvertTo-Json|Set-Content "$target/execution.json"
     Push-Location $target
     try {
-        & 'C:/AMDDesignTools/2026.1/Vivado/bin/vivado.bat' -mode batch -notrace -source "$target/run_synth.tcl" -log vivado.log -journal vivado.jou -tclargs $variant > console.log
+        & $VivadoExecutable -mode batch -notrace -source "$target/run_synth.tcl" -log vivado.log -journal vivado.jou -tclargs $variant > console.log
         if($LASTEXITCODE){throw 'Vivado synthesis failed'}
         if((Get-Content status.txt -Raw).Trim() -ne 'SYNTHESIS_COMPLETE'){throw 'Missing synthesis completion'}
         "SYNTHESIS_COMPLETE $variant"

@@ -1,0 +1,536 @@
+{
+  "status": "PASS",
+  "active_modules": 19,
+  "named_instances": 26,
+  "clock_primitive_bindings": 1,
+  "missing_or_empty_ports": 0,
+  "public_dut_parameters": 0,
+  "shared_nf_f_rtl_unchanged": true,
+  "source_sha256": {
+    "rtl/mac_quire/posit_mac_quire.sv": "f9fa29b3398661fadb2419a259332c3579e095176bd6efac07d918d155ee3cae",
+    "rtl/mac_quire/mac_quire_wrapper.sv": "8e51edf6bbdf5af82f79bbba8950e1fd743ab4f97c6b92fd0fb74132bc2babb8",
+    "rtl/mac_quire/quire_align_comb.sv": "8f0a41a00a068b08826f23261a43dc0680cd0d9096795913ee331b818d924fc8",
+    "rtl/mac_quire/quire_bank.sv": "07ebe3d5f873ba80e8bf9c8aa2e42da2f466cc6d508a33d6beff435adc3f71ed",
+    "rtl/mac_quire/quire_read.sv": "435152c6e6271234942a00cc0415b48706718c7f5018cb8bbea92456cf542267",
+    "rtl/parser/posit_parser.sv": "78e53113a25354699ebd593c8316a9d08e639cd7ee21015161757040b5f41490",
+    "rtl/common/dyn_left_shifter.sv": "f22b3111b56d081e45e10de81bf728b5af18895ea72d0e7ac19e2b8a9884f099",
+    "rtl/common/lod_lzd_core_fixed2.sv": "4d56d69bfcea828f76c01b95e62b0413a29b314b4c331e00fede59e7d2de144c",
+    "rtl/common/dyn_left_shifter_fixed5.sv": "499fc06c2704e57765a95e003867ae5543222209ea602352a4da3b264127d6b3",
+    "rtl/common/lod_lzd_core_fixed4.sv": "707d000f31a435ba01eed8732179c8b3ce2929fc3d370ef73160e37a1e6d9fd5",
+    "rtl/common/dyn_right_shifter_fixed2.sv": "09e1da06be60167c315bca67f4c4f93cea782ab907e0f1bf3ba451aa287a10d5",
+    "rtl/multiplier/ops_sel_comb.sv": "5b76ecc3dd3148281ae167e92cc6534cfd4bef9bf785082c9f23fb70598c071e",
+    "rtl/multiplier/mul_iter_core.sv": "15174d0ac681c3f8f04603dbed574be06e539ca6c13dc360be5c353a8b1d6f50",
+    "rtl/multiplier/sac_step_comb.sv": "ecfb654eb80a8f5871b2c93896087dc35f3c78c83ee87aa9a551fd691509a962",
+    "rtl/multiplier/sbm_shift_comb.sv": "12f22988bdba755da45b9cf743d551da4faba83acb1b7153f2eedc006181e7f6",
+    "rtl/multiplier/sbm_accum_comb.sv": "67b014364118418077d0266434a74c589f7210986702adabf51cdf99fdbfe713",
+    "rtl/packer/posit_pack.sv": "7b45c92f0253045d7888ba1c016bc37e6ccaf28a8962046d082238061ee3d1bc",
+    "rtl/packer/posit_pack_prepare.sv": "542908c530e0333cef884fb86f3b3237065911564ff27d3db91694de46bd0436",
+    "rtl/packer/posit_pack_finish.sv": "8c964b3e8ec1083c0d82826688f0211d661dbfb294213d522b79d30b262e43ad",
+    "tb/quire_checker.sv": "1008c5e85d371160e96128a36c518ee3b710930962f3562a61f115756c4dcd6c",
+    "tb/quire_units.sv": "b4a10dcbd2af2fd15820e01e50da579eb4805e336d490373509abb15f472203a",
+    "tb/tb_posit_mac_quire.sv": "c582657dca8ea722b57e40848c76af54ff50d3869e813aac4b5d8c0e415a1d3a",
+    "tb/quire_ppa_top.sv": "1c85cba28ec51afa45b93b5e0f1b0b637b616fffecb2222cb1e510a4550843c0"
+  },
+  "instances": [
+    {
+      "parent": "posit_mac_quire",
+      "instance": "u_wrapper",
+      "module": "mac_quire_wrapper",
+      "ports": 15
+    },
+    {
+      "parent": "mac_quire_wrapper",
+      "instance": "u_align",
+      "module": "quire_align_comb",
+      "ports": 5
+    },
+    {
+      "parent": "mac_quire_wrapper",
+      "instance": "u_bank",
+      "module": "quire_bank",
+      "ports": 18
+    },
+    {
+      "parent": "mac_quire_wrapper",
+      "instance": "u_read",
+      "module": "quire_read",
+      "ports": 18
+    },
+    {
+      "parent": "mac_quire_wrapper",
+      "instance": "u_a",
+      "module": "posit_parser",
+      "ports": 12
+    },
+    {
+      "parent": "mac_quire_wrapper",
+      "instance": "u_b",
+      "module": "posit_parser",
+      "ports": 12
+    },
+    {
+      "parent": "mac_quire_wrapper",
+      "instance": "u_ops",
+      "module": "ops_sel_comb",
+      "ports": 11
+    },
+    {
+      "parent": "mac_quire_wrapper",
+      "instance": "u_core",
+      "module": "mul_iter_core",
+      "ports": 20
+    },
+    {
+      "parent": "mac_quire_wrapper",
+      "instance": "u_pack",
+      "module": "posit_pack",
+      "ports": 15
+    },
+    {
+      "parent": "posit_parser",
+      "instance": "u_align_payload",
+      "module": "dyn_left_shifter",
+      "ports": 3
+    },
+    {
+      "parent": "posit_parser",
+      "instance": "u_regime_detector",
+      "module": "lod_lzd_core_fixed2",
+      "ports": 3
+    },
+    {
+      "parent": "mul_iter_core",
+      "instance": "u_sac",
+      "module": "sac_step_comb",
+      "ports": 6
+    },
+    {
+      "parent": "mul_iter_core",
+      "instance": "u_shift",
+      "module": "sbm_shift_comb",
+      "ports": 5
+    },
+    {
+      "parent": "mul_iter_core",
+      "instance": "u_accum",
+      "module": "sbm_accum_comb",
+      "ports": 6
+    },
+    {
+      "parent": "sac_step_comb",
+      "instance": "u_shift",
+      "module": "dyn_left_shifter_fixed5",
+      "ports": 3
+    },
+    {
+      "parent": "sac_step_comb",
+      "instance": "u_lod",
+      "module": "lod_lzd_core_fixed4",
+      "ports": 3
+    },
+    {
+      "parent": "posit_pack",
+      "instance": "u_prepare",
+      "module": "posit_pack_prepare",
+      "ports": 14
+    },
+    {
+      "parent": "posit_pack",
+      "instance": "u_finish",
+      "module": "posit_pack_finish",
+      "ports": 9
+    },
+    {
+      "parent": "posit_pack_prepare",
+      "instance": "u_payload_shift",
+      "module": "dyn_right_shifter_fixed2",
+      "ports": 4
+    },
+    {
+      "parent": "quire_checker",
+      "instance": "dut",
+      "module": "posit_mac_quire",
+      "ports": 15
+    },
+    {
+      "parent": "quire_units",
+      "instance": "u_align",
+      "module": "quire_align_comb",
+      "ports": 5
+    },
+    {
+      "parent": "quire_units",
+      "instance": "u_bank",
+      "module": "quire_bank",
+      "ports": 18
+    },
+    {
+      "parent": "quire_units",
+      "instance": "u_read",
+      "module": "quire_read",
+      "ports": 18
+    },
+    {
+      "parent": "quire_units",
+      "instance": "u_pack",
+      "module": "posit_pack",
+      "ports": 15
+    },
+    {
+      "parent": "tb_posit_mac_quire",
+      "instance": "dut",
+      "module": "posit_mac_quire",
+      "ports": 15
+    },
+    {
+      "parent": "quire_ppa_top",
+      "instance": "u_dut",
+      "module": "posit_mac_quire",
+      "ports": 15
+    }
+  ],
+  "lint": [
+    {
+      "top": "dyn_left_shifter",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "dyn_left_shifter",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/dyn_left_shifter"
+      ]
+    },
+    {
+      "top": "dyn_left_shifter_fixed5",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "dyn_left_shifter_fixed5",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/dyn_left_shifter_fixed5"
+      ]
+    },
+    {
+      "top": "dyn_right_shifter_fixed2",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "dyn_right_shifter_fixed2",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/dyn_right_shifter_fixed2"
+      ]
+    },
+    {
+      "top": "lod_lzd_core_fixed2",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "lod_lzd_core_fixed2",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/lod_lzd_core_fixed2"
+      ]
+    },
+    {
+      "top": "lod_lzd_core_fixed4",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "lod_lzd_core_fixed4",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/lod_lzd_core_fixed4"
+      ]
+    },
+    {
+      "top": "mac_quire_wrapper",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "mac_quire_wrapper",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/mac_quire_wrapper"
+      ]
+    },
+    {
+      "top": "mul_iter_core",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "mul_iter_core",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/mul_iter_core"
+      ]
+    },
+    {
+      "top": "ops_sel_comb",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "ops_sel_comb",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/ops_sel_comb"
+      ]
+    },
+    {
+      "top": "posit_mac_quire",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "posit_mac_quire",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/posit_mac_quire"
+      ]
+    },
+    {
+      "top": "posit_pack",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "posit_pack",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/posit_pack"
+      ]
+    },
+    {
+      "top": "posit_pack_finish",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "posit_pack_finish",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/posit_pack_finish"
+      ]
+    },
+    {
+      "top": "posit_pack_prepare",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "posit_pack_prepare",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/posit_pack_prepare"
+      ]
+    },
+    {
+      "top": "posit_parser",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "posit_parser",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/posit_parser"
+      ]
+    },
+    {
+      "top": "quire_align_comb",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "quire_align_comb",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/quire_align_comb"
+      ]
+    },
+    {
+      "top": "quire_bank",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "quire_bank",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/quire_bank"
+      ]
+    },
+    {
+      "top": "quire_read",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "quire_read",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/quire_read"
+      ]
+    },
+    {
+      "top": "sac_step_comb",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "sac_step_comb",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/sac_step_comb"
+      ]
+    },
+    {
+      "top": "sbm_accum_comb",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "sbm_accum_comb",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/sbm_accum_comb"
+      ]
+    },
+    {
+      "top": "sbm_shift_comb",
+      "status": "PASS",
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--timing",
+        "--assert",
+        "-Wall",
+        "-Irtl",
+        "--top-module",
+        "sbm_shift_comb",
+        "-f",
+        "rtl/quire_active.f",
+        "--Mdir",
+        "results/quire_20261103/lint/sbm_shift_comb"
+      ]
+    }
+  ]
+}

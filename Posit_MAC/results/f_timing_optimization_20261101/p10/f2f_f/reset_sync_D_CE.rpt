@@ -1,0 +1,167 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Sun Nov  1 23:32:20 2026
+| Host         : MSI running 64-bit major release  (build 9200)
+| Command      : report_timing -from [all_registers] -to [get_pins -quiet -of_objects {u_dut/u_wrapper/meta_sync1_reg u_dut/u_wrapper/meta_sync2_reg u_dut/u_wrapper/reset_bridge_q_reg u_dut/u_wrapper/u_a/meta_sync1_reg u_dut/u_wrapper/u_a/meta_sync2_reg u_dut/u_wrapper/u_add/meta_sync1_reg u_dut/u_wrapper/u_add/meta_sync2_reg u_dut/u_wrapper/u_b/meta_sync1_reg u_dut/u_wrapper/u_b/meta_sync2_reg u_dut/u_wrapper/u_c/meta_sync1_reg u_dut/u_wrapper/u_c/meta_sync2_reg u_dut/u_wrapper/u_core/meta_sync1_reg u_dut/u_wrapper/u_core/meta_sync2_reg u_dut/u_wrapper/u_pack/meta_sync1_reg u_dut/u_wrapper/u_pack/meta_sync2_reg} -filter {REF_PIN_NAME == D || REF_PIN_NAME == CE}] -delay_type max -max_paths 3 -file reset_sync_D_CE.rpt
+| Design       : week13_fused_ppa_top
+| Device       : 7a35t-cpg236
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+| Design State : Synthesized
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             8.986ns  (required time - arrival time)
+  Source:                 u_dut/u_wrapper/meta_sync1_reg/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/meta_sync2_reg/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (clk rise@10.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.670ns  (logic 0.478ns (71.343%)  route 0.192ns (28.657%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.454ns = ( 11.454 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.653ns
+    Clock Pessimism Removal (CPR):    0.054ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.973     0.973    clk
+                         BUFG (Prop_bufg_I_O)         0.096     1.069 r  u_clk/O
+                         net (fo=820, unplaced)       0.584     1.653    u_dut/u_wrapper/CLK
+                         FDCE                                         r  u_dut/u_wrapper/meta_sync1_reg/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     2.131 r  u_dut/u_wrapper/meta_sync1_reg/Q
+                         net (fo=1, unplaced)         0.192     2.323    u_dut/u_wrapper/meta_sync1
+                         FDCE                                         r  u_dut/u_wrapper/meta_sync2_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)       10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=0)                   0.924    10.924    clk
+                         BUFG (Prop_bufg_I_O)         0.091    11.015 r  u_clk/O
+                         net (fo=820, unplaced)       0.439    11.454    u_dut/u_wrapper/CLK
+                         FDCE                                         r  u_dut/u_wrapper/meta_sync2_reg/C
+                         clock pessimism              0.054    11.508    <hidden>
+                         clock uncertainty           -0.135    11.373    <hidden>
+                         FDCE (Setup_fdce_C_D)       -0.064    11.309    u_dut/u_wrapper/meta_sync2_reg
+  -------------------------------------------------------------------
+                         required time                         11.309    <hidden>
+                         arrival time                          -2.323    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  8.986    <hidden>
+
+Slack (MET) :             8.986ns  (required time - arrival time)
+  Source:                 u_dut/u_wrapper/u_a/meta_sync1_reg/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_a/meta_sync2_reg/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (clk rise@10.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.670ns  (logic 0.478ns (71.343%)  route 0.192ns (28.657%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.454ns = ( 11.454 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.653ns
+    Clock Pessimism Removal (CPR):    0.054ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.973     0.973    clk
+                         BUFG (Prop_bufg_I_O)         0.096     1.069 r  u_clk/O
+                         net (fo=820, unplaced)       0.584     1.653    u_dut/u_wrapper/u_a/CLK
+                         FDCE                                         r  u_dut/u_wrapper/u_a/meta_sync1_reg/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     2.131 r  u_dut/u_wrapper/u_a/meta_sync1_reg/Q
+                         net (fo=1, unplaced)         0.192     2.323    u_dut/u_wrapper/u_a/meta_sync1
+                         FDCE                                         r  u_dut/u_wrapper/u_a/meta_sync2_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)       10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=0)                   0.924    10.924    clk
+                         BUFG (Prop_bufg_I_O)         0.091    11.015 r  u_clk/O
+                         net (fo=820, unplaced)       0.439    11.454    u_dut/u_wrapper/u_a/CLK
+                         FDCE                                         r  u_dut/u_wrapper/u_a/meta_sync2_reg/C
+                         clock pessimism              0.054    11.508    <hidden>
+                         clock uncertainty           -0.135    11.373    <hidden>
+                         FDCE (Setup_fdce_C_D)       -0.064    11.309    u_dut/u_wrapper/u_a/meta_sync2_reg
+  -------------------------------------------------------------------
+                         required time                         11.309    <hidden>
+                         arrival time                          -2.323    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  8.986    <hidden>
+
+Slack (MET) :             8.986ns  (required time - arrival time)
+  Source:                 u_dut/u_wrapper/u_add/meta_sync1_reg/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_add/meta_sync2_reg/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (clk rise@10.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.670ns  (logic 0.478ns (71.343%)  route 0.192ns (28.657%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.454ns = ( 11.454 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.653ns
+    Clock Pessimism Removal (CPR):    0.054ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.973     0.973    clk
+                         BUFG (Prop_bufg_I_O)         0.096     1.069 r  u_clk/O
+                         net (fo=820, unplaced)       0.584     1.653    u_dut/u_wrapper/u_add/CLK
+                         FDCE                                         r  u_dut/u_wrapper/u_add/meta_sync1_reg/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     2.131 r  u_dut/u_wrapper/u_add/meta_sync1_reg/Q
+                         net (fo=1, unplaced)         0.192     2.323    u_dut/u_wrapper/u_add/meta_sync1
+                         FDCE                                         r  u_dut/u_wrapper/u_add/meta_sync2_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)       10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=0)                   0.924    10.924    clk
+                         BUFG (Prop_bufg_I_O)         0.091    11.015 r  u_clk/O
+                         net (fo=820, unplaced)       0.439    11.454    u_dut/u_wrapper/u_add/CLK
+                         FDCE                                         r  u_dut/u_wrapper/u_add/meta_sync2_reg/C
+                         clock pessimism              0.054    11.508    <hidden>
+                         clock uncertainty           -0.135    11.373    <hidden>
+                         FDCE (Setup_fdce_C_D)       -0.064    11.309    u_dut/u_wrapper/u_add/meta_sync2_reg
+  -------------------------------------------------------------------
+                         required time                         11.309    <hidden>
+                         arrival time                          -2.323    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  8.986    <hidden>
+
+
+
+

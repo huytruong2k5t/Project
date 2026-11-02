@@ -1,5 +1,7 @@
 # Kết quả được giữ sau dọn dẹp — 02/11/2026
 
+> Cập nhật03/11/2026: đã xóa các archive/backup cũ theo yêu cầu người dùng; hướng dẫn restore archive lịch sử bên dưới không còn khả dụng. Toàn bộ bằng chứng trong results được giữ nguyên khi dọn local; không chạy lại simulation/synthesis. [Biên bản](../docs/local_build_cleanup_20261103_final.json).
+
 **Mới nhất03/11:** [quire_20261103/summary.json](quire_20261103/summary.json),
 Q12-1024 signed972/grid2^-480. Main10M MAC retired/4 seed,0 mismatch;
 19428 chuỗi>12 và38 chuỗi1024. Model/unit/Python/ModelSim đạt; coverage sau3

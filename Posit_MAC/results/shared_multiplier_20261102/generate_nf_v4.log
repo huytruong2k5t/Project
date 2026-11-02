@@ -1,0 +1,7 @@
+%Warning-WIDTHTRUNC: ../../../tb/shared_mac_checker.sv:39:9: Logical operator GENIF expects 1 bit on the If, but If's VARREF 'FUSED' generates 32 bits.
+                                                           : ... note: In instance 'shared_mac_checker'
+   39 |         if (FUSED) begin : g_f
+      |         ^~
+                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032
+                     ... Use "/* verilator lint_off WIDTHTRUNC */" and lint_on around source to disable this message.
+%Error: Exiting due to 1 warning(s)

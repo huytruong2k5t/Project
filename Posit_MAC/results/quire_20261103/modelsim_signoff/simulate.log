@@ -1,0 +1,33 @@
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim {+VECTORS=C:\HCMUT\HK261\Do an 2\Posit_MAC\results\quire_20261103\modelsim_signoff\vectors\commands.txt} -do run.do -c -wlf wave.wlf work.tb_posit_mac_quire 
+# Loading sv_std.std
+# Loading work.tb_posit_mac_quire
+# Loading work.posit_mac_quire
+# Loading work.mac_quire_wrapper
+# Loading work.posit_parser
+# Loading work.lod_lzd_core_fixed2
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.mul_iter_core
+# Loading work.sac_step_comb
+# Loading work.lod_lzd_core_fixed4
+# Loading work.dyn_left_shifter_fixed5
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum_comb
+# Loading work.quire_align_comb
+# Loading work.quire_bank
+# Loading work.quire_read
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter_fixed2
+# Loading work.posit_pack_finish
+# do run.do 
+# QUIRE_MODELSIM_PASS accepted=4881 completed=4876 aborted=5 commits=4833 stalls=19512 invalid_checks=72 mismatches=0
+# QUIRE_RESPONSE_LATENCY cmd=0 min=1 max=1 cycles; accept to first valid, before imposed hold
+# QUIRE_RESPONSE_LATENCY cmd=1 min=7 max=42 cycles; accept to first valid, before imposed hold
+# QUIRE_RESPONSE_LATENCY cmd=2 min=3 max=57 cycles; accept to first valid, before imposed hold
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_20261103/modelsim_signoff/source/tb/tb_posit_mac_quire.sv(170)
+#    Time: 2014737 ns  Iteration: 0  Instance: /tb_posit_mac_quire

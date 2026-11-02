@@ -1,0 +1,13 @@
+# vsim -do run.do -l core.log -c -wlf core.wlf work.tb_mul_iter_core 
+# Loading sv_std.std
+# Loading work.tb_mul_iter_core
+# Loading work.mul_iter_core
+# Loading work.sac_step_comb
+# Loading work.lod_lzd_core_fixed4
+# Loading work.dyn_left_shifter_fixed5
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum_comb
+# do run.do 
+# SHARED_CORE_PASS cases=53249 checkpoints=231437 mismatches=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/shared_multiplier_20261102/modelsim_final/source/tb/tb_mul_iter_core.sv(174)
+#    Time: 6574440 ns  Iteration: 1  Instance: /tb_mul_iter_core

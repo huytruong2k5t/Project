@@ -1,0 +1,7 @@
+﻿label,description,F2F_ns,logic_ns,net_ns,levels,slack_f2f_ns,LUT,FF,WNS_ns,WHS_ns,startpoint,endpoint,path
+before_parser_refactor,carry/group; shared old adder LOD,6.602,2.878,3.724,10,3.147,1257,820,2.689,-0.055,u_dut/u_wrapper/accumulator_q_reg[31]/C,u_dut/u_wrapper/u_c/p1_cnt_q_reg[0]/D,C:\HCMUT\HK261\Do an 2\Posit_MAC\results\readme_refactor_recheck_20261101
+p11_current,prefix/flat; current shared adder LOD,7.697,1.495,6.202,7,2.052,1374,820,1.57,-0.055,u_dut/u_wrapper/accumulator_q_reg[31]/C,u_dut/u_wrapper/u_c/p1_cnt_q_reg[0]/D,C:\HCMUT\HK261\Do an 2\Posit_MAC\results\parser_lod_refactor_recheck_20261101
+p00,carry/group; F-only parser,6.602,2.878,3.724,10,3.147,1265,820,2.689,-0.055,u_dut/u_wrapper/accumulator_q_reg[31]/C,u_dut/u_wrapper/u_c/p1_cnt_q_reg[0]/D,C:\HCMUT\HK261\Do an 2\Posit_MAC\results\f_timing_optimization_20261101\p00
+p01,carry/flat; F-only parser,6.844,2.254,4.59,7,2.905,1268,820,2.537,-0.055,u_dut/u_wrapper/accumulator_q_reg[31]/C,u_dut/u_wrapper/u_c/p1_cnt_q_reg[1]/D,C:\HCMUT\HK261\Do an 2\Posit_MAC\results\f_timing_optimization_20261101\p01
+p10,prefix/group; F-only parser,6.865,1.371,5.494,6,2.884,1314,820,2.467,-0.055,u_dut/u_wrapper/accumulator_q_reg[0]/C,u_dut/u_wrapper/u_c/p1_cnt_q_reg[0]/D,C:\HCMUT\HK261\Do an 2\Posit_MAC\results\f_timing_optimization_20261101\p10
+p20,carry + direct raw transition/group; F-only parser,6.883,1.371,5.512,6,2.866,1466,820,2.173,-0.055,u_dut/u_wrapper/accumulator_q_reg[5]/C,u_dut/u_wrapper/u_c/p1_cnt_q_reg[1]/D,C:\HCMUT\HK261\Do an 2\Posit_MAC\results\f_timing_optimization_20261101\p20

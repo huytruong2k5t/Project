@@ -1,5 +1,17 @@
 # Constraint và luồng đo A35T
 
+## Sắp xếp thư mục — 19/10/2026
+
+Recipe hiện hành vẫn là `opt12_120mhz_release.json`, clock 120 MHz ở
+`constraints/a35t_clock_120mhz.xdc`. Không di chuyển hoặc sửa nội dung recipe,
+XDC, Tcl hay báo cáo STA. Các ràng buộc 100 MHz vẫn giữ để replay lịch sử.
+
+23 file ứng viên cũ đã chuyển vào [kho nén](../archive/README.md).
+Runner PPA lịch sử cần nguồn đó phải phục hồi đúng đường dẫn trước khi chạy;
+không cần phục hồi để dùng file list production. Báo cáo cũ dưới 120 MHz vẫn
+giữ trong `results/` để đối chiếu, không được coi là trạng thái hiện hành của RTL.
+Lần dọn này không chạy synthesis/P&R/STA mới và không thay đổi kết luận timing.
+
 ## Release production đã khóa — 18/10/2026
 
 **Production hiện hành18/10:** đã chọn và promote OPT-12 negate, khóa release

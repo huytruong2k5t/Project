@@ -1,17 +1,19 @@
 # Tầng L0: Wrapper Thư viện Chuẩn SoftPosit (`l0/`)
 
-Thư mục này chứa mã nguồn wrapper C/C++ và Python tích hợp thư viện chuẩn quốc tế **SoftPosit** (phát triển bởi nhóm tác giả Posit, CERG Lab):
+Thư mục này chứa mã nguồn wrapper C/C++ và Python tích hợp thư viện **SoftPosit**:
 
 ---
 
-## 1. Vai trò trong Hệ thống Kiểm chứng (§6.1 SPEC)
+## 1. Vai trò trong kiểm chứng hiện hành
 
-- **Chuẩn vàng Toán học (Golden Reference)**: Đóng vai trò là tầng tham chiếu chân lý cao nhất (Ground Truth) để thẩm định độ chính xác của mô hình thuật toán L1 và chế độ Exact của lõi RTL.
-- **Tiêu chí nghiệm thu AC-02**:
-  - `posit8 (ES=0)`: Quét cạn toàn bộ không gian (Exhaustive) với $2^{16}$ cặp nhân (`p8_mul`), $2^{16}$ cặp cộng (`p8_add`), và $2^{24}$ bộ ba MAC.
-  - `posit16 (ES=1)`: Quét cạn $2^{32}$ cặp nhân và cộng.
-  - `posit32 (ES=2)`: Khớp bit-exact trên toàn bộ Corner List (§6.4) và $\ge 10^8$ vector ngẫu nhiên phân tầng.
-  - **Kết quả yêu cầu**: **0 mismatch tuyệt đối**.
+Wrapper này gọi p8/es0, p16/es1 và p32/es2. Vì đề tài chỉ nghiệm thu **Posit(32,3)**,
+`l0_p32_mul/add/mulAdd` không phải golden trực tiếp của DUT hoặc model L1 hiện hành.
+Đổi tên wrapper, gọi ctypes hay chuyển qua double không đổi ES và không tạo oracle độc lập.
+
+Golden32/3, model approximate FULL_TERM và Ideal được quy định tại
+[SPEC §6.1](../SPEC_Posit_MAC_IP.md#61-golden-model-và-ideal).
+AC02 exact phần cứng đã retired; không yêu cầu thêm exhaustive8/16 hoặc 100M exact32
+trong ma trận mới. Giữ thư viện và các kết quả đã có để hồi quy đúng format/snapshot.
 
 ---
 

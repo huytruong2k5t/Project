@@ -1,0 +1,18 @@
+rtl: share approximate12 FULL_TERM multiplier across NF and fused MAC
+
+Use one OPS/core26-Q24/normalizer design in both wrappers. Remove cfg_mode,
+exact datapath and obsolete multiplier helpers; preserve previous sources in
+hash-checked archives. Include the active 31-module parser/adder/packer tree
+and eight verification references required to rebuild the tested source.
+
+Verification: 143934016 unit comparisons, 52-point pilot 5.2M completed,
+and default stress 1M NF + 1M F: zero mismatches. Final ModelSim core 53249
+cases/231437 checkpoints; each MAC 29820 completed + 180 reset-aborted.
+31 strict lint tops and 68 module instances + 2 BUFG bindings pass port audit.
+L1/integer oracle/Python fixtures checked independently. Preserve source,
+evidence, tool versions, seeds and commands with byte-stable attributes.
+
+This is a pilot checkpoint, not final release. Main 520M matrix and regime
+quota are not met; raw branch coverage NF/F and line coverage F remain below
+SPEC. Paired accuracy, matched FULL_TERM PPA and quire implementation remain
+open. Previous FLOOR timing and paper baseline provenance are not promoted.

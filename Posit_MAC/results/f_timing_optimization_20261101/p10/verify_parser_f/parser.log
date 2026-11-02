@@ -1,0 +1,14 @@
+# vsim -do run.do -l parser.log -c -wlf parser.wlf work.tb_parser_f_timing_equiv 
+# Loading sv_std.std
+# Loading work.tb_parser_f_timing_equiv
+# Loading work.posit_parser_f
+# Loading work.posit_parser_f_regime_lod
+# Loading work.dyn_left_shifter
+# Loading work.posit_parser_previous
+# Loading work.lod_lzd_core_previous
+# do run.do 
+# PARSER_MAG_DUT_PASS checked=4000000
+# LOD_SERIAL_PASS checked=500063
+# PARSER_PREVIOUS_EQUIV_PASS accepted=105394 completed=105367 aborted=27 stalls=35270
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/f_timing_optimization_20261101/p10/source/tb/tb_parser_f_timing_equiv.sv(112)
+#    Time: 6000760 ns  Iteration: 1  Instance: /tb_parser_f_timing_equiv

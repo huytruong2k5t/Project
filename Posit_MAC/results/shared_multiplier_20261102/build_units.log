@@ -1,0 +1,5 @@
+make: Entering directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/shared_multiplier_20261102/obj_units_v1'
+/usr/share/verilator/include/verilated.mk:72: *** Unsupported: GNU Make cannot build in directories containing spaces, build elsewhere: '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/shared_multiplier_20261102/obj_units_v1'.  Stop.
+make: Leaving directory '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/shared_multiplier_20261102/obj_units_v1'
+%Error: make -C . -f Vshared_multiplier_units.mk -j 4 exited with 2
+%Error: Command Failed ulimit -s unlimited 2>/dev/null; exec /usr/bin/verilator_bin --cc --exe --build -j 4 --timing --assert -Wall -I../../../rtl --top-module shared_multiplier_units -f sources.f shared_multiplier_units.cpp --Mdir . -CFLAGS -O3\ -std=c++17\ -I../../../tb\ -I../../../tb/opt17\ -I../../../l1/include

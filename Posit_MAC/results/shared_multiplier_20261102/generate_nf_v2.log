@@ -1,0 +1,201 @@
+%Warning-TIMESCALEMOD: ../../../rtl/mac_nf/posit_mac_nf.sv:9:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    9 | module posit_mac_nf (
+      |        ^~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032
+                       ... Use "/* verilator lint_off TIMESCALEMOD */" and lint_on around source to disable this message.
+%Warning-TIMESCALEMOD: ../../../rtl/mac_nf/mac_nf_wrapper.sv:11:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   11 | module mac_nf_wrapper (
+      |        ^~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/multiplier/mul_prepack_norm_comb.sv:9:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    9 | module mul_prepack_norm_comb (
+      |        ^~~~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/mac_nf/posit_product_pack.sv:16:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   16 | module posit_product_pack (
+      |        ^~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/mac_nf/posit_magnitude_parse.sv:11:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   11 | module posit_magnitude_parse (
+      |        ^~~~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/adder/posit_add.sv:14:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   14 | module posit_add (
+      |        ^~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/parser/posit_parser.sv:19:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   19 | module posit_parser (
+      |        ^~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/multiplier/ops_sel_comb.sv:13:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   13 | module ops_sel_comb (
+      |        ^~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/multiplier/mul_iter_core.sv:12:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   12 | module mul_iter_core (
+      |        ^~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/packer/posit_pack.sv:15:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   15 | module posit_pack (
+      |        ^~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/adder/posit_add_prepare_comb.sv:9:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    9 | module posit_add_prepare_comb (
+      |        ^~~~~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/adder/posit_add_align_comb.sv:9:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    9 | module posit_add_align_comb (
+      |        ^~~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/adder/posit_add_arith_comb.sv:9:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    9 | module posit_add_arith_comb (
+      |        ^~~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/adder/posit_add_lod_comb.sv:9:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    9 | module posit_add_lod_comb (
+      |        ^~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/adder/posit_add_norm_comb.sv:10:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   10 | module posit_add_norm_comb (
+      |        ^~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/packer/posit_pack_prepare.sv:15:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   15 | module posit_pack_prepare (
+      |        ^~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/packer/posit_pack_finish.sv:13:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   13 | module posit_pack_finish (
+      |        ^~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/multiplier/sbm_shift_comb.sv:9:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    9 | module sbm_shift_comb (
+      |        ^~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/common/dyn_right_shifter_fixed4.sv:11:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   11 | module dyn_right_shifter_fixed4 (
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/common/dyn_right_shifter_fixed2.sv:13:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   13 | module dyn_right_shifter_fixed2 (
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/multiplier/sac_step_comb.sv:12:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   12 | module sac_step_comb (
+      |        ^~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/multiplier/sbm_accum_comb.sv:9:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    9 | module sbm_accum_comb (
+      |        ^~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/common/dyn_left_shifter.sv:13:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   13 | module dyn_left_shifter (
+      |        ^~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/common/lod_lzd_core_fixed2.sv:15:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   15 | module lod_lzd_core_fixed2 (
+      |        ^~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/common/dyn_left_shifter_fixed6.sv:11:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   11 | module dyn_left_shifter_fixed6 (
+      |        ^~~~~~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/common/lod_lzd_core_fixed3.sv:14:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   14 | module lod_lzd_core_fixed3 (
+      |        ^~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/common/dyn_left_shifter_fixed3.sv:19:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   19 | module dyn_left_shifter_fixed3 (
+      |        ^~~~~~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/common/lod_lzd_core_fixed4.sv:14:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   14 | module lod_lzd_core_fixed4 (
+      |        ^~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/mac_f/posit_mac_f.sv:9:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    9 | module posit_mac_f (
+      |        ^~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/mac_f/mac_f_wrapper.sv:11:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   11 | module mac_f_wrapper (
+      |        ^~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/common/dyn_left_shifter_fixed5.sv:19:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   19 | module dyn_left_shifter_fixed5 (
+      |        ^~~~~~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/parser/posit_parser_f.sv:19:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   19 | module posit_parser_f (
+      |        ^~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: ../../../rtl/parser/posit_parser_f_regime_lod.sv:14:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+   14 | module posit_parser_f_regime_lod (
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~
+                       ../../../tb/shared_mac_checker.sv:7:8: ... Location of module with timescale
+    7 | module shared_mac_checker #(
+      |        ^~~~~~~~~~~~~~~~~~
+%Error: Exiting due to 33 warning(s)

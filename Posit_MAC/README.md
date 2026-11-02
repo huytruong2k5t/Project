@@ -1,3 +1,5 @@
+> Dọn local 03/11/2026: các archive/backup cũ đã được xóa theo yêu cầu; liên kết ZIP lịch sử bên dưới không còn dùng để restore. RTL/TB hiện hành và bằng chứng trong results được giữ. Xem [biên bản](docs/local_build_cleanup_20261103_final.json).
+
 ## MAC quire Q12-1024 — 03/11/2026
 
 Đã build `posit_mac_quire`: Posit(32,3), cùng multiplier approximate12,

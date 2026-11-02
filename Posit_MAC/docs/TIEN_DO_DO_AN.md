@@ -1,9 +1,9 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 23/10/2026 (giờ Việt Nam)
+**Ngày cập nhật:** 02/11/2026 (giờ Việt Nam)
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.22](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
+**Tài liệu chi tiết:** [SPEC v1.27](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -13,7 +13,9 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 
 ## 1. Tổng quan
 
-**Hiện hành23/10:** release `POSIT_MAC_RTL_20261022_FIXED32_3`,54 module fixed32/3 đã kiểm chức năng. NF10M+F10M completed/0 mismatch;37 biến thể tổ hợp740k so sánh,ModelSim36.056 giao dịch hoàn tất/0 mismatch,54 strict lint. L1/oracle không sửa. Các số120,48MHz/W14 và candidate OPT15/16 bên dưới vẫn gắn với nguồn cũ; không suy thành STA/PPA hoặc final coverage của release mới. Chi tiết tại results/fixed32_3_20261022/summary.json.
+**Hiện hành02/11:** approximate12, FULL_TERM26/Q24, mặc định OPS1/n12; NF/F dùng chung mã bộ nhân và adder.31 module active, không cfg_mode/exact.143934016 so sánh unit và7.2M MAC completed/0 mismatch; ModelSim mỗi NF/F29820 completed+180 reset-aborted.31 strict lint/68 instance đủ cổng. Đây là pilot đã kiểm chức năng, **chưa nghiệm thu cuối**: main520M, quota regime, coverage nhánh/line, paired accuracy và PPA nguồn mới còn mở. [Bằng chứng](../results/shared_multiplier_20261102/summary.json).
+
+Các số54 module/20M/W14/120,48MHz, FLOOR/exact và các bảng tuần10–14 bên dưới giữ ý nghĩa **lịch sử đúng snapshot**; không suy PASS/STA/coverage sang nguồn FULL_TERM mới. Mốc chuyển hợp đồng02/11 là công việc đang làm, không xóa thành quả cũ.
 
 Đã hoàn thành nền tảng L0, Gate1 của L1 và bộ cộng tuần5. Bộ nhân lặp L1 đã được kiểm chứng; profile source từng đạt ngưỡng TableI nhưng không khớp output ví dụ gốc. Baseline gốc bài báo chưa xác định; giữ nghiên cứu phụ. Mục tiêu chính chuyển sang MAC non-fused làm baseline nội bộ và fused làm biến thể so sánh.
 
@@ -21,10 +23,12 @@ MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng ch�
 
 ## 2. Công việc còn lại và ưu tiên
 
-**Quyết định22/10:** chỉ posit32/ES3 cho thiết kế và nghiệm thu NF/F, theo lựa chọn sau trao đổi với giảng viên. Giữ FW12/FLOOR/RNE/OPS1/n0..8, F W32/Q29 và ngưỡng kiểm32/3. Các format khác lưu lịch sử; không tiếp tục exhaustive8/16 hoặc nghiệm thu32/2. Exact32/3 vẫn mở theo AC02 với oracle độc lập, không dùng SoftPosit ES2. Chỉ sửa phạm vi tài liệu; source/freeze và các kết quả cũ giữ nguyên. Hồ sơ mới phải tách số lượt32/3 khỏi tổng đa format cũ.
+**Quyết định hiện hành02/11:** chỉ posit32/ES3, FW12/FULL_TERM26/Q24/RNE/OPS1/n0..12; bỏ exact hardware và FLOOR từng term. Giữ NF làm baseline nội bộ; provenance/TableI là nghiên cứu phụ, quire mới là hợp đồng mở rộng. Ưu tiên kiểm đích coverage → main52×10M → paired accuracy/matched PPA → hồ sơ trước05/12. SoftPosit ES2 không là oracle32/3.
 
 | Mốc lớn | Trạng thái | Phần cần hoàn thiện |
 | --- | --- | --- |
+| Đồng bộ NF/F approximate FULL_TERM | ✅ phạm vi refactor/pilot | Core/OPS/normalizer dùng chung; bỏ tín hiệu/đường exact dư; unit,ModelSim và pilot mới0 mismatch. Không đồng nghĩa đóng Gate cuối |
+| Nghiệm thu FULL_TERM nguồn mới | processing | Main520M chưa chạy; pilot min188/189<4000/cell. NF line/branch/toggle96.05/89.13/93.67%; F76.06/89.74/93.11%; chưa waiver RTL. PPA/paired accuracy chưa đo lại |
 | Khóa cấu hình duy nhất32/3 | ✅ phạm vi chức năng |54 module fixed,runner/mapping và wrapper synthesis đã đồng bộ;NF/F20M completed,ModelSim và kiểm tổ hợp0 mismatch. Còn STA/PPA mới,AC02 exact và final per-n/AC04;candidate lịch sử cần rebase riêng |
 | Baseline nội bộ và so sánh NF/F | processing | RTL NF/F final approximate và paired standalone accuracy đã đạt; còn matched PPA. Baseline paper giữ nghiên cứu phụ |
 | RTL và kiểm chứng tích hợp — Gate2/3 | processing | Gate2/adder, NF tuần11 và F profile chính đã kiểm; final approximate và coverage NF/F đã đạt;exact/AC02 vẫn mở riêng |
@@ -39,6 +43,7 @@ Tuần1–9 giữ lịch sử; tuần10–16 có lịch dự kiến từ12/10/20
 
 | Tuần | Mốc cần đạt | Trạng thái | Kết quả chính / phần còn lại |
 | --- | --- | --- | --- |
+| 02/11 — chuyển hợp đồng | Dùng chung multiplier FULL_TERM và kiểm nguồn mới | processing | Refactor/pilot✅; main52 điểm×10M,AC04,accuracy/PPA còn mở; không kế thừa PASS FLOOR |
 | 1 | Tài liệu và nền tảng dự án | processing | Đã có đặc tả, kế hoạch và khung dự án; còn hoàn thiện lint/luồng tự động |
 | 2 | Mô hình tham chiếu L0 | ✅ | SoftPosit đã build và kiểm thử đạt |
 | 3 | L1 số học chính xác — Gate1 | ✅ | Parser/packer, nhân exact và round đã nghiệm thu |
@@ -143,6 +148,13 @@ Chi tiết và giới hạn: [Optimization §8.30](../../doc/Optimization.md#leg
 | **7. Mở rộng tùy chọn ngoài đề cương chính** | Exact fused rộng, format phụ ngoài ma trận §6.7, TRUNC/JAM F, quire hoặc ASIC synthesis | **Đóng (Không thực hiện)** | Ngoài profile chính; dừng hoàn toàn để tập trung 100% cho nghiệm thu NF/F và viết báo cáo |
 
 ## 4. Nhật ký theo ngày
+
+### 4.0. Ngày 02/11/2026 — mốc mới nhất
+
+| Mốc / nhóm công việc | Kết quả chính | Trạng thái |
+| --- | --- | --- |
+| Dùng chung nhân NF/F, gọn wrapper và kiểm IO |31 module active;143934016 unit và7.2M MAC completed/0 mismatch;ModelSim core53249 case,MAC mỗi bản29820 completed;31 strict lint/68 instance+2 BUFG đủ cổng; nguồn cũ đã lưu ZIP/hash | ✅ phạm vi pilot |
+| Nghiệm thu/PPA hợp đồng FULL_TERM |Main520M/quota regime chưa đạt;coverage line F và branch NF/F chưa đủ;paired accuracy/PPA/quire còn mở. Chi tiết seed,lệnh,tool,hash trong summary hiện hành | processing |
 
 ### 4.1. Cách cập nhật
 

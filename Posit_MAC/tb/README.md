@@ -1,6 +1,35 @@
+## Testbench hiện hành — shared FULL_TERM,02/11/2026
+
+| Testbench/harness | Phạm vi và bằng chứng |
+| --- | --- |
+| shared_multiplier_units.sv/.cpp | OPS fraction/mode và metadata kiểm riêng; SAC/SBM toàn bus; normalizer magnitude/scale kiểm riêng; accumulator lấy mẫu có overflow.143934016 comparisons/0 mismatch, không exhaustive toàn MAC |
+| shared_mac_checker.sv + shared_mac_harness.cpp | Hai top NF/F, mọi IO nối/lái/kiểm; scoreboarding raw32, flags, state, reset-abort, stall/hold, invalid cfg, checkpoint từng vòng.52 cấu hình pilot5.2M +default2M completed/0 mismatch |
+| shared_multiplier_model_check.cpp | L1 vs oracle số nguyên độc lập400k,806204 checkpoint;60k hàng fixture Python của ModelSim cuối,0 mismatch |
+| tb_mul_iter_core.sv | ModelSim53249 case,231437 checkpoint; all4096 fraction×n0..12 và zero bypass; kiểm context/retention/live-input/reset/invalid n |
+| tb_refactored_mac.sv | ModelSim NF/F mỗi bản30k accepted=29820 completed+180 reset-aborted; output stall, cấu hình thay sau accept, invalid n/OPS/clear, startup/reset |
+| tb_posit_add_5stage_equiv.sv |39534 completed+1 reset-aborted; reference tổ hợp và pipeline5 |
+| tb_posit_pack_equiv.sv |10851 completed,3552 stall; sign/reference sign cũng nối và kiểm; helper riêng trong reference/rtl/packer |
+| prepack_nf_ppa_top.sv,week13_fused_ppa_top.sv | Adapter synthesis đã bỏ cfg_mode; audit named ports và2 BUFG. Chưa đo PPA FULL_TERM mới |
+
+Chạy `scripts/run_refactored_mac.ps1` cho bộ ModelSim hiện hành và
+`scripts/verify_shared_multiplier.py` cho Verilator; dùng RunRoot/label/tag mới.
+8 reference module ở `reference/rtl/files.f`, mỗi file một module; compile riêng
+khi TB cần. Không compile đệ quy toàn bộ TB cũ.
+
+[Audit](../results/shared_multiplier_20261102/ports_and_lint.json) liệt kê các TB
+lịch sử còn cfg_mode/core cũ phải replay với snapshot tương ứng.68 instance
+hiện hành đều đủ cổng, không named-port rỗng. Cổng DUT giữ vì có ý nghĩa giao
+thức/diagnostic, không tự bỏ vì một vector không kích hoạt nó.
+
+Đủ10 mã flags NF/8 mã F trên hợp pilot52 điểm; không có nghĩa toàn bộ2^96
+tổ hợp A/B/C hoặc mọi cờ ở từng cấu hình. Main520M,quota≥4000/cell và AC04
+còn mở; xem [summary](../results/shared_multiplier_20261102/summary.json).
+
+---
+
 ## Hợp đồng hiện hành ngày 02/11/2026
 
-[SPEC v1.26](../SPEC_Posit_MAC_IP.md) chốt Posit(32,3), approximate12 fraction,
+[SPEC v1.27](../SPEC_Posit_MAC_IP.md) chốt Posit(32,3), approximate12 fraction,
 FULL_TERM26/Q24 không FLOOR từng term, mặc định **OPS1/n12**; vẫn khảo sát OPS0/n0..12
 và early-stop. Parser2, adder dùng chung5, Packer RNE2 tầng; adapter F giữ đủ tích trước RNE.
 Không exact hardware/cfg_mode trong top mục tiêu. Quire là mở rộng riêng theo
@@ -10,10 +39,12 @@ chưa có RTL quire được nghiệm thu, không gán PASS NF/F sang quire.
 Golden32/3 độc lập và L1 phải khớp trước fixture/pilot; mặc định driver/model OPS1/n12,
 không thả nổi input cfg. Giữ [ma trận52 điểm](../SPEC_Posit_MAC_IP.md#acceptance-matrix),
 ≥10M completed/điểm (≥520M), coverage và paired accuracy; không giảm ngưỡng.
-Nguồn live vẫn có FLOOR, NF exact-capable/N_MAX8 và F prepack14; header FULL_TERM có API mixed.
-Đây là cập nhật tài liệu, không sửa RTL/model/TB/runner hoặc cấp nghiệm thu mới.
+Nguồn live đã dùng chung multiplier26/Q24, approximate-only/n0..12, không cfg_mode;
+31 module active,8 reference. Unit143934016 và pilot MAC7.2M completed đều0 mismatch.
+ModelSim cuối mỗi NF/F29820 completed/180 reset-aborted; chưa main520M/AC04/PPA mới.
+Xem `results/shared_multiplier_20261102/summary.json` (từ gốc dự án) để kiểm hash và giới hạn.
 
-Các lệnh, thông số và mục có ngày cũ bên dưới là hướng dẫn/snapshot lịch sử khi khác v1.26;
+Các lệnh, thông số và mục có ngày cũ bên dưới là hướng dẫn/snapshot lịch sử khi khác v1.27;
 không ghi đè hợp đồng hiện hành. Chọn đúng source/dependency khi replay, không dùng
 SoftPosit p32/ES2 làm oracle32/3. Trình tự triển khai và khoảng cách xem SPEC §8.
 

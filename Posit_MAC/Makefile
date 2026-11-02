@@ -22,32 +22,36 @@ ASIC_DIR    := asic
 SCRIPTS_DIR := scripts
 RESULTS_DIR := results
 
-.PHONY: all help lint smoke regress cov syn ppa asic report clean
+.PHONY: all help build lint smoke regress cov syn ppa asic report clean
 
 FIXED_RUN ?= manual
+SHARED_COUNT ?= 100000
 
-all: lint smoke regress cov ## Fixed32/ES3 functional flow; STA/PPA are separate
+all: lint smoke ## Current shared FULL_TERM flow; build first, run matrix explicitly
 
 help: ## Show this help message
 	@echo "Posit MAC IP Makefile Targets:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-12s %s\n", $$1, $$2}'
 
-lint: ## Audit fixed32/ES3 source and all54 strict lint checks
-	$(PYTHON) $(SCRIPTS_DIR)/audit_rtl_release.py --self-test
-	$(PYTHON) $(SCRIPTS_DIR)/audit_fixed32_3.py --lint
+build: ## Build current unit/NF/F harnesses; choose a fresh SHARED_BUILD_TAG
+	$(PYTHON) $(SCRIPTS_DIR)/verify_shared_multiplier.py build units
+	$(PYTHON) $(SCRIPTS_DIR)/verify_shared_multiplier.py build nf
+	$(PYTHON) $(SCRIPTS_DIR)/verify_shared_multiplier.py build f
 
-smoke: ## Fixed32/ES3 NF/F pilot; build first with verify_fixed32_3.py
-	$(PYTHON) $(SCRIPTS_DIR)/verify_fixed32_3.py run nf 100000 smoke_$(FIXED_RUN)
-	$(PYTHON) $(SCRIPTS_DIR)/verify_fixed32_3.py run f 100000 smoke_$(FIXED_RUN)
+lint: ## Active hierarchy, full named ports and per-module strict lint
+	$(PYTHON) $(SCRIPTS_DIR)/audit_shared_multiplier.py
+
+smoke: ## Shared FULL_TERM NF/F smoke with n/OPS variation; build first
+	$(PYTHON) $(SCRIPTS_DIR)/verify_shared_multiplier.py run nf 10000 smoke_$(FIXED_RUN) -1 -1
+	$(PYTHON) $(SCRIPTS_DIR)/verify_shared_multiplier.py run f 10000 smoke_$(FIXED_RUN) -1 -1
 
 
-regress: ## Fixed32/ES3 NF/F10M each; choose a fresh FIXED_RUN label
-	$(PYTHON) $(SCRIPTS_DIR)/verify_fixed32_3.py run nf 10000000 regress_$(FIXED_RUN)
-	$(PYTHON) $(SCRIPTS_DIR)/verify_fixed32_3.py run f 10000000 regress_$(FIXED_RUN)
+regress: ## 52-point matrix; pilot100k default, main uses SHARED_COUNT=10000000
+	$(PYTHON) $(SCRIPTS_DIR)/run_shared_multiplier_matrix.py --count $(SHARED_COUNT) --label matrix_$(FIXED_RUN)
 
 
-cov: ## Audit bound functional evidence; does not declare final structural AC04
-	$(PYTHON) $(SCRIPTS_DIR)/audit_fixed32_3.py --self-test
+cov: ## Summarize source-bound evidence; does not silently close Gate/AC04
+	$(PYTHON) $(SCRIPTS_DIR)/summarize_shared_multiplier.py
 
 syn: ## Run FPGA synthesis and implementation via Vivado / Yosys
 	@echo "==> Running FPGA synthesis..."

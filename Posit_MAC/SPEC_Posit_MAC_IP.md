@@ -1,6 +1,6 @@
 # SPEC lõi IP Posit MAC xấp xỉ dạng lặp
 
-**v1.26 — 02/11/2026.** Sinh viên: Đan Huy. Hợp đồng approximate12/FULL_TERM, mặc định OPS1/n12, kiến trúc các khối, testbench và mở rộng MAC quire. Tài liệu quy định thiết kế mục tiêu và nghiệm thu; nhật ký, số đo và PASS của từng snapshot nằm riêng trong `results/`, [tiến độ](docs/TIEN_DO_DO_AN.md) và [Optimization](../doc/Optimization.md).
+**v1.27 — 02/11/2026.** Sinh viên: Đan Huy. Hợp đồng approximate12/FULL_TERM, mặc định OPS1/n12; cập nhật hiện thực bộ nhân dùng chung và bằng chứng pilot. Không đổi số học hoặc ngưỡng nghiệm thu v1.26. Nhật ký, số đo và PASS của từng snapshot nằm riêng trong `results/`, [tiến độ](docs/TIEN_DO_DO_AN.md) và [Optimization](../doc/Optimization.md).
 
 ## 1. Mục tiêu và phạm vi
 
@@ -15,7 +15,7 @@ Thiết kế bằng SystemVerilog hai lõi **non-fused (NF)** và **fused (F)** 
 
 **Quan hệ với bài báo:** Norris–Kim2021 §III-A/B/D chọn nb32/es3 và 12 bit fraction cao (không tính hidden), fraction thiếu được đệm 0. Đồ án kế thừa phạm vi này và kiến trúc dịch–cộng. FULL_TERM26/Q24 không cắt từng term, OPS min-popcount, RNE và NF/F/quire là hợp đồng được chốt của đồ án; không suy chúng là RTL gốc hoặc đã tái hiện Table I. Packer paper mô tả ghép 12 fraction; Packer đồ án dùng đầy đủ dữ liệu trước pack và RNE theo §2.
 
-Phiên này chỉ sửa hợp đồng/tài liệu và kiểm tính nhất quán công thức; không đổi RTL, L1/golden thực thi, testbench, runner hoặc manifest, không cấp PASS số học mới. Khoảng cách giữa nguồn hiện tại và mục tiêu ở §8.
+Nguồn hiện tại đã triển khai FULL_TERM dùng chung cho NF/F và kiểm đơn vị/pilot theo §8. Đây chưa là release nghiệm thu cuối; không chuyển PASS/STA của snapshot FLOOR cũ sang nguồn mới.
 
 ## 2. Định dạng số
 
@@ -384,22 +384,23 @@ Giữ profile A35T đã chọn: input min=max2.5ns, output min0/max0.5ns, uncert
 
 ## 8. Trạng thái nguồn và tham chiếu
 
-Đối chiếu đọc file 02/11/2026 cho thấy nguồn hiện tại chưa đồng nhất với mục tiêu v1.26. Các số đo/PASS cũ vẫn theo snapshot riêng:
+Nguồn ngày 02/11/2026 đã chuyển sang bộ nhân approximate dùng chung. [Summary có kiểm hash](results/shared_multiplier_20261102/summary.json) và checkpoint `rtl/shared_multiplier_checkpoint.json` ghi phạm vi pilot; các số đo/PASS cũ vẫn theo snapshot riêng:
 
 | Thành phần | Hiện trạng |
 | --- | --- |
-| rtl/mac_nf/mac_nf_wrapper.sv | Còn cfg_mode, EXACT_EN=1, N_MAX8 và bank54; chưa là top approximate-only FULL_TERM. |
-| rtl/mac_f/mac_f_wrapper.sv | N_MAX12 nhưng cổng ngoài còn cfg_mode; core/bank16/prepack14 FLOOR. Đã dùng adapter tới `posit_add`5 tầng, chưa magnitude26/Q24. |
-| Parser/adder/Packer active | 42 module theo `rtl/mac_active.f`, NF/F dùng chung adder5/Packer2, F có parser riêng p00. Refactor tương đương/timing synthesis không thay nghiệm thu FULL_TERM. |
-| L1/golden FULL_TERM §6.1 | Header đã có; API còn nhánh phần mềm mixed. Khóa approximate=true và kiểm lại cùng manifest trước nghiệm thu. |
-| tb/opt17/harness.cpp / candidate OPT17 | Còn stimulus exact/mixed, không tự thành regression 52 điểm approximate-only. |
-| mac_active.f, production.f, freeze/report cũ | Các danh mục/snapshot riêng; không đổi nhãn PASS hay gán kết quả cũ cho nguồn đang refactor. |
-| OPS1/n12 mặc định | Phải khóa trong wrapper/driver/API/test mới; không gán default cho cổng input bằng cách thả X/Z. |
+| NF/F wrappers và top | Cùng gọi `ops_sel_comb`, `mul_iter_core`, `mul_prepack_norm_comb`; không cfg_mode/exact/sticky nhân dư. N_MAX12, bank26/Q24. NF product RNE rồi cộng; F adapter26 không RNE trung gian. |
+| Cây active | 31 module theo `rtl/mac_active.f`; 6 multiplier, 7 common. Hai top cùng dùng adder5/Packer2; F giữ parser riêng. 11 file cũ đã bảo toàn nguyên byte trước khi đưa khỏi RTL. |
+| L1/golden FULL_TERM §6.1 | Profile `full_term32::Config` mặc định approximate=true,n12,OPS1; 400k kiểm model/golden,806204 checkpoint,60k hàng fixture Python độc lập đều 0 mismatch. Nhánh phần mềm lịch sử không là chế độ DUT. |
+| Kiểm khối và cổng | 143934016 so sánh đơn vị (các miền phân tách, accumulator lấy mẫu),31/31 strict lint;68 instance named-port và2 BUFG đầy đủ, không cổng trống/thiếu. Không là exhaustive toàn bộ MAC. |
+| Kiểm tích hợp mới | Ma trận52 điểm×100k=5.2M completed; default OPS1/n12 thêm1M NF+1M F, tổng7.2M/0 mismatch. Đã thấy đủ10 mã cờ hợp lệ NF và8 mã F trên hợp các điểm. ModelSim cuối: mỗi NF/F29820 completed+180 reset-aborted; core53249 case/231437 checkpoint. |
+| Coverage/nghiệm thu | Lượt20k mixed: NF line96.053%,branch89.130%,toggle93.674%; F line76.056%,branch89.744%,toggle93.110%. Chưa waiver RTL; branch/line chưa đủ. Main520M và quota≥4000/cell/điểm chưa chạy/đạt (pilot min188/189). Gate/AC04 vẫn mở. |
+| mac_active.f, production.f, freeze/report cũ | Checkpoint mới chỉ khóa nguồn pilot. production.f/production_freeze.json giữ lịch sử; recipe54 không dùng trên cây31. PPA/paired accuracy FULL_TERM chưa chạy lại. |
+| OPS1/n12 mặc định | Reset cấu hình wrapper và model/driver/TB dùng OPS1/n12; input ngoài vẫn phải được lái hợp lệ, không dựa vào X/Z. Runtime OPS0/n0..11 vẫn được kiểm. |
 | MAC quire | Mới chốt hợp đồng mở rộng §9; chưa có release RTL/model/coverage quire được nghiệm thu. W/L_max phải được khóa trước triển khai. |
 
 Chỉ công bố release mới khi top, model/harness và ma trận cùng đúng hợp đồng. Thứ tự hiện thực: khóa golden/default và prepack → core26/Q24 + bỏ mode exact → adapter NF/F dùng chung adder → unit/pilot → freeze/main/coverage → accuracy/PPA → mở rộng quire nếu được triển khai. Không cần quire hoàn thành để nghiệm thu NF/F; không gọi NF/F hiện tại là MAC quire.
 
-Thiếu hụt hiện thực không là lý do đổi FULL_TERM thành FLOOR trong spec. Giữ [bản trước rút gọn](archive/spec_v1_24_before_compact_20261101.zip) và [snapshot8 tài liệu trước v1.26](archive/spec_v1_25_before_approx12_quire_20261102.zip) có SHA256. Không tạo thêm Markdown hoặc ghi đè bằng chứng lịch sử trong lần sửa này.
+Thiếu hụt kiểm chứng không là lý do hạ ngưỡng nghiệm thu. Giữ [bản trước rút gọn](archive/spec_v1_24_before_compact_20261101.zip), [snapshot trước v1.26](archive/spec_v1_25_before_approx12_quire_20261102.zip), [nguồn trước dùng chung](archive/shared_multiplier_before_20261102.zip) và [tài liệu trước cập nhật](archive/shared_multiplier_docs_before_20261102.zip) có SHA256. Không ghi đè bằng chứng lịch sử.
 
 <a id="mac-quire-extension"></a>
 
@@ -482,7 +483,9 @@ Gate NF/F AC-01..08 giữ nguyên. Chỉ khi Q-MODEL/Q-RTL/Q-COVER và bounds đ
 
 ## 10. Lịch sử revision và nguồn tham khảo
 
-v1.26: khóa mặc định OPS1/n12, phân biệt12 fraction với13 significand; mở rộng block contracts, prepack26/Q24 và adapter F không suy hao; đồng nhất adder5 tầng; bổ sung testbench/truy vết và hợp đồng MAC_Q12 với bounds/giao thức/nghiệm thu riêng. Không sửa RTL/model/testbench chạy được hoặc tái nghiệm thu số học/PPA.
+v1.27: cập nhật trạng thái hiện thực31 module/core dùng chung, bỏ cfg_mode/exact, kết quả unit/pilot/ModelSim và coverage còn thiếu; giữ nguyên ngưỡng main/AC04, chưa cấp nghiệm thu cuối hoặc PPA mới.
+
+v1.26: khóa mặc định OPS1/n12, phân biệt12 fraction với13 significand; mở rộng block contracts, prepack26/Q24 và adapter F không suy hao; đồng nhất adder5 tầng; bổ sung testbench/truy vết và hợp đồng MAC_Q12 với bounds/giao thức/nghiệm thu riêng. Phiên v1.26 chỉ sửa tài liệu.
 
 Tham khảo chính:
 

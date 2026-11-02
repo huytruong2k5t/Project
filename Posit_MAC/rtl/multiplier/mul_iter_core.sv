@@ -3,114 +3,129 @@
 // Author(s)     : Dan Huy
 // Project       : Posit MAC IP
 // Creation Date : 2026-10-09
-// Description   : L0 context, L1 SAC, L2 shift, L3 accumulator.
-//                 One reserved transaction; release after output retirement.
-// $Source: $ $Revision: 1.0 $ $Log: SPEC 5.5-A core implementation. $
+// Description   : Shared NF/F approximate12 FULL_TERM26/Q24 multiplier.
+//                 Directly encloses L0 context, L1 SAC FSM (u_sac), L2 shift (u_shift),
+//                 and L3 accumulator (u_accum) with all pipeline and control registers.
+// $Source: $ $Revision: 3.0 $ $Log: Shared26-bit core; no FLOOR or numerical-tail registers. $
 //-----------------------------------------------------------------------------
 `include "posit_mac.vh"
 module mul_iter_core (
-    input logic clk,
-    input logic reset_n,
-    input logic launch_valid,
-    output wire launch_ready,
-    input logic release_result,
-    input logic [25:0] x_frac,
-    input logic [26:0] y_mant,
-    input logic cfg_mode,
-    input logic [3:0] cfg_n,
-    input logic sign_i,
-    input logic signed [10:0] sf_i,
-    input logic input_cut_i,
-    output wire run_ready,
-    output wire core_done,
-    output wire [53:0] acc,
-    output wire sticky_acc,
-    output wire numerical_tail,
-    output wire [4:0] iterations_done,
-    output wire approx_cut,
-    output logic sign_o,
+    input  logic              clk,
+    input  logic              reset_n,
+    input  logic              launch_valid,
+    output wire               launch_ready,
+    input  logic              release_result,
+    input  logic [11:0]       x_frac,
+    input  logic [12:0]       y_mant,
+    input  logic [3:0]        cfg_n,
+    input  logic              sign_i,
+    input  logic signed [10:0] sf_i,
+    input  logic              input_cut_i,
+    output wire               run_ready,
+    output wire               core_done,
+    output wire [25:0]        acc,
+    output wire [3:0]         iterations_done,
+    output wire               approx_cut,
+    output logic              sign_o,
     output logic signed [10:0] sf_o,
-    output logic input_cut_o,
-    output logic mode_o,
-    output wire state_error
+    output logic              input_cut_o,
+    output wire               state_error
 );
-    // Fixed posit32/ES3 elaboration; no public parameters.
-    localparam int FRAC_MAX = 26;
-    
-    
-    
-    
-    
-    localparam int S_W = 5;
-    
-    localparam int I_W = 5;
-    localparam int ACC_W = 54;
+    // Fixed posit32/ES3 approximate-12 elaboration; no public parameters.
+    localparam int FRAC_MAX = 12;
+    localparam int S_W      = 4;
+    localparam int I_W      = 4;
+    localparam int ACC_W    = 26;
 
-    (* ASYNC_REG="TRUE" *) logic meta_sync1,meta_sync2;
+    // Reset synchronizer
+    (* ASYNC_REG="TRUE" *) logic meta_sync1, meta_sync2;
+    assign run_ready = meta_sync2;
+
+    // L0 Context and Handshakes
     logic busy_q;
-    logic [FRAC_MAX:0] y_q;
-    wire launch,ctrl_ready,acc_ready;
-    wire t1_valid,t1_first,t1_last,t1_init,t1_cut;
-    wire [S_W-1:0] t1_scale;
-    wire [I_W-1:0] t1_iteration;
-    wire ctrl_error,carry_error;
-    wire [ACC_W-1:0] y_base,term;
-    wire term_tail;
-    logic t2_valid,t2_first,t2_last,t2_init,t2_cut,t2_tail;
-    logic [I_W-1:0] t2_iteration;
+    logic [12:0] y_q;
+    wire launch = launch_valid && launch_ready;
+    assign launch_ready = run_ready && !busy_q && (cfg_n <= 4'd12)
+                        && ((y_mant == 13'b0) || y_mant[12]);
+
+    // L1 Control and SAC FSM
+    logic emitting_q;
+    logic [FRAC_MAX-1:0] fx_q;
+    logic [S_W-1:0] scale_q;
+    logic [I_W-1:0] count_q, limit_q;
+
+    wire step_error;
+    wire [FRAC_MAX-1:0] fx_next;
+    wire [S_W-1:0] next_scale;
+    wire exhausted;
+    wire is_init   = (fx_q == '0) || (limit_q == '0);
+    wire [I_W-1:0] next_count = count_q + 1'b1;
+    wire is_last   = is_init || exhausted || (next_count >= limit_q);
+
+    // L1 Combinational Datapath Instance
+    sac_step_comb u_sac (
+        .fx (fx_q),
+        .scale (scale_q),
+        .scale_next (next_scale),
+        .fx_next (fx_next),
+        .exhausted (exhausted),
+        .state_error (step_error)
+    );
+
+    // L1 -> L2 Pipeline Token Registers
+    logic           t1_valid;
+    logic           t1_first;
+    logic           t1_last;
+    logic           t1_init;
+    logic [S_W-1:0] t1_scale;
+    logic [I_W-1:0] t1_iteration;
+    logic           t1_cut;
+
+    // L2 Combinational Datapath Instance
+    wire [ACC_W-1:0] y_base, term;
+
+    sbm_shift_comb u_shift (
+        .y_mant (y_q),
+        .scale (t1_scale),
+        .init_only (t1_init),
+        .y_base (y_base),
+        .term (term)
+    );
+
+    // L2 -> L3 Pipeline Token Registers
+    logic             t2_valid;
+    logic             t2_first;
+    logic             t2_last;
+    logic             t2_cut;
+    logic [I_W-1:0]   t2_iteration;
     logic [ACC_W-1:0] t2_term;
-    assign run_ready=meta_sync2 && ctrl_ready && acc_ready;
-    assign launch_ready=run_ready && !busy_q;
-    assign launch=launch_valid && launch_ready;
-    assign state_error=ctrl_error || carry_error;
-    iter_ctrl  u_ctrl (
-        .clk(clk),
-        .reset_n(reset_n),
-        .launch(launch),
-        .cfg_mode(cfg_mode),
-        .cfg_n(cfg_n),
-        .x_frac(x_frac),
-        .run_ready(ctrl_ready),
-        .token_valid(t1_valid),
-        .first(t1_first),
-        .last(t1_last),
-        .init_only(t1_init),
-        .scale(t1_scale),
-        .iteration(t1_iteration),
-        .approx_cut(t1_cut),
-        .state_error(ctrl_error)
+
+    // L3 Combinational Datapath Instance
+    wire [ACC_W-1:0] acc_next;
+    wire             carry_raw;
+
+    logic [ACC_W-1:0] acc_q;
+    logic [I_W-1:0]   iterations_done_q;
+    logic             approx_cut_q;
+    logic             done_q;
+
+    sbm_accum_comb u_accum (
+        .first (t2_first),
+        .y_base (y_base),
+        .term (t2_term),
+        .acc (acc_q),
+        .acc_next (acc_next),
+        .carry_error (carry_raw)
     );
-    sbm_shift_comb  u_shift (
-        .cfg_mode(mode_o),
-        .y_mant(y_q),
-        .scale(t1_scale),
-        .init_only(t1_init),
-        .y_base(y_base),
-        .term(term),
-        .term_tail(term_tail)
-    );
-    sbm_accum  u_acc (
-        .clk(clk),
-        .reset_n(reset_n),
-        .commit_valid(t2_valid),
-        .cfg_mode(mode_o),
-        .first(t2_first),
-        .last(t2_last),
-        .init_only(t2_init),
-        .y_base(y_base),
-        .term(t2_term),
-        .term_tail(t2_tail),
-        .iteration(t2_iteration),
-        .approx_cut(t2_cut),
-        .run_ready(acc_ready),
-        .acc(acc),
-        .sticky_acc(sticky_acc),
-        .numerical_tail(numerical_tail),
-        .iterations_done(iterations_done),
-        .approx_cut_o(approx_cut),
-        .done(core_done),
-        .carry_error(carry_error)
-    );
+
+    // Diagnostic & Output Assignments
+    assign state_error     = (emitting_q && !is_init && step_error) || (t2_valid && carry_raw);
+    assign core_done       = done_q;
+    assign acc             = acc_q;
+    assign iterations_done = iterations_done_q;
+    assign approx_cut      = approx_cut_q;
+
+    // 2-Stage Reset Synchronizer
     always_ff @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
             meta_sync1 <= 1'b0;
@@ -120,43 +135,97 @@ module mul_iter_core (
             meta_sync2 <= `CK2Q meta_sync1;
         end
     end
+
+    // Sequential Datapath & Pipeline Control
     always_ff @(posedge clk or negedge meta_sync2) begin
         if (!meta_sync2) begin
-            busy_q <= 1'b0;
-            y_q <= '0;
-            sign_o <= 1'b0;
-            sf_o <= '0;
-            input_cut_o <= 1'b0;
-            mode_o <= 1'b0;
-            t2_valid <= 1'b0;
-            t2_first <= 1'b0;
-            t2_last <= 1'b0;
-            t2_init <= 1'b0;
-            t2_cut <= 1'b0;
-            t2_tail <= 1'b0;
-            t2_iteration <= '0;
-            t2_term <= '0;
+            // L0 Reset
+            busy_q            <= 1'b0;
+            y_q               <= '0;
+            sign_o            <= 1'b0;
+            sf_o              <= '0;
+            input_cut_o       <= 1'b0;
+
+            // L1 Reset
+            emitting_q        <= 1'b0;
+            fx_q              <= '0;
+            scale_q           <= '0;
+            count_q           <= '0;
+            limit_q           <= '0;
+            t1_valid          <= 1'b0;
+            t1_first          <= 1'b0;
+            t1_last           <= 1'b0;
+            t1_init           <= 1'b0;
+            t1_scale          <= '0;
+            t1_iteration      <= '0;
+            t1_cut            <= 1'b0;
+
+            // L2 Reset
+            t2_valid          <= 1'b0;
+            t2_first          <= 1'b0;
+            t2_last           <= 1'b0;
+            t2_cut            <= 1'b0;
+            t2_iteration      <= '0;
+            t2_term           <= '0;
+
+            // L3 Reset
+            acc_q             <= '0;
+            iterations_done_q <= '0;
+            approx_cut_q      <= 1'b0;
+            done_q            <= 1'b0;
         end else begin
+            // L0 Context update
             if (release_result) busy_q <= `CK2Q 1'b0;
             if (launch) begin
-                busy_q <= `CK2Q 1'b1;
-                y_q <= `CK2Q y_mant;
-                sign_o <= `CK2Q sign_i;
-                sf_o <= `CK2Q sf_i;
-                input_cut_o <= `CK2Q input_cut_i;
-                mode_o <= `CK2Q cfg_mode;
+                busy_q      <= `CK2Q 1'b1;
+                y_q         <= `CK2Q y_mant;
+                sign_o      <= `CK2Q ((y_mant == 0) ? 1'b0 : sign_i);
+                sf_o        <= `CK2Q ((y_mant == 0) ? 11'sd0 : sf_i);
+                input_cut_o <= `CK2Q ((y_mant == 0) ? 1'b0 : input_cut_i);
             end
+
+            // L1 FSM and token generation
+            t1_valid <= `CK2Q emitting_q;
+            if (launch) begin
+                emitting_q <= `CK2Q 1'b1;
+                fx_q       <= `CK2Q x_frac;
+                scale_q    <= `CK2Q '0;
+                count_q    <= `CK2Q '0;
+                limit_q    <= `CK2Q cfg_n;
+            end else if (emitting_q) begin
+                t1_first     <= `CK2Q (count_q == '0);
+                t1_last      <= `CK2Q is_last;
+                t1_init      <= `CK2Q is_init;
+                t1_scale     <= `CK2Q (is_init ? {S_W{1'b0}} : next_scale);
+                t1_iteration <= `CK2Q (is_init ? {I_W{1'b0}} : next_count);
+                t1_cut       <= `CK2Q (is_init ? (fx_q != '0) : (is_last && !exhausted));
+                fx_q         <= `CK2Q fx_next;
+                scale_q      <= `CK2Q next_scale;
+                count_q      <= `CK2Q next_count;
+                if (is_last) emitting_q <= `CK2Q 1'b0;
+            end
+
+            // L2 Pipeline Stage
             t2_valid <= `CK2Q t1_valid;
             if (t1_valid) begin
-                t2_first <= `CK2Q t1_first;
-                t2_last <= `CK2Q t1_last;
-                t2_init <= `CK2Q t1_init;
-                t2_cut <= `CK2Q t1_cut;
-                t2_tail <= `CK2Q term_tail;
+                t2_first     <= `CK2Q t1_first;
+                t2_last      <= `CK2Q t1_last;
+                t2_cut       <= `CK2Q t1_cut;
                 t2_iteration <= `CK2Q t1_iteration;
-                t2_term <= `CK2Q term;
+                t2_term      <= `CK2Q term;
+            end
+
+            // L3 Accumulator Stage
+            done_q <= `CK2Q (t2_valid && t2_last);
+            if (t2_valid) begin
+                acc_q             <= `CK2Q acc_next;
+                iterations_done_q <= `CK2Q t2_iteration;
+                approx_cut_q      <= `CK2Q t2_cut;
             end
         end
     end
+
 endmodule
+//-----------------------------------------------------------------------------
 // End of mul_iter_core.sv
+//-----------------------------------------------------------------------------

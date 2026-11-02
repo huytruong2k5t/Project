@@ -1,6 +1,64 @@
+## Chạy nguồn hiện tại — shared FULL_TERM31 module,02/11/2026
+
+Các lệnh ở mục này chạy từ gốc `Posit_MAC`. Build lại sau khi source guard báo
+đổi nguồn; không xóa manifest/hash để bỏ qua kiểm. Luôn chọn tag/label/RunRoot
+chưa tồn tại để giữ bằng chứng trước. Không dùng runner release54 trên cây31.
+
+Trong terminal WSL (đã cài Verilator/G++/make):
+
+```sh
+cd '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC'
+python3 -B scripts/audit_shared_multiplier.py
+SHARED_BUILD_TAG=replay01 make build
+python3 -B scripts/verify_shared_multiplier.py units
+make smoke FIXED_RUN=replay01
+python3 -B scripts/run_shared_multiplier_matrix.py --count 100000 --label matrix_replay01
+python3 -B scripts/verify_shared_multiplier.py run nf 1000000 default_replay01 12 1
+python3 -B scripts/verify_shared_multiplier.py run f 1000000 default_replay01 12 1
+python3 -B scripts/run_shared_multiplier_coverage.py --tag coverage_replay01 --label coverage_replay01 --count 20000
+```
+
+Runner dùng đường dẫn tương đối trong thư mục build và `make CURDIR=.` để
+xử lý đường dẫn dự án có khoảng trắng; không cần đổi tên thư mục hoặc sửa
+Verilator hệ thống. Temp/build/log đặt trong `results/shared_multiplier_20261102/`.
+`--count 100000` là pilot100k/điểm; main yêu cầu `--count 10000000` cho52 điểm.
+Các nhãn replay trên chưa chạy trong phiên gốc; đổi hậu tố nếu đã tồn tại.
+
+Từ Windows **Command Prompt**, dùng runner gọi ModelSim đã cài sẵn:
+
+```bat
+cd /d "C:\HCMUT\HK261\Do an 2\Posit_MAC"
+powershell.exe -NoProfile -File scripts\run_refactored_mac.ps1 -Stage Verify -RunRoot results/shared_multiplier_20261102/modelsim_replay01 -VectorCount 30000
+```
+
+Không cần mở GUI; runner tạo work/transcript/temp và snapshot trong RunRoot.
+ModelSim10.1d được gọi ở `C:/altera/13.0sp1/modelsim_ase/win32aloem`.
+Nếu máy khác, cập nhật đường dẫn tool trong bản runner riêng và lưu version;
+không sửa license hoặc thư mục cài đặt. Runner dừng nếu RunRoot đã tồn tại.
+
+Lượt đã chạy thực tế: `modelsim_signoff`,30000 accepted mỗi NF/F;
+29820 completed+180 reset-aborted,0 mismatch. Core53249 cases/231437 checkpoints,
+adder39534 completed,packer10851 completed. Verilator5.032/G++15.2.0,
+seed Verilator/L1=20261102,fixture ModelSim Python=20261101;
+matrix_pilot52×100k và default_stress1M mỗi NF/F đều0 mismatch.
+
+```sh
+python3 -B scripts/summarize_shared_multiplier.py
+```
+
+Lệnh summary kiểm hash đối với **bằng chứng phiên02/11** đã lưu, không tự tìm
+và gộp lượt replay mới. Xem JSON/log của label mới trước khi cập nhật nghiệm thu.
+Raw coverage phiên này: NF line/branch/toggle96.05/89.13/93.67%;
+F76.06/89.74/93.11%. Main520M/AC04/paired accuracy/PPA mới chưa đạt;
+không đọc chữ PASS pilot thành nghiệm thu toàn SPEC.
+
+Các mục bên dưới giữ recipe lịch sử với đúng snapshot/dependency của chúng.
+
+---
+
 ## Hợp đồng hiện hành ngày 02/11/2026
 
-[SPEC v1.26](../SPEC_Posit_MAC_IP.md) chốt Posit(32,3), approximate12 fraction,
+[SPEC v1.27](../SPEC_Posit_MAC_IP.md) chốt Posit(32,3), approximate12 fraction,
 FULL_TERM26/Q24 không FLOOR từng term, mặc định **OPS1/n12**; vẫn khảo sát OPS0/n0..12
 và early-stop. Parser2, adder dùng chung5, Packer RNE2 tầng; adapter F giữ đủ tích trước RNE.
 Không exact hardware/cfg_mode trong top mục tiêu. Quire là mở rộng riêng theo
@@ -10,10 +68,12 @@ chưa có RTL quire được nghiệm thu, không gán PASS NF/F sang quire.
 Golden32/3 độc lập và L1 phải khớp trước fixture/pilot; mặc định driver/model OPS1/n12,
 không thả nổi input cfg. Giữ [ma trận52 điểm](../SPEC_Posit_MAC_IP.md#acceptance-matrix),
 ≥10M completed/điểm (≥520M), coverage và paired accuracy; không giảm ngưỡng.
-Nguồn live vẫn có FLOOR, NF exact-capable/N_MAX8 và F prepack14; header FULL_TERM có API mixed.
-Đây là cập nhật tài liệu, không sửa RTL/model/TB/runner hoặc cấp nghiệm thu mới.
+Nguồn live đã dùng chung multiplier26/Q24, approximate-only/n0..12, không cfg_mode;
+31 module active,8 reference. Unit143934016 và pilot MAC7.2M completed đều0 mismatch.
+ModelSim cuối mỗi NF/F29820 completed/180 reset-aborted; chưa main520M/AC04/PPA mới.
+Xem `results/shared_multiplier_20261102/summary.json` (từ gốc dự án) để kiểm hash và giới hạn.
 
-Các lệnh, thông số và mục có ngày cũ bên dưới là hướng dẫn/snapshot lịch sử khi khác v1.26;
+Các lệnh, thông số và mục có ngày cũ bên dưới là hướng dẫn/snapshot lịch sử khi khác v1.27;
 không ghi đè hợp đồng hiện hành. Chọn đúng source/dependency khi replay, không dùng
 SoftPosit p32/ES2 làm oracle32/3. Trình tự triển khai và khoảng cách xem SPEC §8.
 

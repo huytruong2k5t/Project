@@ -1,0 +1,50 @@
+﻿{
+    "scope":  "Retired modules only; exact bytes checked in preservation ZIP before removing live copies",
+    "retired":  [
+                    {
+                        "path":  "rtl/common/dyn_left_shifter_fixed3.sv",
+                        "sha256":  "a4b7124b6ffc633424f44311c99445012a4cfa71878449549b71780d559e4ab9"
+                    },
+                    {
+                        "path":  "rtl/common/dyn_right_shifter_fixed3.sv",
+                        "sha256":  "89d3d19f0e93452ff0d6f90062f81c6c8b91e50587d26173031b9849d2c3f417"
+                    },
+                    {
+                        "path":  "rtl/common/lod_lzd_core_fixed3.sv",
+                        "sha256":  "944d635114110b158c7463cbb70f9984268ba903cf06fc5d62b445c0dd1cdb5c"
+                    },
+                    {
+                        "path":  "rtl/multiplier/iter_ctrl.sv",
+                        "sha256":  "cabb3e0df5a5c7a344f29125247fae8e180efda3f40af097154b1251f158c171"
+                    },
+                    {
+                        "path":  "rtl/multiplier/mul_iter_core_fixed2.sv",
+                        "sha256":  "0c5224f1dfee32aabd04d78a165cccf4d70435b3c40e81803885f6f354d0c119"
+                    },
+                    {
+                        "path":  "rtl/multiplier/ops_sel_comb_fixed2.sv",
+                        "sha256":  "f094a54fd3a36c640336f81a91ca352f58d5e0e9f509b57b18c5afb504bfa242"
+                    },
+                    {
+                        "path":  "rtl/multiplier/sac_step_comb_fixed2.sv",
+                        "sha256":  "289f6705fc795693ccc9f94f2a372816ebcda3a1b894f0615776d6ce5840f340"
+                    },
+                    {
+                        "path":  "rtl/multiplier/sac_step_comb_fixed3.sv",
+                        "sha256":  "fdc728fe42ca9c58d8ab21a79051a7a866e85df518823cca289e14e685fec4d2"
+                    },
+                    {
+                        "path":  "rtl/multiplier/sbm_accum.sv",
+                        "sha256":  "c920dafb4d1650cac663bd12369726dbc1ad12d1c4980e3c947f2141438bf05c"
+                    },
+                    {
+                        "path":  "rtl/multiplier/sbm_accum_comb_fixed2.sv",
+                        "sha256":  "6aa3b0633136846f2070e3b47fe7c810f4bec4c7bf85ba279b3bd6fcc969123f"
+                    },
+                    {
+                        "path":  "rtl/multiplier/sbm_shift_comb_fixed2.sv",
+                        "sha256":  "df1206a67e36ad0961af7b064bbc655004e45564cedad56e6f7b1578e5ca6a5b"
+                    }
+                ],
+    "archive":  "archive/shared_multiplier_before_20261102.zip"
+}

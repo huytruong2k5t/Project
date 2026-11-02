@@ -29,7 +29,6 @@ module posit_magnitude_parse (
         begin : g_invalid
             initial $fatal(1,"posit_magnitude_parse: unsupported parameters");
         end
-    typedef logic signed [SF_W-1:0] sf_value_t;
     wire [NB-1:0] magnitude;
     wire r;
     wire [NB-3:0] terminator_bits;
@@ -38,7 +37,7 @@ module posit_magnitude_parse (
     wire unused_terminator_valid;
     wire signed [REG_W-1:0] regime;
     wire [NB-4:0] payload;
-    wire signed [SF_W-1:0] finite_sf;
+    wire signed [7:0] finite_regime;
     wire rest_is_zero;
     assign rest_is_zero = ~(|p[NB-2:0]);
     assign is_zero = !p[NB-1] && rest_is_zero;
@@ -63,14 +62,10 @@ module posit_magnitude_parse (
     // This equals shift rest by cnt, then drop the terminator (L1 formulation).
     dyn_left_shifter  align_payload(
         .in(magnitude[NB-4:0]),.b(cnt),.out(payload));
-    if(ES==0) begin:g_es0
-        assign finite_sf=sf_value_t'(regime);
-    end else begin:g_exponent
-        wire [ES-1:0] exponent=payload[NB-4 -: ES];
-        // Signed concatenation: k*2^ES+e. Assignment sign extends to SF_W.
-        assign finite_sf=sf_value_t'($signed({regime,exponent}));
-    end
-    assign sf=(is_zero || is_nar)?{SF_W{1'b0}}:finite_sf;
+    wire [2:0] exponent;
+    assign exponent = payload[28:26];
+    assign finite_regime = {{2{regime[5]}}, regime};
+    assign sf = $signed({rest_is_zero ? 8'd0 : finite_regime, exponent});
     // Hidden bit omitted; variable fraction length is already zero-padded at LSB.
-    assign frac=(is_zero || is_nar)?{FRAC_MAX{1'b0}}:payload[FRAC_MAX-1:0];
+    assign frac=payload[FRAC_MAX-1:0];
 endmodule

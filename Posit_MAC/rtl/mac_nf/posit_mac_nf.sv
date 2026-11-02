@@ -16,7 +16,6 @@ module posit_mac_nf (
     input logic [31:0] c,
     input logic acc_mode,
     input logic acc_clr,
-    input logic cfg_mode,
     input logic [3:0] cfg_n,
     input logic [1:0] cfg_ops,
     output wire out_valid,
@@ -25,31 +24,23 @@ module posit_mac_nf (
     output wire [4:0] flags
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    
-    
-    
-    
-    
-    
-    
 
     mac_nf_wrapper  u_wrapper (
-        .clk(clk),
-        .rst_n(rst_n),
-        .in_valid(in_valid),
-        .in_ready(in_ready),
-        .a(a),
-        .b(b),
-        .c(c),
-        .acc_mode(acc_mode),
-        .acc_clr(acc_clr),
-        .cfg_mode(cfg_mode),
-        .cfg_n(cfg_n),
-        .cfg_ops(cfg_ops),
-        .out_valid(out_valid),
-        .out_ready(out_ready),
-        .d(d),
-        .flags(flags)
+        .clk (clk),
+        .rst_n (rst_n),
+        .in_valid (in_valid),
+        .in_ready (in_ready),
+        .a (a),
+        .b (b),
+        .c (c),
+        .acc_mode (acc_mode),
+        .acc_clr (acc_clr),
+        .cfg_n (cfg_n),
+        .cfg_ops (cfg_ops),
+        .out_valid (out_valid),
+        .out_ready (out_ready),
+        .d (d),
+        .flags (flags)
     );
 endmodule
 // End of posit_mac_nf.sv

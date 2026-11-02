@@ -16,7 +16,6 @@ module posit_mac_f (
     input logic [31:0] c,
     input logic acc_mode,
     input logic acc_clr,
-    input logic cfg_mode,
     input logic [3:0] cfg_n,
     input logic [1:0] cfg_ops,
     output wire out_valid,
@@ -25,14 +24,6 @@ module posit_mac_f (
     output wire [4:0] flags
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    
-    
-    
-    
-    
-    
-    
-    
 
     mac_f_wrapper  u_wrapper (
         .clk (clk),
@@ -44,7 +35,6 @@ module posit_mac_f (
         .c (c),
         .acc_mode (acc_mode),
         .acc_clr (acc_clr),
-        .cfg_mode (cfg_mode),
         .cfg_n (cfg_n),
         .cfg_ops (cfg_ops),
         .out_valid (out_valid),

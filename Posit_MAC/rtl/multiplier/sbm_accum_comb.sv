@@ -2,43 +2,24 @@
 // File          : sbm_accum_comb.sv
 // Author(s)     : Dan Huy
 // Project       : Posit MAC IP
-// Creation Date : 2026-10-09
-// Description   : One accumulator commit; init_only loads Y, not Y+Y.
-// $Source: $ $Revision: 1.0 $ $Log: Initial week9 implementation. $
+// Revision      : 2026-11-02 shared approximate12 FULL_TERM26/Q24
+// Description   : One unsigned26 accumulator step with explicit overflow check.
 //-----------------------------------------------------------------------------
-module sbm_accum_comb (
-    input logic cfg_mode,
-    input logic first,
-    input logic init_only,
-    input logic [53:0] y_base,
-    input logic [53:0] term,
-    input logic term_tail,
-    input logic [53:0] acc,
-    input logic sticky_acc,
-    input logic numerical_tail,
-    output logic [53:0] acc_next,
-    output logic sticky_next,
-    output logic numerical_next,
-    output logic carry_error
-);
-    // Fixed posit32/ES3 elaboration; no public parameters.
-    localparam int ACC_W = 54;
-    localparam int ROUND_SCHEME = 0;
 
-    logic [ACC_W:0] sum;
-    always_comb begin
-        sum = {1'b0, first ? y_base : acc};
-        sticky_next = first ? 1'b0 : sticky_acc;
-        numerical_next = first ? 1'b0 : numerical_tail;
-        if (!init_only) begin
-            sum = sum + {1'b0, term};
-            numerical_next = numerical_next | term_tail;
-            if (!cfg_mode || ROUND_SCHEME == 1) begin
-                sticky_next = sticky_next | term_tail;
-            end
-        end
-        acc_next = sum[ACC_W-1:0];
-        carry_error = sum[ACC_W];
-    end
+module sbm_accum_comb (
+    input  logic        first,
+    input  logic [25:0] y_base,
+    input  logic [25:0] term,
+    input  logic [25:0] acc,
+    output wire [25:0] acc_next,
+    output wire        carry_error
+);
+    wire [25:0] base_value;
+    wire [26:0] extended_sum;
+
+    assign base_value = first ? y_base : acc;
+    assign extended_sum = {1'b0, base_value} + {1'b0, term};
+    assign acc_next = extended_sum[25:0];
+    assign carry_error = extended_sum[26];
 endmodule
 // End of sbm_accum_comb.sv

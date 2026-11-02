@@ -43,7 +43,6 @@ module posit_parser (
     // Reset synchronizer: no combinational logic before the first FF.
     (* ASYNC_REG = "TRUE" *) logic meta_sync1;
     (* ASYNC_REG = "TRUE" *) logic meta_sync2;
-    typedef logic signed [SF_W-1:0] sf_value_t;
     wire reset_b_sync_clk;
 
     wire [NB-1:0] magnitude;
@@ -70,7 +69,7 @@ module posit_parser (
 
     wire [NB-4:0] payload;
     wire signed [REG_W-1:0] regime;
-    wire signed [SF_W-1:0] finite_sf;
+    wire signed [7:0] finite_regime;
     wire signed [SF_W-1:0] sf_d;
     wire [FRAC_MAX-1:0] frac_d;
 
@@ -108,8 +107,18 @@ module posit_parser (
     assign is_zero_d      = !s_d && rest_is_zero_d;
     assign is_nar_d       =  s_d && rest_is_zero_d;
 
-    assign magnitude = (p ^ {NB{s_d}})
-                     + {{(NB-1){1'b0}}, s_d};
+    // Carry-free two's-complement magnitude (2026-11-01):
+    //   -p keeps every bit up to and including the lowest set bit and inverts
+    //   every bit above it, so m[i] = p[i] ^ (s & |p[i-1:0]).
+    // The prefix-OR is a shallow LUT tree, replacing the 32-bit CARRY4 chain
+    // (6 CARRY4) that sat in front of the regime LOD. Bit-exact with
+    // (p ^ {NB{s}}) + s, including NaR (0x8000_0000 -> 0x8000_0000).
+    wire [31:0] lower_any;
+    assign lower_any[0] = 1'b0;
+    for (genvar bit_index = 1; bit_index < 32; bit_index++) begin : g_lower_any
+        assign lower_any[bit_index] = |p[bit_index-1:0];
+    end
+    assign magnitude = p ^ ({NB{s_d}} & lower_any);
 
     assign first_regime_bit = magnitude[NB-2];
     assign payload_seed     = magnitude[NB-4:0];
@@ -164,7 +173,8 @@ module posit_parser (
     //=========================================================================
     // r=1: k=cnt. r=0: k=-(cnt+1). Keep k signed for sign extension.
     // Registering FRB instead of REG_W-bit k saves CNT_W register bits in P1.
-    assign regime = ~({1'b0, p1_cnt_q} ^ {REG_W{p1_first_regime_bit_q}});
+    wire special_p1 = p1_is_zero_q | p1_is_nar_q;
+    assign regime   = ~({1'b0, p1_cnt_q} ^ {REG_W{p1_first_regime_bit_q}});
 
     dyn_left_shifter  u_align_payload (
         .in  (p1_payload_seed_q),
@@ -175,15 +185,13 @@ module posit_parser (
     wire [ES-1:0] exponent;
 
     assign exponent  = payload[NB-4 -: ES];
-    assign finite_sf = sf_value_t'($signed({regime, exponent}));
+    assign finite_regime = {{2{regime[5]}}, regime};
 
-    assign sf_d = (p1_is_zero_q || p1_is_nar_q)
-                ? {SF_W{1'b0}}
-                : finite_sf;
-
-    assign frac_d = (p1_is_zero_q || p1_is_nar_q)
-                  ? {FRAC_MAX{1'b0}}
-                  : payload[FRAC_MAX-1:0];
+    // When special_p1 is asserted (Zero or NaR), p1_payload_seed_q is 29'd0,
+    // so shifted payload[28:0] (both exponent and frac_d) is inherently 0
+    // without post-shifter gating MUXes. Only sf_d[10:3] requires zeroing.
+    assign sf_d   = $signed({special_p1 ? 8'd0 : finite_regime, exponent});
+    assign frac_d = payload[FRAC_MAX-1:0];
 
     //=========================================================================
     // P2 register bank, immediately after payload alignment.

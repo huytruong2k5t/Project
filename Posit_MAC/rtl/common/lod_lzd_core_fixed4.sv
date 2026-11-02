@@ -58,12 +58,12 @@ module lod_lzd_core_fixed4 (
                                             : valid_child[2] ? pos_tree[l][4*j+2]
                                             : valid_child[1] ? pos_tree[l][4*j+1]
                                                              : pos_tree[l][4*j];
-                        assign pos_tree[l+1][j] = selected_pos
-                                               | (POS_W'(group_index) << (2*l));
+                        wire [POS_W-1:0] group_shifted = { {(POS_W-2){1'b0}}, group_index } << (2*l);
+                        assign pos_tree[l+1][j] = selected_pos | group_shifted;
                     end
                 end
             assign vld = valid_tree[LEVELS][0];
-            assign K = vld ? S'(pos_tree[LEVELS][0]) : '0;
+            assign K = vld ? pos_tree[LEVELS][0][S-1:0] : '0;
         end else begin : g_baseline
             //-------------------------------------------------------------------------
             // Parameter Validation

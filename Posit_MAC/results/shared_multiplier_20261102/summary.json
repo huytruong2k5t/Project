@@ -1,0 +1,222 @@
+{
+  "date": "2026-11-02",
+  "status": "PILOT_FUNCTION_VERIFIED_NOT_FINAL_RELEASE",
+  "profile": "POSIT32_ES3_APPROX12_FULL_TERM26_Q24",
+  "seed": 20261102,
+  "modelsim_fixture_seed": 20261101,
+  "tools": {
+    "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)",
+    "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "modelsim": "ModelSim ALTERA STARTER EDITION 10.1d"
+  },
+  "sources_verified_against_builds": true,
+  "port_audit": {
+    "active_modules": 31,
+    "strict_lint_tops": 31,
+    "instances_checked": 68,
+    "pnr_clock_primitive_bindings_checked": 2,
+    "missing_or_empty_ports": 0
+  },
+  "unit_comparisons": 143934016,
+  "units": {
+    "status": "PASS",
+    "mismatches": 0,
+    "ops": 33554432,
+    "ops_metadata": 33554432,
+    "sac": 65536,
+    "sbm": 262144,
+    "accumulator": 1000000,
+    "normalizer": 75497472,
+    "claim": "Exhaustive OPS fraction/mode and sign/scale domains separately; exhaustive SAC/SBM buses; normalizer magnitude and scale domains separately; accumulator sampled with directed overflow. Not Cartesian metadata-times-fraction or exhaustive whole MAC."
+  },
+  "model": {
+    "status": "PASS",
+    "mismatches": 0,
+    "model_golden_checks": 400000,
+    "checkpoint_checks": 806204,
+    "python_fixture_rows": 60000
+  },
+  "matrix_pilot": {
+    "status": "PASS",
+    "points": 52,
+    "completed": 5200000,
+    "mismatches": 0,
+    "count_per_point": 100000,
+    "seed": 20261102,
+    "variants": [
+      {
+        "variant": "nf",
+        "points": 26,
+        "completed": 2600000,
+        "mismatches": 0,
+        "all_legal_output_flag_codes_observed": [
+          0,
+          2,
+          3,
+          6,
+          7,
+          10,
+          11,
+          14,
+          15,
+          16
+        ],
+        "near_min_fraction": 0.35615,
+        "minimum_regime_cell": 188,
+        "main_volume_met": false,
+        "main_regime_quota_met": false,
+        "claim": "Configuration/functional pilot; not all raw32 triples or structural signoff"
+      },
+      {
+        "variant": "f",
+        "points": 26,
+        "completed": 2600000,
+        "mismatches": 0,
+        "all_legal_output_flag_codes_observed": [
+          0,
+          2,
+          3,
+          6,
+          7,
+          10,
+          11,
+          16
+        ],
+        "near_min_fraction": 0.34494,
+        "minimum_regime_cell": 189,
+        "main_volume_met": false,
+        "main_regime_quota_met": false,
+        "claim": "Configuration/functional pilot; not all raw32 triples or structural signoff"
+      }
+    ],
+    "gate_status": "PILOT_ONLY_MAIN_520M_NOT_RUN"
+  },
+  "default_stress": {
+    "nf": {
+      "completed": 1000000,
+      "accepted": 1004665,
+      "reset_aborted": 4665,
+      "mismatches": 0,
+      "stage_checks": 3373935
+    },
+    "f": {
+      "completed": 1000000,
+      "accepted": 1003919,
+      "reset_aborted": 3919,
+      "mismatches": 0,
+      "stage_checks": 3360024
+    }
+  },
+  "verilator_final_completed_excluding_exploratory": 7200000,
+  "modelsim": {
+    "adder": {
+      "marker": "ADDER_REFACTOR_PASS accepted=39535 completed=39534 aborted=1 stalls=20310",
+      "log_sha256": "a464f6996e331687409c22888ece1c111a0ff5ff956f7c31ee2ca0b5670d767d"
+    },
+    "packer": {
+      "marker": "PACKER_REFACTOR_PASS completed=10851 stalls=3552 errors=0",
+      "log_sha256": "809f048038e72434a3fc5ac6e443263390900b9cd843aa58efc38b6dddb36418"
+    },
+    "core": {
+      "marker": "SHARED_CORE_PASS cases=53249 checkpoints=231437 mismatches=0",
+      "log_sha256": "d68d2ae89e6e9f71702473073b6c03c176f7dbeac894462f5e67c4e5da485db9"
+    },
+    "nf": {
+      "marker": "MAC_REFACTOR_PASS F=0 rows=30000 accepted=30000 completed=29820 aborted=180 stalls=108669 latency_observed=15..26",
+      "log_sha256": "b7807bfd8583ea136e1bf7457204ce14ae4f09655ff424534877315ee64b03f2"
+    },
+    "f": {
+      "marker": "MAC_REFACTOR_PASS F=1 rows=30000 accepted=30000 completed=29820 aborted=180 stalls=108669 latency_observed=12..23",
+      "log_sha256": "7cad016fc213c7f099f10f0597d182c820cd453cf79e970fe861138111b62b05"
+    }
+  },
+  "coverage": {
+    "nf": {
+      "variant": "nf",
+      "metrics": {
+        "v_toggle": {
+          "hit": 5805,
+          "total": 6197,
+          "percent": 93.67435856059383,
+          "threshold_percent": 85,
+          "met": true
+        },
+        "v_line": {
+          "hit": 73,
+          "total": 76,
+          "percent": 96.05263157894737,
+          "threshold_percent": 95,
+          "met": true
+        },
+        "v_branch": {
+          "hit": 82,
+          "total": 92,
+          "percent": 89.1304347826087,
+          "threshold_percent": 90,
+          "met": false
+        }
+      },
+      "raw_sha256": "ff2be0bbef664e7353a4cd69de6ed163c654c8973f40bf48196399e78e4d5d96",
+      "excluded": "Verification top only",
+      "rtl_exclusions_applied": [],
+      "status": "OPEN",
+      "limits": "20k mixed transactions. Point-hit ratios from Verilator counters; no automatic waivers for unhit RTL or assertion code."
+    },
+    "f": {
+      "variant": "f",
+      "metrics": {
+        "v_toggle": {
+          "hit": 5135,
+          "total": 5515,
+          "percent": 93.10970081595649,
+          "threshold_percent": 85,
+          "met": true
+        },
+        "v_line": {
+          "hit": 54,
+          "total": 71,
+          "percent": 76.05633802816901,
+          "threshold_percent": 95,
+          "met": false
+        },
+        "v_branch": {
+          "hit": 70,
+          "total": 78,
+          "percent": 89.74358974358974,
+          "threshold_percent": 90,
+          "met": false
+        }
+      },
+      "raw_sha256": "b4b4eab315157f5c384500a8c9c8e6561faf87581ddd5628846bf7872775519c",
+      "excluded": "Verification top only",
+      "rtl_exclusions_applied": [],
+      "status": "OPEN",
+      "limits": "20k mixed transactions. Point-hit ratios from Verilator counters; no automatic waivers for unhit RTL or assertion code."
+    }
+  },
+  "gate_status": "OPEN",
+  "remaining": [
+    "52 points x 10M completed (520M) not run on current source",
+    "Per-point regime quota >=4000 not met by pilot (min NF188/F189)",
+    "AC04 raw line/branch coverage below thresholds; review unhit points and add targeted tests",
+    "Paired accuracy and matched synthesis/route PPA not rerun for FULL_TERM",
+    "Quire extension is a contract, not implemented RTL"
+  ],
+  "limits": [
+    "No exhaustive raw32 A/B/C input space claim",
+    "All legal output flag codes observed as a union across the 52-point pilot, not every flag per configuration",
+    "Factorized unit domains are not a Cartesian exhaustion of full MAC state",
+    "No proof of original paper RTL/provenance or Table I reproduction"
+  ],
+  "commands": [
+    "python3 -B scripts/audit_shared_multiplier.py",
+    "SHARED_BUILD_TAG=<fresh> make build",
+    "python3 -B scripts/verify_shared_multiplier.py units",
+    "python3 -B scripts/run_shared_multiplier_matrix.py --count 100000 --label <fresh>",
+    "python3 -B scripts/verify_shared_multiplier.py run nf 1000000 <fresh> 12 1",
+    "python3 -B scripts/verify_shared_multiplier.py run f 1000000 <fresh> 12 1",
+    "python3 -B scripts/run_shared_multiplier_coverage.py --tag <fresh> --label <fresh>",
+    "python3 -B scripts/check_shared_model.py",
+    "powershell.exe -NoProfile -File scripts/run_refactored_mac.ps1 -Stage Verify -RunRoot <fresh> -VectorCount 30000"
+  ]
+}

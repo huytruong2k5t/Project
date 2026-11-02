@@ -1,6 +1,6 @@
 ## Dọn dẹp RTL/results — 02/11/2026
 
-RTL đang làm việc chỉ giữ **42 module MAC**; 7 module reference cho verification đã chuyển sang **tb/reference/rtl/**. Các candidate/benchmark/research và module đã thay thế được lưu ngoài RTL. Results giữ8 mốc cần kiểm chứng/đối chiếu; F đã chọn vẫn6.602ns/1265LUT/820FF. Nội dung active RTL và bằng chứng giữ lại không thay đổi.
+RTL hiện có **31 module MAC**, **8 module reference** ngoài DUT. NF/F dùng chung một thiết kế bộ nhân FULL_TERM26/Q24; bỏ đường exact và `cfg_mode`. Nguồn trước sửa được bảo toàn trong [ZIP có hash](archive/shared_multiplier_before_20261102.zip). Số6.602ns/1265LUT/820FF thuộc snapshot FLOOR cũ, chưa đo PPA nguồn mới.
 
 [Kết quả hiện dùng](results/README.md) · [Biên bản](docs/DON_DEP_RTL_RESULTS_20261102.md) · [Archive và phục hồi](archive/cleanup_20261102/INDEX.md).
 
@@ -16,13 +16,13 @@ Các mục lịch sử bên dưới giữ ngày/scope của snapshot tương ứ
 
 | Nội dung | Trạng thái |
 | --- | --- |
-| Hợp đồng | [SPEC v1.26](SPEC_Posit_MAC_IP.md): approximate-only, fraction đầu vào12 bit, **FULL_TERM26/Q24**, n0..12, OPS0/1 (mặc định **OPS1/n12**), RNE; không exact hardware/cfg_mode/TRUNC/FLOOR trong cấu hình nghiệm thu |
-| Nguồn hiện tại | Đang refactor, **vẫn có đường nhân FLOOR**. NF còn exact-capable, n≤8 và `cfg_mode`; F approximate-only, n≤12, top còn `cfg_mode`. Chưa đáp ứng trọn hợp đồng FULL_TERM |
-| File list đang dùng | [`rtl/mac_active.f`](rtl/mac_active.f), **42 module**; không compile đệ quy toàn bộ RTL |
-| Kiến trúc hiện tại | NF/F cùng dùng bộ cộng `posit_add`5 tầng và Packer RNE2 tầng. F dùng parser riêng `posit_parser_f`, core phẳng `mul_iter_core_fixed2`; NF vẫn dùng `mul_iter_core` |
+| Hợp đồng | [SPEC v1.27](SPEC_Posit_MAC_IP.md): approximate-only, fraction đầu vào12 bit, **FULL_TERM26/Q24**, n0..12, OPS0/1 (mặc định **OPS1/n12**), RNE |
+| Nguồn hiện tại | Cả NF/F dùng `ops_sel_comb`, `mul_iter_core`, `mul_prepack_norm_comb` chung; không cfg_mode/exact/FLOOR từng term. Đây là dùng chung mã kiến trúc, không chia sẻ một instance giữa hai top chạy đồng thời |
+| File list đang dùng | [`rtl/mac_active.f`](rtl/mac_active.f), **31 module**; không compile đệ quy toàn bộ RTL |
+| Kiến trúc hiện tại | Parser2, multiplier26/Q24, adder5 và Packer RNE2. NF RNE tích trước cộng; F giữ frac26 không RNE trung gian. F giữ parser riêng `posit_parser_f` |
 | Nguồn lịch sử | [`rtl/production.f`](rtl/production.f)54 module và [`production_freeze.json`](rtl/production_freeze.json) thuộc checkpoint cũ; không dùng PASS cũ để nghiệm thu cây hiện tại |
 
-Golden Posit32/ES3 dùng oracle số nguyên độc lập theo SPEC §6.1; **SoftPosit p32/ES2 không thay được oracle32/3**. Header FULL_TERM đã có nhưng API/model/harness còn mixed; xem SPEC §8 trước khi chạy. Độ rộng RTL cố định, không truyền NB/ES hoặc feature override vào DUT.
+Golden Posit32/ES3 dùng oracle số nguyên độc lập theo SPEC §6.1; **SoftPosit p32/ES2 không thay được oracle32/3**. Model FULL_TERM, Python fixture và checkpoint đã đối chiếu; nhánh phần mềm lịch sử không phải chế độ DUT. Độ rộng RTL cố định, không truyền NB/ES hoặc feature override vào DUT.
 
 ## 2. Bằng chứng quan trọng và giới hạn
 
@@ -30,6 +30,7 @@ Mỗi PASS/số đo chỉ áp dụng đúng nguồn, manifest và recipe của l
 
 | Mốc | Kết quả được lưu | Giới hạn / nơi đối chiếu |
 | --- | --- | --- |
+| Shared FULL_TERM02/11 | **143934016** so sánh unit; **7.2M MAC completed/0 mismatch** gồm52 điểm×100k và default1M mỗi NF/F. ModelSim mỗi bản29820 completed+180 aborted,core53249 case;31 strict lint,68 instance đủ cổng | [Summary/source guard](results/shared_multiplier_20261102/summary.json). Đủ10 mã cờ NF/8 mã F trên hợp pilot; không exhaustive toàn MAC. Main520M và AC04 còn mở |
 | F `p00`,01/11 | A35T OOC synthesis10ns: F2F **7.697→6.602ns**, LUT1374→1265, FF820; regression50k accepted, parser4M magnitude, LOD500063 và streaming PASS | Vẫn FLOOR/Q12; accepted gồm reset-aborted. Chưa route, WHS−0.055ns; F2F không phải Fmax. [Báo cáo và lệnh chạy](results/f_timing_optimization_20261101/summary.md) |
 | Refactor31/10–01/11 | Adder5 tầng39.534 completed; packer10.692 completed; MAC NF/F mỗi bản4.970 completed +30 aborted;0 mismatch | Kiểm tương đương của các snapshot refactor; chi tiết trong bản README lưu trữ ở §5, không tự áp dụng mọi thay đổi sau đó |
 | OPT-17 FULL_TERM | Candidate2P NF/F mỗi bản10M completed/0 mismatch; golden2.053.248 checks; ModelSim mỗi bản8.192 completed/0 mismatch | **Chưa promote**; parent thay đổi trong lúc chạy, benchmark/matched PPA còn thiếu. [Summary](results/opt17_20261029/summary.json) |
@@ -42,7 +43,7 @@ Mỗi PASS/số đo chỉ áp dụng đúng nguồn, manifest và recipe của l
 
 Hợp đồng [MAC quire mở rộng](SPEC_Posit_MAC_IP.md#mac-quire-extension) đã được bổ sung: dùng cùng prepack FULL_TERM, tổng rộng không làm tròn từng MAC, RNE khi READ. Chưa triển khai/nghiệm thu quire; width và chiều dài chuỗi phải khóa riêng. Xem §5 và §6.9 của SPEC cho cấu trúc khối/testbench mới.
 
-- Đồng bộ NF/F, prepack adapter, L1/golden, API và runner về FULL_TERM26/Q24, n0..12, approximate-only theo SPEC.
+- Bổ sung kiểm đích cho coverage nhánh/line: NF96.05/89.13/93.67%, F76.06/89.74/93.11% (line/branch/toggle); chưa áp waiver RTL.
 - Nghiệm thu **52 điểm NF/F×OPS×n**, mỗi điểm≥10M completed cùng coverage theo SPEC §6.7. Regression nhỏ/aggregate cũ không thay ma trận này.
 - Đo matched PPA NF/F cùng điều kiện; đóng setup/hold sau route và kiểm trên board nếu thực hiện. Không suy Fmax từ F2F synthesis.
 - Exact hardware/AC02 exact đã rút khỏi mục tiêu; các mốc exact chưa hoàn tất trước đây chỉ còn ý nghĩa lịch sử.
@@ -70,7 +71,7 @@ verilator --lint-only --timing --assert -Wall -Irtl --top-module posit_mac_f -f 
 verilator --lint-only --timing --assert -Wall -Irtl --top-module posit_mac_nf -f rtl/mac_active.f
 ```
 
-Đây là lệnh hướng dẫn, không phải kết quả kiểm mới. Lệnh tái chạy `p00` nằm trong báo cáo01/11 ở §2; dùng RunRoot mới và đúng SourceRoot, không trộn với runner release54.
+Luồng mới: `make lint`, `SHARED_BUILD_TAG=<mới> make build`, `make smoke FIXED_RUN=<mới>`, `make regress FIXED_RUN=<mới>` (pilot100k/điểm). Main dùng thêm `SHARED_COUNT=10000000`; chưa chạy main trong phiên này. [Hướng dẫn](docs/HUONG_DAN_CHAY_WSL_MODELSIM.md) có lệnh ModelSim và coverage. Không trộn runner release54 với nguồn31.
 
 ## 5. Bảo toàn lịch sử và phục hồi
 

@@ -1,6 +1,20 @@
+## Mốc triển khai FULL_TERM — 02/11/2026
+
+1. **Đã kiểm pilot:** model FULL_TERM mặc định OPS1/n12; shared OPS/SAC/SBM/core26/normalizer; NF product RNE, F lossless prepack.31 module/68 instance đủ cổng, không cfg_mode. Unit143934016 và MAC7.2M completed đều0 mismatch; ModelSim cuối đạt.
+2. **Tiếp theo:** đọc các điểm chưa hit trong coverage_review_nf/f.json; thêm kiểm đích theo code, không miễn trừ vô căn cứ. NF branch89.13%, F line76.06%/branch89.74%; AC04 chưa đóng.
+3. **Nghiệm thu nguồn đã khóa:**52 điểm×10M completed, quota≥4000/cell,near≥30%, kiểm cấu hình/từng vòng/reset/stall/flags. Pilot100k/điểm không thay main520M.
+4. **Sau nghiệm thu số học:** paired accuracy và matched A35T synthesis/route PPA; không kế thừa timing p00/FLOOR. Quire triển khai riêng sau khi khóa bounds/chiều dài chuỗi.
+
+[Summary/source guard](../results/shared_multiplier_20261102/summary.json),
+[hướng dẫn chạy](../docs/HUONG_DAN_CHAY_WSL_MODELSIM.md),
+[tiến độ](../docs/TIEN_DO_DO_AN.md). Các tuần/gate đã đạt bên dưới là lịch sử
+đúng snapshot; chưa nghiệm thu cuối FULL_TERM hiện hành.
+
+---
+
 ## Hợp đồng hiện hành ngày 02/11/2026
 
-[SPEC v1.26](../SPEC_Posit_MAC_IP.md) chốt Posit(32,3), approximate12 fraction,
+[SPEC v1.27](../SPEC_Posit_MAC_IP.md) chốt Posit(32,3), approximate12 fraction,
 FULL_TERM26/Q24 không FLOOR từng term, mặc định **OPS1/n12**; vẫn khảo sát OPS0/n0..12
 và early-stop. Parser2, adder dùng chung5, Packer RNE2 tầng; adapter F giữ đủ tích trước RNE.
 Không exact hardware/cfg_mode trong top mục tiêu. Quire là mở rộng riêng theo
@@ -10,10 +24,12 @@ chưa có RTL quire được nghiệm thu, không gán PASS NF/F sang quire.
 Golden32/3 độc lập và L1 phải khớp trước fixture/pilot; mặc định driver/model OPS1/n12,
 không thả nổi input cfg. Giữ [ma trận52 điểm](../SPEC_Posit_MAC_IP.md#acceptance-matrix),
 ≥10M completed/điểm (≥520M), coverage và paired accuracy; không giảm ngưỡng.
-Nguồn live vẫn có FLOOR, NF exact-capable/N_MAX8 và F prepack14; header FULL_TERM có API mixed.
-Đây là cập nhật tài liệu, không sửa RTL/model/TB/runner hoặc cấp nghiệm thu mới.
+Nguồn live đã dùng chung multiplier26/Q24, approximate-only/n0..12, không cfg_mode;
+31 module active,8 reference. Unit143934016 và pilot MAC7.2M completed đều0 mismatch.
+ModelSim cuối mỗi NF/F29820 completed/180 reset-aborted; chưa main520M/AC04/PPA mới.
+Xem `results/shared_multiplier_20261102/summary.json` (từ gốc dự án) để kiểm hash và giới hạn.
 
-Các lệnh, thông số và mục có ngày cũ bên dưới là hướng dẫn/snapshot lịch sử khi khác v1.26;
+Các lệnh, thông số và mục có ngày cũ bên dưới là hướng dẫn/snapshot lịch sử khi khác v1.27;
 không ghi đè hợp đồng hiện hành. Chọn đúng source/dependency khi replay, không dùng
 SoftPosit p32/ES2 làm oracle32/3. Trình tự triển khai và khoảng cách xem SPEC §8.
 
@@ -42,7 +58,7 @@ L1/oracle và nội dung46 module/testbench dùng chung không đổi;FULL_TERM 
 
 # Xây dựng L1, baseline nội bộ và MAC non-fused/fused
 
-**Cập nhật:** 29/10/2026 — chốt hợp đồng FULL_TERM;L1/RTL/TB thực thi vẫn là profile FLOOR đã khóa.
+**Mốc lịch sử29/10/2026:** chốt FULL_TERM khi nguồn còn FLOOR. Từ02/11 đã triển khai và kiểm pilot FULL_TERM theo mục đầu; các recipe cũ cần matching snapshot.
 
 **Hợp đồng mục tiêu:** SPEC v1.23 §4.3 thay profile so sánh bằng approximate12 bit đầu vào,
 FULL_TERM M26/Q24,n0..12,OPS0/1 và RNE tại các packer NF/F. Không FLOOR/JAM hoặc RNE từng term.

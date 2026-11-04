@@ -9,7 +9,9 @@ import re
 import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'results/shared_multiplier_20261102'
+OUT=ROOT/os.environ.get('SHARED_RESULTS_ROOT','results/shared_multiplier_20261102')
+OUT.mkdir(parents=True,exist_ok=True)
+(OUT/'tmp').mkdir(exist_ok=True)
 
 def clean(text): return re.sub(r'//[^\n]*|/\*.*?\*/','',text,flags=re.S)
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -38,6 +40,7 @@ def main():
         if path in paths:
             assert not re.search(r'\bparameter\b',s),path
             assert 'cfg_mode' not in s,path
+            assert not re.search(r'\b(acc_mode|acc_clr|accumulator_q|c_eff)\b',s),path
         modules[name]={'path':path,'ports':ports}
     edges={n:set() for n in modules};instances=[]
     for path,s in texts.items():

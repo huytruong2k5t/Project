@@ -1,0 +1,367 @@
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 12-oct-2027.
+
+****** Vivado v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Wed Nov  4 23:22:53 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+INFO: [Common 17-1239] XILINX_LOCAL_USER_DATA is set to 'no'.
+source {C:\HCMUT\HK261\Do an 2\Posit_MAC\results\quire_opt_20261104\synth_before\source\syn\quire_synth_only.tcl} -notrace
+create_project: Time (s): cpu = 00:00:13 ; elapsed = 00:00:07 . Memory (MB): peak = 601.906 ; gain = 273.633
+Command: synth_design -top quire_ppa_top -part xc7a35tcpg236-1 -mode out_of_context -flatten_hierarchy rebuilt -max_dsp 0 -max_bram 0
+Starting synth_design
+Attempting to get a license for feature 'Vivado_Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Vivado_Synthesis' and/or device 'xc7a35t'
+INFO: [Vivado_Tcl 4-288] User specified maximum number of block RAM allowed in design is 0
+INFO: [Vivado_Tcl 4-287] User specified maximum number of block DSP allowed in design is 0
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Designutils 20-5008] Incremental synthesis strategy default
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 27616
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 1362.449 ; gain = 578.637
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'quire_ppa_top' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/tb/quire_ppa_top.sv:5]
+INFO: [Synth 8-6157] synthesizing module 'BUFG' [C:/AMDDesignTools/2026.1/Vivado/scripts/rt/data/unisim_comp.v:2678]
+INFO: [Synth 8-6155] done synthesizing module 'BUFG' (0#1) [C:/AMDDesignTools/2026.1/Vivado/scripts/rt/data/unisim_comp.v:2678]
+INFO: [Synth 8-6157] synthesizing module 'posit_mac_quire' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/mac_quire/posit_mac_quire.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'mac_quire_wrapper' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/mac_quire/mac_quire_wrapper.sv:10]
+INFO: [Synth 8-6157] synthesizing module 'posit_parser' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/parser/posit_parser.sv:19]
+INFO: [Synth 8-6157] synthesizing module 'posit_parser_f_regime_lod' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/parser/posit_parser_f_regime_lod.sv:14]
+INFO: [Synth 8-6155] done synthesizing module 'posit_parser_f_regime_lod' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/parser/posit_parser_f_regime_lod.sv:14]
+INFO: [Synth 8-6157] synthesizing module 'dyn_left_shifter' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/common/dyn_left_shifter.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'dyn_left_shifter' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/common/dyn_left_shifter.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'posit_parser' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/parser/posit_parser.sv:19]
+INFO: [Synth 8-6157] synthesizing module 'ops_sel_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/multiplier/ops_sel_comb.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'ops_sel_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/multiplier/ops_sel_comb.sv:13]
+INFO: [Synth 8-6157] synthesizing module 'mul_iter_core' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/multiplier/mul_iter_core.sv:12]
+INFO: [Synth 8-6157] synthesizing module 'sac_step_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/multiplier/sac_step_comb.sv:12]
+INFO: [Synth 8-6157] synthesizing module 'lod_lzd_core_fixed4' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/common/lod_lzd_core_fixed4.sv:14]
+INFO: [Synth 8-6155] done synthesizing module 'lod_lzd_core_fixed4' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/common/lod_lzd_core_fixed4.sv:14]
+INFO: [Synth 8-6157] synthesizing module 'dyn_left_shifter_fixed5' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/common/dyn_left_shifter_fixed5.sv:19]
+INFO: [Synth 8-6155] done synthesizing module 'dyn_left_shifter_fixed5' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/common/dyn_left_shifter_fixed5.sv:19]
+INFO: [Synth 8-6155] done synthesizing module 'sac_step_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/multiplier/sac_step_comb.sv:12]
+INFO: [Synth 8-6157] synthesizing module 'sbm_shift_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/multiplier/sbm_shift_comb.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'sbm_shift_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/multiplier/sbm_shift_comb.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'sbm_accum_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/multiplier/sbm_accum_comb.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'sbm_accum_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/multiplier/sbm_accum_comb.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'mul_iter_core' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/multiplier/mul_iter_core.sv:12]
+INFO: [Synth 8-6157] synthesizing module 'quire_align_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/mac_quire/quire_align_comb.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'quire_align_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/mac_quire/quire_align_comb.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'quire_bank' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/mac_quire/quire_bank.sv:10]
+INFO: [Synth 8-6155] done synthesizing module 'quire_bank' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/mac_quire/quire_bank.sv:10]
+INFO: [Synth 8-6157] synthesizing module 'quire_read' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/mac_quire/quire_read.sv:10]
+INFO: [Synth 8-226] default block is never used [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/mac_quire/quire_read.sv:81]
+INFO: [Synth 8-6155] done synthesizing module 'quire_read' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/mac_quire/quire_read.sv:10]
+INFO: [Synth 8-6157] synthesizing module 'posit_pack' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/packer/posit_pack.sv:15]
+INFO: [Synth 8-6157] synthesizing module 'posit_pack_prepare' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/packer/posit_pack_prepare.sv:15]
+INFO: [Synth 8-6157] synthesizing module 'dyn_right_shifter_fixed2' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/common/dyn_right_shifter_fixed2.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'dyn_right_shifter_fixed2' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/common/dyn_right_shifter_fixed2.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'posit_pack_prepare' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/packer/posit_pack_prepare.sv:15]
+INFO: [Synth 8-6157] synthesizing module 'posit_pack_finish' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/packer/posit_pack_finish.sv:13]
+INFO: [Synth 8-294] found qualifier unique on case statement: implementing as parallel_case [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/packer/posit_pack_finish.sv:61]
+INFO: [Synth 8-6155] done synthesizing module 'posit_pack_finish' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/packer/posit_pack_finish.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'posit_pack' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/packer/posit_pack.sv:15]
+INFO: [Synth 8-6155] done synthesizing module 'mac_quire_wrapper' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/mac_quire/mac_quire_wrapper.sv:10]
+INFO: [Synth 8-6155] done synthesizing module 'posit_mac_quire' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/rtl/mac_quire/posit_mac_quire.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'quire_ppa_top' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/tb/quire_ppa_top.sv:5]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1502.609 ; gain = 718.797
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:11 ; elapsed = 00:00:11 . Memory (MB): peak = 1502.609 ; gain = 718.797
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:11 ; elapsed = 00:00:11 . Memory (MB): peak = 1502.609 ; gain = 718.797
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.066 . Memory (MB): peak = 1502.609 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/syn/constraints/a35t_clock.xdc]
+Finished Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/syn/constraints/a35t_clock.xdc]
+Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/syn/constraints/a35t_benchmark_100mhz.xdc]
+Finished Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/syn/constraints/a35t_benchmark_100mhz.xdc]
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 1578.422 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.100 . Memory (MB): peak = 1579.727 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:22 ; elapsed = 00:00:23 . Memory (MB): peak = 1579.727 ; gain = 795.914
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35tcpg236-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:22 ; elapsed = 00:00:23 . Memory (MB): peak = 1579.727 ; gain = 795.914
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:22 ; elapsed = 00:00:23 . Memory (MB): peak = 1579.727 ; gain = 795.914
+---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'quire_read'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'mac_quire_wrapper'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    IDLE |                               00 |                               00
+                     ABS |                               01 |                               01
+                    SCAN |                               10 |                               10
+                  OUTPUT |                               11 |                               11
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'sequential' in module 'quire_read'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    IDLE |                            00001 |                              000
+                 PRODUCT |                            10000 |                              001
+                    BANK |                            01000 |                              010
+                 READING |                            00100 |                              011
+                RESPONSE |                            00010 |                              100
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'one-hot' in module 'mac_quire_wrapper'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:24 ; elapsed = 00:00:24 . Memory (MB): peak = 1579.727 ; gain = 795.914
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input   37 Bit       Adders := 1     
+	   2 Input   37 Bit       Adders := 1     
+	   2 Input   32 Bit       Adders := 1     
+	   2 Input   31 Bit       Adders := 2     
+	   2 Input   27 Bit       Adders := 2     
+	   2 Input   12 Bit       Adders := 2     
+	   2 Input   11 Bit       Adders := 2     
+	   2 Input    6 Bit       Adders := 1     
+	   5 Input    5 Bit       Adders := 1     
+	   3 Input    5 Bit       Adders := 1     
+	   2 Input    5 Bit       Adders := 3     
+	   2 Input    4 Bit       Adders := 1     
+	   6 Input    3 Bit       Adders := 4     
++---XORs : 
+	   2 Input     36 Bit         XORs := 1     
+	   2 Input     32 Bit         XORs := 1     
+	   2 Input     31 Bit         XORs := 2     
+	   2 Input     30 Bit         XORs := 2     
+	   2 Input      6 Bit         XORs := 2     
+	   2 Input      5 Bit         XORs := 1     
+	   2 Input      1 Bit         XORs := 2     
++---Registers : 
+	              972 Bit    Registers := 4     
+	               53 Bit    Registers := 1     
+	               32 Bit    Registers := 2     
+	               31 Bit    Registers := 1     
+	               29 Bit    Registers := 2     
+	               26 Bit    Registers := 4     
+	               13 Bit    Registers := 1     
+	               12 Bit    Registers := 1     
+	               11 Bit    Registers := 5     
+	                5 Bit    Registers := 8     
+	                4 Bit    Registers := 8     
+	                3 Bit    Registers := 1     
+	                2 Bit    Registers := 1     
+	                1 Bit    Registers := 74    
++---Muxes : 
+	   2 Input  972 Bit        Muxes := 5     
+	   4 Input  972 Bit        Muxes := 1     
+	   2 Input   59 Bit        Muxes := 5     
+	   4 Input   53 Bit        Muxes := 1     
+	   2 Input   32 Bit        Muxes := 3     
+	   6 Input   32 Bit        Muxes := 1     
+	   5 Input   32 Bit        Muxes := 1     
+	   2 Input   29 Bit        Muxes := 10    
+	   2 Input   27 Bit        Muxes := 1     
+	   2 Input   26 Bit        Muxes := 9     
+	   2 Input   13 Bit        Muxes := 1     
+	   2 Input   12 Bit        Muxes := 10    
+	   2 Input   11 Bit        Muxes := 4     
+	   4 Input   11 Bit        Muxes := 1     
+	   2 Input    8 Bit        Muxes := 2     
+	   2 Input    5 Bit        Muxes := 12    
+	   4 Input    5 Bit        Muxes := 1     
+	   6 Input    5 Bit        Muxes := 1     
+	   5 Input    5 Bit        Muxes := 2     
+	   3 Input    5 Bit        Muxes := 1     
+	   2 Input    4 Bit        Muxes := 12    
+	   5 Input    3 Bit        Muxes := 1     
+	   2 Input    2 Bit        Muxes := 13    
+	   4 Input    2 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 38    
+	   4 Input    1 Bit        Muxes := 13    
+	   5 Input    1 Bit        Muxes := 6     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 90 (col length:60)
+BRAMs: 100 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:05:41 ; elapsed = 00:05:43 . Memory (MB): peak = 1819.688 ; gain = 1035.875
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:05:47 ; elapsed = 00:05:49 . Memory (MB): peak = 1819.688 ; gain = 1035.875
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:06:05 ; elapsed = 00:06:07 . Memory (MB): peak = 1886.297 ; gain = 1102.484
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:06:13 ; elapsed = 00:06:16 . Memory (MB): peak = 1986.219 ; gain = 1202.406
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:06:20 ; elapsed = 00:06:22 . Memory (MB): peak = 2109.105 ; gain = 1325.293
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:06:20 ; elapsed = 00:06:22 . Memory (MB): peak = 2109.105 ; gain = 1325.293
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:06:21 ; elapsed = 00:06:24 . Memory (MB): peak = 2109.105 ; gain = 1325.293
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:06:22 ; elapsed = 00:06:24 . Memory (MB): peak = 2109.105 ; gain = 1325.293
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:06:24 ; elapsed = 00:06:27 . Memory (MB): peak = 2109.105 ; gain = 1325.293
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:06:24 ; elapsed = 00:06:27 . Memory (MB): peak = 2109.105 ; gain = 1325.293
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |BUFG   |     1|
+|2     |CARRY4 |   239|
+|3     |LUT1   |    27|
+|4     |LUT2   |  1334|
+|5     |LUT3   |  2354|
+|6     |LUT4   |  1821|
+|7     |LUT5   |  1682|
+|8     |LUT6   |  4494|
+|9     |MUXF7  |     4|
+|10    |MUXF8  |     1|
+|11    |FDCE   |  4453|
+|12    |FDPE   |     4|
+|13    |FDRE   |     1|
++------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:06:25 ; elapsed = 00:06:27 . Memory (MB): peak = 2109.105 ; gain = 1325.293
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:06:11 ; elapsed = 00:06:23 . Memory (MB): peak = 2109.105 ; gain = 1248.176
+Synthesis Optimization Complete : Time (s): cpu = 00:06:25 ; elapsed = 00:06:27 . Memory (MB): peak = 2112.926 ; gain = 1325.293
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.119 . Memory (MB): peak = 2112.926 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 244 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/syn/constraints/a35t_clock.xdc]
+Finished Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/syn/constraints/a35t_clock.xdc]
+Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/syn/constraints/a35t_benchmark_100mhz.xdc]
+Finished Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/source/syn/constraints/a35t_benchmark_100mhz.xdc]
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 2128.770 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete | Checksum: 5987e850
+INFO: [Common 17-83] Releasing license: Vivado_Synthesis
+65 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:06:33 ; elapsed = 00:06:37 . Memory (MB): peak = 2128.770 ; gain = 1526.863
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 4 CPUs
+report_timing_summary: Time (s): cpu = 00:00:13 ; elapsed = 00:00:08 . Memory (MB): peak = 2128.770 ; gain = 0.000
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.019 . Memory (MB): peak = 2128.770 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/HCMUT/HK261/Do an 2/Posit_MAC/results/quire_opt_20261104/synth_before/synthesis.dcp' has been generated.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+QUIRE_SYNTHESIS_ONLY_COMPLETE
+INFO: [Common 17-206] Exiting Vivado at Wed Nov  4 23:30:06 2026...

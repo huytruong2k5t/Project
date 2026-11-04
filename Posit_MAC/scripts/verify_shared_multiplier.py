@@ -9,7 +9,8 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT/'results/shared_multiplier_20261102'
+OUT = ROOT/os.environ.get('SHARED_RESULTS_ROOT','results/shared_multiplier_20261102')
+OUT.mkdir(parents=True,exist_ok=True)
 TMP = OUT/'tmp'
 
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -33,11 +34,12 @@ def build(kind):
     cpp='tb/shared_multiplier_units.cpp' if kind=='units' else 'tb/shared_mac_harness.cpp'
     shutil.copyfile(ROOT/cpp,target/Path(cpp).name)
     paths=sources()+[f'tb/{top}.sv']
-    (target/'sources.f').write_text(''.join('../../../'+p+'\n' for p in paths))
-    cflags='-O3 -std=c++17 -I../../../tb -I../../../tb/opt17 -I../../../l1/include'
+    relative_root=Path(os.path.relpath(ROOT,target)).as_posix()
+    (target/'sources.f').write_text(''.join(relative_root+'/'+p+'\n' for p in paths))
+    cflags=f'-O3 -std=c++17 -I{relative_root}/tb -I{relative_root}/tb/opt17 -I{relative_root}/l1/include'
     if kind!='units': cflags+=f' -DTEST_FUSED={int(kind=="f")}'
     args=['verilator','--cc','--exe','--timing','--timescale-override','1ns/1ps','--assert','-Wall',
-          '-I../../../rtl','--top-module',top,'-f','sources.f',Path(cpp).name,
+          '-I'+relative_root+'/rtl','--top-module',top,'-f','sources.f',Path(cpp).name,
           '--Mdir','.', '-CFLAGS',cflags]
     if kind!='units': args+=['-GFUSED='+str(int(kind=='f'))]
     coverage=kind!='units' and os.environ.get('SHARED_COVERAGE','0')=='1'

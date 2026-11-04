@@ -1,5 +1,11 @@
 # Kết quả được giữ sau dọn dẹp — 02/11/2026
 
+**MAC-quire tối ưu nguồn04/11, kiểm hoàn tất05/11:** [quire_opt_20261104/summary.md](quire_opt_20261104/summary.md). Matched synthesis A35T: LUT10156→2888, FF4458→2636, F2F18.483→9.579ns; setup WNS+0.170ns, hold−0.055ns. Verification mới1.1M MAC/0 mismatch, unit và ModelSim đạt. Không route; chưa timing signoff/main10M mới. Nguồn NF/F giữ nguyên trong lượt tối ưu quire.
+
+**MAC-NF sau chỉnh parser/core04/11:** [nf_parser_recheck_20261104/summary.md](nf_parser_recheck_20261104/summary.md). Một synthesis A35T: F2F8.945→6.314ns, LUT1604/FF916; ước lượng nội bộ có setup152.3MHz, toàn giao diện122.6MHz. ModelSim9940 completed +60 reset-aborted/0 mismatch. Không đo F/route; hold−0.055ns còn mở.
+
+**NF/F mới nhất04/11:** [feedforward_a_20261104/summary.md](feedforward_a_20261104/summary.md), phương án A nhận C trực tiếp, bỏ hồi tiếp nội bộ. Giữ matched FULL_TERM baseline/candidate, verification ModelSim/Verilator, DCP, F2F từng bank và CSV. F6.777→5.340ns; NF9.344→8.945ns. Chỉ synthesis/unplaced, không route; các kết quả02/11 và FLOOR bên dưới thuộc snapshot lịch sử.
+
 > Cập nhật03/11/2026: đã xóa các archive/backup cũ theo yêu cầu người dùng; hướng dẫn restore archive lịch sử bên dưới không còn khả dụng. Toàn bộ bằng chứng trong results được giữ nguyên khi dọn local; không chạy lại simulation/synthesis. [Biên bản](../docs/local_build_cleanup_20261103_final.json).
 
 **Mới nhất03/11:** [quire_20261103/summary.json](quire_20261103/summary.json),

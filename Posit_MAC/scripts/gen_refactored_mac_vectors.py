@@ -72,7 +72,7 @@ def main():
             for i in range(args.count):
                 n=i%(max_n+1);ops=(i//(max_n+1))%2
                 a,b,c=(rng.getrandbits(32) for _ in range(3))
-                mode=(i//7)%2;clear=bool(mode and i%37==0)
+                mode=int(i%256<64 or (i//7)%2);clear=bool(mode and (i%256==0 or (i%256>=64 and i%37==0)))
                 if i%5==0:a=corners[(i//5)%len(corners)];b=corners[(i//50)%len(corners)]
                 if i%11==0:c=0
                 if i%13==0:a=0x40000000;b=0x40000000;c=0xc0000000
@@ -101,6 +101,6 @@ def main():
                     if mode:state=d
                     key=f'n{n}_ops{ops}';bins[key]=bins.get(key,0)+1
         summary[path.stem]={'rows':args.count,'completed':args.count-aborted,'aborted':aborted,'bins':bins}
-    (out/'vectors.json').write_text(json.dumps({'profile':'APPROX12_FULL_TERM26_Q24; no cfg_mode','seed':20261101,'counts':summary},indent=2))
+    (out/'vectors.json').write_text(json.dumps({'profile':'APPROX12_FULL_TERM26_Q24_FEEDFORWARD; external retired-result feedback','seed':20261101,'counts':summary},indent=2))
 
 if __name__=='__main__':main()

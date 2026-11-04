@@ -26,6 +26,8 @@ RESULTS_DIR := results
 
 FIXED_RUN ?= manual
 SHARED_COUNT ?= 100000
+SHARED_RESULTS_ROOT ?= results/feedforward_a_20261104/verification
+export SHARED_RESULTS_ROOT
 QUIRE_TAG ?= manual
 
 all: lint smoke ## Current shared FULL_TERM flow; build first, run matrix explicitly

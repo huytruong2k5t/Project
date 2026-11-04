@@ -1,0 +1,358 @@
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 12-oct-2027.
+#-----------------------------------------------------------
+# Vivado v2026.1 (64-bit)
+# SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+# IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+# SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+# Start of session at: Wed Nov  4 22:13:25 2026
+# Process ID         : 10844
+# Current directory  : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/synth_nf
+# Command line       : vivado.exe -mode batch -notrace -source C:\HCMUT\HK261\Do an 2\Posit_MAC\results\feedforward_a_20261104\baseline/synth_nf/run_synth.tcl -log vivado.log -journal vivado.jou -tclargs nf
+# Log file           : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/synth_nf/vivado.log
+# Journal file       : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/synth_nf\vivado.jou
+# Running On         : MSI
+# Platform           : Windows 10
+# Operating System   : 19045
+# Processor Detail   : Intel(R) Core(TM) i5-10500H CPU @ 2.50GHz
+# CPU Frequency      : 2496 MHz
+# CPU Physical cores : 6
+# CPU Logical cores  : 12
+# Host memory        : 16993 MB
+# Swap memory        : 7802 MB
+# Total Virtual      : 24795 MB
+# Available Virtual  : 4597 MB
+#-----------------------------------------------------------
+INFO: [Common 17-1239] XILINX_LOCAL_USER_DATA is set to 'no'.
+source {C:\HCMUT\HK261\Do an 2\Posit_MAC\results\feedforward_a_20261104\baseline/synth_nf/run_synth.tcl} -notrace
+create_project: Time (s): cpu = 00:00:13 ; elapsed = 00:00:09 . Memory (MB): peak = 606.168 ; gain = 278.355
+Command: synth_design -top prepack_nf_ppa_top -part xc7a35tcpg236-1 -mode out_of_context -flatten_hierarchy rebuilt -max_dsp 0 -max_bram 0
+Starting synth_design
+Attempting to get a license for feature 'Vivado_Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Vivado_Synthesis' and/or device 'xc7a35t'
+INFO: [Vivado_Tcl 4-288] User specified maximum number of block RAM allowed in design is 0
+INFO: [Vivado_Tcl 4-287] User specified maximum number of block DSP allowed in design is 0
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Designutils 20-5008] Incremental synthesis strategy default
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 27036
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 1361.984 ; gain = 577.004
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'prepack_nf_ppa_top' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/tb/prepack_nf_ppa_top.sv:2]
+INFO: [Synth 8-6157] synthesizing module 'BUFG' [C:/AMDDesignTools/2026.1/Vivado/scripts/rt/data/unisim_comp.v:2678]
+INFO: [Synth 8-6155] done synthesizing module 'BUFG' (0#1) [C:/AMDDesignTools/2026.1/Vivado/scripts/rt/data/unisim_comp.v:2678]
+INFO: [Synth 8-6157] synthesizing module 'posit_mac_nf' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/mac_nf/posit_mac_nf.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'mac_nf_wrapper' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/mac_nf/mac_nf_wrapper.sv:11]
+INFO: [Synth 8-6157] synthesizing module 'posit_parser' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/parser/posit_parser.sv:19]
+INFO: [Synth 8-6157] synthesizing module 'lod_lzd_core_fixed2' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/lod_lzd_core_fixed2.sv:15]
+INFO: [Synth 8-6155] done synthesizing module 'lod_lzd_core_fixed2' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/lod_lzd_core_fixed2.sv:15]
+INFO: [Synth 8-6157] synthesizing module 'dyn_left_shifter' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/dyn_left_shifter.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'dyn_left_shifter' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/dyn_left_shifter.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'posit_parser' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/parser/posit_parser.sv:19]
+INFO: [Synth 8-6157] synthesizing module 'ops_sel_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/ops_sel_comb.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'ops_sel_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/ops_sel_comb.sv:13]
+INFO: [Synth 8-6157] synthesizing module 'mul_iter_core' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/mul_iter_core.sv:12]
+INFO: [Synth 8-6157] synthesizing module 'sac_step_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/sac_step_comb.sv:12]
+INFO: [Synth 8-6157] synthesizing module 'lod_lzd_core_fixed4' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/lod_lzd_core_fixed4.sv:14]
+INFO: [Synth 8-6155] done synthesizing module 'lod_lzd_core_fixed4' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/lod_lzd_core_fixed4.sv:14]
+INFO: [Synth 8-6157] synthesizing module 'dyn_left_shifter_fixed5' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/dyn_left_shifter_fixed5.sv:19]
+INFO: [Synth 8-6155] done synthesizing module 'dyn_left_shifter_fixed5' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/dyn_left_shifter_fixed5.sv:19]
+INFO: [Synth 8-6155] done synthesizing module 'sac_step_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/sac_step_comb.sv:12]
+INFO: [Synth 8-6157] synthesizing module 'sbm_shift_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/sbm_shift_comb.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'sbm_shift_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/sbm_shift_comb.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'sbm_accum_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/sbm_accum_comb.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'sbm_accum_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/sbm_accum_comb.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'mul_iter_core' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/mul_iter_core.sv:12]
+INFO: [Synth 8-6157] synthesizing module 'mul_prepack_norm_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/mul_prepack_norm_comb.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'mul_prepack_norm_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/multiplier/mul_prepack_norm_comb.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'posit_product_pack' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/mac_nf/posit_product_pack.sv:16]
+INFO: [Synth 8-6157] synthesizing module 'posit_pack_prepare' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/packer/posit_pack_prepare.sv:15]
+INFO: [Synth 8-6157] synthesizing module 'dyn_right_shifter_fixed2' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/dyn_right_shifter_fixed2.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'dyn_right_shifter_fixed2' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/dyn_right_shifter_fixed2.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'posit_pack_prepare' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/packer/posit_pack_prepare.sv:15]
+INFO: [Synth 8-6157] synthesizing module 'posit_pack_finish' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/packer/posit_pack_finish.sv:13]
+INFO: [Synth 8-294] found qualifier unique on case statement: implementing as parallel_case [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/packer/posit_pack_finish.sv:61]
+INFO: [Synth 8-6155] done synthesizing module 'posit_pack_finish' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/packer/posit_pack_finish.sv:13]
+INFO: [Synth 8-6155] done synthesizing module 'posit_product_pack' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/mac_nf/posit_product_pack.sv:16]
+INFO: [Synth 8-6157] synthesizing module 'posit_magnitude_parse' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/mac_nf/posit_magnitude_parse.sv:11]
+INFO: [Synth 8-6155] done synthesizing module 'posit_magnitude_parse' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/mac_nf/posit_magnitude_parse.sv:11]
+INFO: [Synth 8-6157] synthesizing module 'posit_add' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add.sv:14]
+INFO: [Synth 8-6157] synthesizing module 'posit_add_prepare_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add_prepare_comb.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'posit_add_prepare_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add_prepare_comb.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'posit_add_align_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add_align_comb.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'dyn_right_shifter_fixed4' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/dyn_right_shifter_fixed4.sv:11]
+INFO: [Synth 8-6155] done synthesizing module 'dyn_right_shifter_fixed4' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/dyn_right_shifter_fixed4.sv:11]
+INFO: [Synth 8-6155] done synthesizing module 'posit_add_align_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add_align_comb.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'posit_add_arith_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add_arith_comb.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'posit_add_arith_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add_arith_comb.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'posit_add_lod_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add_lod_comb.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'posit_add_lod_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add_lod_comb.sv:9]
+INFO: [Synth 8-6157] synthesizing module 'posit_add_norm_comb' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add_norm_comb.sv:10]
+INFO: [Synth 8-6157] synthesizing module 'dyn_left_shifter_fixed6' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/dyn_left_shifter_fixed6.sv:11]
+INFO: [Synth 8-6155] done synthesizing module 'dyn_left_shifter_fixed6' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/common/dyn_left_shifter_fixed6.sv:11]
+INFO: [Synth 8-6155] done synthesizing module 'posit_add_norm_comb' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add_norm_comb.sv:10]
+INFO: [Synth 8-6155] done synthesizing module 'posit_add' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/adder/posit_add.sv:14]
+INFO: [Synth 8-6157] synthesizing module 'posit_pack' [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/packer/posit_pack.sv:15]
+INFO: [Synth 8-6155] done synthesizing module 'posit_pack' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/packer/posit_pack.sv:15]
+INFO: [Synth 8-6155] done synthesizing module 'mac_nf_wrapper' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/mac_nf/mac_nf_wrapper.sv:11]
+INFO: [Synth 8-6155] done synthesizing module 'posit_mac_nf' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/rtl/mac_nf/posit_mac_nf.sv:9]
+INFO: [Synth 8-6155] done synthesizing module 'prepack_nf_ppa_top' (0#1) [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/tb/prepack_nf_ppa_top.sv:2]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 1496.605 ; gain = 711.625
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 1496.605 ; gain = 711.625
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 1496.605 ; gain = 711.625
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.024 . Memory (MB): peak = 1496.605 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/syn/constraints/a35t_clock.xdc]
+Finished Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/syn/constraints/a35t_clock.xdc]
+Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/syn/constraints/a35t_benchmark_100mhz.xdc]
+Finished Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/syn/constraints/a35t_benchmark_100mhz.xdc]
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1566.316 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.043 . Memory (MB): peak = 1567.082 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:22 ; elapsed = 00:00:27 . Memory (MB): peak = 1567.082 ; gain = 782.102
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35tcpg236-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:22 ; elapsed = 00:00:27 . Memory (MB): peak = 1567.082 ; gain = 782.102
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:22 ; elapsed = 00:00:27 . Memory (MB): peak = 1567.082 ; gain = 782.102
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:23 ; elapsed = 00:00:28 . Memory (MB): peak = 1567.082 ; gain = 782.102
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   32 Bit       Adders := 2     
+	   3 Input   31 Bit       Adders := 1     
+	   2 Input   27 Bit       Adders := 1     
+	   2 Input   12 Bit       Adders := 1     
+	   3 Input   12 Bit       Adders := 2     
+	   2 Input   11 Bit       Adders := 3     
+	   3 Input   11 Bit       Adders := 1     
+	   5 Input    5 Bit       Adders := 1     
+	   3 Input    5 Bit       Adders := 1     
+	   2 Input    4 Bit       Adders := 1     
+	   6 Input    3 Bit       Adders := 4     
++---XORs : 
+	   2 Input     32 Bit         XORs := 2     
+	   2 Input     31 Bit         XORs := 3     
+	   2 Input     30 Bit         XORs := 4     
+	   2 Input      6 Bit         XORs := 4     
+	   2 Input      5 Bit         XORs := 2     
+	   2 Input      1 Bit         XORs := 3     
++---Registers : 
+	               32 Bit    Registers := 3     
+	               31 Bit    Registers := 4     
+	               30 Bit    Registers := 1     
+	               29 Bit    Registers := 4     
+	               26 Bit    Registers := 10    
+	               13 Bit    Registers := 1     
+	               12 Bit    Registers := 1     
+	               11 Bit    Registers := 12    
+	                5 Bit    Registers := 12    
+	                4 Bit    Registers := 12    
+	                3 Bit    Registers := 2     
+	                1 Bit    Registers := 109   
++---Muxes : 
+	   2 Input   59 Bit        Muxes := 10    
+	   2 Input   32 Bit        Muxes := 10    
+	   6 Input   32 Bit        Muxes := 2     
+	   2 Input   31 Bit        Muxes := 6     
+	   2 Input   30 Bit        Muxes := 6     
+	   2 Input   29 Bit        Muxes := 21    
+	   2 Input   26 Bit        Muxes := 9     
+	   2 Input   13 Bit        Muxes := 1     
+	   2 Input   12 Bit        Muxes := 10    
+	   2 Input   11 Bit        Muxes := 3     
+	   2 Input    8 Bit        Muxes := 4     
+	   6 Input    5 Bit        Muxes := 2     
+	   2 Input    5 Bit        Muxes := 3     
+	   2 Input    4 Bit        Muxes := 12    
+	   5 Input    3 Bit        Muxes := 2     
+	   2 Input    1 Bit        Muxes := 18    
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 90 (col length:60)
+BRAMs: 100 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:43 ; elapsed = 00:00:49 . Memory (MB): peak = 1636.684 ; gain = 851.703
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:51 ; elapsed = 00:00:56 . Memory (MB): peak = 1726.605 ; gain = 941.625
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:55 ; elapsed = 00:01:01 . Memory (MB): peak = 1776.152 ; gain = 991.172
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:57 ; elapsed = 00:01:03 . Memory (MB): peak = 1813.863 ; gain = 1028.883
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:01:03 ; elapsed = 00:01:10 . Memory (MB): peak = 2028.113 ; gain = 1243.133
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:03 ; elapsed = 00:01:10 . Memory (MB): peak = 2028.113 ; gain = 1243.133
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:03 ; elapsed = 00:01:10 . Memory (MB): peak = 2028.113 ; gain = 1243.133
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:03 ; elapsed = 00:01:10 . Memory (MB): peak = 2028.113 ; gain = 1243.133
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:04 ; elapsed = 00:01:10 . Memory (MB): peak = 2028.113 ; gain = 1243.133
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:04 ; elapsed = 00:01:10 . Memory (MB): peak = 2028.113 ; gain = 1243.133
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |BUFG   |     1|
+|2     |CARRY4 |    51|
+|3     |LUT1   |    30|
+|4     |LUT2   |   219|
+|5     |LUT3   |   413|
+|6     |LUT4   |   345|
+|7     |LUT5   |   323|
+|8     |LUT6   |   789|
+|9     |FDCE   |   972|
+|10    |FDPE   |     3|
+|11    |FDRE   |     1|
++------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:04 ; elapsed = 00:01:10 . Memory (MB): peak = 2028.113 ; gain = 1243.133
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:51 ; elapsed = 00:01:07 . Memory (MB): peak = 2028.113 ; gain = 1172.656
+Synthesis Optimization Complete : Time (s): cpu = 00:01:04 ; elapsed = 00:01:11 . Memory (MB): peak = 2028.113 ; gain = 1243.133
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.040 . Memory (MB): peak = 2028.113 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 51 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/syn/constraints/a35t_clock.xdc]
+Finished Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/syn/constraints/a35t_clock.xdc]
+Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/syn/constraints/a35t_benchmark_100mhz.xdc]
+Finished Parsing XDC File [C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/source/syn/constraints/a35t_benchmark_100mhz.xdc]
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 2041.051 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete | Checksum: 7086413c
+INFO: [Common 17-83] Releasing license: Vivado_Synthesis
+76 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:01:11 ; elapsed = 00:01:29 . Memory (MB): peak = 2041.066 ; gain = 1434.898
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 4 CPUs
+report_timing_summary: Time (s): cpu = 00:00:09 ; elapsed = 00:00:08 . Memory (MB): peak = 2041.066 ; gain = 0.000
+Command: report_drc -file synthesis_drc.rpt
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/AMDDesignTools/2026.1/Vivado/data/ip'.
+INFO: [DRC 23-27] Running DRC with 4 threads
+WARNING: [DRC 23-814] Not all possible (connectivity based) DRCs may have been run because this design is seen as Out of Context.
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/synth_nf/synthesis_drc.rpt.
+report_drc completed successfully
+report_drc: Time (s): cpu = 00:00:03 ; elapsed = 00:00:06 . Memory (MB): peak = 2041.066 ; gain = 0.000
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.214 . Memory (MB): peak = 2041.066 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/HCMUT/HK261/Do an 2/Posit_MAC/results/feedforward_a_20261104/baseline/synth_nf/synthesis.dcp' has been generated.
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -to_pins  -max_paths 20 -nworst 1 -delay_type max -sort_by slack.
+ERROR: [Common 17-54] The object 'timing_path' does not have a property 'LOGIC_DELAY'.
+
+    while executing
+"source [file join $root syn report_mac_f2f.tcl]"
+    (file "C:\HCMUT\HK261\Do an 2\Posit_MAC\results\feedforward_a_20261104\baseline/synth_nf/run_synth.tcl" line 28)
+INFO: [Common 17-206] Exiting Vivado at Wed Nov  4 22:15:39 2026...

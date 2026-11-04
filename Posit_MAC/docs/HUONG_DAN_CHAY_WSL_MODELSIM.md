@@ -1,3 +1,27 @@
+## NF/F Phương án A — 04/11/2026
+
+NF/F hiện nhận trực tiếp `c`; đã bỏ `acc_mode`, `acc_clr` và hồi tiếp nội bộ. Driver TB tự giữ kết quả Posit32 khi retire và lái `c` cho giao dịch tiếp theo. Quire riêng giữ nguyên.
+
+Từ gốc Posit_MAC trong WSL, chọn output/tag/label mới:
+
+```sh
+export SHARED_RESULTS_ROOT=results/feedforward_replay01
+export SHARED_BUILD_TAG=replay01
+python3 -B scripts/audit_shared_multiplier.py
+python3 -B scripts/verify_shared_multiplier.py build nf
+python3 -B scripts/verify_shared_multiplier.py build f
+python3 -B scripts/verify_shared_multiplier.py run nf 100000 mixed -1 -1
+python3 -B scripts/verify_shared_multiplier.py run f 100000 mixed -1 -1
+```
+
+Các target make NF/F mặc định dùng `results/feedforward_a_20261104/verification`; khi replay nên truyền `SHARED_RESULTS_ROOT` mới để giữ kết quả đã đo. Runner trực tiếp cần biến môi trường này như ví dụ trên; không dùng build manifest02/11 cho RTL mới.
+
+ModelSim vẫn dùng `run_refactored_mac.ps1 -Stage Verify` với `-RunRoot` mới. Sau PASS, dùng `run_feedforward_ppa.py <RunRoot> nf|f --vivado <tool>` để synthesis một lượt/top, gồm F2F D/CE từng bank; runner đọc snapshot đã verify. Không chạy implementation. [Kết quả04/11 và công thức Fmax](../results/feedforward_a_20261104/summary.md).
+
+Các mục03/11 và02/11 dưới đây là lịch sử theo snapshot. Archive cũ đã xóa theo yêu cầu người dùng, nên hướng dẫn restore ZIP đã bỏ không còn khả dụng.
+
+---
+
 ## Chạy quire Q12-1024 — 03/11/2026
 
 Nguồn: `rtl/quire_active.f`19 module; top `posit_mac_quire`.

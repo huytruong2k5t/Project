@@ -28,7 +28,8 @@ def main():
                 'XILINX_LOCAL_USER_DATA':'no','QUIRE_SOURCE_ROOT':(run/'source').as_posix()})
     paths=(ROOT/'rtl/quire_active.f').read_text().splitlines()+[
         'rtl/quire_active.f','rtl/posit_mac.vh','tb/quire_ppa_top.sv','syn/quire_ooc.tcl',
-        'scripts/verify_quire_ppa.py']
+        'scripts/verify_quire_ppa.py','syn/constraints/a35t_clock.xdc',
+        'syn/constraints/a35t_benchmark_100mhz.xdc']
     hashes={p:sha(ROOT/p) for p in paths if p.strip()}
     for path in hashes:
         target=run/'source'/path;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/path,target)

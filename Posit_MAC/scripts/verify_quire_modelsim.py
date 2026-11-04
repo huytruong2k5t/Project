@@ -21,7 +21,7 @@ def main():
     parser.add_argument('--label',required=True)
     args=parser.parse_args()
     if not args.label.replace('_','').isalnum():parser.error('Simple label required')
-    run=ROOT/'results/quire_20261103'/args.label
+    run=ROOT/os.environ.get('QUIRE_RESULTS_ROOT','results/quire_20261103')/args.label
     if run.exists():raise RuntimeError('Fresh --label required; preserve previous run')
     run.mkdir();(run/'tmp').mkdir();(run/'source').mkdir()
     env=os.environ.copy();env['TMP']=env['TEMP']=str(run/'tmp')

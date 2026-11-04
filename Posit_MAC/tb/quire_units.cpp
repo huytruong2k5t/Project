@@ -27,7 +27,8 @@ int main(int argc,char**argv) {
         d.clk=0;d.reset_n=0;d.bank_valid=0;d.read_valid=0;d.out_ready=1;d.clear=0;
         d.term_nar=0;d.term_invalid=0;d.term_loss=0;d.term_cut=0;d.magnitude=0;d.sign=0;d.sf=0;
         d.read_nar=0;d.read_invalid=0;d.read_loss=0;d.read_cut=0;
-        for(unsigned i=0;i<31;++i){d.bank_term[i]=0;d.read_q[i]=0;}
+        d.bank_coefficient=0;d.bank_index=0;d.bank_offset=0;d.bank_zero=1;
+        for(unsigned i=0;i<31;++i)d.read_q[i]=0;
         d.eval();for(unsigned i=0;i<5;++i)clock();d.reset_n=1;for(unsigned i=0;i<10;++i)clock();
         uint64_t align_checks=0,read_checks=0,norm_checks=0,bank_checks=0;
         // Full signed sf bus and both signs with independent bit construction.
@@ -102,11 +103,26 @@ int main(int argc,char**argv) {
         }
         read({},true);read({},false,true);read({},false,false,true,true);
         auto bank=[&](const quire32::Words& term,bool clear=false,bool nar=false,bool invalid=false,bool loss=false,bool cut=false) {
+            const auto old_count=d.q_count;
+            quire32::Words old_q{};for(unsigned i=0;i<31;++i)old_q[i]=d.bank_q[i];
             d.clear=clear;d.eval();require(d.bank_ready,"bank ready");
-            for(unsigned i=0;i<31;++i)d.bank_term[i]=term[i];
+            const bool negative=quire32::Model::bit(term,971);
+            const auto mag=negative?quire32::Model::negate(term):term;
+            unsigned low=0;while(low<972&&!quire32::Model::bit(mag,int(low)))++low;
+            uint32_t coeff=0;
+            if(low<972) {
+                for(unsigned bit=0;bit<26;++bit)if(quire32::Model::bit(mag,int(low+bit)))coeff|=1u<<bit;
+                for(unsigned bit=low+26;bit<972;++bit)require(!quire32::Model::bit(mag,int(bit)),"test compact coefficient bound");
+            }
+            d.bank_zero=(low==972);d.bank_coefficient=negative?((0u-coeff)&0x7ffffffu):coeff;
+            d.bank_index=low==972?0:low/36;d.bank_offset=low==972?0:low%36;
             d.term_nar=nar;d.term_invalid=invalid;d.term_loss=loss;d.term_cut=cut;d.bank_valid=1;
             clock();d.bank_valid=0;d.clear=0;d.eval();
-            unsigned timeout=0;while(!d.bank_done&&timeout++<40)clock();
+            unsigned timeout=0;
+            while(!d.bank_done&&timeout++<40) {
+                for(unsigned i=0;i<31;++i)require(d.bank_q[i]==old_q[i],"partial Q visible before atomic commit");
+                require(d.q_count==old_count,"partial count before commit");clock();
+            }
             require(d.bank_done,"bank timeout");++bank_checks;
             // Any held bank result must not commit again in absence of a request.
             const auto count=d.q_count;clock();clock();require(!d.bank_done&&d.q_count==count,"bank commit once");
@@ -124,6 +140,23 @@ int main(int argc,char**argv) {
         bank({},true);bank({},false,false,false,true,true);require(d.q_loss&&d.q_cut,"loss with zero term");
         bank({},true);for(unsigned i=0;i<1024;++i)bank({});
         require(!d.bank_ready&&d.q_count==1024,"bank capacity");bank({},true);
+        // Independent full972-bit limb sum versus compact word generation.
+        quire32::Words expected_q{};
+        for(unsigned trial=0;trial<10000;++trial) {
+            if(trial%512==0){bank({},true);expected_q={};}
+            const unsigned shift=unsigned(mix(20261104+trial)%901);
+            const uint32_t coefficient=uint32_t(mix(trial+73))&0x3ffffffu;
+            quire32::Words term{};
+            for(unsigned bit=0;bit<26;++bit)if((coefficient>>bit)&1)
+                term[(shift+bit)/32]|=uint32_t(1)<<((shift+bit)%32);
+            if(trial&1)term=quire32::Model::negate(term);
+            uint64_t carry=0;
+            for(unsigned i=0;i<31;++i){const uint64_t sum=uint64_t(expected_q[i])+term[i]+carry;expected_q[i]=uint32_t(sum);carry=sum>>32;}
+            expected_q[30]&=4095;
+            bank(term);
+            for(unsigned i=0;i<31;++i)require(d.bank_q[i]==expected_q[i],"compact bank full-grid sum");
+            require(!d.q_invalid&&!d.q_overflow,"bounded random bank status");
+        }
         std::ofstream(argv[1])<<"{\"status\":\"PASS\",\"mismatches\":0,\"align_checks\":"<<align_checks
             <<",\"read_checks\":"<<read_checks<<",\"normalizer_checks\":"<<norm_checks<<",\"bank_checks\":"<<bank_checks<<"}\n";
         #if VM_COVERAGE

@@ -4,7 +4,7 @@ param(
     [ValidatePattern('^[A-Za-z0-9_]*$')][string]$SynthSuffix='',
     [ValidateRange(1000,1000000)][int]$VectorCount=5000,
     [string]$SourceRoot='',
-    [ValidateSet('All','F')][string]$VerifyScope='All',
+    [ValidateSet('All','NF','F')][string]$VerifyScope='All',
     [string]$ModelSimBin=$env:MODELSIM_BIN,
     [string]$PythonExecutable='python',
     [string]$VivadoExecutable='vivado'
@@ -37,9 +37,8 @@ if($Stage -eq 'Verify') {
         'tb/tb_posit_add_5stage_equiv.sv','tb/tb_refactored_mac.sv','tb/tb_posit_pack_equiv.sv','tb/tb_mul_iter_core.sv',
         'tb/prepack_nf_ppa_top.sv','tb/week13_fused_ppa_top.sv',
         'scripts/gen_refactored_mac_vectors.py','scripts/run_refactored_mac.ps1',
-        'syn/refactored_mac_synth.tcl','syn/constraints/a35t_clock.xdc','syn/constraints/a35t_benchmark_100mhz.xdc')
+        'syn/refactored_mac_synth.tcl','syn/report_mac_f2f.tcl','syn/constraints/a35t_clock.xdc','syn/constraints/a35t_benchmark_100mhz.xdc')
     $paths+=@(Get-VerificationReferences $inputRoot)
-    if(Test-Path "$inputRoot/tb/tb_parser_f_timing_equiv.sv"){$paths+='tb/tb_parser_f_timing_equiv.sv'}
     $hashes=@{}
     foreach($p in ($paths|Sort-Object -Unique)) {
         if(!$p.Trim()){continue}
@@ -73,7 +72,7 @@ if($Stage -eq 'Verify') {
         & "$bin/vlog.exe" -sv -timescale 1ns/1ps "+incdir+$run/source/rtl" -work work @sources -l compile.log > compile_console.log
         if($LASTEXITCODE){throw 'Compile failed; inspect compile.log'}
         @('onerror {quit -code 1}','onbreak {quit -code 1}','run -all','quit -code 0')|Set-Content -Encoding ascii run.do
-        $labels=if($VerifyScope -eq 'F'){@('adder','packer','core','f')}else{@('adder','packer','core','nf','f')}
+        $labels=if($VerifyScope -eq 'F'){@('adder','packer','core','f')}elseif($VerifyScope -eq 'NF'){@('adder','packer','core','nf')}else{@('adder','packer','core','nf','f')}
         foreach($label in $labels) {
             $simArgs=@('-c')
             if($label -eq 'adder'){$simArgs+='work.tb_posit_add_5stage_equiv';$marker='ADDER_REFACTOR_PASS'}
@@ -93,6 +92,7 @@ if($Stage -eq 'Verify') {
     if((Get-Content "$run/verify/status.txt" -Raw).Trim() -ne 'PASS'){throw 'Verification must pass before synthesis'}
     $variant=if($Stage -eq 'SynthNF'){'nf'}else{'f'}
     if($variant -eq 'nf' -and $manifest.verify_scope -eq 'F'){throw 'NF was not verified in this run'}
+    if($variant -eq 'f' -and $manifest.verify_scope -eq 'NF'){throw 'F was not verified in this run'}
     $target="$run/synth_${variant}$SynthSuffix"
     if(Test-Path $target){throw 'Preserve existing synthesis'}
     New-Item -ItemType Directory -Force $target|Out-Null
@@ -100,7 +100,7 @@ if($Stage -eq 'Verify') {
     $env:APPDATA="$target/appdata";$env:LOCALAPPDATA="$target/localappdata"
     $env:TEMP="$target/tmp";$env:TMP=$env:TEMP;$env:XILINX_LOCAL_USER_DATA='no'
     $env:REFACTORED_SOURCE_ROOT="$run/source"
-    Copy-Item -LiteralPath "$root/syn/refactored_mac_synth.tcl" -Destination "$target/run_synth.tcl"
+    Copy-Item -LiteralPath "$run/source/syn/refactored_mac_synth.tcl" -Destination "$target/run_synth.tcl"
     @{runner_sha256=(Get-FileHash $PSCommandPath).Hash;tcl_sha256=(Get-FileHash "$target/run_synth.tcl").Hash;verified_manifest_sha256=(Get-FileHash "$run/manifest.json").Hash;variant=$variant;stage='synthesis only'}|ConvertTo-Json|Set-Content "$target/execution.json"
     Push-Location $target
     try {

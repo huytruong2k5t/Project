@@ -16,8 +16,6 @@ module mac_f_wrapper (
     input logic [31:0] a,
     input logic [31:0] b,
     input logic [31:0] c,
-    input logic acc_mode,
-    input logic acc_clr,
     input logic [3:0] cfg_n,
     input logic [1:0] cfg_ops,
     output wire out_valid,
@@ -26,7 +24,6 @@ module mac_f_wrapper (
     output wire [4:0] flags
 );
     // Fixed posit32/ES3 elaboration; no public parameters.
-    localparam int NB = 32;
     localparam int N_W = 4;
 
     localparam int F = 26; // NB - 3 - ES
@@ -36,10 +33,6 @@ module mac_f_wrapper (
     logic reset_bridge_q;
     (* ASYNC_REG="TRUE" *) logic meta_sync1,meta_sync2;
     logic busy_q;
-    logic acc_mode_q;
-    logic committed_q;
-    logic [NB-1:0] accumulator_q;
-    wire [NB-1:0] c_eff;
     wire ready_c;
     wire valid_c;
     wire s_c;
@@ -77,8 +70,10 @@ module mac_f_wrapper (
     wire nar_b;
     wire signed [SF_W-1:0] sf_a;
     wire signed [SF_W-1:0] sf_b;
-    wire [F-1:0] frac_a;
-    wire [F-1:0] frac_b;
+    wire [11:0] frac_a;
+    wire [11:0] frac_b;
+    wire cut_a;
+    wire cut_b;
     wire [11:0] ops_x;
     wire [11:0] x;
     wire [12:0] ops_y;
@@ -86,7 +81,7 @@ module mac_f_wrapper (
     wire ops_sign;
     wire ops_cut;
     wire signed [SF_W-1:0] ops_sf;
-    assign ops_cut = |(frac_a[13:0] | frac_b[13:0]);
+    assign ops_cut = cut_a | cut_b;
     wire cfg_valid;
     wire core_ready;
     wire core_run;
@@ -121,9 +116,7 @@ module mac_f_wrapper (
     assign product_flags = (zero_q || nar_q) ? 5'b0
                          : {3'b0, (core_cut || approx_cut), approx_cut};
     assign reset_n = reset_bridge_q;
-    assign c_eff = acc_mode ? (acc_clr ? {NB{1'b0}} : accumulator_q) : c;
-    assign cfg_valid = (cfg_ops <= 2'd1) && (cfg_n <= 4'd12)
-                    && (!acc_clr || acc_mode);
+    assign cfg_valid = (cfg_ops <= 2'd1) && (cfg_n <= 4'd12);
     assign in_ready = rst_n && meta_sync2 && core_run && pack_ready
                     && ready_a && ready_b && ready_c && add_ready
                     && !busy_q && cfg_valid;
@@ -146,7 +139,7 @@ module mac_f_wrapper (
             meta_sync2 <= `CK2Q meta_sync1;
         end
     end
-    posit_parser_f u_a (
+    posit_parser_mul u_a (
         .clk (clk),
         .reset_n (reset_n),
         .in_valid (pair_accept),
@@ -158,9 +151,10 @@ module mac_f_wrapper (
         .is_zero (z_a),
         .is_nar (nar_a),
         .sf (sf_a),
-        .frac (frac_a)
+        .frac (frac_a),
+        .tail_cut (cut_a)
     );
-    posit_parser_f u_b (
+    posit_parser_mul u_b (
         .clk (clk),
         .reset_n (reset_n),
         .in_valid (pair_accept),
@@ -172,14 +166,15 @@ module mac_f_wrapper (
         .is_zero (z_b),
         .is_nar (nar_b),
         .sf (sf_b),
-        .frac (frac_b)
+        .frac (frac_b),
+        .tail_cut (cut_b)
     );
-    posit_parser_f u_c (
+    posit_parser u_c (
         .clk (clk),
         .reset_n (reset_n),
         .in_valid (pair_accept),
         .in_ready (ready_c),
-        .p (c_eff),
+        .p (c),
         .out_valid (valid_c),
         .out_ready (pair_retire),
         .s (s_c),
@@ -189,8 +184,8 @@ module mac_f_wrapper (
         .frac (frac_c)
     );
     ops_sel_comb u_ops (
-        .frac_a (frac_a[25:14]),
-        .frac_b (frac_b[25:14]),
+        .frac_a (frac_a),
+        .frac_b (frac_b),
         .s_a (s_a),
         .s_b (s_b),
         .sf_a (sf_a),
@@ -269,9 +264,6 @@ module mac_f_wrapper (
     always_ff @(posedge clk or negedge meta_sync2) begin
         if (!meta_sync2) begin
             busy_q <= 1'b0;
-            acc_mode_q <= 1'b0;
-            committed_q <= 1'b0;
-            accumulator_q <= '0;
             c_sign_q <= 1'b0;
             c_zero_q <= 1'b0;
             c_sf_q <= '0;
@@ -283,16 +275,9 @@ module mac_f_wrapper (
             c_nar_q <= 1'b0;
             core_sf_inc_q <= '0;
         end else begin
-            if (pack_out_valid && !committed_q) begin
-                committed_q <= `CK2Q 1'b1;
-                if (acc_mode_q) accumulator_q <= `CK2Q d;
-            end
             if (retire) busy_q <= `CK2Q 1'b0;
             if (pair_accept) begin
                 busy_q <= `CK2Q 1'b1;
-                acc_mode_q <= `CK2Q acc_mode;
-                committed_q <= `CK2Q 1'b0;
-                if (acc_mode && acc_clr) accumulator_q <= `CK2Q '0;
                 n_q <= `CK2Q cfg_n;
                 ops_q <= `CK2Q cfg_ops[0];
             end

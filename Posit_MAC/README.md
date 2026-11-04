@@ -1,5 +1,15 @@
 > Dọn local 03/11/2026: các archive/backup cũ đã được xóa theo yêu cầu; liên kết ZIP lịch sử bên dưới không còn dùng để restore. RTL/TB hiện hành và bằng chứng trong results được giữ. Xem [biên bản](docs/local_build_cleanup_20261103_final.json).
 
+## NF/F feed-forward, Phương án A — 04/11/2026
+
+Đã gỡ `accumulator_q`, `acc_mode`, `acc_clr` và MUX `c_eff` khỏi top/wrapper NF/F; cổng `c` đi thẳng vào Parser C. Driver quản lý tích lũy Posit32 bên ngoài và chỉ cập nhật sau retire. Bộ nhân FULL_TERM26/Q24, parser, adder5 và packer giữ nguyên; quire là IP riêng và vẫn giữ Q.
+
+Verification: strict lint31 module/68 instance; Verilator mỗi NF/F100k completed/0 mismatch, ModelSim mỗi bản49701 completed +299 reset-aborted/0 mismatch, chuỗi ngoài dài tới70. Chưa thay nghiệm thu52×10M/coverage mới.
+
+Matched A35T synthesis10ns: **F F2F6.777→5.340ns**, **NF9.344→8.945ns**. Nghịch đảo F2F sau sửa: F187.3MHz/NF111.8MHz; tính setup/skew/uncertainty nội bộ: F178.9MHz/NF106.1MHz. Đây là ước lượng unplaced; toàn giao diện và hold còn phải đánh giá riêng. [Bảng trước/sau, giới hạn và nguồn](results/feedforward_a_20261104/summary.md).
+
+---
+
 ## MAC quire Q12-1024 — 03/11/2026
 
 Đã build `posit_mac_quire`: Posit(32,3), cùng multiplier approximate12,
@@ -38,7 +48,7 @@ Các mục lịch sử bên dưới giữ ngày/scope của snapshot tương ứ
 
 # Posit MAC — NF và fused
 
-Đồ án chuyên ngành HK261, HCMUT — Đan Huy. Thiết kế SystemVerilog cho `D = A × B + C_eff`, duy nhất **Posit(32,3)**; NF là baseline nội bộ để so sánh với F. NF làm tròn tích trước cộng; F cộng tích trước pack rồi RNE đầu ra. Tích lũy hiện lưu kết quả Posit đã làm tròn mỗi giao dịch, không phải quire.
+Đồ án chuyên ngành HK261, HCMUT — Đan Huy. Thiết kế SystemVerilog cho `D = A × B + C`, duy nhất **Posit(32,3)**; NF là baseline nội bộ để so sánh với F. NF làm tròn tích trước cộng; F cộng tích trước pack rồi RNE đầu ra. Nếu tích lũy Posit32, thanh ghi/harness bên ngoài lưu kết quả đã làm tròn sau retire và cấp lại vào `c`; tích lũy rộng dùng IP quire riêng.
 
 ## 1. Hợp đồng mục tiêu và mã đang làm việc
 

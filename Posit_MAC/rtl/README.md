@@ -1,3 +1,25 @@
+## Dọn parser cũ — 05/11/2026
+
+Đã xóa `parser/posit_parser_f.sv` khỏi cây làm việc vì không còn caller trong NF/F/quire. RTL còn36 file SV và tất cả đều thuộc active hierarchy; mac_active.f31 module, quire_active.f19 module. `posit_parser_f_regime_lod.sv` vẫn dùng bởi parser hiện tại và được giữ nguyên. Testbench parser F lịch sử cần matching snapshot và không nằm trong runner hiện hành. [Biên bản](../docs/rtl_usage_cleanup_20261105.json).
+
+---
+
+## MAC-quire tối ưu backend — nguồn04/11, tổng kết05/11/2026
+
+Đã thêm bank prepack43 bit, thay term972 bit bằng descriptor38 bit và shifter cục bộ63 bit. Q/pending truy cập theo27 word36, giữ atomic commit và bảo toàn Q trên overflow. READ dùng hai word cửa sổ +abs word +tail OR thay snapshot/shift972 bit; bank Q phải giữ ổn định trong READ, được bảo đảm bởi một lệnh outstanding ở wrapper. Không đổi top/API hoặc số học; không sửa RTL NF/F.
+
+Matched synthesis: LUT10156→2888, FF4458→2636, F2F18.483→9.579ns. Setup100MHz+0.170ns, hold−0.055ns; chưa route/signoff. Verification mới1.1M MAC/0 mismatch. [Báo cáo và tradeoff latency](../results/quire_opt_20261104/summary.md). Checkpoint03/11 vẫn chỉ áp dụng nguồn cũ; bản mới ở `quire_opt_checkpoint.json`.
+
+---
+
+## NF/F Phương án A — 04/11/2026
+
+`posit_mac_nf` và `posit_mac_f` nhận trực tiếp `c`; không còn `acc_mode`, `acc_clr`, `accumulator_q` hoặc `c_eff`. Bốn file top/wrapper đã đổi giao diện; file list31 module và các leaf arithmetic giữ nguyên. Hai PPA adapter và TB hiện hành đã cập nhật. Tích lũy Posit32 nằm ở driver ngoài và cập nhật khi retire; quire riêng không đổi.
+
+[Verification và F2F trước/sau](../results/feedforward_a_20261104/summary.md). Mỗi lõi giảm34 FF. Không dùng checkpoint ngày02/11 để nghiệm thu trực tiếp giao diện mới; xem `feedforward_checkpoint.json` và snapshot ngày04/11.
+
+---
+
 ## Quire Q12-1024 — 03/11/2026
 
 Top `mac_quire/posit_mac_quire.sv`, file list **quire_active.f19 module**;

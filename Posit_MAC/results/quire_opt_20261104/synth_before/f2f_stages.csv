@@ -1,0 +1,15 @@
+group,register_count,target_kind,data_delay_ns,logic_delay_ns,net_delay_ns,slack_ns,levels,startpoint,endpoint
+whole,4458,D,17.870,6.948,10.922,-8.121,37,u_dut/u_wrapper/u_core/sf_o_reg[8]/C,u_dut/u_wrapper/u_bank/busy_q_reg/D
+whole_worst_setup,4458,D_CE,18.483,6.948,11.535,-8.965,37,u_dut/u_wrapper/u_core/sf_o_reg[8]/C,u_dut/u_wrapper/u_bank/carry_q_reg/CE
+whole,4458,D_CE,18.483,6.948,11.535,-8.965,37,u_dut/u_wrapper/u_core/sf_o_reg[8]/C,u_dut/u_wrapper/u_bank/carry_q_reg/CE
+read_fraction,53,D_CE,7.949,1.735,6.214,1.800,9,u_dut/u_wrapper/u_read/work_q_reg[950]/C,u_dut/u_wrapper/u_read/frac_reg[0]/D
+parser_a_p1,39,D_CE,5.797,1.495,4.302,3.721,7,u_dut/u_wrapper/n_q_reg[3]/C,u_dut/u_wrapper/u_a/p1_cnt_q_reg[0]/CE
+parser_a_p2,39,D_CE,3.638,1.069,2.569,6.111,3,u_dut/u_wrapper/u_a/p1_payload_seed_q_reg[25]/C,u_dut/u_wrapper/u_a/p2_sf_q_reg[0]/D
+parser_b_p1,39,D_CE,5.797,1.495,4.302,3.721,7,u_dut/u_wrapper/n_q_reg[3]/C,u_dut/u_wrapper/u_b/p1_cnt_q_reg[0]/CE
+parser_b_p2,39,D_CE,3.638,1.069,2.569,6.111,3,u_dut/u_wrapper/u_b/p1_payload_seed_q_reg[25]/C,u_dut/u_wrapper/u_b/p2_sf_q_reg[0]/D
+multiplier_context,13,D_CE,5.182,1.395,3.787,4.567,6,u_dut/u_wrapper/u_a/p2_frac_q_reg[24]/C,u_dut/u_wrapper/u_core/y_q_reg[10]/D
+multiplier_sac,12,D_CE,5.944,1.511,4.433,3.805,7,u_dut/u_wrapper/u_core/fx_q_reg[7]/C,u_dut/u_wrapper/u_core/fx_q_reg[9]/D
+multiplier_t2,29,D_CE,2.924,0.999,1.925,6.825,3,u_dut/u_wrapper/u_core/y_q_reg[11]/C,u_dut/u_wrapper/u_core/t2_term_reg[12]/D
+multiplier_acc,26,D_CE,3.023,2.206,0.817,6.773,8,u_dut/u_wrapper/u_core/t2_first_reg/C,u_dut/u_wrapper/u_core/acc_q_reg[25]/D
+final_pack_p1,44,D_CE,4.781,1.273,3.508,4.968,5,u_dut/u_wrapper/u_read/sf_reg[10]/C,u_dut/u_wrapper/u_pack/p1_sticky_bit_q_reg/D
+final_pack_p2,32,D_CE,4.934,1.395,3.539,4.815,6,u_dut/u_wrapper/u_pack/p1_mag_trunc_q_reg[25]/C,u_dut/u_wrapper/u_pack/d_q_reg[12]/D

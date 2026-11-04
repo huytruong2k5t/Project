@@ -9,7 +9,7 @@ import shutil
 import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'results/quire_20261103'
+OUT=ROOT/os.environ.get('QUIRE_RESULTS_ROOT','results/quire_20261103')
 
 
 def sha(path):
@@ -43,12 +43,13 @@ def build(args):
     top='quire_units' if args.kind=='units' else 'quire_checker'
     cpp='quire_units.cpp' if args.kind=='units' else 'quire_harness.cpp'
     sources=(ROOT/'rtl/quire_active.f').read_text().splitlines()+['tb/'+top+'.sv']
-    (target/'sources.f').write_text(''.join('../../../'+p+'\n' for p in sources if p.strip()))
+    relative_root=Path(os.path.relpath(ROOT,target)).as_posix()
+    (target/'sources.f').write_text(''.join(relative_root+'/'+p+'\n' for p in sources if p.strip()))
     shutil.copyfile(ROOT/'tb'/cpp,target/cpp)
     command=['verilator','--cc','--exe','--timing','--timescale-override','1ns/1ps','--assert',
-             '-Wall','-I../../../rtl','--top-module',top,'-f','sources.f',
+             '-Wall','-I'+relative_root+'/rtl','--top-module',top,'-f','sources.f',
              cpp,'--Mdir','.',
-             '-CFLAGS','-O3 -std=c++17 -I../../../tb -I../../../l1/include']
+             '-CFLAGS',f'-O3 -std=c++17 -I{relative_root}/tb -I{relative_root}/l1/include']
     if args.coverage:command+=['--coverage']
     before=inputs(args.kind)
     execute(command,target,OUT/('generate_'+args.tag+'.log'))
@@ -107,7 +108,7 @@ def main():
     args=parser.parse_args()
     for field in ('tag','label'):
         if hasattr(args,field) and not getattr(args,field).replace('_','').isalnum():parser.error('Simple tag/label required')
-    OUT.mkdir(exist_ok=True)
+    OUT.mkdir(parents=True,exist_ok=True)
     {'build':build,'run':run,'model':model}[args.action](args)
 
 

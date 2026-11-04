@@ -14,7 +14,10 @@ module quire_units (
     input logic bank_valid,
     output wire bank_ready,
     input logic clear,
-    input logic [971:0] bank_term,
+    input logic [26:0] bank_coefficient,
+    input logic [4:0] bank_index,
+    input logic [5:0] bank_offset,
+    input logic bank_zero,
     input logic term_nar,
     input logic term_invalid,
     input logic term_loss,
@@ -48,11 +51,18 @@ module quire_units (
     output wire [4:0] flags
 );
     wire pack_ready;
+    wire [26:0] coefficient;
+    wire [4:0] word_index;
+    wire [5:0] bit_offset;
+    // Verification-only reconstruction; no972-bit barrel in the production IP.
+    assign term={{945{coefficient[26]}},coefficient} << (10'(word_index)*10'd36+10'(bit_offset));
     quire_align_comb u_align (
         .magnitude (magnitude),
         .sign (sign),
         .sf (sf),
-        .term (term),
+        .coefficient (coefficient),
+        .word_index (word_index),
+        .bit_offset (bit_offset),
         .align_error (align_error)
     );
     quire_bank u_bank (
@@ -61,7 +71,10 @@ module quire_units (
         .in_valid (bank_valid),
         .in_ready (bank_ready),
         .clear (clear),
-        .term (bank_term),
+        .coefficient (bank_coefficient),
+        .word_index (bank_index),
+        .bit_offset (bank_offset),
+        .term_zero (bank_zero),
         .term_nar (term_nar),
         .term_invalid (term_invalid),
         .term_loss (term_loss),

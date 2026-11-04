@@ -1,6 +1,6 @@
 # Optimization — Tối ưu RTL và hồ sơ kiểm chứng Posit MAC
 
-**Cập nhật:** 29/10/2026. Chốt approximate FULL_TERM không FLOOR,M26/Q24,n0..12 ở8.39/SPEC v1.23 §4.3.Giữ lịch hai/ba Parser8.37/8.38 như kế hoạch có điều kiện.Chưa sửa RTL/L1 thực thi/testbench hoặc chạy lại số học/PPA.
+**Cập nhật:** 04/11/2026. Chốt approximate FULL_TERM không FLOOR,M26/Q24,n0..12 ở8.39/SPEC v1.23 §4.3;chốt tiếp **Phương án A** (mục8.42 / SPEC v1.29):lõi NF/F (`posit_mac_nf`,`posit_mac_f`) là bộ nhân–cộng luồng thẳng `D = A × B + C`,gỡ thanh ghi hồi tiếp `accumulator_q` cùng `acc_mode`/`acc_clr` khỏi top IP để loại nút thắt F2F `accumulator_q → Parser C` (`6.602 ns` trên F),đồng thời ghi nhận kế hoạch tối ưu PPA/timing cho `posit_mac_quire`.Giữ lịch hai/ba Parser8.37/8.38 như kế hoạch có điều kiện.
 
 Tài liệu này giữ các phương án tối ưu, thay đổi RTL, kết quả mô phỏng/lint, synthesis và STA/PPA, gồm cả ứng viên không được chọn và giới hạn bằng chứng. Mọi đường dẫn code/results và lệnh trong phần lịch sử được hiểu từ gốc `Posit_MAC`, trừ liên kết Markdown đã ghi rõ. Không di chuyển hoặc sửa mã nguồn, kết quả, seed hay hash của checkpoint.
 
@@ -3048,3 +3048,92 @@ vìiter_ctrl/NF hiện còncaller.Model/headeroracles chia sẻ vàL0 lịch s�
 Bước triển khai sau:tách/reuse coreF FULL_TERM26 choNF,adapterNF→53 giữ đủbits,
 cốđịnh model/harness approximate-only,chốtparentdrift,rồipilot/main vàmatchedbenchmark/PPA.
 Lượt này chỉ tài liệu;không đổi/xóa RTL/L1/TB/runner/freeze,không tạoPASS mới.
+
+
+### 8.42. Chốt Phương án A (NF/F feed-forward `D = A × B + C`, gỡ `accumulator_q` nội bộ) và kế hoạch tối ưu timing/PPA cho NF/F & Quire — 04/11/2026
+
+#### 1. Chẩn đoán nút thắt F2F do thanh ghi hồi tiếp `accumulator_q` trong NF/F và lý do chốt Phương án A
+
+Trong RTL hiện tại (`mac_nf_wrapper.sv` dòng 136 và `mac_f_wrapper.sv` dòng 124), đường chọn toán hạng cộng thứ ba đặt một MUX 3:1 tổ hợp ngay trước cổng vào của `u_c` (`posit_parser`):
+
+```systemverilog
+assign c_eff = acc_mode ? (acc_clr ? {NB{1'b0}} : accumulator_q) : c;
+```
+
+- **Về mặt kiến trúc số học:** Thanh ghi `accumulator_q` (32-bit) chỉ lưu kết quả Posit32 `d` sau khi đã đi qua `posit_pack_finish` (chuẩn hóa + RNE + bù hai). Ở giao dịch tích lũy kế tiếp, `accumulator_q` lại đi ngược về đầu pipeline qua MUX `c_eff` để bị `u_c` (`posit_parser`) lấy bù hai, tách regime bằng LOD 31-bit và giải mã lại từ đầu. Việc giữ vòng dây hồi tiếp `Packer P2 → accumulator_q → MUX c_eff → Parser C P1` ngay bên trong lõi IP vừa không tăng độ chính xác (vẫn bị RNE mỗi chu kỳ MAC, khác hoàn toàn với `posit_mac_quire`), vừa kéo dây định tuyến xuyên suốt chiều dài macro từ đầu ra về đầu vào.
+- **Về mặt timing F2F thực đo (`results/f_timing_optimization_20261101/summary.md`):**
+  - Toàn bộ các khoang F2F nội bộ của `posit_mac_f` đều đã đạt $\le 5.243\text{ ns}$ (`multiplier_sac_state = 5.243 ns`, `multiplier_ops_context = 4.996 ns`, `adder_s2 = 4.851 ns`, `final_packer_p2 = 4.732 ns`, `parser_a_p1 = 4.511 ns`, `parser_b_p1 = 4.511 ns`).
+  - Riêng đường hồi tiếp từ `accumulator_q_reg[31]/C` $\rightarrow$ `MUX c_eff (LUT4, fanout=33)` $\rightarrow$ `chuỗi bù hai 6 CARRY4` $\rightarrow$ `LOD 31-bit` $\rightarrow$ `u_c/p1_cnt_q_reg[0]/D` vọt lên **`6.602 ns`** (10 mức logic: `2.878 ns` logic + `3.724 ns` route) trên `posit_mac_f` và **`7.063 ns`** trên `posit_mac_nf`, trở thành đường găng F2F số 1 toàn thiết kế.
+- **Quyết định kiến trúc (Phương án A — cập nhật tại SPEC v1.29):**
+  - Chốt hai lõi `posit_mac_nf` và `posit_mac_f` là **lõi nhân–cộng luồng thẳng thuần túy (`D = A × B + C`)**: gỡ bỏ `accumulator_q`, cổng `acc_mode`, `acc_clr` và MUX `c_eff` khỏi top/wrapper của NF và F.
+  - Cổng `c[31:0]` đi thẳng vào `u_c` (`posit_parser`), giúp Parser C đối xứng hoàn toàn với Parser A và Parser B (`~4.51 ns`).
+  - **Ước lượng trước thực thi từ snapshot FLOOR cũ:** bỏ đường6.602ns sẽ để lại đường khoảng5.243ns (~190MHz nghịch đảo datapath). Đây không phải kết quả đo FULL_TERM, không bảo đảm số LUT giảm hoặc Fmax toàn giao diện. Kết quả matched FULL_TERM ngày04/11: F6.777→5.340ns; xem mục4 bên dưới.
+  - Khi hệ thống hoặc testbench cần tính chuỗi tích lũy Posit32 (`C_k = D_(k-1)`), thanh ghi hồi tiếp nằm ở tầng gọi lõi (register file / wrapper hệ thống / testbench driver) và cấp trực tiếp vào cổng `c`.
+
+#### 2. Các chỉnh sửa cần thiết để hiện thực hóa Phương án A trên NF/F
+
+1. **Giao diện và RTL (`rtl/mac_nf/` và `rtl/mac_f/`):**
+   - Trong [`rtl/mac_nf/posit_mac_nf.sv`](../Posit_MAC/rtl/mac_nf/posit_mac_nf.sv) và [`rtl/mac_f/posit_mac_f.sv`](../Posit_MAC/rtl/mac_f/posit_mac_f.sv): gỡ hai cổng đầu vào `acc_mode`, `acc_clr` khỏi danh sách port của module top và instance `u_wrapper`.
+   - Trong [`rtl/mac_nf/mac_nf_wrapper.sv`](../Posit_MAC/rtl/mac_nf/mac_nf_wrapper.sv) và [`rtl/mac_f/mac_f_wrapper.sv`](../Posit_MAC/rtl/mac_f/mac_f_wrapper.sv):
+     - Gỡ cổng `acc_mode`, `acc_clr`.
+     - Sửa điều kiện `cfg_invalid` chỉ còn kiểm tra `cfg_n > 4'd12` và `cfg_ops > 2'd1` (bỏ `acc_clr && !acc_mode`).
+     - Gỡ tín hiệu `c_eff`, `acc_mode_d*`, thanh ghi `accumulator_q[31:0]` và khối `always_ff` cập nhật `accumulator_q`.
+     - Nối trực tiếp cổng `c` vào `.in_posit(c)` của `u_c` (`posit_parser`).
+2. **Testbench, Driver và Scoreboard (`tb/`):**
+   - Cập nhật instantiation của `posit_mac_nf` / `posit_mac_f` trong các testbench tích hợp/unit (gỡ kết nối `.acc_mode`, `.acc_clr`).
+   - Với các bài kiểm kịch bản chuỗi tích lũy (`>= 10%` số giao dịch trong AC-01, chuỗi `> 12` giao dịch ở §6.4 và `TC-AP12-STATE` ở §6.10): driver quản lý biến trạng thái chuỗi `S` ở phía testbench — khi khởi tạo chuỗi mới (`clear`) thì lái `c = 32'h0000_0000`, các bước tiếp theo trong chuỗi sau khi giao dịch trước retire (`out_valid && out_ready`) thì lái `c = d_retired` (`C_k = D_(k-1)`). Nhờ vậy toàn bộ 52 điểm nghiệm thu và kịch bản chuỗi giữ nguyên 100% ý nghĩa toán học mà không cần thanh ghi `accumulator_q` nội bộ.
+
+#### 3. Chẩn đoán nguyên nhân tốn tài nguyên/Fmax thấp trên `posit_mac_quire` và các chỉnh sửa RTL cần thiết
+
+Kết quả tổng hợp/route OOC 100 MHz ngày 03/11/2026 của `posit_mac_quire` (`results/quire_20261103/summary.json`) ghi nhận **10,339 Slice LUTs, 4,453 FFs, WNS = `-12.016 ns` (critical path `21.575 ns`, 32 logic levels)**. Phân tích chi tiết netlist và STA (`results/quire_20261103/ppa_final/`) chỉ ra 4 nguyên nhân gốc rễ và hướng sửa tương ứng:
+
+1. **Đường găng tổ hợp `21.575 ns` xuyên từ `mul_iter_core` qua `quire_align_comb` vào `quire_bank`:**
+   - *Nguyên nhân:* Trong [`rtl/mac_quire/mac_quire_wrapper.sv`](../Posit_MAC/rtl/mac_quire/mac_quire_wrapper.sv), đầu ra `pre_mag` (26-bit) và `pre_sf` (11-bit) của `mul_iter_core` đi thẳng (không qua thanh ghi cắt tầng) vào [`rtl/mac_quire/quire_align_comb.sv`](../Posit_MAC/rtl/mac_quire/quire_align_comb.sv), thực hiện dịch trái 972-bit, rồi trong [`rtl/mac_quire/quire_bank.sv`](../Posit_MAC/rtl/mac_quire/quire_bank.sv) lại kiểm tra `(term == '0)` bằng cây NOR **972-bit** trước khi tạo tín hiệu `bank_accept` lái `CE` cho hàng nghìn FF (`sum_work_q`, `term_work_q`).
+   - *Chỉnh sửa cần thực hiện:*
+     - Thay phép kiểm tra `term == '0` (972-bit) bằng kiểm tra trực tiếp trên `pre_mag == 26'd0` (hoặc tín hiệu `pre_zero` từ `mul_iter_core`), loại bỏ hoàn toàn cây so sánh 972-bit trên đường điều khiển `CE`.
+     - Chèn 1 tầng thanh ghi nhỏ (~40 FF) chốt gói `{pre_mag[25:0], pre_sf[10:0], pre_sign, pre_zero, pre_nar}` ngay đầu ra `mul_iter_core` trước khi tính dịch/nạp vào `quire_bank`.
+2. **Loại bỏ thanh ghi dịch `term_work_q[971:0]` và bộ dịch barrel 972-bit trong `quire_align_comb` + `quire_bank`:**
+   - *Nguyên nhân:* `quire_align_comb` đang tạo một vector tổ hợp 972-bit (`signed_coeff <<< shift_amt`), sau đó `quire_bank` chốt toàn bộ vào `term_work_q[971:0]` (tốn 972 FF + ~1,500 LUT dịch/mux) chỉ để mỗi chu kỳ lấy ra 36 bit thấp `term_work_q[35:0]` cộng vào `sum_work_q` rồi dịch phải `term_work_q >>> 36`.
+   - *Chỉnh sửa cần thực hiện:*
+     - Do `signed_coeff` chỉ rộng **27 bit**, sau khi dịch theo `shift_amt = b + 456`, các bit khác 0/sign-extension chỉ nằm trong **tối đa 2 word 36-bit liên tiếp** (`word_idx = shift_amt / 36`, `bit_offset = shift_amt % 36`).
+     - Thay `term_work_q[971:0]` (972 FF) bằng thanh ghi lưu `{signed_coeff[26:0], word_idx[4:0], bit_offset[5:0]}` (~38 FF) và dịch cục bộ 63-bit để cấp đúng word 36-bit tại bước `step_q` tương ứng (các bước `step_q < word_idx` không cần cộng hoặc giữ nguyên word cũ; từ `word_idx` trở đi mới cộng và truyền carry). Cách này cắt giảm **> 930 FF và ~2,200 LUT**.
+3. **Thay phép dịch toàn mảng 972-bit mỗi chu kỳ trong `quire_bank` và `quire_read` bằng truy cập theo chỉ số word `step_q`:**
+   - *Nguyên nhân:* Trong `quire_bank.sv` và `quire_read.sv`, cách viết `q_work_q >>> 36` và `sum_work_q[971:936] <= word_sum[35:0]` kèm phép gán mảng 27 word khiến công cụ tổng hợp tạo hàng nghìn LUT4/LUT6 mux trên toàn bộ 972 FF, đồng thời `quire_read` cấp thêm 3 thanh ghi 972-bit (`abs_work_q`, `scan_work_q`, và bản sao snapshot).
+   - *Chỉnh sửa cần thực hiện:*
+     - Tổ chức thanh ghi Quire thành mảng 27 word 36-bit `q_reg[0:26]`, đọc/ghi theo chỉ số `step_q[4:0]` (multiplexer 27:1 rộng 36-bit và giải mã write-enable 27-bit), dùng chung logic quét/lấy trị tuyệt đối theo từng word thay vì nhân bản 3 thanh ghi 972-bit trong `quire_read` (tiết kiệm thêm **~1,944 FF và ~3,500 LUT**).
+4. **Cập nhật thứ tự ràng buộc clock trong script tổng hợp OOC (`scripts/quire_ooc.tcl`):**
+     - Đặt lệnh `create_clock -period 10.000 [get_ports clk]` **trước** `synth_design` (thay vì chỉ tạo clock sau `synth_design`) để Vivado tối ưu hóa cây logic và fanout theo đúng mục tiêu 100 MHz ngay từ pha synthesis.
+
+#### 4. Đã thực hiện Phương án A NF/F và đo matched synthesis — 04/11/2026
+
+Đã bỏ `accumulator_q`, `acc_mode`, `acc_clr`, `committed_q` và MUX `c_eff` khỏi hai top/wrapper NF/F; cổng `c` nối trực tiếp Parser C. Driver/scoreboard giữ trạng thái ngoài và chỉ cập nhật sau retire. Không thêm pipeline, không đổi số học; toàn bộ parser, multiplier FULL_TERM26/Q24, adder5 và packer giữ nguyên byte. Quire không thay đổi trong lượt này; kế hoạch mục3 còn mở.
+
+Đối chứng dùng cùng Vivado2026.1, A35T xc7a35tcpg236-1, OOC synthesis clock10ns, uncertainty0.1ns, input2.5ns/output0.5ns. Mỗi NF/F có một synthesis trước và một sau; không route/bitstream.
+
+| Lõi | F2F D/CE trước→sau | 1000/F2F sau | Fmax nội bộ tính setup/skew/uncertainty | LUT trước→sau | FF trước→sau |
+|---|---|---|---|---|---|
+| NF |9.344→8.945ns|111.8MHz|106.1MHz|1698→1613|976→942|
+| F |6.777→5.340ns|187.3MHz|178.9MHz|1291→1262|841→807|
+
+F2F nội bộ có setup ước lượng bằng `1000/(10 − worst_F2F_slack)`; nghịch đảo datapath chỉ là trần sơ bộ. Toàn giao diện: NF WNS−0.955ns (~91.3MHz), F WNS+2.689ns (~136.8MHz); WHS cả hai−0.055ns, nên chưa timing signoff. F còn bị đầu vào a[1]→Parser A P1 giới hạn ở toàn giao diện; đưa hồi tiếp ra ngoài không tự đóng timing vòng tích lũy hệ thống.
+
+Critical path F mới là `u_core/fx_q[2]→fx_q[9]` qua SAC,5.340ns (logic1.263 + net ước lượng4.077ns). NF còn đường `Parser B p2_frac[24]→OPS/y_mant hợp lệ→launch_ready/pair_retire/launch→count_q/CE`,8.945ns (logic1.743 + net7.202ns,9 mức LUT); report cho thấy fanout64 ở pair_retire và54 ở launch. Vì vậy không kết luận NF đạt ~190MHz chỉ bằng bỏ thanh ghi hồi tiếp. Đây là nút thắt điều khiển cho bước tối ưu sau, chưa sửa ngoài Phương án A.
+
+Verification: audit31 module/68 instance và strict lint đạt; Verilator mỗi lõi100k completed/0 mismatch, kiểm từng vòng nhân và tất cả26 n×OPS trong mixed corpus; ModelSim mỗi lõi49701 completed +299 reset-aborted/0 mismatch, chuỗi ngoài tới70. Adder39534, packer10851, core53249 case đạt. Chưa chạy main52×10M/coverage/accuracy mới.
+
+[Báo cáo đầy đủ](../Posit_MAC/results/feedforward_a_20261104/summary.md), [CSV đối chứng](../Posit_MAC/results/feedforward_a_20261104/comparison.csv), [nguồn và kết quả có hash](../Posit_MAC/results/feedforward_a_20261104/summary.json). Giữ DCP, snapshot, vectors và F2F từng bank để đối chiếu; không sửa các checkpoint lịch sử02/11/03/11.
+
+#### 5. Đồng nhất Parser (`CARRY4` + `posit_parser_f_regime_lod`), rút gọn P2 của Parser A/B xuống 12-bit fraction + 1-bit `tail_cut`, và cắt đường găng `CE` giả trong `mul_iter_core` — 04/11/2026
+
+Từ kết quả đo matched synthesis ở mục 4 (`results/feedforward_a_20261104/all_stages.csv`), phân tích chi tiết chỉ ra 2 nút thắt trên `posit_mac_nf` và cơ hội tiết kiệm FF ở tầng P2 của Parser:
+
+1. **Nguyên nhân đường găng F2F `8.945 ns` (`multiplier_sac`), `8.874 ns` (`parser_a/b/c_p1`) và `8.303 ns` (`parser_a/b/c_p2`) trên `posit_mac_nf`:**
+   - Trong [`rtl/multiplier/mul_iter_core.sv`](../Posit_MAC/rtl/multiplier/mul_iter_core.sv) dòng 48–49, tín hiệu `launch_ready` chứa điều kiện `&& ((y_mant == 13'b0) || y_mant[12])`.
+   - Do `ops_sel_comb` luôn đặt `ops_y[12] = 1'b1` và wrapper gán `y = bypass ? 13'b0 : ops_y`, biểu thức `((y_mant == 13'b0) || y_mant[12])` về mặt toán học là hằng đúng (`1'b1`). Tuy nhiên khi tổng hợp `posit_mac_nf` với `-flatten_hierarchy rebuilt`, bộ tối ưu boolean của Vivado nhân phân phối `!bypass` vào `ops_y[11:0]` mà không triệt tiêu 12 bit thấp, làm `core_ready` phụ thuộc giả vào cây popcount 12-bit của `ops_sel_comb` (xuất phát từ `u_b/p2_frac_q_reg[24]/C`) rồi đánh ngược về `pair_retire` (fanout 64), `in_ready` (gây `WNS = -0.955 ns`) và chân `CE` của toàn bộ thanh ghi P1/P2 trong `u_a, u_b, u_c`.
+   - **Khắc phục:** Gỡ điều kiện hằng đúng `&& ((y_mant == 13'b0) || y_mant[12])` khỏi `launch_ready` trong `mul_iter_core.sv` (`assign launch_ready = run_ready && !busy_q && (cfg_n <= 4'd12);`), cắt đứt hoàn toàn đường tổ hợp giả từ `p2_frac_q → ops_sel_comb → core_ready → CE`.
+2. **Đồng nhất kiến trúc tầng P1 của `posit_parser.sv` giữa NF và F (Giải pháp 2):**
+   - Thay cây LUT prefix-OR `lower_any` và `lod_lzd_core_fixed2` trong [`rtl/parser/posit_parser.sv`](../Posit_MAC/rtl/parser/posit_parser.sv) bằng chuỗi cộng phần cứng `CARRY4` (`(p ^ {NB{s_d}}) + {{(NB-1){1'b0}}, s_d}`) và `posit_parser_f_regime_lod` giống `posit_parser_f.sv`, giúp đường `input -> p1_cnt_q_reg/D` của NF giảm từ `6.305 ns` xuống `~5.77 ns` và tiết kiệm ~20 LUT mỗi bộ Parser.
+3. **Tách `posit_parser_mul.sv` chỉ giữ 12-bit fraction + 1-bit `tail_cut` ở tầng P2 cho `u_a` và `u_b`:**
+   - Do `ops_sel_comb` chỉ sử dụng 12 bit fraction cao `frac[25:14]` của `A` và `B`, còn 14 bit thấp `frac[13:0]` chỉ dùng để tính cờ `ops_cut = |(frac_a[13:0] | frac_b[13:0])`, tạo module [`rtl/parser/posit_parser_mul.sv`](../Posit_MAC/rtl/parser/posit_parser_mul.sv) dùng cho `u_a, u_b` trong cả `mac_nf_wrapper.sv` và `mac_f_wrapper.sv` (trong khi `u_c` dùng chung `posit_parser.sv` 26-bit fraction).
+   - Ở tầng P2 của `posit_parser_mul`, chỉ chốt 12 FF `p2_frac_q[11:0]` và 1 FF `p2_tail_cut_q <= |payload[13:0]`, giúp **tiết kiệm 13 FF mỗi bộ Parser A/B (26 FF trên mỗi lõi MAC NF/F)** mà vẫn giữ bit-exact 100% kết quả `d` và cả 5 cờ `flags` so với Golden Model.
+

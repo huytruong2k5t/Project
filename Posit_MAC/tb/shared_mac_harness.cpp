@@ -46,7 +46,7 @@ int main(int argc,char** argv) {
         };
         auto clock=[&]() { advance(5000); d.clk=1; d.eval(); advance(2000); advance(3000); d.clk=0; d.eval(); };
         d.clk=0; d.rst_n=0; d.in_valid=0; d.out_ready=0; d.cfg_n=12; d.cfg_ops=1;
-        d.a=0; d.b=0; d.c=0; d.acc_mode=0; d.acc_clr=0; d.eval();
+        d.a=0; d.b=0; d.c=0; d.eval();
         for (unsigned i=0;i<5;++i) clock();
         d.rst_n=1; d.eval();
         for (unsigned i=0;i<10;++i) clock();
@@ -61,14 +61,13 @@ int main(int argc,char** argv) {
             d.cfg_ops=op;
             for (unsigned i=0;i<4;++i) { d.eval(); require(!d.in_ready && !d.out_valid,"invalid ops accepted"); clock(); ++invalid_checks; }
         }
-        d.cfg_ops=1; d.acc_mode=0; d.acc_clr=1;
-        for (unsigned i=0;i<4;++i) { d.eval(); require(!d.in_ready && !d.out_valid,"invalid clear accepted"); clock(); ++invalid_checks; }
-        d.in_valid=0; d.acc_clr=0;
+        d.cfg_ops=1; d.in_valid=0;
 
         uint64_t cycles=0,generated=0,accepted=0,completed=0,aborted=0,stage_checks=0,done_checks=0;
         uint64_t input_stalls=0,output_stalls=0,near=0,standalone=0,accumulation=0;
         uint64_t lat_min=UINT64_MAX,lat_max=0;
         uint32_t state=0;
+        uint64_t chain_length=0,max_chain=0,long_chain_steps=0;
         bool active=false,input_pending=false,held=false;
         uint64_t held_payload=0;
         Request input,current;
@@ -141,14 +140,22 @@ int main(int argc,char** argv) {
             ++cycles;
             require(cycles<(target+1000)*180,"watchdog/deadlock");
             if (!reset_left && cycles%4093==0 && active) {
-                ++aborted; active=false; input_pending=false; held=false; state=0; reset_left=5;
+                ++aborted; active=false; input_pending=false; held=false; state=0; chain_length=0; reset_left=5;
             }
             d.rst_n=reset_left?0:1;
             if (reset_left) --reset_left;
-            if (!input_pending && d.rst_n) { input=make_request(generated++); input_pending=true; }
+            // Bind external C only after previous output retires; keep it stable
+            // while stalled at the input. No feedback state exists in DUT.
+            if (!input_pending && !active && d.rst_n) {
+                input=make_request(generated++);
+                if (generated%256<64) {
+                    input.accumulate=true; input.clear=(generated%256==1);
+                }
+                input.effective_c=input.accumulate?(input.clear?0:state):input.c;
+                input_pending=true;
+            }
             d.in_valid=input_pending && d.rst_n;
-            d.a=input.a; d.b=input.b; d.c=input.c; d.cfg_n=input.n; d.cfg_ops=input.ops;
-            d.acc_mode=input.accumulate; d.acc_clr=input.clear;
+            d.a=input.a; d.b=input.b; d.c=input.effective_c; d.cfg_n=input.n; d.cfg_ops=input.ops;
             d.out_ready=d.rst_n && (mix(seed+cycles)%7<5) && cycles%113>6;
             d.eval();
             const bool take_in=d.rst_n && d.in_valid && d.in_ready;
@@ -169,7 +176,12 @@ int main(int argc,char** argv) {
                              <<" got="<<d.d<<"/"<<unsigned(d.flags)<<" expected="<<current.expected<<"/"<<current.flags<<std::dec<<" n="<<current.n<<" ops="<<current.ops<<'\n';
                     throw std::runtime_error("MAC oracle mismatch at "+std::to_string(completed));
                 }
-                if (current.accumulate) { state=d.d; ++accumulation; } else ++standalone;
+                if (current.accumulate) {
+                    state=d.d; ++accumulation;
+                    if (current.clear) chain_length=0;
+                    ++chain_length; max_chain=std::max(max_chain,chain_length);
+                    if (chain_length>12) ++long_chain_steps;
+                } else { ++standalone; chain_length=0; }
                 ++bins[current.ops][current.n]; ++flag_bins[d.flags];
                 if (current.a && current.b && current.a!=0x80000000u && current.b!=0x80000000u) {
                     const auto ar=run_info(current.a),br=run_info(current.b);
@@ -196,7 +208,6 @@ int main(int argc,char** argv) {
             if (take_in) {
                 require(!active,"capacity exceeded");
                 current=input; current.accepted_at=cycles;
-                current.effective_c=current.accumulate?(current.clear?0:state):current.c;
                 const auto expected=opt17_reference::mac(current.a,current.b,current.effective_c,{true,current.n,current.ops},TEST_FUSED);
                 current.expected=expected.first; current.flags=expected.second;
                 current.product=opt17_reference::product(current.a,current.b,{true,current.n,current.ops});
@@ -239,6 +250,7 @@ int main(int argc,char** argv) {
            <<",\"cycles\":"<<cycles<<",\"mismatches\":0,\"stage_checks\":"<<stage_checks<<",\"done_checks\":"<<done_checks
            <<",\"input_stalls\":"<<input_stalls<<",\"output_stalls\":"<<output_stalls
            <<",\"invalid_checks\":"<<invalid_checks<<",\"near_cancellation\":"<<near
+           <<",\"external_feedback\":true,\"max_chain\":"<<max_chain<<",\"long_chain_steps\":"<<long_chain_steps
            <<",\"standalone\":"<<standalone<<",\"accumulation\":"<<accumulation
            <<",\"latency_retire_observed\":["<<lat_min<<','<<lat_max<<"],\"bins\":[";
         for (unsigned op=0;op<2;++op) for (unsigned n=0;n<13;++n) { if(op||n) out<<','; out<<bins[op][n]; }

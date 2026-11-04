@@ -4,8 +4,8 @@ rtl/mac_quire/quire_align_comb.sv
 rtl/mac_quire/quire_bank.sv
 rtl/mac_quire/quire_read.sv
 rtl/parser/posit_parser.sv
+rtl/parser/posit_parser_f_regime_lod.sv
 rtl/common/dyn_left_shifter.sv
-rtl/common/lod_lzd_core_fixed2.sv
 rtl/common/dyn_left_shifter_fixed5.sv
 rtl/common/lod_lzd_core_fixed4.sv
 rtl/common/dyn_right_shifter_fixed2.sv

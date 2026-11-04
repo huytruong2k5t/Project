@@ -1,3 +1,6 @@
+// Historical supplemental bench; replay only with its matching source snapshot.
+// posit_parser_f was retired from live RTL on2026-11-05; current NF/F use
+// posit_parser and posit_parser_mul. This bench is outside current verification.
 // Supplemental checks against the previous measured parser and a serial LOD oracle.
 module tb_parser_f_timing_equiv;
     logic clk = 0, clock_enable = 0, reset_n = 0;

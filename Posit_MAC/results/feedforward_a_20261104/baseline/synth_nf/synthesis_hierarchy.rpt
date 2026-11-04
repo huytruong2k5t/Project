@@ -1,0 +1,43 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Wed Nov  4 22:15:16 2026
+| Host         : MSI running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file synthesis_hierarchy.rpt
+| Design       : prepack_nf_ppa_top
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Synthesized
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++------------------------+------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+|        Instance        |         Module         | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
++------------------------+------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+| prepack_nf_ppa_top     |                  (top) |       1698 |       1698 |       0 |    0 | 976 |      0 |      0 |          0 |
+|   (prepack_nf_ppa_top) |                  (top) |          0 |          0 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   u_dut                |           posit_mac_nf |       1698 |       1698 |       0 |    0 | 976 |      0 |      0 |          0 |
+|     u_wrapper          |         mac_nf_wrapper |       1697 |       1697 |       0 |    0 | 976 |      0 |      0 |          0 |
+|       (u_wrapper)      |         mac_nf_wrapper |         11 |         11 |       0 |    0 | 138 |      0 |      0 |          0 |
+|       u_a              |           posit_parser |        208 |        208 |       0 |    0 |  80 |      0 |      0 |          0 |
+|       u_add            |              posit_add |        491 |        491 |       0 |    0 | 310 |      0 |      0 |          0 |
+|         (u_add)        |              posit_add |        400 |        400 |       0 |    0 | 310 |      0 |      0 |          0 |
+|         u_s1_prepare   | posit_add_prepare_comb |         69 |         69 |       0 |    0 |   0 |      0 |      0 |          0 |
+|       u_b              |         posit_parser_0 |        174 |        174 |       0 |    0 |  80 |      0 |      0 |          0 |
+|       u_c              |         posit_parser_1 |        209 |        209 |       0 |    0 |  80 |      0 |      0 |          0 |
+|       u_core           |          mul_iter_core |        293 |        293 |       0 |    0 | 120 |      0 |      0 |          0 |
+|         (u_core)       |          mul_iter_core |        252 |        252 |       0 |    0 | 120 |      0 |      0 |          0 |
+|       u_pack           |             posit_pack |        132 |        132 |       0 |    0 |  84 |      0 |      0 |          0 |
+|         (u_pack)       |             posit_pack |        102 |        102 |       0 |    0 |  84 |      0 |      0 |          0 |
+|       u_product_pack   |     posit_product_pack |        164 |        164 |       0 |    0 |  84 |      0 |      0 |          0 |
++------------------------+------------------------+------------+------------+---------+------+-----+--------+--------+------------+
+
+

@@ -45,8 +45,7 @@ module mul_iter_core (
     logic busy_q;
     logic [12:0] y_q;
     wire launch = launch_valid && launch_ready;
-    assign launch_ready = run_ready && !busy_q && (cfg_n <= 4'd12)
-                        && ((y_mant == 13'b0) || y_mant[12]);
+    assign launch_ready = run_ready && !busy_q && (cfg_n <= 4'd12);
 
     // L1 Control and SAC FSM
     logic emitting_q;

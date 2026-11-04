@@ -1,3 +1,13 @@
+## NF/F feed-forward — 04/11/2026
+
+Audit và verification shared hỗ trợ `SHARED_RESULTS_ROOT` để giữ snapshot cũ. `make` mặc định dùng `results/feedforward_a_20261104/verification`; khi replay chọn root/tag/label mới. Driver quản lý feedback ngoài DUT và chỉ cập nhật lúc retire. Chạy ModelSim bằng `run_refactored_mac.ps1 -Stage Verify` với RunRoot mới.
+
+`run_feedforward_ppa.py <RunRoot> nf|f --vivado <tool>` synthesis snapshot đã verify; `--report-only` chỉ đọc DCP đã có. `syn/report_mac_f2f.tcl` xuất bank D/CE, worst setup, input C và timing toàn giao diện. Không place/route/bitstream. `summarize_feedforward_a.py` kiểm hash nguồn/recipe và tổng hợp đối chứng ngày04/11, không gộp kết quả ngày02/11.
+
+[Kết quả, CSV và cách hiểu Fmax](../results/feedforward_a_20261104/summary.md). Hướng dẫn archive trong các mục lịch sử bên dưới không còn khả dụng sau khi người dùng yêu cầu xóa archive cũ.
+
+---
+
 ## Runner giữ lại sau dọn — 03/11/2026
 
 Luồng quire portable: verify_quire.py (model/build/run),run_quire_main.py

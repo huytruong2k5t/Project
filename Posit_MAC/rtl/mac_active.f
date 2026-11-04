@@ -27,5 +27,5 @@ rtl/common/lod_lzd_core_fixed4.sv
 rtl/mac_f/posit_mac_f.sv
 rtl/mac_f/mac_f_wrapper.sv
 rtl/common/dyn_left_shifter_fixed5.sv
-rtl/parser/posit_parser_f.sv
+rtl/parser/posit_parser_mul.sv
 rtl/parser/posit_parser_f_regime_lod.sv

@@ -1,0 +1,34 @@
+{
+  "status": "VERIFICATION_PASS_SYNTHESIS_COMPLETE",
+  "verify_scope": "NF",
+  "source_drift": [],
+  "manifest_inputs": 54,
+  "reference": {
+    "snapshot": "candidate",
+    "variant": "nf",
+    "f2f_d_ce_ns": 8.945,
+    "f2f_d_only_ns": 8.412,
+    "f2f_raw_reciprocal_mhz": 111.79429849077697,
+    "f2f_setup_estimate_mhz": 106.07828577490189,
+    "f2f_setup_min_period_ns": 9.427,
+    "whole_interface_estimate_mhz": 91.28251939753537,
+    "wns_ns": -0.955,
+    "whs_ns": -0.055,
+    "luts": 1613,
+    "ffs": 942,
+    "feedback_registers": 0,
+    "critical_start": "u_dut/u_wrapper/u_b/p2_frac_q_reg[24]/C",
+    "critical_end": "u_dut/u_wrapper/u_core/count_q_reg[0]/CE",
+    "logic_ns": 1.743,
+    "estimated_net_ns": 7.202,
+    "logic_levels": 9,
+    "reports": "results/feedforward_a_20261104/candidate/synth_nf"
+  },
+  "verification_markers": [
+    "# ADDER_REFACTOR_PASS accepted=39535 completed=39534 aborted=1 stalls=20310",
+    "# PACKER_REFACTOR_PASS completed=10851 stalls=3552 errors=0",
+    "# SHARED_CORE_PASS cases=53249 checkpoints=231437 mismatches=0",
+    "# EXTERNAL_FEEDBACK_PASS F=0 completed=6211 max_chain=70",
+    "# MAC_REFACTOR_PASS F=0 rows=10000 accepted=10000 completed=9940 aborted=60 stalls=36231 latency_observed=15..26"
+  ]
+}

@@ -6,7 +6,8 @@ module tb_refactored_mac;
     logic rst_n=0,in_valid=0,out_ready=0;
     wire in_ready,out_valid;
     logic [31:0] a=0,b=0,c=0;
-    logic acc_mode=0,acc_clr=0;
+    logic [31:0] external_state=0;
+    integer accumulation_completed=0,chain_length=0,max_chain=0;
     logic [3:0] cfg_n=12;
     logic [1:0] cfg_ops=1;
     wire [31:0] d;
@@ -20,8 +21,6 @@ module tb_refactored_mac;
             .a(a),
             .b(b),
             .c(c),
-            .acc_mode(acc_mode),
-            .acc_clr(acc_clr),
             .cfg_n(cfg_n),
             .cfg_ops(cfg_ops),
             .out_valid(out_valid),
@@ -38,8 +37,6 @@ module tb_refactored_mac;
             .a(a),
             .b(b),
             .c(c),
-            .acc_mode(acc_mode),
-            .acc_clr(acc_clr),
             .cfg_n(cfg_n),
             .cfg_ops(cfg_ops),
             .out_valid(out_valid),
@@ -70,7 +67,8 @@ module tb_refactored_mac;
     end
     task automatic reset_dut;
         @(negedge clk);rst_n=0;in_valid=0;out_ready=0;
-        cfg_n=12;cfg_ops=1;acc_mode=0;acc_clr=0;
+        cfg_n=12;cfg_ops=1;
+        external_state=0;chain_length=0;
         repeat(4) @(negedge clk);
         rst_n=1;
         timeout=0;
@@ -79,29 +77,28 @@ module tb_refactored_mac;
             if(out_valid !== 0 || timeout>30) $fatal(1,"reset/startup failure");
         end
     endtask
-    task automatic invalid_request(input logic [3:0] nn,input logic [1:0] oo,input logic mm,input logic cc);
-        @(negedge clk);in_valid=1;cfg_n=nn;cfg_ops=oo;acc_mode=mm;acc_clr=cc;
+    task automatic invalid_request(input logic [3:0] nn,input logic [1:0] oo);
+        @(negedge clk);in_valid=1;cfg_n=nn;cfg_ops=oo;
         repeat(6) begin
             @(posedge clk);
             if(in_ready !== 0 || out_valid !== 0) $fatal(1,"invalid configuration accepted");
         end
-        @(negedge clk);in_valid=0;cfg_n=12;cfg_ops=1;acc_mode=0;acc_clr=0;
+        @(negedge clk);in_valid=0;cfg_n=12;cfg_ops=1;
     endtask
     initial begin
         if(!$value$plusargs("VECTORS=%s",vector_path)) $fatal(1,"VECTORS required");
         fd=$fopen(vector_path,"r");if(!fd) $fatal(1,"missing fixture");
         reset_dut();
-        invalid_request(15,0,0,0);
-        invalid_request(0,3,0,0);
-        invalid_request(0,0,0,1);
-        invalid_request(13,0,0,0);
-        invalid_request(14,0,0,0);
-        invalid_request(0,2,0,0);
+        invalid_request(15,0);
+        invalid_request(0,3);
+        invalid_request(13,0);
+        invalid_request(14,0);
+        invalid_request(0,2);
         while(!$feof(fd)) begin
             fields=$fscanf(fd,"%h %h %h %d %d %d %d %h %h %d\n",av,bv,cv,n,ops,mode,clear,expected,expected_flags,abort_kind);
             if(fields==10) begin
                 @(negedge clk);
-                a=av;b=bv;c=cv;cfg_n=n;cfg_ops=ops;acc_mode=mode;acc_clr=clear;in_valid=1;out_ready=0;
+                a=av;b=bv;c=mode ? (clear ? 32'b0 : external_state) : cv;cfg_n=n;cfg_ops=ops;in_valid=1;out_ready=0;
                 timeout=0;
                 do begin
                     @(posedge clk);timeout=timeout+1;
@@ -110,7 +107,7 @@ module tb_refactored_mac;
                 accepted=accepted+1;
                 @(negedge clk);in_valid=0;
                 // Change live ports after accept; only stored context may affect this result.
-                a=~av;b=~bv;c=~cv;cfg_n=15;cfg_ops=3;acc_mode=~mode;acc_clr=1;
+                a=~av;b=~bv;c=~cv;cfg_n=15;cfg_ops=3;
                 if(abort_kind==1) begin
                     reset_dut();aborted=aborted+1;
                 end else begin
@@ -130,6 +127,12 @@ module tb_refactored_mac;
                         out_ready=1;
                         @(posedge clk);
                         @(negedge clk);out_ready=0;completed=completed+1;
+                        if(mode) begin
+                            external_state=d;accumulation_completed=accumulation_completed+1;
+                            if(clear)chain_length=0;
+                            chain_length=chain_length+1;
+                            if(chain_length>max_chain)max_chain=chain_length;
+                        end else chain_length=0;
                         repeat(2) begin
                             @(negedge clk);
                             if(out_valid !== 0) $fatal(1,"duplicate output");
@@ -137,11 +140,13 @@ module tb_refactored_mac;
                     end
                 end
                 rows=rows+1;
-                cfg_n=12;cfg_ops=1;acc_mode=0;acc_clr=0;
+                cfg_n=12;cfg_ops=1;
             end else if(fields!=-1) $fatal(1,"malformed fixture");
         end
         $fclose(fd);
         if(rows<1000 || completed+aborted!=accepted || stalls==0 || aborted==0) $fatal(1,"incomplete suite/counts");
+        if(accumulation_completed<completed/10 || max_chain<=12) $fatal(1,"external accumulation coverage missing");
+        $display("EXTERNAL_FEEDBACK_PASS F=%0d completed=%0d max_chain=%0d",FUSED,accumulation_completed,max_chain);
         $display("MAC_REFACTOR_PASS F=%0d rows=%0d accepted=%0d completed=%0d aborted=%0d stalls=%0d latency_observed=%0d..%0d",FUSED,rows,accepted,completed,aborted,stalls,latency_min,latency_max);
         $finish;
     end

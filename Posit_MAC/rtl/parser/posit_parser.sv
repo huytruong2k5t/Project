@@ -107,18 +107,9 @@ module posit_parser (
     assign is_zero_d      = !s_d && rest_is_zero_d;
     assign is_nar_d       =  s_d && rest_is_zero_d;
 
-    // Carry-free two's-complement magnitude (2026-11-01):
-    //   -p keeps every bit up to and including the lowest set bit and inverts
-    //   every bit above it, so m[i] = p[i] ^ (s & |p[i-1:0]).
-    // The prefix-OR is a shallow LUT tree, replacing the 32-bit CARRY4 chain
-    // (6 CARRY4) that sat in front of the regime LOD. Bit-exact with
-    // (p ^ {NB{s}}) + s, including NaR (0x8000_0000 -> 0x8000_0000).
-    wire [31:0] lower_any;
-    assign lower_any[0] = 1'b0;
-    for (genvar bit_index = 1; bit_index < 32; bit_index++) begin : g_lower_any
-        assign lower_any[bit_index] = |p[bit_index-1:0];
-    end
-    assign magnitude = p ^ ({NB{s_d}} & lower_any);
+    // Carry magnitude retains Artix-7 dedicated carry resources.
+    assign magnitude = (p ^ {NB{s_d}})
+                     + {{(NB-1){1'b0}}, s_d};
 
     assign first_regime_bit = magnitude[NB-2];
     assign payload_seed     = magnitude[NB-4:0];
@@ -130,7 +121,7 @@ module posit_parser (
     // Sentinel supplies the no-terminator count NB-2.
     assign detector_in = {terminator_bits, 1'b1};
 
-    lod_lzd_core_fixed2  u_regime_detector (
+    posit_parser_f_regime_lod u_regime_detector (
         .in  (detector_in),
         .K   (cnt_d),
         .vld (unused_terminator_valid)

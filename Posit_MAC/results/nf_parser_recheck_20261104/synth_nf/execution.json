@@ -1,0 +1,23 @@
+{
+  "source_manifest_sha256": "ae52b2b28a2f332e55a77e853ebe61c3633a7f1470f3ae4f322243ad8b8dba30",
+  "report_script_sha256": "1db444e64ac2458b153c214fe11b8cc1247c17d27c906f35c77472def3723b31",
+  "measurement_script_sha256": "1dfbaf48ff6560bf00e8b0d158137605f4138869068865cada67f29e8c8b091c",
+  "command": [
+    "C:/AMDDesignTools/2026.1/Vivado/bin/vivado.bat",
+    "-mode",
+    "batch",
+    "-notrace",
+    "-source",
+    "measure.tcl",
+    "-log",
+    "vivado.log",
+    "-journal",
+    "vivado.jou",
+    "-tclargs",
+    "nf"
+  ],
+  "report_only": false,
+  "part": "xc7a35tcpg236-1",
+  "period_ns": 10,
+  "implementation_run": false
+}

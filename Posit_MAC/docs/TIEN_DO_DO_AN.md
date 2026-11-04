@@ -1,9 +1,9 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 03/11/2026 (giờ Việt Nam)
+**Ngày cập nhật:** 04/11/2026 (giờ Việt Nam)
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
-**Tài liệu chi tiết:** [SPEC v1.28](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
+**Tài liệu chi tiết:** [SPEC v1.29](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
 
 **Cách chạy kiểm chứng:** [Hướng dẫn WSL và ModelSim từ Windows CMD](HUONG_DAN_CHAY_WSL_MODELSIM.md).
 
@@ -12,6 +12,8 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 **Trạng thái:** `✅` = hoàn thành phạm vi của dòng và có kiểm chứng; `processing` = đã làm một phần hoặc còn thiếu tiêu chí; `không` = chưa thực hiện.
 
 ## 1. Tổng quan
+
+**Phương án A04/11 — đã hiện thực:** gỡ hồi tiếp Posit32 trong NF/F, nhận C trực tiếp; driver ngoài commit state khi retire. Verilator mỗi lõi100k completed, ModelSim49701 completed +299 reset-aborted,0 mismatch; strict lint31 module/68 instance. Matched synthesis A35T: F F2F6.777→5.340ns (~187.3MHz nghịch đảo datapath;178.9MHz gồm setup nội bộ), NF9.344→8.945ns (~111.8/106.1MHz). Mỗi lõi giảm34FF. Fmax toàn giao diện chỉ ước lượng F136.8/NF91.3MHz, WHS−0.055ns; chưa route/main52×10M/coverage mới. Quire không đổi. [Báo cáo](../results/feedforward_a_20261104/summary.md).
 
 **Mở rộng03/11:** quire Q12-1024 đã build và kiểm chức năng: W972/grid2^-480,
 cùng core approximate12;10M MAC retired/0 mismatch,ModelSim và unit đạt.

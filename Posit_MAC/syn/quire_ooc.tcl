@@ -15,15 +15,10 @@ foreach path [split [read $file_handle] "\n"] {
 close $file_handle
 foreach source $sources {read_verilog -sv [list $source]}
 read_verilog -sv [list "$source_root/tb/quire_ppa_top.sv"]
+# Load deferred XDC before synthesis, so clock goals apply during optimization.
+read_xdc [list [file join $source_root syn constraints a35t_clock.xdc]]
+read_xdc [list [file join $source_root syn constraints a35t_benchmark_100mhz.xdc]]
 synth_design -top quire_ppa_top -part xc7a35tcpg236-1 -mode out_of_context -flatten_hierarchy rebuilt
-create_clock -name clk -period 10.000 [get_ports clk]
-set_clock_uncertainty -setup 0.100 [get_clocks clk]
-set_clock_uncertainty -hold 0.100 [get_clocks clk]
-set data_inputs [get_ports -filter {DIRECTION == IN && NAME != clk}]
-set_input_delay -clock clk -min 2.500 $data_inputs
-set_input_delay -clock clk -max 2.500 $data_inputs
-set_output_delay -clock clk -min 0.000 [all_outputs]
-set_output_delay -clock clk -max 0.500 [all_outputs]
 report_utilization -file synthesis_utilization.rpt
 report_timing_summary -delay_type min_max -file synthesis_timing.rpt
 opt_design

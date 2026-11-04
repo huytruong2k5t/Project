@@ -26,7 +26,7 @@ module mac_quire_wrapper (
 );
     localparam logic [1:0] CLEAR=2'd0, MAC=2'd1, READ=2'd2;
     localparam logic [2:0] IDLE=3'd0, PRODUCT=3'd1, BANK=3'd2,
-                           READING=3'd3, RESPONSE=3'd4;
+                           READING=3'd3, RESPONSE=3'd4, ALIGN=3'd5;
     logic reset_bridge_q;
     wire reset_n;
     (* ASYNC_REG="TRUE" *) logic meta_sync1, meta_sync2;
@@ -49,7 +49,12 @@ module mac_quire_wrapper (
     wire [3:0] iterations_done;
     wire approx_cut, core_sign, core_cut;
     wire signed [10:0] core_sf;
-    wire [971:0] aligned_term;
+    logic [25:0] pre_magnitude_q;
+    logic signed [10:0] pre_sf_q;
+    logic pre_sign_q,pre_zero_q,pre_nar_q,pre_invalid_q,pre_loss_q,pre_cut_q;
+    wire [26:0] term_coefficient;
+    wire [4:0] term_index;
+    wire [5:0] term_offset;
     wire align_error;
     wire bank_valid, bank_ready, bank_done;
     wire bank_invalid, bank_loss;
@@ -85,9 +90,9 @@ module mac_quire_wrapper (
     assign x = bypass ? 12'b0 : ops_x;
     assign y = bypass ? 13'b0 : ops_y;
     assign ops_cut = |(frac_a[13:0] | frac_b[13:0]);
-    assign bank_valid = (accept && q_cmd == CLEAR) || (state_q == PRODUCT && core_done);
-    assign bank_invalid = align_error || core_error;
-    assign bank_loss = core_cut || approx_cut;
+    assign bank_valid = (accept && q_cmd == CLEAR) || (state_q == ALIGN);
+    assign bank_invalid = align_error || pre_invalid_q;
+    assign bank_loss = pre_loss_q;
     assign status_flags = (q_nar || q_invalid) ? 5'b10000 : {3'b0, q_loss, q_cut};
     assign pack_retire = state_q == READING;
 
@@ -168,10 +173,12 @@ module mac_quire_wrapper (
         .state_error (core_error)
     );
     quire_align_comb u_align (
-        .magnitude (acc),
-        .sign (core_sign),
-        .sf (core_sf),
-        .term (aligned_term),
+        .magnitude (pre_magnitude_q),
+        .sign (pre_sign_q),
+        .sf (pre_sf_q),
+        .coefficient (term_coefficient),
+        .word_index (term_index),
+        .bit_offset (term_offset),
         .align_error (align_error)
     );
     quire_bank u_bank (
@@ -180,11 +187,14 @@ module mac_quire_wrapper (
         .in_valid (bank_valid),
         .in_ready (bank_ready),
         .clear (clear_select),
-        .term (aligned_term),
-        .term_nar (product_nar_q),
+        .coefficient (term_coefficient),
+        .word_index (term_index),
+        .bit_offset (term_offset),
+        .term_zero (pre_zero_q),
+        .term_nar (pre_nar_q),
         .term_invalid (bank_invalid),
         .term_loss (bank_loss),
-        .term_cut (approx_cut),
+        .term_cut (pre_cut_q),
         .done (bank_done),
         .q_value (q_value),
         .q_count (q_count),
@@ -238,6 +248,8 @@ module mac_quire_wrapper (
             n_q <= 4'd12;
             ops_q <= 1'b1;
             product_nar_q <= 1'b0;
+            pre_magnitude_q<='0;pre_sf_q<='0;pre_sign_q<=1'b0;pre_zero_q<=1'b1;
+            pre_nar_q<=1'b0;pre_invalid_q<=1'b0;pre_loss_q<=1'b0;pre_cut_q<=1'b0;
             out_cmd <= CLEAR;
             d <= '0;
             flags <= '0;
@@ -260,7 +272,16 @@ module mac_quire_wrapper (
                     end
                 end
                 PRODUCT: begin
-                    if (core_done) state_q <= `CK2Q BANK;
+                    if (core_done) begin
+                        pre_magnitude_q<=`CK2Q acc;pre_sf_q<=`CK2Q core_sf;
+                        pre_sign_q<=`CK2Q core_sign;pre_zero_q<=`CK2Q (acc==26'b0);
+                        pre_nar_q<=`CK2Q product_nar_q;pre_invalid_q<=`CK2Q core_error;
+                        pre_loss_q<=`CK2Q (core_cut||approx_cut);pre_cut_q<=`CK2Q approx_cut;
+                        state_q<=`CK2Q ALIGN;
+                    end
+                end
+                ALIGN: begin
+                    if (bank_ready) state_q<=`CK2Q BANK;
                 end
                 BANK: begin
                     if (bank_done) begin

@@ -1,0 +1,859 @@
+{
+  "date": "2026-11-05",
+  "status": "PASS",
+  "rtl_sv_files": 37,
+  "active_rtl_sv_files": 36,
+  "outside_active_rtl_sv_files": 1,
+  "outside_active_modules": [
+    "posit_parser_f"
+  ],
+  "tops": {
+    "posit_mac_nf": 29,
+    "posit_mac_f": 27,
+    "posit_mac_quire": 19
+  },
+  "active_file_lists": {
+    "rtl/mac_active.f": {
+      "files": 31,
+      "missing_files": [],
+      "unreachable_listed": [],
+      "missing_dependencies": [],
+      "status": "PASS"
+    },
+    "rtl/quire_active.f": {
+      "files": 19,
+      "missing_files": [],
+      "unreachable_listed": [],
+      "missing_dependencies": [],
+      "status": "PASS"
+    }
+  },
+  "outside_active_references": [
+    {
+      "module": "posit_parser_f",
+      "file": "tb/tb_parser_f_timing_equiv.sv",
+      "line": 11,
+      "text": "posit_parser_f u_new(.clk(clk), .reset_n(reset_n), .in_valid(in_valid),"
+    },
+    {
+      "module": "posit_parser_f",
+      "file": "tb/tb_parser_f_timing_equiv.sv",
+      "line": 17,
+      "text": "posit_parser_f u_mag(.clk(clk), .reset_n(reset_n), .in_valid(1'b0),"
+    }
+  ],
+  "legacy_production_list": {
+    "entries": 54,
+    "existing_files": 22,
+    "missing_files": [
+      "rtl/adder/posit_add_align.sv",
+      "rtl/adder/posit_add_arith.sv",
+      "rtl/adder/posit_add_normalize.sv",
+      "rtl/multiplier/iter_ctrl.sv",
+      "rtl/multiplier/sbm_accum.sv",
+      "rtl/common/dyn_right_shifter.sv",
+      "rtl/multiplier/sac_step_comb_fixed2.sv",
+      "rtl/common/lod_lzd_core.sv",
+      "rtl/common/dyn_left_shifter_fixed2.sv",
+      "rtl/common/lod_lzd_core_fixed3.sv",
+      "rtl/common/dyn_left_shifter_fixed3.sv",
+      "rtl/common/dyn_left_shifter_fixed4.sv",
+      "rtl/mac_f/fused_add_pipe.sv",
+      "rtl/mac_f/fused_abs_borrow_comb.sv",
+      "rtl/mac_f/fused_align_comb.sv",
+      "rtl/mac_f/fused_arith_comb.sv",
+      "rtl/multiplier/ops_sel_comb_fixed2.sv",
+      "rtl/multiplier/mul_iter_core_fixed2.sv",
+      "rtl/mac_f/fused_prepare_comb.sv",
+      "rtl/mac_f/fused_norm_comb.sv",
+      "rtl/multiplier/iter_ctrl_fixed2.sv",
+      "rtl/multiplier/sbm_shift_comb_fixed2.sv",
+      "rtl/multiplier/sbm_accum_fixed2.sv",
+      "rtl/multiplier/sac_step_comb_fixed3.sv",
+      "rtl/multiplier/sbm_accum_comb_fixed2.sv",
+      "rtl/adder/posit_add_comb.sv",
+      "rtl/multiplier/posit_mul_iter.sv",
+      "rtl/multiplier/mul_iter_wrapper.sv",
+      "rtl/multiplier/mul_norm_comb.sv",
+      "rtl/packer/posit_pack_comb.sv",
+      "rtl/packer/round_unpacked_comb.sv",
+      "rtl/parser/posit_parser_comb.sv"
+    ],
+    "scope": "Historical checkpoint; not current build list"
+  },
+  "modules": [
+    {
+      "module": "posit_add",
+      "file": "rtl/adder/posit_add.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_f_wrapper",
+          "instance": "u_add",
+          "file": "rtl/mac_f/mac_f_wrapper.sv",
+          "line": 221
+        },
+        {
+          "module": "mac_nf_wrapper",
+          "instance": "u_add",
+          "file": "rtl/mac_nf/mac_nf_wrapper.sv",
+          "line": 277
+        }
+      ],
+      "sha256": "0a8b334af7191b862f81e8f920661620ea309244075052807ab6b35259ff09a8",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_add_align_comb",
+      "file": "rtl/adder/posit_add_align_comb.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_add",
+          "instance": "u_s2_align",
+          "file": "rtl/adder/posit_add.sv",
+          "line": 119
+        }
+      ],
+      "sha256": "385ecbc1af5bc5cc43d383c68808b095befa3651536257c65c61198fbed38392",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_add_arith_comb",
+      "file": "rtl/adder/posit_add_arith_comb.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_add",
+          "instance": "u_s3_arith",
+          "file": "rtl/adder/posit_add.sv",
+          "line": 140
+        }
+      ],
+      "sha256": "0092c8a207ac413e32a66653536a7e11be71711380b29821816c5d946b5d1848",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_add_lod_comb",
+      "file": "rtl/adder/posit_add_lod_comb.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_add",
+          "instance": "u_s4_lod",
+          "file": "rtl/adder/posit_add.sv",
+          "line": 164
+        }
+      ],
+      "sha256": "515fc3078fb6bcd7cc338c6eeff72918cdd1ce218f1dbb9205be8c1853171829",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_add_norm_comb",
+      "file": "rtl/adder/posit_add_norm_comb.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_add",
+          "instance": "u_s5_norm",
+          "file": "rtl/adder/posit_add.sv",
+          "line": 184
+        }
+      ],
+      "sha256": "fdbe96b3bae28504e7a842183583bac184691c35e38665a332ae84a66e356e8c",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_add_prepare_comb",
+      "file": "rtl/adder/posit_add_prepare_comb.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_add",
+          "instance": "u_s1_prepare",
+          "file": "rtl/adder/posit_add.sv",
+          "line": 81
+        }
+      ],
+      "sha256": "4ec414c6d623649329dd8676341054812418da6098b32241248e2ef112f736bf",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "dyn_left_shifter",
+      "file": "rtl/common/dyn_left_shifter.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_magnitude_parse",
+          "instance": "align_payload",
+          "file": "rtl/mac_nf/posit_magnitude_parse.sv",
+          "line": 63
+        },
+        {
+          "module": "posit_parser",
+          "instance": "u_align_payload",
+          "file": "rtl/parser/posit_parser.sv",
+          "line": 170
+        },
+        {
+          "module": "posit_parser_f",
+          "instance": "u_align_payload",
+          "file": "rtl/parser/posit_parser_f.sv",
+          "line": 170
+        },
+        {
+          "module": "posit_parser_mul",
+          "instance": "u_align_payload",
+          "file": "rtl/parser/posit_parser_mul.sv",
+          "line": 175
+        }
+      ],
+      "sha256": "f22b3111b56d081e45e10de81bf728b5af18895ea72d0e7ac19e2b8a9884f099",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "dyn_left_shifter_fixed5",
+      "file": "rtl/common/dyn_left_shifter_fixed5.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "sac_step_comb",
+          "instance": "u_shift",
+          "file": "rtl/multiplier/sac_step_comb.sv",
+          "line": 37
+        }
+      ],
+      "sha256": "499fc06c2704e57765a95e003867ae5543222209ea602352a4da3b264127d6b3",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "dyn_left_shifter_fixed6",
+      "file": "rtl/common/dyn_left_shifter_fixed6.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_add_norm_comb",
+          "instance": "u_left_shift",
+          "file": "rtl/adder/posit_add_norm_comb.sv",
+          "line": 34
+        }
+      ],
+      "sha256": "4d843f1d62679adedb325658c4a4edf6a03f1d00d3519ab1b43fb66f729458f7",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "dyn_right_shifter_fixed2",
+      "file": "rtl/common/dyn_right_shifter_fixed2.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_pack_prepare",
+          "instance": "u_payload_shift",
+          "file": "rtl/packer/posit_pack_prepare.sv",
+          "line": 57
+        }
+      ],
+      "sha256": "09e1da06be60167c315bca67f4c4f93cea782ab907e0f1bf3ba451aa287a10d5",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "dyn_right_shifter_fixed4",
+      "file": "rtl/common/dyn_right_shifter_fixed4.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_add_align_comb",
+          "instance": "u_right_shift",
+          "file": "rtl/adder/posit_add_align_comb.sv",
+          "line": 22
+        }
+      ],
+      "sha256": "af64a7d5b743913f16a7737f76ab080cb950d0a5cf8475b173b7af4290612f24",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "lod_lzd_core_fixed2",
+      "file": "rtl/common/lod_lzd_core_fixed2.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_add_lod_comb",
+          "instance": "u_lod",
+          "file": "rtl/adder/posit_add_lod_comb.sv",
+          "line": 17
+        },
+        {
+          "module": "posit_magnitude_parse",
+          "instance": "u_regime_detector",
+          "file": "rtl/mac_nf/posit_magnitude_parse.sv",
+          "line": 53
+        }
+      ],
+      "sha256": "4d56d69bfcea828f76c01b95e62b0413a29b314b4c331e00fede59e7d2de144c",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "lod_lzd_core_fixed4",
+      "file": "rtl/common/lod_lzd_core_fixed4.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "sac_step_comb",
+          "instance": "u_lod",
+          "file": "rtl/multiplier/sac_step_comb.sv",
+          "line": 28
+        }
+      ],
+      "sha256": "707d000f31a435ba01eed8732179c8b3ce2929fc3d370ef73160e37a1e6d9fd5",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "mac_f_wrapper",
+      "file": "rtl/mac_f/mac_f_wrapper.sv",
+      "used_by_tops": [
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_mac_f",
+          "instance": "u_wrapper",
+          "file": "rtl/mac_f/posit_mac_f.sv",
+          "line": 26
+        }
+      ],
+      "sha256": "2fe90bc64a6b70f86d44f65ea352ab6a0bcfa91c7087d481b609dc75de045ea1",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_mac_f",
+      "file": "rtl/mac_f/posit_mac_f.sv",
+      "used_by_tops": [
+        "posit_mac_f"
+      ],
+      "rtl_callers": [],
+      "sha256": "cf9b8a21daaae69b223070d3e6c595bee9f4f8d025db5dc48d8402f6a40c1716",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "mac_nf_wrapper",
+      "file": "rtl/mac_nf/mac_nf_wrapper.sv",
+      "used_by_tops": [
+        "posit_mac_nf"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_mac_nf",
+          "instance": "u_wrapper",
+          "file": "rtl/mac_nf/posit_mac_nf.sv",
+          "line": 26
+        }
+      ],
+      "sha256": "801f6168e4969e02969359d93d3e419e436bb2774ecdd572cf22c21da5596d15",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_mac_nf",
+      "file": "rtl/mac_nf/posit_mac_nf.sv",
+      "used_by_tops": [
+        "posit_mac_nf"
+      ],
+      "rtl_callers": [],
+      "sha256": "46872da7e889e2aa37b191f82f2aa2cd7cf3f77cb66baeb9361863ba8cca8596",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_magnitude_parse",
+      "file": "rtl/mac_nf/posit_magnitude_parse.sv",
+      "used_by_tops": [
+        "posit_mac_nf"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_nf_wrapper",
+          "instance": "u_product_parse",
+          "file": "rtl/mac_nf/mac_nf_wrapper.sv",
+          "line": 268
+        }
+      ],
+      "sha256": "6fb004b1fcc0b135599980a31c86336464ef7a96cf05b8a07a4b28a8869fe0a7",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_product_pack",
+      "file": "rtl/mac_nf/posit_product_pack.sv",
+      "used_by_tops": [
+        "posit_mac_nf"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_nf_wrapper",
+          "instance": "u_product_pack",
+          "file": "rtl/mac_nf/mac_nf_wrapper.sv",
+          "line": 250
+        }
+      ],
+      "sha256": "ddca8613ec217a564bc230a96fabebeeeb94423188f70e8a640f653bf4e56506",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "mac_quire_wrapper",
+      "file": "rtl/mac_quire/mac_quire_wrapper.sv",
+      "used_by_tops": [
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_mac_quire",
+          "instance": "u_wrapper",
+          "file": "rtl/mac_quire/posit_mac_quire.sv",
+          "line": 26
+        }
+      ],
+      "sha256": "edd43defc1caee6330b5327787b3bf6743c534cabad43598f76add37925e567f",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_mac_quire",
+      "file": "rtl/mac_quire/posit_mac_quire.sv",
+      "used_by_tops": [
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [],
+      "sha256": "f9fa29b3398661fadb2419a259332c3579e095176bd6efac07d918d155ee3cae",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "quire_align_comb",
+      "file": "rtl/mac_quire/quire_align_comb.sv",
+      "used_by_tops": [
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_quire_wrapper",
+          "instance": "u_align",
+          "file": "rtl/mac_quire/mac_quire_wrapper.sv",
+          "line": 175
+        }
+      ],
+      "sha256": "6ff7bb1197ce1df3df4e57f6eb48f9e875082274ac3508826f2d10d24d793f8c",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "quire_bank",
+      "file": "rtl/mac_quire/quire_bank.sv",
+      "used_by_tops": [
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_quire_wrapper",
+          "instance": "u_bank",
+          "file": "rtl/mac_quire/mac_quire_wrapper.sv",
+          "line": 184
+        }
+      ],
+      "sha256": "384827dd624d24f9bd32b9590c9c82a500e3f4824bd242a8fc5193da07f41a5a",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "quire_read",
+      "file": "rtl/mac_quire/quire_read.sv",
+      "used_by_tops": [
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_quire_wrapper",
+          "instance": "u_read",
+          "file": "rtl/mac_quire/mac_quire_wrapper.sv",
+          "line": 207
+        }
+      ],
+      "sha256": "e9c44525e091d464557929041390a63280e2a49da137d351ba0114af96e75420",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "mul_iter_core",
+      "file": "rtl/multiplier/mul_iter_core.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_f_wrapper",
+          "instance": "u_core",
+          "file": "rtl/mac_f/mac_f_wrapper.sv",
+          "line": 199
+        },
+        {
+          "module": "mac_nf_wrapper",
+          "instance": "u_core",
+          "file": "rtl/mac_nf/mac_nf_wrapper.sv",
+          "line": 213
+        },
+        {
+          "module": "mac_quire_wrapper",
+          "instance": "u_core",
+          "file": "rtl/mac_quire/mac_quire_wrapper.sv",
+          "line": 153
+        }
+      ],
+      "sha256": "5fc48e27390864b0ad090c1927ab8e1359d264421f941da0718c5444dfc80bae",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "mul_prepack_norm_comb",
+      "file": "rtl/multiplier/mul_prepack_norm_comb.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_f_wrapper",
+          "instance": "u_norm",
+          "file": "rtl/mac_f/mac_f_wrapper.sv",
+          "line": 109
+        },
+        {
+          "module": "mac_nf_wrapper",
+          "instance": "u_norm",
+          "file": "rtl/mac_nf/mac_nf_wrapper.sv",
+          "line": 235
+        }
+      ],
+      "sha256": "c4e18c295c4f1dc0475c6aa31f4de843a2481fcef0e1b1666be0228421f454af",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "ops_sel_comb",
+      "file": "rtl/multiplier/ops_sel_comb.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_f_wrapper",
+          "instance": "u_ops",
+          "file": "rtl/mac_f/mac_f_wrapper.sv",
+          "line": 186
+        },
+        {
+          "module": "mac_nf_wrapper",
+          "instance": "u_ops",
+          "file": "rtl/mac_nf/mac_nf_wrapper.sv",
+          "line": 200
+        },
+        {
+          "module": "mac_quire_wrapper",
+          "instance": "u_ops",
+          "file": "rtl/mac_quire/mac_quire_wrapper.sv",
+          "line": 140
+        }
+      ],
+      "sha256": "5b76ecc3dd3148281ae167e92cc6534cfd4bef9bf785082c9f23fb70598c071e",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "sac_step_comb",
+      "file": "rtl/multiplier/sac_step_comb.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mul_iter_core",
+          "instance": "u_sac",
+          "file": "rtl/multiplier/mul_iter_core.sv",
+          "line": 65
+        }
+      ],
+      "sha256": "ecfb654eb80a8f5871b2c93896087dc35f3c78c83ee87aa9a551fd691509a962",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "sbm_accum_comb",
+      "file": "rtl/multiplier/sbm_accum_comb.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mul_iter_core",
+          "instance": "u_accum",
+          "file": "rtl/multiplier/mul_iter_core.sv",
+          "line": 111
+        }
+      ],
+      "sha256": "67b014364118418077d0266434a74c589f7210986702adabf51cdf99fdbfe713",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "sbm_shift_comb",
+      "file": "rtl/multiplier/sbm_shift_comb.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mul_iter_core",
+          "instance": "u_shift",
+          "file": "rtl/multiplier/mul_iter_core.sv",
+          "line": 86
+        }
+      ],
+      "sha256": "12f22988bdba755da45b9cf743d551da4faba83acb1b7153f2eedc006181e7f6",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_pack",
+      "file": "rtl/packer/posit_pack.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_f_wrapper",
+          "instance": "u_pack",
+          "file": "rtl/mac_f/mac_f_wrapper.sv",
+          "line": 247
+        },
+        {
+          "module": "mac_nf_wrapper",
+          "instance": "u_pack",
+          "file": "rtl/mac_nf/mac_nf_wrapper.sv",
+          "line": 303
+        },
+        {
+          "module": "mac_quire_wrapper",
+          "instance": "u_pack",
+          "file": "rtl/mac_quire/mac_quire_wrapper.sv",
+          "line": 227
+        }
+      ],
+      "sha256": "7b45c92f0253045d7888ba1c016bc37e6ccaf28a8962046d082238061ee3d1bc",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_pack_finish",
+      "file": "rtl/packer/posit_pack_finish.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_product_pack",
+          "instance": "u_finish",
+          "file": "rtl/mac_nf/posit_product_pack.sv",
+          "line": 99
+        },
+        {
+          "module": "posit_pack",
+          "instance": "u_finish",
+          "file": "rtl/packer/posit_pack.sv",
+          "line": 96
+        }
+      ],
+      "sha256": "8c964b3e8ec1083c0d82826688f0211d661dbfb294213d522b79d30b262e43ad",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_pack_prepare",
+      "file": "rtl/packer/posit_pack_prepare.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_product_pack",
+          "instance": "u_prepare",
+          "file": "rtl/mac_nf/posit_product_pack.sv",
+          "line": 71
+        },
+        {
+          "module": "posit_pack",
+          "instance": "u_prepare",
+          "file": "rtl/packer/posit_pack.sv",
+          "line": 69
+        }
+      ],
+      "sha256": "542908c530e0333cef884fb86f3b3237065911564ff27d3db91694de46bd0436",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_parser",
+      "file": "rtl/parser/posit_parser.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_f_wrapper",
+          "instance": "u_c",
+          "file": "rtl/mac_f/mac_f_wrapper.sv",
+          "line": 172
+        },
+        {
+          "module": "mac_nf_wrapper",
+          "instance": "u_c",
+          "file": "rtl/mac_nf/mac_nf_wrapper.sv",
+          "line": 186
+        },
+        {
+          "module": "mac_quire_wrapper",
+          "instance": "u_a",
+          "file": "rtl/mac_quire/mac_quire_wrapper.sv",
+          "line": 112
+        },
+        {
+          "module": "mac_quire_wrapper",
+          "instance": "u_b",
+          "file": "rtl/mac_quire/mac_quire_wrapper.sv",
+          "line": 126
+        }
+      ],
+      "sha256": "fe62b916e80c447be34042a6cf8f5ac38e948ae279ca930210677a57a158b3c4",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_parser_f",
+      "file": "rtl/parser/posit_parser_f.sv",
+      "used_by_tops": [],
+      "rtl_callers": [],
+      "sha256": "2f6a81bb0ddc26e2957d586999cc0ba96725703b06f29fc422278530278fffa9",
+      "status": "OUTSIDE_ACTIVE_HIERARCHIES"
+    },
+    {
+      "module": "posit_parser_f_regime_lod",
+      "file": "rtl/parser/posit_parser_f_regime_lod.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f",
+        "posit_mac_quire"
+      ],
+      "rtl_callers": [
+        {
+          "module": "posit_parser",
+          "instance": "u_regime_detector",
+          "file": "rtl/parser/posit_parser.sv",
+          "line": 124
+        },
+        {
+          "module": "posit_parser_f",
+          "instance": "u_regime_detector",
+          "file": "rtl/parser/posit_parser_f.sv",
+          "line": 124
+        },
+        {
+          "module": "posit_parser_mul",
+          "instance": "u_regime_detector",
+          "file": "rtl/parser/posit_parser_mul.sv",
+          "line": 131
+        }
+      ],
+      "sha256": "2ea7845ef892a9720d0fbd83a0facad2934e4e2a8ec0f25fa87754ca0b931941",
+      "status": "ACTIVE"
+    },
+    {
+      "module": "posit_parser_mul",
+      "file": "rtl/parser/posit_parser_mul.sv",
+      "used_by_tops": [
+        "posit_mac_nf",
+        "posit_mac_f"
+      ],
+      "rtl_callers": [
+        {
+          "module": "mac_f_wrapper",
+          "instance": "u_a",
+          "file": "rtl/mac_f/mac_f_wrapper.sv",
+          "line": 142
+        },
+        {
+          "module": "mac_f_wrapper",
+          "instance": "u_b",
+          "file": "rtl/mac_f/mac_f_wrapper.sv",
+          "line": 157
+        },
+        {
+          "module": "mac_nf_wrapper",
+          "instance": "u_a",
+          "file": "rtl/mac_nf/mac_nf_wrapper.sv",
+          "line": 156
+        },
+        {
+          "module": "mac_nf_wrapper",
+          "instance": "u_b",
+          "file": "rtl/mac_nf/mac_nf_wrapper.sv",
+          "line": 171
+        }
+      ],
+      "sha256": "7dc76212d4dc2bcc2b5eb90f1079d93d5f39b5ddf32532e14ddd837143385503",
+      "status": "ACTIVE"
+    }
+  ],
+  "rtl_modified": false,
+  "simulation_run": false,
+  "synthesis_run": false
+}

@@ -1,0 +1,41 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Wed Nov  4 23:29:42 2026
+| Host         : MSI running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file synthesis_hierarchy.rpt
+| Design       : quire_ppa_top
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Synthesized
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++-------------------+-------------------+------------+------------+---------+------+------+--------+--------+------------+
+|      Instance     |       Module      | Total LUTs | Logic LUTs | LUTRAMs | SRLs |  FFs | RAMB36 | RAMB18 | DSP Blocks |
++-------------------+-------------------+------------+------------+---------+------+------+--------+--------+------------+
+| quire_ppa_top     |             (top) |      10156 |      10156 |       0 |    0 | 4458 |      0 |      0 |          0 |
+|   (quire_ppa_top) |             (top) |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|   u_dut           |   posit_mac_quire |      10156 |      10156 |       0 |    0 | 4458 |      0 |      0 |          0 |
+|     u_wrapper     | mac_quire_wrapper |      10154 |      10154 |       0 |    0 | 4458 |      0 |      0 |          0 |
+|       (u_wrapper) | mac_quire_wrapper |          4 |          4 |       0 |    0 |   54 |      0 |      0 |          0 |
+|       u_a         |      posit_parser |        158 |        158 |       0 |    0 |   80 |      0 |      0 |          0 |
+|       u_align     |  quire_align_comb |       3011 |       3011 |       0 |    0 |    0 |      0 |      0 |          0 |
+|       u_b         |    posit_parser_0 |        191 |        191 |       0 |    0 |   80 |      0 |      0 |          0 |
+|       u_bank      |        quire_bank |       1831 |       1831 |       0 |    0 | 2946 |      0 |      0 |          0 |
+|       u_core      |     mul_iter_core |       3109 |       3109 |       0 |    0 |  153 |      0 |      0 |          0 |
+|         (u_core)  |     mul_iter_core |       3068 |       3068 |       0 |    0 |  153 |      0 |      0 |          0 |
+|       u_pack      |        posit_pack |        105 |        105 |       0 |    0 |   84 |      0 |      0 |          0 |
+|         (u_pack)  |        posit_pack |         75 |         75 |       0 |    0 |   84 |      0 |      0 |          0 |
+|       u_read      |        quire_read |       1700 |       1700 |       0 |    0 | 1061 |      0 |      0 |          0 |
++-------------------+-------------------+------------+------------+---------+------+------+--------+--------+------------+
+
+

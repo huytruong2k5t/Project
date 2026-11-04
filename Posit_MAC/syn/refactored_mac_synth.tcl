@@ -25,6 +25,7 @@ report_drc -file synthesis_drc.rpt
 report_clocks -file clocks.rpt
 write_checkpoint synthesis.dcp
 write_xdc effective_constraints.xdc
+source [file join $root syn report_mac_f2f.tcl]
 set f [open status.txt w];puts $f SYNTHESIS_COMPLETE;close $f
 puts "REFACTORED_MAC_SYNTHESIS_COMPLETE variant=$variant part=$part"
 close_project

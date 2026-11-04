@@ -1,0 +1,14 @@
+# vsim -do run.do -l parser_lod.log -c -wlf parser_lod.wlf work.tb_parser_lod_refactor_recheck 
+# Loading sv_std.std
+# Loading work.tb_parser_lod_refactor_recheck
+# Loading work.posit_parser
+# Loading work.lod_lzd_core_fixed2
+# Loading work.dyn_left_shifter
+# Loading work.posit_parser_previous
+# Loading work.lod_lzd_core_previous
+# do run.do 
+# PARSER_MAG_DUT_PASS checked=4000000
+# LOD_SERIAL_PASS checked=500063
+# PARSER_PREVIOUS_EQUIV_PASS accepted=105394 completed=105367 aborted=27 stalls=35270
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/parser_lod_refactor_recheck_20261101/verify_parser_lod/source/tb_parser_lod_refactor_recheck.sv(112)
+#    Time: 6000760 ns  Iteration: 1  Instance: /tb_parser_lod_refactor_recheck

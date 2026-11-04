@@ -1,0 +1,15 @@
+{
+  "status": "PREPARED_BEFORE_RUN",
+  "parent_matrix_sha256": "09f69b6fb2a9cdeef34f6365babd2cb28d2aa488a47814f9d39f5ea29080f2c2",
+  "profiles": [
+    "nf32_3",
+    "nf32_2"
+  ],
+  "completed_each": 20000,
+  "target": "adder_bins[49], d=8..F same-sign overflow; exact A=2-2^-F B=1 C=2^-8",
+  "original_corpus_sha256": "1f328a2d15a1db77c217b1d1d3acb6c241008ac5ba760de3b737097bccc33cd5",
+  "source_sha256": {
+    "nf_carry.cpp": "a1ea0a6a21a3e72d7147d33b4e7f2b214d794e938e1ffa669b09ea17f44f8dda",
+    "nf_carry.hpp": "ecd43deaf98aa364478af8986cd8e24d2bb6ea7a8a0f33d1e6b884e6ad0e83c5"
+  }
+}

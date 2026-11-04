@@ -1,0 +1,30 @@
+# vsim {+VECTORS=C:\HCMUT\HK261\Do an 2\Posit_MAC\results\refactored_mac_20261101_r3/vectors/f.txt} -do run.do -l f.log -c -wlf f.wlf -gFUSED=1 work.tb_refactored_mac 
+# Loading sv_std.std
+# Loading work.tb_refactored_mac
+# Loading work.posit_mac_f
+# Loading work.mac_f_wrapper
+# Loading work.posit_parser
+# Loading work.lod_lzd_core_fixed2
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb_fixed2
+# Loading work.mul_iter_core_fixed2
+# Loading work.sac_step_comb_fixed3
+# Loading work.lod_lzd_core_fixed4
+# Loading work.dyn_left_shifter_fixed5
+# Loading work.sbm_shift_comb_fixed2
+# Loading work.dyn_right_shifter_fixed3
+# Loading work.sbm_accum_comb_fixed2
+# Loading work.fused_add_pipe
+# Loading work.fused_prepare_comb
+# Loading work.fused_align_comb
+# Loading work.fused_arith_comb
+# Loading work.fused_abs_borrow_comb
+# Loading work.fused_norm_comb
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter_fixed2
+# Loading work.posit_pack_finish
+# do run.do 
+# MAC_REFACTOR_PASS F=1 rows=5000 accepted=5000 completed=4970 aborted=30 stalls=18115 latency_observed=12..23
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/refactored_mac_20261101_r3/source/tb/tb_refactored_mac.sv(112)
+#    Time: 1143470 ns  Iteration: 1  Instance: /tb_refactored_mac

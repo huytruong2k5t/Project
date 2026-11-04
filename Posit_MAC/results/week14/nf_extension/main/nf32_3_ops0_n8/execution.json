@@ -1,0 +1,34 @@
+{
+  "status": "COMPLETE",
+  "job": {
+    "id": "nf32_3_ops0_n8",
+    "top": "nf",
+    "nb": 32,
+    "es": 3,
+    "exact_en": 1,
+    "ops": 0,
+    "n": 8,
+    "main_goal": 10000000,
+    "seed": 2026101825,
+    "pilot_goal": 20000,
+    "scheme": "FLOOR",
+    "rounding": "RNE"
+  },
+  "goal": 10000000,
+  "command": [
+    "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/nf_extension/builds/nf32_3/obj/Vposit_mac_nf",
+    "10000000",
+    "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/nf_extension/main/nf32_3_ops0_n8/result",
+    "8",
+    "0",
+    "2026101825"
+  ],
+  "binary_sha256": "bbddd7980b2b2e54076cd44ebcd0d873ed5e96dd0e3bee38e3218d9b4829cff5",
+  "parent_matrix_sha256": "09f69b6fb2a9cdeef34f6365babd2cb28d2aa488a47814f9d39f5ea29080f2c2",
+  "runner_sha256": "8a4319d6dea10ee29fc3e5a07da401ee881589822bd2b1dca56fe6067806bf46",
+  "exit_code": 0,
+  "wall_seconds": 199.7721490890001,
+  "peak_child_rss_kib": 327016,
+  "report_sha256": "44a1bd89dc9bd3f551fca734006b8036e72a2b8287cdb7093a8b9f928a06713d",
+  "log_sha256": "7d878190381da59e2209231aed82a6a0a0bbe7d4b6240c51a2593f3fbe6f9744"
+}

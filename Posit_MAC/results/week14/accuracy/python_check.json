@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "cpp_samples_per_n": 100000,
+  "n": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "python_fraction_checks_per_n": [
+    1024,
+    1024,
+    1024,
+    1024,
+    1024,
+    1024,
+    1024,
+    1024,
+    1024
+  ],
+  "total_python_checks": 9216,
+  "metrics": "decode, exact real A*B+C, independent RNE, absolute/relative error and strict thresholds",
+  "tolerance": "long-double numerical metrics relative1e-15; exact integer classification/reference bits",
+  "scope": "standalone accuracy pilot, not RTL main accuracy or W14-09",
+  "policy": "Standalone shared C; future acc_mode suite reports own NF/F states and exact-real reference state separately, never silently reuses common C across divergent feedback"
+}

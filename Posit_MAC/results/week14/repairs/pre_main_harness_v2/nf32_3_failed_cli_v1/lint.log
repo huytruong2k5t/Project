@@ -1,0 +1,7 @@
+%Warning-WIDTHTRUNC: src/rtl/posit_mac_nf.sv:14:19: Operator VAR 'EXACT_EN' expects 1 bits on the Initial value, but Initial value's CONST '32'h1' generates 32 bits.
+                                                  : ... note: In instance 'posit_mac_nf'
+   14 |     parameter bit EXACT_EN=1'b1,
+      |                   ^~~~~~~~
+                     ... For warning description see https://verilator.org/warn/WIDTHTRUNC?v=5.032
+                     ... Use "/* verilator lint_off WIDTHTRUNC */" and lint_on around source to disable this message.
+%Error: Exiting due to 1 warning(s)

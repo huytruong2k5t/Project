@@ -1,0 +1,91 @@
+{
+  "baseline": "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\readme_refactor_recheck_20261101",
+  "current": "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\parser_lod_refactor_recheck_20261101",
+  "part": "xc7a35tcpg236-1",
+  "period_ns": 10,
+  "synthesis_only": true,
+  "rtl_unchanged_by_review": true,
+  "changed_rtl": [
+    "rtl/parser/posit_parser.sv",
+    "rtl/common/lod_lzd_core_fixed2.sv"
+  ],
+  "verification": {
+    "adder": "ADDER_REFACTOR_PASS accepted=39535 completed=39534 aborted=1 stalls=20310",
+    "packer": "PACKER_REFACTOR_PASS completed=10851 stalls=3552 errors=0",
+    "nf": "MAC_REFACTOR_PASS F=0 rows=50000 accepted=50000 completed=49701 aborted=299 stalls=181084 latency_observed=15..22",
+    "f": "MAC_REFACTOR_PASS F=1 rows=50000 accepted=50000 completed=49701 aborted=299 stalls=181084 latency_observed=12..23",
+    "parser_lod": [
+      "PARSER_MAG_DUT_PASS checked=4000000",
+      "LOD_SERIAL_PASS checked=500063",
+      "PARSER_PREVIOUS_EQUIV_PASS accepted=105394 completed=105367 aborted=27 stalls=35270"
+    ]
+  },
+  "comparison": {
+    "nf": {
+      "old": {
+        "LUT": 2098,
+        "FF": 1077,
+        "DSP": 0,
+        "BRAM": 0,
+        "WNS_ns": 2.025,
+        "WHS_ns": -0.055,
+        "F2F_ns": 7.334
+      },
+      "new": {
+        "LUT": 2214,
+        "FF": 1077,
+        "DSP": 0,
+        "BRAM": 0,
+        "WNS_ns": 2.025,
+        "WHS_ns": -0.055,
+        "F2F_ns": 7.334
+      },
+      "F2F_reduction_percent": 0.0,
+      "critical_path": {
+        "group": "whole_f2f",
+        "register_count": "1077",
+        "target_kind": "D_CE",
+        "data_delay_ns": "7.334",
+        "logic_delay_ns": "1.742",
+        "net_delay_ns": "5.592",
+        "slack_ns": "2.466",
+        "levels": "8",
+        "startpoint": "u_dut/u_wrapper/u_b/p2_frac_q_reg[9]/C",
+        "endpoint": "u_dut/u_wrapper/u_core/u_ctrl/fx_q_reg[10]/D"
+      }
+    },
+    "f": {
+      "old": {
+        "LUT": 1257,
+        "FF": 820,
+        "DSP": 0,
+        "BRAM": 0,
+        "WNS_ns": 2.689,
+        "WHS_ns": -0.055,
+        "F2F_ns": 6.602
+      },
+      "new": {
+        "LUT": 1374,
+        "FF": 820,
+        "DSP": 0,
+        "BRAM": 0,
+        "WNS_ns": 1.57,
+        "WHS_ns": -0.055,
+        "F2F_ns": 7.697
+      },
+      "F2F_reduction_percent": -16.59,
+      "critical_path": {
+        "group": "whole_f2f",
+        "register_count": "820",
+        "target_kind": "D_CE",
+        "data_delay_ns": "7.697",
+        "logic_delay_ns": "1.495",
+        "net_delay_ns": "6.202",
+        "slack_ns": "2.052",
+        "levels": "7",
+        "startpoint": "u_dut/u_wrapper/accumulator_q_reg[31]/C",
+        "endpoint": "u_dut/u_wrapper/u_c/p1_cnt_q_reg[0]/D"
+      }
+    }
+  }
+}

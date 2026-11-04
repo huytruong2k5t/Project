@@ -1,0 +1,287 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Sun Nov  1 17:45:33 2026
+| Host         : MSI running 64-bit major release  (build 9200)
+| Command      : report_timing -from [all_registers] -to [get_pins -quiet -of_objects {{u_dut/u_wrapper/u_core/u_acc/acc_reg[0]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[10]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[11]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[12]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[13]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[14]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[15]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[16]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[17]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[18]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[19]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[1]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[20]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[21]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[22]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[23]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[24]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[25]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[26]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[27]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[28]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[29]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[2]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[30]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[31]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[32]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[33]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[34]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[35]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[36]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[37]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[38]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[39]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[3]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[40]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[41]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[42]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[43]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[44]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[45]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[46]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[47]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[48]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[49]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[4]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[50]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[51]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[52]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[53]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[5]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[6]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[7]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[8]} {u_dut/u_wrapper/u_core/u_acc/acc_reg[9]} u_dut/u_wrapper/u_core/u_acc/approx_cut_o_reg u_dut/u_wrapper/u_core/u_acc/done_reg u_dut/u_wrapper/u_core/u_acc/numerical_tail_reg} -filter {REF_PIN_NAME == D}] -delay_type max -max_paths 3 -file multiplier_acc_l3_D.rpt
+| Design       : prepack_nf_ppa_top
+| Device       : 7a35t-cpg236
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+| Design State : Synthesized
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             5.406ns  (required time - arrival time)
+  Source:                 u_dut/u_wrapper/u_core/mode_o_reg/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_core/u_acc/acc_reg[53]/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (clk rise@10.000ns - clk rise@0.000ns)
+  Data Path Delay:        4.390ns  (logic 2.895ns (65.945%)  route 1.495ns (34.055%))
+  Logic Levels:           14  (CARRY4=13 LUT4=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.454ns = ( 11.454 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.653ns
+    Clock Pessimism Removal (CPR):    0.054ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.973     0.973    clk
+                         BUFG (Prop_bufg_I_O)         0.096     1.069 r  u_clk/O
+                         net (fo=1077, unplaced)      0.584     1.653    u_dut/u_wrapper/u_core/CLK
+                         FDCE                                         r  u_dut/u_wrapper/u_core/mode_o_reg/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.456     2.109 r  u_dut/u_wrapper/u_core/mode_o_reg/Q
+                         net (fo=185, unplaced)       0.856     2.965    u_dut/u_wrapper/u_core/u_acc/p1_mag_trunc_q_reg[30]_0
+                         LUT4 (Prop_lut4_I1_O)        0.295     3.260 r  u_dut/u_wrapper/u_core/u_acc/acc[7]_i_4/O
+                         net (fo=1, unplaced)         0.639     3.899    u_dut/u_wrapper/u_core/u_acc/sum1[5]
+                         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.520     4.419 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[7]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.419    u_dut/u_wrapper/u_core/u_acc/acc_reg[7]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.536 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[11]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.536    u_dut/u_wrapper/u_core/u_acc/acc_reg[11]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.653 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[15]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.653    u_dut/u_wrapper/u_core/u_acc/acc_reg[15]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.770 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[19]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.770    u_dut/u_wrapper/u_core/u_acc/acc_reg[19]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.887 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[23]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.887    u_dut/u_wrapper/u_core/u_acc/acc_reg[23]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.004 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[27]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.004    u_dut/u_wrapper/u_core/u_acc/acc_reg[27]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.121 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[31]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.121    u_dut/u_wrapper/u_core/u_acc/acc_reg[31]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.238 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[35]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.238    u_dut/u_wrapper/u_core/u_acc/acc_reg[35]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.355 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[39]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.355    u_dut/u_wrapper/u_core/u_acc/acc_reg[39]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.472 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[43]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.472    u_dut/u_wrapper/u_core/u_acc/acc_reg[43]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.589 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[47]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.589    u_dut/u_wrapper/u_core/u_acc/acc_reg[47]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.706 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[51]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.706    u_dut/u_wrapper/u_core/u_acc/acc_reg[51]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.337     6.043 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[53]_i_1/O[1]
+                         net (fo=1, unplaced)         0.000     6.043    u_dut/u_wrapper/u_core/u_acc/acc_reg[53]_i_1_n_6
+                         FDCE                                         r  u_dut/u_wrapper/u_core/u_acc/acc_reg[53]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)       10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=0)                   0.924    10.924    clk
+                         BUFG (Prop_bufg_I_O)         0.091    11.015 r  u_clk/O
+                         net (fo=1077, unplaced)      0.439    11.454    u_dut/u_wrapper/u_core/u_acc/CLK
+                         FDCE                                         r  u_dut/u_wrapper/u_core/u_acc/acc_reg[53]/C
+                         clock pessimism              0.054    11.508    <hidden>
+                         clock uncertainty           -0.135    11.373    <hidden>
+                         FDCE (Setup_fdce_C_D)        0.076    11.449    u_dut/u_wrapper/u_core/u_acc/acc_reg[53]
+  -------------------------------------------------------------------
+                         required time                         11.449    <hidden>
+                         arrival time                          -6.043    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  5.406    <hidden>
+
+Slack (MET) :             5.511ns  (required time - arrival time)
+  Source:                 u_dut/u_wrapper/u_core/mode_o_reg/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_core/u_acc/acc_reg[52]/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (clk rise@10.000ns - clk rise@0.000ns)
+  Data Path Delay:        4.285ns  (logic 2.790ns (65.111%)  route 1.495ns (34.889%))
+  Logic Levels:           14  (CARRY4=13 LUT4=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.454ns = ( 11.454 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.653ns
+    Clock Pessimism Removal (CPR):    0.054ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.973     0.973    clk
+                         BUFG (Prop_bufg_I_O)         0.096     1.069 r  u_clk/O
+                         net (fo=1077, unplaced)      0.584     1.653    u_dut/u_wrapper/u_core/CLK
+                         FDCE                                         r  u_dut/u_wrapper/u_core/mode_o_reg/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.456     2.109 r  u_dut/u_wrapper/u_core/mode_o_reg/Q
+                         net (fo=185, unplaced)       0.856     2.965    u_dut/u_wrapper/u_core/u_acc/p1_mag_trunc_q_reg[30]_0
+                         LUT4 (Prop_lut4_I1_O)        0.295     3.260 r  u_dut/u_wrapper/u_core/u_acc/acc[7]_i_4/O
+                         net (fo=1, unplaced)         0.639     3.899    u_dut/u_wrapper/u_core/u_acc/sum1[5]
+                         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.520     4.419 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[7]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.419    u_dut/u_wrapper/u_core/u_acc/acc_reg[7]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.536 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[11]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.536    u_dut/u_wrapper/u_core/u_acc/acc_reg[11]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.653 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[15]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.653    u_dut/u_wrapper/u_core/u_acc/acc_reg[15]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.770 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[19]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.770    u_dut/u_wrapper/u_core/u_acc/acc_reg[19]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.887 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[23]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.887    u_dut/u_wrapper/u_core/u_acc/acc_reg[23]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.004 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[27]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.004    u_dut/u_wrapper/u_core/u_acc/acc_reg[27]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.121 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[31]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.121    u_dut/u_wrapper/u_core/u_acc/acc_reg[31]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.238 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[35]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.238    u_dut/u_wrapper/u_core/u_acc/acc_reg[35]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.355 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[39]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.355    u_dut/u_wrapper/u_core/u_acc/acc_reg[39]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.472 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[43]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.472    u_dut/u_wrapper/u_core/u_acc/acc_reg[43]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.589 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[47]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.589    u_dut/u_wrapper/u_core/u_acc/acc_reg[47]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.706 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[51]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.706    u_dut/u_wrapper/u_core/u_acc/acc_reg[51]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.232     5.938 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[53]_i_1/O[0]
+                         net (fo=1, unplaced)         0.000     5.938    u_dut/u_wrapper/u_core/u_acc/acc_reg[53]_i_1_n_7
+                         FDCE                                         r  u_dut/u_wrapper/u_core/u_acc/acc_reg[52]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)       10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=0)                   0.924    10.924    clk
+                         BUFG (Prop_bufg_I_O)         0.091    11.015 r  u_clk/O
+                         net (fo=1077, unplaced)      0.439    11.454    u_dut/u_wrapper/u_core/u_acc/CLK
+                         FDCE                                         r  u_dut/u_wrapper/u_core/u_acc/acc_reg[52]/C
+                         clock pessimism              0.054    11.508    <hidden>
+                         clock uncertainty           -0.135    11.373    <hidden>
+                         FDCE (Setup_fdce_C_D)        0.076    11.449    u_dut/u_wrapper/u_core/u_acc/acc_reg[52]
+  -------------------------------------------------------------------
+                         required time                         11.449    <hidden>
+                         arrival time                          -5.938    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  5.511    <hidden>
+
+Slack (MET) :             5.523ns  (required time - arrival time)
+  Source:                 u_dut/u_wrapper/u_core/mode_o_reg/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_core/u_acc/acc_reg[49]/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (clk rise@10.000ns - clk rise@0.000ns)
+  Data Path Delay:        4.273ns  (logic 2.778ns (65.013%)  route 1.495ns (34.987%))
+  Logic Levels:           13  (CARRY4=12 LUT4=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.454ns = ( 11.454 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.653ns
+    Clock Pessimism Removal (CPR):    0.054ns
+  Clock Uncertainty:      0.135ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.973     0.973    clk
+                         BUFG (Prop_bufg_I_O)         0.096     1.069 r  u_clk/O
+                         net (fo=1077, unplaced)      0.584     1.653    u_dut/u_wrapper/u_core/CLK
+                         FDCE                                         r  u_dut/u_wrapper/u_core/mode_o_reg/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.456     2.109 r  u_dut/u_wrapper/u_core/mode_o_reg/Q
+                         net (fo=185, unplaced)       0.856     2.965    u_dut/u_wrapper/u_core/u_acc/p1_mag_trunc_q_reg[30]_0
+                         LUT4 (Prop_lut4_I1_O)        0.295     3.260 r  u_dut/u_wrapper/u_core/u_acc/acc[7]_i_4/O
+                         net (fo=1, unplaced)         0.639     3.899    u_dut/u_wrapper/u_core/u_acc/sum1[5]
+                         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.520     4.419 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[7]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.419    u_dut/u_wrapper/u_core/u_acc/acc_reg[7]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.536 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[11]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.536    u_dut/u_wrapper/u_core/u_acc/acc_reg[11]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.653 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[15]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.653    u_dut/u_wrapper/u_core/u_acc/acc_reg[15]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.770 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[19]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.770    u_dut/u_wrapper/u_core/u_acc/acc_reg[19]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.887 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[23]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.887    u_dut/u_wrapper/u_core/u_acc/acc_reg[23]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.004 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[27]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.004    u_dut/u_wrapper/u_core/u_acc/acc_reg[27]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.121 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[31]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.121    u_dut/u_wrapper/u_core/u_acc/acc_reg[31]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.238 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[35]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.238    u_dut/u_wrapper/u_core/u_acc/acc_reg[35]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.355 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[39]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.355    u_dut/u_wrapper/u_core/u_acc/acc_reg[39]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.472 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[43]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.472    u_dut/u_wrapper/u_core/u_acc/acc_reg[43]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.589 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[47]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     5.589    u_dut/u_wrapper/u_core/u_acc/acc_reg[47]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.337     5.926 r  u_dut/u_wrapper/u_core/u_acc/acc_reg[51]_i_1/O[1]
+                         net (fo=1, unplaced)         0.000     5.926    u_dut/u_wrapper/u_core/u_acc/acc_reg[51]_i_1_n_6
+                         FDCE                                         r  u_dut/u_wrapper/u_core/u_acc/acc_reg[49]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)       10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=0)                   0.924    10.924    clk
+                         BUFG (Prop_bufg_I_O)         0.091    11.015 r  u_clk/O
+                         net (fo=1077, unplaced)      0.439    11.454    u_dut/u_wrapper/u_core/u_acc/CLK
+                         FDCE                                         r  u_dut/u_wrapper/u_core/u_acc/acc_reg[49]/C
+                         clock pessimism              0.054    11.508    <hidden>
+                         clock uncertainty           -0.135    11.373    <hidden>
+                         FDCE (Setup_fdce_C_D)        0.076    11.449    u_dut/u_wrapper/u_core/u_acc/acc_reg[49]
+  -------------------------------------------------------------------
+                         required time                         11.449    <hidden>
+                         arrival time                          -5.926    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  5.523    <hidden>
+
+
+
+

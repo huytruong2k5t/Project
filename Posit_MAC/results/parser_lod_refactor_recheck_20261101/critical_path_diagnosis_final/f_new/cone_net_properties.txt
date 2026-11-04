@@ -1,0 +1,124 @@
+Property                        Type     Read-only  Value
+AIE.BUFFER_COUNT                int      false      
+AIE.FIFO_DEPTH                  int      false      
+AIE.MARGIN                      int      false      
+AREA_GROUP                      string   true       
+AUTOPIPELINE_GROUP              string   false      
+AUTOPIPELINE_INCLUDE            string   false      
+AUTOPIPELINE_LIMIT              int      false      
+BEL                             string   true       
+BLKNM                           string   true       
+BUFFER_TYPE                     enum     false      
+BUFG                            enum     true       
+BUS_NAME                        string   true       accumulator_q__0
+BUS_START                       int      true       31
+BUS_STOP                        int      true       0
+BUS_WIDTH                       int      true       32
+CLASS                           string   true       net
+CLOCK_BUFFER_EXCLUDE_LUTFF      bool     false      
+CLOCK_BUFFER_TYPE               enum     false      
+CLOCK_DEDICATED_ROUTE           enum     false      
+CLOCK_DELAY_GROUP               string   false      
+CLOCK_EXPANSION_WINDOW          string   true       
+CLOCK_LOW_FANOUT                bool     false      
+CLOCK_REGION_ASSIGNMENT         string   false      
+CLOCK_ROOT                      string*  true       
+CLOCK_TRACK                     int      true       
+CLOCK_TRACK_GROUP               string   true       
+CLOCK_VTREE_TYPE                string   true       
+COLLAPSE                        bool     true       
+COOL_CLK                        bool     true       
+CROSSING_SLRS                   string   true       
+DATA_GATE                       bool     true       
+DCI_VALUE                       int      false      
+DIRECT_ENABLE                   bool     false      
+DIRECT_RESET                    bool     false      
+DONT_TOUCH                      bool     false      
+DRIVER_COUNT                    int      true       1
+DSP_FOLDING_FASTCLOCK           bool     false      
+ESSENTIAL_CLASSIFICATION_VALUE  int      false      
+EXTRACT_ENABLE                  bool     false      
+EXTRACT_RESET                   bool     false      
+FILE_NAME                       string   true       
+FIXED_ROUTE                     string   false      
+FLAT_PIN_COUNT                  int      true       4
+FLOAT                           bool     true       
+FORCE_MAX_FANOUT                string   false      
+GATED_CLOCK                     bool     false      
+GCLK_DESKEW                     enum     false      
+HAS_WEIGHTED_ROOT_COSTS         bool     false      
+HBLKNM                          string   true       
+HD.NO_ROUTE_CONTAINMENT         bool     false      
+HIGH_PRIORITY                   bool     false      
+IBUF_DELAY_VALUE                double   true       
+IFD_DELAY_VALUE                 double   true       
+IGNORE_AUTO_CLOCK_DELAY_GROUP   bool     false      
+IGNORE_BUFG_GT_CONSTRAINING     bool     false      
+INTER_SLR_MUX_CLOCK             bool     false      
+INTER_SLR_MUX_NET               bool     false      
+INTER_SLR_MUX_RESET             bool     false      
+IN_TERM                         enum     true       
+IOB                             enum     false      
+IOBDELAY                        enum     false      
+IO_BUFFER_TYPE                  enum     false      
+IS_CONTAIN_ROUTING              bool     true       0
+IS_HTREE                        bool     false      
+IS_INTERNAL                     bool     true       0
+IS_REUSED                       bool     true       1
+IS_ROUTE_FIXED                  bool     false      0
+KEEP                            bool     false      
+KEEPER                          bool     true       
+LINE_NUMBER                     int      true       
+LOC                             string   true       
+MARK_DEBUG                      bool     false      0
+MAXDELAY                        double   true       
+MAXSKEW                         double   true       
+MAX_FANOUT                      string   false      
+MAX_FANOUT_MODE                 enum     false      
+MBUFG_GROUP                     string   false      
+METHODOLOGY_DRC_VIOS            string   false      
+NAME                            string   true       u_dut/u_wrapper/accumulator_q__0[0]
+NODELAY                         bool     true       
+NOREDUCE                        bool     true       
+OUT_TERM                        enum     true       
+PARENT                          string   true       u_dut/u_wrapper/accumulator_q__0[0]
+PARENT_CELL                     cell     true       u_dut/u_wrapper
+PARTITION_ID                    int      true       0
+PIN_COUNT                       int      true       2
+PULLDOWN                        bool     true       
+PULLUP                          bool     true       
+PWR_MODE                        enum     true       
+RAM_DECOMP                      enum     false      
+RAM_STYLE                       enum     false      
+REUSE_STATUS                    enum     true       
+RLOC                            string   true       
+ROM_STYLE                       enum     false      
+ROUTE                           string   false      
+ROUTE_STATUS                    enum     true       UNPLACED
+RPM_GRID                        enum     true       
+S                               bool     true       
+SCHMITT_TRIGGER                 bool     true       
+SCOPED_NAME                     string   true       u_dut/u_wrapper/accumulator_q__0[0]
+SLEW                            string   true       
+SRL_STYLE                       enum     false      
+SUSPEND                         string   true       
+TDM_KEEP                        bool     true       
+TOOL_CLOCK_DELAY_GROUP          string   false      
+TYPE                            enum     true       SIGNAL
+USELOWSKEWLINES                 bool     true       
+USER_CLOCK_EXPANSION_WINDOW     string   false      
+USER_CLOCK_ROOT                 string*  false      
+USER_CLOCK_TRACK                int      false      
+USER_CLOCK_TRACK_GROUP          enum     false      
+USER_CLOCK_TRACK_ROUTING        int      false      
+USER_CLOCK_VTREE_TYPE           string   false      
+USER_CROSSING_SLR               string   false      
+USER_MAX_PROG_DELAY             int      false      
+USER_SLL_GUIDANCE               string   false      
+USE_DSP                         enum     false      
+USE_DSP48                       enum     false      
+USE_INTRA_SLL                   bool     false      
+WEIGHT                          int      false      
+WIREAND                         bool     true       
+XBLKNM                          string   true       
+async_reg                       string   false      

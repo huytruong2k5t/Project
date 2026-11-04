@@ -1,0 +1,33 @@
+{
+  "part": "xc7a35tcpg236-1",
+  "clock_period_ns": 10,
+  "flow": "out-of-context synthesis only",
+  "profile": "Current RTL FLOOR; NF N_MAX8/exact-capable bank54; F N_MAX12 bank16; cfg_mode=1 in replay. Not FULL_TERM acceptance.",
+  "verification": {
+    "adder": "ADDER_REFACTOR_PASS accepted=39535 completed=39534 aborted=1 stalls=20310",
+    "nf": "MAC_REFACTOR_PASS F=0 rows=5000 accepted=5000 completed=4970 aborted=30 stalls=18115 latency_observed=15..22",
+    "f": "MAC_REFACTOR_PASS F=1 rows=5000 accepted=5000 completed=4970 aborted=30 stalls=18115 latency_observed=12..23"
+  },
+  "synthesis": {
+    "nf": {
+      "LUT": 2319,
+      "FF": 1066,
+      "DSP": 0,
+      "BRAM": 0,
+      "WNS_ns": 1.77,
+      "WHS_ns": -0.055,
+      "synthesis_complete": true,
+      "post_route": false
+    },
+    "f": {
+      "LUT": 1380,
+      "FF": 804,
+      "DSP": 0,
+      "BRAM": 0,
+      "WNS_ns": 2.178,
+      "WHS_ns": -0.055,
+      "synthesis_complete": true,
+      "post_route": false
+    }
+  }
+}

@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/scripts/check_week14_accuracy.py", line 91, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/scripts/check_week14_accuracy.py", line 61, in main
+    a,b,c=(decode(row[key]) for key in ('a','b','c'))
+    ^^^^^
+  File "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/scripts/check_week14_accuracy.py", line 61, in <genexpr>
+    a,b,c=(decode(row[key]) for key in ('a','b','c'))
+           ~~~~~~^^^^^^^^^^
+  File "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/scripts/check_week14_accuracy.py", line 22, in decode
+    f=i+1;coefficient=(1<<f)+(mag&((1<<f)-1))
+                       ~^^~
+ValueError: negative shift count

@@ -1,0 +1,545 @@
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module posit_mac_nf
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_nf.sv(14): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_nf.sv(14): 'a' already declared in this scope (posit_mac_nf).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_nf.sv(20): (vlog-2730) Undefined variable: 'N_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_nf.sv(20): 'cfg_n' already declared in this scope (posit_mac_nf).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_nf.sv(29): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_nf.sv(41): 'N_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_nf.sv(14): Identifier must be declared with a port mode: a.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_nf.sv(20): Identifier must be declared with a port mode: cfg_n.
+-- Compiling module mac_nf_wrapper
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_nf_wrapper.sv(16): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_nf_wrapper.sv(16): 'a' already declared in this scope (mac_nf_wrapper).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_nf_wrapper.sv(22): (vlog-2730) Undefined variable: 'N_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_nf_wrapper.sv(22): 'cfg_n' already declared in this scope (mac_nf_wrapper).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_nf_wrapper.sv(31): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_nf_wrapper.sv(47): 'N_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_nf_wrapper.sv(16): Identifier must be declared with a port mode: a.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_nf_wrapper.sv(22): Identifier must be declared with a port mode: cfg_n.
+-- Compiling module mul_prepack_norm_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(11): (vlog-2730) Undefined variable: 'ACC_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(11): 'acc' already declared in this scope (mul_prepack_norm_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(12): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(12): 'sf' already declared in this scope (mul_prepack_norm_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(14): (vlog-2730) Undefined variable: 'F_IN'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(15): 'frac_norm' already declared in this scope (mul_prepack_norm_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(24): 'ACC_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(26): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(28): 'F_IN' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(11): Identifier must be declared with a port mode: acc.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(12): Identifier must be declared with a port mode: sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_prepack_norm_comb.sv(14): Identifier must be declared with a port mode: frac_norm.
+-- Compiling module posit_product_pack
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(22): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(22): 'sf' already declared in this scope (posit_product_pack).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(23): (vlog-2730) Undefined variable: 'F_IN'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(23): 'frac' already declared in this scope (posit_product_pack).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(28): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(28): 'd' already declared in this scope (posit_product_pack).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(34): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(38): 'F_IN' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(40): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(22): Identifier must be declared with a port mode: sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(23): Identifier must be declared with a port mode: frac.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_product_pack.sv(28): Identifier must be declared with a port mode: d.
+-- Compiling module posit_magnitude_parse
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(12): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(12): 'p' already declared in this scope (posit_magnitude_parse).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(17): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(17): 'sf' already declared in this scope (posit_magnitude_parse).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(18): (vlog-2730) Undefined variable: 'FRAC_MAX'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(19): 'frac' already declared in this scope (posit_magnitude_parse).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(22): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(26): 'FRAC_MAX' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(28): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(12): Identifier must be declared with a port mode: p.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(17): Identifier must be declared with a port mode: sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_magnitude_parse.sv(18): Identifier must be declared with a port mode: frac.
+-- Compiling module posit_add
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(24): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(24): 'a_sf' already declared in this scope (posit_add).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(25): (vlog-2730) Undefined variable: 'F'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(25): 'a_frac' already declared in this scope (posit_add).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(36): (vlog-2730) Undefined variable: 'F_OUT'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(36): 'frac' already declared in this scope (posit_add).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(46): 'F' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(48): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(50): 'F_OUT' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(24): Identifier must be declared with a port mode: a_sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(25): Identifier must be declared with a port mode: a_frac.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add.sv(36): Identifier must be declared with a port mode: frac.
+-- Compiling module posit_parser
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(24): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(24): 'p' already declared in this scope (posit_parser).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(30): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(30): 'sf' already declared in this scope (posit_parser).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(31): (vlog-2730) Undefined variable: 'FRAC_MAX'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(32): 'frac' already declared in this scope (posit_parser).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(35): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(39): 'FRAC_MAX' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(41): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(24): Identifier must be declared with a port mode: p.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(30): Identifier must be declared with a port mode: sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser.sv(31): Identifier must be declared with a port mode: frac.
+-- Compiling module ops_sel_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(17): (vlog-2730) Undefined variable: 'FRAC_MAX'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(17): 'frac_a' already declared in this scope (ops_sel_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(21): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(21): 'sf_a' already declared in this scope (ops_sel_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(27): (vlog-2730) Undefined variable: 'WIDTH_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(27): 'active_width' already declared in this scope (ops_sel_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(36): 'FRAC_MAX' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(40): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(46): 'WIDTH_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(17): Identifier must be declared with a port mode: frac_a.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(21): Identifier must be declared with a port mode: sf_a.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb.sv(27): Identifier must be declared with a port mode: active_width.
+-- Compiling module mul_iter_core
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(17): (vlog-2730) Undefined variable: 'FRAC_MAX'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(17): 'x_frac' already declared in this scope (mul_iter_core).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(20): (vlog-2730) Undefined variable: 'N_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(20): 'cfg_n' already declared in this scope (mul_iter_core).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(22): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(22): 'sf_i' already declared in this scope (mul_iter_core).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(26): (vlog-2730) Undefined variable: 'ACC_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(26): 'acc' already declared in this scope (mul_iter_core).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(29): (vlog-2730) Undefined variable: 'I_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(29): 'iterations_done' already declared in this scope (mul_iter_core).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(39): 'FRAC_MAX' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(49): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(53): 'N_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(55): 'I_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(57): 'ACC_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(17): Identifier must be declared with a port mode: x_frac.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(20): Identifier must be declared with a port mode: cfg_n.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(22): Identifier must be declared with a port mode: sf_i.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(26): Identifier must be declared with a port mode: acc.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core.sv(29): Identifier must be declared with a port mode: iterations_done.
+-- Compiling module posit_pack
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(22): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(22): 'sf' already declared in this scope (posit_pack).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(23): (vlog-2730) Undefined variable: 'F_IN'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(23): 'frac' already declared in this scope (posit_pack).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(28): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(28): 'd' already declared in this scope (posit_pack).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(33): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(37): 'F_IN' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(39): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(22): Identifier must be declared with a port mode: sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(23): Identifier must be declared with a port mode: frac.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack.sv(28): Identifier must be declared with a port mode: d.
+-- Compiling module posit_add_align
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_align.sv(16): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_align.sv(16): 'a_sf' already declared in this scope (posit_add_align).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_align.sv(17): (vlog-2730) Undefined variable: 'F'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_align.sv(17): 'a_frac' already declared in this scope (posit_add_align).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_align.sv(40): 'F' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_align.sv(42): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_align.sv(16): Identifier must be declared with a port mode: a_sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_align.sv(17): Identifier must be declared with a port mode: a_frac.
+-- Compiling module posit_add_arith
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_arith.sv(13): (vlog-2730) Undefined variable: 'F'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_arith.sv(13): 'x' already declared in this scope (posit_add_arith).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_arith.sv(20): 'F' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_arith.sv(13): Identifier must be declared with a port mode: x.
+-- Compiling module posit_add_normalize
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(13): (vlog-2730) Undefined variable: 'F'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(13): 'magnitude' already declared in this scope (posit_add_normalize).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(15): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(15): 'sf_base' already declared in this scope (posit_add_normalize).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(24): (vlog-2730) Undefined variable: 'F_OUT'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(24): 'frac' already declared in this scope (posit_add_normalize).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(34): 'F' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(36): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(38): 'F_OUT' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(13): Identifier must be declared with a port mode: magnitude.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(15): Identifier must be declared with a port mode: sf_base.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_normalize.sv(24): Identifier must be declared with a port mode: frac.
+-- Compiling module posit_pack_prepare
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(17): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(17): 'sf' already declared in this scope (posit_pack_prepare).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(18): (vlog-2730) Undefined variable: 'F_IN'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(18): 'frac' already declared in this scope (posit_pack_prepare).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(21): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(21): 'mag_trunc' already declared in this scope (posit_pack_prepare).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(31): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(35): 'F_IN' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(37): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(17): Identifier must be declared with a port mode: sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(18): Identifier must be declared with a port mode: frac.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_prepare.sv(21): Identifier must be declared with a port mode: mag_trunc.
+-- Compiling module posit_pack_finish
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_finish.sv(13): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_finish.sv(13): 'mag_trunc' already declared in this scope (posit_pack_finish).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_finish.sv(25): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_finish.sv(13): Identifier must be declared with a port mode: mag_trunc.
+-- Compiling module iter_ctrl
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(15): (vlog-2730) Undefined variable: 'N_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(15): 'cfg_n' already declared in this scope (iter_ctrl).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(16): (vlog-2730) Undefined variable: 'FRAC_MAX'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(16): 'x_frac' already declared in this scope (iter_ctrl).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(22): (vlog-2730) Undefined variable: 'S_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(22): 'scale' already declared in this scope (iter_ctrl).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(23): (vlog-2730) Undefined variable: 'I_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(23): 'iteration' already declared in this scope (iter_ctrl).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(29): 'FRAC_MAX' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(35): 'S_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(37): 'N_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(39): 'I_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(15): Identifier must be declared with a port mode: cfg_n.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(16): Identifier must be declared with a port mode: x_frac.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(22): Identifier must be declared with a port mode: scale.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl.sv(23): Identifier must be declared with a port mode: iteration.
+-- Compiling module sbm_shift_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(11): (vlog-2730) Undefined variable: 'FRAC_MAX'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(11): 'y_mant' already declared in this scope (sbm_shift_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(12): (vlog-2730) Undefined variable: 'S_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(12): 'scale' already declared in this scope (sbm_shift_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(14): (vlog-2730) Undefined variable: 'ACC_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(14): 'y_base' already declared in this scope (sbm_shift_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(20): 'FRAC_MAX' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(28): 'S_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(30): 'ACC_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(11): Identifier must be declared with a port mode: y_mant.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(12): Identifier must be declared with a port mode: scale.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb.sv(14): Identifier must be declared with a port mode: y_base.
+-- Compiling module sbm_accum
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum.sv(18): (vlog-2730) Undefined variable: 'ACC_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum.sv(18): 'y_base' already declared in this scope (sbm_accum).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum.sv(21): (vlog-2730) Undefined variable: 'I_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum.sv(21): 'iteration' already declared in this scope (sbm_accum).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum.sv(34): 'ACC_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum.sv(36): 'I_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum.sv(18): Identifier must be declared with a port mode: y_base.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum.sv(21): Identifier must be declared with a port mode: iteration.
+-- Compiling module dyn_right_shifter
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter.sv(24): (vlog-2730) Undefined variable: 'N'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter.sv(24): 'in' already declared in this scope (dyn_right_shifter).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter.sv(25): (vlog-2730) Undefined variable: 'SHIFT_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter.sv(25): 'b' already declared in this scope (dyn_right_shifter).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter.sv(31): 'N' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter.sv(33): 'SHIFT_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter.sv(24): Identifier must be declared with a port mode: in.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter.sv(25): Identifier must be declared with a port mode: b.
+-- Compiling module dyn_right_shifter_fixed2
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter_fixed2.sv(24): (vlog-2730) Undefined variable: 'N'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter_fixed2.sv(24): 'in' already declared in this scope (dyn_right_shifter_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter_fixed2.sv(25): (vlog-2730) Undefined variable: 'SHIFT_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter_fixed2.sv(25): 'b' already declared in this scope (dyn_right_shifter_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter_fixed2.sv(31): 'N' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter_fixed2.sv(33): 'SHIFT_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter_fixed2.sv(24): Identifier must be declared with a port mode: in.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_right_shifter_fixed2.sv(25): Identifier must be declared with a port mode: b.
+-- Compiling module sac_step_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb.sv(16): (vlog-2730) Undefined variable: 'W_X'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb.sv(16): 'fx' already declared in this scope (sac_step_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb.sv(17): (vlog-2730) Undefined variable: 'S_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb.sv(17): 'scale' already declared in this scope (sac_step_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb.sv(27): 'W_X' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb.sv(29): 'S_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb.sv(16): Identifier must be declared with a port mode: fx.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb.sv(17): Identifier must be declared with a port mode: scale.
+-- Compiling module sac_step_comb_fixed2
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed2.sv(16): (vlog-2730) Undefined variable: 'W_X'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed2.sv(16): 'fx' already declared in this scope (sac_step_comb_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed2.sv(17): (vlog-2730) Undefined variable: 'S_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed2.sv(17): 'scale' already declared in this scope (sac_step_comb_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed2.sv(27): 'W_X' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed2.sv(29): 'S_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed2.sv(16): Identifier must be declared with a port mode: fx.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed2.sv(17): Identifier must be declared with a port mode: scale.
+-- Compiling module sbm_accum_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_comb.sv(13): (vlog-2730) Undefined variable: 'ACC_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_comb.sv(13): 'y_base' already declared in this scope (sbm_accum_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_comb.sv(26): 'ACC_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_comb.sv(13): Identifier must be declared with a port mode: y_base.
+-- Compiling module lod_lzd_core
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core.sv(15): (vlog-2730) Undefined variable: 'N'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core.sv(15): 'in' already declared in this scope (lod_lzd_core).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core.sv(16): (vlog-2730) Undefined variable: 'S'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core.sv(16): 'K' already declared in this scope (lod_lzd_core).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core.sv(21): 'N' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core.sv(25): 'S' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core.sv(15): Identifier must be declared with a port mode: in.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core.sv(16): Identifier must be declared with a port mode: K.
+-- Compiling module dyn_left_shifter
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter.sv(20): (vlog-2730) Undefined variable: 'N'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter.sv(20): 'in' already declared in this scope (dyn_left_shifter).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter.sv(21): (vlog-2730) Undefined variable: 'SHIFT_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter.sv(21): 'b' already declared in this scope (dyn_left_shifter).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter.sv(26): 'N' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter.sv(28): 'SHIFT_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter.sv(20): Identifier must be declared with a port mode: in.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter.sv(21): Identifier must be declared with a port mode: b.
+-- Compiling module lod_lzd_core_fixed2
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed2.sv(15): (vlog-2730) Undefined variable: 'N'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed2.sv(15): 'in' already declared in this scope (lod_lzd_core_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed2.sv(16): (vlog-2730) Undefined variable: 'S'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed2.sv(16): 'K' already declared in this scope (lod_lzd_core_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed2.sv(21): 'N' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed2.sv(25): 'S' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed2.sv(15): Identifier must be declared with a port mode: in.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed2.sv(16): Identifier must be declared with a port mode: K.
+-- Compiling module dyn_left_shifter_fixed2
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed2.sv(20): (vlog-2730) Undefined variable: 'N'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed2.sv(20): 'in' already declared in this scope (dyn_left_shifter_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed2.sv(21): (vlog-2730) Undefined variable: 'SHIFT_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed2.sv(21): 'b' already declared in this scope (dyn_left_shifter_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed2.sv(26): 'N' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed2.sv(28): 'SHIFT_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed2.sv(20): Identifier must be declared with a port mode: in.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed2.sv(21): Identifier must be declared with a port mode: b.
+-- Compiling module lod_lzd_core_fixed3
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed3.sv(15): (vlog-2730) Undefined variable: 'N'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed3.sv(15): 'in' already declared in this scope (lod_lzd_core_fixed3).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed3.sv(16): (vlog-2730) Undefined variable: 'S'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed3.sv(16): 'K' already declared in this scope (lod_lzd_core_fixed3).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed3.sv(21): 'N' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed3.sv(25): 'S' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed3.sv(15): Identifier must be declared with a port mode: in.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed3.sv(16): Identifier must be declared with a port mode: K.
+-- Compiling module dyn_left_shifter_fixed3
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed3.sv(20): (vlog-2730) Undefined variable: 'N'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed3.sv(20): 'in' already declared in this scope (dyn_left_shifter_fixed3).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed3.sv(21): (vlog-2730) Undefined variable: 'SHIFT_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed3.sv(21): 'b' already declared in this scope (dyn_left_shifter_fixed3).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed3.sv(26): 'N' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed3.sv(28): 'SHIFT_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed3.sv(20): Identifier must be declared with a port mode: in.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed3.sv(21): Identifier must be declared with a port mode: b.
+-- Compiling module lod_lzd_core_fixed4
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed4.sv(15): (vlog-2730) Undefined variable: 'N'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed4.sv(15): 'in' already declared in this scope (lod_lzd_core_fixed4).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed4.sv(16): (vlog-2730) Undefined variable: 'S'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed4.sv(16): 'K' already declared in this scope (lod_lzd_core_fixed4).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed4.sv(21): 'N' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed4.sv(25): 'S' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed4.sv(15): Identifier must be declared with a port mode: in.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\lod_lzd_core_fixed4.sv(16): Identifier must be declared with a port mode: K.
+-- Compiling module dyn_left_shifter_fixed4
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed4.sv(20): (vlog-2730) Undefined variable: 'N'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed4.sv(20): 'in' already declared in this scope (dyn_left_shifter_fixed4).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed4.sv(21): (vlog-2730) Undefined variable: 'SHIFT_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed4.sv(21): 'b' already declared in this scope (dyn_left_shifter_fixed4).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed4.sv(26): 'N' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed4.sv(28): 'SHIFT_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed4.sv(20): Identifier must be declared with a port mode: in.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed4.sv(21): Identifier must be declared with a port mode: b.
+-- Compiling module posit_mac_f
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_f.sv(14): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_f.sv(14): 'a' already declared in this scope (posit_mac_f).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_f.sv(20): (vlog-2730) Undefined variable: 'N_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_f.sv(20): 'cfg_n' already declared in this scope (posit_mac_f).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_f.sv(29): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_f.sv(43): 'N_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_f.sv(14): Identifier must be declared with a port mode: a.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mac_f.sv(20): Identifier must be declared with a port mode: cfg_n.
+-- Compiling module mac_f_wrapper
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_f_wrapper.sv(16): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_f_wrapper.sv(16): 'a' already declared in this scope (mac_f_wrapper).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_f_wrapper.sv(22): (vlog-2730) Undefined variable: 'N_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_f_wrapper.sv(22): 'cfg_n' already declared in this scope (mac_f_wrapper).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_f_wrapper.sv(31): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_f_wrapper.sv(45): 'N_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_f_wrapper.sv(16): Identifier must be declared with a port mode: a.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mac_f_wrapper.sv(22): Identifier must be declared with a port mode: cfg_n.
+-- Compiling module fused_add_pipe
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_add_pipe.sv(18): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_add_pipe.sv(18): 'p_scale' already declared in this scope (fused_add_pipe).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_add_pipe.sv(37): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_add_pipe.sv(18): Identifier must be declared with a port mode: p_scale.
+-- Compiling module fused_abs_borrow_comb
+-- Compiling module fused_align_comb
+-- Compiling module fused_arith_comb
+-- Compiling module ops_sel_comb_fixed2
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(17): (vlog-2730) Undefined variable: 'FRAC_MAX'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(17): 'frac_a' already declared in this scope (ops_sel_comb_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(21): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(21): 'sf_a' already declared in this scope (ops_sel_comb_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(27): (vlog-2730) Undefined variable: 'WIDTH_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(27): 'active_width' already declared in this scope (ops_sel_comb_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(36): 'FRAC_MAX' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(40): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(46): 'WIDTH_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(17): Identifier must be declared with a port mode: frac_a.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(21): Identifier must be declared with a port mode: sf_a.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\ops_sel_comb_fixed2.sv(27): Identifier must be declared with a port mode: active_width.
+-- Compiling module mul_iter_core_fixed2
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(17): (vlog-2730) Undefined variable: 'FRAC_MAX'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(17): 'x_frac' already declared in this scope (mul_iter_core_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(20): (vlog-2730) Undefined variable: 'N_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(20): 'cfg_n' already declared in this scope (mul_iter_core_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(22): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(22): 'sf_i' already declared in this scope (mul_iter_core_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(26): (vlog-2730) Undefined variable: 'ACC_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(26): 'acc' already declared in this scope (mul_iter_core_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(29): (vlog-2730) Undefined variable: 'I_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(29): 'iterations_done' already declared in this scope (mul_iter_core_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(39): 'FRAC_MAX' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(49): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(53): 'N_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(55): 'I_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(57): 'ACC_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(17): Identifier must be declared with a port mode: x_frac.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(20): Identifier must be declared with a port mode: cfg_n.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(22): Identifier must be declared with a port mode: sf_i.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(26): Identifier must be declared with a port mode: acc.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_core_fixed2.sv(29): Identifier must be declared with a port mode: iterations_done.
+-- Compiling module fused_prepare_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_prepare_comb.sv(11): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_prepare_comb.sv(11): 'p_scale' already declared in this scope (fused_prepare_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_prepare_comb.sv(28): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_prepare_comb.sv(11): Identifier must be declared with a port mode: p_scale.
+-- Compiling module fused_norm_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_norm_comb.sv(11): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_norm_comb.sv(11): 'anchor' already declared in this scope (fused_norm_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_norm_comb.sv(18): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\fused_norm_comb.sv(11): Identifier must be declared with a port mode: anchor.
+-- Compiling module iter_ctrl_fixed2
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(15): (vlog-2730) Undefined variable: 'N_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(15): 'cfg_n' already declared in this scope (iter_ctrl_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(16): (vlog-2730) Undefined variable: 'FRAC_MAX'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(16): 'x_frac' already declared in this scope (iter_ctrl_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(22): (vlog-2730) Undefined variable: 'S_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(22): 'scale' already declared in this scope (iter_ctrl_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(23): (vlog-2730) Undefined variable: 'I_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(23): 'iteration' already declared in this scope (iter_ctrl_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(29): 'FRAC_MAX' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(35): 'S_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(37): 'N_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(39): 'I_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(15): Identifier must be declared with a port mode: cfg_n.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(16): Identifier must be declared with a port mode: x_frac.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(22): Identifier must be declared with a port mode: scale.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\iter_ctrl_fixed2.sv(23): Identifier must be declared with a port mode: iteration.
+-- Compiling module sbm_shift_comb_fixed2
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(11): (vlog-2730) Undefined variable: 'FRAC_MAX'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(11): 'y_mant' already declared in this scope (sbm_shift_comb_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(12): (vlog-2730) Undefined variable: 'S_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(12): 'scale' already declared in this scope (sbm_shift_comb_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(14): (vlog-2730) Undefined variable: 'ACC_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(14): 'y_base' already declared in this scope (sbm_shift_comb_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(20): 'FRAC_MAX' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(28): 'S_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(30): 'ACC_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(11): Identifier must be declared with a port mode: y_mant.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(12): Identifier must be declared with a port mode: scale.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_shift_comb_fixed2.sv(14): Identifier must be declared with a port mode: y_base.
+-- Compiling module sbm_accum_fixed2
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_fixed2.sv(18): (vlog-2730) Undefined variable: 'ACC_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_fixed2.sv(18): 'y_base' already declared in this scope (sbm_accum_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_fixed2.sv(21): (vlog-2730) Undefined variable: 'I_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_fixed2.sv(21): 'iteration' already declared in this scope (sbm_accum_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_fixed2.sv(34): 'ACC_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_fixed2.sv(36): 'I_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_fixed2.sv(18): Identifier must be declared with a port mode: y_base.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_fixed2.sv(21): Identifier must be declared with a port mode: iteration.
+-- Compiling module sac_step_comb_fixed3
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed3.sv(16): (vlog-2730) Undefined variable: 'W_X'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed3.sv(16): 'fx' already declared in this scope (sac_step_comb_fixed3).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed3.sv(17): (vlog-2730) Undefined variable: 'S_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed3.sv(17): 'scale' already declared in this scope (sac_step_comb_fixed3).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed3.sv(27): 'W_X' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed3.sv(29): 'S_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed3.sv(16): Identifier must be declared with a port mode: fx.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sac_step_comb_fixed3.sv(17): Identifier must be declared with a port mode: scale.
+-- Compiling module sbm_accum_comb_fixed2
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_comb_fixed2.sv(13): (vlog-2730) Undefined variable: 'ACC_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_comb_fixed2.sv(13): 'y_base' already declared in this scope (sbm_accum_comb_fixed2).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_comb_fixed2.sv(26): 'ACC_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\sbm_accum_comb_fixed2.sv(13): Identifier must be declared with a port mode: y_base.
+-- Compiling module dyn_left_shifter_fixed5
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed5.sv(20): (vlog-2730) Undefined variable: 'N'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed5.sv(20): 'in' already declared in this scope (dyn_left_shifter_fixed5).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed5.sv(21): (vlog-2730) Undefined variable: 'SHIFT_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed5.sv(21): 'b' already declared in this scope (dyn_left_shifter_fixed5).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed5.sv(26): 'N' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed5.sv(28): 'SHIFT_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed5.sv(20): Identifier must be declared with a port mode: in.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\dyn_left_shifter_fixed5.sv(21): Identifier must be declared with a port mode: b.
+-- Compiling module posit_add_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(16): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(16): 'a_sf' already declared in this scope (posit_add_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(17): (vlog-2730) Undefined variable: 'F'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(17): 'a_frac' already declared in this scope (posit_add_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(28): (vlog-2730) Undefined variable: 'F_OUT'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(28): 'frac' already declared in this scope (posit_add_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(38): 'F' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(40): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(42): 'F_OUT' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(16): Identifier must be declared with a port mode: a_sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(17): Identifier must be declared with a port mode: a_frac.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_add_comb.sv(28): Identifier must be declared with a port mode: frac.
+-- Compiling module posit_mul_iter
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mul_iter.sv(14): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mul_iter.sv(14): 'a' already declared in this scope (posit_mul_iter).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mul_iter.sv(17): (vlog-2730) Undefined variable: 'N_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mul_iter.sv(17): 'cfg_n' already declared in this scope (posit_mul_iter).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mul_iter.sv(26): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mul_iter.sv(42): 'N_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mul_iter.sv(14): Identifier must be declared with a port mode: a.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_mul_iter.sv(17): Identifier must be declared with a port mode: cfg_n.
+-- Compiling module mul_iter_wrapper
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_wrapper.sv(16): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_wrapper.sv(16): 'a' already declared in this scope (mul_iter_wrapper).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_wrapper.sv(19): (vlog-2730) Undefined variable: 'N_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_wrapper.sv(19): 'cfg_n' already declared in this scope (mul_iter_wrapper).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_wrapper.sv(28): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_wrapper.sv(48): 'N_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_wrapper.sv(16): Identifier must be declared with a port mode: a.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_iter_wrapper.sv(19): Identifier must be declared with a port mode: cfg_n.
+-- Compiling module mul_norm_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(12): (vlog-2730) Undefined variable: 'ACC_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(12): 'acc' already declared in this scope (mul_norm_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(14): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(14): 'sf' already declared in this scope (mul_norm_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(16): (vlog-2730) Undefined variable: 'F_IN'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(16): 'frac_norm' already declared in this scope (mul_norm_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(29): 'ACC_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(31): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(33): 'F_IN' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(12): Identifier must be declared with a port mode: acc.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(14): Identifier must be declared with a port mode: sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\mul_norm_comb.sv(16): Identifier must be declared with a port mode: frac_norm.
+-- Compiling module posit_pack_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(16): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(16): 'sf' already declared in this scope (posit_pack_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(17): (vlog-2730) Undefined variable: 'F_IN'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(17): 'frac' already declared in this scope (posit_pack_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(20): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(20): 'd' already declared in this scope (posit_pack_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(25): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(29): 'F_IN' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(31): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(16): Identifier must be declared with a port mode: sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(17): Identifier must be declared with a port mode: frac.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_pack_comb.sv(20): Identifier must be declared with a port mode: d.
+-- Compiling module round_unpacked_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(13): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(13): 'sf' already declared in this scope (round_unpacked_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(14): (vlog-2730) Undefined variable: 'F_IN'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(14): 'frac' already declared in this scope (round_unpacked_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(20): (vlog-2730) Undefined variable: 'F'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(20): 'frac_o' already declared in this scope (round_unpacked_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(29): 'F' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(31): 'F_IN' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(33): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(13): Identifier must be declared with a port mode: sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(14): Identifier must be declared with a port mode: frac.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\round_unpacked_comb.sv(20): Identifier must be declared with a port mode: frac_o.
+-- Compiling module posit_parser_comb
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(12): (vlog-2730) Undefined variable: 'NB'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(12): 'p' already declared in this scope (posit_parser_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(16): (vlog-2730) Undefined variable: 'SF_W'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(16): 'sf' already declared in this scope (posit_parser_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(17): (vlog-2730) Undefined variable: 'FRAC_MAX'.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(18): 'frac' already declared in this scope (posit_parser_comb).
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(21): 'NB' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(25): 'FRAC_MAX' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(27): 'SF_W' already declared in this scope.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(12): Identifier must be declared with a port mode: p.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(16): Identifier must be declared with a port mode: sf.
+** Error: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\fixed32_3_20261022\event\source\rtl\posit_parser_comb.sv(17): Identifier must be declared with a port mode: frac.
+-- Compiling module tb_fixed32_3_nf
+-- Compiling module tb_week13_fused_event

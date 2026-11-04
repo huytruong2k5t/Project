@@ -1,0 +1,48 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Sun Nov  1 22:17:10 2026
+| Host         : MSI running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file synthesis_hierarchy.rpt
+| Design       : prepack_nf_ppa_top
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Synthesized
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++------------------------+------------------------+------------+------------+---------+------+------+--------+--------+------------+
+|        Instance        |         Module         | Total LUTs | Logic LUTs | LUTRAMs | SRLs |  FFs | RAMB36 | RAMB18 | DSP Blocks |
++------------------------+------------------------+------------+------------+---------+------+------+--------+--------+------------+
+| prepack_nf_ppa_top     |                  (top) |       2214 |       2214 |       0 |    0 | 1077 |      0 |      0 |          0 |
+|   (prepack_nf_ppa_top) |                  (top) |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|   u_dut                |           posit_mac_nf |       2214 |       2214 |       0 |    0 | 1077 |      0 |      0 |          0 |
+|     u_wrapper          |         mac_nf_wrapper |       2213 |       2213 |       0 |    0 | 1077 |      0 |      0 |          0 |
+|       (u_wrapper)      |         mac_nf_wrapper |         21 |         21 |       0 |    0 |  140 |      0 |      0 |          0 |
+|       u_a              |           posit_parser |        256 |        256 |       0 |    0 |   80 |      0 |      0 |          0 |
+|       u_add            |              posit_add |        505 |        505 |       0 |    0 |  310 |      0 |      0 |          0 |
+|         (u_add)        |              posit_add |        414 |        414 |       0 |    0 |  310 |      0 |      0 |          0 |
+|         u_s1_prepare   | posit_add_prepare_comb |         69 |         69 |       0 |    0 |    0 |      0 |      0 |          0 |
+|       u_b              |         posit_parser_0 |        239 |        239 |       0 |    0 |   80 |      0 |      0 |          0 |
+|       u_c              |         posit_parser_1 |        202 |        202 |       0 |    0 |   80 |      0 |      0 |          0 |
+|       u_core           |          mul_iter_core |        668 |        668 |       0 |    0 |  218 |      0 |      0 |          0 |
+|         (u_core)       |          mul_iter_core |          3 |          3 |       0 |    0 |  104 |      0 |      0 |          0 |
+|         u_acc          |              sbm_accum |        260 |        260 |       0 |    0 |   59 |      0 |      0 |          0 |
+|           (u_acc)      |              sbm_accum |        209 |        209 |       0 |    0 |   59 |      0 |      0 |          0 |
+|           u_add        |         sbm_accum_comb |         53 |         53 |       0 |    0 |    0 |      0 |      0 |          0 |
+|         u_ctrl         |              iter_ctrl |        405 |        405 |       0 |    0 |   55 |      0 |      0 |          0 |
+|           (u_ctrl)     |              iter_ctrl |        389 |        389 |       0 |    0 |   55 |      0 |      0 |          0 |
+|       u_pack           |             posit_pack |         96 |         96 |       0 |    0 |   84 |      0 |      0 |          0 |
+|         (u_pack)       |             posit_pack |         66 |         66 |       0 |    0 |   84 |      0 |      0 |          0 |
+|       u_product_pack   |     posit_product_pack |        198 |        198 |       0 |    0 |   85 |      0 |      0 |          0 |
++------------------------+------------------------+------------+------------+---------+------+------+--------+--------+------------+
+
+

@@ -1,0 +1,39 @@
+# vsim {+VECTORS=C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol/source/tb/protocol_expected.hex} -do run.do -l mode1.log -c -wlf mode1.wlf -gNF_EX0=1 work.tb_week14_protocol 
+# Loading sv_std.std
+# Loading work.tb_week14_protocol
+# Loading work.posit_mac_nf
+# Loading work.mac_nf_wrapper
+# Loading work.posit_parser
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.mul_iter_core
+# Loading work.iter_ctrl
+# Loading work.sac_step_comb
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum
+# Loading work.sbm_accum_comb
+# Loading work.mul_prepack_norm_comb
+# Loading work.posit_product_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter
+# Loading work.posit_magnitude_parse
+# Loading work.posit_add
+# Loading work.posit_add_align
+# Loading work.posit_add_arith
+# Loading work.posit_add_normalize
+# Loading work.posit_pack
+# Loading work.posit_pack_finish
+# do run.do 
+# W14_PROTOCOL_N_PASS NF_EX0=1 n=0 q=1 L=13 H=14 II=15 completed=16
+# W14_PROTOCOL_N_PASS NF_EX0=1 n=1 q=1 L=13 H=14 II=15 completed=16
+# W14_PROTOCOL_N_PASS NF_EX0=1 n=2 q=2 L=14 H=15 II=16 completed=16
+# W14_PROTOCOL_N_PASS NF_EX0=1 n=3 q=3 L=15 H=16 II=17 completed=16
+# W14_PROTOCOL_N_PASS NF_EX0=1 n=4 q=4 L=16 H=17 II=18 completed=16
+# W14_PROTOCOL_N_PASS NF_EX0=1 n=5 q=5 L=17 H=18 II=19 completed=16
+# W14_PROTOCOL_N_PASS NF_EX0=1 n=6 q=6 L=18 H=19 II=20 completed=16
+# W14_PROTOCOL_N_PASS NF_EX0=1 n=7 q=7 L=19 H=20 II=21 completed=16
+# W14_PROTOCOL_N_PASS NF_EX0=1 n=8 q=8 L=20 H=21 II=22 completed=16
+# W14_PROTOCOL_PASS NF_EX0=1 completed=144 mismatch=0 CK2Q=1ns clock=8ns
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/event_protocol/source/tb/tb_week14_protocol.sv(103)
+#    Time: 22024 ns  Iteration: 1  Instance: /tb_week14_protocol

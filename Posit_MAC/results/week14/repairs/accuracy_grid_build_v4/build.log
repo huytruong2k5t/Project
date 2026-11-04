@@ -1,0 +1,23 @@
+/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/accuracy/src/tb/week14_accuracy.cpp: In function ‘week12_reference::Oracle<32, 3>::Wide error_grid(const week12_reference::Oracle<32, 3>::Result&, uint32_t)’:
+/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/accuracy/src/tb/week14_accuracy.cpp:39:51: error: ‘u128’ in ‘using O = class week12_reference::Oracle<32, 3>’ {aka ‘class week12_reference::Oracle<32, 3>’} does not name a type
+   39 |         for(unsigned i=0;i<O::WORDS;++i){const O::u128 t=O::u128(a[i])+b[i]+carry;out[i]=uint64_t(t);carry=uint64_t(t>>64);}
+      |                                                   ^~~~
+/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/accuracy/src/tb/week14_accuracy.cpp:39:99: error: ‘t’ was not declared in this scope
+   39 |         for(unsigned i=0;i<O::WORDS;++i){const O::u128 t=O::u128(a[i])+b[i]+carry;out[i]=uint64_t(t);carry=uint64_t(t>>64);}
+      |                                                                                                   ^
+/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/accuracy/src/tb/week14_accuracy.cpp:43:51: error: ‘u128’ in ‘using O = class week12_reference::Oracle<32, 3>’ {aka ‘class week12_reference::Oracle<32, 3>’} does not name a type
+   43 |         for(unsigned i=0;i<O::WORDS;++i){const O::u128 t=O::u128(b[i])+borrow;out[i]=a[i]-uint64_t(t);borrow=O::u128(a[i])<t;}
+      |                                                   ^~~~
+/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/accuracy/src/tb/week14_accuracy.cpp:43:100: error: ‘t’ was not declared in this scope
+   43 |         for(unsigned i=0;i<O::WORDS;++i){const O::u128 t=O::u128(b[i])+borrow;out[i]=a[i]-uint64_t(t);borrow=O::u128(a[i])<t;}
+      |                                                                                                    ^
+/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/accuracy/src/tb/week14_accuracy.cpp:43:113: error: ‘u128’ is not a member of ‘O’ {aka ‘week12_reference::Oracle<32, 3>’}
+   43 |         for(unsigned i=0;i<O::WORDS;++i){const O::u128 t=O::u128(b[i])+borrow;out[i]=a[i]-uint64_t(t);borrow=O::u128(a[i])<t;}
+      |                                                                                                                 ^~~~
+/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/accuracy/src/tb/week14_accuracy.cpp: In function ‘bool threshold(const week12_reference::Oracle<32, 3>::Wide&, const week12_reference::Oracle<32, 3>::Wide&, unsigned int)’:
+/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/accuracy/src/tb/week14_accuracy.cpp:49:47: error: ‘u128’ in ‘using O = class week12_reference::Oracle<32, 3>’ {aka ‘class week12_reference::Oracle<32, 3>’} does not name a type
+   49 |     for(unsigned i=0;i<O::WORDS;++i){const O::u128 t=O::u128(error[i])*multiplier+carry;scaled[i]=uint64_t(t);carry=uint64_t(t>>64);}
+      |                                               ^~~~
+/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/accuracy/src/tb/week14_accuracy.cpp:49:108: error: ‘t’ was not declared in this scope
+   49 |     for(unsigned i=0;i<O::WORDS;++i){const O::u128 t=O::u128(error[i])*multiplier+carry;scaled[i]=uint64_t(t);carry=uint64_t(t>>64);}
+      |                                                                                                            ^

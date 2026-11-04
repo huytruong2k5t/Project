@@ -1,0 +1,59 @@
+{
+  "baseline": "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\refactored_mac_20261101_r3",
+  "current": "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\readme_refactor_recheck_20261101",
+  "part": "xc7a35tcpg236-1",
+  "period_ns": 10,
+  "synthesis_only": true,
+  "rtl_unchanged_by_review": true,
+  "verification": {
+    "adder": "ADDER_REFACTOR_PASS accepted=39535 completed=39534 aborted=1 stalls=20310",
+    "packer": "PACKER_REFACTOR_PASS completed=10851 stalls=3552 errors=0",
+    "ops": "OPS_POPCOUNT_PASS checked=149152",
+    "nf": "MAC_REFACTOR_PASS F=0 rows=50000 accepted=50000 completed=49701 aborted=299 stalls=181084 latency_observed=15..22",
+    "f": "MAC_REFACTOR_PASS F=1 rows=50000 accepted=50000 completed=49701 aborted=299 stalls=181084 latency_observed=12..23"
+  },
+  "comparison": {
+    "nf": {
+      "old": {
+        "LUT": 2319,
+        "FF": 1066,
+        "DSP": 0,
+        "BRAM": 0,
+        "WNS_ns": 1.77,
+        "WHS_ns": -0.055,
+        "F2F_ns": 7.979
+      },
+      "new": {
+        "LUT": 2098,
+        "FF": 1077,
+        "DSP": 0,
+        "BRAM": 0,
+        "WNS_ns": 2.025,
+        "WHS_ns": -0.055,
+        "F2F_ns": 7.334
+      },
+      "F2F_reduction_percent": 8.08
+    },
+    "f": {
+      "old": {
+        "LUT": 1380,
+        "FF": 804,
+        "DSP": 0,
+        "BRAM": 0,
+        "WNS_ns": 2.178,
+        "WHS_ns": -0.055,
+        "F2F_ns": 7.254
+      },
+      "new": {
+        "LUT": 1257,
+        "FF": 820,
+        "DSP": 0,
+        "BRAM": 0,
+        "WNS_ns": 2.689,
+        "WHS_ns": -0.055,
+        "F2F_ns": 6.602
+      },
+      "F2F_reduction_percent": 8.99
+    }
+  }
+}

@@ -1,0 +1,39 @@
+# vsim {+VECTORS=C:\HCMUT\HK261\Do an 2\Posit_MAC\results\parser_lod_refactor_recheck_20261101/vectors/nf.txt} -do run.do -l nf.log -c -wlf nf.wlf -gFUSED=0 work.tb_refactored_mac 
+# Loading sv_std.std
+# Loading work.tb_refactored_mac
+# Loading work.posit_mac_nf
+# Loading work.mac_nf_wrapper
+# Loading work.posit_parser
+# Loading work.lod_lzd_core_fixed2
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.mul_iter_core
+# Loading work.iter_ctrl
+# Loading work.sac_step_comb
+# Loading work.dyn_left_shifter_fixed3
+# Loading work.sac_step_comb_fixed2
+# Loading work.lod_lzd_core_fixed4
+# Loading work.dyn_left_shifter_fixed5
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum
+# Loading work.sbm_accum_comb
+# Loading work.mul_prepack_norm_comb
+# Loading work.posit_product_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter_fixed2
+# Loading work.posit_pack_finish
+# Loading work.posit_magnitude_parse
+# Loading work.posit_add
+# Loading work.posit_add_prepare_comb
+# Loading work.posit_add_align_comb
+# Loading work.dyn_right_shifter_fixed4
+# Loading work.posit_add_arith_comb
+# Loading work.posit_add_lod_comb
+# Loading work.posit_add_norm_comb
+# Loading work.dyn_left_shifter_fixed6
+# Loading work.posit_pack
+# Loading work.lod_lzd_core_fixed3
+# do run.do 
+# MAC_REFACTOR_PASS F=0 rows=50000 accepted=50000 completed=49701 aborted=299 stalls=181084 latency_observed=15..22
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/parser_lod_refactor_recheck_20261101/source/tb/tb_refactored_mac.sv(112)
+#    Time: 12564840 ns  Iteration: 1  Instance: /tb_refactored_mac

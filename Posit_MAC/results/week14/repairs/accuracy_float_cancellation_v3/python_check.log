@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/scripts/check_week14_accuracy.py", line 91, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/scripts/check_week14_accuracy.py", line 70, in main
+    assert close(row['metrics'][k]['absolute'],error),(n,row['i'],name,'absolute')
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (0, 34, 'nf', 'absolute')

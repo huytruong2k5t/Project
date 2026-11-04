@@ -1,0 +1,18 @@
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim -do run.do -l nar_contract.log -c -wlf nar_contract.wlf work.tb_fused_nar_contract 
+# Loading sv_std.std
+# Loading work.tb_fused_nar_contract
+# Loading work.fused_add_pipe
+# Loading work.fused_prepare_comb
+# Loading work.fused_align_comb
+# Loading work.fused_arith_comb
+# Loading work.fused_abs_borrow_comb
+# Loading work.fused_norm_comb
+# Loading work.lod_lzd_core_fixed2
+# do run.do 
+# FUSED_NAR_CONTRACT_PASS nar_cases=32 finite_zero=1 stalled_checks=128
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_fused_nar_contract.sv(72)
+#    Time: 2990 ns  Iteration: 1  Instance: /tb_fused_nar_contract

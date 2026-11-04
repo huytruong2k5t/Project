@@ -1,0 +1,51 @@
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+C:\altera\13.0sp1\modelsim_ase\win32aloem\vlog.exe -sv -timescale 1ns/1ps +incdir+C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol/source/rtl -work work C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\adder\posit_add.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\adder\posit_add_align.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\adder\posit_add_arith.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\adder\posit_add_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\adder\posit_add_normalize.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\common\dyn_left_shifter.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\common\dyn_right_shifter.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol/compat/lod_lzd_core.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\mac_f\fused_abs_borrow_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\mac_f\fused_add_pipe.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\mac_f\fused_align_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\mac_f\fused_arith_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\mac_f\fused_norm_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\mac_f\fused_prepare_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol/compat/mac_f_wrapper.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\mac_f\posit_mac_f.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\mac_nf\mac_nf_wrapper.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\mac_nf\posit_mac_nf.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\multiplier\iter_ctrl.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\multiplier\mul_iter_core.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\multiplier\mul_iter_wrapper.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\multiplier\mul_norm_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\multiplier\mul_prepack_norm_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\multiplier\ops_sel_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\multiplier\posit_mul_iter.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\multiplier\sac_step_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\multiplier\sbm_accum.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\multiplier\sbm_accum_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\multiplier\sbm_shift_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\packer\posit_pack.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\packer\posit_pack_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\packer\posit_pack_finish.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\packer\posit_pack_prepare.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\packer\round_unpacked_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\parser\posit_parser.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\parser\posit_parser_comb.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\mac_nf\posit_product_pack.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol\source\rtl\mac_nf\posit_magnitude_parse.sv C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol/source/tb/tb_week14_protocol.sv -l compile.log 
+-- Compiling module posit_add
+-- Compiling module posit_add_align
+-- Compiling module posit_add_arith
+-- Compiling module posit_add_comb
+-- Compiling module posit_add_normalize
+-- Compiling module dyn_left_shifter
+-- Compiling module dyn_right_shifter
+-- Compiling module lod_lzd_core
+** Warning: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol/compat/lod_lzd_core.sv(84): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+** Warning: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol/compat/lod_lzd_core.sv(85): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+** Warning: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol/compat/lod_lzd_core.sv(85): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+** Warning: C:\HCMUT\HK261\Do an 2\Posit_MAC\results\week14\event_protocol/compat/lod_lzd_core.sv(86): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+-- Compiling module fused_abs_borrow_comb
+-- Compiling module fused_add_pipe
+-- Compiling module fused_align_comb
+-- Compiling module fused_arith_comb
+-- Compiling module fused_norm_comb
+-- Compiling module fused_prepare_comb
+-- Compiling module mac_f_wrapper
+-- Compiling module posit_mac_f
+-- Compiling module mac_nf_wrapper
+-- Compiling module posit_mac_nf
+-- Compiling module iter_ctrl
+-- Compiling module mul_iter_core
+-- Compiling module mul_iter_wrapper
+-- Compiling module mul_norm_comb
+-- Compiling module mul_prepack_norm_comb
+-- Compiling module ops_sel_comb
+-- Compiling module posit_mul_iter
+-- Compiling module sac_step_comb
+-- Compiling module sbm_accum
+-- Compiling module sbm_accum_comb
+-- Compiling module sbm_shift_comb
+-- Compiling module posit_pack
+-- Compiling module posit_pack_comb
+-- Compiling module posit_pack_finish
+-- Compiling module posit_pack_prepare
+-- Compiling module round_unpacked_comb
+-- Compiling module posit_parser
+-- Compiling module posit_parser_comb
+-- Compiling module posit_product_pack
+-- Compiling module posit_magnitude_parse
+-- Compiling module tb_week14_protocol
+
+Top level modules:
+	posit_add_comb
+	posit_mul_iter
+	round_unpacked_comb
+	tb_week14_protocol

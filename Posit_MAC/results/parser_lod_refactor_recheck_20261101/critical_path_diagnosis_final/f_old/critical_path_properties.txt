@@ -1,0 +1,38 @@
+Property                     Type    Read-only  Value
+ARRIVAL_TIME                 double  true       8.255
+CLASS                        string  true       timing_path
+CLOCK_PESSIMISM              double  true       0.054
+CORNER                       string  true       Slow
+DATAPATH_DELAY               double  true       6.602
+DATAPATH_LOGIC_DELAY         double  true       2.878
+DATAPATH_NET_DELAY           double  true       3.724
+DELAY_TYPE                   string  true       max
+ENDPOINT_CLOCK               clock   true       clk
+ENDPOINT_CLOCK_DELAY         double  true       1.454
+ENDPOINT_CLOCK_EDGE          double  true       10.000
+ENDPOINT_CLOCK_ROOT          string  true       
+ENDPOINT_PIN                 pin     true       u_dut/u_wrapper/u_c/p1_cnt_q_reg[0]/D
+EXCEPTION                    string  true       
+EXCEPTION_ID                 int*    true       
+GROUP                        string  true       clk
+INPUT_DELAY                  double  true       
+INTER_SLR_COMPENSATION       double  true       
+LOGIC_LEVELS                 int     true       10
+MAX_FANOUT                   int     true       34
+NAME                         string  true       {u_dut/u_wrapper/accumulator_q_reg[31]/C --> u_dut/u_wrapper/u_c/p1_cnt_q_reg[0]/D}
+OUTPUT_DELAY                 double  true       
+REQUIRED_TIME                double  true       11.402
+REQUIREMENT                  double  true       10.000
+ROUTABLE_NETS                int     true       unset***
+SKEW                         double  true       -0.145
+SLACK                        double  true       3.147
+SLR_CROSSINGS                int     true       0
+STARTPOINT_CLOCK             clock   true       clk
+STARTPOINT_CLOCK_DELAY       double  true       1.653
+STARTPOINT_CLOCK_EDGE        double  true       0.000
+STARTPOINT_CLOCK_ROOT        string  true       
+STARTPOINT_PIN               pin     true       u_dut/u_wrapper/accumulator_q_reg[31]/C
+TIME_BORROWED_FROM_ENDPOINT  double  true       
+TIME_GIVEN_TO_STARTPOINT     double  true       
+UNCERTAINTY                  double  true       0.135
+USER_UNCERTAINTY             double  true       0.100

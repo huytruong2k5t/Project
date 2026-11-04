@@ -1,0 +1,38 @@
+{
+  "status": "COMPLETE",
+  "job": {
+    "id": "f32_3_ops1_n0",
+    "top": "f",
+    "nb": 32,
+    "es": 3,
+    "exact_en": 0,
+    "ops": 1,
+    "n": 0,
+    "main_goal": 10000000,
+    "seed": 2026101800,
+    "pilot_goal": 20000,
+    "scheme": "FLOOR",
+    "rounding": "RNE"
+  },
+  "phase": "pilot",
+  "goal": 20000,
+  "command": [
+    "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/builds/f32_3/obj/Vweek13_fused_tb",
+    "20000",
+    "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/week14/pilot/f32_3_ops1_n0/result",
+    "0",
+    "1",
+    "2026101800"
+  ],
+  "binary_sha256": "634af8f3ba9d10f2d2eddb8a65c7bb8d64e0bc16b2bdf44268d4870e7d3ab441",
+  "pilot_source_sha256": "b5c2a82e66624cbf3427f19630e05c923d66555fc19471c21e5366e4a407869d",
+  "runner_sha256": "52994e855bc4e9298006e9802d798ea95fc8a9c352a540c16c1680b6ccfb4ca8",
+  "log": "console.log",
+  "exit_code": 0,
+  "wall_seconds": 3.903164825999994,
+  "peak_child_rss_kib": 19056,
+  "report_sha256": "4cbd8716243a159df735391685662c78f8f356bbb7a72d6a47c9832eb1fa6a1b",
+  "log_sha256": "15819353a848f35a87b9e7d5e83e9fe0ac9dba355081d26b9c76ee10b3e7ca69",
+  "completed_per_second": 5124.046995600803,
+  "output_bytes": 800214
+}

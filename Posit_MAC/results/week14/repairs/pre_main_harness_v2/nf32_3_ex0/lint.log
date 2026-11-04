@@ -1,0 +1,7 @@
+%Warning-UNUSEDSIGNAL: src/rtl/sbm_shift_comb.sv:18:30: Bits of signal are not used: 'y_mant'[26:16]
+                                                      : ... note: In instance 'posit_mac_nf.u_wrapper.u_core.u_shift'
+   18 |     input logic [FRAC_MAX:0] y_mant,
+      |                              ^~~~~~
+                       ... For warning description see https://verilator.org/warn/UNUSEDSIGNAL?v=5.032
+                       ... Use "/* verilator lint_off UNUSEDSIGNAL */" and lint_on around source to disable this message.
+%Error: Exiting due to 1 warning(s)

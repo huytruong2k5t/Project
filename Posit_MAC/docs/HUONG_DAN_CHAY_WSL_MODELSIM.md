@@ -1,3 +1,11 @@
+## Hai bản khóa hiện tại — 05/11/2026
+
+Nguồn hiện hành nằm ở [releases/current.json](../releases/current.json); hướng dẫn gói [NF/F05/11](../releases/nf_f_20261105/README.md). Kiểm hash bằng `python3 -B scripts/audit_current_locks.py`. Báo cáo khóa cuối ở `results/nf_f_lock_20261105/final`.
+
+Các bản source/manifest khóa cũ đã gỡ, chỉ giữ báo cáo/log/vector. Hướng dẫn restore ZIP hoặc audit các checkpoint cũ trong các mục lịch sử bên dưới không còn khả dụng. Khi replay NF/F, dùng SourceRoot gói05/11 và RunRoot mới; khi build từ cây live, chọn SHARED_RESULTS_ROOT/tag/label mới.
+
+---
+
 ## NF/F Phương án A — 04/11/2026
 
 NF/F hiện nhận trực tiếp `c`; đã bỏ `acc_mode`, `acc_clr` và hồi tiếp nội bộ. Driver TB tự giữ kết quả Posit32 khi retire và lái `c` cho giao dịch tiếp theo. Quire riêng giữ nguyên.

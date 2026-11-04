@@ -1,5 +1,7 @@
 # Golden model NF/F Posit(32,3)
 
+Hai phiên bản nguồn hiện tại đã khóa tại [releases/current.json](../releases/current.json), kiểm lại bằng golden với100k completed mỗi NF/F và ModelSim9940 completed mỗi lõi. Xem [gói05/11](../releases/nf_f_20261105/README.md). Báo cáo cũ bên dưới chỉ để đối chiếu; source/khóa cũ đã gỡ theo yêu cầu.
+
 Đã có golden độc lập cho cấu hình hiện tại: Posit32/ES3, fraction đầu vào12 bit, FULL_TERM26/Q24, OPS0/1, n0..12, RNE và5 cờ. Với tích approximate P_hat theo hợp đồng:
 
 - NF: `R(R(P_hat) + C)`.

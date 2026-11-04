@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 // File          : lod_lzd_core_fixed2.sv
-// Author(s)     : Dan Huy / Codex
+// Author(s)     : Dan Huy 
 // Email         :
 // Project       : Posit MAC IP
 // Creation Date : 2026-10-16

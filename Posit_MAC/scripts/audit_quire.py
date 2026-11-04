@@ -9,7 +9,7 @@ import re
 import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/os.environ.get('QUIRE_RESULTS_ROOT','results/quire_20261103')
+OUT=ROOT/os.environ.get('QUIRE_RESULTS_ROOT','results/quire_current_20261105')
 
 
 def clean(text):return re.sub(r'//[^\n]*|/\*.*?\*/','',text,flags=re.S)
@@ -46,11 +46,11 @@ def main():
         name=todo.pop()
         if name not in reached:reached.add(name);todo.extend(edges[name])
     assert reached=={Path(p).stem for p in paths},'Unreachable active module'
-    reference=OUT/'before/manifest.json'
-    if not reference.exists():reference=ROOT/'rtl/shared_multiplier_checkpoint.json'
-    old=json.loads(reference.read_text())
+    index=json.loads((ROOT/'releases/current.json').read_text())
+    reference=ROOT/index['package']/'source.sha256.json'
+    locked=json.loads(reference.read_text())
     common={p:sha(ROOT/p) for p in paths if not p.startswith('rtl/mac_quire/')}
-    assert all(old['source_sha256'][p]==h for p,h in common.items()),'NF/F shared RTL changed'
+    assert all(locked[p]==h for p,h in common.items()),'Shared RTL differs from current NF/F locks'
     logs=OUT/'lint';logs.mkdir(parents=True,exist_ok=True)
     (OUT/'tmp').mkdir(exist_ok=True)
     env=os.environ.copy();env['TMPDIR']=str(OUT/'tmp')

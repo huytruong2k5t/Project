@@ -1,0 +1,28 @@
+# vsim -do run.do -l adder.log -c -wlf adder.wlf work.tb_posit_add_5stage_equiv 
+# Loading sv_std.std
+# Loading work.tb_posit_add_5stage_equiv
+# Loading work.posit_add
+# Loading work.posit_add_prepare_comb
+# Loading work.posit_add_align_comb
+# Loading work.dyn_right_shifter_fixed4
+# Loading work.posit_add_arith_comb
+# Loading work.posit_add_lod_comb
+# Loading work.lod_lzd_core_fixed2
+# Loading work.posit_add_norm_comb
+# Loading work.dyn_left_shifter_fixed6
+# Loading work.posit_add_comb
+# Loading work.posit_add_align
+# Loading work.dyn_right_shifter
+# Loading work.posit_add_arith
+# Loading work.posit_add_normalize
+# Loading work.lod_lzd_core
+# Loading work.dyn_left_shifter_fixed2
+# do run.do 
+# =============================================================
+#   5-Stage Posit Adder Equivalence Summary:
+#   Accepted: 39535 | Completed: 39534 | Stall Checks: 20310 | Errors: 0
+# ADDER_REFACTOR_PASS accepted=39535 completed=39534 aborted=1 stalls=20310
+#   STATUS: PASS (100% Bit-Exact & Elastic Protocol Verified!)
+# =============================================================
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/nf_f_lock_20261105/final/modelsim/source/tb/tb_posit_add_5stage_equiv.sv(286)
+#    Time: 646175 ns  Iteration: 1  Instance: /tb_posit_add_5stage_equiv

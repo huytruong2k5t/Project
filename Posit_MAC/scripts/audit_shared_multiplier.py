@@ -9,7 +9,7 @@ import re
 import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/os.environ.get('SHARED_RESULTS_ROOT','results/shared_multiplier_20261102')
+OUT=ROOT/os.environ.get('SHARED_RESULTS_ROOT','results/nf_f_lock_20261105')
 OUT.mkdir(parents=True,exist_ok=True)
 (OUT/'tmp').mkdir(exist_ok=True)
 

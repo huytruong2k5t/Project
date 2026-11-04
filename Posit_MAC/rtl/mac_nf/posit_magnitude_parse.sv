@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 // File          : posit_magnitude_parse.sv
-// Author(s)     : Codex, for Dan Huy
+// Author(s)     : Dan Huy
 // Project       : Posit MAC IP
 // Creation Date : 2026-10-05
 // Description   : Combinational Posit decoder, SPEC 5.2 / Norris-Kim Fig.5(a).

@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-05",
+  "status": "SOURCE_LOCKED_REGRESSION_VERIFIED",
+  "release_index": "releases/current.json",
+  "source_guard": "FINAL_BYTE_EXACT",
+  "versions": {
+    "nf": {
+      "completed": 100000,
+      "reset_aborted": 448,
+      "mismatches": 0,
+      "stage_checks": 272789,
+      "accumulation": 46977,
+      "max_chain": 66,
+      "modelsim_completed": 9940,
+      "modelsim_reset_aborted": 60
+    },
+    "f": {
+      "completed": 100000,
+      "reset_aborted": 377,
+      "mismatches": 0,
+      "stage_checks": 270453,
+      "accumulation": 46952,
+      "max_chain": 66,
+      "modelsim_completed": 9940,
+      "modelsim_reset_aborted": 60
+    }
+  },
+  "unit_checks": {
+    "status": "PASS",
+    "mismatches": 0,
+    "ops": 33554432,
+    "ops_metadata": 33554432,
+    "sac": 65536,
+    "sbm": 262144,
+    "accumulator": 1000000,
+    "normalizer": 75497472,
+    "claim": "Exhaustive OPS fraction/mode and sign/scale domains separately; exhaustive SAC/SBM buses; normalizer magnitude and scale domains separately; accumulator sampled with directed overflow. Not Cartesian metadata-times-fraction or exhaustive whole MAC."
+  },
+  "final_52x10M_acceptance": false,
+  "new_coverage_signoff": false,
+  "new_synthesis_run": false,
+  "timing_signoff": false
+}

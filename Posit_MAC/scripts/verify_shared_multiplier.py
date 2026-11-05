@@ -46,6 +46,7 @@ def build(kind):
     if coverage: args+=['--coverage']
     inputs=paths+['rtl/mac_active.f','rtl/posit_mac.vh',cpp,'scripts/verify_shared_multiplier.py']
     inputs+=['tb/opt17/full_term_reference.hpp','tb/week12_fused_reference.hpp']
+    if kind!='units': inputs+=['tb/nf_f_functional_coverage.hpp']
     inputs += [str(p.relative_to(ROOT)) for p in (ROOT/'l1/include').glob('*.hpp')]
     input_hashes={p:sha(ROOT/p) for p in sorted(set(inputs))}
     execute(args,target,OUT/('generate_'+kind+'_'+tag+'.log'))
@@ -77,7 +78,7 @@ def run_mac(kind,count,label,n,ops):
     report=OUT/(label+'_'+kind+'.json')
     if report.exists(): raise RuntimeError('Preserve existing report')
     binary=load(kind)
-    args=[str(binary),str(count),str(n),str(ops),'20261102',str(report)]
+    args=[str(binary),str(count),str(n),str(ops),os.environ.get('SHARED_SEED','20261105'),str(report)]
     execute(args,ROOT,report.with_suffix('.log'))
     print(report.read_text().strip())
 if __name__=='__main__':

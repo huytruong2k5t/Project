@@ -7,10 +7,15 @@
 - audit_shared_multiplier.py: kiểm31 module/68 instance và strict lint.
 - verify_shared_multiplier.py: build unit/NF/F, kiểm source guard, chạy golden integer độc lập.
 - run_refactored_mac.ps1: ModelSim snapshot/replay; VerifyScope All/NF/F, CLI tool paths.
+- verify_nf_f_coverage.py + report_nf_f_coverage.py: ma trận52 điểm, binary fast/instrumented riêng; raw coverage, bin bắt buộc, waiver theo hash và exit nonzero khi chưa đạt.
+- summarize_nf_f_verification.py: kiểm nguồn và bằng chứng unit/model/lint/ModelSim/coverage, không gán pilot thành AC01/main.
 - run_feedforward_ppa.py và syn/report_mac_f2f.tcl: synthesis-only từ snapshot đã verify, đo D/CE theo bank.
 - retire_old_rtl_versions_20261105.py: biên bản dọn nguồn cũ, chạy một lần; không dùng để dọn các khóa mới.
 
 Kết quả khóa nằm tại results/nf_f_lock_20261105. Chọn root/tag/label mới khi chạy lại để giữ bằng chứng:
+
+Bộ coverage mới và cách chạy: [tests/nf_f_coverage.md](../tests/nf_f_coverage.md).
+`make cov FIXED_RUN=<ten_moi>` chạy kiểm chứng mới, không gọi summary02/11.
 
 ```sh
 export SHARED_RESULTS_ROOT=results/nf_f_replay01

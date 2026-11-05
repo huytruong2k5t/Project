@@ -26,6 +26,8 @@ RESULTS_DIR := results
 
 FIXED_RUN ?= manual
 SHARED_COUNT ?= 100000
+NF_F_COV_ROOT ?= results/nf_f_coverage_$(FIXED_RUN)
+NF_F_CODE_COUNT ?= 5000
 SHARED_RESULTS_ROOT ?= results/nf_f_lock_20261105
 export SHARED_RESULTS_ROOT
 QUIRE_TAG ?= manual
@@ -53,8 +55,12 @@ regress: ## 52-point matrix; pilot100k default, main uses SHARED_COUNT=10000000
 	$(PYTHON) $(SCRIPTS_DIR)/run_shared_multiplier_matrix.py --count $(SHARED_COUNT) --label matrix_$(FIXED_RUN)
 
 
-cov: ## Summarize source-bound evidence; does not silently close Gate/AC04
-	$(PYTHON) $(SCRIPTS_DIR)/summarize_shared_multiplier.py
+cov: ## Fresh NF/F pilot + structural coverage; no synthesis or old evidence reuse
+	$(PYTHON) $(SCRIPTS_DIR)/verify_nf_f_coverage.py --out $(NF_F_COV_ROOT) --stage build
+	$(PYTHON) $(SCRIPTS_DIR)/verify_nf_f_coverage.py --out $(NF_F_COV_ROOT) --stage build --engine fast
+	$(PYTHON) $(SCRIPTS_DIR)/verify_nf_f_coverage.py --out $(NF_F_COV_ROOT) --stage run --count $(NF_F_CODE_COUNT) --label coverage
+	$(PYTHON) $(SCRIPTS_DIR)/verify_nf_f_coverage.py --out $(NF_F_COV_ROOT) --stage run --engine fast --count $(SHARED_COUNT) --label pilot
+	$(PYTHON) $(SCRIPTS_DIR)/verify_nf_f_coverage.py --out $(NF_F_COV_ROOT) --stage report --count $(NF_F_CODE_COUNT) --label coverage --pilot-label pilot --pilot-count $(SHARED_COUNT)
 
 quire-lint: ## Audit current19-module quire hierarchy and strict lint
 	$(PYTHON) $(SCRIPTS_DIR)/audit_quire.py

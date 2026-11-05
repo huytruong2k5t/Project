@@ -8,7 +8,7 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'results/shared_multiplier_20261102'
+OUT = ROOT / os.environ.get('SHARED_RESULTS_ROOT','results/shared_multiplier_20261102')
 
 
 def sha(path):
@@ -16,6 +16,7 @@ def sha(path):
 
 
 def main():
+    OUT.mkdir(parents=True,exist_ok=True)
     parser = argparse.ArgumentParser()
     parser.add_argument('--fixtures', default='results/shared_multiplier_20261102/modelsim_signoff/vectors')
     args = parser.parse_args()

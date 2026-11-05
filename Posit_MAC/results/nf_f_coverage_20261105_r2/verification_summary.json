@@ -1,0 +1,78 @@
+{
+  "status": "VERIFICATION_AND_COVERAGE_PASS_NOT_FINAL_ACCEPTANCE",
+  "profile": "POSIT32_ES3_APPROX12_FULL_TERM26_Q24_RNE",
+  "rtl_identity": {
+    "nf": {
+      "locked_id": "MAC_NF_POSIT32_ES3_FULLTERM_20261105",
+      "same_rtl_as_lock": true,
+      "different_paths": []
+    },
+    "f": {
+      "locked_id": "MAC_F_POSIT32_ES3_FULLTERM_20261105",
+      "same_rtl_as_lock": true,
+      "different_paths": []
+    }
+  },
+  "frozen_source_lock_audit": [
+    "SOURCE_LOCK_AUDIT_PASS nf 29 RTL modules",
+    "SOURCE_LOCK_AUDIT_PASS f 27 RTL modules"
+  ],
+  "unit_component_comparisons": 143934016,
+  "model": {
+    "status": "PASS",
+    "mismatches": 0,
+    "model_golden_checks": 400000,
+    "checkpoint_checks": 806204,
+    "python_fixture_rows": 20000
+  },
+  "lint": {
+    "modules": 31,
+    "instances": 68,
+    "status": "PASS"
+  },
+  "coverage_summary_sha256": "fe5f876879b6bb98c4cb30042def52ca369c26adfe20ffa59f16f9d34954959f",
+  "modelsim": {
+    "adder": {
+      "marker": "ADDER_REFACTOR_PASS accepted=39535 completed=39534 aborted=1 stalls=20310",
+      "log_sha256": "f2609043e15b488b10e461adef829e596938ad32f74d06c01efbd4d614184b22"
+    },
+    "packer": {
+      "marker": "PACKER_REFACTOR_PASS completed=10851 stalls=3552 errors=0",
+      "log_sha256": "1e1c9b522fb58b02c319e64d35ce7224a202575bf8383743afb363ff95447db9"
+    },
+    "core": {
+      "marker": "SHARED_CORE_PASS cases=53249 checkpoints=231437 mismatches=0",
+      "log_sha256": "7f2c533a8617c3b32698dda9efab7b15dabd6ad3ae544b00277b9531ae63bb06"
+    },
+    "nf": {
+      "marker": "MAC_REFACTOR_PASS F=0 rows=10000 accepted=10000 completed=9940 aborted=60 stalls=36231 latency_observed=15..26",
+      "log_sha256": "ded371c12aa809b45ab6bad0922fc1c17fb4561315db707112049f7241662ade"
+    },
+    "f": {
+      "marker": "MAC_REFACTOR_PASS F=1 rows=10000 accepted=10000 completed=9940 aborted=60 stalls=36231 latency_observed=12..23",
+      "log_sha256": "b895c625d9232fde799cf73a549b1b21bd98c38ae43fc87e71161f1509885da5"
+    }
+  },
+  "pilot_completed": 5200000,
+  "instrumented_completed": 260000,
+  "minimum_near_cancellation_fraction": 0.38999,
+  "minimum_regime_cell_per_point": 10,
+  "main_10m_per_point_met": false,
+  "main_regime_quota_met": false,
+  "remaining": [
+    "52 x 10M AC01 and >=4000 regime samples/cell/point not completed by this pilot",
+    "AC03 paired accuracy and timing signoff remain separate"
+  ],
+  "excluded_exploration": "matrix_* and the initial nf_f_coverage_20261105 exploration are not counted",
+  "synthesis_run": false,
+  "evidence_sha256": {
+    "units.json": "81c0d6eb07bfcdc5d5bbf4cd784d933fa56b7712f6858b6e169022c25d4f65b9",
+    "build_units.json": "51ee2a4c1624d0801063d2e5c2f5613104af0a0d3e62666c6e6a0407102852df",
+    "ports_and_lint.json": "317621ed86c1a53c48d0d7123b86defb728833187eeecc54328c7e2d5a41df63",
+    "model_check.json": "b76e9ebc6bbd7f93ebafbd64417b7f5c5567672556ba5e21217e76a5d629ce94",
+    "model_check_receipt.json": "7bca2c1d540d1ab96d9bdd434f87deec7c652f106782c4708121c0cd6fc110c0",
+    "modelsim/manifest.json": "95b8ee9651a3b92672f93f434d500142f4eb55c8a5e67dbf5ac1a41750a9897b",
+    "modelsim/verify/status.txt": "d938fa189912f8776c3deb31a6bec42f403f57b9c8e3ed936bdb076caf6bd61c",
+    "coverage_summary.json": "fe5f876879b6bb98c4cb30042def52ca369c26adfe20ffa59f16f9d34954959f"
+  }
+}

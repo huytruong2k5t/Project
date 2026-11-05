@@ -1,5 +1,9 @@
 # Vector và ca kiểm thử Posit MAC
 
+Bộ NF/F mới: [kế hoạch, bin và lệnh coverage](nf_f_coverage.md). `make cov`
+build từ nguồn hiện tại, chạy pilot và đo structural riêng; không dùng summary
+cũ làm PASS. SPEC hiện nằm tại [docs/SPEC_Posit_MAC_IP.md](../docs/SPEC_Posit_MAC_IP.md).
+
 Ma trận hiện hành: [SPEC §6.7](../SPEC_Posit_MAC_IP.md#acceptance-matrix), chỉ
 Posit(32,3), approximate FW12/FULL_TERM26/Q24/RNE, NF/F, OPS0/1 và n0..12.
 Không có test mode exact phần cứng, TRUNC hoặc format8/16/32-es2 trong nghiệm thu mới.

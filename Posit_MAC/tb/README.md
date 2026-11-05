@@ -1,3 +1,15 @@
+## NF/F hiện tại — 05/11/2026
+
+Xem [bộ testbench và coverage mới](../tests/nf_f_coverage.md): driver/scoreboard
+feed-forward NF/F, golden32/es3 độc lập, trace core từng vòng, monitor RNE/adder,
+52 điểm OPS0/1 x n0..12, manifest nguồn và raw/reviewed coverage. Header
+`nf_f_functional_coverage.hpp` ghi bin theo retire hoặc valid/ready được phân biệt
+rõ. Chạy `make cov FIXED_RUN=<ten_moi>` trong WSL; không chạy synthesis.
+
+Các số đếm, archive và release trong phần lịch sử bên dưới không phải bằng chứng
+cho nguồn mới. Gói nguồn NF/F05/11 đã khóa giữ nguyên; TB hiện tại được phát triển
+riêng và các lượt mới phải dùng thư mục kết quả mới.
+
 ## Bộ kiểm chứng sau dọn — 03/11/2026
 
 Chỉ giữ bộ NF/F hiện hành bên dưới,8 reference module và bộ quire mới:

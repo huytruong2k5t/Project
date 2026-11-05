@@ -23,7 +23,11 @@ Audit kiểm hash snapshot, nguồn RTL đang làm việc và bằng chứng ver
 
 ## Tài liệu và kiểm chứng
 
-- [SPEC](SPEC_Posit_MAC_IP.md), [golden32/es3](docs/GOLDEN_MODEL_POSIT32_ES3.md), [hướng dẫn WSL/ModelSim](docs/HUONG_DAN_CHAY_WSL_MODELSIM.md).
+Bộ testbench coverage NF/F mới: [kế hoạch và lệnh chạy](tests/nf_f_coverage.md).
+Kết quả [coverage](results/nf_f_coverage_20261105_r2/README.md) ghi riêng raw,
+reviewed, các điểm loại và pilot; không thay điều kiện nghiệm thu52x10M.
+
+- [SPEC](docs/SPEC_Posit_MAC_IP.md), [golden32/es3](docs/GOLDEN_MODEL_POSIT32_ES3.md), [hướng dẫn WSL/ModelSim](docs/HUONG_DAN_CHAY_WSL_MODELSIM.md).
 - [RTL](rtl/README.md), [runner](scripts/README.md), [constraints/synthesis](syn/README.md).
 - [Kết quả được giữ](results/README.md), [Optimization](../doc/Optimization.md).
 - [Nguồn đã khóa](releases/current.json), [verification05/11](results/nf_f_lock_20261105/).

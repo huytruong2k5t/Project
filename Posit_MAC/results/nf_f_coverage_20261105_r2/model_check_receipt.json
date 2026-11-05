@@ -1,0 +1,53 @@
+{
+  "build_command": [
+    "g++",
+    "-O3",
+    "-std=c++17",
+    "-Itb/opt17",
+    "-Itb",
+    "-Il1/include",
+    "tb/shared_multiplier_model_check.cpp",
+    "-o",
+    "results/nf_f_coverage_20261105_r2/model_check_recorded"
+  ],
+  "run_command": [
+    "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/nf_f_coverage_20261105_r2/model_check_recorded",
+    "/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/nf_f_coverage_20261105_r2/modelsim/vectors"
+  ],
+  "source_sha256": {
+    "tb/shared_multiplier_model_check.cpp": "349975894e3b68e973411b5054c87bff0b0ccb94d11b9c14047e9f9d42b201ec",
+    "tb/opt17/full_term_reference.hpp": "e8a57ab1d36495d5fc7ac677acfc4902685c79b15325f83c34a4475019ef92e9",
+    "tb/week12_fused_reference.hpp": "e34eeaeea5f17f53b28cf84fac994404735b9e94e1de867111d77285c25a4001",
+    "scripts/check_shared_model.py": "5be0ccd3278df825b2e48db497bae7e5a0ae7421d946cb50ee5ef0d4772f5053",
+    "l1/include/floor_rne_profile.hpp": "3e7f45da94c1c6fa057061e841d2242d27a880a37c1825f37f982e7179be4300",
+    "l1/include/kim_investigation.hpp": "5d984f8a7b387bf5b82313359eddffd468f7e3a81bd157cf75aac350f567a15b",
+    "l1/include/l1_multiplier_exact.hpp": "22b74fea86a300f18e64f4f77053006932c6c06aa4b6fe4e67ac1a62503ac1bd",
+    "l1/include/l1_multiplier_iter.hpp": "aaef62b1223507c378c6cef04adc8db1f23700f5e7ccb11aed5413182e87171a",
+    "l1/include/mul_norm.hpp": "5fd2e1aac6b0cecb0627f24429b2bee04d41531e280b2615fdaf7c4bedfee41a",
+    "l1/include/ops_sel.hpp": "558c0b319bd32da1e6ebcf1c5dc8539b26e1861104dfb94aa75f5c03d0b1a4bf",
+    "l1/include/paper_babic.hpp": "33b89ecd7d6e7b746daec2c2d90900e1cb57b8f9c0331228278acdbe68edbda4",
+    "l1/include/paper_fig3_accumulator.hpp": "872182bf83dd28503c74fe0a97d881fd5513eee4c5e8313765bdc29c90bd2742",
+    "l1/include/paper_measurement.hpp": "c4cdf0ce9895781f00717693fa50693e34f46a963235041329eb89258c16635f",
+    "l1/include/paper_multiplier.hpp": "39d2dc4e49bbc67fa0f7491a33184589cfc332fc4ba38151a9fa3aa8bc6ca1bc",
+    "l1/include/paper_ops.hpp": "fb42bd0cd52fdc60cabeda11cdead840ad9d0e7d55f4d58a855a4f915ec1eda7",
+    "l1/include/posit_adder.hpp": "08d20c9ccc3aad3cb314c4ca42649f8a039364756633099dea3bebec60a80ba4",
+    "l1/include/posit_fused_window.hpp": "8a5e8ff54da3a49f49522d70e40a71d3fd4b4c82f55c647d782d6f8caa8327f2",
+    "l1/include/posit_mac.hpp": "136aa7adc8038384785c249c12c2c779534f448f6e4b6b54fc26cbe26ab2c66a",
+    "l1/include/posit_mac_full_term.hpp": "bf5a6bb8379becbc2ae6abe22fca64b8610dfbfe5b4325af7da318ef7708d8da",
+    "l1/include/posit_packer.hpp": "532e3e3af4416d925de83e38e1a4554129953ee5521d1d8114a4e30c539b57bb",
+    "l1/include/posit_parser.hpp": "c6aaefa8d9dbf7afb5bc61a2f9615d28fd3372c6663d34edf12b13ebd97059ec",
+    "l1/include/posit_quire.hpp": "3612a767617d3fe18c2dc0b81997d1f9fd1785a0da722573e1dba0216ecb2275",
+    "l1/include/posit_types.hpp": "4e3d61f091bc86917d8a983dcf6228af6ee14a12b49e491ba3b99be70b05771b",
+    "l1/include/prepack_product.hpp": "1089ba08b60cf03b763b961af0106808e2bccc1caad35ad52e4de51c211a44b9",
+    "l1/include/round_unpacked.hpp": "473a820638be6f80da99cebf0c35be80e68a18c08f18b31dfd07755e5332a62c",
+    "l1/include/sac.hpp": "aca2fdffd0df9060e167d5ad6d22e219c3e70a2258999da093388c565fe89625",
+    "l1/include/sbm.hpp": "88ab3e30b3b2c078bef18f335b39991029678338adae295c12d1cdddd1ff61c3",
+    "results/nf_f_coverage_20261105_r2/modelsim/vectors/nf.txt": "9cf30ebe479cca326699cf0b0c33dae6289e84775118c3e16cf2130f01f356f7",
+    "results/nf_f_coverage_20261105_r2/modelsim/vectors/f.txt": "8c10259bb7308d5d72085d7741a9fd29cd900fad8e0e0ef540fee9363a18eec6"
+  },
+  "binary_sha256": "091ceec17a3d63c4856e455d999fa7d7cea6be47e1a1e5605bf8630b35f53b26",
+  "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "seed": 20261102,
+  "python_fixture_seed": 20261101,
+  "scope": "L1, independent integer oracle, Python ModelSim fixtures"
+}

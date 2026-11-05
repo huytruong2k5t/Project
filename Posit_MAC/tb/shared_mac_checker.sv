@@ -31,7 +31,16 @@ module shared_mac_checker #(
     output wire commit_valid,
     output wire commit_first,
     output wire commit_last,
-    output wire [3:0] commit_iteration
+    output wire [3:0] commit_iteration,
+    output wire pack_sample,
+    output wire [2:0] pack_special,
+    output wire [3:0] pack_rounding,
+    output wire add_sample,
+    output wire [4:0] add_shift,
+    output wire add_clamped,
+    output wire add_sub,
+    output wire [4:0] add_lzc,
+    output wire add_lzc_sample
 );
     generate
         if (FUSED != 0) begin : g_f
@@ -62,6 +71,16 @@ module shared_mac_checker #(
             assign commit_first = dut.u_wrapper.u_core.t2_first;
             assign commit_last = dut.u_wrapper.u_core.t2_last;
             assign commit_iteration = dut.u_wrapper.u_core.t2_iteration;
+            assign pack_sample = dut.u_wrapper.u_pack.in_valid && dut.u_wrapper.u_pack.in_ready;
+            assign pack_special = dut.u_wrapper.u_pack.p1_special_sel_d;
+            assign pack_rounding = {dut.u_wrapper.u_pack.p1_mag_trunc_d[0], dut.u_wrapper.u_pack.p1_guard_bit_d,
+                                    dut.u_wrapper.u_pack.p1_round_bit_d, dut.u_wrapper.u_pack.p1_sticky_bit_d};
+            assign add_sample = dut.u_wrapper.u_add.in_valid && dut.u_wrapper.u_add.in_ready;
+            assign add_shift = dut.u_wrapper.u_add.s1_shift_d;
+            assign add_clamped = dut.u_wrapper.u_add.s1_clamped_d;
+            assign add_sub = dut.u_wrapper.u_add.s1_sub_d;
+            assign add_lzc = dut.u_wrapper.u_add.s4_count_d;
+            assign add_lzc_sample = dut.u_wrapper.u_add.valid_q[2] && dut.u_wrapper.u_add.ready3;
         end else begin : g_nf
             posit_mac_nf dut (
                 .clk(clk),
@@ -90,6 +109,16 @@ module shared_mac_checker #(
             assign commit_first = dut.u_wrapper.u_core.t2_first;
             assign commit_last = dut.u_wrapper.u_core.t2_last;
             assign commit_iteration = dut.u_wrapper.u_core.t2_iteration;
+            assign pack_sample = dut.u_wrapper.u_pack.in_valid && dut.u_wrapper.u_pack.in_ready;
+            assign pack_special = dut.u_wrapper.u_pack.p1_special_sel_d;
+            assign pack_rounding = {dut.u_wrapper.u_pack.p1_mag_trunc_d[0], dut.u_wrapper.u_pack.p1_guard_bit_d,
+                                    dut.u_wrapper.u_pack.p1_round_bit_d, dut.u_wrapper.u_pack.p1_sticky_bit_d};
+            assign add_sample = dut.u_wrapper.u_add.in_valid && dut.u_wrapper.u_add.in_ready;
+            assign add_shift = dut.u_wrapper.u_add.s1_shift_d;
+            assign add_clamped = dut.u_wrapper.u_add.s1_clamped_d;
+            assign add_sub = dut.u_wrapper.u_add.s1_sub_d;
+            assign add_lzc = dut.u_wrapper.u_add.s4_count_d;
+            assign add_lzc_sample = dut.u_wrapper.u_add.valid_q[2] && dut.u_wrapper.u_add.ready3;
         end
     endgenerate
 endmodule

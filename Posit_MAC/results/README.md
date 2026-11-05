@@ -1,5 +1,12 @@
 # Báo cáo và bằng chứng được giữ — 05/11/2026
 
+## Coverage NF/F mới
+
+[Lượt05/11 r2](nf_f_coverage_20261105_r2/README.md) dùng testbench cập nhật trên
+RTL NF/F hiện tại; báo riêng 52 điểm pilot, counter structural, functional bin,
+raw/reviewed và waiver có giải thích. `verification_summary.json` liên kết thêm
+unit, lint, model và ModelSim. Không tính các lượt thăm dò `matrix_*` vào kết quả.
+
 ## Hai bản nguồn đã khóa hiện tại
 
 [Khóa NF/F05/11](../releases/nf_f_20261105/README.md) là hai phiên bản nguồn được giữ hiện hành. [Verification mới](nf_f_lock_20261105/final/summary.json): mỗi lõi100000 completed/0 mismatch, ModelSim9940 completed +60 reset-aborted, strict lint31 module/68 instance và unit arithmetic đạt. Chưa thay main52×10M/coverage/timing sau route.

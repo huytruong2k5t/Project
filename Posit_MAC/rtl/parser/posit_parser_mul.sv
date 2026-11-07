@@ -4,12 +4,9 @@
 // Email         :
 // Project       : Posit MAC IP
 // Creation Date : 2026-11-04
-// Description   : Two-stage elastic Posit parser for approximate-12 multiplier
-//                 operands (A, B). Shares the unified CARRY4 magnitude and
-//                 posit_parser_f_regime_lod P1 front-end with posit_parser,
-//                 but registers only the 12-bit upper fraction (frac[11:0]) and
-//                 1-bit truncated-tail OR flag (tail_cut) in P2, saving 13 FFs
-//                 per multiplier parser instance while remaining 100% bit-exact.
+// Description   : Two-stage elastic Posit(32,3) parser shared by NF/F.
+//                 A/B use the upper fraction and tail_cut for multiplication.
+//                 C uses both fraction slices for full-precision addition.
 //-----------------------------------------------------------------------------
 // $Source: $
 // $Revision: 1.0 $
@@ -31,9 +28,10 @@ module posit_parser_mul (
     output wire                     is_nar,
     output wire signed [10:0]       sf,
     output wire [11:0]              frac,
+    output wire [13:0]              frac_lo,
     output wire                     tail_cut
 );
-    // Fixed posit32/ES3 approximate-12 elaboration; no public parameters.
+    // Fixed posit32/ES3 elaboration; no public parameters.
     localparam int NB = 32;
     localparam int ES = 3;
     localparam int FRAC_MAX = 26;
@@ -76,16 +74,18 @@ module posit_parser_mul (
     wire signed [7:0] finite_regime;
     wire signed [SF_W-1:0] sf_d;
     wire [FRAC_OUT_W-1:0] frac_d;
+    wire [TAIL_W-1:0] frac_lo_d;
     wire tail_cut_d;
 
     // P2 registers: one output slot, held until downstream handshake.
-    // Registers only 12-bit upper fraction and 1-bit tail_cut instead of 26-bit frac.
+    // Independent outputs let synthesis trim the fields not consumed by each instance.
     logic p2_valid_q;
     logic p2_s_q;
     logic p2_is_zero_q;
     logic p2_is_nar_q;
     logic signed [SF_W-1:0] p2_sf_q;
     logic [FRAC_OUT_W-1:0] p2_frac_q;
+    logic [TAIL_W-1:0] p2_frac_lo_q;
     logic p2_tail_cut_q;
 
     wire p1_ready;
@@ -185,7 +185,8 @@ module posit_parser_mul (
 
     assign sf_d       = $signed({special_p1 ? 8'd0 : finite_regime, exponent});
     assign frac_d     = payload[FRAC_MAX-1 -: FRAC_OUT_W];
-    assign tail_cut_d = |payload[TAIL_W-1:0];
+    assign frac_lo_d  = payload[TAIL_W-1:0];
+    assign tail_cut_d = |frac_lo_d;
 
     //=========================================================================
     // P2 register bank, immediately after payload alignment.
@@ -198,6 +199,7 @@ module posit_parser_mul (
             p2_is_nar_q   <= 1'b0;
             p2_sf_q       <= '0;
             p2_frac_q     <= '0;
+            p2_frac_lo_q  <= '0;
             p2_tail_cut_q <= 1'b0;
         end else if (p2_ready) begin
             p2_valid_q <= `CK2Q p1_valid_q;
@@ -208,6 +210,7 @@ module posit_parser_mul (
                 p2_is_nar_q   <= `CK2Q p1_is_nar_q;
                 p2_sf_q       <= `CK2Q sf_d;
                 p2_frac_q     <= `CK2Q frac_d;
+                p2_frac_lo_q  <= `CK2Q frac_lo_d;
                 p2_tail_cut_q <= `CK2Q tail_cut_d;
             end
         end
@@ -218,6 +221,7 @@ module posit_parser_mul (
     assign is_nar   = p2_is_nar_q;
     assign sf       = p2_sf_q;
     assign frac     = p2_frac_q;
+    assign frac_lo  = p2_frac_lo_q;
     assign tail_cut = p2_tail_cut_q;
 
 endmodule

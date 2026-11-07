@@ -179,7 +179,7 @@ Sau chuẩn hóa chỉ cần tối đa25 fraction, vừa bus26. Phải giữ bit
 
 Parser nhận Posit32, xuất sign/Zero/NaR, sf signed11 và frac26/Q26 không hidden. P1 nhận biết Zero/NaR, tạo magnitude không dấu, phát hiện run regime và lưu bundle. P2 bỏ regime/terminator, lấy exponent tối đa3 bit, đệm exponent thiếu ở phía thấp và fraction ở phía thấp, tính sf=8k+e. Regime dài/no terminator phải có kết quả xác định; không dùng vị trí detector invalid làm shift tùy ý. Zero/NaR có sf/frac0; NaR sign1, Zero sign0.
 
-Hai tầng có valid/ready và giữ toàn bộ bundle khi stall. Các topology LOD/prefix/negation khác nhau được phép nếu equivalent; cả hai lõi NF và F dùng chung kiến trúc P1 (`CARRY4` lấy bù hai + `posit_parser_f_regime_lod`). Đối với hai toán hạng nhân `A, B`, cho phép dùng biến thể `posit_parser_mul` chỉ chốt 12 bit fraction cao `frac[11:0]` (`payload[25:14]`) và 1 bit cờ cắt đuôi `tail_cut = |payload[13:0]` ở thanh ghi tầng P2 (tiết kiệm 13 FF mỗi bộ Parser A/B mà vẫn giữ nguyên 100% giá trị số học và cờ `input_cut`). Parser C (`posit_parser`) nhận trực tiếp cổng `c` (không qua MUX hồi tiếp nội bộ `c_eff`) và giữ đủ 26 bit fraction `frac[25:0]` cho bộ cộng `posit_add`.
+Hai tầng có valid/ready và giữ toàn bộ bundle khi stall. NF và F dùng chung `posit_parser_mul` cho cả `A`, `B` và `C`. P1 dùng phép bù hai qua carry chain và `posit_parser_f_regime_lod`. P2 chốt 12 bit fraction cao `frac`, 14 bit thấp `frac_lo` và `tail_cut = |payload[13:0]`. Đường nhân chỉ lấy `frac` và `tail_cut` của A/B. Đường cộng lấy đủ 26 bit `{frac, frac_lo}` của C từ cổng `c`. Các ngõ ra không được tiêu thụ có thể được lược bỏ khi tổng hợp.
 
 ### 5.2 OPS và khởi tạo context
 
@@ -389,7 +389,7 @@ Nguồn ngày 02/11/2026 đã chuyển sang bộ nhân approximate dùng chung; 
 | Thành phần | Hiện trạng |
 | --- | --- |
 | NF/F wrappers và top | Cùng gọi `ops_sel_comb`, `mul_iter_core`, `mul_prepack_norm_comb`; không cfg_mode/exact/sticky nhân dư. N_MAX12, bank26/Q24. NF product RNE rồi cộng; F adapter26 không RNE trung gian. Đã gỡ `accumulator_q`/`acc_mode`/`acc_clr` ngày04/11 theo Phương án A (§4.2); C cấp trực tiếp từ cổng `c`, chuỗi tích lũy do driver ngoài quản lý sau retire. |
-| Cây active | 31 module theo `rtl/mac_active.f`; 6 multiplier, 7 common. Hai top cùng dùng chung `posit_parser_mul` (12-bit frac + 1-bit `tail_cut` cho A/B), `posit_parser` (26-bit frac cho C), `posit_parser_f_regime_lod`, adder5 và Packer2. 11 file cũ đã bảo toàn nguyên byte trước khi đưa khỏi RTL. |
+| Cây active | Từ ngày 07/11, NF/F có 30 module theo `rtl/mac_active.f`. Hai top cùng dùng `posit_parser_mul` cho A/B/C theo §5.1. Các bằng chứng ghi 31 module ở dưới thuộc phiên bản trước khi hợp nhất parser C. |
 | L1/golden FULL_TERM §6.1 | Profile `full_term32::Config` mặc định approximate=true,n12,OPS1; 400k kiểm model/golden,806204 checkpoint,60k hàng fixture Python độc lập đều 0 mismatch. Nhánh phần mềm lịch sử không là chế độ DUT. |
 | Kiểm khối và cổng | 143934016 so sánh đơn vị (các miền phân tách, accumulator lấy mẫu),31/31 strict lint;68 instance named-port và2 BUFG đầy đủ, không cổng trống/thiếu. Không là exhaustive toàn bộ MAC. |
 | Kiểm tích hợp mới | Ma trận52 điểm×100k=5.2M completed; default OPS1/n12 thêm1M NF+1M F, tổng7.2M/0 mismatch. Đã thấy đủ10 mã cờ hợp lệ NF và8 mã F trên hợp các điểm. ModelSim cuối: mỗi NF/F29820 completed+180 reset-aborted; core53249 case/231437 checkpoint. |

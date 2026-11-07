@@ -92,6 +92,12 @@ module mac_nf_wrapper (
     wire [11:0] frac_b;
     wire cut_a;
     wire cut_b;
+    // A/B consume the OR of the low fraction; C consumes the low bits themselves.
+    /* verilator lint_off UNUSEDSIGNAL */
+    wire [13:0] frac_a_lo_discarded;
+    wire [13:0] frac_b_lo_discarded;
+    wire cut_c_discarded;
+    /* verilator lint_on UNUSEDSIGNAL */
     wire [11:0] ops_x;
     wire [11:0] x;
     wire [12:0] ops_y;
@@ -166,6 +172,7 @@ module mac_nf_wrapper (
         .is_nar (nar_a),
         .sf (sf_a),
         .frac (frac_a),
+        .frac_lo (frac_a_lo_discarded),
         .tail_cut (cut_a)
     );
     posit_parser_mul  u_b (
@@ -181,9 +188,10 @@ module mac_nf_wrapper (
         .is_nar (nar_b),
         .sf (sf_b),
         .frac (frac_b),
+        .frac_lo (frac_b_lo_discarded),
         .tail_cut (cut_b)
     );
-    posit_parser  u_c (
+    posit_parser_mul u_c (
         .clk (clk),
         .reset_n (reset_n),
         .in_valid (pair_accept),
@@ -195,7 +203,9 @@ module mac_nf_wrapper (
         .is_zero (z_c),
         .is_nar (nar_c),
         .sf (sf_c),
-        .frac (frac_c)
+        .frac (frac_c[25:14]),
+        .frac_lo (frac_c[13:0]),
+        .tail_cut (cut_c_discarded)
     );
     ops_sel_comb u_ops (
         .frac_a (frac_a),

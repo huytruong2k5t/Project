@@ -1,6 +1,8 @@
 # Posit MAC — NF và F
 
-Hai phiên bản nguồn hiện tại đã khóa ngày05/11/2026:
+RTL đang phát triển dùng chung `posit_parser_mul` cho A, B và C ở cả MAC-NF và MAC-F. Xem [mô tả RTL](rtl/README.md) và [hồi quy sau khi hợp nhất parser](results/shared_parser_mul_20261107/summary.md).
+
+Hai phiên bản nguồn khóa ngày 05/11/2026:
 
 | Lõi | ID | RTL | Manifest |
 |---|---|---:|---|
@@ -11,7 +13,7 @@ Cấu hình Posit(32,3), fraction đầu vào12 bit, FULL_TERM26/Q24, OPS0/1, n0
 
 ## Phạm vi khóa
 
-Nguồn đã qua strict lint31 module/68 instance, unit143934016 kiểm tra thành phần và mỗi NF/F100000 completed/0 mismatch với golden độc lập. ModelSim mỗi bản9940 completed +60 reset-aborted; kiểm reset/stall/chuỗi ngoài, adder, packer và core đều đạt.
+Nguồn đã khóa qua strict lint31 module/68 instance, unit143934016 kiểm tra thành phần và mỗi NF/F100000 completed/0 mismatch với golden độc lập. ModelSim mỗi bản9940 completed +60 reset-aborted; kiểm reset/stall/chuỗi ngoài, adder, packer và core đều đạt.
 
 Đây là **khóa phiên bản nguồn đã regression**, chưa là nghiệm thu52×10M, coverage mới hoặc timing sau route. Không kế thừa PASS/PPA của một nguồn khác. [Gói nguồn và cách dùng](releases/nf_f_20261105/README.md).
 

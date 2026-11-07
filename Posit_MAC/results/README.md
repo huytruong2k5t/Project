@@ -1,9 +1,13 @@
 # Báo cáo và bằng chứng được giữ — 05/11/2026
 
+## Hợp nhất parser NF/F ngày 07/11
+
+[Hồi quy NF/F](shared_parser_mul_20261107/summary.md) dùng đúng RTL công bố cùng parser hợp nhất. Bằng chứng gồm strict lint, kết quả đối chiếu golden và mã băm đầu vào của hai bản build.
+
 ## Coverage NF/F mới
 
 [Lượt05/11 r2](nf_f_coverage_20261105_r2/README.md) dùng testbench cập nhật trên
-RTL NF/F hiện tại; báo riêng 52 điểm pilot, counter structural, functional bin,
+snapshot NF/F ngày 05/11; báo riêng 52 điểm pilot, counter structural, functional bin,
 raw/reviewed và waiver có giải thích. `verification_summary.json` liên kết thêm
 unit, lint, model và ModelSim. Không tính các lượt thăm dò `matrix_*` vào kết quả.
 

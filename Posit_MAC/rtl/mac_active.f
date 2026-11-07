@@ -4,7 +4,6 @@ rtl/multiplier/mul_prepack_norm_comb.sv
 rtl/mac_nf/posit_product_pack.sv
 rtl/mac_nf/posit_magnitude_parse.sv
 rtl/adder/posit_add.sv
-rtl/parser/posit_parser.sv
 rtl/multiplier/ops_sel_comb.sv
 rtl/multiplier/mul_iter_core.sv
 rtl/packer/posit_pack.sv

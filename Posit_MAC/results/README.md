@@ -1,36 +1,32 @@
-# Báo cáo và bằng chứng được giữ — 05/11/2026
+# Danh mục bằng chứng thực nghiệm hiện hành — Posit MAC (`RTL 07/11–13/11/2026`)
 
-## Coverage NF/F mới
+Thư mục `results/` chỉ giữ lại 17 bộ kết quả đang gắn trực tiếp với RTL cuối cùng, báo cáo tiến độ (`Bao_cao_tien_do_Posit_MAC_20261114.pdf`) và bản thảo hội đồng (`Ban_thao_hoi_dong_Posit_MAC_20261113_datapath.pdf`). Các thư mục `_smoke` và kết quả RTL cũ trước mốc chốt đã được dọn dẹp.
 
-[Lượt05/11 r2](nf_f_coverage_20261105_r2/README.md) dùng testbench cập nhật trên
-RTL NF/F hiện tại; báo riêng 52 điểm pilot, counter structural, functional bin,
-raw/reviewed và waiver có giải thích. `verification_summary.json` liên kết thêm
-unit, lint, model và ModelSim. Không tính các lượt thăm dò `matrix_*` vào kết quả.
-
-## Hai bản nguồn đã khóa hiện tại
-
-[Khóa NF/F05/11](../releases/nf_f_20261105/README.md) là hai phiên bản nguồn được giữ hiện hành. [Verification mới](nf_f_lock_20261105/final/summary.json): mỗi lõi100000 completed/0 mismatch, ModelSim9940 completed +60 reset-aborted, strict lint31 module/68 instance và unit arithmetic đạt. Chưa thay main52×10M/coverage/timing sau route.
-
-## Báo cáo đối chiếu
-
-Theo yêu cầu người dùng, giữ báo cáo/log/vector nhưng gỡ snapshot RTL, gói source và manifest khóa cũ. ZIP hỗn hợp đã bỏ các entry nguồn; các entry báo cáo/vector còn lại được kiểm hash không đổi. Kết quả cũ mô tả đúng nguồn khi đo; không còn đầy đủ source để replay, không dùng audit khóa cũ hoặc số PASS cũ cho cây hiện tại.
-
-| Nhóm | Báo cáo đối chiếu |
+## 1. Kiểm chứng RTL cuối cùng & coverage chức năng / cấu trúc
+| Thư mục | Nội dung chính |
 |---|---|
-|[NF sau chỉnh parser/core](nf_parser_recheck_20261104/summary.md)|F2F6.314ns,LUT1604/FF916; thuộc đúng snapshot khi đo.|
-|[NF/F feed-forward](feedforward_a_20261104/summary.md)|So trước/sau bỏ hồi tiếp; F5.340ns,NF8.945ns ở nguồn lúc đó.|
-|[Quire tối ưu](quire_opt_20261104/summary.md)|LUT10156→2888,FF4458→2636,F2F18.483→9.579ns;1.1M MAC/0 mismatch; synthesis unplaced,hold còn âm.|
-|[Quire03/11](quire_20261103/summary.json)|10M MAC/0 mismatch trên nguồn cũ; route100MHz chưa đạt.|
-|[Parser hợp nhất](parser_unified_20261104/)|Audit/regression trung gian; không gộp volume với phiên bản sau.|
-|[FULL_TERM dùng chung02/11](shared_multiplier_20261102/summary.json)|Unit/pilot trước feed-forward; nguồn khóa cũ đã gỡ.|
-|[Tối ưu F01/11](f_timing_optimization_20261101/summary.md)|Các thử nghiệm parser/F2F FLOOR cũ.|
-|[Critical path cũ](parser_lod_refactor_recheck_20261101/critical_path_diagnosis_final/diagnosis.md)|Phân tích đường găng theo netlist ngày đo.|
-|[README recheck](readme_refactor_recheck_20261101/)|Mốc refactor trước FULL_TERM.|
-|[Refactor r3](refactored_mac_20261101_r3/)|Mốc pipeline/packer lịch sử.|
-|[Fixed32/3](fixed32_3_20261022/summary.json)|Nghiệm thu checkpoint cũ; không còn giữ bản source đã khóa.|
-|[W14](week14/handoff.json)|Coverage/accuracy và aggregate cũ, không chuyển sang nguồn05/11.|
-|[OPT17](opt17_20261029/summary.json)|Candidate lịch sử, đã gỡ source candidate.|
-|[L1 FLOOR](l1_floor_rne_freeze/)|Báo cáo profile thuật toán cũ.|
-|[SPEC approximate12](spec_approx12_20261102/)|Kiểm công thức/hợp đồng.|
+| `nf_f_coverage_final/` | Verilator structural coverage trên RTL cuối (NF/F, tổng hợp `coverage_summary.json`, closure functional bins `2.6M`/lõi, bảng waiver). |
+| `shared_parser_mul_20261107/` | Hồi quy hỗn hợp `100.000` vector trên RTL khóa mốc `07/11` (shared parser & shared multiplier). |
+| `modelsim_subset_cov_20261113/` | Kiểm chứng giao thức, `stall`, `reset` tập trung (`1.500` vector) trên ModelSim. |
+| `report_datapath_detectors/` | Kiểm chứng khối LOD và phát hiện regime trên ModelSim (`4.096 + 560` trường hợp). |
+| `report_trace_20261113/` | Truy vết dạng sóng theo từng chu kỳ (`FT-05`, `stall`, `reset`). |
 
-Các liên kết source/restore trong chính báo cáo lịch sử có thể không còn tồn tại sau lần gỡ nguồn này. Bản báo cáo được giữ nguyên nội dung. Số synthesis unplaced không là Fmax sau route hoặc board signoff.
+## 2. Đánh giá độ chính xác nhân/cộng, chuỗi tích lũy & ứng dụng
+| Thư mục | Nội dung chính |
+|---|---|
+| `mul_prepack_20261112/` | Đo sai số pre-Packer cho bộ nhân `12-bit` (`n = 0..12`, `1.634.048` giao dịch). |
+| `paired_mac_20261112/` | So sánh ghép cặp `NF` vs `F` và phân tích triệt tiêu dấu (`377.032` cặp). |
+| `paired_mac_20261112_extra/` | Dữ liệu mở rộng và phân rã lỗi chi tiết cho bộ thí nghiệm ghép cặp `NF/F`. |
+| `mac_chains_20261112/` | Thực nghiệm `48` chuỗi tích lũy đa chiều dài trên `MAC-NF`, `MAC-F` và `MAC-Quire`. |
+| `app_benchmarks/` | Benchmark ứng dụng thực: bộ lọc FIR `32-tap` và tích vô hướng `128-D` (`MAC-F` vs `FP32` vs `Quire`). |
+
+## 3. Tổng hợp FPGA, Route 100 MHz, tối ưu fanout, công suất & đối chiếu Xilinx FP32
+| Thư mục | Nội dung chính |
+|---|---|
+| `restored_f2f_20261106/` | Tổng hợp OOC nền và bảng phân tách độ trễ theo tầng (`F2F`). |
+| `quire_opt_20261104/` | Tối ưu backend Quire sang word-bank `36-bit` (`LUT/FF`, so sánh trước/sau). |
+| `f_s1_opt_20261113/` | Tối ưu tách fanout tầng `S1` trên `MAC-F`, kiểm chứng tương đương RTL & Synth/Route. |
+| `route_nf_f_20261112/` | Kết quả Vivado `route_design` OOC `100 MHz` cho `MAC-NF` và `MAC-F`. |
+| `route_nf_f_internal_20261113/` | Kết quả `route` và đường găng nội bộ (`R2R`) trên `MAC-NF` và `MAC-F`. |
+| `route_quire_20261113/` | Kết quả Vivado `route_design` OOC `100 MHz` và đường găng trên `MAC-Quire`. |
+| `fpga_power_and_fp32/` | Báo cáo công suất (`report_power`) và đối chiếu với Xilinx `Floating-Point FP32` OOC (có DSP & 0 DSP). |

@@ -1,0 +1,47 @@
+CMD: ['C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe', '-c', '-lib', 'work_base', 'work_base.tb_refactored_mac', '-GFUSED=0', '+VECTORS=C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\modelsim_subset_cov_20261113\\subset_1500.vec\\nf.txt', '-do', 'run -all; quit -f']
+RC: 0
+ELAPSED_S: 1.307
+--- STDOUT ---
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim {+VECTORS=C:\HCMUT\HK261\Do an 2\Posit_MAC\results\modelsim_subset_cov_20261113\subset_1500.vec\nf.txt} -do {run -all; quit -f} -lib work_base -c -GFUSED=0 work_base.tb_refactored_mac 
+# Loading sv_std.std
+# Loading work_base.tb_refactored_mac
+# Loading work_base.posit_mac_nf
+# Loading work_base.mac_nf_wrapper
+# Loading work_base.posit_parser_mul
+# Loading work_base.posit_parser_f_regime_lod
+# Loading work_base.dyn_left_shifter
+# Loading work_base.ops_sel_comb
+# Loading work_base.mul_iter_core
+# Loading work_base.sac_step_comb
+# Loading work_base.lod_lzd_core_fixed4
+# Loading work_base.dyn_left_shifter_fixed5
+# Loading work_base.sbm_shift_comb
+# Loading work_base.sbm_accum_comb
+# Loading work_base.mul_prepack_norm_comb
+# Loading work_base.posit_product_pack
+# Loading work_base.posit_pack_prepare
+# Loading work_base.dyn_right_shifter_fixed2
+# Loading work_base.posit_pack_finish
+# Loading work_base.posit_magnitude_parse
+# Loading work_base.lod_lzd_core_fixed2
+# Loading work_base.posit_add
+# Loading work_base.posit_add_prepare_comb
+# Loading work_base.posit_add_align_comb
+# Loading work_base.dyn_right_shifter_fixed4
+# Loading work_base.posit_add_arith_comb
+# Loading work_base.posit_add_lod_comb
+# Loading work_base.posit_add_norm_comb
+# Loading work_base.dyn_left_shifter_fixed6
+# Loading work_base.posit_pack
+# run -all 
+# EXTERNAL_FEEDBACK_PASS F=0 completed=929 max_chain=68
+# MAC_REFACTOR_PASS F=0 rows=1500 accepted=1500 completed=1491 aborted=9 stalls=5438 latency_observed=15..26
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_refactored_mac.sv(151)
+#    Time: 386250 ns  Iteration: 1  Instance: /tb_refactored_mac
+
+--- STDERR ---
+

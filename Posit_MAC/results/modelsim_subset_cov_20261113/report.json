@@ -1,0 +1,203 @@
+{
+  "vlib_base": {
+    "cmd": [
+      "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vlib.exe",
+      "work_base"
+    ],
+    "rc": 0,
+    "elapsed_s": 0.121,
+    "stdout": "",
+    "stderr": ""
+  },
+  "vlog_base": {
+    "cmd": [
+      "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vlog.exe",
+      "-sv",
+      "-timescale",
+      "1ns/1ps",
+      "+incdir+C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl",
+      "-work",
+      "work_base",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_nf\\posit_mac_nf.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_nf\\mac_nf_wrapper.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\mul_prepack_norm_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_nf\\posit_product_pack.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_nf\\posit_magnitude_parse.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\ops_sel_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\mul_iter_core.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\packer\\posit_pack.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add_prepare_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add_align_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add_arith_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add_lod_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add_norm_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\packer\\posit_pack_prepare.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\packer\\posit_pack_finish.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\sbm_shift_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\dyn_right_shifter_fixed4.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\dyn_right_shifter_fixed2.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\sac_step_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\sbm_accum_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\dyn_left_shifter.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed2.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\dyn_left_shifter_fixed6.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed4.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_f\\posit_mac_f.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_f\\mac_f_wrapper.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\dyn_left_shifter_fixed5.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\parser\\posit_parser_mul.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\parser\\posit_parser_f_regime_lod.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\tb\\tb_refactored_mac.sv"
+    ],
+    "rc": 0,
+    "elapsed_s": 0.395,
+    "stdout": "Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012\n-- Compiling module posit_mac_nf\n-- Compiling module mac_nf_wrapper\n-- Compiling module mul_prepack_norm_comb\n-- Compiling module posit_product_pack\n-- Compiling module posit_magnitude_parse\n-- Compiling module posit_add\n-- Compiling module ops_sel_comb\n-- Compiling module mul_iter_core\n-- Compiling module posit_pack\n-- Compiling module posit_add_prepare_comb\n-- Compiling module posit_add_align_comb\n-- Compiling module posit_add_arith_comb\n-- Compiling module posit_add_lod_comb\n-- Compiling module posit_add_norm_comb\n-- Compiling module posit_pack_prepare\n-- Compiling module posit_pack_finish\n-- Compiling module sbm_shift_comb\n-- Compiling module dyn_right_shifter_fixed4\n-- Compiling module dyn_right_shifter_fixed2\n-- Compiling module sac_step_comb\n-- Compiling module sbm_accum_comb\n-- Compiling module dyn_left_shifter\n-- Compiling module lod_lzd_core_fixed2\n-- Compiling module dyn_left_shifter_fixed6\n-- Compiling module lod_lzd_core_fixed4\n** Warning: C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed4.sv(83): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.\n\n** Warning: C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed4.sv(84): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.\n\n** Warning: C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed4.sv(84): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.\n\n** Warning: C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed4.sv(85): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.\n\n-- Compiling module posit_mac_f\n-- Compiling module mac_f_wrapper\n-- Compiling module dyn_left_shifter_fixed5\n-- Compiling module posit_parser_mul\n-- Compiling module posit_parser_f_regime_lod\n-- Compiling module tb_refactored_mac\n\nTop level modules:\n\ttb_refactored_mac\n",
+    "stderr": ""
+  },
+  "vsim_base_nf": {
+    "cmd": [
+      "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+      "-c",
+      "-lib",
+      "work_base",
+      "work_base.tb_refactored_mac",
+      "-GFUSED=0",
+      "+VECTORS=C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\modelsim_subset_cov_20261113\\subset_1500.vec\\nf.txt",
+      "-do",
+      "run -all; quit -f"
+    ],
+    "rc": 0,
+    "elapsed_s": 1.307,
+    "stdout": "Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl \n\n# 10.1d\n\n# vsim {+VECTORS=C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\modelsim_subset_cov_20261113\\subset_1500.vec\\nf.txt} -do {run -all; quit -f} -lib work_base -c -GFUSED=0 work_base.tb_refactored_mac \n# Loading sv_std.std\n# Loading work_base.tb_refactored_mac\n# Loading work_base.posit_mac_nf\n# Loading work_base.mac_nf_wrapper\n# Loading work_base.posit_parser_mul\n# Loading work_base.posit_parser_f_regime_lod\n# Loading work_base.dyn_left_shifter\n# Loading work_base.ops_sel_comb\n# Loading work_base.mul_iter_core\n# Loading work_base.sac_step_comb\n# Loading work_base.lod_lzd_core_fixed4\n# Loading work_base.dyn_left_shifter_fixed5\n# Loading work_base.sbm_shift_comb\n# Loading work_base.sbm_accum_comb\n# Loading work_base.mul_prepack_norm_comb\n# Loading work_base.posit_product_pack\n# Loading work_base.posit_pack_prepare\n# Loading work_base.dyn_right_shifter_fixed2\n# Loading work_base.posit_pack_finish\n# Loading work_base.posit_magnitude_parse\n# Loading work_base.lod_lzd_core_fixed2\n# Loading work_base.posit_add\n# Loading work_base.posit_add_prepare_comb\n# Loading work_base.posit_add_align_comb\n# Loading work_base.dyn_right_shifter_fixed4\n# Loading work_base.posit_add_arith_comb\n# Loading work_base.posit_add_lod_comb\n# Loading work_base.posit_add_norm_comb\n# Loading work_base.dyn_left_shifter_fixed6\n# Loading work_base.posit_pack\n# run -all \n# EXTERNAL_FEEDBACK_PASS F=0 completed=929 max_chain=68\n# MAC_REFACTOR_PASS F=0 rows=1500 accepted=1500 completed=1491 aborted=9 stalls=5438 latency_observed=15..26\n# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_refactored_mac.sv(151)\n#    Time: 386250 ns  Iteration: 1  Instance: /tb_refactored_mac\n",
+    "stderr": ""
+  },
+  "vsim_base_f": {
+    "cmd": [
+      "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+      "-c",
+      "-lib",
+      "work_base",
+      "work_base.tb_refactored_mac",
+      "-GFUSED=1",
+      "+VECTORS=C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\modelsim_subset_cov_20261113\\subset_1500.vec\\f.txt",
+      "-do",
+      "run -all; quit -f"
+    ],
+    "rc": 0,
+    "elapsed_s": 1.098,
+    "stdout": "Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl \n\n# 10.1d\n\n# vsim {+VECTORS=C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\modelsim_subset_cov_20261113\\subset_1500.vec\\f.txt} -do {run -all; quit -f} -lib work_base -c -GFUSED=1 work_base.tb_refactored_mac \n# Loading sv_std.std\n# Loading work_base.tb_refactored_mac\n# Loading work_base.posit_mac_f\n# Loading work_base.mac_f_wrapper\n# Loading work_base.mul_prepack_norm_comb\n# Loading work_base.posit_parser_mul\n# Loading work_base.posit_parser_f_regime_lod\n# Loading work_base.dyn_left_shifter\n# Loading work_base.ops_sel_comb\n# Loading work_base.mul_iter_core\n# Loading work_base.sac_step_comb\n# Loading work_base.lod_lzd_core_fixed4\n# Loading work_base.dyn_left_shifter_fixed5\n# Loading work_base.sbm_shift_comb\n# Loading work_base.sbm_accum_comb\n# Loading work_base.posit_add\n# Loading work_base.posit_add_prepare_comb\n# Loading work_base.posit_add_align_comb\n# Loading work_base.dyn_right_shifter_fixed4\n# Loading work_base.posit_add_arith_comb\n# Loading work_base.posit_add_lod_comb\n# Loading work_base.lod_lzd_core_fixed2\n# Loading work_base.posit_add_norm_comb\n# Loading work_base.dyn_left_shifter_fixed6\n# Loading work_base.posit_pack\n# Loading work_base.posit_pack_prepare\n# Loading work_base.dyn_right_shifter_fixed2\n# Loading work_base.posit_pack_finish\n# run -all \n# EXTERNAL_FEEDBACK_PASS F=1 completed=929 max_chain=68\n# MAC_REFACTOR_PASS F=1 rows=1500 accepted=1500 completed=1491 aborted=9 stalls=5438 latency_observed=12..23\n# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/tb/tb_refactored_mac.sv(151)\n#    Time: 341430 ns  Iteration: 1  Instance: /tb_refactored_mac\n",
+    "stderr": ""
+  },
+  "vlib_cov": {
+    "cmd": [
+      "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vlib.exe",
+      "work_cov"
+    ],
+    "rc": 0,
+    "elapsed_s": 0.03,
+    "stdout": "",
+    "stderr": ""
+  },
+  "vlog_cov": {
+    "cmd": [
+      "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vlog.exe",
+      "+cover=bcesft",
+      "-sv",
+      "-timescale",
+      "1ns/1ps",
+      "+incdir+C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl",
+      "-work",
+      "work_cov",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_nf\\posit_mac_nf.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_nf\\mac_nf_wrapper.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\mul_prepack_norm_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_nf\\posit_product_pack.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_nf\\posit_magnitude_parse.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\ops_sel_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\mul_iter_core.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\packer\\posit_pack.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add_prepare_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add_align_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add_arith_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add_lod_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\adder\\posit_add_norm_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\packer\\posit_pack_prepare.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\packer\\posit_pack_finish.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\sbm_shift_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\dyn_right_shifter_fixed4.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\dyn_right_shifter_fixed2.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\sac_step_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\multiplier\\sbm_accum_comb.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\dyn_left_shifter.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed2.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\dyn_left_shifter_fixed6.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed4.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_f\\posit_mac_f.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\mac_f\\mac_f_wrapper.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\dyn_left_shifter_fixed5.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\parser\\posit_parser_mul.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\parser\\posit_parser_f_regime_lod.sv",
+      "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\tb\\tb_refactored_mac.sv"
+    ],
+    "rc": 0,
+    "elapsed_s": 0.364,
+    "stdout": "Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012\n-- Compiling module posit_mac_nf\n-- Compiling module mac_nf_wrapper\n-- Compiling module mul_prepack_norm_comb\n-- Compiling module posit_product_pack\n-- Compiling module posit_magnitude_parse\n-- Compiling module posit_add\n-- Compiling module ops_sel_comb\n-- Compiling module mul_iter_core\n-- Compiling module posit_pack\n-- Compiling module posit_add_prepare_comb\n-- Compiling module posit_add_align_comb\n-- Compiling module posit_add_arith_comb\n-- Compiling module posit_add_lod_comb\n-- Compiling module posit_add_norm_comb\n-- Compiling module posit_pack_prepare\n-- Compiling module posit_pack_finish\n-- Compiling module sbm_shift_comb\n-- Compiling module dyn_right_shifter_fixed4\n-- Compiling module dyn_right_shifter_fixed2\n-- Compiling module sac_step_comb\n-- Compiling module sbm_accum_comb\n-- Compiling module dyn_left_shifter\n-- Compiling module lod_lzd_core_fixed2\n-- Compiling module dyn_left_shifter_fixed6\n-- Compiling module lod_lzd_core_fixed4\n** Warning: C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed4.sv(83): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.\n\n** Warning: C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed4.sv(84): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.\n\n** Warning: C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed4.sv(84): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.\n\n** Warning: C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\rtl\\common\\lod_lzd_core_fixed4.sv(85): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.\n\n-- Compiling module posit_mac_f\n-- Compiling module mac_f_wrapper\n-- Compiling module dyn_left_shifter_fixed5\n-- Compiling module posit_parser_mul\n-- Compiling module posit_parser_f_regime_lod\n-- Compiling module tb_refactored_mac\n\nTop level modules:\n\ttb_refactored_mac\n",
+    "stderr": ""
+  },
+  "vsim_cov_nf": {
+    "cmd": [
+      "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+      "-c",
+      "-coverage",
+      "-lib",
+      "work_cov",
+      "work_cov.tb_refactored_mac",
+      "-GFUSED=0",
+      "+VECTORS=C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\modelsim_subset_cov_20261113\\subset_1500.vec\\nf.txt",
+      "-do",
+      "run -all; coverage save cov_nf.ucdb; coverage report -detail -file cov_nf_report.txt; quit -f"
+    ],
+    "rc": 12,
+    "elapsed_s": 0.991,
+    "stdout": "Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl \n\n# 10.1d\n\n# vsim {+VECTORS=C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\modelsim_subset_cov_20261113\\subset_1500.vec\\nf.txt} -coverage -do {run -all; coverage save cov_nf.ucdb; coverage report -detail -file cov_nf_report.txt; quit -f} -lib work_cov -c -GFUSED=0 work_cov.tb_refactored_mac \n# Loading sv_std.std\n# Loading work_cov.tb_refactored_mac\n# Loading work_cov.posit_mac_nf\n# Loading work_cov.mac_nf_wrapper\n# Loading work_cov.posit_parser_mul\n# Loading work_cov.posit_parser_f_regime_lod\n# Loading work_cov.dyn_left_shifter\n# Loading work_cov.ops_sel_comb\n# Loading work_cov.mul_iter_core\n# Loading work_cov.sac_step_comb\n# Loading work_cov.lod_lzd_core_fixed4\n# Loading work_cov.dyn_left_shifter_fixed5\n# Loading work_cov.sbm_shift_comb\n# Loading work_cov.sbm_accum_comb\n# Loading work_cov.mul_prepack_norm_comb\n# Loading work_cov.posit_product_pack\n# Loading work_cov.posit_pack_prepare\n# Loading work_cov.dyn_right_shifter_fixed2\n# Loading work_cov.posit_pack_finish\n# Loading work_cov.posit_magnitude_parse\n# Loading work_cov.lod_lzd_core_fixed2\n# Loading work_cov.posit_add\n# Loading work_cov.posit_add_prepare_comb\n# Loading work_cov.posit_add_align_comb\n# Loading work_cov.dyn_right_shifter_fixed4\n# Loading work_cov.posit_add_arith_comb\n# Loading work_cov.posit_add_lod_comb\n# Loading work_cov.posit_add_norm_comb\n# Loading work_cov.dyn_left_shifter_fixed6\n# Loading work_cov.posit_pack\n# ** Error: Failure to license for coverage.  Unable to checkout msimcoverage license feature.\n# Error loading design\n",
+    "stderr": "Error loading design\n"
+  },
+  "vsim_cov_f": {
+    "cmd": [
+      "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+      "-c",
+      "-coverage",
+      "-lib",
+      "work_cov",
+      "work_cov.tb_refactored_mac",
+      "-GFUSED=1",
+      "+VECTORS=C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\modelsim_subset_cov_20261113\\subset_1500.vec\\f.txt",
+      "-do",
+      "run -all; coverage save cov_f.ucdb; coverage report -detail -file cov_f_report.txt; quit -f"
+    ],
+    "rc": 12,
+    "elapsed_s": 0.964,
+    "stdout": "Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl \n\n# 10.1d\n\n# vsim {+VECTORS=C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\modelsim_subset_cov_20261113\\subset_1500.vec\\f.txt} -coverage -do {run -all; coverage save cov_f.ucdb; coverage report -detail -file cov_f_report.txt; quit -f} -lib work_cov -c -GFUSED=1 work_cov.tb_refactored_mac \n# Loading sv_std.std\n# Loading work_cov.tb_refactored_mac\n# Loading work_cov.posit_mac_f\n# Loading work_cov.mac_f_wrapper\n# Loading work_cov.mul_prepack_norm_comb\n# Loading work_cov.posit_parser_mul\n# Loading work_cov.posit_parser_f_regime_lod\n# Loading work_cov.dyn_left_shifter\n# Loading work_cov.ops_sel_comb\n# Loading work_cov.mul_iter_core\n# Loading work_cov.sac_step_comb\n# Loading work_cov.lod_lzd_core_fixed4\n# Loading work_cov.dyn_left_shifter_fixed5\n# Loading work_cov.sbm_shift_comb\n# Loading work_cov.sbm_accum_comb\n# Loading work_cov.posit_add\n# Loading work_cov.posit_add_prepare_comb\n# Loading work_cov.posit_add_align_comb\n# Loading work_cov.dyn_right_shifter_fixed4\n# Loading work_cov.posit_add_arith_comb\n# Loading work_cov.posit_add_lod_comb\n# Loading work_cov.lod_lzd_core_fixed2\n# Loading work_cov.posit_add_norm_comb\n# Loading work_cov.dyn_left_shifter_fixed6\n# Loading work_cov.posit_pack\n# Loading work_cov.posit_pack_prepare\n# Loading work_cov.dyn_right_shifter_fixed2\n# Loading work_cov.posit_pack_finish\n# ** Error: Failure to license for coverage.  Unable to checkout msimcoverage license feature.\n# Error loading design\n",
+    "stderr": "Error loading design\n"
+  },
+  "coverage_files": {
+    "cov_nf.ucdb": {
+      "exists": false,
+      "size": 0
+    },
+    "cov_nf_report.txt": {
+      "exists": false,
+      "size": 0
+    },
+    "cov_f.ucdb": {
+      "exists": false,
+      "size": 0
+    },
+    "cov_f_report.txt": {
+      "exists": false,
+      "size": 0
+    }
+  }
+}

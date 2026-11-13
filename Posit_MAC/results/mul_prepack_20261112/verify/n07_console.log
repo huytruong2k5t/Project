@@ -1,0 +1,37 @@
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim +N=7 +PAIRS=../tmp/pairs.vec +OBSERVED=../tmp/n07.csv -do run.do -l n07.log -c -wlf ../tmp/n07.wlf work.tb_multiplier_prepack 
+# Loading sv_std.std
+# Loading work.tb_multiplier_prepack
+# Loading work.posit_mac_f
+# Loading work.mac_f_wrapper
+# Loading work.mul_prepack_norm_comb
+# Loading work.posit_parser_mul
+# Loading work.posit_parser_f_regime_lod
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.mul_iter_core
+# Loading work.sac_step_comb
+# Loading work.lod_lzd_core_fixed4
+# Loading work.dyn_left_shifter_fixed5
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum_comb
+# Loading work.posit_add
+# Loading work.posit_add_prepare_comb
+# Loading work.posit_add_align_comb
+# Loading work.dyn_right_shifter_fixed4
+# Loading work.posit_add_arith_comb
+# Loading work.posit_add_lod_comb
+# Loading work.lod_lzd_core_fixed2
+# Loading work.posit_add_norm_comb
+# Loading work.dyn_left_shifter_fixed6
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter_fixed2
+# Loading work.posit_pack_finish
+# do run.do 
+# MULTIPLIER_PREPACK_CAPTURED n=7 rows=125696
+# ** Note: $finish    : ../source/tb/tb_multiplier_prepack.sv(130)
+#    Time: 22086685 ns  Iteration: 1  Instance: /tb_multiplier_prepack

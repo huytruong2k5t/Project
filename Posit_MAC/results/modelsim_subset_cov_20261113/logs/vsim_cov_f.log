@@ -1,0 +1,43 @@
+CMD: ['C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe', '-c', '-coverage', '-lib', 'work_cov', 'work_cov.tb_refactored_mac', '-GFUSED=1', '+VECTORS=C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\modelsim_subset_cov_20261113\\subset_1500.vec\\f.txt', '-do', 'run -all; coverage save cov_f.ucdb; coverage report -detail -file cov_f_report.txt; quit -f']
+RC: 12
+ELAPSED_S: 0.964
+--- STDOUT ---
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim {+VECTORS=C:\HCMUT\HK261\Do an 2\Posit_MAC\results\modelsim_subset_cov_20261113\subset_1500.vec\f.txt} -coverage -do {run -all; coverage save cov_f.ucdb; coverage report -detail -file cov_f_report.txt; quit -f} -lib work_cov -c -GFUSED=1 work_cov.tb_refactored_mac 
+# Loading sv_std.std
+# Loading work_cov.tb_refactored_mac
+# Loading work_cov.posit_mac_f
+# Loading work_cov.mac_f_wrapper
+# Loading work_cov.mul_prepack_norm_comb
+# Loading work_cov.posit_parser_mul
+# Loading work_cov.posit_parser_f_regime_lod
+# Loading work_cov.dyn_left_shifter
+# Loading work_cov.ops_sel_comb
+# Loading work_cov.mul_iter_core
+# Loading work_cov.sac_step_comb
+# Loading work_cov.lod_lzd_core_fixed4
+# Loading work_cov.dyn_left_shifter_fixed5
+# Loading work_cov.sbm_shift_comb
+# Loading work_cov.sbm_accum_comb
+# Loading work_cov.posit_add
+# Loading work_cov.posit_add_prepare_comb
+# Loading work_cov.posit_add_align_comb
+# Loading work_cov.dyn_right_shifter_fixed4
+# Loading work_cov.posit_add_arith_comb
+# Loading work_cov.posit_add_lod_comb
+# Loading work_cov.lod_lzd_core_fixed2
+# Loading work_cov.posit_add_norm_comb
+# Loading work_cov.dyn_left_shifter_fixed6
+# Loading work_cov.posit_pack
+# Loading work_cov.posit_pack_prepare
+# Loading work_cov.dyn_right_shifter_fixed2
+# Loading work_cov.posit_pack_finish
+# ** Error: Failure to license for coverage.  Unable to checkout msimcoverage license feature.
+# Error loading design
+
+--- STDERR ---
+Error loading design
+

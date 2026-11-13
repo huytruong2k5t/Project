@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "strict_lint": "31 active module tops",
+  "records": [
+    {
+      "variant": "nf",
+      "status": "PASS",
+      "completed": 100000,
+      "mismatches": 0,
+      "configuration_bins_hit": 26
+    },
+    {
+      "variant": "f",
+      "status": "PASS",
+      "completed": 100000,
+      "mismatches": 0,
+      "configuration_bins_hit": 26
+    }
+  ],
+  "limits": "Mixed 100k/variant regression with golden oracle and protocol/core checks; not full coverage signoff or raw adder-bus equivalence."
+}

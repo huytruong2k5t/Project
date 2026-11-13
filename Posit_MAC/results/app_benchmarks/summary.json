@@ -1,0 +1,146 @@
+{
+  "fir_32tap_256samples": {
+    "fp32": {
+      "samples": 257,
+      "snr_db": 138.91569708745254,
+      "rmse": 5.99492193859735e-08,
+      "max_abs_err": 2.1290327078940354e-07
+    },
+    "mac_f_n12": {
+      "samples": 257,
+      "snr_db": 72.50840209533655,
+      "rmse": 0.0001253569110447278,
+      "max_abs_err": 0.00022236016535060688,
+      "avg_cycles_per_sample": 576.9533073929961,
+      "time_us_per_sample": 3.7362602473319266
+    },
+    "mac_f_n8": {
+      "samples": 257,
+      "snr_db": 72.35907129710438,
+      "rmse": 0.00012753072303658036,
+      "max_abs_err": 0.00022236016535060688,
+      "avg_cycles_per_sample": 576.8910505836576,
+      "time_us_per_sample": 3.7358570818783683
+    },
+    "mac_nf_n12": {
+      "samples": 257,
+      "snr_db": 72.50840209533655,
+      "rmse": 0.0001253569110447278,
+      "max_abs_err": 0.00022236016535060688,
+      "avg_cycles_per_sample": 672.9533073929961,
+      "time_us_per_sample": 4.953649667964638
+    },
+    "mac_quire": {
+      "samples": 257,
+      "snr_db": 72.50839263062716,
+      "rmse": 0.00012535704764183306,
+      "max_abs_err": 0.00022234526418941304,
+      "avg_cycles_per_sample": 1374.953307392996,
+      "time_us_per_sample": 14.007266782732234
+    }
+  },
+  "dot_product_128d": {
+    "nn_norm_dim128": {
+      "fp32": {
+        "p50_rel": 1.8784411450572514e-07,
+        "p95_rel": 1.3199726329614397e-06,
+        "max_rel": 1.4187017046934448e-05,
+        "fail_inf_cnt": 0
+      },
+      "mac_f_n12": {
+        "p50_rel": 0.00018122672372643904,
+        "p95_rel": 0.0005664204103578123,
+        "max_rel": 0.001909761474063893,
+        "fail_inf_cnt": 0
+      },
+      "mac_f_n8": {
+        "p50_rel": 0.0001850758882762189,
+        "p95_rel": 0.0005580101331000105,
+        "max_rel": 0.001909761474063893,
+        "fail_inf_cnt": 0
+      },
+      "mac_nf_n12": {
+        "p50_rel": 0.00018122672372643904,
+        "p95_rel": 0.0005664204103578123,
+        "max_rel": 0.001909761474063893,
+        "fail_inf_cnt": 0
+      },
+      "mac_quire": {
+        "p50_rel": 0.00018119574837704636,
+        "p95_rel": 0.0005663983897908092,
+        "max_rel": 0.0019096089871034002,
+        "fail_inf_cnt": 0
+      },
+      "fp32_fail_or_underflow_cnt": 0,
+      "mac_f_valid_nonzero_cnt": 200
+    },
+    "wide_dyn_scale_dim128": {
+      "fp32": {
+        "p50_rel": Infinity,
+        "p95_rel": Infinity,
+        "max_rel": Infinity,
+        "fail_inf_cnt": 100
+      },
+      "mac_f_n12": {
+        "p50_rel": 0.0021178086937298727,
+        "p95_rel": 0.008687100745674633,
+        "max_rel": 0.017923883187645182,
+        "fail_inf_cnt": 0
+      },
+      "mac_f_n8": {
+        "p50_rel": 0.0021178086937298727,
+        "p95_rel": 0.008687100745674633,
+        "max_rel": 0.017923883187645182,
+        "fail_inf_cnt": 0
+      },
+      "mac_nf_n12": {
+        "p50_rel": 0.0021511748162364266,
+        "p95_rel": 0.008271409013264881,
+        "max_rel": 0.015359715780824413,
+        "fail_inf_cnt": 0
+      },
+      "mac_quire": {
+        "p50_rel": 0.0004631097730009186,
+        "p95_rel": 0.0011350603523816302,
+        "max_rel": 0.0016275729375244189,
+        "fail_inf_cnt": 0
+      },
+      "fp32_fail_or_underflow_cnt": 100,
+      "mac_f_valid_nonzero_cnt": 200
+    },
+    "wide_dyn_cancel_dim128": {
+      "fp32": {
+        "p50_rel": Infinity,
+        "p95_rel": Infinity,
+        "max_rel": Infinity,
+        "fail_inf_cnt": 200
+      },
+      "mac_f_n12": {
+        "p50_rel": 7.592010820100631e+82,
+        "p95_rel": 4.190763289428963e+84,
+        "max_rel": 1.1446206918748854e+87,
+        "fail_inf_cnt": 0
+      },
+      "mac_f_n8": {
+        "p50_rel": 7.592010820100631e+82,
+        "p95_rel": 4.190763289428963e+84,
+        "max_rel": 1.1446206918748854e+87,
+        "fail_inf_cnt": 0
+      },
+      "mac_nf_n12": {
+        "p50_rel": 5.885916571466147e+82,
+        "p95_rel": 3.2248888724163747e+84,
+        "max_rel": 1.20486388618409e+87,
+        "fail_inf_cnt": 0
+      },
+      "mac_quire": {
+        "p50_rel": 0.00020425306920131682,
+        "p95_rel": 0.0007733660357069548,
+        "max_rel": 0.049848225926320364,
+        "fail_inf_cnt": 0
+      },
+      "fp32_fail_or_underflow_cnt": 200,
+      "mac_f_valid_nonzero_cnt": 200
+    }
+  }
+}

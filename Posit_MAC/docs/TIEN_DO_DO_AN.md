@@ -1,6 +1,6 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 04/11/2026 (giờ Việt Nam)
+**Ngày cập nhật:** 13/11/2026 (giờ Việt Nam)
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
 **Tài liệu chi tiết:** [SPEC v1.29](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
@@ -10,6 +10,29 @@
 File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lại ở mục2, tiến độ tuần ở mục3 và cập nhật theo ngày ở mục4. Chi tiết tối ưu, kiểm chứng/synthesis/STA lưu trong Optimization; PLAN giữ kiến trúc/build. Tiến độ chỉ giữ mốc, công việc còn mở và nhật ký; raw bằng chứng ở results.
 
 **Trạng thái:** `✅` = hoàn thành phạm vi của dòng và có kiểm chứng; `processing` = đã làm một phần hoặc còn thiếu tiêu chí; `không` = chưa thực hiện.
+
+## 0. Tóm tắt chốt tiến độ nộp ngày 14/11/2026
+
+Tài liệu đối chiếu nhanh phục vụ báo cáo tiến độ ngày 14/11/2026 (đồng bộ với [Báo cáo tiến độ PDF](../../doc/Posit_MAC_LaTeX/Bao_cao_tien_do_Posit_MAC_20261114.pdf) và [Hồ sơ bằng chứng `.docx`](Ho_so_Bang_chung_Thuc_nghiem_Posit_MAC.docx)):
+
+### Bảng các công việc đã hoàn thành
+
+| Hạng mục công việc | Kết quả định lượng đạt được | Bằng chứng xác nhận |
+| --- | --- | --- |
+| **1. Thiết kế RTL 5 tầng & tối ưu tách tải S1** | Hoàn thiện `MAC-F`, `MAC-NF` và `MAC-Quire` dùng chung bộ nhân lặp 12 bit `FULL_TERM26/Q24` + bộ cộng 5 tầng `S1--S5` đủ 26 bit. Tách fanout 4 nhánh `choose_a` ở tầng S1 (`posit_add_prepare_comb.sv`) giữ `bit-exact` (`201.764` kiểm tra) và nâng $F_{\max,\mathrm{R2R}}$ của `MAC-F` lên `154,42 MHz`. | [Hồ sơ bằng chứng](Ho_so_Bang_chung_Thuc_nghiem_Posit_MAC.docx), `rtl/` |
+| **2. Kiểm chứng chức năng & độ phủ RTL cuối** | `0` sai lệch qua `1,634` triệu giao dịch bộ nhân (`n=0..12`), `377.032` bộ ghép cặp, `48` chuỗi dài (`16.320` MAC/lõi) và `110.000`/lõi hồi quy hỗn hợp. `Verilator 5.032` trên RTL cuối đạt `98,03%` / `96,30%` line, `100%` branch và `2,6` triệu tx/lõi đóng `100%` bin (`517/517` NF, `516/516` F). | [coverage_summary.json](../results/nf_f_coverage_final/coverage_summary.json) |
+| **3. Đánh giá sai số & ứng dụng thực tế** | `OPS1/n12` đạt $P_{95} = 0{,}0297\%$ trước Packer. Trên FIR `32` hệ số (`8.224` MAC), `MAC-F` đạt `SNR = 72,5 dB` (`3,74 us`/mẫu); trên dải động `DynScale` (`10^-45..10^43`) xử lý `200/200` vectơ `0` lỗi khi `IEEE-754 FP32` tràn/dưới biên toàn bộ. | [app_benchmarks/summary.json](../results/app_benchmarks/summary.json) |
+| **4. Triển khai FPGA, công suất & đối chiếu `FP32`** | Route OOC `100 MHz` trên `xc7a35tcpg236-1` (`Vivado v.2026.1`): `MAC-F` tốn `1.221 LUT`, `781 FF`, `0 DSP`, thông lượng `8,56 M MAC/s`, $P_{\mathrm{dyn}} = 4\text{ mW}$ (giảm `48,6%` FF và `5,5x` công suất động so với `Xilinx FP32 0-DSP`). Đã đối chiếu thêm với `PACoGen`, `FloPoCo` và `PERCIVAL`. | [fpga_power_and_fp32](../results/fpga_power_and_fp32/run_xilinx_fp32.tcl) |
+| **5. Hồ sơ báo cáo hội đồng & tiến độ 14/11** | Hoàn thiện bản thảo hội đồng `87` trang (`14` hình datapath RTL, `21` tài liệu tham khảo), bản báo cáo tiến độ nộp `14/11/2026` và hồ sơ bằng chứng `.docx/.md` kèm mã SHA-256. | [Bao_cao_tien_do_Posit_MAC_20261114.pdf](../../doc/Posit_MAC_LaTeX/Bao_cao_tien_do_Posit_MAC_20261114.pdf) |
+
+### Các công việc chưa hoàn thành (còn mở cho giai đoạn tiếp theo)
+
+- **Đóng timing `100 MHz` cho `MAC-Quire`:** Biến thể đối chứng `MAC-Quire` còn `WNS = -0,187 ns` ($F_{\max} = 98,16\text{ MHz}$) sau route OOC; cần chèn thêm `1` tầng thanh ghi giữa khối chuẩn bị tham số và mảng tích lũy từ `36` bit.
+- **Chạy thực nghiệm trên bo mạch Artix-7 thật:** Chưa nạp bitstream lên phần cứng Basys3/Arty (`xc7a35t`) để đưa vectơ qua UART, đối chiếu kết quả thực tế và đo công suất trực tiếp trên board.
+- **Tích hợp bus hệ thống & STA sơ đồ chân vật lý:** Các số liệu timing hiện chạy ở chế độ OOC với ngân sách I/O giả định; cần bọc giao diện hệ thống (AXI4-Stream/Lite) và chạy STA theo `pinout` chân I/O thật.
+- **Mở rộng hồi quy dài hạn:** Chưa chạy ma trận `AC-01` (`52 x 10` triệu giao dịch), `AC-03` đủ cả `13` mức `n` và bộ kiểm thử `stall` ngẫu nhiên chuyên sâu cho từng từ `36` bit của `MAC-Quire`.
+
+---
 
 ## 1. Tổng quan
 
@@ -31,6 +54,93 @@ Các số54 module/20M/W14/120,48MHz, FLOOR/exact và các bảng tuần10–14 
 MAC L1/Gate1B, parser/packer, Gate2 multiplier và Gate3 NF đã có bằng chứng. L1 fused W32 và RTL F profile chính đã kiểm trong phạm vi công bố. NF production giữ lịch OPT-03, đã promote OPT-02c/05/09/10A và khóa38 module ngày18/10. Chi tiết số lượt/mismatch, freeze và timing lịch sử chuyển về Optimization; final approximate per-n/AC04,reset/interface review và paired standalone accuracy đã đạt W14;exact/AC02,matched PPA và Gate4 còn mở.
 
 ## 2. Công việc còn lại và ưu tiên
+
+**Kết quả cập nhật 13/11.** Đã hoàn thiện [bản nộp 14/11, 20 trang](../../doc/Posit_MAC_LaTeX/Bao_cao_tien_do_Posit_MAC_20261114.pdf) và [bản thảo hội đồng, 46 trang](../../doc/Posit_MAC_LaTeX/Ban_thao_hoi_dong_Posit_MAC_20261113.pdf). Bản nộp có hai mã giả tiếng Anh nguyên khối, đồ thị sai số theo n và diễn giải theo nhóm mẫu. Bản hội đồng gồm sáu chương, hình datapath theo RTL 07/11, ma trận bằng chứng và phần phân tích timing. [Đối chiếu Word, LaTeX và manifest](../../doc/Posit_MAC_LaTeX/DOI_CHIEU_BAN_THAO_HOI_DONG.md)
+
+**Kiểm mới cho hình giao thức.** ModelSim chạy FT-05, n0, giữ response qua ba cạnh stall và reset hủy một request trên RTL khóa 07/11. Kết quả 4 nhận, 3 retire, 1 reset hủy, 0 sai lệch. [Trace CSV](../results/report_trace_20261113/trace.csv) · [Manifest](../results/report_trace_20261113/manifest.json)
+
+**Phần kỹ thuật còn mở.** Ưu tiên coverage AC-04 trên snapshot nghiệm thu, ma trận AC-01, paired accuracy AC-03 theo từng n, rồi STA sau tích hợp với ràng buộc chân và I/O cụ thể. Quire tiếp tục có luồng nghiệm thu riêng.
+
+### Kế hoạch mở rộng bản tiến độ thành bản thảo khoảng 50 trang
+
+**Mục tiêu bàn giao:** khoảng 50 trang PDF A4 tính cả phần đầu, tài liệu tham khảo và phụ lục. Mức **70%** là độ hoàn thiện của **bản thảo báo cáo hội đồng**: bài toán, thiết kế, hình, phương pháp và kết quả hiện có đã viết thành chương có thể giữ lại khi hoàn thiện. Tiến độ nghiệm thu RTL tiếp tục được theo dõi theo SPEC và theo từng snapshot. Giữ MAC-F làm thiết kế chính, MAC-NF làm đối chứng và MAC-quire làm khảo sát mở rộng.
+
+**Tài liệu đối chiếu:** [bản Word 73 trang](../../doc/Project%202%20-%20Bao%20cao%20tien%20do.docx), [bản LaTeX 20 trang](../../doc/Posit_MAC_LaTeX/Bao_cao_tien_do_Posit_MAC_20261114.pdf), [sườn báo cáo](../../doc/Suon%20bao%20cao%20Posit%20MAC.md), [luận văn Fahad](../../RTL_Design_Synthesis/Muhammad%20Fahad%20-%20MSc%20Thesis%20-%20Posit%20Multiplier%202026.pdf) và [bảng nguồn phép đo](NGUON_VA_CAU_HINH_DO_BAO_CAO_20261112.md). Bản Word có 5 chương, 18 bảng và 9 hình kỹ thuật đánh số ở Chương 3, trong đó Hình 3.1 gồm hai sơ đồ NF/F. Chương lý thuyết cũ chiếm 29 trang. Bản mở rộng lấy lại các phần trực tiếp phục vụ thiết kế và kiểm chứng, đồng thời dùng số liệu mới của LaTeX để thay các nhận định phụ thuộc bản Word cũ.
+
+#### Bố cục và ngân sách trang
+
+| Phần | Trang mục tiêu | Nội dung hoàn thiện cho bản tiến độ |
+| --- | ---: | --- |
+| Phần đầu | 5 | Bìa, tóm tắt có số liệu, mục lục, danh mục hình/bảng/thuật toán và ký hiệu. Tóm tắt nêu bài toán, quyết định chọn F, kết quả sai số, timing OOC và các việc còn mở. |
+| Chương 1. Bài toán và công trình liên quan | 4 | Khôi phục từ Ch. 1 Word phần bài toán, mục tiêu, phạm vi và phương pháp. Viết rõ hai bài toán: nhân–cộng độc lập và chuỗi tích lũy. Đối chiếu Norris–Kim về nhân lặp và Fahad về cách đánh giá. Nêu các phần đã hiện thực, phép đo hỗ trợ từng kết luận và ranh giới tái lập bài báo gốc. |
+| Chương 2. Cơ sở số học, đặc tả và lựa chọn kiến trúc | 8 | Chọn lọc §2.2–2.6 Word: Posit(32,3), một ví dụ giải mã, Q24, khai triển dịch–cộng, cắt fraction và bỏ số hạng, căn chỉnh/jam, triệt tiêu và RNE. Chốt công thức NF/F/quire và OPS1/n12. Kết chương bằng hình ba phương án và lý do chọn F dựa trên đối chứng cùng điều kiện. Chuyển lịch sử Unum và các phép tính tay dài sang tài liệu tham khảo hoặc phụ lục khi cần. |
+| Chương 3. Kiến trúc và thiết kế RTL MAC-F | 13 | Mở rộng từ §3.2–3.7 Word: top, giao thức, Parser P1/P2, OPS–SAC–SBM/T1–T3, chuẩn hóa tích, adder S1–S5, Packer P1/P2. Giữ hai mã giả tiếng Anh. Dùng một ca FT-05 xuyên qua bộ nhân, kèm một trace riêng cho stall/reset hoặc triệt tiêu nếu có bằng chứng. Đặt các hình chi tiết cạnh phần giải thích thanh ghi, dữ liệu và điều khiển. |
+| Chương 4. Phương pháp và kết quả kiểm chứng chức năng | 7 | Khôi phục §4.1–4.7 Word: vai trò model/golden/ideal, sơ đồ testbench, scoreboard tại accept/retire, reset hủy giao dịch và backpressure. Đưa một bảng ma trận yêu cầu → ca thử → kết quả → mốc nguồn. Tách unit, hồi quy hỗn hợp và tiêu chí AC-01/03/04. Lệnh build dài để ở phụ lục. |
+| Chương 5. Đánh giá sai số, chuỗi và FPGA | 8 | Mở rộng từ §4.3–4.4 LaTeX và §5.2–5.5 Word: đồ thị sai số theo n, phân tích đuôi sai số, paired NF/F ở OPS1/n12, ca gần triệt tiêu, 48 chuỗi và đánh đổi với quire. Trình bày tổng hợp 06/11 và route OOC 12/11 trên nguồn 07/11 thành hai phép đo. Bổ sung một bảng đường găng và đoạn giới hạn kết luận. |
+| Chương 6. Kết luận và việc còn lại | 2 | Trả lời các mục tiêu đã đặt, dẫn về kết quả tương ứng, nêu giới hạn của OOC và mẫu đã chạy. Ghi kế hoạch nghiệm thu, coverage và tích hợp. |
+| Tài liệu tham khảo và phụ lục | 3 | BibTeX, bảng cổng đầy đủ, trace hoặc bảng F2F bổ sung, manifest/CSV và lệnh tái chạy. Có thể điều chỉnh số trang phụ lục khi dàn trang để giữ dung lượng gần 50. |
+| **Tổng** | **50** | Dùng số trang để cân đối dung lượng. Ưu tiên ví dụ, hình và phân tích có dữ liệu kiểm chứng. |
+
+**Cách áp dụng Fahad:** Dùng §1.2–1.4 để tổ chức vấn đề → mục tiêu → đóng góp. Dùng Ch. 3–4 để trình bày cơ sở toán, mã giả, sơ đồ tổng thể rồi giải thích datapath theo từng khối. Dùng §3.7 và §5.2 để tách kiểm chức năng khỏi đo sai số và phân tích cả đuôi sai số. Dùng §5.9 và §5.11 để viết đối chứng trước–sau cùng điều kiện và nêu giới hạn. Với đồ án này, ba mức đánh giá tương ứng là **bộ nhân trước Packer**, **toàn MAC và chuỗi tích lũy**, **triển khai FPGA**.
+
+#### Kế hoạch kiểm tra và vẽ lại datapath
+
+Mốc đề xuất cho hình NF/F là RTL **07/11**, lấy từ `results/route_nf_f_20261112/source/rtl/` và đối chiếu manifest. Hình quire phải ghi rõ kiến trúc đang vẽ thuộc bản backend 04/11 hay bản dùng trong phép đo chuỗi. Dựng hình vector TikZ để sửa nhãn và độ rộng cùng mã LaTeX.
+
+| Hình Word cũ / hình cần có | Hành động | Bằng chứng để duyệt |
+| --- | --- | --- |
+| **3.1 NF/F** và hai hình tổng quan TikZ | Giữ hình ba phương án ở Ch. 2. Vẽ chi tiết riêng MAC-F ở Ch. 3: A/B/C, vị trí chốt OPS/n, context C, đường chuẩn hóa tích, adder và Packer. Dùng nét riêng cho valid/ready và metadata. | `mac_f_wrapper.sv`: `pair_accept` chốt cấu hình, `pair_retire` chốt C, `core_done` cấp valid cho adder, `retire` giải phóng busy. Hình hồi tiếp D→C ghi rõ phần bên ngoài lõi. |
+| **3.2 Parser P1/P2** | Dùng hình cũ làm bản nháp. Vẽ lại bù hai, XOR lân cận, sentinel, dò chuyển tiếp và ranh giới P1/P2. Ghi riêng fraction cao 12 bit, thấp 14 bit và `tail_cut`. | `posit_parser_mul.sv` và Algorithm 3.1. Chỉ rõ A/B dùng fraction cao, C dùng đủ 26 bit. |
+| **3.3–3.5 OPS/SAC/SBM** | Gộp thành một sơ đồ pipeline và một trace ngắn. Vẽ bộ chọn OPS, context, token T1, dịch T2, cộng/commit T3, accumulator Q24 26 bit và đường `core_done`. | `ops_sel_comb.sv`, `mul_iter_core.sv`, các module SAC/SBM trong file list và Algorithm 3.2. Kiểm trace FT-05, n=0 và dừng sớm. |
+| **3.6–3.8 adder S1/S2/S5** | Giữ ý chính các hình cũ, dựng một sơ đồ S1–S5 đầy đủ, bổ sung S3/S4 và dùng hình chi tiết S2/S5 cho phần jam và triệt tiêu. | `posit_add.sv` và các module tầng. Kiểm ranh giới thanh ghi, độ rộng, dấu/scale, sticky/cờ và quy tắc valid/ready. Ghi rõ chỗ chuyển từ payload nội bộ sang đầu vào Packer. |
+| **3.9 Packer** | Ưu tiên vẽ mới vì chú thích bản Word đã ghi cần cập nhật. Tách P1 chuẩn bị payload, dịch và tạo G/R/S khỏi P2 làm tròn, kẹp và tạo cờ. | `posit_pack.sv`, `posit_pack_prepare.sv`, `posit_pack_finish.sv` của bản 07/11. Thể hiện payload 59 bit và nhánh sticky song song ở mức cần thiết. |
+| **Hình bổ sung về giao dịch và kiểm chứng** | Vẽ sequence/waveform từ trace đã lưu hoặc chạy lại một fixture nhỏ: accept → Parser/core → response → retire, kèm một ca stall hoặc reset. Nếu có hình quire chi tiết, thể hiện CLEAR/MAC/READ và đường Q theo đúng nguồn. | Trace và manifest tương ứng. Ghi tên fixture, cấu hình, snapshot và điểm lấy mẫu. Các ca mới chỉ đưa vào PDF khi đã có trace kiểm chứng. |
+
+**Điều kiện duyệt hình:** Mỗi hình có snapshot, tên module, biên pipeline và tên/độ rộng bus ở các ranh giới quan trọng. Chú thích phân biệt sơ đồ khái niệm với sơ đồ theo RTL. Khi hình cũ và RTL khác nhau, vẽ theo RTL gắn với phép đo. Nếu có sơ đồ hoặc thay đổi RTL mới muốn dùng cho bản hội đồng, Đan Huy xác nhận snapshot và gửi bản chỉnh trước khi thay các hình liên quan. Có thể soạn các hình từ snapshot 07/11 trong lúc chờ xác nhận phiên bản mới.
+
+#### Thứ tự thực hiện và điều kiện bàn giao
+
+1. **Chốt mốc nguồn và lập mục lục chi tiết.** Gắn từng chương Word với mục LaTeX tương ứng, giữ phần đã có bằng chứng. Chốt snapshot hình NF/F và quire, và bảng liên kết từng phép đo với nguồn/manifest.
+2. **Dựng hình và viết Ch. 2–3 trước.** Ưu tiên top MAC-F, bộ nhân, Packer rồi Parser và adder. Duyệt hình với mã giả và trace. Viết mỗi khối theo thứ tự đầu vào → xử lý → thanh ghi → đầu ra → lý do lựa chọn.
+3. **Viết Ch. 4–5 từ bằng chứng hiện có.** Dựng sơ đồ kiểm chứng và đồ thị từ CSV. Có đoạn giải thích sau mỗi bảng: quan sát, điều kiện đo, hệ quả và giới hạn. Giữ riêng mốc tổng hợp 06/11, nguồn RTL 07/11, lượt route ngày 12/11 và dữ liệu quire.
+4. **Ghép phần đầu, kết luận và phụ lục.** Chuyển các bảng rộng, lệnh chạy và trace dài sang phụ lục. Kiểm mục lục, số hình/bảng/thuật toán, DOI, tham chiếu và dàn trang PDF. Bản 50 trang đạt mốc bản thảo khi sáu chương đã đọc liền mạch, hình chính đã duyệt, bảng chính truy được nguồn và phần còn mở có tiêu chí đóng.
+
+**Phần hoàn thiện cho hội đồng:** AC-01 main, AC-03 main theo từng n, coverage AC-04 đúng snapshot, timing sau tích hợp với ràng buộc I/O thực, và kết quả tối ưu hoặc kiểm tra bổ sung nếu được thực hiện. Cập nhật từng kết quả vào chương đã chuẩn bị, kèm manifest và giới hạn. Mốc bản thảo 70% có thể dùng các lượt đo hiện có để trình bày đầy đủ phương pháp và kết luận tiến độ.
+
+### Rà soát bản nộp hạn 14/11/2026
+
+**Bản rà soát:** [PDF LaTeX 20 trang](../../doc/Posit_MAC_LaTeX/Bao_cao_tien_do_Posit_MAC_20261114.pdf), bìa ngày 14/11, gồm năm chương và ba phụ lục. PDF hiện tại trùng bản dựng `.build/main.pdf`. Đã rà bố cục tổng thể và đọc phần thiết kế, kiểm chứng, kết quả và kết luận.
+
+**Đã có trong bản nộp:** Lý thuyết Norris–Kim, sơ đồ ba phương án và sơ đồ MAC-F, hai thuật toán đánh số, bảng sai số trước Packer cho n=0…12, so sánh NF/F trên 377.032 bộ A/B/C và khảo sát 48 chuỗi mỗi lõi. Cả NF/F có setup và hold slack dương trong lượt route OOC 100 MHz trên nguồn 07/11. Bảng F2F đã ghi đúng 4,040 ns cho Parser A/B/C P1 của MAC-F. Các mục trong kế hoạch 12/11 bên dưới phản ánh thời điểm lập kế hoạch. Trạng thái nộp hiện tại căn cứ bản LaTeX và [bảng nguồn, cấu hình đo](NGUON_VA_CAU_HINH_DO_BAO_CAO_20261112.md).
+
+| Ưu tiên | Vị trí trong báo cáo | Việc hoàn thiện và tiêu chí kiểm tra |
+| --- | --- | --- |
+| **Trước khi nộp** | Tóm tắt và Chương 5 | Thêm một kết quả sai số định lượng vào tóm tắt, chẳng hạn P95 **0,029718% trước Packer ở OPS1/n12 trên 100.000 cặp hữu hạn lấy mẫu đều**. Kết luận chọn F dựa trên chi phí IP và kết quả timing đã đo. Phân biệt 06/11 tổng hợp, 07/11 nguồn RTL, và 12/11 ngày chạy route OOC. Khi nêu giảm **347 LUT và 135 FF**, ghi rõ đó là so sánh trong cùng lượt 06/11. |
+| **Trước khi nộp** | §3.2–3.3, Thuật toán 3.1 và 3.2 | Đổi hai danh sách đánh số thành khối mã giả có **Đầu vào**, **Đầu ra**, số dòng và nhánh/vòng lặp rõ ràng theo mẫu Fahad. Thuật toán 3.1 hiện bị ngắt giữa trang PDF 9 và 10. Ưu tiên giữ mỗi khối trên một trang, kiểm lại Zero/NaR, n=0, bit ẩn và điều kiện dừng với RTL đang mô tả. |
+| **Trước khi nộp** | §4.3.1–4.3.3 | Thêm diễn giải ngay sau các bảng: P95 có thể gần bão hòa trong khi đuôi sai số còn giảm, ví dụ từ n=8 đến n=10 trên nhóm lấy mẫu đều. Ghi rõ 100.000 cặp là nhóm của bảng chính, còn 125.696 cặp là toàn bộ mẫu mỗi n gồm ca phân tầng và ca chủ đích. Giữ điều kiện **48 chuỗi**, **4 chuỗi mỗi nhóm/độ dài** và **đầu ra luôn sẵn sàng** khi diễn giải độ trễ. Dùng “số chu kỳ” khi nói về so sánh NF/F/quire ở RTL. |
+| **Trước khi nộp** | §4.1, §4.4, Chương 5 và phụ lục | Nêu rõ mốc nguồn ngay cạnh kết quả chính và dẫn đến manifest hoặc bảng nguồn đo. Rà AC-01, AC-03, AC-04 theo phạm vi từng lượt. Bảng route ghi OOC 100 MHz với budget I/O giả định. Sau khi biên dịch, kiểm bìa, mục lục, tham chiếu, ngắt trang, bảng dài và PDF đúng bản dựng cuối. |
+| **Nếu còn thời gian** | §4.3.1 và tài liệu tham khảo | Thêm một đồ thị sai số theo n lấy từ CSV để thấy P95 và max hội tụ khác nhau. Chú thích nhóm mẫu và cách thể hiện giá trị 0 nếu dùng trục log. Bổ sung liên kết kho lưu trữ cho luận văn Fahad trong thư mục tài liệu tham khảo. |
+
+**Sau mốc báo cáo tiến độ:** AC-01 main 520 triệu, AC-03 main theo từng n, coverage AC-04 trên đúng nguồn nghiệm thu, và STA của thiết kế tích hợp có placement và ràng buộc chân/I/O cụ thể. Ghi các mục này trong bảng việc còn mở. Phép đo chuỗi của quire và timing của NF/F có manifest riêng.
+
+### Kế hoạch hoàn thiện báo cáo theo sườn ngày 12/11/2026
+
+Xem [sườn báo cáo mới](../../doc/Suon%20bao%20cao%20Posit%20MAC.md). MAC-F là trọng tâm trình bày và tối ưu, MAC-NF là đối chứng nội bộ, MAC-quire là khảo sát mở rộng. Cấu hình benchmark mặc định là `cfg_ops=1`, `cfg_n=12`. Phạm vi và ngưỡng nghiệm thu RTL theo [đặc tả hiện hành](SPEC_Posit_MAC_IP.md). Bảng dưới theo dõi phần việc để hoàn thiện hồ sơ báo cáo.
+
+| Thứ tự | Việc cần làm | Hoàn thành khi | Trạng thái |
+| --- | --- | --- | --- |
+| 1 | Chốt phiên bản RTL và cấu hình cho từng phép đo | Có bảng ghi phiên bản nguồn, oracle, seed, số mẫu và cấu hình đầu vào. Bảng tài nguyên ngày 06/11 ghi rõ tổng hợp lõi có cổng cấu hình động. | ✅ Chốt RTL 07/11 cho các lượt đo sai số MAC và timing sau route. [Bảng nguồn và cấu hình](NGUON_VA_CAU_HINH_DO_BAO_CAO_20261112.md) |
+| 2 | Kiểm và đo sai số bộ nhân trước Packer (§4.3.1) | Đối chiếu tích, dấu, số mũ, số vòng và cờ cắt với oracle FULL_TERM. Dùng cùng tập cặp A/B đo ở OPS1/n12 và một số mức n thấp hơn. Có mốc tích chính xác đầy đủ và mốc tích của toán hạng đã giữ 12 bit fraction để phân biệt hai nguồn sai số. Lưu CSV, seed, số mẫu, phân vị 95, sai số lớn nhất quan sát được và số vòng thực tế. | ✅ Nguồn MAC-F khớp hash 07/11. OPS1, n=0…12, 125.696 cặp mỗi n, 1.634.048 giao dịch, 0 sai lệch. [Báo cáo §4.3.1](../results/mul_prepack_20261112/summary.md) · [Tập A/B cho bước 4](../results/mul_prepack_20261112/pairs.csv) |
+| 3 | Đối chiếu phương pháp với Norris–Kim (§1.3, §2.2, §4.3.1) | Viết phần lý thuyết có trích dẫn. Nếu đưa số công bố vào bảng, ghi điều kiện và cách đo có sẵn. Dùng tích chính xác trên cùng đầu vào làm mốc định lượng chính. | ✅ [Nội dung và trích dẫn](../../doc/DOI_CHIEU_NORRIS_KIM_20261112.md) |
+| 4 | Đo sai số toàn MAC (§4.3.2) | Dùng lại tập cặp A/B và thêm C cùng dấu, trái dấu, gần triệt tiêu. So MAC-F và MAC-NF với tổng chính xác trên cùng A/B/C. Báo riêng sai số tuyệt đối ở tổng bằng hoặc gần 0, cùng các ca F kém NF nếu có. | ✅ RTL 07/11, OPS1/n12, 377.032 bộ A/B/C, 0 sai lệch d/flags mỗi lõi. [Kết quả §4.3.2](../results/paired_mac_20261112/summary.md) |
+| 5 | Hoàn thiện bằng chứng kiểm chứng và timing (§4.2, §4.4) | Gắn số hồi quy với đúng snapshot, đối chiếu coverage và ma trận theo đặc tả. Sửa ba hàng Parser A/B/C P1 của MAC-F trong bảng đưa sang LaTeX thành 4,040 ns theo CSV ngày 06/11. Cập nhật setup/hold sau đặt và định tuyến khi có kết quả. | ✅ Hồ sơ báo cáo đã đối chiếu. RTL 07/11 route OOC 100 MHz, WNS/WHS NF +0,665/+0,043 ns và F +2,142/+0,043 ns. [Kiểm chứng và phạm vi còn mở](../../doc/DOI_CHIEU_KIEM_CHUNG_NF_F_20261112.md) · [Timing sau route](../results/route_nf_f_20261112/summary.md) |
+| 6 | Viết lại chương thiết kế và chọn kiến trúc (§2–3) | Có hình ba phương án, sơ đồ đường dữ liệu MAC-F, hai khối mã giả Parser và FULL_TERM đã đối chiếu RTL, bảng NF/F cùng điều kiện và bảng quire trước–sau theo lượt đo riêng. | ✅ Nguồn LaTeX và hai hình TikZ đã đối chiếu RTL. [Chương 2](../../doc/Posit_MAC_LaTeX/chapters/02_arithmetic.tex) · [Chương 3](../../doc/Posit_MAC_LaTeX/chapters/03_design.tex). Biên dịch cùng báo cáo ở mục 8. |
+| 7 | Nếu đánh giá tốc độ chuỗi, đo ở cấp hệ thống (§4.3.3) | Có cùng dãy đầu vào, trạng thái ban đầu và điều kiện giao tiếp. Ghi tổng số chu kỳ, gồm hồi tiếp ngoài hoặc READ, và sai số cuối. | ✅ 48 chuỗi trên cả ba lõi, 0 sai lệch với oracle, có số chu kỳ và sai số cuối. [Khảo sát chuỗi](../results/mac_chains_20261112/summary.md) |
+| 8 | Hoàn thiện bản LaTeX (§5 và phụ lục) | Ghép các chương, dẫn nguồn vào tệp .bib, liên kết hình/bảng/thuật toán, kiểm số liệu với CSV và biên dịch PDF. Mục kết luận ghi rõ trạng thái của từng phép đo. | ✅ Bản nộp cập nhật 13/11, 20 trang đã kiểm bố cục, bìa ngày nộp 14/11/2026. [PDF](../../doc/Posit_MAC_LaTeX/Bao_cao_tien_do_Posit_MAC_20261114.pdf) · [Nguồn LaTeX và cách dựng](../../doc/Posit_MAC_LaTeX/README.md) |
+
+Mốc để nối phần bộ nhân với phần MAC là **tập cặp A/B đã khóa và bảng sai số tại đầu ra bộ nhân trước Packer**. Dùng lại tập này ở bước 4 để giải thích tác động của phép cộng và vị trí làm tròn.
+
+### Các mốc kỹ thuật đã ghi trước đó
 
 **Quyết định hiện hành02/11:** chỉ posit32/ES3, FW12/FULL_TERM26/Q24/RNE/OPS1/n0..12; bỏ exact hardware và FLOOR từng term. Giữ NF làm baseline nội bộ; provenance/TableI là nghiên cứu phụ, quire mới là hợp đồng mở rộng. Ưu tiên kiểm đích coverage → main52×10M → paired accuracy/matched PPA → hồ sơ trước05/12. SoftPosit ES2 không là oracle32/3.
 

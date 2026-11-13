@@ -1,0 +1,121 @@
+{
+  "nf": {
+    "functional": {
+      "hit_bins": 510,
+      "required_bins": 517,
+      "missing": [
+        "regime/196",
+        "regime/200",
+        "regime/204",
+        "regime/208",
+        "regime/212",
+        "regime/216",
+        "regime/220"
+      ]
+    },
+    "raw": {
+      "v_branch": {
+        "hit": 76,
+        "total": 86,
+        "percent": 88.37209302325581
+      },
+      "v_line": {
+        "hit": 149,
+        "total": 162,
+        "percent": 91.9753086419753
+      },
+      "v_toggle": {
+        "hit": 5750,
+        "total": 6141,
+        "percent": 93.63295880149813
+      }
+    },
+    "reviewed": {
+      "v_branch": {
+        "hit": 76,
+        "total": 76,
+        "percent": 100.0
+      },
+      "v_line": {
+        "hit": 149,
+        "total": 152,
+        "percent": 98.02631578947368
+      },
+      "v_toggle": {
+        "hit": 5750,
+        "total": 6141,
+        "percent": 93.63295880149813
+      }
+    },
+    "waived_count": 10,
+    "waived_by_file": {
+      "rtl/adder/posit_add.sv": 5,
+      "rtl/mac_nf/posit_product_pack.sv": 2,
+      "rtl/packer/posit_pack.sv": 1,
+      "rtl/parser/posit_parser_mul.sv": 2
+    },
+    "unhit_by_cat": {
+      "v_toggle": 391,
+      "v_line": 3
+    }
+  },
+  "f": {
+    "functional": {
+      "hit_bins": 509,
+      "required_bins": 516,
+      "missing": [
+        "regime/196",
+        "regime/200",
+        "regime/204",
+        "regime/208",
+        "regime/212",
+        "regime/216",
+        "regime/220"
+      ]
+    },
+    "raw": {
+      "v_branch": {
+        "hit": 64,
+        "total": 72,
+        "percent": 88.88888888888889
+      },
+      "v_line": {
+        "hit": 130,
+        "total": 143,
+        "percent": 90.9090909090909
+      },
+      "v_toggle": {
+        "hit": 5074,
+        "total": 5454,
+        "percent": 93.03263659699303
+      }
+    },
+    "reviewed": {
+      "v_branch": {
+        "hit": 64,
+        "total": 64,
+        "percent": 100.0
+      },
+      "v_line": {
+        "hit": 130,
+        "total": 135,
+        "percent": 96.29629629629629
+      },
+      "v_toggle": {
+        "hit": 5074,
+        "total": 5454,
+        "percent": 93.03263659699303
+      }
+    },
+    "waived_count": 8,
+    "waived_by_file": {
+      "rtl/adder/posit_add.sv": 5,
+      "rtl/packer/posit_pack.sv": 1,
+      "rtl/parser/posit_parser_mul.sv": 2
+    },
+    "unhit_by_cat": {
+      "v_toggle": 380,
+      "v_line": 5
+    }
+  }
+}

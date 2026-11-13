@@ -1,0 +1,66 @@
+[
+  {
+    "id": "48f7e10d42539f59ad7248fc24eea5cb511dfc18c5ca7e4986f6c71e963fee0c",
+    "source": "rtl/adder/posit_add.sv",
+    "line": 264,
+    "category": "v_branch",
+    "code": "if (ready0) begin",
+    "reason": "Leaf backpressure branch unreachable in the single-outstanding NF/F integration; not waived for standalone leaf tests."
+  },
+  {
+    "id": "7e7e7bb44bb2776ea7edad15514144d9c6b634d824a1e91af4ec1d0f2152d16e",
+    "source": "rtl/adder/posit_add.sv",
+    "line": 282,
+    "category": "v_branch",
+    "code": "if (ready1) begin",
+    "reason": "Leaf backpressure branch unreachable in the single-outstanding NF/F integration; not waived for standalone leaf tests."
+  },
+  {
+    "id": "1f7763ee9cdaa7bb52eecc19e26ebe2541f006e70815f73fba02ffed78ba0ef7",
+    "source": "rtl/adder/posit_add.sv",
+    "line": 298,
+    "category": "v_branch",
+    "code": "if (ready2) begin",
+    "reason": "Leaf backpressure branch unreachable in the single-outstanding NF/F integration; not waived for standalone leaf tests."
+  },
+  {
+    "id": "5ef9746bda05d35b9defa38c96c66a5a2804174cb203a6dbb74e0a9170b5779a",
+    "source": "rtl/adder/posit_add.sv",
+    "line": 312,
+    "category": "v_branch",
+    "code": "if (ready3) begin",
+    "reason": "Leaf backpressure branch unreachable in the single-outstanding NF/F integration; not waived for standalone leaf tests."
+  },
+  {
+    "id": "f68e8088ae2223d3e7f303a00aa28dfbaa2cf6cd3560bbd943426454857a7c80",
+    "source": "rtl/adder/posit_add.sv",
+    "line": 328,
+    "category": "v_branch",
+    "code": "if (ready4) begin",
+    "reason": "Leaf backpressure branch unreachable in the single-outstanding NF/F integration; not waived for standalone leaf tests."
+  },
+  {
+    "id": "7cff1bef78b0199e1d01d1fbb80d387cd3650f4b2d0335d19677f30c139ac92a",
+    "source": "rtl/packer/posit_pack.sv",
+    "line": 131,
+    "category": "v_branch",
+    "code": "end else if (p1_ready) begin",
+    "reason": "Leaf backpressure branch unreachable in the single-outstanding NF/F integration; not waived for standalone leaf tests. (line-mapped on final RTL)"
+  },
+  {
+    "id": "34eff4961cf21c114ad86f87387a1c72cbc2950c91f64d346e816b118ac68cdd",
+    "source": "rtl/parser/posit_parser_mul.sv",
+    "line": 155,
+    "category": "v_branch",
+    "code": "end else if (p1_ready) begin",
+    "reason": "Leaf backpressure branch unreachable in the single-outstanding NF/F integration; not waived for standalone leaf tests."
+  },
+  {
+    "id": "583cefae770a8284686012d4d09d034211eca061d13156a53d677defa689ac07",
+    "source": "rtl/parser/posit_parser_mul.sv",
+    "line": 204,
+    "category": "v_branch",
+    "code": "end else if (p2_ready) begin",
+    "reason": "Leaf backpressure branch unreachable in the single-outstanding NF/F integration; not waived for standalone leaf tests. (line-mapped on final RTL)"
+  }
+]

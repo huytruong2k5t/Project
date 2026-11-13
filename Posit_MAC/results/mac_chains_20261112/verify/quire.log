@@ -1,0 +1,26 @@
+# vsim +FIXTURE=../tmp/quire.vec +RESULTS=../tmp/quire.csv -do run.do -l quire.log -c -wlf ../tmp/quire.wlf -gCORE=2 work.tb_mac_chain_benchmark 
+# Loading sv_std.std
+# Loading work.tb_mac_chain_benchmark
+# Loading work.posit_mac_quire
+# Loading work.mac_quire_wrapper
+# Loading work.posit_parser
+# Loading work.posit_parser_f_regime_lod
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.mul_iter_core
+# Loading work.sac_step_comb
+# Loading work.lod_lzd_core_fixed4
+# Loading work.dyn_left_shifter_fixed5
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum_comb
+# Loading work.quire_align_comb
+# Loading work.quire_bank
+# Loading work.quire_read
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter_fixed2
+# Loading work.posit_pack_finish
+# do run.do 
+# MAC_CHAIN_PASS core=2 commands=16416 sequences=48
+# ** Note: $finish    : ../source/tb/tb_mac_chain_benchmark.sv(108)
+#    Time: 6725105 ns  Iteration: 1  Instance: /tb_mac_chain_benchmark

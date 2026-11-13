@@ -1,0 +1,41 @@
+CMD: ['C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe', '-c', '-lib', 'work', 'work.tb_report_mac_f_trace', '-do', 'run -all; quit -f']
+RC: 0
+ELAPSED_S: 1.09
+
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim -do {run -all; quit -f} -lib work -c work.tb_report_mac_f_trace 
+# Loading sv_std.std
+# Loading work.tb_report_mac_f_trace
+# Loading work.posit_mac_f
+# Loading work.mac_f_wrapper
+# Loading work.mul_prepack_norm_comb
+# Loading work.posit_parser_mul
+# Loading work.posit_parser_f_regime_lod
+# Loading work.dyn_left_shifter
+# Loading work.ops_sel_comb
+# Loading work.mul_iter_core
+# Loading work.sac_step_comb
+# Loading work.lod_lzd_core_fixed4
+# Loading work.dyn_left_shifter_fixed5
+# Loading work.sbm_shift_comb
+# Loading work.sbm_accum_comb
+# Loading work.posit_add
+# Loading work.posit_add_prepare_comb
+# Loading work.posit_add_align_comb
+# Loading work.dyn_right_shifter_fixed4
+# Loading work.posit_add_arith_comb
+# Loading work.posit_add_lod_comb
+# Loading work.lod_lzd_core_fixed2
+# Loading work.posit_add_norm_comb
+# Loading work.dyn_left_shifter_fixed6
+# Loading work.posit_pack
+# Loading work.posit_pack_prepare
+# Loading work.dyn_right_shifter_fixed2
+# Loading work.posit_pack_finish
+# run -all 
+# REPORT_TRACE_PASS accepted=4 retired=3 aborted=1
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/f_s1_opt_20261113/c2a_prenorm_split/source/tb/tb_report_mac_f_trace.sv(96)
+#    Time: 960 ns  Iteration: 1  Instance: /tb_report_mac_f_trace

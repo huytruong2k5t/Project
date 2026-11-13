@@ -4,10 +4,12 @@
 // Project       : Posit MAC IP
 // Creation Date : 2026-10-06
 // Description   : Elastic RNE two-stage Posit(32,3) packer.
-//                 Refactored & flattened:
-//                   - Removed dead TRUNC generate branch and g_rne scope
+//                 Refactored & timing-optimized:
+//                   - P1: Bounded regime shifter + parallel 1-LUT6 thermometer sticky mask
+//                   - P2: Direct RNE rounding carry-chain and endpoint clamp
 //                   - All Stage-1 (p1_*) and Stage-2 (p2_*/d_q/flags_q) registers
-//                     are exposed at the top level of posit_pack for easy debugging
+//                     are exposed at the top level of posit_pack for clean debugging
+//                   - See rtl/changelog.md for detailed optimization logs
 //-----------------------------------------------------------------------------
 
 `include "posit_mac.vh"

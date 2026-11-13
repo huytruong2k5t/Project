@@ -1,0 +1,25 @@
+{
+  "command": [
+    "C:\\AMDDesignTools\\2026.1\\Vivado\\bin\\vivado.bat",
+    "-mode",
+    "batch",
+    "-notrace",
+    "-source",
+    "measure.tcl",
+    "-log",
+    "vivado.log",
+    "-journal",
+    "vivado.jou",
+    "-tclargs",
+    "nf"
+  ],
+  "source_manifest_sha256": "e6a5e7d60bdbb5f46a56ba0cf639210942c9af2fb3875add2028a8b906344ba6",
+  "original_recipe_sha256": "983578da4154d8acafed4b3a579681ea834c84a4744b2dc8b630da46840d6aa0",
+  "measurement_script_sha256": "f4936207724e3415a680eda99cd1aee17408f2de0ace5f6bea5ede2f27683da9",
+  "supplemental_report_sha256": "f5468af7080ce59ecc788cd1e93fa6169f4496b3dcb31a10c390348553b528ba",
+  "part": "xc7a35tcpg236-1",
+  "period_ns": 10,
+  "change_from_original_recipe": "Only add reporting after original F2F reports",
+  "implementation_run": false,
+  "bitstream_run": false
+}

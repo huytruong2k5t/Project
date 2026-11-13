@@ -11,7 +11,7 @@ Thiết kế bằng SystemVerilog hai lõi nhân–cộng **non-fused (NF)** và
 - NF/F là phạm vi nghiệm thu chính. Giao diện tích trước pack MUST cho phép mở rộng MAC quire theo §4.5; hợp đồng phần mở rộng ở §9. Chia/căn, chuyển đổi FP bằng phần cứng, ASIC và tái hiện toàn bộ số liệu bài báo ngoài mục tiêu. Chồng lấn giao dịch/đối chứng FP là mở rộng; baseline chỉ có một giao dịch đang xử lý.
 - Oracle tính chính xác bằng phần mềm vẫn bắt buộc để kiểm thiết kế approximate và đo sai số; không tạo thêm mode của DUT.
 
-**Profile mặc định MUST:** `cfg_ops=1`, `cfg_n=12`, approximate-only. Giữ lựa chọn runtime OPS0 và n0..11 để kiểm/đánh giá đánh đổi; đây không phải mode exact. n giới hạn số số hạng fraction, không giới hạn chiều dài chuỗi MAC. Early-stop khi hết bit 1 vẫn bắt buộc; không phát đủ 12 vòng rỗng chỉ để đạt số đếm.
+**Cấu hình benchmark mặc định cho NF/F:** `cfg_ops=1`, `cfg_n=12`, approximate-only. Driver hoặc wrapper cấp cặp giá trị này cho các phép đo ở cấu hình mặc định. Các phép đo khảo sát phải ghi rõ cặp cấu hình được dùng. Giữ lựa chọn runtime OPS0 và n0..11 để kiểm/đánh giá đánh đổi; đây không phải mode exact. n giới hạn số số hạng fraction, không giới hạn chiều dài chuỗi MAC. Early-stop khi hết bit 1 vẫn bắt buộc; không phát đủ 12 vòng rỗng chỉ để đạt số đếm.
 
 **Quan hệ với bài báo:** Norris–Kim2021 §III-A/B/D chọn nb32/es3 và 12 bit fraction cao (không tính hidden), fraction thiếu được đệm 0. Đồ án kế thừa phạm vi này và kiến trúc dịch–cộng. FULL_TERM26/Q24 không cắt từng term, OPS min-popcount, RNE và NF/F/quire là hợp đồng được chốt của đồ án; không suy chúng là RTL gốc hoặc đã tái hiện Table I. Packer paper mô tả ghép 12 fraction; Packer đồ án dùng đầy đủ dữ liệu trước pack và RNE theo §2.
 

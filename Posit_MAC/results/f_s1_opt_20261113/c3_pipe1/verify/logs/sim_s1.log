@@ -1,0 +1,17 @@
+CMD: ['C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe', '-c', '-lib', 'work', 'work.tb_s1_prepare_equiv', '-do', 'run -all; quit -f']
+RC: 0
+ELAPSED_S: 4.69
+
+Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+
+# 10.1d
+
+# vsim -do {run -all; quit -f} -lib work -c work.tb_s1_prepare_equiv 
+# Loading sv_std.std
+# Loading work.tb_s1_prepare_equiv
+# Loading work.posit_add_prepare_comb
+# Loading work.posit_add_prepare_comb_ref
+# run -all 
+# S1_PREPARE_EQUIV_PASS checks=201764 mismatches=0
+# ** Note: $finish    : C:/HCMUT/HK261/Do an 2/Posit_MAC/results/f_s1_opt_20261113/c3_pipe1/verify/tb_s1_prepare_equiv.sv(85)
+#    Time: 201764 ns  Iteration: 0  Instance: /tb_s1_prepare_equiv

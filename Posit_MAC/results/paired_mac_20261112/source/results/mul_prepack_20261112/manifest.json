@@ -1,0 +1,443 @@
+{
+  "status": "PASS",
+  "scope": "Posit(32,3) MAC-F, C=0, FULL_TERM26/Q24 product at core_done before normalization and packing",
+  "source_receipt": "results/shared_parser_mul_20261107/build_f.json",
+  "source_sha256": {
+    "rtl/mac_nf/posit_mac_nf.sv": "46872da7e889e2aa37b191f82f2aa2cd7cf3f77cb66baeb9361863ba8cca8596",
+    "rtl/mac_nf/mac_nf_wrapper.sv": "c2c66280cb3fdf14bb67dc3b460bbd3c259c46858e89bcea5639a4faadc67d56",
+    "rtl/multiplier/mul_prepack_norm_comb.sv": "c4e18c295c4f1dc0475c6aa31f4de843a2481fcef0e1b1666be0228421f454af",
+    "rtl/mac_nf/posit_product_pack.sv": "ddca8613ec217a564bc230a96fabebeeeb94423188f70e8a640f653bf4e56506",
+    "rtl/mac_nf/posit_magnitude_parse.sv": "821aadd29b673ee6e758711cbbceea35274511538e8c727770d7d617ea7a4a0f",
+    "rtl/adder/posit_add.sv": "0a8b334af7191b862f81e8f920661620ea309244075052807ab6b35259ff09a8",
+    "rtl/multiplier/ops_sel_comb.sv": "5b76ecc3dd3148281ae167e92cc6534cfd4bef9bf785082c9f23fb70598c071e",
+    "rtl/multiplier/mul_iter_core.sv": "5fc48e27390864b0ad090c1927ab8e1359d264421f941da0718c5444dfc80bae",
+    "rtl/packer/posit_pack.sv": "617687aa51bcaf3c062b0cf870f00a812b0ecedd04b14cc4efae44fc8e7b7d6c",
+    "rtl/adder/posit_add_prepare_comb.sv": "4ec414c6d623649329dd8676341054812418da6098b32241248e2ef112f736bf",
+    "rtl/adder/posit_add_align_comb.sv": "385ecbc1af5bc5cc43d383c68808b095befa3651536257c65c61198fbed38392",
+    "rtl/adder/posit_add_arith_comb.sv": "0092c8a207ac413e32a66653536a7e11be71711380b29821816c5d946b5d1848",
+    "rtl/adder/posit_add_lod_comb.sv": "515fc3078fb6bcd7cc338c6eeff72918cdd1ce218f1dbb9205be8c1853171829",
+    "rtl/adder/posit_add_norm_comb.sv": "146af844ebfab0ab5d9ee5cdb0b000f72eb935cacb12859db42f95eba1f96596",
+    "rtl/packer/posit_pack_prepare.sv": "542908c530e0333cef884fb86f3b3237065911564ff27d3db91694de46bd0436",
+    "rtl/packer/posit_pack_finish.sv": "79aa99f8da196188d49e44d9c344da8ca786f3d12ba83830dc54933350cb54d1",
+    "rtl/multiplier/sbm_shift_comb.sv": "12f22988bdba755da45b9cf743d551da4faba83acb1b7153f2eedc006181e7f6",
+    "rtl/common/dyn_right_shifter_fixed4.sv": "af64a7d5b743913f16a7737f76ab080cb950d0a5cf8475b173b7af4290612f24",
+    "rtl/common/dyn_right_shifter_fixed2.sv": "09e1da06be60167c315bca67f4c4f93cea782ab907e0f1bf3ba451aa287a10d5",
+    "rtl/multiplier/sac_step_comb.sv": "ecfb654eb80a8f5871b2c93896087dc35f3c78c83ee87aa9a551fd691509a962",
+    "rtl/multiplier/sbm_accum_comb.sv": "67b014364118418077d0266434a74c589f7210986702adabf51cdf99fdbfe713",
+    "rtl/common/dyn_left_shifter.sv": "f22b3111b56d081e45e10de81bf728b5af18895ea72d0e7ac19e2b8a9884f099",
+    "rtl/common/lod_lzd_core_fixed2.sv": "5e062a4cd49601c808655e78d372627a38b276128df132492c9905e5cd409f6c",
+    "rtl/common/dyn_left_shifter_fixed6.sv": "4d843f1d62679adedb325658c4a4edf6a03f1d00d3519ab1b43fb66f729458f7",
+    "rtl/common/lod_lzd_core_fixed4.sv": "6bd4838facfa08b0beedc910c2c2b9711c1544bd105ad00916c1c163d54b3ece",
+    "rtl/mac_f/posit_mac_f.sv": "cf9b8a21daaae69b223070d3e6c595bee9f4f8d025db5dc48d8402f6a40c1716",
+    "rtl/mac_f/mac_f_wrapper.sv": "ed79d79b852d48e7835c3ba8ab6a733467baf6992e3b731d96000d602df3e9fe",
+    "rtl/common/dyn_left_shifter_fixed5.sv": "499fc06c2704e57765a95e003867ae5543222209ea602352a4da3b264127d6b3",
+    "rtl/parser/posit_parser_mul.sv": "a9565278080ab8fd9ab0baed74123249d5a176bcafe81d0159d6f26a30734eae",
+    "rtl/parser/posit_parser_f_regime_lod.sv": "c936f7dd2c6e24f5744df75c65c7d6fbd8e93fafe9b21b5d0cb452926f741475",
+    "rtl/mac_active.f": "65911d9e6c846da2e269bbb3ce6e60bb9eabdcbd45e00d6234a904f0ac771188",
+    "rtl/posit_mac.vh": "24c4ef9e496ceee16640b36338ff05e4bd830942bef676673b8731d6e58d2e88",
+    "results/shared_parser_mul_20261107/build_f.json": "d9fbcc391c6d6083fffb9fb8d3c53f4588df4a15ed04c9e3166e9581e05ec18c",
+    "scripts/gen_refactored_mac_vectors.py": "5d15f740cce3a23dd0ea52dac50291261e20741b83a46ec55b7161e0ec886aea",
+    "tb/tb_multiplier_prepack.sv": "93a800c1391ecb04856f4eaf763e95639f934d26a727132d7945cfef54a46f80",
+    "scripts/measure_multiplier_prepack.py": "ea761200f53b69ff408c720beae1051de0825829042db34e21cd38d6e18b8088"
+  },
+  "seed": 20261112,
+  "rng": "Python random.Random (MT19937)",
+  "python": "3.11.4 (tags/v3.11.4:d2340ef, Jun  7 2023, 05:45:37) [MSC v.1934 64 bit (AMD64)]",
+  "ops": 1,
+  "n": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "uniform_count": 100000,
+  "regime_pairs_per_cell": 100,
+  "regime_run_bins": [
+    [
+      1,
+      3
+    ],
+    [
+      4,
+      7
+    ],
+    [
+      8,
+      11
+    ],
+    [
+      12,
+      15
+    ],
+    [
+      16,
+      17
+    ],
+    [
+      18,
+      22
+    ],
+    [
+      23,
+      27
+    ],
+    [
+      28,
+      31
+    ]
+  ],
+  "pair_counts": {
+    "uniform_raw": 100000,
+    "stratified_regime": 25600,
+    "directed_finite": 68,
+    "directed_zero": 13,
+    "directed_nar": 15
+  },
+  "comparisons": 1634048,
+  "mismatches": 0,
+  "p95": "nearest rank, ceil(0.95 * count), on finite nonzero products within each group",
+  "simulator": {
+    "version": "Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1d Simulator 2012.11 Nov  2 2012",
+    "library": [
+      "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vlib.exe",
+      "work"
+    ],
+    "compile": [
+      "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vlog.exe",
+      "-sv",
+      "-timescale",
+      "1ns/1ps",
+      "+incdir+../source/rtl",
+      "-work",
+      "work",
+      "../source/rtl/mac_nf/posit_mac_nf.sv",
+      "../source/rtl/mac_nf/mac_nf_wrapper.sv",
+      "../source/rtl/multiplier/mul_prepack_norm_comb.sv",
+      "../source/rtl/mac_nf/posit_product_pack.sv",
+      "../source/rtl/mac_nf/posit_magnitude_parse.sv",
+      "../source/rtl/adder/posit_add.sv",
+      "../source/rtl/multiplier/ops_sel_comb.sv",
+      "../source/rtl/multiplier/mul_iter_core.sv",
+      "../source/rtl/packer/posit_pack.sv",
+      "../source/rtl/adder/posit_add_prepare_comb.sv",
+      "../source/rtl/adder/posit_add_align_comb.sv",
+      "../source/rtl/adder/posit_add_arith_comb.sv",
+      "../source/rtl/adder/posit_add_lod_comb.sv",
+      "../source/rtl/adder/posit_add_norm_comb.sv",
+      "../source/rtl/packer/posit_pack_prepare.sv",
+      "../source/rtl/packer/posit_pack_finish.sv",
+      "../source/rtl/multiplier/sbm_shift_comb.sv",
+      "../source/rtl/common/dyn_right_shifter_fixed4.sv",
+      "../source/rtl/common/dyn_right_shifter_fixed2.sv",
+      "../source/rtl/multiplier/sac_step_comb.sv",
+      "../source/rtl/multiplier/sbm_accum_comb.sv",
+      "../source/rtl/common/dyn_left_shifter.sv",
+      "../source/rtl/common/lod_lzd_core_fixed2.sv",
+      "../source/rtl/common/dyn_left_shifter_fixed6.sv",
+      "../source/rtl/common/lod_lzd_core_fixed4.sv",
+      "../source/rtl/mac_f/posit_mac_f.sv",
+      "../source/rtl/mac_f/mac_f_wrapper.sv",
+      "../source/rtl/common/dyn_left_shifter_fixed5.sv",
+      "../source/rtl/parser/posit_parser_mul.sv",
+      "../source/rtl/parser/posit_parser_f_regime_lod.sv",
+      "../source/tb/tb_multiplier_prepack.sv",
+      "-l",
+      "compile.log"
+    ],
+    "runs": [
+      {
+        "n": 0,
+        "captured": 125696,
+        "elapsed_s": 52.91,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=0",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n00.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n00.log",
+          "-wlf",
+          "../tmp/n00.wlf"
+        ]
+      },
+      {
+        "n": 1,
+        "captured": 125696,
+        "elapsed_s": 54.2,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=1",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n01.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n01.log",
+          "-wlf",
+          "../tmp/n01.wlf"
+        ]
+      },
+      {
+        "n": 2,
+        "captured": 125696,
+        "elapsed_s": 63.49,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=2",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n02.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n02.log",
+          "-wlf",
+          "../tmp/n02.wlf"
+        ]
+      },
+      {
+        "n": 3,
+        "captured": 125696,
+        "elapsed_s": 72.16,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=3",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n03.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n03.log",
+          "-wlf",
+          "../tmp/n03.wlf"
+        ]
+      },
+      {
+        "n": 4,
+        "captured": 125696,
+        "elapsed_s": 78.14,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=4",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n04.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n04.log",
+          "-wlf",
+          "../tmp/n04.wlf"
+        ]
+      },
+      {
+        "n": 5,
+        "captured": 125696,
+        "elapsed_s": 83.02,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=5",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n05.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n05.log",
+          "-wlf",
+          "../tmp/n05.wlf"
+        ]
+      },
+      {
+        "n": 6,
+        "captured": 125696,
+        "elapsed_s": 95.05,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=6",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n06.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n06.log",
+          "-wlf",
+          "../tmp/n06.wlf"
+        ]
+      },
+      {
+        "n": 7,
+        "captured": 125696,
+        "elapsed_s": 96.31,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=7",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n07.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n07.log",
+          "-wlf",
+          "../tmp/n07.wlf"
+        ]
+      },
+      {
+        "n": 8,
+        "captured": 125696,
+        "elapsed_s": 92.83,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=8",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n08.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n08.log",
+          "-wlf",
+          "../tmp/n08.wlf"
+        ]
+      },
+      {
+        "n": 9,
+        "captured": 125696,
+        "elapsed_s": 96.51,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=9",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n09.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n09.log",
+          "-wlf",
+          "../tmp/n09.wlf"
+        ]
+      },
+      {
+        "n": 10,
+        "captured": 125696,
+        "elapsed_s": 96.55,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=10",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n10.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n10.log",
+          "-wlf",
+          "../tmp/n10.wlf"
+        ]
+      },
+      {
+        "n": 11,
+        "captured": 125696,
+        "elapsed_s": 94.36,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=11",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n11.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n11.log",
+          "-wlf",
+          "../tmp/n11.wlf"
+        ]
+      },
+      {
+        "n": 12,
+        "captured": 125696,
+        "elapsed_s": 75.09,
+        "command": [
+          "C:\\altera\\13.0sp1\\modelsim_ase\\win32aloem\\vsim.exe",
+          "-c",
+          "work.tb_multiplier_prepack",
+          "+N=12",
+          "+PAIRS=../tmp/pairs.vec",
+          "+OBSERVED=../tmp/n12.csv",
+          "-do",
+          "run.do",
+          "-l",
+          "n12.log",
+          "-wlf",
+          "../tmp/n12.wlf"
+        ]
+      }
+    ]
+  },
+  "evidence_sha256": {
+    "pairs.csv": "e89808ee7ff91209c945f989f90dec8ea01f2093946a07cd5610f5ab96f4df34",
+    "tmp/pairs.vec": "efb07d021b066f91ec5c306dc0a87467b842f57ae02f7c22e9c2366486aaeb3b",
+    "summary.csv": "7089e33ca0984a18ef91a918ee2655230bf7b4e802b78203e15fc76053ee4458",
+    "rounds_hist.csv": "8062d3045235c0fffffb5d857a1eaec3dfdb387c1a2e08bef22585ef68c14fa7",
+    "samples.csv.gz": "108f7c0eaa3efa9576ff7b23b9587f63f2309bca7e6e3905133a1b4fbee83f94",
+    "verify/run.do": "721d595a617d24192827de2fabfc40f088fec0e61c453e2775c601c131368a6d",
+    "verify/library.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verify/compile.log": "b438f2caa2acc292182ece0656fac66b6dd312a144d4dfd254f11b41581f950e",
+    "verify/compile_console.log": "88fc0f22733b1165c94c3768929f5e4ef37779dc536ad77b9018e9c7df2da88c",
+    "verify/n00.log": "87014a94b0ae6e89319c1c1b30c7403f83fb1161a9dbaaf657ef5b09c33a157d",
+    "verify/n00_console.log": "ab29485f8aa4f3ea783f99f71698da557dcc340a8c105c4a1f610c6456eeab71",
+    "verify/n01.log": "4280eb4f40c2b3620eabfc002c9c05e6985b2235e50e1ee46fb5685f64895a93",
+    "verify/n01_console.log": "73bd2e442a5e978dea9ab7603085edd93af12c7f054ddc1dad932ec6f4ea3860",
+    "verify/n02.log": "35edc263ca79a900448da707900d1e1cc8ab831adfe32fc2ab27b5728ef7f027",
+    "verify/n02_console.log": "1a61ef48069e0d8fc28f5f223c1dd41140150071a64c948c03f8559ebc7d6e5a",
+    "verify/n03.log": "128a11613c45bbfe99308bc0ab4056cdcc054873d481b63c0174bb14b2022c29",
+    "verify/n03_console.log": "596b709e38192571fa749b85d7b43b34d813208eae8542df475989aa6c2d37ba",
+    "verify/n04.log": "057a95c71e8bc74ea2ab2e87ebd82659395bd8f26afaba93e05b4363bc09dc21",
+    "verify/n04_console.log": "027d7908f3db08eb9700ae4929625b958613e4519caa3613663de2031d0ff944",
+    "verify/n05.log": "d8419adbf77f7d5129bd3b353941a4280d29b653de136f642fcf9baf54638269",
+    "verify/n05_console.log": "6c5d244c14303f8ff0ce89147e0547dc88060f792e3fb084deafabb35e6492ec",
+    "verify/n06.log": "78a0905b1f983132e9acee6806c416e6d0d44071a4e3e7adbc878dd43e2abd1f",
+    "verify/n06_console.log": "d4e3f2be3e46fe4e10f9b1f3d3b67c42dd394b52fc556f536403cde88acb24ab",
+    "verify/n07.log": "ca6bbebbc0ee6135c0d177d60d9f838bf09d137a6c9d2a902607dc7b399a2c99",
+    "verify/n07_console.log": "b11f3297b28bf68c812f58a6e2c45f0d980912ecac59fb7b1ca21cb49c65e24f",
+    "verify/n08.log": "1511c353377c03b9a97bc6a3eebba70365332712cf3118d2d58ea75c86a8c264",
+    "verify/n08_console.log": "600938f0becf1b049ee7fbb4ee00260b6b5e36f32b736b44e33750f452035441",
+    "verify/n09.log": "fd93e5ce8bf51918d515faf21a609cea3b8c50aec7a811ed0eb647b39c20c791",
+    "verify/n09_console.log": "6f564a4553b64d1ba700d3b049c6e392543287a44e7babc65139558b6292b992",
+    "verify/n10.log": "1aed095d508d2d37460e4150c8138f74e40ddecb2ea7fbfec6259a7aa916f994",
+    "verify/n10_console.log": "a8f94325f9d5463360b411ad5062ab1b0a47aa01a70f51f7fda21e212fefd445",
+    "verify/n11.log": "597cf2ffac17e8829e8ad7224026681d671eb2f8e027488cedf60a075f3a5caf",
+    "verify/n11_console.log": "e84f6b9828bb62c9271219b9f01a2c2bbfdc153b60962159fbf8dc5f1e22654e",
+    "verify/n12.log": "a6846aff8e4084dee3e4f8e1f1db45846f3a6df1242b34927d2370cc2d1dbd05",
+    "verify/n12_console.log": "5e74cd3191c8bcb1120dec044de41e10035fb5e57181af5a9077152a1d194ae1"
+  }
+}

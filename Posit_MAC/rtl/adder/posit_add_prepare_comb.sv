@@ -41,17 +41,26 @@ module posit_add_prepare_comb (
     wire clamp_ab = !diff_ab[11] && ((|diff_ab[10:5]) || (diff_ab[4:0] > 5'd28));
     wire clamp_ba = !diff_ba[11] && ((|diff_ba[10:5]) || (diff_ba[4:0] > 5'd28));
 
-    wire choose_a = !a_is_zero
-                  && (b_is_zero || (!sf_a_lt_b && (!sf_equal || frac_a_ge_b)));
+    wire choose_a_cond = !a_is_zero
+                       && (b_is_zero || (!sf_a_lt_b && (!sf_equal || frac_a_ge_b)));
 
-    assign both_nonzero = !a_is_zero && !b_is_zero;
-    assign x_frac       = choose_a ? a_frac : b_frac;
-    assign y_frac       = choose_a ? b_frac : a_frac;
-    assign shift_amount = sf_a_lt_b ? diff_ba[4:0] : diff_ab[4:0];
-    assign clamped      = sf_a_lt_b ? clamp_ba : clamp_ab;
-    assign subtract     = both_nonzero && (a_sign != b_sign);
-    assign sign_base    = choose_a ? a_sign : b_sign;
-    assign sf_base      = choose_a ? a_sf   : b_sf;
+    (* dont_touch = "true" *) wire choose_a_frac0 = choose_a_cond;
+    (* dont_touch = "true" *) wire choose_a_frac1 = choose_a_cond;
+    (* dont_touch = "true" *) wire choose_a_frac2 = choose_a_cond;
+    (* dont_touch = "true" *) wire choose_a_meta  = choose_a_cond;
+
+    assign both_nonzero       = !a_is_zero && !b_is_zero;
+    assign x_frac[8:0]        = choose_a_frac0 ? a_frac[8:0]   : b_frac[8:0];
+    assign y_frac[8:0]        = choose_a_frac0 ? b_frac[8:0]   : a_frac[8:0];
+    assign x_frac[17:9]       = choose_a_frac1 ? a_frac[17:9]  : b_frac[17:9];
+    assign y_frac[17:9]       = choose_a_frac1 ? b_frac[17:9]  : a_frac[17:9];
+    assign x_frac[25:18]      = choose_a_frac2 ? a_frac[25:18] : b_frac[25:18];
+    assign y_frac[25:18]      = choose_a_frac2 ? b_frac[25:18] : a_frac[25:18];
+    assign shift_amount       = sf_a_lt_b ? diff_ba[4:0] : diff_ab[4:0];
+    assign clamped            = sf_a_lt_b ? clamp_ba : clamp_ab;
+    assign subtract           = both_nonzero && (a_sign != b_sign);
+    assign sign_base          = choose_a_meta ? a_sign : b_sign;
+    assign sf_base            = choose_a_meta ? a_sf   : b_sf;
     assign both_zero    = a_is_zero && b_is_zero;
     assign is_nar       = a_is_nar || b_is_nar || flags_in[4];
     assign flags_lo     = flags_in[3:0];

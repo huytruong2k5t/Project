@@ -1,0 +1,7 @@
+CMD: ['wsl', 'bash', '-lc', "cd '/mnt/c/HCMUT/HK261/Do an 2/Posit_MAC/results/f_s1_opt_20261113/c1a_split_only/source' && verilator --lint-only --timing --assert -Wall -Irtl --top-module posit_mac_f -f rtl/mac_active.f"]
+RC: 0
+ELAPSED_S: 6.17
+
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)
+- Verilator: Built from 1.876 MB sources in 31 modules, into 0.676 MB in 5 C++ files needing 0.000 MB
+- Verilator: Walltime 0.385 s (elab=0.016, cvt=0.080, bld=0.000); cpu 0.143 s on 1 threads; alloced 14.043 MB

@@ -8,6 +8,7 @@
 //                   - Direct RNE rounding without dead TRUNC generate scopes
 //                   - Single 32-bit carry chain merging rounding & 2's complement
 //                   - Parallel endpoint clamp detection & NORMAL G/R/S flag merge
+//                   - See rtl/changelog.md for detailed optimization logs
 //-----------------------------------------------------------------------------
 
 module posit_pack_finish (

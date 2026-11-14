@@ -1,0 +1,98 @@
+\subsection{Dấu, mã độ lớn và miền giá trị}
+
+Đối với số âm hữu hạn, phần cứng thực hiện lấy bù hai 32 bit trước khi đếm chuỗi
+regime; chẳng hạn từ mã \texttt{0xbc000000} được đổi thành độ lớn \texttt{0x44000000},
+giải mã phần trường như $+2$ rồi khôi phục dấu âm ở đầu ra. Nếu đếm trực tiếp trên
+mã âm thô, chuỗi bit lặp sẽ phản ánh dạng mã hóa bù hai chứ không còn mang ý nghĩa
+của trường regime. Hai mã \texttt{Zero} và \texttt{NaR} được kiểm tra trước bước
+tách trường để tránh nhầm lẫn cực trị hữu hạn với trạng thái ngoại lệ.
+
+\begin{engineeringtable}{Các mã tiêu biểu của Posit(32,3) dùng để đối chiếu giải mã và các cận biên.}{tab:posit-code-examples}
+\begin{tabularx}{\linewidth}{@{}llllY@{}}
+\toprule
+Mã hex & Dấu & $k$ & $e$ & Giá trị hoặc vai trò \\
+\midrule
+\texttt{00000000} & 0 & -- & -- & \texttt{Zero} ($0$) \\
+\texttt{80000000} & 1 & -- & -- & \texttt{NaR} (\textit{Not a Real}) \\
+\texttt{40000000} & 0 & $0$ & $0$ & $1$ \\
+\texttt{44000000} & 0 & $0$ & $1$ & $2$ \\
+\texttt{bc000000} & 1 & $0$ & $1$ & $-2$ sau khi lấy bù hai thành \texttt{44000000} \\
+\texttt{00000001} & 0 & $-30$ & $0$ & $2^{-240}$ ($\mathrm{minpos}$) \\
+\texttt{7fffffff} & 0 & $30$ & $0$ & $2^{240}$ ($\mathrm{maxpos}$) \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+Khi số bit còn lại sau regime không đủ 3 bit exponent, các vị trí thấp còn thiếu
+được đệm 0 theo quy tắc giải mã Posit. Không gian dành cho fraction thu hẹp dần khi
+chuỗi regime kéo dài về phía gần $\mathrm{minpos}$ hoặc $\mathrm{maxpos}$; ngược
+lại quanh giá trị $1$, regime chỉ dài 2 bit và để lại tới 26 bit fraction. Do bước
+lượng tử biến thiên theo từng miền $k$, không thể xem hiệu giữa hai mã Posit liên
+tiếp là một đơn vị ULP có độ lớn không đổi trên toàn dải số.
+
+\subsection{Ví dụ giải mã Posit(32,3) dương và âm}
+
+\paragraph{Ví dụ 1: Giải mã một số Posit dương.}
+Xét từ mã đầu vào $P_+ = \texttt{0x1B400000}$, có biểu diễn nhị phân 32 bit là:
+\[
+P_+ = \texttt{00011011\ 01000000\ 00000000\ 00000000}_2.
+\]
+Vì bit MSB bằng $0$ và từ mã khác \texttt{0x00000000}, đây là một số dương hữu
+hạn khác $0$. Các trường bit tính từ trái sang phải được tách thành 4 phần (Bảng~\ref{tab:decode-ex-pos}).
+
+\begin{engineeringtable}{Phân tách trường bit cho ví dụ giải mã số Posit dương \texttt{0x1B400000}.}{tab:decode-ex-pos}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{26mm} l r Y@{}}
+\toprule
+Trường & Chuỗi bit & Số bit & Ý nghĩa giải mã \\
+\midrule
+Sign ($s$) & \texttt{0} & 1 & Số dương ($s=0$). \\
+Regime & \texttt{001} & 3 & Hai bit \texttt{0} liên tiếp rồi kết thúc bằng \texttt{1}: $m=2 \Rightarrow k=-m=-2$. \\
+Exponent ($e$) & \texttt{101} & 3 & Giá trị không dấu $e = 101_2 = 5$. \\
+Fraction ($f$) & \texttt{101000...00} & 25 & $f = 1\cdot 2^{-1} + 0\cdot 2^{-2} + 1\cdot 2^{-3} = \frac{5}{8}$. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+Từ các trường vừa tách, hệ số tỷ lệ của regime là $\mathrm{useed}^k = 256^{-2} = 2^{-16}$,
+phần trị có bit ẩn bằng 1 là $M = 1 + f = 1 + \frac{5}{8} = \frac{13}{8} = 1{,}625$,
+và số mũ tổng hợp bằng $sf = 8k + e = 8(-2) + 5 = -11$. Giá trị thực tương ứng của
+từ mã là:
+\[
+x_+ = (-1)^0 \cdot 2^{-11} \cdot \frac{13}{8} = \frac{13}{16\,384} = 0{,}00079345703125.
+\]
+
+\paragraph{Ví dụ 2: Giải mã một số Posit âm.}
+Xét từ mã đối của ví dụ trên là $P_- = \texttt{0xE4C00000}$:
+\[
+P_- = \texttt{11100100\ 11000000\ 00000000\ 00000000}_2.
+\]
+Bit dấu $s=1$ và mã khác \texttt{0x80000000} nên đây là một số âm hữu hạn. Phần
+cứng lưu dấu $s=1$ rồi thực hiện bù hai toàn bộ 32 bit để đưa về mã độ lớn:
+\[
+P_{\mathrm{mag}} = \overline{\texttt{0xE4C00000}} + 1 = \texttt{0x1B3FFFFF} + 1 = \texttt{0x1B400000}.
+\]
+Tách trường trên $P_{\mathrm{mag}}$ thu được cùng bộ tham số $k=-2$, $e=5$,
+$M=\frac{13}{8}$ và $sf=-11$ như Ví dụ 1. Ghép với dấu $s=1$ ban đầu cho kết quả:
+\[
+x_- = (-1)^1 \cdot 2^{-11} \cdot \frac{13}{8} = -\frac{13}{16\,384} = -0{,}00079345703125.
+\]
+Hai ví dụ cho thấy việc tách trường trên số âm bắt buộc phải thực hiện sau bước
+lấy bù hai; đồng thời cần phân biệt rõ bit dấu $s$ của toán hạng với dấu âm/dương
+của các đại lượng nội bộ $k$ và $sf$.
+
+\subsection{Lưới số nguyên bảo toàn trọng số bit}
+
+Với phần fraction được căn đủ 26 bit ở định dạng \texttt{Posit(32,3)}, hệ số nguyên
+không dấu mang bit ẩn là $J = 2^{26} + F$, nên mọi số hữu hạn khác 0 biểu diễn
+chính xác dưới dạng $x = (-1)^s J 2^{sf - 26}$. Khi nhân hai toán hạng bất kỳ,
+$sf_A + sf_B \ge -480$ và tích $J_A J_B$ có $52$ vị trí fraction; do đó toàn bộ
+trọng số thấp nhất của tích nằm trên lưới số nguyên chung $2^{-532}$. Biểu diễn
+bằng số nguyên lớn trên lưới $2^{-532}$ được mô hình tham chiếu (\textit{golden
+model}) sử dụng để thực hiện phép cộng và đánh giá sai số độc lập hoàn toàn với
+giới hạn độ rộng của dấu phẩy động \texttt{binary64}.
+
+Bên trong phần cứng, dữ liệu không cần duy trì lưới rộng ở mọi tầng: khối nhân
+lặp làm việc trên lưới 24 bit sau dấu chấm (\texttt{Q24}), bộ cộng của \texttt{MAC-F}
+làm việc trên cửa sổ 31 bit (\texttt{Q29}) kèm bit phần dư căn chỉnh, còn
+\texttt{MAC-Quire} duy trì trạng thái 972 bit trên lưới $2^{-480}$ để tích lũy
+liên tiếp nhiều tích xấp xỉ trước lệnh \texttt{READ}.

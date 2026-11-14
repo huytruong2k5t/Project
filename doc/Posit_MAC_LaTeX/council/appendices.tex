@@ -1,0 +1,125 @@
+\chapter{Giao diện tín hiệu và ví dụ mã hóa}
+\label{app:signals}
+
+Với cặp đầu vào mẫu \texttt{FT-05} ($A=\texttt{0x1c900000}$, $B=\texttt{0x3c820000}$),
+bộ nhân lặp tạo giá trị nguyên không dấu $M=24\,224\,768$ trên lưới \texttt{Q24},
+số mũ cơ sở $b=-11$, dấu dương và thực hiện hai vòng fraction ở cấu hình
+\texttt{OPS=1} với $n \ge 2$. Tích nội bộ bằng $M \cdot 2^{b-24}$. Khi $C=0$,
+từ mã đầu ra tại cổng retire của cả \texttt{MAC-NF}, \texttt{MAC-F} và mô hình
+tham chiếu là \texttt{0x1ae34800} với thanh ghi cờ \texttt{flags=0x00}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Mô tả giao diện tín hiệu RTL của các lõi IP. Toàn bộ tín hiệu bắt tay đồng bộ theo cạnh lên của \texttt{clk}.}
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{52mm}Y@{}}
+    \toprule
+    Tín hiệu & Ý nghĩa và vai trò điều khiển \\
+    \midrule
+    \texttt{clk, rst\_n} & Xung nhịp hệ thống và tín hiệu đặt lại tích cực mức thấp. \\
+    \texttt{in\_valid, in\_ready} & Giao dịch đầu vào được chấp nhận khi cả hai cùng bằng 1. \\
+    \texttt{a, b, c[31:0]} & Các toán hạng \texttt{Posit(32,3)} (\texttt{MAC-Quire} dùng $A/B$ và trạng thái nội bộ $Q$). \\
+    \texttt{cfg\_ops[1:0], cfg\_n[3:0]} & Chính sách chọn toán hạng (\texttt{OPS=0/1}) và giới hạn số vòng ($n \in [0, 12]$). \\
+    \texttt{out\_valid, out\_ready} & Kết quả hoàn tất (\textit{retire}) khi cả hai tín hiệu cùng bằng 1. \\
+    \texttt{d[31:0], flags[4:0]} & Từ mã kết quả và 5 cờ \{\texttt{nar}, \texttt{sat\_max}, \texttt{sat\_min}, \texttt{inexact}, \texttt{approx\_cut}\}. \\
+    \texttt{q\_cmd, out\_cmd, q\_overflow} & Mã lệnh \texttt{CLEAR/MAC/READ}, mã lệnh phản hồi và cờ tràn của \texttt{MAC-Quire}. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\chapter{Quy trình tái lập mô phỏng và đánh giá sai số}
+\label{app:verification}
+
+Cấu trúc dự án phần cứng được tổ chức tập trung tại thư mục \texttt{Posit\_MAC}
+với các phân vùng chuẩn hóa:
+\begin{itemize}\raggedright
+  \item \path{rtl/}: mã nguồn SystemVerilog khả tổng hợp của bộ giải mã \texttt{Parser},
+        bộ nhân lặp \texttt{FULL\_TERM26/Q24} dùng chung (\path{rtl/multiplier/}),
+        bộ cộng 5 tầng (\path{rtl/adder/}), bộ đóng gói \texttt{Packer}, khối backend
+        tích lũy 972 bit (\path{rtl/quire/}) và các wrapper \texttt{MAC-NF/F/Quire}.
+  \item \path{l0/}, \path{l1/}, \path{tb/}: mô hình tham chiếu số nguyên lớn Posit
+        ES3 (C++ và Python), bộ sinh kịch bản phân tầng theo \textit{regime}/dấu,
+        cùng testbench kiểm chứng chức năng và giao thức trên ModelSim.
+  \item \path{scripts/}: các bộ công cụ dòng lệnh tự động hóa kiểm tra lint cổng
+        RTL (\path{audit_shared_multiplier.py}), đo sai số bộ nhân trước Packer
+        (\path{measure_multiplier_prepack.py}), đo sai số ghép cặp NF/F
+        (\path{measure_paired_mac_accuracy.py}), phân tích nhóm triệt tiêu
+        (\path{analyze_cancel_target.py}) và đánh giá chuỗi tích lũy
+        (\path{measure_mac_chains.py}).
+\end{itemize}
+
+Từ thư mục gốc \texttt{Posit\_MAC} (được quản lý phiên bản theo kho lưu trữ Git trên
+nhánh \texttt{main}, kế thừa từ mốc kiểm chứng \texttt{6fc77d3}), các bộ số liệu
+sai số, độ dài chuỗi, đối chiếu \texttt{SoftPosit}, kiểm thử \texttt{Verilator}
+cùng bài toán ứng dụng trong Chương~\ref{ch:evaluation} và Chương~\ref{ch:measurements}
+có thể được kiểm tra và tái lập thống nhất qua môi trường Python~3:
+\begin{verbatim}
+python3 scripts/audit_shared_multiplier.py
+python3 scripts/measure_multiplier_prepack.py audit
+python3 scripts/measure_paired_mac_accuracy.py audit
+python3 scripts/measure_mac_chains.py audit
+python3 scripts/verify_golden_vs_softposit.py
+python3 scripts/run_app_benchmarks.py
+python3 results/nf_f_coverage_final/elastic_test/run_elastic_cov.py
+\end{verbatim}
+
+Bảng~\ref{tab:cancel-target-metrics-full} lưu giữ phân tích chi tiết toàn bộ 7 cột
+(bao gồm giá trị cực đại quan sát và lớp \texttt{uniform} nằm trong \texttt{near\_zero})
+cho nhóm dữ liệu ép triệt tiêu $C=R(-P)$ được tóm tắt tại Chương~\ref{ch:measurements}.
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Bảng đầy đủ phân tích nhóm $C=R(-P)$ từ \texttt{samples.csv.gz} ($n=125.668$, tách riêng $r=P+C=0$, 3 chữ số có nghĩa).}
+  \label{tab:cancel-target-metrics-full}
+  \footnotesize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{25mm} r *{3}{>{\raggedleft\arraybackslash}p{18.5mm}} >{\raggedleft\arraybackslash}p{14mm} >{\raggedleft\arraybackslash}X@{}}
+    \toprule
+    \textbf{Tập con ($C=R(-P)$)} & \textbf{Số mẫu} & \textbf{P50 NF / F} & \textbf{P95 NF / F} & \textbf{Max NF / F} & \textbf{Khớp ($=0$)} & \textbf{F thắng / hòa / thua} \\
+    \midrule
+    \multicolumn{7}{@{}l}{\textbf{Khoảng cách mã} \texttt{code-distance} $= |\mathrm{code}_s(d) - \mathrm{code}_s(R(r))|$ (đơn vị bước mã nguyên dương)} \\
+    \midrule
+    $r = 0$ (tách riêng) & 4.272 & $0$ / $0$ & {$2{,}56{\times}10^7$ /} {$2{,}56{\times}10^7$} & {$2{,}15{\times}10^9$ /} {$2{,}15{\times}10^9$} & 3.966 / 3.966 & 0 / 4.272 / 0 \\
+    \texttt{near\_zero} ($r \ne 0$) & 108.703 & {$2{,}99{\times}10^8$ /} {$2{,}94{\times}10^8$} & {$3{,}31{\times}10^9$ /} {$3{,}37{\times}10^9$} & {$4{,}29{\times}10^9$ /} {$4{,}29{\times}10^9$} & 0 / 94 & 13.053 / 83.564 / 12.086 \\
+    \quad trong đó \texttt{uniform} & 99.994 & {$3{,}14{\times}10^8$ /} {$3{,}14{\times}10^8$} & {$3{,}10{\times}10^9$ /} {$3{,}10{\times}10^9$} & {$4{,}29{\times}10^9$ /} {$4{,}29{\times}10^9$} & 0 / 0 & 9.393 / 81.161 / 9.440 \\
+    \texttt{regular} (có \texttt{clamp}) & 12.693 & {$2{,}15{\times}10^9$ /} $0$ & {$2{,}15{\times}10^9$ /} $75$ & {$2{,}15{\times}10^9$ /} {10.646} & 0 / 10.104 & 12.691 / 0 / 2 \\
+    \textbf{Toàn nhóm} $C=R(-P)$ & 125.668 & {$2{,}81{\times}10^8$ /} {$2{,}06{\times}10^8$} & {$3{,}08{\times}10^9$ /} {$3{,}13{\times}10^9$} & {$4{,}29{\times}10^9$ /} {$4{,}29{\times}10^9$} & 3.966 / 14.164 & 25.744 / 87.836 / 12.088 \\
+    \midrule
+    \multicolumn{7}{@{}l}{\textbf{Sai số tương đối theo độ lớn tích} $|err|/|P| = |d - (P+C)| / |P|$} \\
+    \midrule
+    $r = 0$ (tách riêng) & 4.272 & $0$ / $0$ & {$7{,}09{\times}10^{-5}$ /} {$7{,}09{\times}10^{-5}$} & {$2{,}12{\times}10^{-4}$ /} {$2{,}12{\times}10^{-4}$} & 3.966 / 3.966 & 0 / 4.272 / 0 \\
+    \texttt{near\_zero} ($r \ne 0$) & 108.703 & {$1{,}63{\times}10^{-4}$ /} {$1{,}62{\times}10^{-4}$} & {$2{,}96{\times}10^{-4}$ /} {$2{,}96{\times}10^{-4}$} & {$7{,}94{\times}10^{-4}$ /} {$4{,}60{\times}10^{-4}$} & 0 / 93 & 12.753 / 83.578 / 12.372 \\
+    \quad trong đó \texttt{uniform} & 99.994 & {$1{,}65{\times}10^{-4}$ /} {$1{,}65{\times}10^{-4}$} & {$2{,}97{\times}10^{-4}$ /} {$2{,}97{\times}10^{-4}$} & {$4{,}72{\times}10^{-4}$ /} {$4{,}60{\times}10^{-4}$} & 0 / 0 & 9.390 / 81.161 / 9.443 \\
+    \texttt{regular} (có \texttt{clamp}) & 12.693 & {$0{,}932$ /} {$0{,}991$} & {$1{,}33{\times}10^{36}$ /} {1{,}00} & {$1{,}77{\times}10^{72}$ /} {1{,}00} & 0 / 21 & 12.473 / 0 / 220 \\
+    \textbf{Toàn nhóm} $C=R(-P)$ & 125.668 & {$1{,}70{\times}10^{-4}$ /} {$1{,}64{\times}10^{-4}$} & {$0{,}981$ /} {$0{,}998$} & {$1{,}77{\times}10^{72}$ /} {1{,}00} & 3.966 / 4.080 & 25.226 / 87.850 / 12.592 \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{2pt}
+  {\footnotesize Ghi chú: Phần vị tính theo thứ hạng gần nhất; 306 mẫu có $r=0$ cho $d_{\mathrm{NF}}=d_{\mathrm{F}}\ne 0$ do bộ nhân $n=12$ cắt bỏ bit thấp của $P$ trước khi cộng $C$.}
+\end{table}
+
+\chapter{Hồ sơ triển khai FPGA}
+\label{app:fpga}
+
+Tất cả các lượt tổng hợp (\textit{Synthesis}), định tuyến (\textit{Place \& Route})
+và phân tích công suất (\texttt{report\_power}, 100\,MHz \textit{vectorless})
+được thực hiện trên Vivado 2026.1 ở chế độ \textit{Out-of-Context} (OOC) nhắm đích
+FPGA Artix-7 \texttt{xc7a35tcpg236-1} tại tần số mục tiêu 100\,MHz (chu kỳ clock
+10\,ns, \texttt{clock\_uncertainty} 0,1\,ns, \texttt{input\_delay} 2,5\,ns,
+\texttt{output\_delay} 0/0,5\,ns) thông qua các tệp kịch bản Tcl trong thư mục
+\path{syn/}. Các đường găng nội bộ \textit{reg-to-reg} được truy vấn trực tiếp
+từ checkpoint \path{synthesis.dcp} và \path{routed.dcp} bằng chế độ phân tích
+tĩnh cùng tập ràng buộc XDC.
+
+Bộ ba cấu hình đối chứng \texttt{Xilinx Floating-Point v7.1} \texttt{FP32}
+(\texttt{FMA Full\_Usage}, \texttt{FMA Medium\_Usage} và biến thể $0$-DSP ghép
+\texttt{Multiply No\_Usage + Add\_Subtract}) được sinh và triển khai qua kịch bản
+\path{results/fpga_power_and_fp32/run_xilinx_fp32.tcl} trên cùng chip đích,
+cùng bộ đệm xung nhịp \texttt{BUFG} và cùng tệp ràng buộc OOC 100\,MHz nhằm bảo
+đảm công bằng tuyệt đối về phần cứng.
+
+Bảng~\ref{tab:f2f-stages} trình bày chi tiết độ trễ \textit{flip-flop to flip-flop}
+(F2F D/CE) lớn nhất theo từng nhóm thanh ghi đích sau tổng hợp cơ sở để đối chiếu
+với bảng tổng hợp hiệu năng sau định tuyến (Bảng~\ref{tab:fpga-synth-vs-route}).
+
+\input{council/tables/f2f_stages}

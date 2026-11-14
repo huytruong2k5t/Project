@@ -1,0 +1,40 @@
+\IfFontExistsTF{Arial}{\setsansfont{Arial}}{\setsansfont{Times New Roman}}
+% Keep math in diagram labels on sizes available in the offline TeX bundle.
+\DeclareMathSizes{8.5}{8}{8}{8}
+\DeclareMathSizes{9.5}{10}{8}{8}
+\DeclareMathSizes{10}{10}{8}{8}
+\DeclareMathSizes{10.95}{10.95}{8}{8}
+\definecolor{dpink}{HTML}{182C40}
+\definecolor{dpblue}{HTML}{375775}
+\definecolor{dpline}{HTML}{B1BFCC}
+\definecolor{dpcomb}{HTML}{F2F6FA}
+\definecolor{dpff}{HTML}{DAE8F4}
+\definecolor{dpcopper}{HTML}{825137}
+\definecolor{dpnote}{HTML}{FBF4EA}
+\tikzset{
+  rtlpic/.style={x=1cm,y=1.12cm,>=Stealth, font=\fontsize{9.5}{11.3}\selectfont\sffamily,text=dpink},
+  unit/.style={draw=dpblue,fill=dpcomb,line width=.55pt,rounded corners=1pt,
+      align=center,inner xsep=4pt,inner ysep=4pt,minimum height=9mm},
+  ff/.style={unit,fill=dpff,line width=.8pt},
+  pipe/.style={unit,double,double distance=1.1pt,line width=.55pt,fill=dpcomb},
+  pick/.style={unit,fill=dpnote,draw=dpcopper,inner ysep=2pt,minimum height=7mm},
+  pad/.style={unit,fill=white,draw=dpline},
+  pin/.style={font=\fontsize{9.5}{11.3}\selectfont\sffamily\bfseries,inner sep=2pt,align=center},
+  tag/.style={font=\fontsize{8.5}{10}\selectfont\sffamily,inner sep=2pt,align=center,fill=white},
+  side/.style={font=\fontsize{8.5}{10}\selectfont\sffamily,anchor=east,inner sep=1.5pt,align=right,text=dpblue},
+  explain/.style={unit,fill=dpnote,draw=dpcopper,font=\footnotesize\sffamily},
+  head/.style={font=\fontsize{9.5}{11.3}\selectfont\sffamily\bfseries,align=center,inner sep=3pt},
+  wire/.style={-{Stealth[length=1.9mm,width=1.45mm]},draw=dpink,line width=.6pt},
+  trunk/.style={draw=dpink,line width=.6pt},
+  meta/.style={wire,densely dotted,draw=dpblue,line width=.8pt},
+  enable/.style={wire,densely dashed,draw=dpcopper},
+  tapdot/.style={circle,fill=dpink,inner sep=0pt,minimum size=2.8pt},
+}
+\newcommand{\rtlfig}[4][!htbp]{%
+  \begin{figure}[#1]\centering
+    \begin{tikzpicture}[rtlpic]#4\end{tikzpicture}
+    \caption{#2}\label{#3}
+  \end{figure}}
+\newcommand{\sig}[1]{\texttt{#1}}
+\newcommand{\hw}[1]{\textbf{#1}}
+

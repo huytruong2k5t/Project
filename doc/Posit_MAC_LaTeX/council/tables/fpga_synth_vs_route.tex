@@ -1,0 +1,28 @@
+\begin{table}[!htbp]
+  \centering
+  \caption{So sánh cùng ràng buộc OOC 100\,MHz (\texttt{xc7a35tcpg236-1}) giữa pha tổng hợp (\textit{Synth}) và định tuyến (\textit{Route}): tách riêng WNS toàn thiết kế (gồm I/O \texttt{in\_ready}) và WNS nội bộ \textit{reg-to-reg} trên miền \texttt{clk}}
+  \label{tab:fpga-synth-vs-route}
+  \footnotesize
+  \setlength{\tabcolsep}{3.5pt}
+  \begin{tabularx}{\textwidth}{@{}Y l r r r r r r@{}}
+    \toprule
+    \textbf{Cấu hình kiến trúc} & \textbf{Pha} & \textbf{LUT} & \textbf{FF} & \textbf{WNS toàn} & \textbf{WNS R2R} & \textbf{$F_{\max,\mathrm{R2R}}$} & \textbf{WHS (fail)} \\
+     &  &  &  & \textbf{TK (ns)} & \textbf{(ns)} & \textbf{(MHz)} & \textbf{(ns)} \\
+    \midrule
+    MAC-NF (trước tách S1) & Synth & 1.582 & 916 & $+1{,}843$ & $+3{,}435$ & 152,32 & $-0{,}055$ (8) \\
+    MAC-NF (trước tách S1) & Route & 1.558 & 916 & $+0{,}665$ & $+2{,}943$ & 141,70 & $+0{,}043$ (0) \\
+    MAC-NF (tách S1) & Synth & 1.616 & 916 & $+1{,}843$ & $+3{,}435$ & 152,32 & $-0{,}055$ (8) \\
+    MAC-NF (tách S1) & Route & 1.591 & 916 & $+0{,}669$ & $+2{,}639$ & 135,85 & $+0{,}041$ (0) \\
+    \midrule
+    MAC-F (trước tách S1) & Synth & 1.235 & 781 & $+2{,}689$ & $+4{,}319$ & 176,03 & $-0{,}055$ (7) \\
+    MAC-F (trước tách S1) & Route & 1.211 & 781 & $+2{,}142$ & $+2{,}768$ & 138,27 & $+0{,}043$ (0) \\
+    \textbf{MAC-F (tách S1, hoàn thiện)} & \textbf{Synth} & \textbf{1.244} & \textbf{781} & \textbf{$+2{,}689$} & \textbf{$+4{,}319$} & \textbf{176,03} & \textbf{$-0{,}055$ (7)} \\
+    \textbf{MAC-F (tách S1, hoàn thiện)} & \textbf{Route} & \textbf{1.221} & \textbf{781} & \textbf{$+2{,}247$} & \textbf{$+3{,}524$} & \textbf{154,42} & \textbf{$+0{,}043$ (0)} \\
+    \midrule
+    MAC-Quire & Synth & 2.888 & 2.636 & $+0{,}170$ & $+0{,}170$ & 101,73 & $-0{,}055$ (7) \\
+    MAC-Quire & Route & 2.873 & 2.636 & $-0{,}187$ & $-0{,}187$ & 98,16 & $+0{,}040$ (0) \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{2pt}
+  {\footnotesize Ghi chú: Cả ba cấu hình có $\mathrm{DSP}=0$, $\mathrm{BRAM}=0$ ở cả hai pha; riêng MAC-Quire dùng thêm 174 F7~Mux và 1 F8~Mux. Các cấu hình NF/F đều đạt $\mathrm{TNS}=0{,}000$\,ns và 0 lỗi định tuyến ở pha Route; cấu hình \texttt{tách S1} giữ nguyên hoàn toàn datapath, số FF và độ trễ chu kỳ, chỉ tách 4 nhánh cho \texttt{choose\_a} trong \texttt{posit\_add\_prepare\_comb}. Đối với MAC-Quire, tổng hợp đạt $\mathrm{TNS}=0{,}000$\,ns nhưng sau định tuyến còn $\mathrm{TNS}=-19{,}336$\,ns với 280/5.271 điểm cuối intra-\texttt{clk} vi phạm (giá trị WHS trước route là ước lượng chưa đặt mạch, đều đóng về dương sau route). $F_{\max,\mathrm{R2R}} = 1000 / (10{,}000 - \mathrm{WNS}_{\mathrm{R2R}})$.}
+\end{table}

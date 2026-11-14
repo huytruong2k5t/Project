@@ -1,0 +1,46 @@
+\rtlfig{Backend quire cập nhật theo từ 36 bit. MAC cập nhật từng word rồi commit Q; READ đọc Q đã commit, dò bit dẫn đầu theo word và làm tròn đúng một lần.}{fig:quire-context}{
+\node[head] at (-3.85,0) {Ghi: lệnh MAC};
+\node[head] at (3.85,0) {Đọc: lệnh READ};
+\node[ff,text width=63mm] (prod) at (-3.85,-1.15) {\hw{Chốt tích từ core}\\magnitude 26 Q24, $sf$ 11, dấu/cờ};
+\node[unit,text width=63mm] (al) at (-3.85,-3.24) {\hw{Căn lưới $2^{-480}$}\\
+ $h=sf+456$; hệ số signed 27 bit\\
+  index $=h_+\ \mathrm{div}\ 36$; offset $=h_+\bmod36$\\
+  $h_+=\max(h,0)$ trên nhánh hợp lệ};
+\draw[wire] (prod)--(al);
+\node[unit,text width=63mm] (w) at (-3.85,-5.53) {\hw{Chọn term của word đang xử lý}\\
+ dịch hệ số trong 63 bit; word 36 bit\\
+ chọn 0, lát thấp, lát cao hoặc dấu};
+\draw[wire] (al)--node[tag,right]{hệ số 27, index 5, offset 6}(w);
+\node[unit,text width=63mm] (sum) at (-3.85,-7.55) {\hw{Cộng theo word 0 $\to$ 26}\\
+ \sig{q\_words[step]} + term + carry\\
+ tổng 37 bit; bit 36 truyền vòng sau};
+\draw[wire] (w)--(sum);
+\node[ff,text width=63mm] (pend) at (-3.85,-9.43) {\hw{Bank pending}\\
+ ghi word tổng; commit khi xong word 26 và không overflow};
+\draw[wire] (sum)--node[tag,right]{tổng thấp 36}(pend);
+\node[ff,text width=64mm] (q) at (3.85,-1.15) {\hw{Q đã commit}\\27 word $\times$ 36 bit; signed 972 bit};
+\draw[wire] (pend.south)--(-3.85,-10.26)--(.28,-10.26) -- (.28,-1.15) -- (q.west);
+\node[tag,rotate=90] at (.28,-9.15) {commit};
+\draw[wire] ($(q.west)+(0,.32)$)--(-.24,-.83)|-(sum.east);
+\node[unit,text width=63mm] (fetch) at (3.85,-3.02) {\hw{FETCH: lấy độ lớn word}\\
+ chọn word theo step từ thấp lên cao\\
+ XOR theo dấu Q, cộng carry $\to$ word 36 bit};
+\draw[wire] (q)--(fetch);
+\node[ff,text width=63mm] (abs) at (3.85,-4.78) {\hw{Chốt}~\sig{abs\_word\_q}~\hw{và carry}};
+\draw[wire] (fetch)--(abs);
+\node[unit,text width=63mm] (red) at (3.85,-6.54) {\hw{REDUCE: dò và tạo cửa sổ}\\
+ ưu tiên bit 1 cao nhất trong word\\
+ cửa sổ 3 word dịch $35-\mathrm{lead\_bit}$};
+\draw[wire] (abs)--(red);
+\draw[enable] (red.east)--(7.56,-6.54) |- (fetch.east);
+\node[ff,text width=63mm] (out) at (3.85,-8.67) {\hw{Cập nhật khi word $\ne0$}\\
+ $sf=36\,\mathrm{step}+\mathrm{lead\_bit}-480$\\
+ frac 53; sticky OR phần thấp\\và các word cũ};
+\draw[wire] (red)--(out);
+\node[unit,text width=63mm] (p) at (3.85,-10.52) {\hw{Packer RNE sau word 26}};
+\draw[wire] (out)--(p);
+\node[pin] (r) at (3.85,-11.6) {\sig{d[31:0]}, flags, \sig{out\_cmd=READ}};
+\draw[wire] (p)--(r);
+\node[explain,text width=63mm] at (-3.85,-11.6) {CLEAR xóa Q và trạng thái.\\CLEAR/MAC trả ack với $d=0$.};
+}
+

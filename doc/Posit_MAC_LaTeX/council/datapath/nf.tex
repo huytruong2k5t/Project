@@ -1,0 +1,29 @@
+\rtlfig{Biên tích trước S1 của MAC-F và MAC-NF. Hai cột biểu diễn hai thiết kế riêng; cả hai giữ C từ lúc Parser retire, còn \sig{posit\_product\_pack} gồm hai tầng pipeline P1/P2 rõ mạch tổ hợp và FF.}{fig:nf-f-split}{
+\node[unit,text width=116mm] (src) at (0,0) {\hw{Adapter sau nhân:}~\sig{mul\_prepack\_norm\_comb}\\
+ \sig{acc[25]} chọn $(sf+1,\{\sig{acc[24:0]},0\})$ hoặc $(sf,\{\sig{acc[23:0]},00\})$};
+\node[head] (hf) at (-3.5,-1.18) {MAC-F};
+\node[head] (hn) at (3.65,-1.18) {MAC-NF};
+\node[unit,text width=66mm] (p1c) at (3.65,-2.52) {\hw{P1 tổ hợp:}~\sig{posit\_pack\_prepare}\\
+ dịch phải 59 bit (\sig{frac}=\{26, 27'b0\}, \sig{sticky}=0)\\mặt nạ nhiệt sticky; phân loại \sig{special\_sel}};
+\node[ff,text width=66mm] (p1r) at (3.65,-4.48) {\hw{P1 FF:}~\sig{posit\_product\_pack} (\sig{p1\_ready})\\
+ \sig{p1\_mag\_trunc\_q[30:0]}, \sig{G/R/S}, \sig{p1\_sign\_q}\\\sig{p1\_special\_sel\_q[2:0]}, \sig{p1\_flags\_q[4:0]}, \sig{p1\_valid\_q}};
+\node[unit,text width=66mm] (p2c) at (3.65,-6.42) {\hw{P2 tổ hợp:}~\sig{posit\_pack\_finish} (\sig{sign=0})\\
+ \sig{round\_up} RNE 32 bit, MUX \sig{special\_sel}/biên, cờ \sig{inexact}};
+\node[ff,text width=66mm] (p2r) at (3.65,-8.18) {\hw{P2 FF:}~\sig{posit\_product\_pack} (\sig{p2\_ready})\\
+ \sig{d\_q[31:0]} (magnitude), \sig{flags\_q[4:0]}, \sig{sign\_q}, \sig{p2\_valid\_q}};
+\node[unit,text width=66mm] (mp) at (3.65,-10.02) {\sig{posit\_magnitude\_parse}\\XOR + sentinel $\to$ LOD 31\\tái tạo frac 26, $sf$ 11, $s,Z,N$};
+\node[ff,text width=66mm] (nr) at (3.65,-11.96) {\hw{Bank tích NF} (\sig{product\_capture})\\\sig{norm\_valid\_q}, \sig{product\_frac\_q}, \sig{norm\_sf\_q}, $s/Z/N$, \sig{norm\_flags\_q}};
+\node[unit,text width=54mm] (af) at (-3.5,-13.62) {\hw{S1 nhận tích F và C}};
+\node[unit,text width=66mm] (an) at (3.65,-13.62) {\hw{S1 nhận tích NF và C}};
+\draw[wire] (src.south) -- ++(0,-.26) -| (hn);
+\draw[wire] (src.south) -- ++(0,-.26) -| (hf);
+\draw[wire] (hn)--node[tag,right]{\sig{core\_done}}(p1c);
+\draw[wire] (p1c)--(p1r);
+\draw[wire] (p1r)--(p2c);
+\draw[wire] (p2c)--(p2r);
+\draw[wire] (p2r)--node[tag,right]{magnitude 32 + \sig{sign\_q}}(mp);
+\draw[wire] (mp)--node[tag,right]{\sig{product\_capture}}(nr);
+\draw[wire] (hf)--(af) node[pos=.28,tag,right]{frac 26 và $sf$ 11\\đưa thẳng vào S1\\với \sig{core\_done}};
+\draw[wire] (nr)--(an);
+\draw[meta] (p2r.west)--++(-.68,0) |- (nr.west) node[pos=.42,tag,left]{\sig{flags\_q[4:0]}};
+}

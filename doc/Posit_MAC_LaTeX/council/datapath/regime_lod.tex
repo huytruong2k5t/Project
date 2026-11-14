@@ -1,0 +1,29 @@
+\rtlfig{LOD tìm chuyển tiếp regime của Parser A/B/C và quire: ba cấp gộp 4:1. Nhánh đệm hằng được vẽ để thể hiện cấu trúc khai triển của RTL.}{fig:lod-regime-tree}{
+\node[pin] (in) at (0,0) {$d[30:0]=\{m[29:0]\oplus m[30:1],1'b1\}$};
+\node[unit,text width=115mm] (pad) at (0,-1.0) {\hw{Căn trái vector tìm kiếm}\\
+  \sig{padded[63:0]} $=\{d[30:0],33'b0\}$};
+\draw[wire] (in)--(pad);
+\foreach \n/\x/\r/\s in {3/-5.4/63:48/16 bit dữ liệu,2/-1.8/47:32/15 bit + 0,1/1.8/31:16/16 bit 0,0/5.4/15:0/16 bit 0}{
+  \node[pad,text width=27mm] (g\n) at (\x,-2.68) {\sig{[\r]}\\ \s};
+  \draw[wire] (pad.south -| g\n)--(g\n);
+  \node[unit,text width=27mm] (a\n) at (\x,-4.24) {\hw{Cấp 1}\\$4\times$ gộp 4:1};
+  \draw[wire] (g\n)--(a\n);
+  \node[unit,text width=27mm] (b\n) at (\x,-5.93) {\hw{Cấp 2}\\gộp 4:1};
+  \draw[wire] (a\n)--node[tag,right]{$4\times(v,p_2)$}(b\n);
+}
+\node[unit,text width=133mm] (root) at (0,-7.64) {\hw{Cấp 3: chọn nhóm hợp lệ cao nhất}\\
+   \sig{pos[5:0]} $=\{g_3[1:0],p_4[3:0]\}$};
+\foreach \n in {0,1,2,3}{\draw[wire] (b\n)--node[tag,right]{$(v,p_4)$}(root.north -| b\n);}
+\node[pin] (out) at (0,-8.91) {\sig{vld} $=v_{\mathrm{root}}$ \qquad \sig{K[4:0]} $=$ \sig{vld ? pos[4:0] : 0}};
+\draw[wire] (root)--(out);
+\node[explain,text width=133mm] at (0,-10.25) {\hw{Một nút gộp}\\
+ $v=\bigvee_{i=0}^{3}v_i$. Ưu tiên nhóm $3,2,1,0$; mã vị trí nhóm lần lượt $00,01,10,11$.\\
+ Ghép mã nhóm ở phía cao và vị trí con được chọn ở phía thấp.};
+\node[pad,text width=133mm] at (0,-12.1) {\hw{Ví dụ từ MSB: cùng detector cho hai dạng terminator}\\
+ \begin{tabular}{@{}lll@{}}
+   Đếm bit 1:  \sig{11101} & $\to$ tìm bit 0 đầu tiên & \sig{XOR = 0011}, $K=2$ \\
+   Đếm bit 0:  \sig{00010} & $\to$ tìm bit 1 đầu tiên & \sig{XOR = 0011}, $K=2$
+ \end{tabular}\\[2pt]
+ Không có chuyển tiếp: sentinel cho $K=30$, \sig{vld=1}.};
+}
+

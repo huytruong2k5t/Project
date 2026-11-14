@@ -1,0 +1,29 @@
+\begin{table}[!htbp]
+  \centering
+  \caption{Tóm tắt sai số nhóm $C=R(-P)$ ($n=125.668$, 3 chữ số có nghĩa; bảng đầy đủ tại Phụ lục~B).}
+  \label{tab:cancel-target-metrics}
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{30mm} r *{2}{>{\raggedleft\arraybackslash}X} >{\raggedleft\arraybackslash}p{26mm}@{}}
+    \toprule
+    \textbf{Tập con ($C=R(-P)$)} & \textbf{Số mẫu} & \textbf{P50 NF / F} & \textbf{P95 NF / F} & \textbf{F thắng / hòa / thua} \\
+    \midrule
+    \multicolumn{5}{@{}l}{\textbf{Khoảng cách mã} $\texttt{code-distance} = |\mathrm{code}_s(d) - \mathrm{code}_s(R(r))|$ (đơn vị bước mã)} \\
+    \midrule
+    $r = 0$ (tách riêng) & 4.272 & $0$ / $0$ & $2{,}56{\times}10^7$ / $2{,}56{\times}10^7$ & 0 / 4.272 / 0 \\
+    \texttt{near\_zero} ($r \ne 0$) & 108.703 & $2{,}99{\times}10^8$ / $2{,}94{\times}10^8$ & $3{,}31{\times}10^9$ / $3{,}37{\times}10^9$ & 13.053 / 83.564 / 12.086 \\
+    \texttt{regular} (có \texttt{clamp}) & 12.693 & $2{,}15{\times}10^9$ / $0$ & $2{,}15{\times}10^9$ / $75$ & 12.691 / 0 / 2 \\
+    \textbf{Toàn nhóm} $C=R(-P)$ & 125.668 & $2{,}81{\times}10^8$ / $2{,}06{\times}10^8$ & $3{,}08{\times}10^9$ / $3{,}13{\times}10^9$ & 25.744 / 87.836 / 12.088 \\
+    \midrule
+    \multicolumn{5}{@{}l}{\textbf{Sai số tương đối theo độ lớn tích} $|err|/|P| = |d - (P+C)| / |P|$} \\
+    \midrule
+    $r = 0$ (tách riêng) & 4.272 & $0$ / $0$ & $7{,}09{\times}10^{-5}$ / $7{,}09{\times}10^{-5}$ & 0 / 4.272 / 0 \\
+    \texttt{near\_zero} ($r \ne 0$) & 108.703 & $1{,}63{\times}10^{-4}$ / $1{,}62{\times}10^{-4}$ & $2{,}96{\times}10^{-4}$ / $2{,}96{\times}10^{-4}$ & 12.753 / 83.578 / 12.372 \\
+    \texttt{regular} (có \texttt{clamp}) & 12.693 & $0{,}932$ / $0{,}991$ & $1{,}33{\times}10^{36}$ / $1{,}00$ & 12.473 / 0 / 220 \\
+    \textbf{Toàn nhóm} $C=R(-P)$ & 125.668 & $1{,}70{\times}10^{-4}$ / $1{,}64{\times}10^{-4}$ & $0{,}981$ / $0{,}998$ & 25.226 / 87.850 / 12.592 \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{2pt}
+  {\footnotesize Ghi chú: Toàn bộ tập $r=0$ gồm 4.272 mẫu đều thuộc \texttt{sum\_class=zero}, trong đó 3.966 mẫu khớp chính xác $0$ và 306 mẫu có sai khác giống nhau trên cả NF và F do cắt bỏ bit thấp của $P$ ở bộ nhân 12 bit trước khi cộng $C$.}
+\end{table}

@@ -1,0 +1,84 @@
+\chapter{Kết luận và hướng phát triển}
+\label{ch:conclusion}
+
+\section{Kết luận}
+Đồ án đã thiết kế, hiện thực và kiểm chứng lõi IP nhân--tích lũy
+\texttt{Posit(32,3)} sử dụng bộ nhân lặp xấp xỉ \texttt{FULL\_TERM26/Q24} trên
+nền tảng FPGA Artix-7, với trọng tâm là kiến trúc hợp nhất \textbf{MAC-F} đặt
+trong đối chứng định lượng với \textbf{MAC-NF}, bộ tích lũy 972 bit \textbf{MAC-Quire}
+và ba cấu hình IP thương mại \texttt{Xilinx Floating-Point v7.1 FP32}. Các kết
+quả chính đạt được gồm:
+\begin{itemize}
+  \item \textbf{Về kiến trúc, công suất và thông lượng phần cứng:} Bằng cách chuyển
+        trực tiếp tích nội bộ sang bộ cộng 5 tầng mà không đóng gói trung gian,
+        \textbf{MAC-F} tiết kiệm 23,3\% LUT và 14,7\% FF so với \texttt{MAC-NF},
+        đồng thời rút ngắn đúng 3 chu kỳ mỗi phép MAC ($14\text{--}25$ chu kỳ so
+        với $17\text{--}28$ chu kỳ). Sau tách bốn nhánh tải ở tầng S1, \textbf{MAC-F}
+        đạt \textbf{1.221 LUT}, \textbf{781 FF}, \textbf{0 DSP}, WNS toàn thiết
+        kế \textbf{$+2{,}247$\,ns} ($129{,}0$\,MHz trên cổng \texttt{in\_ready}),
+        WNS nội bộ \textit{reg-to-reg} \textbf{$+3{,}524$\,ns} ($F_{\max,\mathrm{R2R}}
+        = 154{,}42$\,MHz), thông lượng $6{,}18\text{--}11{,}0$\,M\,MAC/s (trung bình
+        $8{,}56$\,M\,MAC/s) và công suất động \textbf{4\,mW} (tổng $72$\,mW, năng
+        lượng động $0{,}721$\,nJ/MAC tại 100\,MHz, độ phân giải \textit{vectorless}
+        $\pm 0{,}5$\,mW). Dù kém lõi đường ống $II=1$ \texttt{Xilinx FP32}
+        ($180\text{--}195$\,M\,MAC/s, $0{,}210\text{--}0{,}250$\,nJ/MAC) trên
+        luồng độc lập, \texttt{MAC-F} bám sát thông lượng tích lũy hồi tiếp của
+        \texttt{Xilinx FP32 0-DSP} ($8{,}56$ so với $8{,}88$\,M\,MAC/s) trong khi
+        giảm 48,6\% FF và giữ \texttt{0 DSP}.
+  \item \textbf{Về kiểm chứng chức năng và độ phủ:} Mô hình vàng được xác nhận
+        khớp bit-exact với \texttt{SoftPosit} ($100.867$ ca / $403.468$ phép $es=2$,
+        $0$ sai lệch) và Norris--Kim ($12/12$ ô $<0{,}94$\,pp). Hai lõi
+        \texttt{MAC-F} và \texttt{MAC-NF} đạt $0$ sai lệch qua $1.634.048$ giao
+        dịch bộ nhân, $377.032$ bộ ghép cặp $(A,B,C)$, $110.000$ vectơ hồi quy
+        hỗn hợp (trước và sau tối ưu S1), $201.764$ phép kiểm tương đương S1 và
+        $1.500$ trace giao thức \texttt{ModelSim}. Trên RTL cuối cùng,
+        \texttt{Verilator 5.032} đo độ phủ thô $90{,}91\%$ dòng / $88{,}89\%$
+        nhánh (\texttt{MAC-F}) và $91{,}98\%$ / $88{,}37\%$ (\texttt{MAC-NF}),
+        nâng lên sau rà soát (8/10 nhánh \textit{backpressure} loại trừ có căn
+        cứ) là \textbf{96,30\%} dòng / \textbf{100\%} nhánh / \textbf{93,03\%}
+        toggle và \textbf{98,03\%} / \textbf{100\%} / \textbf{93,63\%}, cùng
+        $2.600.000$ giao dịch/lõi khép kín \textbf{100\% functional bin} và bài
+        thử riêng $II=1$ ($20.000$ vectơ) phủ $100\%$ nhánh trên các khối con co
+        giãn. Riêng \texttt{MAC-Quire} đạt $0$ sai lệch trên $48$ chuỗi hồi tiếp
+        ($16.320$ MAC và $96$ lệnh \texttt{CLEAR/READ}).
+  \item \textbf{Về độ chính xác số học và bài toán ứng dụng:} Tại \texttt{OPS1/n12},
+        bộ nhân đạt $\mathrm{P95} = 0{,}0297\%$ (tương ứng $\approx 11\text{--}12$
+        bit hữu hiệu) trong bộ lọc FIR 32 hệ số ($\mathrm{SNR}=72{,}5$\,dB,
+        $3{,}74\,\mu$s/mẫu --- cao hơn $+10{,}3$\,dB so với \texttt{FP16} và
+        $+28{,}4$\,dB so với \texttt{BF16}) và tích vô hướng \texttt{NN} 128 chiều
+        ($\mathrm{P95}=5{,}66{\times}10^{-4}$). Nhờ dải động $2^{\pm 240}$, các
+        lõi \texttt{Posit(32,3)} xử lý thành công $200/200$ vectơ \texttt{DynScale}
+        ($10^{-45}\text{--}10^{43}$) nơi \texttt{FP32} ($100/200$ \texttt{Inf}),
+        \texttt{FP16} và \texttt{BF16} ($200/200$) thất bại. Theo thời gian thực
+        tại $F_{\max,\mathrm{R2R}}$, \texttt{MAC-F} chạy chuỗi $1.024$ MAC nhanh
+        hơn \textbf{3,55--3,64 lần} so với \texttt{MAC-Quire}, còn \texttt{MAC-Quire}
+        giữ ưu thế sai số bậc $10^{-8}$ trên chuỗi triệt tiêu dài.
+\end{itemize}
+
+\begin{table}[!htbp]
+  \centering
+  \small
+  \renewcommand{\arraystretch}{1.10}
+  \caption{Tổng kết kết quả thực hiện và đối chiếu các khối trong đồ án.}
+  \label{tab:status}
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{31mm}Y Y@{}}
+    \toprule
+    Hạng mục & Kết quả đạt được & Ghi chú kỹ thuật \\
+    \midrule
+    Bộ nhân lặp \texttt{FULL\_TERM26} & Kiểm $1.634.048$ giao dịch đủ 13 mức $n \in [0, 12]$, 0 sai lệch; $\mathrm{P95}=0{,}0297\%$ tại $n=12$. &
+      Sử dụng $0\text{ DSP}$; tách bạch cờ \texttt{input\_cut} và \texttt{approx\_cut}. \\
+    Kiểm chứng \texttt{MAC-F/NF} & $110.000$ hỗn hợp + $201.764$ S1 + $100.867$ \texttt{SoftPosit} + $20.000$ $II=1$ + $2{,}6$\,M bin/lõi. &
+      100\% bin; thô $90{,}9\%\text{--}92{,}0\%$ dòng / sau rà soát $96{,}3\%\text{--}98{,}0\%$ dòng, 100\% nhánh. \\
+    Sai số ghép cặp & $377.032$ bộ $(A,B,C)$ tại \texttt{OPS1/n12}; tách $4.272$ mẫu $r=0$, đo \texttt{code-distance} và $|err|/|P|$. &
+      \texttt{MAC-F} thắng $\approx 2\times$ số ca thua và tránh sai lệch kẹp ngưỡng ở nhánh $R(-P)$. \\
+    Bài toán ứng dụng & FIR 32 hệ số ($72{,}5$\,dB so với $62{,}2$\,dB \texttt{FP16}, $44{,}1$\,dB \texttt{BF16}) và 3 kịch bản 128 chiều. &
+      0/200 lỗi \texttt{DynScale} (\texttt{FP32} 100 \texttt{Inf}; \texttt{FP16/BF16} 200 lỗi); Quire $7{,}73{\times}10^{-4}$ khi triệt tiêu. \\
+    Triển khai \textbf{MAC-F} & 1.221 LUT, 781 FF, 0 DSP; $F_{\max}$ $154{,}4$ (R2R) / $129{,}0$\,MHz (TK); $8{,}56$\,M\,MAC/s TB; $P_{\mathrm{dyn}}=4$\,mW. &
+      Giảm $3\times$ $P_{\mathrm{dyn}}$ và 23,3\% LUT so với \texttt{MAC-NF}; giảm $48{,}6\%$ FF so với Xilinx FP32 0-DSP. \\
+    Đối chứng \texttt{MAC-Quire} & 2.873 LUT, 2.636 FF; WNS R2R $-0{,}187$\,ns ($98{,}2$\,MHz); $P_{\mathrm{dyn}}=29$\,mW; 48 chuỗi 0 sai lệch. &
+      Chậm hơn $3{,}55\text{--}3{,}64\times$ về thời gian thực tại $1.024$ MAC; đạt $1{,}73{\times}10^{-8}$ khi gần triệt tiêu. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\input{council/06_next}

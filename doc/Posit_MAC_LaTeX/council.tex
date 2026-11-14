@@ -1,0 +1,139 @@
+\input{preamble}
+\linespread{1.16}
+\input{council/visuals}
+\input{council/datapath/style}
+\begin{document}
+\hypersetup{pageanchor=false}
+\input{council/cover}
+\pagenumbering{roman}
+\hypersetup{pageanchor=true}
+\input{council/frontmatter}
+\chapter*{Tóm tắt đồ án}
+\addcontentsline{toc}{chapter}{Tóm tắt đồ án}
+Đồ án thiết kế, kiểm chứng và hiện thực trên FPGA lõi IP nhân--tích lũy (MAC)
+cho định dạng \texttt{Posit(32,3)} ($es=3$, mở rộng từ chuẩn Posit 2022) dùng
+bộ nhân lặp dịch--cộng xấp xỉ \texttt{FULL\_TERM26/Q24} không tiêu tốn khối DSP.
+Kiến trúc trọng tâm \textbf{MAC-F} hợp nhất tích nội bộ 26 bit trực tiếp vào bộ
+cộng đường ống 5 tầng nhằm bỏ qua bước đóng gói--giải mã trung gian, đồng thời giữ
+trọn $26$ bit fraction ở nhánh cộng $C$ (nâng ngưỡng chênh thang giữ bit gấp
+$65.536\times$ so với tích lũy 16 bit) và dải động $2^{\pm 240}$. Để đối chứng
+khách quan, đề tài triển khai song hành kiến trúc không hợp nhất \textbf{MAC-NF},
+bộ tích lũy chính xác 972 bit \textbf{MAC-Quire} và ba cấu hình \texttt{Xilinx
+Floating-Point v7.1 FP32} trên cùng FPGA Artix-7 \texttt{xc7a35tcpg236-1}.
+
+Về kiểm chứng chức năng và độ chính xác, mô hình vàng số nguyên lớn được đối
+chiếu độc lập với \texttt{SoftPosit} ($100.867$ bộ / $403.468$ phép toán $es=2$,
+$0$ sai lệch) và chuẩn Norris--Kim ($12/12$ ô dưới $0{,}94$ điểm phần trăm). Hai
+lõi \texttt{MAC-F} và \texttt{MAC-NF} đạt $0$ sai lệch qua $1.634.048$ phép nhân,
+$377.032$ bộ ghép cặp $(A,B,C)$, $110.000$ vectơ hồi quy kẹt luồng/\textit{reset},
+$201.764$ kiểm tra tương đương S1 và $1.500$ trace \texttt{ModelSim}; riêng
+\texttt{MAC-Quire} đạt $0$ sai lệch trên $48$ chuỗi hồi tiếp ($16.320$ MAC). Đo
+bằng \texttt{Verilator 5.032} trên RTL cuối cho độ phủ thô $90{,}91\%$ dòng /
+$88{,}89\%$ nhánh (\texttt{MAC-F}) và $91{,}98\%$ / $88{,}37\%$ (\texttt{MAC-NF}),
+đạt sau rà soát lần lượt \textbf{96,30\% / 100\%} và \textbf{98,03\% / 100\%}
+cùng $2{,}6$ triệu giao dịch/lõi khép kín 100\% bin chức năng; phép thử riêng
+pipeline \texttt{Parser$\to$Add$\to$Pack} ở nhịp $II=1$ ($20.000$ vectơ, $14.328$
+chu kỳ kẹt) xác nhận \textbf{100\% nhánh rẽ} của khối co giãn đều hoạt động đúng.
+Ở \texttt{OPS1/n12}, \texttt{MAC-F} đạt $\mathrm{P95}=0{,}0297\%$, $\mathrm{SNR}=72{,}5$\,dB
+trên lọc FIR 32 hệ số (vượt $+10{,}3$\,dB so với \texttt{FP16} và $+28{,}4$\,dB so với
+\texttt{BF16}) và vượt qua $200/200$ vectơ dải động $10^{-45}\text{--}10^{43}$ nơi
+\texttt{FP32} ($100/200$ \texttt{Inf}), \texttt{FP16} và \texttt{BF16} ($200/200$)
+thất bại.
+
+Sau định tuyến OOC 100\,MHz kèm tối ưu tách tải S1, \textbf{MAC-F} dùng 1.221 LUT,
+781 FF, 0 DSP (giảm 23,3\% LUT, 14,7\% FF và 3 chu kỳ/MAC so với \texttt{MAC-NF}),
+đạt $F_{\max,\mathrm{R2R}} = 154{,}42$\,MHz và tần số toàn thiết kế $129{,}0$\,MHz
+(so với $135{,}85$/$107{,}2$\,MHz của \texttt{MAC-NF} và $98{,}16$\,MHz của
+\texttt{MAC-Quire}). Do bộ nhân tuần tự mất $14\text{--}25$ chu kỳ, thông lượng
+trung bình đạt $8{,}56$\,M\,MAC/s với $P_{\mathrm{dyn}} = 4$\,mW ($0{,}721$\,nJ/MAC
+tại 100\,MHz, độ phân giải vectorless $\pm 0{,}5$\,mW). So với \texttt{Xilinx FP32}
+($II=1$, $180\text{--}195$\,M\,MAC/s), \texttt{MAC-F} kém về thông lượng luồng độc
+lập nhưng tiết kiệm FF/DSP, bám sát tốc độ tích lũy hồi tiếp ($8{,}56$ so với
+$8{,}88$\,M\,MAC/s ở biến thể 0-DSP) và thực thi chuỗi $1.024$ MAC nhanh hơn
+\textbf{3,55--3,64$\times$} so với \texttt{MAC-Quire}.
+
+\clearpage
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+This thesis presents the RTL design, verification, and FPGA implementation of a
+DSP-free multiply--accumulate (MAC) IP core for the extended-exponent
+\texttt{Posit(32,3)} ($es=3$) format using the iterative shift--add approximate
+multiplier \texttt{FULL\_TERM26/Q24}. The primary fused architecture (\textbf{MAC-F})
+forwards the unrounded 26-bit mantissa product directly into a five-stage elastic
+adder, eliminating intermediate packing overhead while preserving a full 26-bit
+addend path and a $2^{\pm 240}$ dynamic range. For objective trade-off evaluation,
+a non-fused baseline (\textbf{MAC-NF}), a 972-bit chunked exact accumulator
+(\textbf{MAC-Quire}), and three \texttt{Xilinx Floating-Point v7.1 FP32} variants
+are implemented on the same Artix-7 FPGA (\texttt{xc7a35tcpg236-1}).
+
+The big-integer golden model is cross-validated against \texttt{SoftPosit} ($es=2$,
+$100,867$ cases / $403,468$ ops, $0$ mismatches) and Norris--Kim ($12/12$ cells
+$<0.94$\,pp). Both \texttt{MAC-F} and \texttt{MAC-NF} record $0$ mismatches across
+$1,634,048$ multiplier tests, $377,032$ paired MAC vectors, $110,000$ stalled/reset
+regressions, $201,764$ unit equivalence checks, and $1,500$ \texttt{ModelSim}
+protocol traces, while \texttt{MAC-Quire} passes $48$ feedback chains ($16,320$ MACs).
+Final-RTL \texttt{Verilator 5.032} profiling yields raw coverage of $90.91\%$
+line / $88.89\%$ branch (\texttt{MAC-F}) and $91.98\%$ / $88.37\%$ (\texttt{MAC-NF}),
+reaching \textbf{96.30\% / 100\%} and \textbf{98.03\% / 100\%} after reviewed
+single-outstanding waivers plus $2.6$\,M transactions/core closing $100\%$ of
+functional bins; a standalone $II=1$ testbench ($20,000$ vectors, $14,328$ stall
+cycles) additionally achieves $100\%$ branch coverage on the elastic sub-blocks.
+At \texttt{OPS1/n12}, \texttt{MAC-F} achieves a $0.0297\%$ P95 product error,
+$72.5$\,dB SNR on a 32-tap FIR filter ($+10.3$\,dB over \texttt{FP16}, $+28.4$\,dB
+over \texttt{BF16}), and $0/200$ failures over $10^{-45}\text{--}10^{43}$ where
+\texttt{FP32} ($100/200$ \texttt{Inf}), \texttt{FP16}, and \texttt{BF16} ($200/200$) fail.
+
+Post-route at $100$\,MHz OOC after S1 fanout balancing, \textbf{MAC-F} uses
+$1,221$ LUTs, $781$ FFs, and $0$ DSPs ($-23.3\%$ LUTs, $-14.7\%$ FFs, and $-3$
+cycles/MAC vs.\ \texttt{MAC-NF}), achieving $F_{\max,\mathrm{R2R}} = 154.42$\,MHz
+and a whole-design $F_{\max} = 129.0$\,MHz (vs.\ $135.85$/$107.2$\,MHz for
+\texttt{MAC-NF} and $98.16$\,MHz for \texttt{MAC-Quire}). Owing to its iterative
+$14\text{--}25$-cycle schedule, \texttt{MAC-F} averages $8.56$\,M\,MAC/s at $4$\,mW
+dynamic power ($0.721$\,nJ/MAC vectorless, $\pm 0.5$\,mW resolution): it trails
+pipelined $II=1$ \texttt{Xilinx FP32} ($180\text{--}195$\,M\,MAC/s) on independent
+streams, matches $0$-DSP \texttt{FP32} under sequential loop-carried feedback
+($8.56$ vs.\ $8.88$\,M\,MAC/s) with $48.6\%$ fewer FFs, and executes $1,024$-MAC
+chains $3.55\text{--}3.64\times$ faster in wall-clock time than \texttt{MAC-Quire}.
+\reportcontents
+\reportlists
+\chapter*{Thuật toán, ký hiệu và từ viết tắt}
+\addcontentsline{toc}{chapter}{Thuật toán, ký hiệu và từ viết tắt}
+\begin{itemize}
+  \item Algorithm~\ref{alg:parser}: Giải mã Posit(32,3) hai tầng (Two-Stage Posit(32,3) Decoding).
+  \item Algorithm~\ref{alg:full-term}: Nhân lặp dịch--cộng FULL\_TERM26/Q24 (Iterative Multiplication).
+  \item Algorithm~\ref{alg:posit-add}: Cộng Posit(32,3) đường ống 5 tầng co giãn (Five-Stage Elastic Addition).
+  \item Algorithm~\ref{alg:posit-pack}: Đóng gói và làm tròn RNE hai tầng (Two-Stage RNE Packing).
+\end{itemize}
+\begin{description}
+  \item[$n, es$] Độ rộng từ mã Posit ($n=32$) và độ dài trường mũ cực đại ($es=3$).
+  \item[$\mathrm{useed}$] Hằng số thang regime, $\mathrm{useed}=2^{2^{es}}=256$ với $es=3$.
+  \item[$k, e, sf$] Hệ số regime, giá trị mũ $0\le e<2^{es}$ và số mũ tổng hợp $sf = 2^{es}k + e = 8k + e$.
+  \item[$\widehat P, R(\cdot)$] Tích nội bộ Q24 từ bộ nhân lặp và toán tử chuẩn hóa--làm tròn RNE về \texttt{Posit(32,3)}.
+  \item[$G, R, S, L$] Các bit Guard, Round, Sticky và bit có trọng số thấp nhất (LSB) còn giữ khi làm tròn RNE.
+  \item[MAC] Multiply--accumulate, phép nhân--cộng tích lũy.
+  \item[NF/F] Non-fused và fused, hai biến thể kiến trúc phân biệt theo vị trí làm tròn tích.
+  \item[OPS] Operand selector, khối chọn vai toán hạng $X/Y$.
+  \item[SAC/SBM] Shift amount calculator và shift-based multiplier.
+  \item[LOD/LZD] Leading-one detector và leading-zero detector (bộ dò bit 1 / bit 0 dẫn đầu).
+  \item[RNE] Round to nearest, ties to even (làm tròn gần nhất, hòa về số chẵn).
+  \item[NaR] Not a Real, mã ngoại lệ duy nhất của chuẩn Posit (\texttt{0x80000000}).
+  \item[OOC] Out of context, chế độ tổng hợp và định tuyến riêng lẻ cho lõi IP.
+  \item[F2F / R2R] Đường truyền dữ liệu từ thanh ghi nguồn đến thanh ghi đích (\textit{register-to-register}).
+  \item[WNS/WHS] Worst negative setup slack và worst hold slack.
+\end{description}
+\clearpage
+\pagenumbering{arabic}
+\input{council/01}
+\input{council/02}
+\input{council/03}
+\input{council/04}
+\input{council/05}
+\input{council/06}
+\appendix
+\input{council/appendices}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Tài liệu tham khảo}
+\bibliographystyle{ieeetr}
+{\raggedright\bibliography{council/references}}
+\end{document}

@@ -1,0 +1,120 @@
+\chapter{Thiết kế MAC-F}
+\label{ch:design}
+
+\section{Đường dữ liệu và giao thức}
+Hình~\ref{fig:mac-f-datapath} tách rạch ròi đường dữ liệu, metadata và điều
+khiển, sử dụng hộp viền đôi để phân biệt các khối con đường ống nhiều tầng
+(\texttt{Parser P1/P2}, \texttt{FULL\_TERM T1--T3}, \texttt{posit\_add S1--S5},
+\texttt{posit\_pack P1/P2}) với mạch tổ hợp thuần (viền đơn) và thanh ghi D-FF
+(ô xanh đậm), kèm thanh ranh giới chu kỳ $14\text{--}25$ và chú giải ký hiệu
+chung ở cuối hình. Các khối, độ rộng và vị trí thanh ghi dưới đây được trích
+trực tiếp từ RTL của đề tài; phương pháp pipeline bộ giải mã--chuẩn hóa Posit
+trên FPGA kế thừa cấu trúc đã được khảo sát trong các công trình của
+Jaiswal--So, Podobas--Matsuoka và FloPoCo \cite{jaiswal2018posit,podobas2018posit,murillo2020flopoco}.
+\input{council/datapath/mac}
+Wrapper nhận một giao dịch khi cả ba Parser và đường xử lý đã sẵn sàng.
+Các Parser nhận A/B/C cùng lúc. Wrapper chốt \texttt{cfg\_n} và \texttt{cfg\_ops}
+ở cạnh handshake. Khi cả ba Parser hợp lệ và bộ nhân nhận được dữ liệu,
+wrapper chuyển A/B sang bộ nhân và giữ dấu, số mũ, fraction và cờ của C
+để dùng khi tích sẵn sàng. NaR của bất kỳ toán hạng nào và Zero ở A/B
+ép X/Y bằng 0 ở ngõ vào core; core vẫn phát token init-only.
+Wrapper chuyển cờ ngoại lệ cùng kết quả vào bộ cộng.
+
+Tại \texttt{core\_done}, tích nội bộ được chuẩn hóa và đưa cùng C vào bộ cộng.
+Packer nhận kết quả S5 và giữ mã kết quả, cờ và \texttt{out\_valid} khi
+\texttt{out\_ready=0}. Wrapper giải phóng giao dịch khi response retire.
+Reset xóa các valid và context đang chờ, sau đó các tầng mở lại qua
+các bộ đồng bộ reset và tín hiệu sẵn sàng. Cấu hình OPS ngoài 0/1 hoặc
+n ngoài 0--12 bị chặn ở đầu vào.
+
+\input{council/03_interface}
+
+\section{Giải mã Posit}
+\begin{reportpseudocode}{alg:parser}{Giải mã Posit(32,3) hai tầng (Two-Stage Posit(32,3) Decoding)}
+  {Từ mã Posit $p[31:0]$.}
+  {Dấu $s$, hệ số tỉ lệ $sf$, hai lát phần phân số $f_H[11:0]$, $f_L[13:0]$ và các cờ $z$, $\eta$, $\mathrm{cut}$.}
+  \begin{tabularx}{\linewidth}{@{}r >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{.33\linewidth}@{}}
+    \algline{1}{\textbf{P1} \quad $s\gets p[31]$, $u\gets (p[30:0]=0)$}{Tách bit dấu và kiểm tra tải dữ liệu.}
+    \algline{2}{$z\gets \neg s\land u$, $\eta\gets s\land u$}{Phát hiện các trường hợp Zero và NaR.}
+    \algline{3}{$m\gets p$ \textbf{if} $s=0$ \textbf{else} $(-p\bmod 2^{32})$}{Lấy trị tuyệt đối không dấu 32 bit.}
+    \algline{4}{$r\gets m[30]$, $v\gets m[28:0]$}{Đọc bit regime và hạt dịch trái 29 bit.}
+    \algline{5}{$d\gets (m[29:0]\oplus m[30:1])\mathbin{\|}1$}{Đánh dấu biên chuyển đổi regime và thêm bit chốt.}
+    \algline{6}{$c\gets \mathrm{LZC}(d)$}{Đếm số bit 0 dẫn đầu; chốt tầng P1.}
+    \algline{7}{\textbf{P2} \quad $w[28:0]\gets v\ll c$, $e\gets w[28:26]$}{Dịch chuẩn hóa và trích 3 bit mũ.}
+    \algline{8}{$k[5:0]\gets \mathop{\mathrm{NOT}}\bigl(\{0,c\}\oplus\{6\{r\}\}\bigr)$}{Tính $k$ không rẽ nhánh ($c$ nếu $r=1$, $-c-1$ nếu $r=0$).}
+    \algline{9}{\textbf{if} $z\lor\eta$ \textbf{then} $sf\gets 0$ \textbf{else} $sf\gets (k\ll 3)+e$}{Ghép hệ số tỉ lệ có dấu khi toán hạng hữu hạn.}
+    \algline{10}{$f_H\gets w[25:14]$, $f_L\gets w[13:0]$}{Chia phần phân số thành lát cao và lát thấp.}
+    \algline{11}{$\mathrm{cut}\gets(f_L\ne 0)$}{Bật cờ cắt đuôi nếu lát thấp khác 0.}
+    \algline{12}{\textbf{return} $s,sf,f_H,f_L,z,\eta,\mathrm{cut}$}{Chốt ngõ ra tại tầng đường ống P2.}
+  \end{tabularx}
+\end{reportpseudocode}
+Đường A/B dùng $f_H$ và \texttt{tail\_cut}. Đường C ghép $f_H$ với $f_L$.
+Các cờ Zero/NaR điều khiển cách wrapper sử dụng payload.
+P1 và P2 giữ metadata đồng bộ với dữ liệu khi tầng sau chưa sẵn sàng.
+
+\input{council/03_parser}
+
+\section{Bộ nhân FULL\_TERM}
+\begin{reportpseudocode}{alg:full-term}{Nhân lặp dịch--cộng FULL\_TERM26/Q24 (Iterative Multiplication)}
+  {Hai toán hạng giải mã $A,B$ (gồm $s,sf,f_H,z,\eta,\mathrm{cut}$), cờ $\mathrm{OPS}$ và giới hạn vòng $n$.}
+  {Độ lớn chuẩn hóa $M_{\mathrm{norm}}[25:0]$ (Q24), dấu $s$, tỉ lệ $sf_P$, số vòng $t$ và các cờ cắt đuôi.}
+  \begin{tabularx}{\linewidth}{@{}r >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{.33\linewidth}@{}}
+    \algline{1}{$\mathrm{bypass}\gets z_A\lor z_B\lor \eta_A\lor \eta_B\lor \eta_C$}{Phát hiện Zero/NaR để bỏ qua vòng lặp.}
+    \algline{2}{\textbf{if} $\mathrm{bypass}$ \textbf{then} $(X,Y)\gets (0,0)$ \textbf{else} $\mathrm{OPS\_Select}(A,B,\mathrm{OPS})$}{Chọn toán hạng có popcount nhỏ hơn làm $X$.}
+    \algline{3}{$s\gets s_A\oplus s_B$, $b\gets sf_A+sf_B$, $\mathrm{in\_cut}\gets \mathrm{cut}_A\lor \mathrm{cut}_B$}{Tính dấu tích, tỉ lệ cơ sở và cờ cắt ngõ vào.}
+    \algline{4}{$y_{\mathrm{base}}\gets \{1'b0, 1'b1, f_{H,Y}, 12'b0\}$}{Tạo hạng Q24 nền có bit ẩn $1$.}
+    \algline{5}{$M\gets y_{\mathrm{base}}$, $fx\gets f_{H,X}$, $S\gets 0$, $t\gets 0$, $\mathrm{first}\gets 1$}{Khởi tạo thanh ghi tích lũy và mặt nạ SAC.}
+    \algline{6}{\textbf{while} $fx\ne 0$ \textbf{and} $t<n$ \textbf{do}}{Dừng sớm khi hết bit 1 hoặc chạm ngưỡng $n$.}
+    \algline{7}{\quad $c\gets \mathrm{LZC}(fx[11:0])$, $S\gets S+c+1$}{Tính bước nhảy và độ dịch $S$ từ điểm nhị phân.}
+    \algline{8}{\quad $\mathrm{last\_one}\gets ((fx\mathbin{\&}(fx-1))=0)$}{Kiểm tra bit 1 hiện tại có phải bit cuối.}
+    \algline{9}{\quad $M\gets (\mathrm{first}\ ?\ y_{\mathrm{base}}\ :\ M)+(y_{\mathrm{base}}\gg S)$}{Dịch phải hạng nền theo $S$ và cộng dồn.}
+    \algline{10}{\quad $fx\gets \{fx[10:0], 1'b0\}\ll c$, $t\gets t+1$, $\mathrm{first}\gets 0$}{Loại bỏ bit 1 vừa xử lý bằng dịch trái tăng dần.}
+    \algline{11}{\textbf{end while}}{}
+    \algline{12}{\textbf{if} $M[25]=1$ \textbf{then} $sf_P\gets b+1$, $M_{\mathrm{norm}}\gets \{M[24:0],1'b0\}$}{Chuẩn hóa sau tích nếu tràn sang bit $25$.}
+    \algline{13}{\textbf{else} $sf_P\gets b$, $M_{\mathrm{norm}}\gets \{M[23:0],2'b0\}$}{Ngược lại dịch trái 2 bit về dạng chuẩn 26 bit.}
+    \algline{14}{$\mathrm{approx\_cut}\gets (fx\ne 0)$ \textbf{if} $\neg(z_P\lor \eta_P)$ \textbf{else} $0$}{Ghi nhận cờ cắt gần đúng nếu còn bit chưa cộng.}
+    \algline{15}{\textbf{return} $M_{\mathrm{norm}}, s, sf_P, t, \mathrm{in\_cut}, \mathrm{approx\_cut}$}{Xuất tích chuẩn hóa sang tầng ghép MAC.}
+  \end{tabularx}
+\end{reportpseudocode}
+\begin{samepage}
+Wrapper xử lý riêng các trường hợp bypass Zero/NaR.
+Ở RTL, context giữ $Y$, cấu hình và metadata. T1 phát vị trí dịch và token
+first/last. T2 dịch để tạo term. T3 cộng vào accumulator, chọn $M_0$ làm
+giá trị nền ở token đầu. Token init-only có term bằng 0. Tín hiệu
+\texttt{core\_done} xuất hiện cùng kết quả commit của token cuối.
+Ví dụ FT-05 với A=\texttt{1c900000}, B=\texttt{3c820000} (hex),
+OPS=1 và n ít nhất 2, cho $M=24\,224\,768$, $b=-11$, $t=2$.
+\par\end{samepage}
+
+\input{council/03_multiplier}
+
+\section{Cộng, chuẩn hóa và đóng gói}
+Adapter của MAC-F tăng số mũ khi bit 25 của accumulator bằng 1 và
+căn lại fraction 26 bit theo bit dẫn đầu. Cách ánh xạ này giữ đủ dữ liệu
+tích. Bộ cộng đưa hai toán hạng về cùng thang, cộng hoặc trừ theo dấu và
+chuẩn hóa tổng.
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Năm tầng của bộ cộng dùng chung.}
+  \label{tab:adder-stages}
+  \begin{tabular}{lp{0.74\textwidth}}
+    \hline
+    Tầng & Nhiệm vụ \\
+    \hline
+    S1 & Chọn toán hạng có độ lớn lớn hơn và tính chênh lệch số mũ. \\
+    S2 & Dịch phải để căn thang. Gộp phần đuôi bị dịch thành jam/sticky. \\
+    S3 & Cộng hoặc trừ magnitude 31 bit, tính trước scale khi có carry. \\
+    S4 & Mã hóa ưu tiên bit 1 dẫn đầu trên 31 bit và tạo seed chuẩn hóa. \\
+    S5 & Dịch chuẩn hóa, cập nhật scale và trả metadata ngoại lệ. \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Packer P1 dựng chuỗi regime, exponent và fraction cùng guard, round,
+sticky. P2 quyết định RNE, áp dụng kẹp và tạo mã dấu theo hợp đồng.
+Giữ dữ liệu tích tới bộ cộng giúp MAC-F tránh lượt RNE tích trung gian.
+Các trường hợp gần triệt tiêu vẫn nhạy với sai số đã phát sinh khi cắt
+fraction đầu vào và với bước lượng tử hóa cuối.
+
+\input{council/03_add_pack}

@@ -1,0 +1,61 @@
+\subsection{Các ranh giới giữ context và lựa chọn kiến trúc single-outstanding}
+\label{subsec:single-outstanding}
+
+Các sơ đồ trong chương này mô tả trực tiếp mã nguồn RTL hoàn chỉnh của lõi
+\texttt{MAC-F} cùng hai kiến trúc đối chứng. Cần phân biệt rõ giữa khả năng co
+giãn ở cấp mô-đun con và lịch điều phối ở cấp wrapper IP: ba khối chức năng
+dùng chung gồm bộ giải mã \texttt{posit\_parser\_mul} ($2$ tầng), bộ cộng
+\texttt{posit\_add} ($5$ tầng) và bộ đóng gói \texttt{posit\_pack} ($2$ tầng)
+được thiết kế chuẩn hóa theo giao thức bắt tay \texttt{valid/ready} co giãn đầy
+đủ (\textit{elastic}) nhằm hỗ trợ ghép nối linh hoạt theo nhịp $II=1$ ở từng
+tầng đơn lẻ. Tuy nhiên, ở cấp tích hợp IP \texttt{MAC-NF/F/Quire}, toàn lõi sử
+dụng nhân lặp dịch--cộng tuần tự \texttt{mul\_iter\_core} ($1\text{--}12$ chu kỳ
+phi đường ống) để giữ \texttt{0 DSP}, đồng thời các bài toán tích lũy chuỗi
+($S_i = S_{i-1} + A_i B_i$) có phụ thuộc dữ liệu mang vòng lặp nên mỗi giao dịch
+kế tiếp phụ thuộc trực tiếp kết quả $D_{i-1}$. Vì hai lý do này, wrapper chủ động
+áp đặt cơ chế \textit{single-outstanding} (chỉ phát một giao dịch đang xử lý tại
+một thời điểm) để tối ưu tiết kiệm logic đệm và bảo vệ ngữ cảnh $C$, chấp nhận giữ
+các nhánh \textit{backpressure} liên tầng của các khối con ở trạng thái chờ tĩnh.
+Độ sâu pipeline của các khối cộng và đóng gói vì vậy quyết định trực tiếp độ
+trễ đơn giao dịch, không suy ra $II=1$ cho toàn IP.
+
+\input{council/datapath/context}
+
+Đầu vào cấu hình được chốt ở cạnh \texttt{pair\_accept}; các đầu vào A/B/C
+vào ba Parser cùng cạnh này. \texttt{pair\_retire} là handshake của cụm
+Parser với core, không phải retire ở giao diện ngoài. Ở cạnh đó, wrapper
+giữ $sf_C[10:0]$, fraction $[25:0]$, dấu và metadata của C. Core nhận
+X/Y đã qua OPS hoặc token bypass. Sau khi core phát \texttt{core\_done},
+adapter đưa tích và context C vào S1. Wrapper chỉ nhả slot bận khi
+\texttt{out\_valid} và \texttt{out\_ready} cùng bằng 1.
+
+\begin{engineeringtable}{Chuyển quyền sở hữu dữ liệu ở các ranh giới của MAC-F.}{tab:mac-f-ownership}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{34mm}Y Y@{}}
+\toprule
+Sự kiện & Payload được chốt & Điều kiện giữ và giải phóng \\
+\midrule
+\texttt{pair\_accept} & Mã A/B/C trong Parser, n 4 bit và OPS 1 bit hợp lệ trong wrapper. & Slot bận tới retire hoặc reset. \\
+\texttt{pair\_retire} & A/B đã giảm fraction, C đủ 26 bit, tổng scale và metadata đặc biệt. & C ổn định tới lúc S1 nhận tích. \\
+\texttt{core\_done} & Accumulator Q24, số mũ và cờ được chuyển cùng C vào adder. & Assertion bảo vệ điều kiện nhận của adder. \\
+\texttt{out\_valid} & Mã $D$ và flags 5 bit. & Giữ ổn định khi \texttt{out\_ready=0}, retire đúng một lần khi ready. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+\subsection{Backpressure, hủy giao dịch và trở lại idle}
+
+Một giao dịch hợp lệ bắt đầu tại cạnh nhận. Nếu sink kéo ready thấp
+sau đó, driver không tái cấp đầu vào đang xử lý. Trong trường hợp kết
+quả đã đến Packer P2, P2 không ghi đè slot đang giữ. \texttt{out\_valid}
+và payload được kiểm cùng nhau, vì giữ đúng mã nhưng hạ valid trước
+handshake vẫn làm mất giao dịch. Nếu reset được assert, giao dịch
+chưa retire bị hủy. Sau khi mở reset, các đồng bộ nội bộ và điều kiện
+sẵn sàng chặn nhận cho đến khi pipeline có thể tiếp tục.
+
+Trong kịch bản kiểm chứng giao thức trên bộ dữ liệu mẫu \texttt{FT-05}, phía nhận giữ \texttt{out\_ready=0} khi
+kết quả xuất hiện. Ở các cạnh 14, 15 và 16 tính từ accept, \texttt{d} giữ nguyên
+\texttt{1ae34800} với flags \texttt{00}. Cạnh 17 retire đúng kết quả
+đó. Ca reset riêng hạ reset sau launch khi token chưa ra core,
+sau đó kiểm 30 cạnh không có response cũ. Lượt sau reset dùng lại
+cặp FT-05 và trả đúng mã. Trace này minh họa trực tiếp một kịch bản bắt tay
+tiêu biểu ở phần thiết kế, còn thống kê diện rộng được trình bày ở Chương~\ref{ch:evaluation}.

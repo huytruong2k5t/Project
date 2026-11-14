@@ -1,0 +1,72 @@
+\subsection{P1 lấy độ lớn và tìm chuyển tiếp}
+
+Kiến trúc Parser dùng chung cấu trúc \texttt{posit\_parser\_mul} cho cả ba toán hạng A, B và C.
+Ở P1, dấu và hai cờ đặc biệt đến từ mã gốc. Độ lớn được tạo bằng
+XOR với mặt nạ dấu và cộng bù, dùng đường carry của Artix-7.
+Chuỗi XOR giữa hai bit kề nhau đánh dấu vị trí thay đổi từ run
+đầu sang terminator. Vì vậy cùng một detector tìm chuyển tiếp
+cho cả run 0 và run 1. Thêm sentinel 1 ở cuối giúp định nghĩa
+được kết quả khi mã độ lớn không có terminator trong 31 bit.
+
+\input{council/datapath/parser}
+
+P1 chốt chỉ số \texttt{cnt}, bit regime đầu, seed \texttt{mag[28:0]}
+và dấu/cờ. Seed lấy từ độ lớn gốc. Vector XOR dùng riêng để dò
+vị trí và không đi vào đường fraction. Đây là điểm quan trọng nếu
+đối chiếu hình với RTL: dữ liệu dịch ở P2 là seed của magnitude,
+không phải kết quả XOR. Với mẫu gần cực trị, sentinel giúp detector
+có đầu vào khác 0 để chọn offset xác định.
+
+\subsection{LOD/LZD: quy ước, cấu trúc và vị trí sử dụng}
+
+Trong thiết kế phần cứng Posit \cite{jaiswal2018posit,murillo2020flopoco}, bộ đếm
+bit~0 dẫn đầu (LZD) và bộ đếm bit~1 dẫn đầu (LOD) thường được sử dụng song song
+để xác định độ dài chuỗi \textit{regime} (lần lượt tìm bit~1 hoặc bit~0 đầu
+tiên sau chuỗi lặp) cũng như chuẩn hóa kết quả cộng/trừ. Trong RTL của đề tài,
+khối \sig{lod} được chuẩn hóa theo quy ước tìm \emph{vị trí bit 1 đầu tiên} từ MSB.
+Khi \sig{vld=1}, vị trí $K$ tính từ 0 cũng chính là số bit 0 dẫn đầu
+(LZC). Với đầu vào toàn 0, bộ dò trả $K=0$, \sig{vld=0}.
+
+Parser chuyển cả hai bài toán đếm run về cùng một phép dò:
+XOR hai bit kề tạo bit 1 tại chỗ đổi cực tính đầu tiên, dù
+run bắt đầu bằng 0 hay 1. Khi đó độ dài run là $K+1$.
+Nếu không có chuyển tiếp, sentinel làm $K=30$ và
+\sig{vld=1}. Cách này dùng một đường dò chung cho hai cực tính.
+
+Hình~\ref{fig:lod-regime-tree} khai triển cây gộp radix-4 trong
+Parser A/B/C và Parser của quire. Hình~\ref{fig:lod-sac-adder}
+cho thấy hai cách cài đặt khác: SAC dùng cây nhị phân bốn cấp
+cho fraction 12 bit; S4 và Parser tích NF dùng \sig{casez} 31 bit.
+Tên file \sig{lod\_lzd\_core\_fixed2} và \sig{fixed4}
+không biểu thị radix. Đường READ của quire có phép dò riêng trên
+word 36 bit (Hình~\ref{fig:quire-context}).
+
+\input{council/datapath/regime_lod}
+\input{council/datapath/other_lod}
+
+\subsection{P2 căn payload và tạo hai phần fraction}
+
+P2 vừa dịch seed sang trái, vừa tạo regime signed từ \texttt{cnt}
+và polarity. Khi regime bắt đầu bằng 1, $k=\texttt{cnt}$; khi bắt
+đầu bằng 0, $k=-\texttt{cnt}-1$. Ba bit trên của payload dịch là
+exponent. Phần còn lại được tách thành $f_H[11:0]$ và $f_L[13:0]$.
+P2 ghi cả hai phần và \texttt{tail\_cut} bằng OR của $f_L$.
+Ở A/B, phần thấp chỉ đóng góp thông tin cắt. Ở C, hai phần được
+ghép lại để bộ cộng nhận đủ độ chính xác khả dụng.
+
+Ví dụ FT-05, \texttt{1c900000} giải mã $sf_A=-10$ và
+$F_A=\texttt{0x480}$. \texttt{3c820000} giải mã $sf_B=-1$
+và $F_B=\texttt{0x208}$. Hai mã cùng dấu dương và phần thấp đã
+bỏ bằng 0. Bộ chọn OPS thấy cả hai fraction có hai bit 1, nên
+chọn A làm X và B làm Y. Cách kiểm các số này là giải mã raw
+độc lập, sau đó so dấu, tổng scale và magnitude ở trace core.
+
+\subsection{Điều kiện advance qua P1/P2}
+
+Nếu P2 rỗng hoặc downstream nhận dữ liệu, P2 có thể chốt payload
+mới từ P1. P1 có thể nhận thêm khi P1 rỗng hoặc khi P2 tiến.
+Thanh ghi valid tiến cùng với dữ liệu. Đối với top hiện hành,
+ba Parser retire cùng sự kiện \texttt{pair\_retire}; vì vậy
+dữ liệu C không được ghép với tích từ request khác. Zero và NaR
+đi theo metadata đến wrapper. Fraction hoặc scale của một mã
+đặc biệt chỉ được sử dụng theo nhánh xử lý đã chọn.

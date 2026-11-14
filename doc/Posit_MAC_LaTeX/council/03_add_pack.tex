@@ -1,0 +1,306 @@
+\subsection{Cấu trúc đường ống 5 tầng co giãn của \texttt{posit\_add}}
+
+Bộ cộng dấu phẩy động Posit (\texttt{posit\_add}) được tổ chức thành đường ống
+5 tầng co giãn \texttt{S1..S5} nhằm cân bằng độ sâu logic ở mọi tầng và đáp ứng
+mục tiêu tần số từ $100\text{ MHz}$ trở lên trên Artix-7: mỗi tầng chỉ chứa tối
+đa một phép toán số học hoặc một bộ dịch lớn, giúp năm tầng \texttt{S1..S5}
+đạt độ trễ tổ hợp sau tổng hợp nằm trong khoảng $2{,}958\text{--}4{,}851\text{ ns}$
+(Bảng~\ref{tab:f2f-stages}) và đóng định thời định tuyến trên MAC-F ở
+$F_{\max,\mathrm{R2R}}=154{,}42\text{ MHz}$ (Bảng~\ref{tab:fpga-synth-vs-route}).
+Toàn bộ mạch tuần tự và tín hiệu bắt tay \texttt{valid/ready} được tập trung tại
+mô-đun đỉnh \texttt{posit\_add.sv}, bao bọc năm khối tổ hợp thuần túy từ S1 đến S5
+(Hình~\ref{fig:adder-stages}).
+
+Ở cơ chế co giãn, tín hiệu \texttt{ready} truyền ngược từ S5 về S1: một slot rỗng
+có thể nhận ngay, còn slot đang giữ dữ liệu hợp lệ chỉ tiến lên khi tầng kế tiếp
+sẵn sàng; nếu bị chặn (\texttt{out\_ready=0}), toàn bộ dữ liệu số học và
+metadata (dấu, cờ \texttt{Zero/NaR}, phần dư và \texttt{flags}) được giữ đồng bộ
+với nhau vì chỉ lệch một trường cũng làm sai lệch phép đóng gói cuối.
+
+\input{council/datapath/adder}
+
+Toàn bộ luồng tính toán năm tầng của \texttt{posit\_add} được tóm tắt
+trong Algorithm~\ref{alg:posit-add}, đối chiếu trực tiếp với các khối tổ
+hợp từ S1 đến S5 trong RTL.
+
+\begin{reportpseudocode}{alg:posit-add}{Cộng Posit(32,3) đường ống 5 tầng co giãn (Five-Stage Elastic Addition)}
+  {Hai số hạng chuẩn hóa $A,B$ (với $s, sf[10:0], f[25:0], z, \eta$) và cờ $\mathrm{flags_{in}}[4:0]$.}
+  {Kết quả chuẩn hóa $(s_{\mathrm{out}}, sf[10:0], f_{\mathrm{out}}[52:0], \mathrm{sticky}, z_{\mathrm{out}}, \eta, \mathrm{flags_{out}}[4:0])$.}
+  \begin{tabularx}{\linewidth}{@{}r >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{.33\linewidth}@{}}
+    \algline{1}{\textbf{S1} \quad $d_{AB}\gets sf_A-sf_B$, $d_{BA}\gets sf_B-sf_A$}{Tính hai hiệu scale mở rộng dấu 12 bit song song.}
+    \algline{2}{$\mathrm{choose\_a}\gets \neg z_A\land \bigl(z_B\lor (d_{AB}\ge 0 \land (sf_A\ne sf_B \lor f_A\ge f_B))\bigr)$}{Chọn toán hạng có độ lớn lớn hơn (ưu tiên khác 0).}
+    \algline{3}{$(X,Y)\gets (A,B)$ \textbf{if} $\mathrm{choose\_a}$ \textbf{else} $(B,A)$, $\delta \gets \min(|\Delta sf|,29)$}{Hoán đổi toán hạng; xác định độ dịch $\delta$ và cờ kẹp $|\Delta sf|>28$.}
+    \algline{4}{$\mathrm{sub}\gets \neg(z_A\lor z_B)\land (s_A\ne s_B)$, $\eta\gets \eta_A\lor\eta_B\lor\mathrm{flags_{in}}[4]$}{Xác định phép trừ hiệu dụng và lan truyền cờ NaR.}
+    \algline{5}{\textbf{S2} \quad $w_Y\gets \{1'b0, 1'b1, f_Y[25:0], 3'b0\}$ \textbf{if} $\neg(z_A\lor z_B)$ \textbf{else} $0$}{Mở rộng toán hạng nhỏ thành từ 31 bit có bit ẩn $1$.}
+    \algline{6}{$y_{\mathrm{align}}[30:1]\gets (w_Y\gg \delta)[30:1]$, $\mathrm{tail}\gets \mathrm{clamped}\lor \mathrm{raw\_tail}$}{Dịch phải 31 bit và gom mặt nạ nhiệt kế cho bit rơi.}
+    \algline{7}{$y_{\mathrm{align}}[0]\gets ((w_Y\gg \delta)[0]\lor \mathrm{tail})$ \textbf{if} $\neg(z_A\lor z_B)$ \textbf{else} $0$}{Chèn bit jam tại LSB khi dịch rơi bit hoặc kẹp $\delta$.}
+    \algline{8}{\textbf{S3} \quad $w_X\gets \{1'b0, 1'b1, f_X[25:0], 3'b0\}$ \textbf{if} $\neg(z_A\land z_B)$ \textbf{else} $0$}{Đưa toán hạng lớn về dạng 31 bit để cộng/trừ.}
+    \algline{9}{$M\gets w_X-y_{\mathrm{align}}$ \textbf{if} $\mathrm{sub}$ \textbf{else} $w_X+y_{\mathrm{align}}$, $sf_{\mathrm{inc}}\gets sf_X+1$}{Cộng/trừ 31 bit và cộng bù trước $1$ cho scale.}
+    \algline{10}{\textbf{S4} \quad $(K,\mathrm{nz})\gets \mathrm{LOD}(M[30:0])$, $\mathrm{lost}\gets M[30]\land M[0]$}{Dò bit 1 dẫn đầu thống nhất 31 bit; kiểm tra carry bị mất.}
+    \algline{11}{$\mathrm{seed}[29:0]\gets \{M[29:2], M[1]\lor\mathrm{lost}, M[0]\}$, $\mathrm{sticky}_{\mathrm{raw}}\gets \mathrm{tail}\lor\mathrm{lost}$}{Tạo hạt dịch 30 bit và cập nhật sticky thô.}
+    \algline{12}{\textbf{S5} \quad $f_{\mathrm{hi}}[28:0]\gets (\mathrm{seed}\ll K)[29:1]$, $sf\gets sf_{\mathrm{inc}}-K$}{Dịch trái 30 bit chuẩn hóa và cập nhật scale đồng nhất.}
+    \algline{13}{$z_{\mathrm{out}}\gets \neg\eta\land ((z_A\land z_B)\lor \neg\mathrm{nz})$, $f_{\mathrm{out}}\gets \{f_{\mathrm{hi}}, 24'b0\}$}{Phân loại Zero/NaR và nối 24 bit 0 tạo ngõ ra 53 bit.}
+    \algline{14}{\textbf{return} $s_{\mathrm{out}}, sf, f_{\mathrm{out}}, \mathrm{sticky}_{\mathrm{raw}}, z_{\mathrm{out}}, \eta, \mathrm{flags}_{\mathrm{out}}$}{Chốt thanh ghi S5 kèm cập nhật bit \texttt{inexact}.}
+  \end{tabularx}
+\end{reportpseudocode}
+
+\subsection{Tầng S1: Chuẩn bị, so sánh độ lớn và hoán đổi toán hạng}
+
+Ở đầu vào MAC-F, $X$ và $Y$ của bộ cộng là hai số hạng được sắp lại theo độ lớn
+($|X|\ge|Y|$); ký hiệu này dùng trong phạm vi bộ cộng và khác với vai $X/Y$ của
+khối OPS ở bộ nhân. Mỗi số hạng đưa vào S1 gồm fraction 26 bit, scale signed 11 bit,
+dấu và cờ đặc biệt. Tầng S1 (\texttt{posit\_add\_prepare\_comb}, Hình~\ref{fig:adder-s1})
+tính song song hai hiệu scale mở rộng dấu 12 bit (\texttt{diff\_ab}, \texttt{diff\_ba}),
+so sánh ngang bằng scale (\texttt{sf\_equal}) và so sánh fraction (\texttt{frac\_a\_ge\_b})
+để tạo tín hiệu điều khiển \texttt{choose\_a\_cond} ưu tiên toán hạng khác 0.
+
+Cờ kẹp \texttt{clamp\_ab/\!ba} kiểm tra đồng thời nhóm bit cao \texttt{diff[10:5]}
+khác 0 hoặc \texttt{diff[4:0] > 28} để nhận biết $|\Delta sf|>28$ mà không bị
+cuộn modulo 5 bit khi chênh lệch scale lớn. Để giảm fanout và tránh nghẽn định
+tuyến trên đường tráo toán hạng $62$ nhánh, RTL tách tín hiệu chọn thành bốn lưới
+có thuộc tính \texttt{dont\_touch}: \texttt{choose\_a\_frac0..2} điều khiển riêng
+ba lát fraction \texttt{[8:0]}, \texttt{[17:9]}, \texttt{[25:18]} và
+\texttt{choose\_a\_meta} điều khiển \texttt{sign\_base}/\texttt{sf\_base}, bảo toàn
+nguyên vẹn ranh giới thanh ghi và số chu kỳ đường ống.
+
+\input{council/datapath/adder_s1}
+
+\subsection{Tầng S2: Dịch phải căn chỉnh 31 bit và mặt nạ nhiệt tạo jam}
+
+Tầng S2 (\texttt{posit\_add\_align\_comb}, Hình~\ref{fig:adder-s2}) ghép số hạng
+nhỏ thành từ 31 bit $\texttt{y\_seed} = \{1'\mathrm{b0}, 1'\mathrm{b1}, \texttt{y\_frac}, 3'\mathrm{b000}\}$
+và dịch phải qua bộ dịch \texttt{dyn\_right\_shifter\_fixed4} theo
+\texttt{shift\_amount[4:0]}. Song song với bộ dịch, mạch tổ hợp gồm 25 bộ so sánh
+hằng dựng mặt nạ nhiệt $\texttt{discard\_mask}[j] = (j + 3 < \texttt{shift\_amount})$
+để thu gọn toàn bộ các bit bị dịch rơi xuống dưới bit~0 thành \texttt{raw\_tail}.
+
+Khi \texttt{both\_nonzero=1} và không bị kẹp, 30 bit cao lấy phần dịch
+\texttt{shifted\_full[30:1]}; ngược lại (\texttt{clamped=1} hoặc có một số hạng
+bằng 0), 30 bit cao được xóa về 0. Bit \texttt{y[0]} được hợp nhất cùng phần dư
+$\texttt{both\_nonzero} \land (\texttt{clamped} \lor \texttt{shifted\_full}[0] \lor \texttt{raw\_tail})$,
+còn cờ \texttt{alignment\_tail} lưu riêng trạng thái rơi bit của phép căn chỉnh để
+truyền tiếp qua S3 tới S4. Nhờ kiểm soát qua \texttt{both\_nonzero}, nhánh kẹp
+không bao giờ tự phát sinh bit jam từ toán hạng 0.
+
+\input{council/datapath/adder_s2}
+
+\subsection{Tầng S3 và S4: Cộng/trừ độ lớn, tiền tăng scale và dò bit dẫn đầu}
+
+Hình~\ref{fig:adder-tail} minh họa đầy đủ đường dữ liệu của hai tầng S3
+(\texttt{posit\_add\_arith\_comb}) và S4 (\texttt{posit\_add\_lod\_comb}):
+\begin{itemize}
+  \item \textbf{Tầng S3:} Ghép $X = \{1'\mathrm{b0}, 1'\mathrm{b1}, \texttt{x\_frac}, 3'\mathrm{b000}\}$
+  rồi tính \texttt{magnitude[30:0] = subtract ? (X - Y) : (X + Y)}. Vì S1 đã bảo đảm
+  $|X|\ge|Y|$ trên mọi cặp hữu hạn khác 0, hiệu $X-Y$ luôn không âm nên không cần
+  mạch lấy trị tuyệt đối ở đầu ra S3. Song song với phép cộng/trừ, S3 tính trước
+  $\texttt{sf\_inc} = \texttt{sf\_base} + 11'\mathrm{sd1}$ để chuẩn bị cho bước chuẩn hóa ở S5.
+  \item \textbf{Tầng S4:} Bộ dò ưu tiên 31 bit \texttt{lod\_lzd\_core\_fixed2} quét từ
+  MSB của \texttt{s3\_mag\_q[30:0]} để xác định \texttt{leading\_count[4:0]} và cờ
+  \texttt{nonzero}. Đồng thời, nếu phép cộng có tràn nhớ lên bit~30 và bit~0 bằng~1
+  ($\texttt{lost\_carry} = M[30]\land M[0]$), S4 jam ngay bit này vào vị trí bit~1 của
+  $\texttt{norm\_seed[29:0]} = \{M[29:2], M[1]\lor\texttt{lost\_carry}, M[0]\}$ và OR
+  vào \texttt{sticky\_raw} $= \texttt{s3\_tail\_q} \lor \texttt{lost\_carry}$.
+\end{itemize}
+
+\input{council/datapath/adder_tail}
+
+Một trường hợp dễ kiểm là $\widehat P$ và C có cùng magnitude,
+trái dấu và $\Delta sf=0$. Hai significand thẳng hàng,
+hiệu bằng 0, LOD không tìm thấy bit 1 và Packer chọn mã Zero.
+Nếu số hạng thứ hai chỉ nhỏ hơn một bit thấp, LOD thấy bit 1
+ở xa đầu, scale giảm và bit thấp được kéo lên. Vì vậy một
+thay đổi nhỏ trước adder có thể làm sai số tương đối tăng
+đáng kể trong nhóm gần triệt tiêu. Đó là lý do Chương~\ref{ch:measurements}
+dùng sai số tuyệt đối cho nhóm này.
+
+\subsection{Tầng S5: Dịch trái chuẩn hóa, cập nhật scale và phân loại đầu ra}
+
+Khối tổ hợp S5 (\texttt{posit\_add\_norm\_comb}, Hình~\ref{fig:adder-s5}) nhận
+bộ đếm \texttt{leading\_count[4:0]} để dịch trái từ \texttt{norm\_seed[29:0]} qua
+bộ dịch \texttt{dyn\_left\_shifter\_fixed6}. Vì phép dịch trái 30 bit tự đẩy bit ẩn~1 lên
+vượt khỏi biên bit~28 của kết quả trong mọi chế độ (tràn nhớ $K=0$, bình thường
+$K=1$, và triệt tiêu sâu $K\ge 2$), một phép trừ duy nhất
+$\texttt{sf} = \texttt{sf\_inc} - K$ xử lý thống nhất cả ba chế độ mà không cần bộ
+chọn tăng/giảm scale riêng.
+
+Tại thanh ghi đầu ra S5, RTL chỉ chốt 29 bit fraction cao vào \texttt{frac\_hi\_q[28:0]}
+và nối thêm 24 bit~0 hằng tại biên giao diện (\texttt{frac = \{frac\_hi\_q, 24'b0\}}),
+nhờ vậy loại bỏ được 24 flip-flop luôn mang giá trị 0. Đồng thời, logic phân loại
+\texttt{Zero/NaR} đặt tại tầng Packer thay vì chèn 41 MUX xóa bus số học trên đường
+găng S5; tầng S5 chỉ cập nhật trực tiếp cờ ngoại lệ (\texttt{flags\_out[4]=is\_nar\_in},
+và bit \texttt{inexact} chỉ OR thêm \texttt{sticky\_raw} khi kết quả khác Zero).
+
+\input{council/datapath/adder_s5}
+
+\subsection{Truy vết thanh ghi bộ cộng qua S1--S5}
+
+Để đối chiếu trực tiếp với hai phép tính tay tại Chương~\ref{ch:arithmetic}
+($3{,}5 + 0{,}75 = 4{,}25$ và $3{,}5 + (-3{,}25) = 0{,}25$),
+Bảng~\ref{tab:adder-trace-examples} ghi lại giá trị chốt trong các thanh ghi
+của \texttt{posit\_add} tại ranh giới từng tầng \texttt{S1..S5}. Cùng một bộ
+dò LOD 31 bit (\texttt{K=0} khi có tràn nhớ tại bit~30; \texttt{K=4} khi
+bit dẫn đầu rơi xuống bit~26 do triệt tiêu) và cùng một phép trừ
+\texttt{sf = sf\_inc - K} xử lý thống nhất cả hai chế độ mà không cần bộ
+phân nhánh tăng/giảm scale riêng.
+
+\begin{engineeringtable}{Truy vết giá trị thanh ghi qua năm tầng của \texttt{posit\_add} cho trường hợp tràn nhớ ($4{,}25$) và triệt tiêu ($0{,}25$).}{tab:adder-trace-examples}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{16mm} >{\raggedright\arraybackslash}p{62mm} >{\raggedright\arraybackslash}p{62mm}@{}}
+\toprule
+Tầng & Ca 1: $3{,}5 + 0{,}75 = 4{,}25$ (cộng tràn nhớ) & Ca 2: $3{,}5 + (-3{,}25) = 0{,}25$ (trừ triệt tiêu) \\
+\midrule
+Đầu vào &
+$A{:}\ sf{=}1,\ f{=}\texttt{26'h3000000},\ s{=}0$\newline
+$B{:}\ sf{=}-1,\ f{=}\texttt{26'h2000000},\ s{=}0$ &
+$A{:}\ sf{=}1,\ f{=}\texttt{26'h3000000},\ s{=}0$\newline
+$B{:}\ sf{=}1,\ f{=}\texttt{26'h2800000},\ s{=}1$ \\
+\addlinespace[3pt]
+\texttt{S1} &
+$\sig{choose\_a}{=}1$, $\sig{s1\_shift\_q}{=}2$, $\sig{s1\_sub\_q}{=}0$, $\sig{s1\_sf\_q}{=}1$ &
+$\sig{choose\_a}{=}1$, $\sig{s1\_shift\_q}{=}0$, $\sig{s1\_sub\_q}{=}1$, $\sig{s1\_sf\_q}{=}1$ \\
+\texttt{S2} &
+$X{=}\texttt{31'h38000000}$, $\sig{s2\_y\_q}{=}\texttt{31'h0c000000}$, $\sig{tail}{=}0$ &
+$X{=}\texttt{31'h38000000}$, $\sig{s2\_y\_q}{=}\texttt{31'h34000000}$, $\sig{tail}{=}0$ \\
+\texttt{S3} &
+$\sig{s3\_mag\_q}{=}\texttt{31'h44000000}$ (bit~30 $=1$), $\sig{s3\_sf\_inc\_q}{=}2$ &
+$\sig{s3\_mag\_q}{=}\texttt{31'h04000000}$ (bit~26 $=1$), $\sig{s3\_sf\_inc\_q}{=}2$ \\
+\texttt{S4} &
+$\sig{s4\_count\_q}{=}0$, $\sig{s4\_seed\_q}{=}\texttt{30'h04000000}$, $\sig{sticky}{=}0$ &
+$\sig{s4\_count\_q}{=}4$, $\sig{s4\_seed\_q}{=}\texttt{30'h04000000}$, $\sig{sticky}{=}0$ \\
+\texttt{S5} &
+$\sig{sf}{=}2-0=2$, $\sig{frac\_hi\_q}{=}\texttt{29'h02000000}$ ($1{,}0625\times 2^2=4{,}25$) &
+$\sig{sf}{=}2-4=-2$, $\sig{frac\_hi\_q}{=}\texttt{29'h00000000}$ ($1{,}0\times 2^{-2}=0{,}25$) \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+\subsection{Packer P1 tạo G/R/S và phân loại}
+
+Quá trình đóng gói hai tầng của bộ cộng/tích được mô tả trong
+Algorithm~\ref{alg:posit-pack}, tương ứng với hai mô-đun
+\texttt{posit\_pack\_prepare} (P1) và \texttt{posit\_pack\_finish} (P2).
+
+\begin{reportpseudocode}{alg:posit-pack}{Đóng gói và làm tròn RNE hai tầng (Two-Stage Posit(32,3) RNE Packing)}
+  {Kết quả chuẩn hóa $(s, sf[10:0], f[52:0], \mathrm{sticky}, z, \eta, \mathrm{flags_{in}}[4:0])$.}
+  {Từ mã đóng gói Posit(32,3) $d[31:0]$ và cờ trạng thái $\mathrm{flags}[4:0]$.}
+  \begin{tabularx}{\linewidth}{@{}r >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{.33\linewidth}@{}}
+    \algline{1}{\textbf{P1} \quad $r_0\gets \neg sf[10]$, $\mathrm{offset}[4:0]\gets sf[7:3]\oplus\{5\{sf[10]\}\}$}{Xác định bit regime đầu và độ dịch không rẽ nhánh.}
+    \algline{2}{$\mathrm{payload}[58:0]\gets \{r_0, \neg r_0, sf[2:0], f[52:0], 1'b0\}$}{Ghép 59 bit gồm regime, bit dừng, mũ và phân số.}
+    \algline{3}{$\mathrm{shifted}\gets (\mathrm{payload}\gg_r \mathrm{offset})$}{Dịch phải điền $r_0$ qua 5 tầng MUX để tạo regime.}
+    \algline{4}{$m_{\mathrm{trunc}}[30:0]\gets \mathrm{shifted}[58:28]$, $G\gets \mathrm{shifted}[27]$, $R\gets \mathrm{shifted}[26]$}{Tách độ lớn 31 bit và hai bit làm tròn Guard, Round.}
+    \algline{5}{$S\gets \mathrm{sticky}\lor (\bigvee f[24:0])\lor \bigvee_{k=0}^{30}(\{sf[2:0],f[52:25]\}_k \land (k<\mathrm{offset}))$}{Tính bit Sticky song song bằng mặt nạ nhiệt kế.}
+    \algline{6}{$\mathrm{sel}\gets \mathrm{Classify}(\eta, z, sf, f, \mathrm{sticky})\in\{\mathrm{NAR},\mathrm{ZERO},\mathrm{MAX},\mathrm{MIN},\mathrm{NORM}\}$}{Ưu tiên NaR, Zero và bão hòa tại biên $sf\in[-240,240]$.}
+    \algline{7}{\textbf{P2} \quad $\mathrm{round\_up}\gets G\land (m_{\mathrm{trunc}}[0]\lor R\lor S)$}{Kiểm tra điều kiện làm tròn gần nhất chẵn (RNE).}
+    \algline{8}{$\mathrm{base}\gets \{1'b0, m_{\mathrm{trunc}}\}\oplus \{32\{s\}\}$, $\mathrm{inc}\gets s\oplus \mathrm{round\_up}$}{Gộp bù hai khi $s=1$ và lượng tăng RNE thành một bộ cộng.}
+    \algline{9}{$d_{\mathrm{round}}\gets \mathrm{base}+\mathrm{inc}$}{Tính từ mã đã làm tròn trên nhánh bình thường.}
+    \algline{10}{\textbf{if} $\mathrm{sel}=\mathrm{NAR}$ \textbf{then} $d\gets \texttt{32'h80000000}$, $\mathrm{flags}\gets \texttt{5'b10000}$}{Xuất mẫu NaR và đặt cờ ngoại lệ NaR.}
+    \algline{11}{\textbf{else if} $\mathrm{sel}\in\{\mathrm{ZERO},\mathrm{MAX},\mathrm{MIN}\}$ \textbf{then} $d\gets \mathrm{Const}(\mathrm{sel},s)$}{Xuất $0$, $\pm\mathrm{maxpos}$ hoặc $\pm\mathrm{minpos}$ theo $\mathrm{sel}$.}
+    \algline{12}{\textbf{else} $d\gets \mathrm{Clamp}(m_{\mathrm{trunc}}, s, d_{\mathrm{round}})$, $\mathrm{flags}[1]\gets \mathrm{flags_{in}}[1]\lor G\lor R\lor S$}{Chặn tràn biên max/min và cập nhật cờ \texttt{inexact}.}
+    \algline{13}{\textbf{return} $d, \mathrm{flags}$}{Chốt kết quả Posit(32,3) cuối đường ống P2.}
+  \end{tabularx}
+\end{reportpseudocode}
+
+P1 nhận scale signed 11 bit, fraction 53 bit, dấu, sticky và
+metadata ngoại lệ. Bit regime đầu là nghịch đảo dấu của scale.
+Với $k\ge0$, offset bằng phần thấp của $k$. Với $k<0$, offset
+là $|k|-1$ trên miền normal. Payload 59 bit ghép bit regime đầu,
+terminator, exponent 3 bit, fraction 53 bit và một bit 0.
+Bộ dịch phải điền bit regime đầu vào các vị trí trống bên trái,
+tạo magnitude giữ lại từ \texttt{shifted[58:28]}. Hai bit
+tiếp theo là guard và round.
+
+\input{council/datapath/packer}
+
+P1 tính sticky song song với bộ dịch. Fraction thấp
+\texttt{frac[24:0]} luôn nằm dưới round, nên OR trực tiếp với
+sticky đầu vào. Các bit cao hơn chỉ tham gia sticky khi vị
+trí của chúng nhỏ hơn offset tương ứng. Mỗi bit dùng một so
+sánh hằng theo offset và cổng AND với dữ liệu. Cuối cùng OR
+các bit được chọn. Nhờ vậy phép tìm sticky không đi nối tiếp
+qua toàn bộ đường barrel shifter.
+
+\subsection{Packer P2 làm tròn, kẹp và mã hóa dấu}
+
+Với magnitude giữ $m$ và quyết định tăng $r\in\{0,1\}$,
+đầu ra dương bình thường là $m+r$. Với số âm, biểu thức
+$-(m+r)=\mathop{\mathrm{NOT}}m+(1-r)$ trên 32 bit cho phép
+ghép việc tăng RNE và mã hóa bù hai. RTL chọn XOR theo dấu
+và dùng increment \texttt{sign XOR round\_up}. Đường chọn
+ngoại lệ vẫn có thể trả Zero, NaR, minpos hoặc maxpos.
+
+P1 mang theo chỉ dấu nhánh đặc biệt và flags. NaR ưu tiên,
+sau đó Zero và các nhánh biên. Với nhánh thường,
+\texttt{inexact} OR thông tin mất từ trước với G/R/S.
+\texttt{approx\_cut} vẫn chỉ báo còn số hạng tại điểm dừng
+bộ nhân. Việc tách hai cờ giúp scoreboard phân biệt
+lượng tử hóa ở Packer với giới hạn vòng.
+
+\section{Phạm vi đối chứng NF và quire}
+
+Các khối P1/P2, nhân lặp, adder và Packer cuối của MAC-NF và MAC-F được
+triển khai đồng bộ trên cùng bộ nguồn RTL dùng chung khối nhân. NF có đường tích đi qua
+Packer tích hai tầng P1/P2 (\texttt{posit\_product\_pack}) và Parser tích
+(\texttt{posit\_magnitude\_parse}) rồi đến adder (Hình~\ref{fig:nf-f-split}).
+Cụ thể, ở tầng P1, mạch tổ hợp \texttt{posit\_pack\_prepare} dịch phải 59 bit
+và tạo mặt nạ nhiệt sticky rồi chốt \texttt{p1\_mag\_trunc\_q[30:0]},
+\texttt{G/R/S}, \texttt{p1\_sign\_q}, \texttt{p1\_special\_sel\_q[2:0]},
+\texttt{p1\_flags\_q[4:0]} và \texttt{p1\_valid\_q}. Ở tầng P2, mạch tổ hợp
+\texttt{posit\_pack\_finish} làm tròn RNE 32 bit (\texttt{sign=0}) và ghép nhánh
+ngoại lệ rồi chốt \texttt{d\_q[31:0]}, \texttt{flags\_q[4:0]}, \texttt{sign\_q}
+và \texttt{p2\_valid\_q}. Tiếp đó, \texttt{posit\_magnitude\_parse} giải mã tổ hợp
+trước khi bank tích NF chốt \texttt{norm\_valid\_q} để đưa vào S1.
+
+\input{council/datapath/nf} Khi giải thích
+chênh lệch tài nguyên, so hai kết quả trong cùng một lượt
+tổng hợp. Khi giải thích chu kỳ, dùng cùng dãy A/B và cùng
+điều kiện backpressure; không lấy độ sâu hình khối để suy
+ra tần số hay throughput.
+
+Với quy ước đo tuần tự từng phép một (mỗi lần 1 phép đang chạy, \texttt{out\_ready=1}, đếm gộp từ cạnh chấp nhận đầu vào đến khi hoàn tất rút kết quả và \texttt{in\_ready} sẵn sàng ở cạnh kế tiếp), số chu kỳ của một phép MAC khác 0 phụ thuộc số bit~1 được chọn $t = \mathrm{popcount}(X_{\mathrm{mant}})$ ở bộ nhân như sau:
+\begin{itemize}
+\item \textbf{MAC-F:} $T_F(t) = 13 + \max(1,t) \in [14, 25]$ chu kỳ với $0 \le t \le 12$ (Parser \texttt{P1/P2}: 2; nạp ngữ cảnh/\texttt{T1}: 3; lặp \texttt{T2/T3}: $\max(1,t)$; Adder \texttt{S1..S5}: 5; Packer \texttt{P1/P2}: 2; chuyển tiếp retire sang \texttt{in\_ready}: 1; riêng khoảng cách từ cạnh nhận đến \texttt{out\_valid} là $12 + \max(1,t)$ cạnh).
+\item \textbf{MAC-NF:} $T_{NF}(t) = 16 + \max(1,t) = T_F(t) + 3 \in [17, 28]$ chu kỳ. Do \texttt{posit\_magnitude\_parse} là mạch tổ hợp, phần chênh đúng $+3$ chu kỳ đến từ 2 tầng FF \texttt{P1/P2} của \texttt{posit\_product\_pack} và 1 tầng FF \texttt{norm\_valid\_q} tại bank tích NF trước tầng cộng.
+\item \textbf{MAC-Quire:} Lệnh \texttt{CLEAR} mất $3$ chu kỳ; lệnh \texttt{MAC} với tích khác 0/NaR mất $36 + \max(1,t) = T_F(t) + 23 \in [37, 48]$ chu kỳ do FSM đi qua 30 chu kỳ xử lý tại bank tích lũy 27 từ sau \texttt{core\_done} (thay vì 7 chu kỳ nối thẳng qua Adder/Packer ở MAC-F), còn tích bằng 0 hoặc NaR bỏ qua vòng bank 27 bước để xong sau 1 chu kỳ; lệnh \texttt{READ} mất $59$ chu kỳ để quét/giảm 27 từ quire và đóng gói \texttt{posit\_pack}.
+\end{itemize}
+
+Quire dùng mô-đun đỉnh \texttt{posit\_mac\_quire} và các module backend
+cập nhật theo từng từ 36 bit. Lệnh MAC căn tích
+sang lưới $2^{-480}$ và giữ $Q$ có dấu 972 bit. CLEAR đưa
+$Q$/count/status về trạng thái khởi tạo; READ quét $Q$ để
+tạo fraction và sticky cho Packer. Chi tiết hiệu quả tối ưu hóa của kiến trúc
+backend theo word (từ phiên bản dịch toàn vector sang cập nhật theo từ 36 bit)
+và số chu kỳ đo trên chuỗi tích lũy được trình bày cụ thể trong Chương~\ref{ch:measurements}.
+
+\input{council/datapath/quire}
+
+\subsection{Commit quire và phép đọc giữ trạng thái}
+
+Một MAC hợp lệ tạo term trên lưới quire từ dấu, magnitude
+Q24 và scale. Phần căn tích chuẩn bị descriptor gồm hệ số,
+chỉ số word và offset. Backend cập nhật theo từng word với
+carry/borrow qua ranh giới, rồi commit state hoàn chỉnh.
+Trong thời gian cập nhật, giao diện giữ một lệnh outstanding.
+MAC chỉ trả acknowledge sau khi state đã cập nhật và count
+tăng. Nếu sink kéo ready thấp, response giữ ổn định và không
+commit lặp. C được giữ ở driver đối với NF/F; quire có state
+trong backend và không có cổng C.
+
+READ xác định dấu và bit dẫn đầu của Q, dựng một cửa sổ
+fraction và tổng hợp sticky cho các bit thấp hơn cửa sổ.
+Packer dùng dữ liệu đó để làm tròn đầu ra. READ giữ Q,
+count và trạng thái loss của chuỗi. CLEAR tạo epoch mới
+với Q và count bằng 0. Khi count đã đạt 1.024, lệnh MAC
+tiếp bị chặn; READ và CLEAR vẫn có vai trò kết thúc hoặc
+khởi tạo lại chuỗi. Điểm này được sử dụng trong benchmark:
+mỗi chuỗi dài 1.024 có đúng 1.024 MAC rồi READ.
+
+\begin{engineeringtable}{Giao diện lệnh của \texttt{posit\_mac\_quire} theo đặc tả kỹ thuật.}{tab:quire-command-flow}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{22mm}Y Y@{}}
+\toprule
+Lệnh & Điều kiện và tác động state & Response \\
+\midrule
+CLEAR & Xóa Q, count và trạng thái của epoch. & Ack với out\_cmd=CLEAR, d=0. \\
+MAC & Nhận A/B và cấu hình khi còn dung lượng, tạo và commit term. & Ack với d=0, flags phản ánh trạng thái/loss hiện tại. \\
+READ & Quét state Q đã commit, giữ state. & D là kết quả RNE và flags của READ. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}

@@ -1,0 +1,245 @@
+\section{Độ rộng tích, sai số và chuẩn hóa phép nhân}
+
+Đặt $Y = 4096 + F_Y$ là significand nguyên 13 bit (gồm bit ẩn và 12 bit fraction
+cao) của toán hạng được dịch, và $M_0 = Y 2^{12}$ là giá trị nền khởi tạo trên
+lưới \texttt{Q24}. Vì $M_0$ có $12$ bit thấp bằng $0$, mọi lượng dịch phải
+$S_i \in \{1, \dots, 12\}$ đều bảo toàn toàn bộ trọng số khác $0$ của từng số
+hạng tích riêng phần. Khi xử lý trọn vẹn mọi bit $1$ trong 12 bit fraction của $X$,
+tích nguyên bằng $(4096+F_X)(4096+F_Y)$ với cận trên $8191^2 = 67\,092\,481 < 2^{26}$.
+Do đó 26 bit không dấu của thanh ghi tích lũy \texttt{Q24} (2 bit nguyên và 24 bit
+fraction) đủ chứa mọi tích có thể xảy ra mà không tràn ngoài miền hợp lệ; bit 25
+bằng $1$ chính là tín hiệu phát hiện tràn chuẩn hóa ($M/2^{24} \ge 2$).
+
+Gọi $a = 1+f_A$ và $b = 1+f_B$ là hai significand đầy đủ ban đầu, còn
+$a' = a - \delta_a$ và $b' = b - \delta_b$ là hai significand sau khi giữ 12 bit
+fraction cao ($0 \le \delta_a, \delta_b < 2^{-12}$). Độ lệch do bước cắt đầu vào
+được phân tách đại số theo biểu thức:
+\[
+ab - a'b' = a'\delta_b + b'\delta_a + \delta_a\delta_b.
+\]
+Từ tính chất không âm của các phần dư $\delta_a, \delta_b$ và các số hạng dịch
+tiếp theo, với cùng một cặp đầu vào $(A, B)$, ký hiệu độ lớn của tích đầy đủ,
+tích 12 bit fraction và tích RTL ở giới hạn $n$ vòng lần lượt là $|P|$, $|P_{12}|$
+và $|\widehat P|$, ta luôn có tính đơn điệu theo độ lớn tại đầu ra bộ nhân:
+\[
+|\widehat P| \le |P_{12}| \le |P|.
+\]
+Hệ quả quan trọng là bộ nhân luôn mang \textbf{thiên lệch cắt một phía về không}
+(\textit{one-sided truncation bias}): phép kiểm tra toàn diện trên toàn bộ
+$125.668$ cặp $(A,B)$ hữu hạn khác $0$ của tập mẫu thực nghiệm ở cấu hình
+\texttt{OPS1/n12} ghi nhận bất đẳng thức $|\widehat P| \le |P|$ đúng tuyệt đối
+trên \textbf{100\% mẫu} ($117.486$ cặp nhỏ hơn chặt và $8.182$ cặp bằng nhau
+chính xác khi 14 bit fraction thấp đều bằng $0$). Khi cộng với toán hạng trái dấu
+$C$ và đi qua bước lượng tử hóa RNE ở cuối MAC, thiên lệch âm có hệ thống này đôi
+khi được bù trừ ngẫu nhiên bởi chiều làm tròn lên của bước đóng gói trung gian
+$R(\widehat P)$ trong \texttt{MAC-NF} (giải thích hiện tượng một số phân vị
+tương đối đơn bước tại Chương~\ref{ch:measurements}).
+
+\begin{engineeringtable}{Phân tách các nguồn sai số và mốc đối chiếu độc lập.}{tab:error-mechanisms}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{32mm}Y Y@{}}
+\toprule
+Nguồn sai số & Cơ chế và cờ trạng thái trong RTL & Mốc đối chiếu độc lập \\
+\midrule
+Cắt fraction đầu vào & Loại bỏ bit thấp ngoài 12 bit ở A hoặc B; chốt cờ \texttt{input\_cut}. & So tích 12 bit $P_{12}$ với tích chính xác $P$ đủ 26 bit fraction. \\
+Giới hạn vòng lặp & Mặt nạ $X$ vẫn còn bit 1 khi dừng tại $t=n$; xuất cờ \texttt{approx\_cut}. & So tích RTL $\widehat P$ với $P_{12}$ tại \texttt{core\_done}. \\
+Lượng tử hóa khi đóng gói & Giá trị giải mã từ từ mã 32 bit lệch so với giá trị trước làm tròn RNE. & So $\operatorname{decode}(D)$ với $R(\widehat P + C)$ (hoặc $R(R(\widehat P)+C)$). \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+\subsection{Ví dụ minh họa phép nhân Posit(32,3) từng bước}
+
+Xét phép nhân hai số dương $A = 3{,}5 = +2^1 \times 1{,}75$ (mã \texttt{0x47000000})
+và $B = 0{,}75 = +2^{-1} \times 1{,}5$ (mã \texttt{0x3E000000}). Trình tự 4 bước
+thực hiện phép nhân Posit được minh họa chi tiết như sau:
+
+\begin{enumerate}
+  \item \textbf{Bước 1 (Giải mã đầu vào):}
+        $A$ cho $s_A = 0$, $sf_A = 1$, $M_A = 1.1100_2$;
+        $B$ cho $s_B = 0$, $sf_B = -1$, $M_B = 1.1000_2$.
+  \item \textbf{Bước 2 (Tính dấu và scale thô):}
+        $s_P = s_A \oplus s_B = 0$ (dương) và $sf_{\mathrm{raw}} = sf_A + sf_B = 1 + (-1) = 0$.
+  \item \textbf{Bước 3 (Nhân phần trị theo cột nhị phân):}
+        Thực hiện nhân hai significand trên lưới bốn vị trí fraction:
+        \[
+        \begin{array}{r}
+          \phantom{\times}01.1100\\
+          \underline{\times\phantom{0}01.1000}\\
+          \phantom{+}00.0000\\
+          \phantom{+}00.1110\\
+          \underline{+\phantom{0}01.1100}\\
+          \phantom{+}10.1010
+        \end{array}
+        \]
+        Thu được tích thô $M_{\mathrm{raw}} = 10.1010_2 = 2{,}625_{10}$.
+  \item \textbf{Bước 4 (Chuẩn hóa sau nhân và đóng gói):}
+        Vì $M_{\mathrm{raw}} = 10.1010_2 \ge 2$ (bit nguyên tràn sang vị trí $2^1$),
+        dịch phải 1 bit để đưa bit 1 cao nhất về vị trí ẩn: $M_P = 1.0101_2$ (bỏ bit
+        ẩn còn fraction \texttt{0101}), đồng thời tăng scale: $sf_P = sf_{\mathrm{raw}} + 1 = 1$.
+        Khi đóng gói, $sf_P = 1 \Rightarrow k = \lfloor 1/8 \rfloor = 0$ (regime
+        \texttt{10}) và $e = 1 = \texttt{001}_2$. Ghép trường thu được chuỗi bit
+        \texttt{0\_10\_001\_01010...} $= \texttt{0x45400000}$, biểu diễn đúng giá
+        trị $2^1 \times 1{,}3125 = 2{,}625_{10}$.
+\end{enumerate}
+
+\subsection{Ví dụ khai triển tích lặp trên lưới FULL\_TERM26/Q24}
+
+Để minh họa trực tiếp cơ chế dịch--cộng theo bit trong RTL của đề tài, xét hai
+significand $M_X = 1.1010_2 = 1{,}625$ và $M_Y = 1.1000_2 = 1{,}5$. Fraction của
+$X$ chỉ có hai bit $1$ tại các vị trí $S_1 = 1$ và $S_2 = 3$ sau dấu chấm nhị phân.
+Với quy ước 12 bit fraction, $Y = 4096 + 2048 = 6144$ và giá trị khởi tạo lưới
+Q24 là $M_0 = 6144 \times 4096 = 25\,165\,824$. Khai triển tuần tự theo vòng lặp:
+\[
+1.1010_2 \times 1.1000_2 = 1.1000_2 + 0.1100_2 + 0.0011_2 = 10.0111_2 = 2{,}4375_{10}.
+\]
+Ở cấp số nguyên Q24 của phần cứng:
+\begin{itemize}
+  \item Khởi tạo (\texttt{first}, đóng góp bit ẩn): $M_0 = 25\,165\,824$ (tương ứng $M_0/2^{24} = 1{,}5$ nếu $n=0$).
+  \item Vòng 1 ($S_1 = 1$): $T_1 = 6144 \times 2^{12-1} = 12\,582\,912 \Rightarrow M_1 = M_0 + T_1 = 37\,748\,736$ (tương ứng $2{,}25$ nếu $n=1$).
+  \item Vòng 2 ($S_2 = 3$): $T_2 = 6144 \times 2^{12-3} = 3\,145\,728 \Rightarrow M_2 = M_1 + T_2 = 40\,894\,464$, suy ra $\frac{M_2}{2^{24}} = 2{,}4375$. Mặt nạ của $X$ cạn về $0$ nên lõi tự động dừng sớm ở $t=2$ vòng mà không chạy các vòng rỗng khi cấu hình $n=12$.
+\end{itemize}
+
+\paragraph{Đối chiếu trên cặp mã 32 bit FT-05.}
+Với bộ dữ liệu kiểm thử RTL \texttt{FT-05}: $A = \texttt{0x1c900000}$ (regime
+\texttt{001}, $k_A=-2$, $e_A=6 \Rightarrow sf_A=-10$, $F_A = \texttt{0x480}$) và
+$B = \texttt{0x3c820000}$ (regime \texttt{01}, $k_B=-1$, $e_B=7 \Rightarrow sf_B=-1$,
+$F_B = \texttt{0x208}$). Cả hai mã đều có 2 bit 1 trong 12 bit fraction cao và
+14 bit thấp bằng 0, nên \texttt{OPS1} giữ $A$ làm $X$ và $B$ làm $Y$, cho $b = sf_A + sf_B = -11$.
+Quá trình cộng trên lưới Q24 diễn ra như Bảng~\ref{tab:ft05-worked}. Giá trị trước
+Packer là $24\,224\,768 \times 2^{-35}$; vì bit 25 bằng 0 nên adapter giữ nguyên
+$sf = -11$. Khi $C=0$, cả mô hình tham chiếu và RTL cùng xuất mã \texttt{0x1ae34800}
+(khi đặt $n=0$, bộ nhân chỉ phát đóng góp cơ số $M_0 = 18\,907\,136$ và bật cờ
+\texttt{approx\_cut=1} để cho ra mã \texttt{0x1a410000}).
+
+\begin{engineeringtable}{Phép tính FULL\_TERM26/Q24 theo hệ số nguyên cho cặp FT-05.}{tab:ft05-worked}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{34mm}r Y@{}}
+\toprule
+Đại lượng & Giá trị nguyên & Diễn giải nguồn gốc \\
+\midrule
+$Y$ & 4.616 & Bit ẩn $4.096$ cộng fraction $B$ ($F_B = 520$). \\
+$M_0$ & 18.907.136 & Cơ số $Y \ll 12$ tại xung \texttt{first}. \\
+Term 1 ($S_1=2$) & 4.726.784 & Bit 1 đầu tiên của $X$, $M_0 \gg 2$. \\
+Term 2 ($S_2=5$) & 590.848 & Bit 1 thứ hai của $X$, $M_0 \gg 5$. \\
+$M$ tại \texttt{last} & 24.224.768 & Tổng cơ số và hai term, $t=2$, $b=-11$. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+\section{Nguyên lý cộng, căn chỉnh, jam và chuẩn hóa triệt tiêu}
+
+Khi cộng hoặc trừ hai số hạng có dấu, scale và significand đã chuẩn hóa, bước
+đầu tiên là so sánh độ lớn (so $sf$ trước, nếu bằng nhau thì so significand) để
+đặt số hạng lớn hơn làm toán hạng nền $X$ và số hạng còn lại làm $Y$. Khi hai
+toán hạng cùng dấu hiệu dụng, thực hiện phép cộng $M_X + (M_Y \gg \Delta sf)$;
+khi khác dấu hiệu dụng, thực hiện phép trừ không âm $M_X - (M_Y \gg \Delta sf)$
+và giữ dấu của $X$.
+
+\paragraph{Ví dụ minh họa phép cộng phát sinh carry và phép trừ triệt tiêu.}
+Xét cặp toán hạng $A = 3{,}5$ (\texttt{0x47000000}, $sf_A = 1$, $M_A = 1.1100_2$)
+và $B = 0{,}75$ (\texttt{0x3E000000}, $sf_B = -1$, $M_B = 1.1000_2$):
+\begin{enumerate}
+  \item \textbf{Phép cộng có nhớ ($A + B$):} Vì $sf_A > sf_B$, chọn $A$ làm nền
+        với độ lệch $\Delta sf = 1 - (-1) = 2$. Dịch phải $M_B$ hai vị trí thu
+        được $0.0110_2$ trên cùng thang $2^1$:
+        \[
+        3{,}5 + 0{,}75 = 2^1\bigl(1.1100_2 + 0.0110_2\bigr),
+        \qquad
+        \begin{array}{r}
+          \phantom{+}01.1100\\
+          \underline{+\phantom{0}00.0110}\\
+          \phantom{+}10.0010
+        \end{array}
+        \]
+        Bit nhớ tràn vào vị trí nguyên thứ hai tạo tổng thô $10.0010_2$. Bước chuẩn
+        hóa sau carry dịch phải 1 bit và tăng scale thêm $1$:
+        $10.0010_2 \times 2^1 = 1.0001_2 \times 2^2 = 4{,}25$. Mã hóa $k=0$, $e=2$
+        (\texttt{010}), fraction \texttt{0001} cho ra mã kết quả \texttt{0x48400000}.
+  \item \textbf{Phép trừ gây triệt tiêu ($A - 3{,}25$):} Thay số hạng thứ hai
+        bằng $-3{,}25$ ($s=1$, $sf=1$, $M = 1.1010_2$). Do cùng $sf=1$ và khác
+        dấu, phép cộng chuyển thành trừ hai độ lớn:
+        \[
+        \begin{array}{r}
+          \phantom{-}01.1100\\
+          \underline{-\phantom{0}01.1010}\\
+          \phantom{-}00.0010
+        \end{array}
+        \qquad\Longrightarrow\qquad
+        0.0010_2 \times 2^1 = 1.0000_2 \times 2^{-2} = 0{,}25.
+        \]
+        Hiệu độ lớn mất ba bit cao, buộc mạch chuẩn hóa phải dịch trái $3$ vị
+        trí và giảm scale từ $1$ xuống $-2$, đóng gói thành \texttt{0x38000000}.
+        Trong cửa sổ cộng 31 bit có vị trí bit ẩn $h=29$, ký hiệu $j$ là chỉ số
+        bit 1 cao nhất của tổng/hiệu và $\ell = 30 - j$ là số bit 0 dẫn đầu đếm
+        từ bit 30, công thức cập nhật scale hợp nhất cho cả trường hợp có nhớ
+        ($\ell = 0$), bình thường ($\ell = 1$) và triệt tiêu ($\ell > 1$) là:
+        \[
+        sf_{\mathrm{out}} = sf_{\mathrm{base}} + j - h = sf_{\mathrm{base}} + 1 - \ell.
+        \]
+        Áp dụng cho ví dụ trừ trên với $sf_{\mathrm{base}}=1$ và $\ell=4$ ($j=26$)
+        thu được đúng $sf_{\mathrm{out}} = 1 + 1 - 4 = -2$. Nếu hai độ lớn triệt
+        tiêu hoàn toàn bằng $0$, cờ \texttt{Zero} được kích hoạt trực tiếp thay
+        cho kết quả đếm của LOD.
+\end{enumerate}
+
+\paragraph{Phần dư căn chỉnh và thao tác jam.}
+Trong cửa sổ cộng độ rộng hữu hạn, các bit của toán hạng nhỏ $Y$ bị dịch ra ngoài
+cạnh phải của cửa sổ được gom bằng phép OR (\textit{sticky}). Nếu giữ bit LSB
+của cửa sổ phản ánh phần dư khác 0 (gọi là \textit{jam}), mạch biết được độ lớn
+thật của số hạng nhỏ lớn hơn phần còn giữ trong cửa sổ. Trong phép trừ, phần dư
+này làm giảm nhẹ độ lớn hiệu và ảnh hưởng trực tiếp tới biên làm tròn khi xảy ra
+triệt tiêu; vì vậy đường dữ liệu phải truyền thông tin phần dư qua cả tầng số học
+và tầng chuẩn hóa đến Packer thay vì chỉ OR mù một cờ mất dữ liệu ở cuối.
+
+\section{Làm tròn RNE, mã hóa đầu ra và ranh giới ba kiến trúc}
+
+Sau chuẩn hóa, từ $sf_{\mathrm{out}}$ tách $k = \lfloor sf_{\mathrm{out}} / 8 \rfloor$
+và $e = sf_{\mathrm{out}} - 8k \in [0, 7]$ bằng phép chia lấy phần nguyên xuống
+(ví dụ $sf = -11 \Rightarrow k = -2, e = 5$). Chuỗi bit $1+\text{terminator}$ hoặc
+$0+\text{terminator}$ của $k$ ghép với exponent và fraction tạo thành vector độ
+lớn được giữ lại $31$ bit. Gọi $L$ là bit thấp nhất còn giữ, $G$ (\textit{Guard})
+là bit kề ngay sau $L$, $R$ (\textit{Round}) là bit tiếp theo và $S$ (\textit{Sticky})
+là phép OR toàn bộ các bit thấp hơn cùng phần dư căn chỉnh, điều kiện tăng mã
+độ lớn theo quy tắc RNE (\textit{Round to Nearest, Ties to Even}) là:
+\[
+\rho = G \land (L \lor R \lor S).
+\]
+
+\begin{engineeringtable}{Bảng quyết định làm tròn RNE theo các bit L, G, R và S.}{tab:rne-decision}
+\begin{tabularx}{\linewidth}{@{}llllY@{}}
+\toprule
+$G$ & $R$ & $S$ & $L$ & Hành động làm tròn \\
+\midrule
+0 & bất kỳ & bất kỳ & bất kỳ & Làm tròn xuống (giữ nguyên độ lớn). \\
+1 & 0 & 0 & 0 & Hòa chẵn (\textit{tie-even}): giữ mã có $L=0$. \\
+1 & 0 & 0 & 1 & Hòa lẻ (\textit{tie-odd}): tăng 1 đơn vị để chuyển $L$ về $0$. \\
+1 & 1 & bất kỳ & bất kỳ & Vượt nửa bước: tăng độ lớn thêm 1 đơn vị. \\
+1 & 0 & 1 & bất kỳ & Vượt nửa bước (do có dư ở $S$): tăng độ lớn thêm 1 đơn vị. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+\paragraph{Ví dụ hợp nhất làm tròn RNE và mã hóa bù hai cho số âm.}
+Giả sử phần độ lớn giữ được đang là $m = 6$ và quyết định RNE là tăng $\rho = 1$.
+Nếu kết quả dương, đầu ra là $m + \rho = 7$; nếu kết quả mang dấu âm, giá trị cần
+xuất là $-(m+\rho) = -7$. Trên từ mã 32 bit, đồng nhất thức đại số
+\[
+-(m + \rho) = \overline{m} + (1 - \rho) \pmod{2^{32}}
+\]
+cho thấy thay vì cộng xong rồi mới lấy bù hai bằng hai bộ cộng nối tiếp, phần
+cứng chỉ cần đảo bit $m$ theo dấu kết quả và đưa bit cộng đầu vào bằng
+$s \oplus \rho$: cụ thể $\overline{6} + (1 - 1) = \overline{6} = -7$ (khi $\rho=1$),
+còn khi $\rho=0$ thì $\overline{6} + (1 - 0) = -6$. Các trường hợp ngoại lệ
+\texttt{Zero}, \texttt{NaR} hoặc kẹp biên $\pm\mathrm{minpos}/\pm\mathrm{maxpos}$
+được xử lý song song qua bộ chọn ở ngõ ra.
+
+\paragraph{Hệ quả của vị trí làm tròn đối với MAC-NF, MAC-F và MAC-Quire.}
+Đặt $\varepsilon_p = R(\widehat P) - \widehat P$ là sai số làm tròn khi đóng gói
+tích về \texttt{Posit(32,3)}, quan hệ giữa giá trị đầu vào bộ cộng của hai kiến
+trúc là $R(\widehat P) + C = \widehat P + C + \varepsilon_p$. Khi $\widehat P$ và
+$C$ trái dấu và gần triệt tiêu nhau, tổng thực rất nhỏ nên $\varepsilon_p$ trở thành
+nhiễu đáng kể làm sai lệch chữ số có nghĩa hoặc ngưỡng kẹp (như đã đo được trên nhóm
+$C=R(-P)$ ở Chương~\ref{ch:measurements}). Kiến trúc \texttt{MAC-F} loại bỏ được
+$\varepsilon_p$ ở từng phép MAC; tuy nhiên trong chuỗi tích lũy nhiều bước hồi tiếp
+ngoài, trạng thái $C$ vẫn phải đi qua một lần lượng tử hóa ở cuối mỗi giao dịch,
+trong khi \texttt{MAC-Quire} loại bỏ hoàn toàn bước lượng tử hóa trạng thái trung
+gian nhờ thanh ghi $Q$ trên lưới $2^{-480}$.

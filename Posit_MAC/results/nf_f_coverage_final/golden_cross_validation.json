@@ -1,0 +1,30 @@
+{
+  "softposit_es2_cross_check": {
+    "es3_decode_sanity_checked": 10000,
+    "total_cases": 100867,
+    "corner_cases": 867,
+    "random_cases": 100000,
+    "mismatches": {
+      "add": 0,
+      "sub": 0,
+      "mul": 0,
+      "fma": 0
+    },
+    "total_mismatches": 0,
+    "sample_errors": []
+  },
+  "norris_kim_es3_baseline": {
+    "source_report": "l1/BASELINE_VERIFICATION_REPORT.md",
+    "table_i_cells": 12,
+    "max_abs_delta_pp": 0.9365,
+    "all_cells_under_1pp": true
+  },
+  "multiplier_one_sided_bias": {
+    "total_finite_pairs_n12": 125668,
+    "uniform_finite_pairs_n12": 100000,
+    "p_hat_le_p_full_count": 125668,
+    "p_hat_lt_p_full_count": 117486,
+    "p_hat_eq_p_full_count": 8182,
+    "one_sided_invariant_100pct": true
+  }
+}

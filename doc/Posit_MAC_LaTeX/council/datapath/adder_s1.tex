@@ -1,0 +1,62 @@
+\rtlfig{Datapath chi tiết tầng S1 (\sig{posit\_add\_prepare\_comb}): hai bộ trừ scale 12 bit song song, phát hiện kẹp $|\Delta sf|>28$ và bốn nhánh \sig{choose\_a\_*} cân bằng tải.}{fig:adder-s1}{
+\node[pin] (ina) at (-5.05,.82) {\sig{a\_sf},\,\sig{b\_sf[10:0]}};
+\node[pin] (inb) at (.20,.82) {\sig{a\_frac},\,\sig{b\_frac[25:0]}};
+\node[pin] (inc) at (5.35,.82) {dấu, cờ \sig{Z/N}, \sig{flags\_in[4:0]}};
+
+\node[unit,text width=40mm] (sub) at (-5.05,-.92) {\hw{Trừ scale 12 bit song song}\\
+ $\sig{diff\_ab}=\{a_{10},a_{sf}\}-\{b_{10},b_{sf}\}$\\
+ $\sig{diff\_ba}=\{b_{10},b_{sf}\}-\{a_{10},a_{sf}\}$\\
+ $\sig{sf\_a\_lt\_b}=\sig{diff\_ab}[11]$};
+\node[unit,text width=45mm] (cmp) at (.20,-.92) {\hw{So sánh độ lớn toán hạng}\\
+ $\sig{sf\_equal}=(a_{sf}==b_{sf})$\\
+ $\sig{frac\_a\_ge\_b}=(a_{\mathrm{frac}}\ge b_{\mathrm{frac}})$};
+\node[unit,text width=38mm] (exc) at (5.35,-.92) {\hw{Cờ ngoại lệ \& phép tính}\\
+ $\sig{both\_nz}=\neg a_Z\land\neg b_Z$\\
+ $\sig{sub}=\sig{both\_nz}\land(a_s\ne b_s)$\\
+ \sig{both\_zero}, \sig{is\_nar}, \sig{flags\_lo}};
+
+\draw[wire] (ina)--(sub);
+\draw[wire] (inb)--(cmp);
+\draw[wire] (inc)--(exc);
+
+\node[unit,text width=40mm] (clp) at (-5.05,-3.92) {\hw{Phát hiện kẹp \& dịch}\\
+ $\sig{clamp\_ab/\!ba}: |\Delta sf|>28$\\
+ chọn theo \sig{sf\_a\_lt\_b}:\\
+ \sig{shift\_amount[4:0]}, \sig{clamped}};
+\node[pick,text width=47mm] (sel) at (.20,-3.92) {\hw{Chọn $X{\ge}Y$ \& tách 4 tải}\\
+ $\sig{choose\_a\_cond}=\neg a_Z\land(b_Z\lor\dots)$\\
+ 4 lưới \sig{dont\_touch}:\\
+ \sig{choose\_a\_frac0..2}, \sig{meta}};
+
+\draw[wire] (sub)--(clp);
+\draw[wire] (cmp)--(sel);
+
+\coordinate (gx) at (-1.50,-2.65);
+\node[tapdot] at (-5.05,-2.65) {};
+\draw[meta] (-5.05,-2.65) -- (gx) -- (sel.north -| gx);
+\node[tag] at (-3.15,-2.65) {\sig{sf\_a\_lt\_b}};
+
+\coordinate (gz) at (1.90,-2.65);
+\node[tapdot] at (5.35,-2.65) {};
+\draw[meta] (5.35,-2.65) -- (gz) -- (sel.north -| gz);
+\node[tag] at (3.65,-2.65) {$a_Z, b_Z$};
+
+\node[unit,text width=51mm] (muxxy) at (.20,-6.22) {\hw{MUX tráo 3 lát \& metadata}\\
+ $[8:0]\gets\sig{frac0}$, $[17:9]\gets\sig{frac1}$, $[25:18]\gets\sig{frac2}$\\
+ xuất \sig{x\_frac}, \sig{y\_frac}, \sig{sign\_base}, \sig{sf\_base}};
+\draw[meta] (sel)--(muxxy);
+\node[tag,anchor=west] at (.38,-5.10) {4 nhánh \sig{dont\_touch}};
+
+\node[ff,text width=140mm] (r1) at (.15,-7.95) {\hw{S1}\enspace
+ \sig{s1\_x\_frac\_q}, \sig{s1\_y\_frac\_q[25:0]} \enspace|\enspace
+ \sig{s1\_shift\_q[4:0]}, \sig{s1\_clamped\_q}\\
+ \sig{s1\_sub\_q}, \sig{s1\_sign\_q}, \sig{s1\_sf\_q[10:0]} \enspace|\enspace
+ \sig{s1\_both\_nz\_q}, \sig{s1\_both\_zero\_q}, \sig{s1\_nar\_q}, \sig{s1\_flags\_q[3:0]}};
+
+\draw[wire] (clp.south)--(r1.north -| clp);
+\draw[wire] (muxxy.south)--(r1.north -| muxxy);
+\draw[wire] (exc.south)--(r1.north -| exc);
+
+\node[pin] (o) at (.15,-9.12) {Tới S2 (\sig{posit\_add\_align\_comb}): căn cửa sổ 31 bit, tạo \sig{jam} và \sig{alignment\_tail}};
+\draw[wire] (r1)--(o);
+}

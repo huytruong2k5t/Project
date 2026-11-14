@@ -1,0 +1,42 @@
+\rtlfig{Datapath chi tiết tầng S5 (\sig{posit\_add\_norm\_comb}): dịch trái chuẩn hóa 30 bit, trừ scale một bước và phân loại ngoại lệ không xóa bus dữ liệu.}{fig:adder-s5}{
+\node[pin] (in1) at (-4.95,.82) {\sig{s4\_seed\_q[29:0]}, \sig{s4\_count\_q[4:0]}};
+\node[pin] (in2) at (0,.82) {\sig{s4\_sf\_inc\_q[10:0]}};
+\node[pin] (in3) at (4.95,.82) {\sig{s4\_nz\_q}, \sig{sticky}, dấu, \sig{Z/N}, \sig{flags\_lo}};
+
+\node[unit,text width=41mm] (lsh) at (-4.95,-1.65) {\hw{Dịch trái chuẩn hóa 30 bit}\\
+ \sig{dyn\_left\_shifter\_fixed6}\\
+ $\{\sig{shifted\_hi[28:0]},\sig{lsb}\}=\sig{seed}\ll K$\\
+ $\sig{frac\_hi}=\sig{shifted\_hi}$ (không xóa 0)};
+\node[unit,text width=41mm] (sf) at (0,-1.65) {\hw{Cập nhật scale một bước}\\
+ $\sig{count\_ext}=\{6'\mathrm{b0},K[4:0]\}$\\
+ $\sig{sf[10:0]}=\sig{sf\_inc}-\sig{count\_ext}$\\
+ gộp tràn $K{=}0$ và triệt tiêu $K{\ge}2$};
+\node[unit,text width=43mm] (cls) at (4.95,-1.65) {\hw{Phân loại Zero/NaR \& cờ}\\
+ $\sig{fz}=\neg\sig{nar\_in}\land(\sig{both\_zero}\lor\neg\sig{nz})$\\
+ $\sig{sign}=\sig{nar\_in}\text{ ? }1:(\sig{fz}\text{ ? }0:\sig{sign\_base})$\\
+ $\sig{inexact}|=\neg\sig{fz}\land\sig{sticky\_raw}$};
+
+\draw[wire] (in1)--(lsh);
+\draw[wire] (in2)--(sf);
+\draw[wire] (in3)--(cls);
+\node[tapdot] at (-4.95,.14) {};
+\draw[wire] (-4.95,.14) -- (-1.35,.14) -- (sf.north -| -1.35,0);
+\node[tag] at (-2.95,.14) {$K[4:0]$};
+
+\node[ff,text width=142mm] (r5) at (0,-3.92) {\hw{S5}\enspace
+ \sig{frac\_hi\_q[28:0]} \enspace|\enspace
+ \sig{sf[10:0]} \enspace|\enspace
+ \sig{sticky} \enspace|\enspace
+ \sig{sign}, \sig{is\_zero}, \sig{is\_nar}, \sig{flags\_out[4:0]}, \sig{out\_valid}};
+
+\draw[wire] (lsh.south)--(r5.north -| lsh);
+\draw[wire] (sf.south)--(r5.north -| sf);
+\draw[meta] (cls.south)--(r5.north -| cls);
+
+\node[unit,text width=106mm] (pad) at (0,-5.32) {\hw{Khớp giao diện Packer (tiết kiệm 24 Flip-Flop hằng 0)}\\ $\sig{frac[52:0]}=\{\sig{frac\_hi\_q[28:0]},\ 24'\mathrm{b0}\}$};
+\draw[wire] (r5.south)--(pad.north);
+
+\node[pin] (o) at (0,-6.50) {Tới Packer P1 (\sig{posit\_pack\_prepare}):\\
+ \sig{frac[52:0]}, \sig{sf[10:0]}, \sig{sticky}, \sig{sign}, \sig{is\_zero}, \sig{is\_nar}, \sig{flags\_out}};
+\draw[wire] (pad.south)--(o.north);
+}

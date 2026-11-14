@@ -1,0 +1,26 @@
+\usetikzlibrary{positioning}
+\makeatletter
+\renewcommand{\reportlists}{%
+  \chapter*{Danh mục hình và bảng}
+  \addcontentsline{toc}{chapter}{Danh mục hình và bảng}
+  \begingroup\small\setlength{\parskip}{0pt}%
+  \section*{Hình}\@starttoc{lof}
+  \section*{Bảng}\@starttoc{lot}
+  \endgroup}
+\makeatother
+\tikzset{
+  dataflow/.style={>=Stealth, font=\small},
+  block/.style={draw, rounded corners=2pt, align=center, text width=23mm,
+    minimum height=11mm, inner sep=2pt, fill=blue!5},
+  store/.style={block, fill=orange!11},
+  data/.style={->,semithick},
+  control/.style={->,densely dashed},
+  metadata/.style={->,dotted,thick}
+}
+\newcommand{\blockfigure}[3]{%
+  \begin{figure}[!htbp]\centering
+  \begin{tikzpicture}[dataflow]#3\end{tikzpicture}
+  \caption{#1}\label{#2}\end{figure}}
+\newenvironment{engineeringtable}[2]{%
+  \begin{inlinetable}\centering\small\caption{#1}\label{#2}\vspace{2pt}%
+}{\end{inlinetable}\medskip}

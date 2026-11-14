@@ -1,0 +1,63 @@
+{
+  "run": {
+    "status": "PASS",
+    "completed": 20000,
+    "mismatches": 0,
+    "stall_cycles_with_out_valid": 14328,
+    "back_to_back_accepts": 15079
+  },
+  "by_file": {
+    "rtl/adder/posit_add.sv": {
+      "v_toggle": {
+        "hit": 646,
+        "total": 703,
+        "pct": 91.89189189189189
+      },
+      "v_line": {
+        "hit": 2,
+        "total": 2,
+        "pct": 100.0
+      },
+      "v_branch": {
+        "hit": 24,
+        "total": 24,
+        "pct": 100.0
+      }
+    },
+    "rtl/packer/posit_pack.sv": {
+      "v_toggle": {
+        "hit": 244,
+        "total": 283,
+        "pct": 86.21908127208481
+      },
+      "v_line": {
+        "hit": 5,
+        "total": 5,
+        "pct": 100.0
+      },
+      "v_branch": {
+        "hit": 10,
+        "total": 10,
+        "pct": 100.0
+      }
+    },
+    "rtl/parser/posit_parser_mul.sv": {
+      "v_line": {
+        "hit": 5,
+        "total": 5,
+        "pct": 100.0
+      },
+      "v_branch": {
+        "hit": 10,
+        "total": 10,
+        "pct": 100.0
+      },
+      "v_toggle": {
+        "hit": 383,
+        "total": 383,
+        "pct": 100.0
+      }
+    }
+  },
+  "unhit_branches": []
+}

@@ -1,0 +1,162 @@
+\section{Ba lớp mô hình và vai trò của từng lớp}
+
+Model thuật toán mô tả tuần tự bước OPS, SAC và SBM, giữ các
+checkpoint để có thể tìm sai khác theo vòng. Nó hữu ích khi
+gỡ lỗi nhưng dễ lặp lại lỗi của RTL nếu cả hai dùng cùng
+recurrence. Golden của bộ nhân chọn trực tiếp các vị trí
+bit cao theo OPS và n, rồi nhân hai hệ số nguyên đã xác định.
+Decoder của golden làm việc với mã Posit thô. Cách này kiểm
+kết quả của RTL mà không cần giả định pipeline hoặc cách
+token dịch sang T2.
+
+Ideal dùng tất cả bit fraction và tính bằng số nguyên.
+Với một giao dịch độc lập, ideal là tổng $AB+C$ trước RNE.
+Với chuỗi, ideal là tổng các tích đủ fraction theo cả dãy,
+không thay state bằng một mã Posit sau mỗi bước. Golden và
+ideal vì vậy trả lời hai câu hỏi khác nhau. Golden dùng
+để phân loại một sai lệch là lỗi thực hiện hay đúng theo
+đặc tả. Ideal là mốc để lượng hóa sai số của chính đặc tả
+xấp xỉ và lượng tử hóa.
+
+\begin{engineeringtable}{Mốc so sánh theo ranh giới quan sát.}{tab:oracle-boundaries}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{32mm}Y Y@{}}
+\toprule
+Điểm quan sát & Golden hoặc trạng thái mô hình & Đại lượng sai số \\
+\midrule
+Core trước Packer & Tích hệ số chọn bit, $M$, dấu, scale, số vòng và cờ cắt. & Hai mốc $P_{12}$ và $P$ đầy đủ. \\
+NF retire & $R(R(\widehat P)+C)$ với mã đã nhận. & So giá trị decode của D với $AB+C$. \\
+F retire & $R(\widehat P+C)$ theo hợp đồng FULL\_TERM. & So với cùng tổng $AB+C$ ở phép đo paired. \\
+Quire ack/READ & Trạng thái Q bigint, count, cờ, mã ở READ. & So kết quả cuối với tổng tích đầy đủ của cả chuỗi. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+Golden cộng trên lưới rộng trước encode, để tránh mất phần
+dư ở các cặp có chênh lệch scale lớn. Đối với NF, golden
+đóng gói tích trước rồi giải mã lại mã tích để cộng. Đối với
+F, cùng hệ số Q24 được đưa thẳng vào tổng chính xác theo hợp
+đồng. Các phép kiểm trạng thái quire dùng bigint độc lập
+trên lưới Q và kiểm sau mỗi response. Điểm pack để đo sai
+số chuỗi là READ cuối.
+
+\section{Driver, scoreboard và monitor}
+
+\blockfigure{Luồng kiểm chứng. Scoreboard chốt expected tại accept và so đúng một lần tại retire.}{fig:scoreboard}{
+  \node[block] (fixture) {Corpus hoặc\\fixture};
+  \node[block,right=5mm of fixture] (drv) {Driver\\valid/ready};
+  \node[block,right=5mm of drv] (dut) {DUT\\NF/F/quire};
+  \node[block,right=5mm of dut] (mon) {Monitor\\retire};
+  \node[store,below=7mm of dut] (sb) {Scoreboard\\d và flags};
+  \node[block,left=5mm of sb] (oracle) {Oracle\\số nguyên};
+  \draw[data] (fixture)--(drv);
+  \draw[data] (drv)--(dut);
+  \draw[data] (dut)--(mon);
+  \draw[data] (mon.south)|-(sb.east);
+  \draw[control] (drv)--(oracle);
+  \draw[data] (oracle)--(sb);
+}
+
+Trong hồi quy có feedback, scoreboard giữ state cho từng
+lõi. Tại accept, nó tính expected từ A/B, C hiệu dụng,
+OPS và n. Khi driver chọn hồi tiếp, C là kết quả đã retire
+của chính lõi đang kiểm. Khi chạy paired standalone, mỗi lõi
+nhận cùng C cố định từ corpus. Tách hai chế độ này tránh
+so sánh sai khi hai chuỗi đã đi tới hai state khác nhau.
+
+Monitor giao thức quan sát valid/ready ở cạnh clock. Khi
+out valid mà ready thấp, kết quả vẫn thuộc về DUT và phải
+giữ nguyên đến retire. Khi reset hủy request, scoreboard
+bỏ expected thuộc epoch cũ. Sau khi reset nhả, một cửa sổ
+quan sát không được có response cũ. Cuối lượt cần kiểm số
+đếm accepted bằng completed cộng reset-aborted; đếm cả hai
+vào completed sẽ làm sai khối lượng của ma trận.
+
+\input{council/ft05_wave}
+
+\begin{engineeringtable}{Trace ModelSim trên lõi \texttt{mac\_f\_wrapper}. Mốc cạnh tính từ cạnh \texttt{accept} của giao dịch đang xét.}{tab:control-trace}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{26mm}>{\raggedright\arraybackslash}p{28mm}Y@{}}
+\toprule
+Ca thử & Cạnh clock & Quan sát trạng thái \\
+\midrule
+FT-05, $n=12$ & 0, 2 & Nhận input, sau đó ba Parser retire vào core. \\
+FT-05, $n=12$ & 7, 12 & \texttt{core\_done}, sau đó \texttt{add\_valid}. \\
+Giữ kết quả & 14--16 & \texttt{out\_valid} cao, \texttt{out\_ready} thấp, \texttt{d=1ae34800}, flags \texttt{00}. \\
+Retire & 17 & \texttt{out\_valid} và \texttt{out\_ready} cùng cao, đối chiếu payload. \\
+FT-05, $n=0$ & 6, 14 & Core phát cơ số $M_0$, sau đó retire \texttt{1a410000}/\texttt{03}. \\
+Reset hủy & 4; sau nhả & Reset assert khi đang xử lý; không có response cũ trong 30 cạnh quan sát. \\
+Sau reset & 15 & Giao dịch kế tiếp retire chính xác bộ mẫu FT-05. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+Trace được lấy mẫu ngay trước cạnh lên đồng bộ của thanh ghi.
+Cạnh \texttt{t2\_valid} mô tả token chuẩn bị được cộng dồn; giá trị accumulator
+đã cập nhật xuất hiện ở chu kỳ kế tiếp. Bảng~\ref{tab:ft05-terms}
+sử dụng thống nhất quy ước này để tránh gán nhầm $M$ cho token hiện tại.
+Phiên mô phỏng đối chiếu giao thức nhận 4 giao dịch, retire 3 và hủy 1 do
+\textit{reset}, khớp 100\% theo từng chu kỳ giữa hai phiên bản trước và sau tối ưu
+tầng S1.
+
+\section{Ma trận yêu cầu chức năng và kết quả xác nhận}
+
+\begin{engineeringtable}{Tổng hợp đối chiếu yêu cầu thiết kế, bài kiểm thử và kết quả đạt được.}{tab:verification-matrix}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{28mm}Y Y@{}}
+\toprule
+Yêu cầu & Kịch bản kiểm thử và chỉ tiêu & Kết quả kiểm chứng \\
+\midrule
+Tích nội bộ Q24 & Bộ mẫu FT-05 ($n=0, n=12$), dấu, số mũ cơ sở và hai cờ cắt. &
+Quét đủ 13 mức $n$ trên 1.634.048 giao dịch trước Packer, khớp oracle 100\%. \\
+Nhận và giữ ngữ cảnh & Hồi quy hỗn hợp hai lõi trên toàn bộ 26 tổ hợp \texttt{OPS/n}. &
+100.000 hoàn tất + 10.000 xác nhận sau tách S1 mỗi lõi, $0$ sai lệch. \\
+Hỗ trợ backpressure & Hồi quy \textit{stall} ngẫu nhiên và trace giữ dữ liệu qua 3 cạnh liên tiếp. &
+Đầu ra giữ nguyên trạng thái đến khi \texttt{out\_ready=1}, $0$ sai lệch. \\
+Reset và phục hồi & Hủy giao dịch đang xử lý, không rò response cũ và nhận lại bình thường. &
+Toàn bộ các ca hủy đều sạch dữ liệu cũ và phục hồi đúng ở giao dịch sau. \\
+MAC ghép cặp NF/F & So \texttt{d/flags} trên cùng bộ $(A,B,C)$ với mô hình từng lõi. &
+Hoàn tất 377.032 bộ dữ liệu tại \texttt{OPS1/n12}, $0$ sai lệch. \\
+Tích lũy chuỗi dài & Đối chiếu từng bước NF/F, thanh ghi $Q$/count và lệnh \texttt{CLEAR/READ}. &
+Hoàn tất 48 chuỗi (16.320 MAC/lõi + 96 lệnh điều khiển quire), $0$ sai lệch. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+\section{Tiêu chí quản lý độ chính xác và tính nhất quán kiểm chứng}
+
+Để bảo đảm giá trị kiểm chứng không bị pha trộn giữa các cấu hình, quá trình
+chạy hồi quy tuân thủ quy trình kiểm soát phiên bản chặt chẽ từ tệp RTL đầu vào,
+mô hình tham chiếu, bộ sinh vector tới báo cáo đầu ra. Mỗi khi thành phần tổ
+hợp được tinh chỉnh (như bước tách tải fanout 4 nhánh ở tầng S1), bộ kiểm tra
+tương đương đơn vị (201.764 mẫu bit-exact cho khối \texttt{posit\_add\_prepare\_comb})
+và bộ hồi quy ModelSim toàn cục đều được tái chạy trên cùng bộ dữ liệu hạt giống
+cố định. Nhờ vậy, hệ thống kiểm chứng xác nhận thiết kế sau tối ưu bảo toàn tính
+tương đương từng chu kỳ (\textit{cycle-exact}) so với RTL tham chiếu.
+
+\section{Thiết kế tập kiểm và phân tầng kích thích}
+
+Lượt hồi quy chức năng kết hợp xen kẽ các giao dịch độc lập và các chuỗi hồi tiếp.
+Do lấy mẫu ngẫu nhiên thuần túy theo từ mã ít chạm tới các chuỗi regime rất dài
+hoặc fraction có trọng số bit cao, bộ sinh kích thích thực hiện phân tầng có
+chủ đích theo độ dài regime của hai toán hạng $(A,B)$ và bốn tổ hợp dấu $(s_A,s_B)$,
+tạo thành lưới $8\times 8\times 4 = 256$ ô kiểm chứng cân bằng. Bên cạnh đó, các
+cặp mẫu ép cận triệt tiêu (\textit{near-cancellation}) được chèn bổ sung để kích
+thích mạnh các đường dịch chuẩn hóa dài tại bộ cộng \texttt{S1--S5} của lõi \texttt{MAC-F}.
+
+\begin{engineeringtable}{Phân loại các biến đếm giám sát trong môi trường kiểm chứng.}{tab:counter-meaning}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{36mm}Y Y@{}}
+\toprule
+Loại biến đếm & Điều kiện ghi nhận & Vai trò trong đánh giá \\
+\midrule
+Accepted & \texttt{in\_valid} và \texttt{in\_ready} cùng bằng 1 tại cạnh lên. & Đối soát cân bằng giao thức ($\mathrm{Accepted} = \mathrm{Completed} + \mathrm{Aborted}$). \\
+Completed & Giao dịch hoàn tất \textit{retire} và khớp dữ liệu/cờ với oracle. & Đánh giá khối lượng kiểm chứng hợp lệ. \\
+Reset-aborted & Giao dịch đang chạy bị ngắt bởi tín hiệu \texttt{rst\_n=0}. & Kiểm chứng cơ chế hủy sạch và chống rò rỉ dữ liệu cũ. \\
+Functional bin & Giao dịch hợp lệ kích hoạt đúng nhóm cấu hình/dữ liệu. & Bảo đảm 100\% không gian trạng thái chức năng được kiểm thử. \\
+Structural point & Điểm đếm dòng lệnh, nhánh rẽ và chuyển trạng thái bit. & Đánh giá mức độ bao phủ phần cứng của RTL. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+Ngoài kiểm chứng toàn cục ở biên ngoài IP, quy trình kiểm thử phân lớp còn kiểm
+tra trực tiếp tại các ranh giới trung gian gồm biên giải mã Parser (xử lý
+\texttt{regime} cực trị và \texttt{Zero}/\texttt{NaR}), biên ngõ ra bộ nhân
+(xác nhận giá trị Q24 và cờ cắt trước khi đi vào bộ cộng) và biên Packer cuối
+(kiểm tra các ca hòa RNE, bão hòa biên và mã hóa số âm).

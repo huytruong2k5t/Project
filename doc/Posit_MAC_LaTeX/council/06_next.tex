@@ -1,0 +1,28 @@
+\section{Hướng phát triển}
+
+Từ nền tảng lõi IP \texttt{MAC-F} đã triển khai và kiểm chứng hiện tại, đề tài
+đề xuất bốn hướng mở rộng tiếp theo khi đưa vào hệ thống thực tế:
+\begin{enumerate}
+  \item \textbf{Tích hợp hệ thống, tối ưu biên I/O và kiểm thử trên bo mạch thật:}
+        Khi ghép nối lõi \texttt{MAC-F} vào bus AXI4-Stream hoặc triển khai trên
+        bo mạch Artix-7 thực tế (như Basys3 hay Arty A7), cần đăng ký hóa ngõ ra
+        bắt tay sẵn sàng để đưa toàn bộ đường găng về miền nội bộ \textit{reg-to-reg}
+        ($>154$\,MHz), đồng thời xây dựng cầu UART truyền/nhận vectơ đối chiếu
+        trực tiếp trên phần cứng thật.
+  \item \textbf{Hỗ trợ pipeline \textit{multi-outstanding} và tối ưu \textit{multi-seed} P\&R:}
+        Đối với các bài toán nạp luồng vectơ độc lập liên tiếp không mang phụ thuộc
+        hồi tiếp, có thể nâng cấp wrapper sang kiến trúc đa giao dịch hoặc nhân
+        lặp phân tầng nhằm nâng hệ số khai thác các tầng đường ống co giãn hiện
+        hữu của bộ giải mã, bộ cộng và bộ đóng gói; đồng thời áp dụng quét nhiều
+        hạt giống P\&R kết hợp \texttt{phys\_opt\_design} trong Vivado để đánh
+        giá độ ổn định định thời quanh mốc $154$\,MHz.
+  \item \textbf{Cải tiến pipeline cho biến thể \texttt{MAC-Quire}:} Chèn một
+        tầng thanh ghi trung gian để ngắt đường tổ hợp dài từ khối giải mã độ
+        lệch từ đến tín hiệu cho phép của ngân hàng thanh ghi \texttt{q\_words}
+        nhằm đóng định thời sau định tuyến trên $100$\,MHz cho các ứng dụng cần
+        tích lũy chuỗi siêu dài.
+  \item \textbf{Mở rộng quy mô kiểm chứng vét cạn:} Mở rộng tập dữ liệu đối chiếu
+        ghép cặp sang toàn bộ các giá trị $n \in [0, 12]$ và chạy bổ sung các
+        chiến dịch stress dài hạn quy mô hàng chục đến hàng trăm triệu vectơ
+        trên từng ô \textit{regime}/dấu.
+\end{enumerate}

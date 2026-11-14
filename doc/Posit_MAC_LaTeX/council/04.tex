@@ -1,0 +1,182 @@
+\chapter{Phương pháp và kết quả kiểm chứng chức năng}
+\label{ch:evaluation}
+
+\section{Phương pháp, công cụ và mốc đối chiếu}
+Hệ thống kiểm chứng sử dụng kiến trúc ba tầng độc lập gồm mô hình tham chiếu số
+học (\textit{Golden Posit ES3}), mô hình lý tưởng đủ bit (\textit{Ideal}) và
+bảng điểm theo dõi giao dịch (\textit{Scoreboard}). Mô hình tham chiếu giải mã
+toàn phần từ mã thô và tính toán trên lưới số nguyên lớn trước khi làm tròn RNE
+theo đúng hợp đồng của từng biến thể lõi, bảo đảm tính độc lập hoàn toàn với cấu
+trúc đường ống RTL. Tại thời điểm hoàn tất giao dịch (\textit{retire}), testbench
+đối chiếu đồng thời từ mã 32 bit $D$ và năm cờ trạng thái.
+
+Để phục vụ đồng thời kiểm chứng dạng sóng từng chu kỳ và hồi quy tốc độ cao,
+quy trình sử dụng bốn nhóm công cụ chuyên biệt tóm tắt trong Bảng~\ref{tab:verif-tools}.
+Toàn bộ kịch bản mô phỏng, dữ liệu đầu vào và hạt giống ngẫu nhiên đều được quản
+lý có kiểm soát nhằm bảo đảm khả năng tái lập nhất quán trên cả ba biến thể
+\texttt{MAC-NF}, \texttt{MAC-F} và \texttt{MAC-Quire}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Phân công công cụ trong quy trình kiểm chứng chức năng, độ phủ và triển khai FPGA.}
+  \label{tab:verif-tools}
+  \footnotesize
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{42mm}Y Y@{}}
+    \toprule
+    \textbf{Công cụ / Môi trường} & \textbf{Phạm vi đảm nhiệm} & \textbf{Đầu ra định lượng} \\
+    \midrule
+    \texttt{ModelSim ASE 10.1d} & Mô phỏng RTL cấp chu kỳ, dạng sóng \texttt{FT-05}, giao thức kẹt luồng/\textit{reset}, hồi quy cặp trước--sau tối ưu S1. &
+      Trace đối chiếu \textit{cycle-exact}, xác nhận 0 sai lệch trên toàn bộ ca biên giao thức. \\
+    \texttt{Verilator 5.032 + C++17} & Biên dịch RTL thành mô hình tốc độ cao, hồi quy hỗn hợp, kiểm thử co giãn $II=1$ độc lập và thu thập độ phủ dòng/nhánh/bit trên RTL cuối. &
+      $130.000$ giao dịch gắn đầu dò/lõi, $20.000$ vectơ $II=1$ kẹt luồng + hàng triệu vectơ chức năng, 0 sai lệch. \\
+    \texttt{Python 3 + C++17 BigInt} & Sinh tập mẫu phân tầng \textit{regime}/dấu, đối chiếu \texttt{SoftPosit}, đo sai số ghép cặp và ứng dụng thực tế. &
+      $100.867$ ca \texttt{SoftPosit}, $1{,}634$ triệu mẫu trước Packer, $377.032$ bộ ghép cặp, 48 chuỗi và 2 bài toán ứng dụng. \\
+    \texttt{AMD Vivado 2026.1} & Tổng hợp, \textit{Place \& Route} OOC trên \texttt{xc7a35tcpg236-1}, phân tích định thời R2R và \texttt{report\_power}. &
+      LUT, FF, DSP, $F_{\max,\mathrm{R2R}}$, công suất động/tĩnh và đối chiếu Xilinx \texttt{FP32}. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Đối chiếu chéo độc lập mô hình tham chiếu}
+Để bảo đảm mô hình vàng \textit{Golden Posit} tự xây dựng không mắc sai lệch hệ
+thống chung với RTL ở khâu giải mã và làm tròn RNE, đồ án thực hiện đối chiếu
+chéo với thư viện chuẩn mở \texttt{SoftPosit} (hỗ trợ chuẩn $es=2$) cùng bảng số
+liệu công bố của Norris--Kim ($es=3$):
+\begin{itemize}
+  \item \textbf{Khớp bit-exact với \texttt{SoftPosit} ($es=2$):} Trên $100.867$
+        bộ đầu vào (gồm $867$ ca biên/góc như \texttt{Zero}, \texttt{NaR},
+        $\pm\mathrm{minpos}$, $\pm\mathrm{maxpos}$, biên hòa chẵn/lẻ và $100.000$
+        cặp ngẫu nhiên) kiểm đồng thời 4 phép toán \texttt{add}, \texttt{sub},
+        \texttt{mul} và \texttt{fma} ($403.468$ phép đối chiếu), mô hình vàng
+        đạt \textbf{0 sai lệch} (100\% khớp bit); bổ sung kiểm tra nhất quán
+        giải mã \texttt{Posit(32,3)} trên $10.000$ mẫu ($0$ lỗi).
+  \item \textbf{Đối chiếu Norris--Kim~\cite{norris2021iterativeposit} ($es=3$):}
+        Trên $12/12$ ô thử nghiệm của Bảng~I trong tài liệu gốc, sai số tỷ lệ
+        lệch tuyệt đối lớn nhất giữa mô hình vàng \texttt{FULL\_TERM} của đồ án
+        và số liệu công bố đều nằm dưới $0{,}94$ điểm phần trăm
+        ($\Delta_{\max} = 0{,}9365$\,pp).
+\end{itemize}
+
+\section{Kiểm chứng chức năng và phân tích độ phủ}
+\begin{table}[htbp]
+  \centering
+  \caption{Tổng hợp hồi quy hỗn hợp ngẫu nhiên có kẹt luồng và đặt lại trên hai lõi MAC-NF và MAC-F (mỗi lượt bao phủ toàn bộ 26 tổ hợp OPS và $n$).}
+  \label{tab:mixed}
+  \begin{tabular}{llrrrr}
+    \toprule
+    Bài kiểm thử & Lõi & Nhận & Hoàn tất & Reset hủy & Sai lệch \\
+    \midrule
+    Hồi quy hỗn hợp toàn diện & MAC-NF & 100.600 & 100.000 & 600 & 0 \\
+    Hồi quy hỗn hợp toàn diện & MAC-F  & 100.518 & 100.000 & 518 & 0 \\
+    Kiểm chứng sau tách fanout S1 & MAC-NF & 10.000 & 9.940 & 60 & 0 \\
+    Kiểm chứng sau tách fanout S1 & MAC-F  & 10.000 & 9.940 & 60 & 0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Các lượt hồi quy hỗn hợp kiểm tra đồng thời mọi tổ hợp cấu hình \texttt{cfg\_ops}
+và \texttt{cfg\_n}, dừng vòng lặp sớm, xử lý \texttt{Zero}/\texttt{NaR}, làm tròn
+RNE tại các biên hòa và bão hòa, trừ triệt tiêu gần $0$, hủy giao dịch khi có
+\textit{reset}, giữ dữ liệu khi \textit{stall} và hồi tiếp đầu vào $C$ bên ngoài.
+Ngoài 100.000 giao dịch hoàn tất cho mỗi lõi ở hồi quy chính và 10.000 vector xác
+nhận tương đương hoàn toàn sau tối ưu tách fanout tầng S1 (cùng 201.764 phép kiểm
+tra bit-exact cho khối \texttt{posit\_add\_prepare\_comb}), môi trường kiểm chứng
+còn hoàn tất kiểm thử tập con giao thức tập trung 1.500 vector (1.491 giao dịch
+hoàn tất, 9 giao dịch bị hủy do \textit{reset}, 5.438 chu kỳ \textit{stall} và
+929 chuỗi hồi tiếp với độ dài tối đa 68, đạt độ trễ quan sát 15--26 chu kỳ ở
+\texttt{MAC-NF} và 12--23 chu kỳ ở \texttt{MAC-F}, $0$ sai lệch).
+
+Để loại bỏ độ lệch giữa phiên bản RTL cũ và thiết kế cuối cùng sau tối ưu tách tải
+tầng S1, phép đo độ phủ mã nguồn được chạy trực tiếp lại bằng \texttt{Verilator 5.032}
+trên toàn bộ cây RTL đóng băng cuối cùng qua $26 \times 5.000 = 130.000$ giao dịch
+có gắn đầu dò cho mỗi lõi ($0$ sai lệch). Trên lõi \textbf{MAC-NF}, độ phủ thô
+đạt 91,98\% dòng lệnh (\textit{line}: 149/162), 88,37\% nhánh rẽ (\textit{branch}: 76/86)
+và 93,63\% chuyển trạng thái (\textit{toggle}: 5.750/6.141). Sau khi loại trừ có căn cứ
+10 nhánh \textit{backpressure} nội bộ không thể kích hoạt ở cấu hình tích hợp một
+giao dịch đang xử lý (\textit{single-outstanding}), độ phủ sau rà soát đạt
+\textbf{98,03\%} dòng lệnh (149/152), \textbf{100\%} nhánh rẽ (76/76) và \textbf{93,63\%}
+chuyển trạng thái. Tương ứng trên lõi trọng tâm \textbf{MAC-F}, độ phủ thô là
+90,91\% / 88,89\% / 93,03\% và độ phủ sau rà soát 8 điểm loại trừ đạt
+\textbf{96,30\%} dòng lệnh (130/135), \textbf{100\%} nhánh rẽ (64/64) và \textbf{93,03\%}
+chuyển trạng thái (5.074/5.454).
+
+Bảng~\ref{tab:coverage-waivers} liệt kê chi tiết toàn bộ các điểm được loại trừ
+(\textit{waiver}) cùng các dòng lệnh còn chưa chạm tới ở lượt đo 130.000 giao dịch
+để bảo đảm tính minh bạch khi rà soát. Các nhánh được loại trừ đều nằm ở tín hiệu
+giữ kẹt nội bộ giữa các tầng (\texttt{ready0..ready4}, \texttt{p1\_ready}, \texttt{p2\_ready}),
+vốn chỉ phát sinh khi tồn tại đồng thời từ hai giao dịch trở lên trong đường ống
+như đã phân tích ở Mục~\ref{subsec:single-outstanding}; các dòng còn lại là nhánh phòng thủ \texttt{default}
+hoặc trường hợp cực hiếm tại đuôi LOD. Để xác nhận phần logic co giãn này vẫn
+hoạt động đúng khi chạy ở nhịp tối đa $II=1$, đồ án dựng thêm testbench độc lập
+nối thẳng chuỗi \texttt{posit\_parser\_mul $\to$ posit\_add $\to$ posit\_pack}
+trong \texttt{Verilator 5.032} với $20.000$ vectơ (gồm $15.079$ chu kỳ nạp liên
+tục không khe hở và $14.328$ chu kỳ ép \texttt{out\_ready=0} tạo kẹt ngược liên
+tiếp trên toàn đường ống): kết quả đạt \textbf{0 sai lệch dữ liệu/cờ}, giữ bất
+biến ngõ ra khi kẹt và kích hoạt \textbf{100\% nhánh rẽ} của cả ba mô-đun con
+(\texttt{posit\_parser\_mul}: $10/10$ nhánh và $383/383$ toggle; \texttt{posit\_add}:
+$24/24$ nhánh; \texttt{posit\_pack}: $10/10$ nhánh). Đối với $380$ điểm toggle
+chưa đảo đủ hai chiều trên \texttt{MAC-F} ($391$ trên \texttt{MAC-NF}) ở lượt đo
+toàn lõi, thống kê theo tệp RTL cho thấy chủ yếu tập trung tại các bit dịch dải
+rộng và cờ ít kích hoạt ở biên gồm \path{dyn_right_shifter_fixed2.sv} ($99$ bit),
+\path{posit_pack_prepare.sv} ($51/25$ bit), \path{sbm_shift_comb.sv} ($43$ bit),
+\path{posit_add.sv} ($44/27$ bit), \path{posit_pack.sv} ($26$ bit),
+\path{posit_product_pack.sv} ($32$ bit riêng ở \texttt{MAC-NF}), các mô-đun nhân
+(\path{mul_iter_core.sv} $20$ bit, \path{sbm_accum_comb.sv} $17$ bit) và các
+bit trạng thái tĩnh trong \path{mac_*_wrapper.sv} ($31/60$ bit).
+
+\begin{table}[htbp]
+  \centering
+  \caption{Chi tiết nhóm điểm loại trừ (\textit{waiver}) và các dòng chưa kích hoạt trên RTL cuối cùng (Verilator 5.032, 130.000 giao dịch/lõi).}
+  \label{tab:coverage-waivers}
+  \footnotesize
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{40mm} c Y@{}}
+    \toprule
+    \textbf{Tệp RTL / Nhóm điểm} & \textbf{Số điểm (NF / F)} & \textbf{Lý do kỹ thuật và điều kiện biên} \\
+    \midrule
+    \multicolumn{3}{@{}l}{\textbf{Nhóm nhánh loại trừ (backpressure tầng trung gian trong cấu hình single-outstanding)}} \\
+    \midrule
+    \path{rtl/adder/posit_add.sv} & 5 / 5 & Nhánh \texttt{else} của \texttt{if (ready0..ready4)}: bộ cộng không bao giờ bị kẹt ngược trong hợp đồng wrapper giữ một giao dịch. \\
+    \path{rtl/parser/posit_parser_mul.sv} & 2 / 2 & Nhánh \texttt{else if (p1\_ready / p2\_ready)}: ngõ ra Parser luôn thông suốt khi chỉ một giao dịch đi qua. \\
+    \path{rtl/packer/posit_pack.sv} & 1 / 1 & Nhánh \texttt{else if (p1\_ready)}: tầng đệm đầu của Packer không bị giữ kẹt từ phía lõi. \\
+    \path{rtl/mac_nf/posit_product_pack.sv} & 2 / 0 & Nhánh \texttt{else if (p1\_ready / p2\_ready)}: chỉ hiện diện trên lõi trung gian của \texttt{MAC-NF}. \\
+    \midrule
+    \multicolumn{3}{@{}l}{\textbf{Các dòng \texttt{v\_line} chưa chạm tới sau rà soát}} \\
+    \midrule
+    \path{mac_*_wrapper.sv} & 1 / 1 & Nhánh \texttt{meta\_sync2} (pop FIFO không kèm push đồng thời khi giữ đệm), không xuất hiện khi có sẵn \texttt{in\_ready}. \\
+    \path{posit_pack_finish.sv} & 2 / 2 & Hai dòng bảo vệ biên bão hòa \texttt{magnitude\_max} và nhánh \texttt{default} phòng thủ của bộ chọn đầu ra. \\
+    \path{lod_lzd_core_fixed2.sv} & 0 / 2 & Hai mức dịch cực đại $K=29$ và $K=30$ trong bộ dò 31 bit của \texttt{MAC-F} (ít gặp trong phân bố chuẩn). \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Phạm vi đã kiểm chứng và giới hạn mở}
+Để phản ánh trung thực mức độ bao phủ trên từng biến thể lõi và tránh nhầm lẫn
+giữa khối lượng thử nghiệm của hai nhánh kiến trúc, phạm vi kiểm chứng được phân
+tách rõ như sau:
+\begin{itemize}
+  \item \textbf{Khối lượng riêng của \texttt{MAC-F} và \texttt{MAC-NF}:} Hai lõi
+        tính toán trực tiếp được kiểm đối chiếu tổng cộng $1.634.048$ giao dịch bộ
+        nhân qua đủ 13 mức $n \in [0, 12]$, $377.032$ bộ ghép cặp $(A,B,C)$ tại
+        \texttt{OPS1/n12}, $110.000$ vector hồi quy hỗn hợp trước và sau tách tải
+        tầng S1, $130.000$ giao dịch đo độ phủ Verilator trên RTL cuối cùng và
+        $1.500$ trace giao thức tập trung ($0$ sai lệch).
+  \item \textbf{Khối lượng riêng của lõi đối chứng \texttt{MAC-Quire}:} Trong phạm
+        vi đồ án này, \texttt{MAC-Quire} được kiểm chứng trên $48$ chuỗi tích lũy
+        hồi tiếp từ $L=16$ đến $L=1.024$ (tổng cộng $16.320$ phép MAC cùng $96$
+        lệnh \texttt{CLEAR/READ}, $0$ sai lệch so với mô hình BigInt trên lưới
+        972 bit) và qua bộ kiểm thử ứng dụng thực tế ở Chương~\ref{ch:measurements},
+        thay vì tái chạy toàn bộ các phép đo đơn lẻ hay hồi quy kẹt luồng trên từng từ 36 bit.
+  \item \textbf{Các hạng mục nằm ngoài đợt đóng băng hiện tại:} Ở phép đo gắn đầu dò
+        độ phủ mã nguồn 130.000 giao dịch mỗi lõi, độ phủ chức năng tức thời đạt
+        510/517 (\texttt{MAC-NF}) và 509/516 (\texttt{MAC-F}) nhóm điều kiện
+        do thiếu 7 nhóm đuôi \textit{regime} cực đại ($196\text{--}220$). Để đóng
+        dứt điểm phần đuôi này trên cùng RTL cuối cùng, một lượt kiểm chứng
+        \texttt{Verilator} bổ sung ở chế độ tốc độ cao ($26 \times 100.000
+        = 2.600.000$ giao dịch mỗi lõi) đã đạt \textbf{100\% functional bin}
+        (517/517 ở \texttt{MAC-NF} và 516/516 ở \texttt{MAC-F},
+        \texttt{missing=[]}, $0$ sai lệch). Các chiến dịch quét vét cạn quy mô
+        hàng trăm triệu vectơ hay thử nghiệm trực tiếp trên bo mạch Artix-7 thực tế
+        qua giao tiếp UART là những bước mở rộng chưa triển khai trong phiên bản này.
+\end{itemize}
+
+\input{council/04_methods}

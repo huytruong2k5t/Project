@@ -1,0 +1,28 @@
+\rtlfig{Packer cuối: P1 dựng magnitude và G/R/S song song với phân loại; P2 ghép RNE với bù hai và chọn mã. Mọi đường đều đi qua hai tầng valid/ready.}{fig:packer-stages}{
+\node[pin] (i) at (0,.69) {\sig{sf[10:0]}, \sig{frac[52:0]}, sticky, dấu, Zero/NaR, flags 5};
+\node[unit,text width=42mm] (asm) at (-5,-1.46) {\hw{Regime + payload}\\$r=\neg sf[10]$\\$o=sf[7:3]\oplus\{5\{sf[10]\}\}$\\$P=\{r,\neg r,sf[2:0],f,0\}$};
+\node[unit,text width=42mm] (mask) at (0,-1.46) {\hw{Mặt nạ sticky 31 bit}\\$U=\{sf[2:0],f[52:25]\}$\\chọn $U_j$ nếu $j<o$\\$S=\mathrm{sticky}\lor |f[24:0]\lor |\mathrm{mask}$};
+\node[unit,text width=42mm] (class) at (5,-1.46) {\hw{Phân loại song song}\\NaR $\to$ Zero $\to$ MAX $\to$ MIN\\MAX: $sf\ge240$; MIN: $sf<-240$\\\sig{special\_sel}, flags};
+\foreach \n in {asm,mask,class}{\draw[wire] (i.south)--++(0,-.24)-|(\n.north);}
+\node[unit,text width=42mm] (sh) at (-5,-3.91) {\hw{Dịch phải 59 bit}\\$W=P\gg o$; điền $r$\\$m=W[58:28]$\\$G=W[27]$, $R=W[26]$};
+\draw[wire] (asm)--node[tag,right]{59, $o$:5, $r$:1}(sh);
+\draw[wire] (asm.east)--(mask.west);
+\node[ff,text width=145mm] (r1) at (0,-5.6) {\hw{P1}\enspace $m[30:0]$\enspace|\enspace $G,R,S$\enspace|\enspace dấu\enspace|\enspace \sig{special\_sel[2:0]}, flags};
+\draw[wire] (sh)--(r1.north -| sh);
+\draw[wire] (mask)--node[tag,right]{$S$:1}(r1.north -| mask);
+\draw[meta] (class)--node[tag,right]{loại, flags}(r1.north -| class);
+\node[unit,text width=66mm] (r) at (-3.73,-7.34) {\hw{RNE + mã dấu: một phép cộng}\\
+ $u=G\land(m[0]\lor R\lor S)$\\
+ $D_{\mathrm{r}}=(\{0,m\}\oplus\{32\{s\}\})+(s\oplus u)$};
+\node[unit,text width=62mm] (end) at (3.73,-7.34) {\hw{Biên và cờ}\\
+ test $m=0$ / $m=\mathtt{7fff\,ffff}$\\
+ chọn min/max theo dấu\\nhánh thường: inexact OR G/R/S};
+\draw[wire] (r1.south -| r)--(r);
+\draw[wire] (r1.south -| end)--(end);
+\node[pick,text width=81mm] (mux) at (0,-9.38) {\hw{Chọn mã theo}~\sig{special\_sel}~\hw{và biên}};
+\draw[wire] (r.south)--++(0,-.32)-|(mux.north -| r.east);
+\draw[wire] (end.south)--++(0,-.32)-|(mux.north -| end.west);
+\node[ff,text width=95mm] (r2) at (0,-10.65) {\hw{P2} \quad \sig{d[31:0]}, \sig{flags[4:0]}, \sig{out\_valid}};
+\draw[wire] (mux)--(r2);
+}
+

@@ -1,0 +1,45 @@
+\rtlfig{OPS, SAC và SBM trong bộ nhân FULL\_TERM26/Q24. T1/T2 chốt token; T3 chốt tổng. Hai đường hồi tiếp phục vụ cập nhật mask và cộng term.}{fig:multiplier-stages}{
+\node[pin] (ab) at (-1.55,.46) {$f_A[11:0], f_B[11:0]$};
+\node[pin] (cfg) at (5.4,.46) {\sig{ops\_q}, \sig{n\_q[3:0]}};
+\node[unit,text width=74mm] (ops) at (-1.55,-1.06) {\hw{OPS}\\
+ mỗi toán hạng: 2 đếm 6 bit $\to$ tổng 4 bit\\
+ B làm X nếu OPS1 và $\mathrm{popcount}(B)<\mathrm{popcount}(A)$};
+\draw[wire] (ab)--(ops);
+\draw[enable] (cfg.south)|-node[tag,above]{OPS}(ops.east);
+\node[ff,text width=64mm] (sacreg) at (-2.45,-3.02) {\hw{Context SAC tại launch}\\
+ \sig{fx\_q[11:0]} $\leftarrow X$; scale/count $\leftarrow0$\\
+ \sig{limit\_q[3:0]} $\leftarrow n$};
+\node[ff,text width=47mm] (y) at (4.55,-3.02) {\hw{Context Y và metadata}\\\sig{y\_q[12:0]} $\leftarrow \{1,f_Y\}$\\dấu, $sf$, \sig{input\_cut}};
+\draw[wire] (ops.south -| sacreg)--node[tag,right]{X:12}(sacreg);
+\draw[wire] (ops.south)--++(0,-.31)-|(y.north) node[pos=.25,tag,above]{Y:13};
+\node[unit,text width=64mm] (sac) at (-2.45,-5.18) {\hw{SAC + điều khiển phát token}\\
+ LOD12 $\to (K,v)$; $S' = S+K+1$\\
+ $F'=\{F[10:0],0\}\ll K$ khi $v=1$\\
+ hết bit nếu $F\mathbin{\&}(F-1)=0$};
+\draw[wire] (sacreg)--node[tag,right]{$F,S$, count, limit}(sac);
+\draw[wire] (sac.west)--++(-.52,0)|-(sacreg.west);
+\node[explain,text width=46mm] at (4.55,-5.2) {\hw{Dừng phát}\\init nếu $F=0$ hoặc $n=0$.\\
+ last nếu init, hết bit,\\hoặc count+1 đạt $n$.};
+\node[ff,text width=64mm] (t1) at (-2.45,-7.25) {\hw{T1} \quad scale 4, iteration 4\\valid, first, last, init, cut};
+\draw[wire] (sac)--(t1);
+\node[unit,text width=45mm] (base) at (4.55,-7.25) {\hw{Cơ số Q24}\\$B_0=\{0,\sig{y\_q},12'b0\}$};
+\draw[wire] (y.east)--++(.33,0)|-(base.east);
+\node[unit,text width=64mm] (sbm) at (-2.45,-8.98) {\hw{SBM: dịch phải 26 bit}\\
+ các cấp 1/2/4/8; term $=B_0\gg S'$\\init-only chọn term $=0$};
+\draw[wire] (t1)--(sbm);
+\draw[wire] (base.south)--++(0,-.35)|-(sbm.east) node[pos=.63,tag,above]{26};
+\node[ff,text width=64mm] (t2) at (-2.45,-10.78) {\hw{T2} \quad term 26, iteration 4\\valid, first, last, cut};
+\draw[wire] (sbm)--(t2);
+\node[pick,text width=32mm] (m) at (4.55,-11.04) {first ? $B_0$ : acc};
+\draw[wire] (base)--(m);
+\node[unit,text width=64mm] (sum) at (-2.45,-12.53) {\hw{Cộng mở rộng 27 bit}\\base + term; bit 26 kiểm carry};
+\draw[wire] (t2)--node[tag,right]{term:26}(sum);
+\draw[wire] (m.south)|-(sum.east) node[pos=.62,tag,above]{base:26};
+\draw[enable] (t2.east)|-(m.west) node[midway,tag,above]{first};
+\node[ff,text width=64mm] (t3) at (-2.45,-14.25) {\hw{T3: commit khi T2 valid}\\acc 26, iteration 4, cut, done};
+\draw[wire] (sum)--(t3);
+\draw[wire] (t3.east)--(7.45,-14.25) |- (m.east) node[pos=.61,tag,left]{acc:26};
+\node[pin] (out) at (-2.45,-15.45) {\sig{acc[25:0]}, \sig{iterations\_done}, \sig{approx\_cut}, \sig{core\_done}};
+\draw[wire] (t3)--(out);
+}
+

@@ -1,0 +1,31 @@
+\begin{table}[!htbp]
+  \centering
+  \caption{Đối chiếu định lượng và kiến trúc với IP Xilinx \texttt{FP32} (trên cùng \texttt{xc7a35t}) và các nghiên cứu Posit 32 bit đã công bố.}
+  \label{tab:literature-comparison}
+  \footnotesize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{31mm} >{\raggedright\arraybackslash}p{25mm} r r r r Y@{}}
+    \toprule
+    \textbf{Thiết kế / Công trình} & \textbf{Phép toán / Chuẩn} & \textbf{Nền tảng} & \textbf{LUT} & \textbf{FF} & \textbf{DSP} & \textbf{Tần số \& Đặc điểm chính} \\
+    \midrule
+    \textbf{Đồ án: MAC-F} & Fused MAC \texttt{Posit(32,3)} & Artix-7 A35T & 1.221 & 781 & 0 & 154\,MHz (R2R) / 129\,MHz (TK); 14--25 cyc; $P_{\mathrm{dyn}}=4$\,mW. \\
+    \textbf{Đồ án: MAC-NF} & Non-fused \texttt{Posit(32,3)} & Artix-7 A35T & 1.591 & 916 & 0 & 136\,MHz (R2R) / 107\,MHz (TK); 17--28 cyc; $P_{\mathrm{dyn}}=12$\,mW. \\
+    \textbf{Đồ án: MAC-Quire} & Quire MAC \texttt{Posit(32,3)} & Artix-7 A35T & 2.873 & 2.636 & 0 & 98,2\,MHz; lưới 972 bit theo từ 36 bit; $P_{\mathrm{dyn}}=29$\,mW. \\
+    \midrule
+    Xilinx FP32 FMA Med~\cite{amd_pg060_fp} & Fused FMA \texttt{FP32} & Artix-7 A35T & 777 & 1.285 & 2 & 191\,MHz; đường ống $II=1$, Lat=17; $P_{\mathrm{dyn}}=21$\,mW. \\
+    Xilinx FP32 0-DSP~\cite{amd_pg060_fp} & Mul+Add \texttt{FP32} & Artix-7 A35T & 993 & 1.520 & 0 & 195\,MHz; đường ống $II=1$, Lat=22; $P_{\mathrm{dyn}}=22$\,mW. \\
+    \midrule
+    Jaiswal \& So (PACoGen)~\cite{jaiswal2019pacogen} & Mul / Add \texttt{Posit(32,es)} & Virtex-7 & 854 / 946 & --- & 1 / 0 & 227 / 244\,MHz; đường ống tách rời Mul ($4$ cyc) và Add ($5$ cyc), $II=1$. \\
+    Murillo et al. (FloPoCo)~\cite{murillo2020flopoco,murillo2022energy} & Gen Posit \texttt{Posit(32,es)} & Virtex-7 / 7-s & 572--682 & --- & 4 & Nhân chính xác dùng 4 DSP (mốc tham chiếu tổng hợp bởi~\cite{murillo2021plam}). \\
+    Murillo et al. (PLAM)~\cite{murillo2021plam} & Approx Mul \texttt{Posit(32,es)} & FPGA 7-series & 528 & --- & 0 & Nhân xấp xỉ logarit $0$ DSP (đơn vị nhân đơn lẻ, chưa gồm Add/Quire). \\
+    Mallasén et al. (PERCIVAL)~\cite{mallasen2022percival} & PAU+Quire \texttt{Posit(32,2)} & Kintex-7 325T & 11.879 & 2.985 & 4 & Khối số học tích hợp FPU/Quire đầy đủ trong nhân RISC-V (khác phạm vi IP MAC). \\
+    \midrule
+    Chaurasiya et al.~\cite{chaurasiya2018parameterized} & Gen Mul/Add \texttt{Posit(32,x)} & FPGA / ASIC & --- & --- & --- & Bộ sinh tham số hóa sớm; ghép riêng Add và Mul không hợp nhất lặp. \\
+    Zhang \& Ko~\cite{zhang2020positmul} & Mul \texttt{Posit(32,x)} & FPGA / ASIC & --- & --- & --- & Phân vùng sub-multiplier $15{\times}15$ ngắt động, giảm $\approx 16\%$ công suất nhân. \\
+    Norris \& Kim~\cite{norris2021iterativeposit} & Iterative Mul \texttt{Posit(32,3)} & Xilinx FPGA & --- & --- & --- & Nền tảng nhân lặp xấp xỉ 0 DSP (OPS/SAC/SBM); chưa tích hợp bộ cộng MAC hay Quire. \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{2pt}
+  {\footnotesize Ghi chú: Do khác biệt về dòng chip (Artix-7 tốc độ $-1$ so với Kintex-7/Virtex-7), độ rộng phép toán (IP MAC tuần tự so với đường ống $II=1$ hoặc RISC-V PAU) và công cụ tổng hợp, bảng chỉ dùng để đối chiếu định vị kiến trúc; riêng 5 dòng đầu đo trực tiếp trên cùng quy trình OOC \texttt{xc7a35tcpg236-1} của Vivado 2026.1. Dấu ``---'' biểu thị tài liệu không tách riêng FF cho từng đơn vị con.}
+\end{table}

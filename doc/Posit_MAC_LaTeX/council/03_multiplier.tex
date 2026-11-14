@@ -1,0 +1,60 @@
+\subsection{OPS và context đầu bộ nhân}
+
+OPS đếm bit 1 trên phần fraction 12 bit của A và B. Mỗi phép
+đếm được chia thành hai nhóm 6 bit, rồi cộng hai số đếm cục bộ.
+OPS1 chọn B làm X chỉ khi count B nhỏ hơn count A. Trường hợp
+hòa giữ A làm X. Do X quyết định số token cần phát, OPS1 có thể
+giảm số vòng cho cùng cặp A/B. OPS0 giúp kiểm vai cố định.
+Y gồm bit ẩn và phần fraction 12 bit, nên bus Y có 13 bit.
+Dấu tích là XOR, số mũ cơ sở là $sf_A+sf_B$ signed 11 bit.
+
+\input{council/datapath/mul}
+
+\subsection{SAC, SBM và tích lũy không mất bit}
+
+SAC dùng mask còn lại để tìm bit 1 có trọng số cao nhất, tạo
+offset và mask cho bước tiếp theo. T1 chốt offset tích lũy,
+token first/last, số vòng và cờ cắt. Token last được tạo khi
+mask cạn hoặc khi đã dùng hết số vòng. Nếu không xử lý bit
+fraction nào, token init-only chuyển tới T2 với term bằng 0.
+Nhờ vậy đường dữ liệu commit vẫn chung với trường hợp có vòng.
+
+T2 dịch phải cơ số \texttt{y\_base} theo offset của token.
+Các vị trí bit thấp được đệm 0 từ trước, nên phép dịch từ
+1 đến 12 giữ đủ số hạng trong lưới Q24. T3 chọn cơ số Y ở token
+first hoặc accumulator ở các token sau, cộng term và lưu kết
+quả. \texttt{core\_done} cùng có hiệu lực với kết quả của token
+last đã commit. Số vòng fraction được cập nhật từ metadata của
+token T2, không đếm slot init-only.
+
+\begin{engineeringtable}{Trace số học bộ dữ liệu mẫu FT-05 trên MAC-F ở cấu hình OPS1/n12, $C=0$.}{tab:ft05-terms}
+\begin{tabularx}{\linewidth}{@{}r l r Y@{}}
+\toprule
+Cạnh & Mốc & $M$ quan sát & Diễn giải \\
+\midrule
+0 & Accept & -- & Chốt A/B và cấu hình. \\
+2 & \texttt{pair\_retire} & -- & Context core và C được chốt. \\
+5 & T2 valid, vòng 1 & -- & T3 sắp commit số hạng đầu. \\
+6 & T2 valid, vòng 2 & 23.633.920 & Cơ số 18.907.136 cộng term dịch phải 2. \\
+7 & \texttt{core\_done} & 24.224.768 & Cộng thêm 590.848 từ dịch phải 5, $b=-11$, $t=2$. \\
+14 & \texttt{out\_valid} & 24.224.768 & $D=\texttt{1ae34800}$, flags \texttt{00}. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+Ở n=0 với cùng A/B, init-only cho $M=18\,907\,136$, $t=0$ và
+cờ còn số hạng được đặt. Mã đo được là \texttt{1a410000} với
+flags \texttt{03}. Ở n12, X cạn sau hai vòng. Hai trường hợp
+cho thấy thời gian xử lý phụ thuộc số bit 1 được chọn và không
+đồng nhất với giá trị giới hạn cấu hình. Do bộ nhân luôn chạy ít nhất một chu kỳ ở pha lặp \texttt{T2/T3} sau \texttt{T1}, số chu kỳ thực thi của khối nhân lặp bằng $\max(1,t)$ chu kỳ cộng pha khởi tạo cố định, quyết định trực tiếp thành phần biến thiên trong độ trễ từng phép MAC.
+
+\subsection{Adapter ở biên trước bộ cộng}
+
+Nếu $M[25]=1$, significand tích nằm từ 2 đến dưới 4, nên scale
+chuẩn hóa là $b+1$ và fraction lấy từ \texttt{\{M[24:0],1'b0\}}.
+Nếu bit 25 bằng 0, scale giữ $b$ và fraction là
+\texttt{\{M[23:0],2'b0\}}. Wrapper tính trước $b+1$ khi chốt
+context, để adapter chọn giữa hai scale thay vì thêm carry-chain
+vào đường từ core đến S1. Cả hai cách ánh xạ giữ đủ bit có giá
+trị trong tích Q24. NF sử dụng biểu diễn đã chuẩn hóa để qua
+Packer tích và Parser tích trước khi cộng, còn F dùng trực tiếp.

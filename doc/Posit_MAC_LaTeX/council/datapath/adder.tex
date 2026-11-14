@@ -1,0 +1,37 @@
+\rtlfig{Datapath mô-đun \sig{posit\_add}. Cột trái là xử lý tổ hợp; cột phải liệt kê các trường chính được chốt sau mỗi tầng.}{fig:adder-stages}{
+\node[pin] (in) at (-2.3,.28) {Hai số hạng: frac 26, $sf$ 11, $s,Z,N$ mỗi số};
+\node[head] at (4.65,0) {Ngân hàng thanh ghi};
+\node[unit,text width=73mm] (s1) at (-2.3,-1.42) {\hw{S1: so và đổi vai}\\
+ ưu tiên số khác 0; so $sf$, rồi so frac\\
+ hai hiệu scale signed 12 bit $\to |\Delta sf|$; kẹp nếu $\Delta>28$};
+\node[ff,text width=50mm] (r1) at (4.65,-1.42) {\hw{S1}\\frac X/Y: 26+26; shift: 5\\kẹp, subtract, $sf_{\mathrm{base}}$, dấu/cờ};
+\draw[wire] (in)--(s1);
+\draw[wire] (s1)--(r1);
+\node[unit,text width=73mm] (s2) at (-2.3,-3.96) {\hw{S2: căn Y vào cửa sổ 31 bit}\\
+ $\{0,1,f_Y,3'b0\}\gg\mathrm{shift}$\\
+ mặt nạ đuôi $\to$ jam ở \sig{Y[0]} và \sig{alignment\_tail}};
+\node[ff,text width=50mm] (r2) at (4.65,-3.96) {\hw{S2}\\frac X: 26; Y: 31; tail: 1\\subtract, $sf_{\mathrm{base}}$, dấu/cờ};
+\draw[wire] (r1.south)--++(0,-.54)-|(s2.north);
+\draw[wire] (s2)--(r2);
+\node[unit,text width=73mm] (s3) at (-2.3,-6.51) {\hw{S3: cộng/trừ độ lớn}\\
+ $X=\{0,1,f_X,3'b0\}$; $M=X\pm Y$\\
+ song song tính \sig{sf\_inc} $=sf_{\mathrm{base}}+1$};
+\node[ff,text width=50mm] (r3) at (4.65,-6.51) {\hw{S3}\\magnitude: 31; tail: 1\\\sig{sf\_inc}: 11, dấu/cờ};
+\draw[wire] (r2.south)--++(0,-.54)-|(s3.north);
+\draw[wire] (s3)--(r3);
+\node[unit,text width=73mm] (s4) at (-2.3,-9.06) {\hw{S4: LOD ưu tiên và seed}\\
+ $M[30:0]\to$ \sig{leading\_count[4:0]}, \sig{nonzero}\\
+ song song ghép seed 30 bit và \sig{sticky\_raw}};
+\node[ff,text width=50mm] (r4) at (4.65,-9.06) {\hw{S4}\\seed: 30; count: 5; nonzero\\sticky, \sig{sf\_inc}, dấu/cờ};
+\draw[wire] (r3.south)--++(0,-.54)-|(s4.north);
+\draw[wire] (s4)--(r4);
+\node[unit,text width=73mm] (s5) at (-2.3,-11.61) {\hw{S5: chuẩn hóa và phân loại}\\
+ dịch trái seed theo count; lấy 29 bit cao\\
+ $sf=\sig{sf\_inc}-\mathrm{count}$; xác định Zero/NaR};
+\node[ff,text width=50mm] (r5) at (4.65,-11.61) {\hw{S5}\\\sig{frac\_hi[28:0]}, $sf$, sticky\\dấu, Zero/NaR và flags};
+\draw[wire] (r4.south)--++(0,-.54)-|(s5.north);
+\draw[wire] (s5)--(r5);
+\node[pin] (o) at (4.65,-13.08) {Tới Packer: \sig{frac = \{frac\_hi,24'b0\}}};
+\draw[wire] (r5)--(o);
+}
+

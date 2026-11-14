@@ -1,0 +1,52 @@
+\rtlfig{Datapath chi tiết tầng S2 (\sig{posit\_add\_align\_comb}): dịch phải căn chỉnh 31 bit, mặt nạ nhiệt 25 bit tính song song và hợp nhất \sig{jam}/\sig{alignment\_tail}.}{fig:adder-s2}{
+\node[pin] (in1) at (-4.9,.86) {\sig{s1\_y\_frac\_q[25:0]}, \sig{s1\_shift\_q[4:0]}};
+\node[pin] (in2) at (.2,.86) {\sig{s1\_clamped\_q}, \sig{s1\_both\_nz\_q}};
+\node[pin] (in3) at (5.25,.86) {\sig{s1\_x\_frac\_q[25:0]}, \sig{s1\_sub\_q},\\ \sig{s1\_sf\_q[10:0]}, dấu, cờ};
+
+\node[unit,text width=43mm] (sh) at (-4.9,-1.38) {\hw{Dịch phải 31 bit}\\
+ \sig{dyn\_right\_shifter\_fixed4}\\
+ $\sig{y\_seed}=\{0,1,f_Y,3'\mathrm{b0}\}$\\
+ $\sig{shifted\_full}=\sig{y\_seed}\gg\mathrm{shift}$};
+\node[unit,text width=44mm] (msk) at (.2,-1.38) {\hw{Mặt nạ nhiệt 25 bit song song}\\
+ $\sig{discard\_mask}[j]=(j+3<\mathrm{shift})$\\
+ $\sig{raw\_tail}=\bigvee(f_Y[24:0]\land\sig{mask})$};
+\node[unit,text width=36mm] (pas) at (5.25,-1.38) {\hw{Giữ nguyên toán hạng X}\\
+ \sig{x\_frac[25:0]}, \sig{subtract},\\
+ \sig{sf\_base[10:0]}, \sig{sign\_base},\\
+ \sig{both\_zero}, \sig{is\_nar}, \sig{flags\_lo}};
+
+\draw[wire] (in1)--(sh);
+\draw[wire] (in2)--(msk);
+\draw[wire] (in3)--(pas);
+\node[tapdot] at (-4.9,.18) {};
+\draw[wire] (-4.9,.18) -- (-1.35,.18) -- (msk.north -| -1.35,0);
+\node[tag] at (-2.9,.18) {\sig{f\_Y, shift}};
+
+\node[unit,text width=43mm] (yhi) at (-4.9,-3.85) {\hw{Chốt 30 bit cao của Y}\\
+ $\sig{y[30:1]}=(\sig{bnz}\land\neg\sig{clp})$\\
+ $\text{ ? }\sig{shifted\_full[30:1]} : 30'\mathrm{d0}$};
+\node[unit,text width=45mm] (jam) at (.2,-3.85) {\hw{Tạo jam Y[0] và tail}\\
+ $\sig{y[0]}=\sig{bnz}\land(\sig{clp}\lor\sig{sh[0]}\lor\sig{raw\_tail})$\\
+ $\sig{tail}=\sig{bnz}\land(\sig{clp}\lor\sig{raw\_tail})$};
+
+\draw[wire] (sh)--(yhi);
+\draw[wire] (msk)--(jam);
+\coordinate (sh0p) at (-1.45,-2.66);
+\node[tapdot] at (-4.9,-2.66) {};
+\draw[wire] (-4.9,-2.66) -- (sh0p) -- (jam.north -| sh0p);
+\node[tag] at (-3.05,-2.66) {\sig{sh[0]}};
+
+\node[ff,text width=140mm] (r2) at (.15,-5.68) {\hw{S2}\enspace
+ \sig{s2\_x\_frac\_q[25:0]} \enspace|\enspace
+ \sig{s2\_y\_q[30:0]} \enspace|\enspace
+ \sig{s2\_tail\_q}\\
+ \sig{s2\_sub\_q}, \sig{s2\_sign\_q}, \sig{s2\_sf\_q[10:0]} \enspace|\enspace
+ \sig{s2\_both\_zero\_q}, \sig{s2\_nar\_q}, \sig{s2\_flags\_q[3:0]}};
+
+\draw[wire] (yhi.south)--(r2.north -| yhi);
+\draw[wire] (jam.south)--(r2.north -| jam);
+\draw[wire] (pas.south)--(r2.north -| pas);
+
+\node[pin] (o) at (.15,-6.82) {Tới S3 (\sig{posit\_add\_arith\_comb}): cộng/trừ 31 bit \sig{X +/- Y} và tính song song \sig{sf\_inc}};
+\draw[wire] (r2)--(o);
+}

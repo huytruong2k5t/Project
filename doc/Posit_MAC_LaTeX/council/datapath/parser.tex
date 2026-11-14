@@ -1,0 +1,37 @@
+\rtlfig{Hai tầng của \sig{posit\_parser\_mul}. Vector chuyển tiếp chỉ cấp LOD; seed để dịch giữ nguyên từ magnitude. Quire dùng \sig{posit\_parser} với cùng phép dò regime và trả fraction 26 bit.}{fig:parser-stages}{
+\node[pin] (p) at (0,.42) {\sig{p[31:0]}};
+\node[unit,text width=62mm] (mag) at (-3.05,-1.1) {\hw{Lấy độ lớn}\\$m=(p\oplus\{32\{s\}\})+s$};
+\node[unit,text width=52mm] (exc) at (4.2,-1.1) {\hw{Dấu và đặc biệt}\\$s=p[31]$, $u=\lnot (|p[30:0])$\\$Z=\lnot s\land u$, $N=s\land u$};
+\draw[wire] (p.south)--++(0,-.2) -| (mag.north);
+\draw[wire] (p.south)--++(0,-.2) -| (exc.north);
+\node[unit,text width=62mm] (xor) at (-3.05,-2.95) {\hw{Đánh dấu chuyển tiếp}\\$d=\{m[29:0]\oplus m[30:1],1'b1\}$};
+\draw[wire] (mag)--node[tag,right]{$m[31:0]$}(xor);
+\node[unit,text width=62mm] (lod) at (-3.05,-4.47) {\hw{LOD regime 31 bit}\\\sig{posit\_parser\_f\_regime\_lod}};
+\draw[wire] (xor)--node[tag,right]{$d[30:0]$}(lod);
+\node[ff,text width=125mm] (p1) at (0,-6.18) {\hw{P1} \quad \sig{cnt[4:0]} \enspace|\enspace
+ $r=m[30]$ \enspace|\enspace \sig{seed[28:0]} \enspace|\enspace $s,Z,N$};
+\draw[wire] (lod)--node[tag,right]{\sig{cnt[4:0]}}(p1.north -| lod);
+\coordinate (seedport) at (.85,0);
+\draw[wire] (mag.east) -- (.85,-1.1) -- (p1.north -| seedport)
+    node[pos=.55,tag,right]{$m[30], m[28:0]$};
+\draw[meta] (exc.south)--(p1.north -| exc) node[pos=.5,tag,right]{$s,Z,N$};
+\node[unit,text width=50mm] (sh) at (-3.66,-7.84) {\hw{Dịch trái 29 bit}\\$w=\sig{seed}\ll\sig{cnt}$};
+\node[unit,text width=52mm] (reg) at (3.66,-7.84) {\hw{Tái tạo regime signed}\\$r=1$: $k=\sig{cnt}$\\$r=0$: $k=-\sig{cnt}-1$};
+\draw[wire] (p1.south -| sh)--(sh);
+\draw[wire] (p1.south -| reg)--(reg);
+\node[unit,text width=53mm] (slice) at (-3.66,-9.73) {\hw{Tách fraction}\\$f_H=w[25:14]$, $f_L=w[13:0]$\\\sig{tail\_cut} $=|f_L$};
+\node[unit,text width=52mm] (scale) at (3.66,-9.73) {\hw{Ghép scale}\\$sf=8k+e$, $e=w[28:26]$\\chọn $k=0$ nếu $Z\lor N$};
+\draw[wire] (sh)--(slice);
+\draw[wire] (reg)--(scale);
+\draw[wire] (sh.east)--(0,-7.84) |- (scale.west) node[pos=.49,tag,right]{$e$:3};
+\node[ff,text width=125mm] (p2) at (0,-11.49) {\hw{P2} \quad \sig{sf[10:0]} \enspace|\enspace
+ \sig{frac[11:0]}, \sig{frac\_lo[13:0]} \enspace|\enspace \sig{tail\_cut}, $s,Z,N$};
+\draw[wire] (slice)--(p2.north -| slice);
+\draw[wire] (scale)--(p2.north -| scale);
+\draw[meta] (p1.east)--(6.91,-6.18)--node[tag,left]{$s,Z,N$}(6.91,-11.49)--(p2.east);
+\node[pin] (ab) at (-3.66,-12.81) {A/B: $f_H$, \sig{tail\_cut}};
+\node[pin] (c) at (3.66,-12.81) {C: \sig{\{frac,frac\_lo\}}};
+\draw[wire] (p2.south -| ab)--(ab);
+\draw[wire] (p2.south -| c)--(c);
+}
+

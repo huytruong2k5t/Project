@@ -6,6 +6,18 @@
       "rmse": 5.99492193859735e-08,
       "max_abs_err": 2.1290327078940354e-07
     },
+    "bf16": {
+      "samples": 257,
+      "snr_db": 44.10011464811163,
+      "rmse": 0.0033003701794050546,
+      "max_abs_err": 0.008971716149099364
+    },
+    "fp16": {
+      "samples": 257,
+      "snr_db": 62.231081121006326,
+      "rmse": 0.00040927416462847844,
+      "max_abs_err": 0.0016141521325797805
+    },
     "mac_f_n12": {
       "samples": 257,
       "snr_db": 72.50840209533655,
@@ -47,6 +59,18 @@
         "max_rel": 1.4187017046934448e-05,
         "fail_inf_cnt": 0
       },
+      "bf16": {
+        "p50_rel": 0.009815403396418893,
+        "p95_rel": 0.05739289778564548,
+        "max_rel": 0.6270742361835799,
+        "fail_inf_cnt": 0
+      },
+      "fp16": {
+        "p50_rel": 0.0015714696846597575,
+        "p95_rel": 0.007009870511995101,
+        "max_rel": 0.06550218233262886,
+        "fail_inf_cnt": 0
+      },
       "mac_f_n12": {
         "p50_rel": 0.00018122672372643904,
         "p95_rel": 0.0005664204103578123,
@@ -72,10 +96,24 @@
         "fail_inf_cnt": 0
       },
       "fp32_fail_or_underflow_cnt": 0,
+      "bf16_fail_or_underflow_cnt": 0,
+      "fp16_fail_or_underflow_cnt": 0,
       "mac_f_valid_nonzero_cnt": 200
     },
     "wide_dyn_scale_dim128": {
       "fp32": {
+        "p50_rel": Infinity,
+        "p95_rel": Infinity,
+        "max_rel": Infinity,
+        "fail_inf_cnt": 100
+      },
+      "bf16": {
+        "p50_rel": Infinity,
+        "p95_rel": Infinity,
+        "max_rel": Infinity,
+        "fail_inf_cnt": 100
+      },
+      "fp16": {
         "p50_rel": Infinity,
         "p95_rel": Infinity,
         "max_rel": Infinity,
@@ -106,10 +144,24 @@
         "fail_inf_cnt": 0
       },
       "fp32_fail_or_underflow_cnt": 100,
+      "bf16_fail_or_underflow_cnt": 200,
+      "fp16_fail_or_underflow_cnt": 200,
       "mac_f_valid_nonzero_cnt": 200
     },
     "wide_dyn_cancel_dim128": {
       "fp32": {
+        "p50_rel": Infinity,
+        "p95_rel": Infinity,
+        "max_rel": Infinity,
+        "fail_inf_cnt": 200
+      },
+      "bf16": {
+        "p50_rel": Infinity,
+        "p95_rel": Infinity,
+        "max_rel": Infinity,
+        "fail_inf_cnt": 200
+      },
+      "fp16": {
         "p50_rel": Infinity,
         "p95_rel": Infinity,
         "max_rel": Infinity,
@@ -140,6 +192,8 @@
         "fail_inf_cnt": 0
       },
       "fp32_fail_or_underflow_cnt": 200,
+      "bf16_fail_or_underflow_cnt": 200,
+      "fp16_fail_or_underflow_cnt": 200,
       "mac_f_valid_nonzero_cnt": 200
     }
   }

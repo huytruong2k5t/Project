@@ -1,0 +1,178 @@
+\section{Phân tích độ nhạy của phép đo sai số}
+
+Phân vị 95 mô tả giá trị tại một vị trí trong phân bố,
+còn max mô tả mẫu bất lợi nhất trong corpus. Chúng
+phản ứng khác nhau khi một nhóm nhỏ giao dịch giữ
+thêm số hạng. Từ n8 đến n9, số cặp lấy mẫu đều còn
+term giảm từ 554 xuống 43; tới n10 bằng 0 trong nhóm
+này. P95 gần với mức sai số do cắt đầu vào ngay từ
+n8, nhưng max vẫn thay đổi theo những mẫu hiếm còn term.
+Trong nhóm chủ đích, có cặp cần đủ 12 vòng. Vì vậy
+không thể suy rằng mọi dữ liệu đều đủ ở n10.
+
+\begin{engineeringtable}{Các mốc ở đuôi phân bố trên nhóm lấy đều, OPS1 (3 chữ số có nghĩa).}{tab:tail-sensitivity}
+\begin{tabular}{rrrr}
+\toprule
+n & Cặp còn term & P95 sai số tổng (\%) & Max quan sát (\%) \\
+\midrule
+7 & 3.724 & 0,0320 & 0,351 \\
+8 & 554 & 0,0299 & 0,156 \\
+9 & 43 & 0,0297 & 0,0582 \\
+10 & 0 & 0,0297 & 0,0460 \\
+12 & 0 & 0,0297 & 0,0460 \\
+\bottomrule
+\end{tabular}
+\end{engineeringtable}
+
+Phân tầng regime giúp quan sát rõ các miền ít xuất hiện khi lấy đều theo mã. Với
+$n=12$, nhóm phân tầng đạt $\mathrm{P95} = 0{,}0218\%$, giá trị cực đại $0{,}0438\%$
+và trung bình $2{,}66$ vòng lặp (so với trung bình $5{,}03$ vòng ở nhóm lấy đều).
+Sự khác biệt này phản ánh mật độ bit $1$ và độ dài fraction khác nhau giữa các dải
+\textit{regime}; do đó số liệu của nhóm phân tầng được theo dõi tách biệt khỏi phân
+bố ứng dụng thực tế.
+
+\section{Từ sai số tích đến sai số MAC}
+
+Sai số cắt fraction được bảo toàn giống nhau qua \texttt{MAC-NF} và \texttt{MAC-F}
+cho cùng một tích đầu vào. Khi toán hạng cộng $C$ cùng dấu với $P$, độ lớn tổng tăng
+nên cùng một sai lệch tích thường chiếm tỷ lệ tương đối nhỏ hơn; ngược lại, khi $C$
+trái dấu, mẫu số thu hẹp và bước lượng tử hóa trung gian $R(\widehat P)$ của
+\texttt{MAC-NF} làm xuất hiện sai khác phân kỳ so với tổng đầy đủ.
+
+Trên $108.703$ ca gần $0$ ($r \ne 0$) thuộc nhóm ép triệt tiêu $C = R(-P)$, hai
+chỉ số bất biến theo thang trong Bảng~\ref{tab:cancel-target-metrics} phản ánh bản
+chất sai số chính xác hơn nhiều so với sai số tuyệt đối thô vốn biến thiên hàng
+chục bậc theo hệ số mũ của \texttt{Posit(32,3)}. Đồng thời, vì $C$ bị lượng tử hóa
+trước khi đưa vào RTL, một số cặp chạm ngưỡng kẹp hoặc bước nhảy thưa khiến $P+C$
+không còn thỏa điều kiện gần $0$; việc phân lớp lại theo tổng chính xác $r = P + C$
+trước khi thống kê giúp tách bạch hoàn toàn nhóm $r = 0$ khỏi các ca kẹp ngưỡng
+ở lớp \texttt{regular}.
+
+\section{Ý nghĩa của kết quả chuỗi}
+
+Trong vận hành theo chuỗi, \texttt{MAC-NF} và \texttt{MAC-F} cập nhật trạng thái
+\texttt{Posit(32,3)} sau mỗi phép hoàn tất nên sai khác làm tròn trung gian tích tụ
+qua từng bước hồi tiếp. Trái lại, \texttt{MAC-Quire} tích lũy trực tiếp trên lưới
+972 bit và chỉ làm tròn duy nhất tại lệnh \texttt{READ}. Ở nhóm chuỗi gần triệt tiêu
+có nhiễu nhỏ tại bit thấp bị cắt của cặp toán hạng cuối, các tích đã cắt gọn triệt
+tiêu lẫn nhau giúp \texttt{MAC-Quire} giữ sai số ở bậc $10^{-8}$, tránh lỗi tích tụ
+trạng thái giữa chuỗi.
+
+Tại độ dài $1.024$ MAC, độ trễ tuyệt đối theo xung nhịp thực (Bảng~\ref{tab:chain-cycles})
+giúp phân định rõ ranh giới lựa chọn: khi đặt trong hệ thống xử lý thời gian thực
+cần tần số cao và tài nguyên gọn, \texttt{MAC-F} nhanh hơn đáng kể so với cả hai
+biến thể còn lại dù hai lõi \texttt{MAC-NF}/\texttt{MAC-F} có sai số chuỗi ngang nhau.
+
+\begin{engineeringtable}{Sai số tuyệt đối cuối của nhóm gần triệt tiêu ($4$ chuỗi/lõi, 3 chữ số có nghĩa).}{tab:near-chain-detail}
+\begin{tabular}{rrrrr}
+\toprule
+MAC/chuỗi & Trung vị NF/F & Max NF/F & Trung vị quire & Max quire \\
+\midrule
+16 & $6{,}94{\times}10^{-8}$ & $9{,}97{\times}10^{-8}$ & $9{,}47{\times}10^{-9}$ & $1{,}34{\times}10^{-8}$ \\
+64 & $1{,}54{\times}10^{-7}$ & $7{,}07{\times}10^{-7}$ & $9{,}82{\times}10^{-9}$ & $1{,}02{\times}10^{-8}$ \\
+256 & $2{,}14{\times}10^{-6}$ & $5{,}59{\times}10^{-6}$ & $8{,}30{\times}10^{-9}$ & $9{,}36{\times}10^{-9}$ \\
+1.024 & $2{,}17{\times}10^{-5}$ & $1{,}28{\times}10^{-4}$ & $1{,}73{\times}10^{-8}$ & $2{,}61{\times}10^{-8}$ \\
+\bottomrule
+\end{tabular}
+\end{engineeringtable}
+
+Bảng~\ref{tab:near-chain-detail} dùng giá trị cuối so với
+tổng tích đủ fraction, trên nhóm có các cặp tích đối dấu
+và một perturbation ở bit thấp của cặp cuối. Với bốn mẫu
+mỗi độ dài, các hàng mô tả giá trị đã quan sát. Chúng không
+đủ để suy một luật tăng sai số theo chiều dài cho mọi dãy.
+Giá trị trung vị của NF và F bằng nhau trong nhóm này,
+dù số chu kỳ khác nhau. Vì vậy lựa chọn theo tài nguyên,
+chu kỳ và độ chính xác phải giữ ba đại lượng tách biệt.
+
+\section{Phân tích đường găng và tối ưu hóa vật lý sau định tuyến}
+
+\subsection{Phân biệt tài nguyên giữa tổng hợp và định tuyến}
+
+Ở pha tổng hợp cơ sở (Bảng~\ref{tab:nf-f-synthesis}), \texttt{MAC-F} dùng ít
+hơn 21,9\% LUT (347 LUT) và 14,7\% FF (135 FF) so với \texttt{MAC-NF}. Chênh
+lệch FF xuất phát trực tiếp từ ngân hàng thanh ghi của khối đóng gói tích trung
+gian mà \texttt{MAC-F} loại bỏ, còn tỷ lệ LUT phụ thuộc thêm vào chiến lược gộp
+logic điều khiển và ánh xạ chuỗi cộng của Vivado qua từng pha triển khai.
+
+Sau định tuyến OOC 100\,MHz, cấu hình trước tách tải fanout của \texttt{MAC-F}
+dùng 1.211 LUT / 781 FF (so với 1.558 LUT / 916 FF của \texttt{MAC-NF}). Khi
+tách bốn nhánh cho tín hiệu hoán đổi toán hạng tại tầng chuẩn bị S1, thiết kế
+hoàn thiện của \textbf{MAC-F} sử dụng 1.221 LUT (chỉ tăng $+10$ LUT) và giữ nguyên
+781 FF, trong khi \texttt{MAC-NF} dùng 1.591 LUT và 916 FF; như vậy \textbf{MAC-F}
+tiếp tục tiết kiệm 370 LUT (\textbf{23,3\%}) và 135 FF (\textbf{14,7\%}) so với \texttt{MAC-NF}.
+
+\subsection{Phân tích sụt giảm timing hậu route và hiệu quả tách fanout tầng S1}
+
+\begin{engineeringtable}{Các đường găng quyết định slack sau định tuyến OOC 100\,MHz: tách riêng đường cổng \texttt{in\_ready} và đường \textit{reg-to-reg} nội bộ trước và sau tối ưu tầng S1.}{tab:route-critical}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{34mm}>{\raggedright\arraybackslash}p{15mm}Y Y@{}}
+\toprule
+Lõi (trạng thái) & Slack (ns) & Điểm \textit{launch} & Điểm \textit{capture} \\
+\midrule
+NF setup (I/O, trước tách) & $+0{,}665$ & Packer cuối, \texttt{meta\_sync2\_reg} & Cổng \texttt{in\_ready}. \\
+NF setup (R2R, trước tách) & $+2{,}943$ & \texttt{u\_product\_pack/\allowbreak d\_q\_reg[15]} & \texttt{product\_frac\_\allowbreak q\_reg[5]} (Parser tích). \\
+NF setup (I/O, tách S1) & $+0{,}669$ & \texttt{u\_pack/p1\_valid\_\allowbreak q\_reg} & Cổng \texttt{in\_ready}. \\
+NF setup (R2R, tách S1) & $+2{,}639$ & \texttt{u\_core/acc\_q\_reg[20]} & \texttt{u\_product\_pack/\allowbreak p1\_guard\_bit\_q\_reg} (\texttt{dp=7,256\,ns}). \\
+F setup (I/O, trước tách) & $+2{,}142$ & Wrapper, \texttt{meta\_sync2\_reg} & Cổng \texttt{in\_ready}. \\
+F setup (R2R, trước tách) & $+2{,}768$ & \texttt{core\_sf\_\allowbreak inc\_q\_reg[4]} & \texttt{u\_add/\allowbreak s1\_sf\_q\_reg[1]} (Adder S1). \\
+\textbf{F setup (I/O, hoàn thiện)} & \textbf{$+2{,}247$} & \texttt{u\_b/p2\_valid\_q\_reg} & Cổng \texttt{in\_ready}. \\
+\textbf{F setup (R2R, hoàn thiện)} & \textbf{$+3{,}524$} & \texttt{c\_frac\_q\_reg[9]} & \texttt{u\_add/\allowbreak s1\_x\_frac\_q\_reg[1]} (\texttt{dp=6,321\,ns}). \\
+Quire setup (R2R) & $-0{,}187$ & \texttt{u\_bank/\allowbreak offset\_q\_reg[4]} & \texttt{g\_words[16].\allowbreak q\_words\_reg[16][8]/CE}. \\
+NF hold (R2R, tách S1) & $+0{,}041$ & \texttt{u\_product\_pack/\allowbreak p1\_special\_sel\_q\_reg[2]} & \texttt{u\_product\_pack/\allowbreak d\_q\_reg[27]}. \\
+F hold (R2R, hoàn thiện) & $+0{,}043$ & Adder, \texttt{flags\_out\_reg[0]} & Packer P1, \texttt{p1\_flags\_q\_reg[0]}. \\
+Quire hold (R2R) & $+0{,}040$ & \texttt{pending\_words\_\allowbreak reg[11][32]} & \texttt{q\_words\_\allowbreak reg[11][32]}. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+Độ trễ F2F trong Bảng~\ref{tab:f2f-stages} (Phụ lục~\ref{app:fpga}) phản ánh
+thời gian lan truyền tổ hợp lớn nhất tới từng nhóm thanh ghi đích sau tổng hợp,
+dùng để nhận diện sớm tầng cần theo dõi. WNS toàn thiết kế sau định tuyến bao
+gồm thêm độ lệch clock và quỹ định thời đường cổng ngoài (chi tiết từng thanh ghi
+được ghi nhận tại Bảng~\ref{tab:route-critical}). Dữ liệu hậu \textit{route}
+làm rõ hiện tượng đảo chiều định thời ở cấu hình trước tối ưu và hiệu quả của kỹ
+thuật tách tải:
+\begin{itemize}
+  \item Ở pha tổng hợp, \texttt{MAC-F} vượt trội hoàn toàn với WNS \textit{reg-to-reg}
+        đạt $+4{,}319$\,ns (5 tầng logic) so với $+3{,}435$\,ns của \texttt{MAC-NF}
+        (6 tầng logic).
+  \item Tuy nhiên sau định tuyến, đường găng nội bộ \textit{reg-to-reg} của
+        \texttt{MAC-F} ban đầu sụt từ $+4{,}319$\,ns xuống còn $+2{,}768$\,ns
+        ($138{,}27$\,MHz, trễ đường dữ liệu $7{,}018$\,ns với \textbf{73,67\% là
+        trễ định tuyến}). Nguyên nhân vật lý nằm ở nhánh chuẩn hóa từ thanh ghi
+        số mũ tích đi vào khối tiền xử lý cộng, nơi tín hiệu chọn toán hạng có
+        độ phân tải tới $62$ nhánh song song trên toàn độ rộng 26 bit fraction và
+        metadata tầng S1 (cùng nút tải $130$ nhánh ở bộ tích lũy), gây nghẽn
+        định tuyến cục bộ.
+\end{itemize}
+
+Giải pháp nhân bản bốn nhánh cân bằng tải tại khối chuẩn bị S1 (giữ nguyên toàn
+bộ datapath, số FF và độ trễ chu kỳ) đã dịch chuyển đường găng nội bộ sang nhánh
+căn chỉnh thanh ghi cộng với tỷ lệ trễ cân đối hơn (38,78\% logic / 61,22\% định
+tuyến), nâng WNS \textit{reg-to-reg} của \textbf{MAC-F} lên \textbf{$+3{,}524$\,ns}
+($F_{\max,\mathrm{R2R}} = 154{,}42$\,MHz, tăng $+16{,}15$\,MHz) và WNS toàn thiết
+kế đạt $+2{,}247$\,ns (tương ứng $F_{\max}$ toàn thiết kế $= 129{,}0$\,MHz trên
+đường tổ hợp ra \texttt{in\_ready}). Trên cùng khối S1 dùng chung, \texttt{MAC-NF}
+đạt WNS toàn thiết kế $+0{,}669$\,ns ($107{,}2$\,MHz) và WNS nội bộ $+2{,}639$\,ns
+($135{,}85$\,MHz, giảm nhẹ $0{,}304$\,ns so với trước tách S1 do dao động đặt--định
+tuyến ngẫu nhiên của một lần chạy P\&R đơn lẻ khi đường găng chuyển về nhánh tích
+đến \texttt{u\_product\_pack} chứ không phải nghẽn tại S1; ngược lại, mức cải thiện
+$+0{,}756$\,ns của \texttt{MAC-F} gắn trực tiếp với việc giải tỏa đường găng S1).
+Như vậy, \textbf{MAC-F} vượt trội đồng thời ở tần số nội bộ ($+18{,}57$\,MHz),
+tần số toàn thiết kế ($+21{,}8$\,MHz), độ trễ xử lý ($-3$ chu kỳ/MAC) và tài nguyên LUT/FF.
+
+\section{Phân tích kết quả triển khai MAC-Quire}
+
+Quá trình tối ưu \texttt{MAC-Quire} gồm hai pha rõ rệt. Thứ nhất, chuyển đổi kiến
+trúc backend từ dịch toàn vectơ 972 bit sang cập nhật cục bộ theo từng từ 36 bit
+giúp cắt giảm 71,6\% LUT (10.156 xuống 2.888), 40,9\% FF (4.458 xuống 2.636) và
+gần một nửa độ trễ F2F sau tổng hợp. Thứ hai, khi định tuyến đầy đủ OOC 100\,MHz
+(4.594 net sạch, 0 lỗi DRC nghiêm trọng), mẫu \texttt{MAC-Quire} đạt $+0{,}170$\,ns
+sau tổng hợp nhưng chuyển sang vi phạm setup nhẹ $-0{,}187$\,ns sau định tuyến
+($\mathrm{TNS}=-19{,}336$\,ns, $F_{\max,\mathrm{R2R}} = 98{,}16$\,MHz; hold đạt
+$+0{,}040$\,ns). Đường găng dài $9{,}851$\,ns (17 tầng logic, gồm 9 tầng chuỗi cộng)
+rơi vào mạch giải mã địa chỉ từ tới chân cho phép của ngân hàng thanh ghi quire
+(Bảng~\ref{tab:route-critical}). Như vậy, khi cần triển khai IP chạy trên $100$\,MHz
+với tài nguyên gọn (ít hơn 2,35 lần LUT và 3,38 lần FF), \textbf{MAC-F} là lựa chọn
+tối ưu hơn, trong khi \texttt{MAC-Quire} phù hợp cho ứng dụng triệt tiêu dải rộng
+chấp nhận xung nhịp thấp hơn hoặc chèn thêm tầng thanh ghi ở đường chọn từ.

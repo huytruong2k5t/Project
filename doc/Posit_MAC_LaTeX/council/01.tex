@@ -1,0 +1,84 @@
+\chapter{Bài toán và công trình liên quan}
+\label{ch:problem}
+
+\section{Bối cảnh và bài toán thiết kế}
+Phép nhân--tích lũy ($\sum_i A_i B_i$) là phép toán hạt nhân trong nhiều hệ thống
+xử lý tín hiệu số (DSP), bộ lọc số, tính toán ma trận và các lớp suy luận
+mạng nơ-ron. Vì phép toán được lặp lại với mật độ lớn, việc lựa chọn định dạng
+biểu diễn số và cách tổ chức đường ống phần cứng ảnh hưởng trực tiếp đến tài nguyên
+logic, tần số hoạt động, thời gian xử lý và sai số tích lũy của toàn chuỗi tính toán.
+
+Trong thực tế công nghiệp, chuẩn dấu phẩy động IEEE-754 \cite{ieee754_2019} cung
+cấp cơ sở tính toán phổ biến với quy tắc ngoại lệ chặt chẽ, nhưng số bit dành cho
+trường mũ (\textit{exponent}) và phần định trị (\textit{fraction}) được ấn định cố
+định cho từng định dạng (ví dụ 8 bit mũ và 23 bit fraction ở \texttt{binary32}).
+Ngược lại, hệ thống số Posit do Gustafson và Yonemoto đề xuất \cite{gustafson2017posit}
+và được chuẩn hóa năm 2022 tại \cite{positstandard2022} (với tham số chuẩn $es=2$)
+sử dụng trường \textit{regime} có độ dài biến thiên trên cùng kích thước từ mã
+32 bit. Cơ chế này cho phép phân bổ thêm bit fraction quanh miền $\pm 1$, đồng
+thời cho phép mở rộng sang cấu hình tùy biến \texttt{Posit(32,3)} ($es=3$) theo
+\cite{norris2021iterativeposit} để tăng mạnh dải động khi cần thiết. Tuy nhiên,
+việc hiện thực trực tiếp bộ nhân Posit đầy đủ đòi hỏi bộ nhân cứng $27\times 27$ bit
+kèm logic giải mã và tái mã hóa \textit{regime} phức tạp, gây tốn LUT và làm tăng
+độ trễ tổ hợp trên FPGA.
+
+Từ bài toán đánh đổi giữa chi phí phần cứng và độ chính xác số học, đề tài lựa
+chọn hướng bộ nhân lặp dịch--cộng xấp xỉ có cấu hình giới hạn số vòng theo dữ liệu,
+tích hợp trực tiếp vào hai kiến trúc nhân--cộng \texttt{MAC-NF} và \texttt{MAC-F}
+cùng giao thức bắt tay \texttt{valid/ready}, đồng thời bổ sung kiến trúc tích lũy
+trên thanh ghi mở rộng \texttt{MAC-Quire} để đối chứng sai số chuỗi dài.
+
+\section{Mục tiêu và phạm vi}
+Đồ án hiện thực và kiểm chứng chức năng lõi IP \texttt{Posit(32,3)} trên FPGA dòng
+Artix-7 (\path{xc7a35tcpg236-1}), sử dụng độ rộng fraction nhân 12 bit, lưới tích
+nội bộ \texttt{FULL\_TERM26/Q24} và quy tắc làm tròn chẵn gần nhất (RNE) tại khối
+đóng gói Packer. Nội dung đánh giá phân tách rõ hai bài toán: giao dịch độc lập
+$(A,B,C)$ và chuỗi tích lũy mà đầu vào $C$ được hồi tiếp từ kết quả $D$ của bước
+trước. Trong ba biến thể kiến trúc, \textbf{MAC-F} (hợp nhất tích nội bộ sang bộ
+cộng) là lõi thiết kế chính; \textbf{MAC-NF} (đóng gói tích trung gian về Posit
+trước khi cộng) và \textbf{MAC-Quire} đóng vai trò đối chứng kiến trúc, tài nguyên,
+tần số và độ chính xác theo hợp đồng thiết kế trình bày tại Chương~\ref{ch:design}.
+
+\section{Công trình liên quan và phần việc của đồ án}
+Hệ thống số Posit với quy tắc làm tròn RNE và bộ tích lũy chính xác \textit{Quire}
+được Gustafson và Yonemoto đề xuất nhằm nâng cao độ chính xác cục bộ quanh $1$ và
+triệt tiêu sai số làm tròn lặp giữa các phép MAC liên tiếp
+\cite{gustafson2017posit,positstandard2022}. Tuy vậy, các phân tích so sánh giữa
+Posit và chuẩn dấu phẩy động IEEE-754 trên phần cứng
+\cite{dinechin2019posits,ciocirlan2021accuracy} cho thấy ưu thế lý thuyết của
+Posit phải đánh đổi bằng chi phí giải mã và mã hóa \textit{regime} có độ dài biến
+thiên. Trên nền tảng FPGA, các công trình tiêu biểu như bộ sinh lõi của Jaiswal
+và So (\texttt{PACoGen}) \cite{jaiswal2018posit,jaiswal2019pacogen}, kiến trúc
+tham số hóa của Chaurasiya và cộng sự \cite{chaurasiya2018parameterized}, thiết kế
+của Podobas và Matsuoka \cite{podobas2018posit}, công cụ sinh lõi \texttt{FloPoCo}
+của Murillo và cộng sự \cite{murillo2020flopoco,murillo2022energy}, bộ nhân tối ưu
+công suất của Zhang và Ko \cite{zhang2020positmul} cùng khảo sát cho học sâu của
+Lu và cộng sự \cite{lu2020evaluation} đều chỉ ra rằng khối dò bit dẫn đầu (LZD/LOD)
+kết hợp hai bộ dịch đa tầng (\textit{barrel shifter}) và bộ nhân định trị $27\times 27$
+bit là nguyên nhân chính làm tăng số LUT và độ trễ tổ hợp.
+
+Để giảm mạnh chi phí bộ nhân phần cứng, nhiều công trình theo hướng tính toán xấp xỉ
+và hỗn hợp độ chính xác cho mạng nơ-ron hoặc DSP đã được đề xuất, tiêu biểu là
+\textit{Deep Positron} \cite{carmichael2019deep}, \textit{PositNN}
+\cite{langroudi2019positnn}, bộ nhân xấp xỉ logarit \texttt{PLAM}
+\cite{murillo2021plam}, bộ nhân xấp xỉ tiêu thụ thấp của Wan và Ko
+\cite{wan2023lowcost} và các lõi xử lý tích hợp Quire như \texttt{PERCIVAL}
+\cite{mallasen2022percival,mallasen2024bigposit}. Riêng với giải pháp nhân lặp
+không dùng DSP, Norris và Kim \cite{norris2021iterativeposit} đề xuất bộ nhân
+\texttt{Posit(32,3)} dịch--cộng cấu hình giới hạn vòng lặp, giữ 12 bit cao của
+fraction với ba khối \texttt{OPS}, \texttt{SAC} và \texttt{SBM}. Phân định rõ ràng
+giữa phần kế thừa và đóng góp mới: đồ án kế thừa nguyên lý giải mã--tái mã
+hóa đường ống từ tài liệu trên và lõi nhân dịch--cộng xấp xỉ 12 bit của Norris--Kim,
+từ đó phát triển các phần việc trọng tâm của đề tài gồm: (i) chuẩn hóa hợp đồng
+bộ nhân lặp \texttt{FULL\_TERM26/Q24} (bảo toàn đủ 26 bit tích Q24 cùng hai cờ
+cắt độc lập \texttt{input\_cut}/\texttt{approx\_cut}); (ii) thiết kế tích hợp trọn
+vẹn ba kiến trúc \texttt{MAC-NF}, \texttt{MAC-F} (bỏ đóng gói trung gian) và
+\texttt{MAC-Quire} với đường cộng 5 tầng co giãn trên cùng giao thức
+\texttt{valid/ready}; (iii) phân tích nguyên nhân nghẽn định tuyến hậu route và
+tối ưu tách tải fanout tầng S1 để đưa $F_{\max,\mathrm{R2R}}$ của \texttt{MAC-F}
+lên $154{,}42$\,MHz (toàn thiết kế $129{,}0$\,MHz) với \texttt{0 DSP} trên Artix-7,
+đặt trong đối chứng trực tiếp với IP \texttt{Floating-Point FP32} của AMD/Xilinx
+\cite{amd_pg060_fp,amd_ug906_timing}; và (iv) xây dựng mô hình số nguyên lớn đối
+chiếu độc lập với \texttt{SoftPosit} kèm đánh giá ứng dụng thực tế và độ phủ cuối cùng.
+
+\input{council/01_scope}

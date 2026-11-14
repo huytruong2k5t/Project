@@ -1,0 +1,65 @@
+\chapter*{Nhiệm vụ Đồ án 2}
+\addcontentsline{toc}{chapter}{Nhiệm vụ Đồ án 2}
+\noindent\textbf{Họ và tên sinh viên:} Trương Đào Đan Huy \hfill \textbf{MSSV:} 2311258 \\
+\textbf{Ngành / Chuyên ngành:} Thiết kế Vi mạch \\
+\textbf{Giảng viên hướng dẫn:} Nguyễn Trung Hiếu \\
+\textbf{Tên đề tài:} \textit{Design an Approximate and Iterative Posit MAC IP} (Thiết kế lõi IP nhân--tích lũy số Posit xấp xỉ và lặp).
+
+\vspace{4mm}
+\noindent\textbf{1. Nội dung thực hiện:}
+\begin{enumerate}
+  \item Nghiên cứu hệ thống số \texttt{Posit} (chuẩn 2022 định chuẩn $es=2$) và biến thể mở rộng \texttt{Posit(32,3)} ($es=3$), quy tắc làm tròn chẵn gần nhất (RNE) và bộ tích lũy \textit{Quire}; phân tích lý do lựa chọn \texttt{Posit(32,3)} thay cho chuẩn \texttt{IEEE-754 binary32} khi phối hợp với bộ nhân xấp xỉ lặp dịch--cộng.
+  \item Thiết kế và hiện thực lõi IP nhân--tích lũy bằng SystemVerilog khả tổng hợp trên giao thức \texttt{valid/ready}, gồm kiến trúc trọng tâm hợp nhất \textbf{MAC-F}, kiến trúc đối chứng không hợp nhất \textbf{MAC-NF} và bộ tích lũy 972 bit \textbf{MAC-Quire}.
+  \item Xây dựng mô hình tham chiếu số nguyên lớn (\textit{Golden Posit ES3}) và môi trường kiểm chứng chức năng, đối chiếu độ phủ mã nguồn và đánh giá sai số định lượng trên bài toán chuỗi tích lũy lẫn ứng dụng thực tế.
+  \item Tổng hợp, định tuyến \textit{Place \& Route}, phân tích công suất và tối ưu hóa đường găng trên FPGA Artix-7 (\texttt{xc7a35tcpg236-1}); đối chiếu trực tiếp với IP \texttt{Floating-Point FP32} của Xilinx và các công trình đã công bố.
+\end{enumerate}
+
+\vspace{4mm}
+\noindent\textbf{2. Sản phẩm giao nộp:}
+\begin{itemize}
+  \item Mã nguồn RTL SystemVerilog khả tổng hợp, mô hình kiểm chứng và tập kịch bản tái lập kết quả FPGA.
+  \item Quyển báo cáo tổng kết Đồ án 2 trình bày đầy đủ cơ sở lý thuyết, kiến trúc datapath, kết quả kiểm chứng, triển khai FPGA và hướng phát triển.
+\end{itemize}
+
+\clearpage
+\chapter*{Nhận xét của Giảng viên hướng dẫn}
+\addcontentsline{toc}{chapter}{Nhận xét của Giảng viên hướng dẫn}
+\vspace{4mm}
+\noindent\rule{\linewidth}{0.4pt}\\[10mm]
+\noindent\rule{\linewidth}{0.4pt}\\[10mm]
+\noindent\rule{\linewidth}{0.4pt}\\[10mm]
+\noindent\rule{\linewidth}{0.4pt}\\[10mm]
+\noindent\rule{\linewidth}{0.4pt}\\[10mm]
+\noindent\rule{\linewidth}{0.4pt}\\[10mm]
+\noindent\rule{\linewidth}{0.4pt}
+
+\vspace{16mm}
+\hfill\begin{minipage}{65mm}
+  \centering
+  \textit{TP. Hồ Chí Minh, ngày \ldots\ tháng \ldots\ năm 2026}\\
+  \textbf{Giảng viên hướng dẫn}\\[22mm]
+  \textbf{Nguyễn Trung Hiếu}
+\end{minipage}
+
+\clearpage
+\chapter*{Lời cam đoan}
+\addcontentsline{toc}{chapter}{Lời cam đoan}
+Tôi xin cam đoan toàn bộ nội dung, mã nguồn thiết kế phần cứng (RTL), hệ thống kiểm chứng mô phỏng, kết quả tổng hợp--định tuyến trên FPGA và các số liệu đánh giá trình bày trong quyển báo cáo Đồ án 2 này là sản phẩm nghiên cứu, thiết kế và thực nghiệm trung thực của chính tôi dưới sự hướng dẫn của giảng viên hướng dẫn Nguyễn Trung Hiếu.
+
+Các tài liệu tham khảo, chuẩn số học và công trình liên quan được sử dụng để đối chiếu đều đã được trích dẫn đầy đủ và rõ ràng trong danh mục tài liệu tham khảo. Các số liệu về phạm vi kiểm chứng, độ phủ mã nguồn (bao gồm danh mục các nhánh ngoại lệ đã rà soát) và những giới hạn phần cứng còn tồn tại được báo cáo trung thực theo đúng hiện trạng của các tệp kết quả mô phỏng và triển khai Vivado.
+
+\vspace{14mm}
+\hfill\begin{minipage}{60mm}
+  \centering
+  \textbf{Sinh viên thực hiện}\\[20mm]
+  \textbf{Trương Đào Đan Huy}
+\end{minipage}
+
+\clearpage
+\chapter*{Lời cảm ơn}
+\addcontentsline{toc}{chapter}{Lời cảm ơn}
+Trước tiên, tôi xin gửi lời cảm ơn chân thành nhất đến thầy \textbf{Nguyễn Trung Hiếu}, người đã tận tình định hướng đề tài, theo sát quá trình thiết kế kiến trúc phần cứng, góp ý chi tiết cho từng vòng tối ưu hóa định thời cũng như phương pháp đánh giá khoa học để tôi có thể hoàn thiện đề tài Đồ án 2 này.
+
+Tôi cũng xin trân trọng cảm ơn quý thầy cô Bộ môn Điện tử, Khoa Điện -- Điện tử, Trường Đại học Bách khoa -- Đại học Quốc gia TP. Hồ Chí Minh đã trang bị nền tảng kiến thức vững chắc về thiết kế vi mạch số, ngôn ngữ mô tả phần cứng và quy trình kiểm chứng giúp tôi tự tin tiếp cận một hệ thống số học mới như Posit.
+
+Cuối cùng, tôi xin cảm ơn gia đình và bạn bè đã luôn động viên, hỗ trợ tinh thần trong suốt thời gian thực hiện đồ án.

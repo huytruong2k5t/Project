@@ -1,0 +1,237 @@
+\chapter{Cơ sở lý thuyết về hệ thống số Posit và phép toán MAC}
+\label{ch:arithmetic}
+
+\section{Lý do lựa chọn hệ thống số Posit(32,3) thay cho IEEE-754}
+
+Trong thiết kế phần cứng số học dấu phẩy động 32 bit, chuẩn
+\texttt{IEEE-754 binary32 (FP32)} \cite{ieee754_2019} sử dụng cấu trúc cố định
+gồm 1 bit dấu, 8 bit mũ có độ lệch ($bias=127$) và 23 bit fraction (24 bit
+significand kể cả bit ẩn). Mặc dù phổ biến trên bộ xử lý đa dụng, cấu trúc
+trường cố định này bộc lộ một số hạn chế khi triển khai các phép toán tích vô
+hướng (\textit{dot-product} / MAC) chuyên dụng trên FPGA:
+\begin{itemize}
+  \item \textbf{Lãng phí không gian mã cho các trạng thái ngoại lệ:} IEEE-754 tách
+        hai biểu diễn khác nhau cho số không ($+0$ và $-0$), dùng hai mã vô cực
+        ($+\infty, -\infty$) và hàng triệu tổ hợp bit cho \texttt{NaN}. Ngoài ra,
+        miền số dưới chuẩn (\textit{subnormal/denormal}, có bit ẩn bằng 0) đòi
+        hỏi mạch phát hiện và chuẩn hóa riêng biệt, làm tăng độ phức tạp giải mã
+        và đóng gói phần cứng.
+  \item \textbf{Phân bố độ phân giải phẳng theo hàm mũ:} FP32 giữ cố định 23 bit
+        fraction ở mọi bậc mũ bình thường, do đó không ưu tiên thêm độ chính xác
+        cho miền giá trị phổ biến quanh $\pm 1$ thường gặp trong chuẩn hóa trọng
+        số lọc số và mạng nơ-ron.
+\end{itemize}
+
+Hệ thống số \textbf{Posit} \cite{gustafson2017posit,positstandard2022} khắc phục
+các nhược điểm trên bằng cách đưa thêm trường \textit{regime} có độ dài biến thiên
+trên cùng từ mã 32 bit (lưu ý chuẩn Posit 2022 ấn định $es=2$ làm chuẩn công
+nghiệp, còn đồ án sử dụng cấu hình mở rộng tùy biến \textbf{\texttt{Posit(32,3)}}
+với $n=32, es=3$ theo Norris--Kim \cite{norris2021iterativeposit}). Trên cơ sở
+phân tích định lượng giữa \texttt{FP32}, \texttt{Posit(32,2)} và \texttt{Posit(32,3)}
+(Bảng~\ref{tab:ieee-vs-posit}), đề tài lựa chọn \texttt{Posit(32,3)} vì bốn lý do
+kỹ thuật trực tiếp sau:
+\begin{enumerate}
+  \item \textbf{Dải động vượt trội hơn FP32:} Cần lưu ý rằng không phải mọi cấu
+        hình Posit 32 bit đều có dải biểu diễn rộng hơn FP32. Với $es=2$ của
+        chuẩn 2022, \texttt{Posit(32,2)} chỉ đạt $\mathrm{maxpos}=2^{120}\approx
+        1{,}3292\times 10^{36}$, nhỏ hơn giá trị hữu hạn lớn nhất của FP32
+        ($(2-2^{-23})\times 2^{127}\approx 3{,}4028\times 10^{38}$) khoảng $256$ lần.
+        Ngược lại, khi mở rộng lên $es=3$ (\texttt{Posit(32,3)}), hằng số thang
+        $\mathrm{useed}=2^{2^3}=256$ nâng $\mathrm{maxpos}$ lên $2^{240}\approx
+        1{,}7668\times 10^{72}$ và hạ $\mathrm{minpos}$ xuống $2^{-240}\approx
+        5{,}6598\times 10^{-73}$, mở rộng dải biểu diễn vượt xa FP32 ở cả hai
+        phía rất lớn và rất nhỏ.
+  \item \textbf{Bảo toàn độ phân giải tích lũy ở nhánh cộng (26 bit fraction quanh $1$):}
+        Nhờ đặc tính độ chính xác thuôn dần (\textit{tapered precision}), trong
+        miền $1 \le |x| < 2$ ($k=0$, chuỗi regime dài 2 bit), định dạng
+        \texttt{Posit(32,3)} cung cấp đến $32 - 1 - 2 - 3 = 26$ bit cho phần
+        fraction ($27$ bit significand kể cả bit ẩn), tức bước nhảy lượng tử
+        $\Delta x = 2^{-26}$ ở cấp lưu trữ và đường cộng $C$. Đường giải mã
+        toán hạng $C$ của \texttt{MAC-F} giữ trọn vẹn $26$ bit này để giảm
+        nhiễu làm tròn khi cộng dồn so với tích lũy 16 bit.
+  \item \textbf{Đơn giản hóa và nhất quán quy tắc ngoại lệ phần cứng:} Định dạng
+        \texttt{Posit(32,3)} chỉ có duy nhất một mã \texttt{Zero} (\texttt{0x00000000})
+        và một mã \texttt{NaR} (\texttt{0x80000000}), không có $\pm 0$ và không
+        tồn tại số dưới chuẩn (mọi giá trị hữu hạn khác $0$ đều có bit ẩn bằng $1$).
+        Các phép toán vượt biên hữu hạn được kẹp bão hòa về $\pm\mathrm{maxpos}$
+        hoặc $\pm\mathrm{minpos}$ thay vì tràn thành $\infty$, đồng thời hai số
+        Posit có thể so sánh thứ tự trực tiếp như hai số nguyên bù hai 32 bit.
+  \item \textbf{Phù hợp với kiến trúc nhân lặp xấp xỉ và tích lũy độ chính xác hỗn hợp:}
+        Thay vì triển khai bộ nhân đầy đủ $27\times 27$ bit tiêu tốn nhiều khối DSP,
+        bộ nhân lặp \texttt{FULL\_TERM26/Q24} cắt phần fraction đầu vào còn
+        $12$ bit ($13$ bit significand kể cả bit ẩn) để đạt chi phí $0\text{ DSP}$,
+        trong khi vẫn kế thừa nguyên vẹn băng thông dải động $2^{\pm 240}$ và
+        toàn bộ $26$ bit fraction của nhánh cộng $C$ trong lõi hợp nhất \texttt{MAC-F}.
+\end{enumerate}
+
+\subsection*{Phân tích sự phối hợp bất đối xứng: vì sao dùng Posit(32,3) với bộ nhân 12 bit?}
+Một câu hỏi kiến trúc tự nhiên là: bộ nhân \texttt{FULL\_TERM26/Q24} giới hạn độ
+rộng fraction ở $12$ bit, khiến sai số tương đối đơn phép nhân ở mức
+$\mathrm{P95}\approx 0{,}0297\%$ ($\approx 2^{-11{,}7}$, tương đương độ chính xác
+phần định trị của \texttt{FP16} 10 bit hoặc \texttt{BFloat16} 7 bit); vậy tại sao
+hệ thống sử dụng từ mã 32 bit \texttt{Posit(32,3)} thay vì một định dạng 16 bit?
+Lựa chọn bất đối xứng này dựa trên ba cơ sở định lượng cho phép nhân--tích lũy
+($S_i = S_{i-1} + A_i B_i$):
+\begin{enumerate}
+  \item \textbf{Nới rộng ngưỡng mất bit tích lũy so với 16 bit và chuẩn hóa RNE đơn phép:}
+        Nếu cả tích và thanh ghi cộng $S_{i-1}$ đều giữ ở định dạng 16 bit
+        (\texttt{FP16} chỉ có $10$ bit fraction, \texttt{BFloat16} chỉ có $7$ bit),
+        khi $S_{i-1}$ lớn hơn $A_i B_i$ quá $2^{11}$ (hoặc $2^8$) lần, toàn bộ
+        tín hiệu mới đã bị triệt tiêu hoàn toàn khỏi phần định trị của thanh ghi
+        cộng. Ngược lại, khi lưu trữ \texttt{Posit(32,3)} và đưa đủ \textbf{26 bit
+        fraction} cho nhánh $C$, ngưỡng chênh lệch thang bắt đầu mất bit cộng
+        được nâng thêm tới $2^{16} = 65.536\times$ so với \texttt{FP16} (từ $\Delta sf \approx 11$
+        lên $\Delta sf \approx 27$). Bên trong từng phép MAC đơn lẻ, khi $\Delta sf \ge 27$,
+        số hạng nhỏ ($< 2^{-27} = 0{,}5\,\mathrm{ULP}$ của số lớn) rơi xuống dưới
+        nửa bước lượng tử nên cửa sổ căn chỉnh 31 bit kèm bit \textit{sticky/jam}
+        vẫn cho kết quả làm tròn RNE chính xác tuyệt đối. Riêng đối với bài toán
+        \emph{chống nuốt số qua chuỗi tích lũy rất dài} nơi tổng chênh vượt biên
+        $2^{26}$ lần (như kịch bản \texttt{Cancel}), thiết kế sử dụng thanh ghi
+        972 bit của \texttt{MAC-Quire} (Chương~\ref{ch:measurements}).
+  \item \textbf{Dải động siêu rộng $2^{\pm 240}$ ($\approx 10^{\pm 72}$) với chi phí 0 DSP:}
+        Trong bộ nhân lặp dịch--cộng, độ phức tạp phần cứng chủ yếu tỉ lệ theo số
+        bit phần định trị ($12$ bit $\Rightarrow$ tối đa 12 bước lặp, hoàn toàn dùng
+        LUT với $0\text{ DSP}$); phần xử lý thang mũ ($sf = sf_A + sf_B$) chỉ là
+        một phép cộng số nguyên có dấu 11 bit rất rẻ. Nhờ đó, \texttt{Posit(32,3)}
+        mở rộng dải động vượt xa \texttt{IEEE-754 FP32} ($10^{\pm 38}$), \texttt{BFloat16}
+        ($10^{\pm 38}$) và \texttt{FP16} ($\pm 65.504$) mà không làm phình bộ nhân.
+  \item \textbf{Miền ứng dụng mục tiêu:} Mô hình tích lũy độ chính xác hỗn hợp
+        (nhân xấp xỉ $\approx 12$ bit định trị, cộng trên lưới 26--31 bit dải
+        động siêu rộng) nhắm trực tiếp tới suy luận mạng nơ-ron sâu trên FPGA biên
+        (chấp nhận nhiễu trọng số 8--12 bit), bộ lọc số FIR/IIR băng thông vừa và
+        tích vô hướng tín hiệu cảm biến có biên độ trải rộng nhiều bậc độ lớn.
+\end{enumerate}
+
+\begin{engineeringtable}{So sánh định lượng giữa chuẩn IEEE-754 binary32, Posit(32,2) và Posit(32,3).}{tab:ieee-vs-posit}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{42mm} Y Y Y@{}}
+\toprule
+Đặc tính & IEEE-754 binary32 & Posit(32,2) & Posit(32,3) (đã chọn) \\
+\midrule
+Độ rộng từ mã & 32 bit & 32 bit & 32 bit \\
+Số bit exponent ($e$) & Cố định 8 bit ($bias=127$) & Tối đa 2 bit ($\mathrm{useed}=16$) & Tối đa 3 bit ($\mathrm{useed}=256$) \\
+Fraction quanh $|x|\approx 1$ & Cố định 23 bit & 27 bit ($k=0$) & 26 bit ($k=0$) \\
+Bước nhảy $\Delta x$ trong $[1,2)$ & $2^{-23}$ & $2^{-27}$ (mịn $16\times$) & $2^{-26}$ (mịn $8\times$) \\
+$\mathrm{minpos}$ hữu hạn & $2^{-149}$ (subnormal) / $2^{-126}$ (normal) & $2^{-120}\approx 7{,}52\times 10^{-37}$ & $2^{-240}\approx 5{,}66\times 10^{-73}$ \\
+$\mathrm{maxpos}$ hữu hạn & $(2-2^{-23})2^{127}\approx 3{,}40\times 10^{38}$ & $2^{120}\approx 1{,}33\times 10^{36}$ & $2^{240}\approx 1{,}77\times 10^{72}$ \\
+Số dưới chuẩn (subnormal) & Có (bit ẩn $=0$) & Không (bit ẩn luôn $=1$) & Không (bit ẩn luôn $=1$) \\
+Mã đặc biệt & $\pm 0, \pm\infty$, nhiều \texttt{NaN} & 1 \texttt{Zero}, 1 \texttt{NaR} & 1 \texttt{Zero}, 1 \texttt{NaR} \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+\section{Định dạng Posit(32,3) và quy tắc giải mã}
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[x=1cm,y=1cm]
+    \fill[blue!9] (0,0) rectangle (1,0.85);
+    \fill[blue!4] (1,0) rectangle (4,0.85);
+    \fill[orange!14] (4,0) rectangle (6.7,0.85);
+    \fill[blue!4] (6.7,0) rectangle (11.5,0.85);
+    \draw (0,0) rectangle (11.5,0.85);
+    \foreach \x in {1,4,6.7} \draw (\x,0)--(\x,0.85);
+    \node at (0.5,0.425) {$s$};
+    \node at (2.5,0.425) {Regime};
+    \node at (5.35,0.425) {Exponent};
+    \node at (9.1,0.425) {Fraction};
+    \node[font=\scriptsize] at (0.5,-.22) {1 bit};
+    \node[font=\scriptsize] at (2.5,-.22) {Độ dài thay đổi};
+    \node[font=\scriptsize] at (5.35,-.22) {Tối đa 3 bit};
+    \node[font=\scriptsize] at (9.1,-.22) {Các bit còn lại};
+  \end{tikzpicture}
+  \caption{Các trường của độ lớn hữu hạn Posit(32,3) sau khi xử lý dấu.}
+  \label{fig:posit-fields}
+\end{figure}
+
+Một từ mã \texttt{Posit(32,3)} hữu hạn khác 0 bao gồm 4 thành phần theo thứ tự từ MSB đến LSB: dấu ($s$), \textit{regime} ($r$), \textit{exponent} ($e$) và \textit{fraction} ($f$) \cite{gustafson2017posit,positstandard2022}. Hai mã đặc biệt được nhận diện ngay từ từ mã thô trước khi giải mã các trường: \texttt{0x00000000} biểu diễn chính xác số $0$ (\texttt{Zero}) và \texttt{0x80000000} biểu diễn giá trị ngoại lệ (\texttt{NaR} -- \textit{Not a Real}). Với mọi mã âm hữu hạn ($s=1$, khác \texttt{NaR}), quy tắc chuẩn Posit yêu cầu lấy bù hai toàn bộ 32 bit trước khi tách trường:
+\[
+P_{\mathrm{mag}} = \begin{cases} P, & s = 0, \\ (-P) \bmod 2^{32} = \overline{P} + 1 \pmod{2^{32}}, & s = 1. \end{cases}
+\]
+
+Trên 31 bit độ lớn $P_{\mathrm{mag}}[30:0]$, trường \textit{regime} là một chuỗi $m \ge 1$ bit giống nhau liên tiếp kết thúc bằng một bit đối lập (\textit{terminator}) hoặc chạm tới hết từ mã. Nếu chuỗi mở đầu gồm $m$ bit~1 (kết thúc bằng 0) thì $k = m - 1 \ge 0$; nếu chuỗi mở đầu gồm $m$ bit~0 (kết thúc bằng 1) thì $k = -m < 0$. Đóng góp thang của regime là $\mathrm{useed}^k = 2^{2^{es}\cdot k} = 2^{8k}$ (Bảng~\ref{tab:regime-rules}).
+
+\begin{engineeringtable}{Quy tắc giải mã trường regime trong Posit(32,3) ($\mathrm{useed}=256$).}{tab:regime-rules}
+\begin{tabularx}{\linewidth}{@{}lccc Y@{}}
+\toprule
+Chuỗi bit regime & Số bit lặp ($m$) & Bit kết thúc & Giá trị $k$ & Hệ số thang $\mathrm{useed}^k$ \\
+\midrule
+\texttt{0001} & 3 & 1 & $-3$ & $256^{-3} = 2^{-24}$ \\
+\texttt{001} & 2 & 1 & $-2$ & $256^{-2} = 2^{-16}$ \\
+\texttt{01} & 1 & 1 & $-1$ & $256^{-1} = 2^{-8}$ \\
+\texttt{10} & 1 & 0 & $0$ & $256^{0} = 1$ \\
+\texttt{110} & 2 & 0 & $1$ & $256^{1} = 2^{8}$ \\
+\texttt{1110} & 3 & 0 & $2$ & $256^{2} = 2^{16}$ \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+Sau bit kết thúc của regime, tối đa $es=3$ bit tiếp theo tạo thành số mũ không dấu $e \in [0, 7]$ (nếu số bit còn lại ít hơn 3, các bit thấp còn thiếu được đệm bằng 0). Các bit còn lại (nếu có) tạo thành phần phân số $f \in [0, 1)$, kết hợp với bit ẩn luôn bằng 1 tạo thành significand chuẩn hóa $1 + f \in [1, 2)$. Đặt số mũ tổng hợp (\textit{scale factor}) là $sf = 8k + e$, giá trị số thực của một mã \texttt{Posit(32,3)} hữu hạn khác 0 được xác định thống nhất bởi:
+\[
+x = (-1)^s \cdot \mathrm{useed}^k \cdot 2^e \cdot (1 + f) = (-1)^s \cdot 2^{8k+e} \cdot (1 + f) = (-1)^s \cdot 2^{sf} \cdot (1 + f).
+\]
+
+\input{council/02_decode}
+
+\section{Nguyên lý nhân lặp}
+Kế thừa phương pháp nhân Posit lặp của Norris và Kim \cite{norris2021iterativeposit},
+bộ nhân sử dụng ba khối chức năng: khối chọn toán hạng \texttt{OPS}, khối tính lượng
+dịch \texttt{SAC} tìm vị trí bit 1 tiếp theo, và khối cộng dịch \texttt{SBM} để
+cộng dồn từng số hạng. Ở ngõ vào, bộ nhân giữ tối đa $12$ bit cao của fraction
+từng toán hạng (đệm 0 đối với fraction ngắn hơn $12$ bit). Nếu $S_i \in \{1,\dots,12\}$
+là vị trí tính từ dấu chấm nhị phân của các bit 1 trong $f_X$, phép nhân hai
+significand chuẩn hóa được khai triển thành tổng các bản dịch phải của $1+f_Y$:
+\[
+    (1+f_X)(1+f_Y) = (1+f_Y) + \sum_{i} (1+f_Y) 2^{-S_i}.
+\]
+
+Trong RTL của đề tài, bộ nhân xử lý tối đa \texttt{cfg\_n} $\in [0, 12]$ số hạng
+fraction theo thứ tự từ trọng số lớn đến trọng số nhỏ và tự động dừng sớm ngay khi
+mặt nạ các bit 1 còn lại bằng 0. Ví dụ với $f_X = 0.01001_2$, chỉ cần tối đa hai
+vòng lặp tương ứng với $S_1 = 2$ và $S_2 = 5$ miễn là $\texttt{cfg\_n} \ge 2$. Cả hai
+nguồn xấp xỉ gồm cắt fraction đầu vào về 12 bit và dừng vòng lặp sớm theo \texttt{cfg\_n}
+đều được đánh dấu bằng hai cờ trạng thái tách biệt (\texttt{input\_cut} và
+\texttt{approx\_cut}).
+
+\section{Hợp đồng phép nhân--cộng}
+Ký hiệu $\widehat P$ là tích nội bộ trên lưới \texttt{FULL\_TERM26/Q24} sinh ra ở
+đầu ra bộ nhân lặp, và $R(\cdot)$ là toán tử chuẩn hóa, làm tròn RNE và đóng gói
+về từ mã \texttt{Posit(32,3)} theo quy ước làm tròn chuẩn của đề tài. Đối với các toán
+hạng đầu vào hữu hạn thông thường, hai biến thể kiến trúc thực hiện hai ánh xạ số
+học sau:
+\[
+  D_{\mathrm{NF}} = R\bigl(R(\widehat P) + C\bigr), \qquad
+  D_{\mathrm{F}}  = R(\widehat P + C).
+\]
+
+Bên cạnh hai lõi trực tiếp nhận toán hạng $C$ từ ngoài, kiến trúc đối chứng
+\texttt{MAC-Quire} duy trì bộ tích lũy có dấu 972 bit trên lưới $2^{-480}$, hỗ
+trợ tích lũy tối đa 1.024 phép MAC liên tiếp giữa hai lệnh \texttt{CLEAR}. Lệnh
+\texttt{MAC} cộng trực tiếp tích $\widehat P$ lên lưới $2^{-480}$ của thanh ghi
+$Q$, còn lệnh \texttt{READ} thực hiện $R(Q)$ để trả kết quả \texttt{Posit(32,3)}
+mà vẫn bảo toàn trạng thái $Q$.
+
+Cả \texttt{MAC-NF} và \texttt{MAC-F} cùng nhận bộ dữ liệu \texttt{a/b/c[31:0]},
+cấu hình \texttt{cfg\_n[3:0]} và \texttt{cfg\_ops[1:0]} tại cạnh bắt tay đầu vào,
+và xuất kết quả \texttt{d[31:0]} cùng thanh ghi 5 cờ \texttt{flags[4:0]} theo thứ
+tự \{\texttt{nar}, \texttt{sat\_max}, \texttt{sat\_min}, \texttt{inexact},
+\texttt{approx\_cut}\}. Trong chế độ mặc định \texttt{OPS=1/n=12}, \texttt{OPS}
+chọn toán hạng có ít bit 1 hơn trong 12 bit fraction làm $X$ (khi số bit 1 bằng
+nhau thì giữ $A$ làm $X$); ngược lại \texttt{OPS=0} luôn cố định $A$ làm $X$.
+
+\input{council/02_numeric}
+
+\section{Lựa chọn kiến trúc MAC-F}
+\input{figures/three_architectures}
+Hình~\ref{fig:three-architectures} minh họa sự khác biệt về ranh giới làm tròn và
+trạng thái giữa ba phương án \texttt{MAC-NF}, \texttt{MAC-F} và \texttt{MAC-Quire}.
+Bằng cách đưa trực tiếp tích nội bộ đã chuẩn hóa (dưới dạng magnitude Q24, số mũ
+$sf$ và metadata ngoại lệ) vào bộ cộng thay vì phải đi qua một khối Packer trung gian
+và Parser giải mã lại như ở \texttt{MAC-NF}, kiến trúc \textbf{\texttt{MAC-F}} loại
+bỏ đồng thời hai nguồn tổn hao chính: (i) sai số làm tròn trung gian $R(\widehat P)$
+trước khi cộng với $C$, và (ii) chi phí thanh ghi, LUT cùng 3 chu kỳ đường ống phụ
+cho khối đóng gói/giải mã tích. Trong khi đó, \texttt{MAC-Quire} loại bỏ hoàn toàn
+lượng tử hóa giữa các bước trong chuỗi dài nhưng đánh đổi bằng kích thước ngân
+hàng thanh ghi 972 bit, bộ dịch căn lưới rộng và độ trễ giải mã đọc \texttt{READ}
+lớn. Dựa trên cân bằng toàn diện giữa chi phí phần cứng, độ trễ và độ chính xác
+của từng phép MAC, đồ án lựa chọn \textbf{\texttt{MAC-F}} làm kiến trúc triển khai
+và tối ưu sâu, đồng thời sử dụng \texttt{MAC-NF} và \texttt{MAC-Quire} làm mốc
+đối chứng định lượng trong Chương~\ref{ch:measurements}.

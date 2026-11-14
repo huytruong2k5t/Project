@@ -1,0 +1,116 @@
+\section{Hai bài toán sử dụng cùng giao diện MAC}
+
+Trong bài toán thứ nhất, mỗi bộ ba $(A,B,C)$ là một giao dịch độc lập.
+Bộ điều khiển bên ngoài có thể cấp $C$ tùy theo dữ liệu ứng dụng; $C$ không
+mang nghĩa trạng thái bên trong RTL của MAC-NF/F. Ở cấu hình mặc định, hai bộ
+nhân nhận cùng mã $A/B$, giữ cùng phần fraction và phát cùng tích nội bộ. Do
+đó có thể sử dụng cặp kết quả $(D_{\mathrm{NF}}, D_{\mathrm{F}})$ trên cùng
+dữ liệu đầu vào để quan sát trực tiếp tác động của vị trí làm tròn trung gian.
+
+Trong bài toán thứ hai, trạng thái $S_i$ của một tích vô hướng được dùng làm
+toán hạng cộng cho bước tiếp theo. Bộ điều khiển ngoài của MAC-NF hoặc MAC-F
+đưa $C = S_{i-1}$ và chỉ cập nhật $S_i \gets D_i$ khi giao dịch trước hoàn
+tất (\textit{retire}). Nếu hai lõi cho kết quả khác nhau tại một bước, các giá
+trị $C$ hồi tiếp về sau cũng phân kỳ theo. Phép đánh giá lúc này là đối chiếu
+cả chuỗi trên cùng dãy toán hạng đầu vào $(A_i, B_i)$, cùng điều kiện bắt tay
+và trạng thái khởi tạo ban đầu. Đối với \texttt{MAC-Quire}, trạng thái tích lũy
+được giữ nội bộ dưới dạng thanh ghi 972 bit với trình tự một lệnh \texttt{CLEAR},
+chuỗi lệnh \texttt{MAC} và một lệnh \texttt{READ} cuối chuỗi (chi phí chu kỳ của
+\texttt{CLEAR} và \texttt{READ} được tính gộp vào tổng chu kỳ công bố).
+
+\blockfigure{Hai mức đo trên cùng giao diện số học. Mũi tên đứt là đường hồi tiếp bên ngoài của MAC-NF và MAC-F.}{fig:measurement-levels}{
+  \node[block] (inputs) {$A_i,B_i,C_i$\\giao dịch độc lập};
+  \node[block,right=7mm of inputs] (dut) {MAC\\NF hoặc F};
+  \node[block,right=7mm of dut] (output) {$D_i$, cờ\\khi retire};
+  \node[store,below=7mm of dut] (state) {State driver\\$S_i\gets D_i$};
+  \draw[data] (inputs)--(dut);
+  \draw[data] (dut)--(output);
+  \draw[control] (output.south)|-(state.east);
+  \draw[control] (state.west)-|(inputs.south) node[pos=.22,below] {\scriptsize chế độ chuỗi};
+}
+
+\section{Câu hỏi đánh giá và bằng chứng}
+
+\begin{engineeringtable}{Câu hỏi đánh giá và phép đối chiếu tương ứng.}{tab:research-questions}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{42mm}Y Y@{}}
+\toprule
+Câu hỏi & Phép đo & Phạm vi suy luận \\
+\midrule
+Vòng lặp tạo đúng tích quy định? & So $M$, dấu, $sf$, số vòng và cờ cắt với golden ở \texttt{core\_done}. & Xác nhận tính đúng số học trước chuẩn hóa và RNE. \\
+Sai số phát sinh từ đâu? & So cùng đầu vào với tích đủ fraction và tích của hai significand đã cắt 12 bit. & Tách riêng sai số cắt đầu vào và sai số giới hạn vòng. \\
+Nên chọn NF hay F? & Đo ghép cặp $(A,B,C)$, tổng hợp và định tuyến trên cùng part FPGA và ràng buộc clock. & Lựa chọn kiến trúc ở cấp IP dưới các điều kiện đã ghi. \\
+Làm tròn giữa các bước ảnh hưởng thế nào? & So cùng dãy tích, tổng số chu kỳ và sai số cuối của NF, F và quire. & Đánh giá hiệu năng cho các nhóm chuỗi đã mô phỏng. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}
+
+Tính đúng thiết kế (\textit{functional correctness}) và độ chính xác số học
+(\textit{arithmetic accuracy}) được đánh giá trên hai hệ mốc độc lập. Một lõi
+MAC có thể khớp 100\% về từng bit với mô hình tham chiếu xấp xỉ nhưng kết quả
+vẫn lệch một khoảng đo được so với giá trị thực chính xác $AB+C$. Tương tự, kết
+quả tổng hợp và định tuyến xác định tần số và tài nguyên phần cứng, không thay
+thế cho kiểm chứng chức năng. Chương~\ref{ch:evaluation} trình bày phương pháp
+và kết quả kiểm chứng chức năng; Chương~\ref{ch:measurements} trình bày các đại
+lượng định lượng về sai số, chu kỳ và triển khai FPGA.
+
+\section{Đối chiếu hướng thiết kế kế thừa}
+
+Nghiên cứu của Norris--Kim sử dụng độ rộng fraction cố định ở ngõ vào bộ nhân và
+cho phép chọn giới hạn số vòng lặp khi chạy. Đồ án kế thừa ý tưởng liệt kê các số
+hạng dịch từ bit có trọng số cao xuống thấp, đồng thời cụ thể hóa đầy đủ hợp đồng
+kỹ thuật để tích hợp vào MAC: chốt độ rộng tích nội bộ Q24 (26 bit không dấu),
+quy định chính sách chọn toán hạng \texttt{OPS} theo số bit~1 ít hơn, bổ sung cờ
+báo mất bit ở hai nguồn (cắt đầu vào và giới hạn vòng) và xác định ranh giới làm
+tròn RNE. Ngoài ra, thay vì chỉ báo tỷ lệ đạt ngưỡng sai số trên kết quả đã đóng
+gói khi chuyển đổi từ chuẩn dấu phẩy động IEEE-754 như trong \cite{norris2021iterativeposit},
+đồ án đo trực tiếp trên bộ mã \texttt{Posit(32,3)} cả trước và sau Packer để
+phân tách tường minh hai nguồn sai số.
+
+\section{Phạm vi thiết kế và bố cục báo cáo}
+
+Toàn bộ báo cáo sử dụng cấu hình mở rộng \texttt{Posit(32,3)} ($es=3$) thống nhất trong lý thuyết,
+ví dụ tính tay, mô hình tham chiếu (\textit{golden model}) và RTL. Cấu hình đánh
+giá mặc định đặt \texttt{OPS=1} và \texttt{n=12}; các giá trị cấu hình còn lại
+(\texttt{OPS=0}, $n\in[0,12]$) được kiểm chứng đầy đủ trong hồi quy hỗn hợp và
+khảo sát quét sai số bộ nhân. Các sơ đồ datapath trong Chương~\ref{ch:design} phản
+ánh trực tiếp mã RTL cuối cùng đã vượt qua kiểm chứng mô phỏng và đóng định thời
+sau \textit{Place \& Route} OOC ở 100\,MHz.
+
+Báo cáo được tổ chức thành 6 chương: Chương~\ref{ch:problem} đặt bài toán và
+liên hệ các công trình liên quan; Chương~\ref{ch:arithmetic} trình bày cơ sở
+toán học của \texttt{Posit(32,3)}, lý do lựa chọn thay cho IEEE-754 cùng hệ thống
+ví dụ giải mã, nhân, cộng/trừ từng bước; Chương~\ref{ch:design} mô tả chi tiết
+vi kiến trúc RTL của lõi chính \texttt{MAC-F} và hai cấu hình đối chứng;
+Chương~\ref{ch:evaluation} trình bày phương pháp kiểm chứng và kết quả mô phỏng
+chức năng; Chương~\ref{ch:measurements} đánh giá định lượng sai số, chu kỳ chuỗi
+tích lũy và kết quả triển khai FPGA kèm tối ưu hóa đường găng sau định tuyến; và
+Chương~\ref{ch:conclusion} tổng kết kết quả cùng hướng phát triển.
+
+\section{Đóng góp của đề tài}
+
+Đóng góp thứ nhất là hoàn thiện hợp đồng định lượng cho bộ nhân lặp xấp xỉ
+\texttt{FULL\_TERM26/Q24}. Độ rộng 12 bit fraction đầu vào, thanh ghi tích lũy
+26 bit lưới Q24 và hai cờ mất dữ liệu tách biệt cho phép kiểm tra trực tiếp
+từng kết quả tại ranh giới khối nhân và tái lập hoàn toàn kết quả đo theo $n$.
+
+Đóng góp thứ hai là thiết kế và tích hợp cùng khối nhân lặp vào hai kiến trúc
+\texttt{MAC-NF} và \texttt{MAC-F} trên cùng chuẩn giao thức \texttt{valid/ready},
+kèm theo phiên bản đối chứng \texttt{MAC-Quire} sử dụng ngân hàng tích lũy 972 bit
+theo từng từ 36 bit và giao thức lệnh \texttt{CLEAR/MAC/READ}.
+
+Đóng góp thứ ba là quá trình phân tích sâu nguyên nhân sụt giảm định thời giữa pha
+tổng hợp và định tuyến trên Artix-7, từ đó đề xuất giải pháp tách tải điều khiển
+fanout cao (\texttt{choose\_a}) tại tầng S1 mà không làm thay đổi datapath, số FF
+hay độ trễ chu kỳ của kiến trúc trọng tâm \texttt{MAC-F}.
+
+\begin{engineeringtable}{Phạm vi suy luận và điều kiện áp dụng của các nhóm kết quả.}{tab:claim-levels}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{34mm}Y Y@{}}
+\toprule
+Nhóm kết quả & Kết luận rút ra trực tiếp & Điều kiện khi mở rộng hệ thống \\
+\midrule
+Kiểm chứng chức năng & Payload 32 bit và 5 cờ trạng thái khớp 100\% mô hình số nguyên lớn trên toàn bộ tập kiểm thử. & Mở rộng ma trận kiểm chứng quy mô lớn khi tích hợp vào SoC hoàn chỉnh. \\
+Đánh giá sai số & Phân bố sai số cắt đầu vào, sai số vòng lặp và sai số ghép cặp NF/F trên tập lấy mẫu đều, phân tầng và triệt tiêu. & Hiệu chỉnh thống kê nếu áp dụng cho phân bố trọng số của một mạng nơ-ron cụ thể. \\
+Triển khai FPGA (OOC) & Tài nguyên, độ trễ F2F, WNS/WHS, $F_{\max,\mathrm{R2R}}$ và $F_{\max}$ toàn TK dưới ràng buộc OOC 100\,MHz. & Tái kiểm tra timing tổng thể sau khi gắn chân I/O vật lý và đăng ký cổng \texttt{in\_ready}. \\
+\bottomrule
+\end{tabularx}
+\end{engineeringtable}

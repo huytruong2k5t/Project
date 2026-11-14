@@ -23,7 +23,7 @@ Floating-Point v7.1 FP32} trên cùng FPGA Artix-7 \texttt{xc7a35tcpg236-1}.
 
 Về kiểm chứng chức năng và độ chính xác, mô hình vàng số nguyên lớn được đối
 chiếu độc lập với \texttt{SoftPosit} ($100.867$ bộ / $403.468$ phép toán $es=2$,
-$0$ sai lệch) và chuẩn Norris--Kim ($12/12$ ô dưới $0{,}94$ điểm phần trăm). Hai
+$0$ sai lệch) và số liệu công bố của Norris--Kim ($12/12$ ô dưới $0{,}94$ điểm phần trăm). Hai
 lõi \texttt{MAC-F} và \texttt{MAC-NF} đạt $0$ sai lệch qua $1.634.048$ phép nhân,
 $377.032$ bộ ghép cặp $(A,B,C)$, $110.000$ vectơ hồi quy kẹt luồng/\textit{reset},
 $201.764$ kiểm tra tương đương S1 và $1.500$ trace \texttt{ModelSim}; riêng
@@ -36,21 +36,33 @@ pipeline \texttt{Parser$\to$Add$\to$Pack} ở nhịp $II=1$ ($20.000$ vectơ, $1
 chu kỳ kẹt) xác nhận \textbf{100\% nhánh rẽ} của khối co giãn đều hoạt động đúng.
 Ở \texttt{OPS1/n12}, \texttt{MAC-F} đạt $\mathrm{P95}=0{,}0297\%$, $\mathrm{SNR}=72{,}5$\,dB
 trên lọc FIR 32 hệ số (vượt $+10{,}3$\,dB so với \texttt{FP16} và $+28{,}4$\,dB so với
-\texttt{BF16}) và vượt qua $200/200$ vectơ dải động $10^{-45}\text{--}10^{43}$ nơi
+\texttt{BF16}) và vượt qua $200/200$ vectơ dải động $10^{-45}\text{--}10^{43}$
+(kịch bản dựng nằm ngoài dải \texttt{FP32} ngay từ đầu vào) nơi
 \texttt{FP32} ($100/200$ \texttt{Inf}), \texttt{FP16} và \texttt{BF16} ($200/200$)
 thất bại.
 
 Sau định tuyến OOC 100\,MHz kèm tối ưu tách tải S1, \textbf{MAC-F} dùng 1.221 LUT,
 781 FF, 0 DSP (giảm 23,3\% LUT, 14,7\% FF và 3 chu kỳ/MAC so với \texttt{MAC-NF}),
-đạt $F_{\max,\mathrm{R2R}} = 154{,}42$\,MHz và tần số toàn thiết kế $129{,}0$\,MHz
-(so với $135{,}85$/$107{,}2$\,MHz của \texttt{MAC-NF} và $98{,}16$\,MHz của
-\texttt{MAC-Quire}). Do bộ nhân tuần tự mất $14\text{--}25$ chu kỳ, thông lượng
-trung bình đạt $8{,}56$\,M\,MAC/s với $P_{\mathrm{dyn}} = 4$\,mW ($0{,}721$\,nJ/MAC
+đạt tần số kiểm chứng sau định tuyến $F_{\max,\mathrm{R2R}} \ge 153{,}8$\,MHz
+($153{,}85$\,MHz ở $6{,}5$\,ns; ước lượng tuyến tính tại $10$\,ns là $154{,}42$\,MHz)
+và tần số toàn thiết kế $\ge 142{,}9$\,MHz (route thực ở $7{,}0$\,ns với
+$\mathrm{WNS}=+0{,}045$\,ns, ngân sách I/O $2{,}5/0{,}5$\,ns; ước lượng ở $10$\,ns là
+$129{,}0$\,MHz), cao hơn mức $\ge 135{,}1$\,MHz ($135{,}14$\,MHz ở $7{,}4$\,ns;
+ước lượng tại $10$\,ns là $135{,}85$\,MHz R2R và $107{,}2$\,MHz toàn thiết kế,
+chưa đạt ở $8{,}0$\,ns với $-0{,}074$\,ns) của \texttt{MAC-NF} và $98{,}16$\,MHz của
+\texttt{MAC-Quire}. Do bộ nhân tuần tự mất $14\text{--}25$ chu kỳ, thông lượng
+trung bình đạt $8{,}53$\,M\,MAC/s với $P_{\mathrm{dyn}} = 4$\,mW ($0{,}721$\,nJ/MAC
 tại 100\,MHz, độ phân giải vectorless $\pm 0{,}5$\,mW). So với \texttt{Xilinx FP32}
-($II=1$, $180\text{--}195$\,M\,MAC/s), \texttt{MAC-F} kém về thông lượng luồng độc
-lập nhưng tiết kiệm FF/DSP, bám sát tốc độ tích lũy hồi tiếp ($8{,}56$ so với
-$8{,}88$\,M\,MAC/s ở biến thể 0-DSP) và thực thi chuỗi $1.024$ MAC nhanh hơn
-\textbf{3,55--3,64$\times$} so với \texttt{MAC-Quire}.
+($II=1$, $180\text{--}195$\,M\,MAC/s ước lượng từ lượt $10$\,ns), \texttt{MAC-F} kém
+về thông lượng luồng độc lập, sử dụng nhiều LUT hơn ($1.221$ so với $765\text{--}993$),
+tiêu tốn năng lượng động/MAC gấp khoảng $3\times$ ($0{,}721$ so với
+$0{,}210\text{--}0{,}250$\,nJ) và cho SNR FIR thấp hơn \texttt{FP32} ($72{,}5$ so với
+$138{,}9$\,dB); bù lại \texttt{MAC-F} giữ \texttt{0 DSP}, ít hơn $48{,}6\%$ FF so với
+biến thể \texttt{0-DSP}, mở rộng dải động $2^{\pm 240}$, bám sát tốc độ
+\texttt{Xilinx FP32 0-DSP} khi chạy một chuỗi phụ thuộc đơn lẻ ($8{,}53$ so với
+$8{,}88$\,M\,MAC/s; nếu xen kẽ nhiều chuỗi độc lập như nhiều đầu ra FIR thì Xilinx
+lấy lại $II=1$) và thực thi chuỗi $1.024$ MAC nhanh hơn \textbf{3,57$\times$} so với
+\texttt{MAC-Quire}.
 
 \clearpage
 \chapter*{Abstract}
@@ -67,33 +79,44 @@ a non-fused baseline (\textbf{MAC-NF}), a 972-bit chunked exact accumulator
 are implemented on the same Artix-7 FPGA (\texttt{xc7a35tcpg236-1}).
 
 The big-integer golden model is cross-validated against \texttt{SoftPosit} ($es=2$,
-$100,867$ cases / $403,468$ ops, $0$ mismatches) and Norris--Kim ($12/12$ cells
+$100{,}867$ cases / $403{,}468$ ops, $0$ mismatches) and Norris--Kim ($12/12$ cells
 $<0.94$\,pp). Both \texttt{MAC-F} and \texttt{MAC-NF} record $0$ mismatches across
-$1,634,048$ multiplier tests, $377,032$ paired MAC vectors, $110,000$ stalled/reset
-regressions, $201,764$ unit equivalence checks, and $1,500$ \texttt{ModelSim}
-protocol traces, while \texttt{MAC-Quire} passes $48$ feedback chains ($16,320$ MACs).
+$1{,}634{,}048$ multiplier tests, $377{,}032$ paired MAC vectors, $110{,}000$ stalled/reset
+regressions, $201{,}764$ unit equivalence checks, and $1{,}500$ \texttt{ModelSim}
+protocol traces, while \texttt{MAC-Quire} passes $48$ feedback chains ($16{,}320$ MACs).
 Final-RTL \texttt{Verilator 5.032} profiling yields raw coverage of $90.91\%$
 line / $88.89\%$ branch (\texttt{MAC-F}) and $91.98\%$ / $88.37\%$ (\texttt{MAC-NF}),
 reaching \textbf{96.30\% / 100\%} and \textbf{98.03\% / 100\%} after reviewed
 single-outstanding waivers plus $2.6$\,M transactions/core closing $100\%$ of
-functional bins; a standalone $II=1$ testbench ($20,000$ vectors, $14,328$ stall
+functional bins; a standalone $II=1$ testbench ($20{,}000$ vectors, $14{,}328$ stall
 cycles) additionally achieves $100\%$ branch coverage on the elastic sub-blocks.
 At \texttt{OPS1/n12}, \texttt{MAC-F} achieves a $0.0297\%$ P95 product error,
 $72.5$\,dB SNR on a 32-tap FIR filter ($+10.3$\,dB over \texttt{FP16}, $+28.4$\,dB
-over \texttt{BF16}), and $0/200$ failures over $10^{-45}\text{--}10^{43}$ where
+over \texttt{BF16}), and $0/200$ failures over $10^{-45}\text{--}10^{43}$
+(synthetic out-of-FP32-range tests) where
 \texttt{FP32} ($100/200$ \texttt{Inf}), \texttt{FP16}, and \texttt{BF16} ($200/200$) fail.
 
 Post-route at $100$\,MHz OOC after S1 fanout balancing, \textbf{MAC-F} uses
-$1,221$ LUTs, $781$ FFs, and $0$ DSPs ($-23.3\%$ LUTs, $-14.7\%$ FFs, and $-3$
-cycles/MAC vs.\ \texttt{MAC-NF}), achieving $F_{\max,\mathrm{R2R}} = 154.42$\,MHz
-and a whole-design $F_{\max} = 129.0$\,MHz (vs.\ $135.85$/$107.2$\,MHz for
-\texttt{MAC-NF} and $98.16$\,MHz for \texttt{MAC-Quire}). Owing to its iterative
-$14\text{--}25$-cycle schedule, \texttt{MAC-F} averages $8.56$\,M\,MAC/s at $4$\,mW
-dynamic power ($0.721$\,nJ/MAC vectorless, $\pm 0.5$\,mW resolution): it trails
-pipelined $II=1$ \texttt{Xilinx FP32} ($180\text{--}195$\,M\,MAC/s) on independent
-streams, matches $0$-DSP \texttt{FP32} under sequential loop-carried feedback
-($8.56$ vs.\ $8.88$\,M\,MAC/s) with $48.6\%$ fewer FFs, and executes $1,024$-MAC
-chains $3.55\text{--}3.64\times$ faster in wall-clock time than \texttt{MAC-Quire}.
+$1{,}221$ LUTs, $781$ FFs, and $0$ DSPs ($-23.3\%$ LUTs, $-14.7\%$ FFs, and $-3$
+cycles/MAC vs.\ \texttt{MAC-NF}), achieving a verified post-route
+$F_{\max,\mathrm{R2R}} \ge 153.8$\,MHz ($153.85$\,MHz closed at $6.5$\,ns;
+$154.42$\,MHz linear estimate at $10$\,ns) and whole-design
+$F_{\max} \ge 142.9$\,MHz (routed at $7.0$\,ns with $+0.045$\,ns WNS and $2.5/0.5$\,ns
+I/O budget; $129.0$\,MHz linear estimate at $10$\,ns), vs.\ $\ge 135.1$\,MHz verified
+($135.14$\,MHz at $7.4$\,ns; $10$\,ns linear estimates $135.85$\,MHz R2R and $107.2$\,MHz
+whole-design, failing $8.0$\,ns at $-0.074$\,ns) for \texttt{MAC-NF}, and
+$98.16$\,MHz for \texttt{MAC-Quire}. Owing to its iterative $14\text{--}25$-cycle
+schedule, \texttt{MAC-F} averages $8.53$\,M\,MAC/s at $4$\,mW dynamic power
+($0.721$\,nJ/MAC at $100$\,MHz, vectorless $\pm 0.5$\,mW resolution): it trails
+pipelined $II=1$ \texttt{Xilinx FP32} ($180\text{--}195$\,M\,MAC/s extrapolated at $10$\,ns)
+on independent streams, uses more LUTs ($1{,}221$ vs.\ $765\text{--}993$), consumes
+$\approx 3\times$ higher dynamic energy/MAC ($0.721$ vs.\ $0.210\text{--}0.250$\,nJ),
+and achieves lower FIR SNR ($72.5$ vs.\ $138.9$\,dB). In trade-off, \texttt{MAC-F}
+needs $0$ DSPs, uses $48.6\%$ fewer FFs than $0$-DSP \texttt{FP32}, preserves a
+$2^{\pm 240}$ dynamic range, closely tracks $0$-DSP \texttt{FP32} when running a
+single dependent accumulation chain ($8.53$ vs.\ $8.88$\,M\,MAC/s, while interleaving
+multiple independent streams restores $II=1$ for Xilinx), and executes $1{,}024$-MAC
+chains $3.57\times$ faster in wall-clock time than \texttt{MAC-Quire}.
 \reportcontents
 \reportlists
 \chapter*{Thuật toán, ký hiệu và từ viết tắt}
@@ -118,8 +141,15 @@ chains $3.55\text{--}3.64\times$ faster in wall-clock time than \texttt{MAC-Quir
   \item[RNE] Round to nearest, ties to even (làm tròn gần nhất, hòa về số chẵn).
   \item[NaR] Not a Real, mã ngoại lệ duy nhất của chuẩn Posit (\texttt{0x80000000}).
   \item[OOC] Out of context, chế độ tổng hợp và định tuyến riêng lẻ cho lõi IP.
-  \item[F2F / R2R] Đường truyền dữ liệu từ thanh ghi nguồn đến thanh ghi đích (\textit{register-to-register}).
+  \item[F2F / R2R] Register-to-register (flip-flop tới flip-flop), đường truyền dữ liệu nội bộ giữa hai thanh ghi trong cùng miền xung nhịp \texttt{clk}.
+  \item[TK] Toàn thiết kế (\textit{whole-design}), tập đường định thời tính cả các cổng vào/ra I/O ngoài miền thanh ghi nội bộ.
   \item[WNS/WHS] Worst negative setup slack và worst hold slack.
+  \item[retire] Hoàn tất bàn giao một giao dịch ở ngõ ra khi cả \texttt{out\_valid} và \texttt{out\_ready} cùng ở mức cao.
+  \item[commit] Chốt kết quả trung gian hoặc kết quả tích lũy vào thanh ghi đích ở cạnh lên xung nhịp.
+  \item[token] Gói tín hiệu điều khiển nội bộ mang cấu hình và cờ trạng thái đi qua các tầng của bộ nhân lặp.
+  \item[stall] Trạng thái đóng băng thanh ghi để giữ nguyên dữ liệu khi tầng sau hoặc phía nhận kéo \texttt{ready} xuống thấp.
+  \item[corpus] Tập mẫu đầu vào phân tầng được tạo có kiểm soát để đo sai số và độ phủ kiểm chứng.
+  \item[waiver] Điểm loại trừ độ phủ có giải trình kỹ thuật rõ ràng cho các nhánh bất khả đạt ở cấu hình tích hợp hiện tại.
 \end{description}
 \clearpage
 \pagenumbering{arabic}

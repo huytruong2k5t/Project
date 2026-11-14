@@ -1,0 +1,5 @@
+ALL_SETUP|slack=-0.513|req=6.500|datapath=3.579|levels=3|group=clk|start=u_dut/u_wrapper/u_c/p2_valid_q_reg/C|end=in_ready
+ALL_HOLD|slack=0.043|req=0.000|datapath=0.391|levels=0|group=clk|start=u_dut/u_wrapper/u_add/s3_mag_q_reg[16]/C|end=u_dut/u_wrapper/u_add/s4_seed_q_reg[16]/D
+REG2REG_CLK_SETUP|slack=0.632|req=6.500|datapath=5.728|levels=8|group=clk|start=u_dut/u_wrapper/u_core/acc_q_reg[25]/C|end=u_dut/u_wrapper/u_add/s1_x_frac_q_reg[5]/D
+REG2REG_ANY_SETUP|slack=0.632|req=6.500|datapath=5.728|levels=8|group=clk|start=u_dut/u_wrapper/u_core/acc_q_reg[25]/C|end=u_dut/u_wrapper/u_add/s1_x_frac_q_reg[5]/D
+REG2REG_CLK_HOLD|slack=0.043|req=0.000|datapath=0.391|levels=0|group=clk|start=u_dut/u_wrapper/u_add/s3_mag_q_reg[16]/C|end=u_dut/u_wrapper/u_add/s4_seed_q_reg[16]/D

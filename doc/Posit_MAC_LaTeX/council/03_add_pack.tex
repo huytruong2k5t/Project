@@ -5,8 +5,9 @@ Bộ cộng dấu phẩy động Posit (\texttt{posit\_add}) được tổ chứ
 mục tiêu tần số từ $100\text{ MHz}$ trở lên trên Artix-7: mỗi tầng chỉ chứa tối
 đa một phép toán số học hoặc một bộ dịch lớn, giúp năm tầng \texttt{S1..S5}
 đạt độ trễ tổ hợp sau tổng hợp nằm trong khoảng $2{,}958\text{--}4{,}851\text{ ns}$
-(Bảng~\ref{tab:f2f-stages}) và đóng định thời định tuyến trên MAC-F ở
-$F_{\max,\mathrm{R2R}}=154{,}42\text{ MHz}$ (Bảng~\ref{tab:fpga-synth-vs-route}).
+(Bảng~\ref{tab:f2f-stages}) và đóng định thời định tuyến thực tế trên MAC-F ở
+$F_{\max,\mathrm{R2R}} \ge 153{,}8\text{ MHz}$ ($153{,}85\text{ MHz}$ tại $6{,}5\text{ ns}$,
+ước lượng tuyến tính $10\text{ ns}$ đạt $154{,}42\text{ MHz}$ -- Bảng~\ref{tab:fpga-synth-vs-route}).
 Toàn bộ mạch tuần tự và tín hiệu bắt tay \texttt{valid/ready} được tập trung tại
 mô-đun đỉnh \texttt{posit\_add.sv}, bao bọc năm khối tổ hợp thuần túy từ S1 đến S5
 (Hình~\ref{fig:adder-stages}).

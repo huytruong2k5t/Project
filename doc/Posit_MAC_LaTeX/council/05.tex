@@ -113,7 +113,11 @@ vẫn nghiêng mạnh về \texttt{MAC-F} (số ca thắng gấp đôi số ca t
 \texttt{MAC-F} tránh được sai lệch kẹp ngưỡng cực đại tới $2^{240}$ trên nhóm
 \texttt{regular} của $C=R(-P)$ (dù vẫn ghi nhận trung thực $2$ ca trên \texttt{code-distance}
 và $220$ ca trên $|err|/|P|$ mà lượng tử hóa trung gian của \texttt{MAC-NF} bù ngẫu
-nhiên tốt hơn).
+nhiên tốt hơn). Cần lưu ý rằng lớp \texttt{regular} chỉ xuất hiện khi $|P|$ vượt
+quá dải biểu diễn của \texttt{Posit(32,3)} nên phép lấy $R(-P)$ bị kẹp vào giá
+trị cực đại/cực tiểu; đây là ca biên do cách dựng tập thử tổng hợp. Trên dữ liệu
+biên độ thông thường (như $C=R(P/2)$ và các bài toán chuẩn ở Mục~\ref{sec:app-benchmarks}),
+\texttt{MAC-NF} và \texttt{MAC-F} đạt độ chính xác gần như tương đương.
 
 \subsection{Chuỗi tích lũy và thời gian thực thi theo xung nhịp thực}
 Phép đánh giá chuỗi sử dụng $48$ chuỗi $A/B$ cố định chia đều cho ba tính chất
@@ -138,11 +142,12 @@ trong đó \texttt{CLEAR} tốn $3$ chu kỳ, \texttt{READ} tốn $59$ chu kỳ 
 tích lũy bank 36 bit của quire cộng thêm $23$ chu kỳ. Tuy nhiên, việc so sánh bằng
 chu kỳ thuần túy chưa phản ánh đúng tốc độ thực tế vì ba lõi đạt tần số cực đại
 sau định tuyến khác nhau. Khi quy đổi sang thời gian thực tại $F_{\max,\mathrm{R2R}}$
-đo được trên Artix-7 ($154{,}4$\,MHz cho \texttt{MAC-F}, $135{,}9$\,MHz cho
-\texttt{MAC-NF} và $98{,}2$\,MHz cho \texttt{MAC-Quire} -- Bảng~\ref{tab:chain-cycles}),
-lõi \textbf{MAC-F} thực thi một chuỗi $1.024$ MAC mất khoảng \textbf{119--120\,$\mu$s},
-nhanh hơn \textbf{1,32 lần} so với \texttt{MAC-NF} ($158\text{--}159\,\mu$s) và
-nhanh hơn \textbf{3,55--3,64 lần} so với \texttt{MAC-Quire} ($428\text{--}429\,\mu$s).
+kiểm chứng sau định tuyến trên Artix-7 ($153{,}85$\,MHz ở $6{,}5$\,ns cho \texttt{MAC-F},
+$135{,}14$\,MHz ở $7{,}4$\,ns cho \texttt{MAC-NF} và $98{,}16$\,MHz cho \texttt{MAC-Quire}
+-- Bảng~\ref{tab:chain-cycles}), lõi \textbf{MAC-F} thực thi một chuỗi $1.024$ MAC mất
+khoảng \textbf{120\,$\mu$s} ($119{,}9\text{--}120{,}1\,\mu$s), nhanh hơn \textbf{1,33 lần}
+so với \texttt{MAC-NF} ($159{,}2\text{--}159{,}5\,\mu$s) và nhanh hơn \textbf{3,57 lần}
+so với \texttt{MAC-Quire} ($428{,}4\text{--}428{,}8\,\mu$s).
 Đổi lại, ở chuỗi gần triệt tiêu dài $1.024$ MAC, trung vị sai số tuyệt đối của
 \texttt{MAC-Quire} giữ ở $1{,}73{\times}10^{-8}$ so với $2{,}17{\times}10^{-5}$
 của hai lõi tích lũy theo mã Posit do quire loại bỏ hoàn toàn làm tròn trung gian
@@ -178,7 +183,7 @@ của từng kiến trúc:
         toán biên độ chuẩn này vì sai số cắt 12 bit của bộ nhân lặp chi phối tổng
         thể khi $|C|\sim |AB|$; ưu thế thực tế của \texttt{MAC-F} so với
         \texttt{MAC-NF} và \texttt{MAC-Quire} ở đây nằm ở thời gian thực thi mỗi
-        mẫu ($3{,}74\,\mu$s so với $4{,}95$ và $14{,}0\,\mu$s), tiết kiệm 23,3\%
+        mẫu ($3{,}75\,\mu$s so với $4{,}98$ và $14{,}0\,\mu$s), tiết kiệm 23,3\%
         LUT và giữ toàn vẹn hành vi làm tròn đơn bước ở biên bão hòa.
   \item \textbf{Tính toán dải động cực rộng (\texttt{DynScale}, $10^{-45}\text{--}10^{43}$):}
         Khi biên độ trải rộng ngoài ngưỡng chuẩn thông thường, \texttt{FP16} và
@@ -193,7 +198,11 @@ của từng kiến trúc:
         trên $200/200$ vectơ; \texttt{MAC-F} và \texttt{MAC-NF} giữ được giá trị
         hữu hạn ($0$ \texttt{Inf}) nhưng mất phần dư $10^{-44}$ do cộng--làm tròn
         từng bước về mã 32 bit. Chỉ \texttt{MAC-Quire} bảo toàn phần dư trên lưới
-        972 bit, đạt $\mathrm{P95} = 7{,}73{\times}10^{-4}$ với $0$ lỗi.
+        972 bit, đạt $\mathrm{P95} = 7{,}73{\times}10^{-4}$ với $0$ lỗi. Hai kịch
+        bản \texttt{DynScale} và \texttt{Cancel} được dựng có chủ đích với biên
+        độ nằm ngoài dải biểu diễn của \texttt{FP32} ngay từ đầu vào để minh họa
+        dải động $2^{\pm 240}$; chúng không đại diện cho dữ liệu DSP hay mạng
+        nơ-ron thông thường.
 \end{itemize}
 
 \section{Kết quả FPGA}
@@ -265,12 +274,35 @@ khiển hoán đổi toán hạng gánh tới $62$ nhánh tải ở tầng S1, l
 
 Khi tách tín hiệu hoán đổi toán hạng thành bốn nhánh cân bằng tải tại khối chuẩn
 bị S1 (giữ nguyên hoàn toàn datapath, số FF và độ trễ chu kỳ của \texttt{MAC-F}),
-WNS nội bộ \textit{reg-to-reg} của \textbf{MAC-F} phục hồi lên \textbf{$+3{,}524$\,ns}
-(\textbf{$F_{\max,\mathrm{R2R}} = 154{,}42$\,MHz}, tăng $+16{,}15$\,MHz) và WNS
-toàn thiết kế đạt \textbf{$+2{,}247$\,ns} (tương ứng \textbf{$F_{\max}$ toàn thiết kế
-$= 129{,}0$\,MHz}) tại chi phí \textbf{1.221 LUT / 781 FF} ($\mathrm{WHS}=+0{,}043$\,ns).
-Trên cùng khối S1 dùng chung, \texttt{MAC-NF} đạt WNS toàn thiết kế $+0{,}669$\,ns
-($107{,}2$\,MHz) và nội bộ $+2{,}639$\,ns ($135{,}85$\,MHz) với 1.591 LUT / 916 FF.
+ở ràng buộc $10{,}000$\,ns, WNS nội bộ \textit{reg-to-reg} của \textbf{MAC-F} phục hồi
+lên \textbf{$+3{,}524$\,ns} (ước lượng tuyến tính $F_{\max,\mathrm{R2R}} = 154{,}42$\,MHz,
+tăng $+16{,}15$\,MHz) và WNS toàn thiết kế đạt \textbf{$+2{,}247$\,ns} (ước lượng
+$F_{\max}$ toàn thiết kế $= 129{,}0$\,MHz) tại chi phí \textbf{1.221 LUT / 781 FF}
+($\mathrm{WHS}=+0{,}043$\,ns). Trên cùng khối S1 dùng chung tại $10$\,ns, \texttt{MAC-NF}
+đạt WNS toàn thiết kế $+0{,}669$\,ns (ước lượng $107{,}2$\,MHz; chưa đóng được ở
+$8{,}000$\,ns với $\mathrm{WNS}=-0{,}074$\,ns) và nội bộ $+2{,}639$\,ns (ước lượng
+$135{,}85$\,MHz) với 1.591 LUT / 916 FF. Để xác nhận thực chất thay vì dựa vào
+ngoại suy tuyến tính đơn điểm, phép quét chu kỳ ràng buộc sau định tuyến với chiến
+lược \texttt{Default} kiểm chứng rằng \textbf{MAC-F} đóng sạch định thời \textit{reg-to-reg}
+đến \textbf{$T_{\mathrm{clk}}=6{,}500$\,ns} (\textbf{$F_{\max,\mathrm{R2R}} \ge 153{,}8$\,MHz},
+cụ thể $153{,}85$\,MHz với $\mathrm{WNS}_{\mathrm{R2R}}=+0{,}632$\,ns,
+$\mathrm{WHS}_{\mathrm{R2R}}=+0{,}043$\,ns, $1.225$ LUT / $781$ FF) và đóng sạch toàn
+thiết kế đến \textbf{$T_{\mathrm{clk}}=7{,}000$\,ns} (\textbf{$F_{\max}$ toàn thiết kế
+$\ge 142{,}9$\,MHz}, cụ thể $142{,}86$\,MHz với $\mathrm{WNS}=+0{,}045$\,ns dưới
+ngân sách I/O $2{,}5/0{,}5$\,ns), trong khi \texttt{MAC-NF} đóng \textit{reg-to-reg} đến
+\textbf{$T_{\mathrm{clk}}=7{,}400$\,ns} (\textbf{$F_{\max,\mathrm{R2R}} \ge 135{,}1$\,MHz},
+cụ thể $135{,}14$\,MHz với $\mathrm{WNS}_{\mathrm{R2R}}=+0{,}209$\,ns,
+$\mathrm{WHS}_{\mathrm{R2R}}=+0{,}046$\,ns, $1.599$ LUT / $916$ FF). Ở mức siết
+ràng buộc $T_{\mathrm{clk}}=6{,}500$\,ns, giá trị $\mathrm{WNS}=-0{,}513$\,ns
+trên tổng các đường chỉ xuất phát từ việc giữ ràng buộc \texttt{set\_output\_delay}
+ngoại vi cố định mức $100$\,MHz trên cổng \texttt{in\_ready}; khi bỏ trễ I/O ngoại vi
+(chế độ đo lõi nội bộ), \texttt{MAC-F} đóng sạch toàn bộ đường ở $6{,}500$\,ns với
+$\mathrm{WNS}=\mathrm{WNS}_{\mathrm{R2R}}=+0{,}182$\,ns ($\mathrm{WHS}=+0{,}035$\,ns,
+$1.229$ LUT). Đồng thời, khi quét ba chiến lược đặt--định tuyến (\texttt{Default},
+\texttt{Explore}, \texttt{ExtraTimingOpt}) tại $10$\,ns, $\mathrm{WNS}_{\mathrm{R2R}}$
+dao động trong $[+3{,}184; +3{,}524]$\,ns đối với \texttt{MAC-F} và $[+2{,}639; +2{,}994]$\,ns
+đối với \texttt{MAC-NF}, khẳng định chênh lệch $+18{,}71$\,MHz của \texttt{MAC-F} là
+ổn định.
 Ngược lại, \texttt{MAC-Quire} đạt $+0{,}170$\,ns ở pha tổng hợp nhưng chuyển sang
 $-0{,}187$\,ns sau định tuyến ($\mathrm{TNS}=-19{,}336$\,ns, 280/5.271 điểm cuối
 intra-\texttt{clk}, $F_{\max,\mathrm{R2R}}=98{,}16$\,MHz) do đường găng nằm sâu
@@ -293,33 +325,41 @@ Bảng~\ref{tab:fpga-power-throughput} làm rõ sự đánh đổi kiến trúc 
 tự tiết kiệm tài nguyên và lõi đường ống chuẩn IEEE-754:
 \begin{itemize}
   \item \textbf{Thông lượng và hiệu quả năng lượng nội bộ:} Nhờ rút 3 chu kỳ/MAC
-        và nâng $F_{\max,\mathrm{R2R}}$ lên $154{,}4$\,MHz, \textbf{MAC-F} đạt thông lượng
-        $6{,}18\text{--}11{,}0$\,M\,MAC/s (trung bình $8{,}56$\,M\,MAC/s ở $5{,}03$
-        vòng lặp), cao hơn 32,5\% so với \texttt{MAC-NF} ($4{,}85\text{--}7{,}99$\,M\,MAC/s,
-        TB $6{,}46$) và gấp $3{,}58\times$ so với \texttt{MAC-Quire} ($2{,}05\text{--}2{,}65$\,M\,MAC/s,
-        TB $2{,}39$). Đồng thời, ở phép ước lượng \textit{vectorless} tại $100$\,MHz
+        và nâng $F_{\max,\mathrm{R2R}}$ kiểm chứng lên $\ge 153{,}8$\,MHz ($153{,}85$\,MHz),
+        \textbf{MAC-F} đạt thông lượng $6{,}15\text{--}11{,}0$\,M\,MAC/s (trung bình
+        $8{,}53$\,M\,MAC/s ở $5{,}03$ vòng lặp), cao hơn 32,8\% so với \texttt{MAC-NF}
+        ($4{,}83\text{--}7{,}95$\,M\,MAC/s, TB $6{,}43$) và gấp $3{,}57\times$ so với
+        \texttt{MAC-Quire} ($2{,}05\text{--}2{,}65$\,M\,MAC/s, TB $2{,}39$). Đồng thời, ở phép
+        ước lượng \textit{vectorless} tại $100$\,MHz
         (độ phân giải báo cáo $\pm 0{,}5$\,mW), công suất động của \texttt{MAC-F} là
         \textbf{4\,mW} (tổng $72$\,mW gồm $68$\,mW tĩnh nền chip), thấp hơn
         \texttt{MAC-NF} ($12$\,mW) và giảm năng lượng động mỗi phép MAC về
         \textbf{$0{,}721$\,nJ} (so với $2{,}52$\,nJ của \texttt{MAC-NF} và $11{,}9$\,nJ
         của \texttt{MAC-Quire}).
   \item \textbf{So sánh khách quan với IP \texttt{Xilinx FP32}:} Khi vận hành dạng
-        luồng độc lập ($II=1$), các lõi đường ống \texttt{Xilinx FP32} vượt trội
-        về thông lượng ($180\text{--}195$\,M\,MAC/s), chỉ số $\mathrm{LUT}\times\mathrm{ns}/\mathrm{MAC}$
-        ($4{,}07{\times}10^3\text{--}5{,}09{\times}10^3$ so với $1{,}43{\times}10^5$
-        của \texttt{MAC-F}) và năng lượng động mỗi MAC ($0{,}210\text{--}0{,}250$\,nJ
-        so với $0{,}721$\,nJ do thời gian tính 1 chu kỳ thay vì $18{,}0$ chu kỳ);
-        đây là nhược điểm cố hữu của thiết kế lặp tuần tự đổi lấy không dùng DSP.
-        Bù lại, \texttt{Xilinx FP32} tiêu tốn tới \textbf{1.285--1.520 FF} (gấp
-        $1{,}65\text{--}1{,}95\times$ mức $781$ FF của \texttt{MAC-F}), cần
-        $2\text{--}4$ khối \texttt{DSP48E1} ở biến thể FMA và tiêu thụ công suất
-        động \textbf{21--25\,mW} ($5{,}25\text{--}6{,}25\times$ của \texttt{MAC-F}).
-        Đặc biệt trong kịch bản tích lũy hồi tiếp phụ thuộc từng bước $C_{i+1}=D_i$
-        (nơi mỗi phép mới phải chờ hết $17\text{--}22$ chu kỳ trễ đường ống),
-        thông lượng thực dụng của \texttt{Xilinx FP32 0-DSP} giảm về $195{,}3 / 22
-        = 8{,}88$\,M\,MAC/s, ngang bằng $8{,}56$\,M\,MAC/s của \texttt{MAC-F} trong khi
-        \texttt{MAC-F} tiết kiệm $48{,}6\%$ thanh ghi FF và mở rộng dải động lên
-        $2^{\pm 240}$.
+        luồng độc lập ($II=1$), các lõi đường ống \texttt{Xilinx FP32} (với
+        $F_{\max}$ $180\text{--}195$\,MHz suy ra tuyến tính từ lượt $10$\,ns, chưa
+        route thực ở chu kỳ tương ứng) vượt trội về thông lượng
+        ($180\text{--}195$\,M\,MAC/s), dùng ít LUT hơn ($765\text{--}993$ so với
+        $1.221$ LUT của \texttt{MAC-F}), đạt chỉ số $\mathrm{LUT}\times\mathrm{ns}/\mathrm{MAC}$
+        tốt hơn ($4{,}07{\times}10^3\text{--}5{,}09{\times}10^3$ so với
+        $1{,}43{\times}10^5$), tiêu tốn năng lượng động/MAC thấp hơn khoảng $3\times$
+        ($0{,}210\text{--}0{,}250$\,nJ so với $0{,}721$\,nJ do thời gian tính 1 chu kỳ
+        thay vì $18{,}0$ chu kỳ) và đạt độ chính xác FIR cao hơn rõ rệt
+        ($138{,}9$\,dB so với $72{,}5$\,dB); đây là cái giá đánh đổi cố hữu của
+        thiết kế lặp tuần tự và xấp xỉ 12 bit. Đổi lại, \texttt{Xilinx FP32} tiêu
+        tốn tới \textbf{1.285--1.520 FF} (gấp $1{,}65\text{--}1{,}95\times$ mức $781$ FF
+        của \texttt{MAC-F}), cần $2\text{--}4$ khối \texttt{DSP48E1} ở biến thể FMA
+        và tiêu thụ công suất động \textbf{21--25\,mW} (khoảng $5\text{--}7\times$
+        của \texttt{MAC-F}, tính cả độ phân giải $\pm 0{,}5$\,mW của \texttt{report\_power}).
+        Trong kịch bản chỉ có \textbf{một chuỗi tích lũy phụ thuộc đơn lẻ}
+        $C_{i+1}=D_i$ (nơi mỗi phép mới phải chờ hết $17\text{--}22$ chu kỳ trễ
+        đường ống), thông lượng thực dụng của \texttt{Xilinx FP32 0-DSP} giảm về
+        $195{,}3 / 22 = 8{,}88$\,M\,MAC/s, ngang bằng $8{,}53$\,M\,MAC/s của
+        \texttt{MAC-F} trong khi \texttt{MAC-F} dùng ít hơn $48{,}6\%$ FF, giữ
+        \texttt{0 DSP} và mở rộng dải động lên $2^{\pm 240}$; ngược lại, nếu xen
+        kẽ nhiều chuỗi độc lập (ví dụ nhiều đầu ra FIR song song), lõi
+        \texttt{Xilinx FP32} lấy lại nhịp $II=1$ và vượt trội về thông lượng.
 \end{itemize}
 
 \input{council/tables/literature_comparison}

@@ -1,0 +1,66 @@
+\documentclass[12pt,a4paper,oneside]{report}
+\usepackage[a4paper,left=28mm,right=24mm,top=25mm,bottom=25mm]{geometry}
+\usepackage{fontspec}
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{Latin Modern Roman}}
+\setmonofont[Scale=0.87]{lmmono10-regular.otf}
+\usepackage{amsmath,graphicx,booktabs,array,tabularx,tikz}
+\usetikzlibrary{arrows.meta,calc}
+\usepackage[unicode,hidelinks]{hyperref}
+\hypersetup{pdftitle={Báo cáo tiến độ đồ án 2 -- Posit MAC},pdfauthor={Trương Đào Đan Huy}}
+\renewcommand{\contentsname}{Mục lục}
+\renewcommand{\listfigurename}{Danh mục hình}
+\renewcommand{\listtablename}{Danh mục bảng}
+\renewcommand{\bibname}{Tài liệu tham khảo}
+\renewcommand{\chaptername}{Chương}
+\renewcommand{\appendixname}{Phụ lục}
+\renewcommand{\figurename}{Hình}
+\renewcommand{\tablename}{Bảng}
+\newcounter{reportalgorithm}[chapter]
+\renewcommand{\thereportalgorithm}{\thechapter.\arabic{reportalgorithm}}
+\newenvironment{reportpseudocode}[4]{%
+  \par\medskip\noindent\begin{minipage}{\linewidth}
+  \small
+  \hrule\smallskip
+  \refstepcounter{reportalgorithm}\label{#1}%
+  \textbf{Algorithm \thereportalgorithm. #2}\par
+  \smallskip\hrule\smallskip
+  \textbf{Input}\enspace #3\par
+  \textbf{Output}\enspace #4\par\smallskip
+  \setlength{\tabcolsep}{3pt}%
+  \renewcommand{\arraystretch}{1.12}%
+}{%
+  \smallskip\hrule
+  \end{minipage}\par\medskip
+}
+\newcommand{\algline}[3]{#1 & #2 & #3\\}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\makeatletter
+\def\@makechapterhead#1{%
+  \vspace*{20pt}{\parindent\z@\raggedright\normalfont
+    \ifnum\c@secnumdepth>\m@ne
+      \Large\bfseries\@chapapp\space\thechapter\par\nobreak\vskip 12pt
+    \fi
+    \interlinepenalty\@M\huge\bfseries #1\par\nobreak\vskip 22pt}}
+\def\@makeschapterhead#1{%
+  \vspace*{20pt}{\parindent\z@\raggedright\normalfont
+    \interlinepenalty\@M\huge\bfseries #1\par\nobreak\vskip 22pt}}
+\newcommand{\reportcontents}{%
+  \chapter*{\contentsname}
+  \begingroup\small\setlength{\parskip}{0pt}%
+  \let\reporttocspace\addvspace
+  \renewcommand{\addvspace}[1]{\reporttocspace{.5em}}%
+  \@starttoc{toc}
+  \endgroup}
+\newcommand{\reportlists}{%
+  \chapter*{Danh mục hình và bảng}
+  \addcontentsline{toc}{chapter}{Danh mục hình và bảng}
+  \section*{Hình}\@starttoc{lof}
+  \section*{Bảng}\@starttoc{lot}}
+\newenvironment{inlinetable}{%
+  \par\noindent\begin{minipage}{\textwidth}\def\@captype{table}%
+}{\end{minipage}\par}
+\makeatother
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.16}
+

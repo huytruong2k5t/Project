@@ -1,0 +1,533 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Sat Nov 14 22:06:02 2026
+| Host         : MSI running 64-bit major release  (build 9200)
+| Command      : report_timing -delay_type min_max -max_paths 10 -file route_paths.rpt
+| Design       : week13_fused_ppa_top
+| Device       : 7a35t-cpg236
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             0.043ns  (arrival time - required time)
+  Source:                 u_dut/u_wrapper/u_add/flags_out_reg[0]/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_pack/p1_flags_q_reg[0]/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.277ns  (logic 0.186ns (67.123%)  route 0.091ns (32.877%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        0.013ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.291ns
+    Source Clock Delay      (SCD):    0.999ns
+    Clock Pessimism Removal (CPR):    0.280ns
+  Clock Uncertainty:      0.100ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.000ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.410     0.410    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.436 r  u_clk/O
+                         net (fo=781, routed)         0.563     0.999    u_dut/u_wrapper/u_add/CLK
+    SLICE_X13Y16         FDCE                                         r  u_dut/u_wrapper/u_add/flags_out_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X13Y16         FDCE (Prop_fdce_C_Q)         0.141     1.140 r  u_dut/u_wrapper/u_add/flags_out_reg[0]/Q
+                         net (fo=1, routed)           0.091     1.231    u_dut/u_wrapper/u_add/sum_flags[0]
+    SLICE_X12Y16         LUT2 (Prop_lut2_I0_O)        0.045     1.276 r  u_dut/u_wrapper/u_add/p1_flags_q[0]_i_1/O
+                         net (fo=1, routed)           0.000     1.276    u_dut/u_wrapper/u_pack/p1_flags_q_reg[4]_0[0]
+    SLICE_X12Y16         FDCE                                         r  u_dut/u_wrapper/u_pack/p1_flags_q_reg[0]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.432     0.432    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     0.461 r  u_clk/O
+                         net (fo=781, routed)         0.831     1.291    u_dut/u_wrapper/u_pack/CLK
+    SLICE_X12Y16         FDCE                                         r  u_dut/u_wrapper/u_pack/p1_flags_q_reg[0]/C
+                         clock pessimism             -0.280     1.012    <hidden>
+                         clock uncertainty            0.100     1.112    <hidden>
+    SLICE_X12Y16         FDCE (Hold_fdce_C_D)         0.121     1.233    u_dut/u_wrapper/u_pack/p1_flags_q_reg[0]
+  -------------------------------------------------------------------
+                         required time                         -1.233    <hidden>
+                         arrival time                           1.276    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.043    <hidden>
+
+Slack (MET) :             0.058ns  (arrival time - required time)
+  Source:                 u_dut/u_wrapper/u_add/s2_y_q_reg[26]/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_add/s3_mag_q_reg[26]/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.305ns  (logic 0.251ns (82.267%)  route 0.054ns (17.733%))
+  Logic Levels:           2  (CARRY4=1 LUT3=1)
+  Clock Path Skew:        0.013ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.313ns
+    Source Clock Delay      (SCD):    1.021ns
+    Clock Pessimism Removal (CPR):    0.280ns
+  Clock Uncertainty:      0.100ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.000ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.410     0.410    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.436 r  u_clk/O
+                         net (fo=781, routed)         0.585     1.021    u_dut/u_wrapper/u_add/CLK
+    SLICE_X7Y22          FDCE                                         r  u_dut/u_wrapper/u_add/s2_y_q_reg[26]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X7Y22          FDCE (Prop_fdce_C_Q)         0.141     1.162 r  u_dut/u_wrapper/u_add/s2_y_q_reg[26]/Q
+                         net (fo=1, routed)           0.054     1.216    u_dut/u_wrapper/u_add/s2_y_q[26]
+    SLICE_X6Y22          LUT3 (Prop_lut3_I1_O)        0.045     1.261 r  u_dut/u_wrapper/u_add/s3_mag_q0_carry__5_i_2/O
+                         net (fo=1, routed)           0.000     1.261    u_dut/u_wrapper/u_add/s3_mag_q0_carry__5_i_2_n_0
+    SLICE_X6Y22          CARRY4 (Prop_carry4_S[2]_O[2])
+                                                      0.065     1.326 r  u_dut/u_wrapper/u_add/s3_mag_q0_carry__5/O[2]
+                         net (fo=1, routed)           0.000     1.326    u_dut/u_wrapper/u_add/s3_mag_q0_carry__5_n_5
+    SLICE_X6Y22          FDCE                                         r  u_dut/u_wrapper/u_add/s3_mag_q_reg[26]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.432     0.432    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     0.461 r  u_clk/O
+                         net (fo=781, routed)         0.853     1.313    u_dut/u_wrapper/u_add/CLK
+    SLICE_X6Y22          FDCE                                         r  u_dut/u_wrapper/u_add/s3_mag_q_reg[26]/C
+                         clock pessimism             -0.280     1.034    <hidden>
+                         clock uncertainty            0.100     1.134    <hidden>
+    SLICE_X6Y22          FDCE (Hold_fdce_C_D)         0.134     1.268    u_dut/u_wrapper/u_add/s3_mag_q_reg[26]
+  -------------------------------------------------------------------
+                         required time                         -1.268    <hidden>
+                         arrival time                           1.326    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.058    <hidden>
+
+Slack (MET) :             0.062ns  (arrival time - required time)
+  Source:                 u_dut/u_wrapper/u_add/s1_x_frac_q_reg[13]/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_add/s2_x_frac_q_reg[13]/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.256ns  (logic 0.141ns (55.042%)  route 0.115ns (44.958%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.035ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.287ns
+    Source Clock Delay      (SCD):    0.994ns
+    Clock Pessimism Removal (CPR):    0.259ns
+  Clock Uncertainty:      0.100ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.000ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.410     0.410    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.436 r  u_clk/O
+                         net (fo=781, routed)         0.558     0.994    u_dut/u_wrapper/u_add/CLK
+    SLICE_X11Y21         FDCE                                         r  u_dut/u_wrapper/u_add/s1_x_frac_q_reg[13]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X11Y21         FDCE (Prop_fdce_C_Q)         0.141     1.135 r  u_dut/u_wrapper/u_add/s1_x_frac_q_reg[13]/Q
+                         net (fo=1, routed)           0.115     1.250    u_dut/u_wrapper/u_add/s1_x_frac_q[13]
+    SLICE_X8Y20          FDCE                                         r  u_dut/u_wrapper/u_add/s2_x_frac_q_reg[13]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.432     0.432    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     0.461 r  u_clk/O
+                         net (fo=781, routed)         0.827     1.287    u_dut/u_wrapper/u_add/CLK
+    SLICE_X8Y20          FDCE                                         r  u_dut/u_wrapper/u_add/s2_x_frac_q_reg[13]/C
+                         clock pessimism             -0.259     1.029    <hidden>
+                         clock uncertainty            0.100     1.129    <hidden>
+    SLICE_X8Y20          FDCE (Hold_fdce_C_D)         0.059     1.188    u_dut/u_wrapper/u_add/s2_x_frac_q_reg[13]
+  -------------------------------------------------------------------
+                         required time                         -1.188    <hidden>
+                         arrival time                           1.250    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.062    <hidden>
+
+Slack (MET) :             0.066ns  (arrival time - required time)
+  Source:                 u_dut/u_wrapper/u_c/p2_frac_lo_q_reg[12]/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/c_frac_q_reg[12]/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.255ns  (logic 0.141ns (55.212%)  route 0.114ns (44.788%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.013ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.282ns
+    Source Clock Delay      (SCD):    0.991ns
+    Clock Pessimism Removal (CPR):    0.279ns
+  Clock Uncertainty:      0.100ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.000ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.410     0.410    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.436 r  u_clk/O
+                         net (fo=781, routed)         0.555     0.991    u_dut/u_wrapper/u_c/CLK
+    SLICE_X9Y25          FDCE                                         r  u_dut/u_wrapper/u_c/p2_frac_lo_q_reg[12]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X9Y25          FDCE (Prop_fdce_C_Q)         0.141     1.132 r  u_dut/u_wrapper/u_c/p2_frac_lo_q_reg[12]/Q
+                         net (fo=1, routed)           0.114     1.246    u_dut/u_wrapper/frac_c[12]
+    SLICE_X8Y25          FDCE                                         r  u_dut/u_wrapper/c_frac_q_reg[12]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.432     0.432    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     0.461 r  u_clk/O
+                         net (fo=781, routed)         0.822     1.282    u_dut/u_wrapper/CLK
+    SLICE_X8Y25          FDCE                                         r  u_dut/u_wrapper/c_frac_q_reg[12]/C
+                         clock pessimism             -0.279     1.004    <hidden>
+                         clock uncertainty            0.100     1.104    <hidden>
+    SLICE_X8Y25          FDCE (Hold_fdce_C_D)         0.076     1.180    u_dut/u_wrapper/c_frac_q_reg[12]
+  -------------------------------------------------------------------
+                         required time                         -1.180    <hidden>
+                         arrival time                           1.246    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.066    <hidden>
+
+Slack (MET) :             0.075ns  (arrival time - required time)
+  Source:                 u_dut/u_wrapper/u_add/s2_sign_q_reg/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_add/s3_sign_q_reg/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.251ns  (logic 0.141ns (56.174%)  route 0.110ns (43.826%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.013ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.287ns
+    Source Clock Delay      (SCD):    0.995ns
+    Clock Pessimism Removal (CPR):    0.280ns
+  Clock Uncertainty:      0.100ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.000ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.410     0.410    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.436 r  u_clk/O
+                         net (fo=781, routed)         0.559     0.995    u_dut/u_wrapper/u_add/CLK
+    SLICE_X13Y20         FDCE                                         r  u_dut/u_wrapper/u_add/s2_sign_q_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X13Y20         FDCE (Prop_fdce_C_Q)         0.141     1.136 r  u_dut/u_wrapper/u_add/s2_sign_q_reg/Q
+                         net (fo=1, routed)           0.110     1.246    u_dut/u_wrapper/u_add/s2_sign_q
+    SLICE_X12Y20         FDCE                                         r  u_dut/u_wrapper/u_add/s3_sign_q_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.432     0.432    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     0.461 r  u_clk/O
+                         net (fo=781, routed)         0.827     1.287    u_dut/u_wrapper/u_add/CLK
+    SLICE_X12Y20         FDCE                                         r  u_dut/u_wrapper/u_add/s3_sign_q_reg/C
+                         clock pessimism             -0.280     1.008    <hidden>
+                         clock uncertainty            0.100     1.108    <hidden>
+    SLICE_X12Y20         FDCE (Hold_fdce_C_D)         0.063     1.171    u_dut/u_wrapper/u_add/s3_sign_q_reg
+  -------------------------------------------------------------------
+                         required time                         -1.171    <hidden>
+                         arrival time                           1.246    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.075    <hidden>
+
+Slack (MET) :             0.077ns  (arrival time - required time)
+  Source:                 u_dut/u_wrapper/u_add/s3_sf_inc_q_reg[8]/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_add/s4_sf_inc_q_reg[8]/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.256ns  (logic 0.141ns (55.026%)  route 0.115ns (44.974%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.016ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.288ns
+    Source Clock Delay      (SCD):    0.994ns
+    Clock Pessimism Removal (CPR):    0.279ns
+  Clock Uncertainty:      0.100ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.000ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.410     0.410    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.436 r  u_clk/O
+                         net (fo=781, routed)         0.558     0.994    u_dut/u_wrapper/u_add/CLK
+    SLICE_X13Y21         FDCE                                         r  u_dut/u_wrapper/u_add/s3_sf_inc_q_reg[8]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X13Y21         FDCE (Prop_fdce_C_Q)         0.141     1.135 r  u_dut/u_wrapper/u_add/s3_sf_inc_q_reg[8]/Q
+                         net (fo=1, routed)           0.115     1.250    u_dut/u_wrapper/u_add/s3_sf_inc_q_reg_n_0_[8]
+    SLICE_X12Y19         FDCE                                         r  u_dut/u_wrapper/u_add/s4_sf_inc_q_reg[8]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.432     0.432    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     0.461 r  u_clk/O
+                         net (fo=781, routed)         0.828     1.288    u_dut/u_wrapper/u_add/CLK
+    SLICE_X12Y19         FDCE                                         r  u_dut/u_wrapper/u_add/s4_sf_inc_q_reg[8]/C
+                         clock pessimism             -0.279     1.010    <hidden>
+                         clock uncertainty            0.100     1.110    <hidden>
+    SLICE_X12Y19         FDCE (Hold_fdce_C_D)         0.063     1.173    u_dut/u_wrapper/u_add/s4_sf_inc_q_reg[8]
+  -------------------------------------------------------------------
+                         required time                         -1.173    <hidden>
+                         arrival time                           1.250    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.077    <hidden>
+
+Slack (MET) :             0.087ns  (arrival time - required time)
+  Source:                 u_dut/u_wrapper/u_core/t2_last_reg/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_core/done_q_reg/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.291ns  (logic 0.209ns (71.796%)  route 0.082ns (28.204%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        0.013ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.287ns
+    Source Clock Delay      (SCD):    0.995ns
+    Clock Pessimism Removal (CPR):    0.280ns
+  Clock Uncertainty:      0.100ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.000ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.410     0.410    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.436 r  u_clk/O
+                         net (fo=781, routed)         0.559     0.995    u_dut/u_wrapper/u_core/CLK
+    SLICE_X8Y29          FDCE                                         r  u_dut/u_wrapper/u_core/t2_last_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X8Y29          FDCE (Prop_fdce_C_Q)         0.164     1.159 r  u_dut/u_wrapper/u_core/t2_last_reg/Q
+                         net (fo=1, routed)           0.082     1.241    u_dut/u_core/t2_last
+    SLICE_X9Y29          LUT2 (Prop_lut2_I1_O)        0.045     1.286 r  u_dut/done_q_i_1/O
+                         net (fo=1, routed)           0.000     1.286    u_dut/u_wrapper/u_core/done_q0
+    SLICE_X9Y29          FDCE                                         r  u_dut/u_wrapper/u_core/done_q_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.432     0.432    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     0.461 r  u_clk/O
+                         net (fo=781, routed)         0.827     1.287    u_dut/u_wrapper/u_core/CLK
+    SLICE_X9Y29          FDCE                                         r  u_dut/u_wrapper/u_core/done_q_reg/C
+                         clock pessimism             -0.280     1.008    <hidden>
+                         clock uncertainty            0.100     1.108    <hidden>
+    SLICE_X9Y29          FDCE (Hold_fdce_C_D)         0.091     1.199    u_dut/u_wrapper/u_core/done_q_reg
+  -------------------------------------------------------------------
+                         required time                         -1.199    <hidden>
+                         arrival time                           1.286    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.087    <hidden>
+
+Slack (MET) :             0.092ns  (arrival time - required time)
+  Source:                 u_dut/u_wrapper/u_add/s1_sf_q_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_add/s2_sf_q_reg[1]/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.283ns  (logic 0.141ns (49.769%)  route 0.142ns (50.231%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.015ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.285ns
+    Source Clock Delay      (SCD):    0.992ns
+    Clock Pessimism Removal (CPR):    0.279ns
+  Clock Uncertainty:      0.100ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.000ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.410     0.410    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.436 r  u_clk/O
+                         net (fo=781, routed)         0.556     0.992    u_dut/u_wrapper/u_add/CLK
+    SLICE_X13Y23         FDCE                                         r  u_dut/u_wrapper/u_add/s1_sf_q_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X13Y23         FDCE (Prop_fdce_C_Q)         0.141     1.133 r  u_dut/u_wrapper/u_add/s1_sf_q_reg[1]/Q
+                         net (fo=1, routed)           0.142     1.275    u_dut/u_wrapper/u_add/s1_sf_q_reg_n_0_[1]
+    SLICE_X12Y22         FDCE                                         r  u_dut/u_wrapper/u_add/s2_sf_q_reg[1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.432     0.432    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     0.461 r  u_clk/O
+                         net (fo=781, routed)         0.825     1.285    u_dut/u_wrapper/u_add/CLK
+    SLICE_X12Y22         FDCE                                         r  u_dut/u_wrapper/u_add/s2_sf_q_reg[1]/C
+                         clock pessimism             -0.279     1.007    <hidden>
+                         clock uncertainty            0.100     1.107    <hidden>
+    SLICE_X12Y22         FDCE (Hold_fdce_C_D)         0.076     1.183    u_dut/u_wrapper/u_add/s2_sf_q_reg[1]
+  -------------------------------------------------------------------
+                         required time                         -1.183    <hidden>
+                         arrival time                           1.275    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.092    <hidden>
+
+Slack (MET) :             0.094ns  (arrival time - required time)
+  Source:                 u_dut/u_wrapper/u_core/t1_scale_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_core/t2_term_reg[24]/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.347ns  (logic 0.209ns (60.304%)  route 0.138ns (39.695%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        0.033ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.287ns
+    Source Clock Delay      (SCD):    0.996ns
+    Clock Pessimism Removal (CPR):    0.259ns
+  Clock Uncertainty:      0.100ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.000ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.410     0.410    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.436 r  u_clk/O
+                         net (fo=781, routed)         0.560     0.996    u_dut/u_wrapper/u_core/CLK
+    SLICE_X8Y30          FDCE                                         r  u_dut/u_wrapper/u_core/t1_scale_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X8Y30          FDCE (Prop_fdce_C_Q)         0.164     1.160 f  u_dut/u_wrapper/u_core/t1_scale_reg[3]/Q
+                         net (fo=25, routed)          0.138     1.297    u_dut/u_wrapper/u_core/t1_scale_reg_n_0_[3]
+    SLICE_X10Y29         LUT6 (Prop_lut6_I0_O)        0.045     1.342 r  u_dut/u_wrapper/u_core/t2_term[24]_i_1/O
+                         net (fo=1, routed)           0.000     1.342    u_dut/u_wrapper/u_core/term[24]
+    SLICE_X10Y29         FDCE                                         r  u_dut/u_wrapper/u_core/t2_term_reg[24]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.432     0.432    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     0.461 r  u_clk/O
+                         net (fo=781, routed)         0.827     1.287    u_dut/u_wrapper/u_core/CLK
+    SLICE_X10Y29         FDCE                                         r  u_dut/u_wrapper/u_core/t2_term_reg[24]/C
+                         clock pessimism             -0.259     1.029    <hidden>
+                         clock uncertainty            0.100     1.129    <hidden>
+    SLICE_X10Y29         FDCE (Hold_fdce_C_D)         0.120     1.249    u_dut/u_wrapper/u_core/t2_term_reg[24]
+  -------------------------------------------------------------------
+                         required time                         -1.249    <hidden>
+                         arrival time                           1.342    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.094    <hidden>
+
+Slack (MET) :             0.094ns  (arrival time - required time)
+  Source:                 u_dut/u_wrapper/u_add/s2_y_q_reg[26]/C
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_dut/u_wrapper/u_add/s3_mag_q_reg[27]/D
+                            (rising edge-triggered cell FDCE clocked by clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk rise@0.000ns - clk rise@0.000ns)
+  Data Path Delay:        0.341ns  (logic 0.287ns (84.139%)  route 0.054ns (15.861%))
+  Logic Levels:           2  (CARRY4=1 LUT3=1)
+  Clock Path Skew:        0.013ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.313ns
+    Source Clock Delay      (SCD):    1.021ns
+    Clock Pessimism Removal (CPR):    0.280ns
+  Clock Uncertainty:      0.100ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE + UU
+    Total System Jitter     (TSJ):    0.000ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+    User Uncertainty         (UU):    0.100ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.410     0.410    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.026     0.436 r  u_clk/O
+                         net (fo=781, routed)         0.585     1.021    u_dut/u_wrapper/u_add/CLK
+    SLICE_X7Y22          FDCE                                         r  u_dut/u_wrapper/u_add/s2_y_q_reg[26]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X7Y22          FDCE (Prop_fdce_C_Q)         0.141     1.162 r  u_dut/u_wrapper/u_add/s2_y_q_reg[26]/Q
+                         net (fo=1, routed)           0.054     1.216    u_dut/u_wrapper/u_add/s2_y_q[26]
+    SLICE_X6Y22          LUT3 (Prop_lut3_I1_O)        0.045     1.261 r  u_dut/u_wrapper/u_add/s3_mag_q0_carry__5_i_2/O
+                         net (fo=1, routed)           0.000     1.261    u_dut/u_wrapper/u_add/s3_mag_q0_carry__5_i_2_n_0
+    SLICE_X6Y22          CARRY4 (Prop_carry4_S[2]_O[3])
+                                                      0.101     1.362 r  u_dut/u_wrapper/u_add/s3_mag_q0_carry__5/O[3]
+                         net (fo=1, routed)           0.000     1.362    u_dut/u_wrapper/u_add/s3_mag_q0_carry__5_n_4
+    SLICE_X6Y22          FDCE                                         r  u_dut/u_wrapper/u_add/s3_mag_q_reg[27]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=0)                   0.432     0.432    clk
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.029     0.461 r  u_clk/O
+                         net (fo=781, routed)         0.853     1.313    u_dut/u_wrapper/u_add/CLK
+    SLICE_X6Y22          FDCE                                         r  u_dut/u_wrapper/u_add/s3_mag_q_reg[27]/C
+                         clock pessimism             -0.280     1.034    <hidden>
+                         clock uncertainty            0.100     1.134    <hidden>
+    SLICE_X6Y22          FDCE (Hold_fdce_C_D)         0.134     1.268    u_dut/u_wrapper/u_add/s3_mag_q_reg[27]
+  -------------------------------------------------------------------
+                         required time                         -1.268    <hidden>
+                         arrival time                           1.362    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.094    <hidden>
+
+
+
+

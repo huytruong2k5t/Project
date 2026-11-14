@@ -76,8 +76,10 @@ vẹn ba kiến trúc \texttt{MAC-NF}, \texttt{MAC-F} (bỏ đóng gói trung gi
 \texttt{MAC-Quire} với đường cộng 5 tầng co giãn trên cùng giao thức
 \texttt{valid/ready}; (iii) phân tích nguyên nhân nghẽn định tuyến hậu route và
 tối ưu tách tải fanout tầng S1 để đưa $F_{\max,\mathrm{R2R}}$ của \texttt{MAC-F}
-lên $154{,}42$\,MHz (toàn thiết kế $129{,}0$\,MHz) với \texttt{0 DSP} trên Artix-7,
-đặt trong đối chứng trực tiếp với IP \texttt{Floating-Point FP32} của AMD/Xilinx
+lên mức kiểm chứng thực tế $\ge 153{,}8$\,MHz ($153{,}85$\,MHz tại $T_{\mathrm{clk}}=6{,}5$\,ns,
+ước lượng tuyến tính tại $10$\,ns đạt $154{,}42$\,MHz) với tần số toàn thiết kế
+đạt $\ge 142{,}9$\,MHz (route thực tại $7{,}0$\,ns, $\mathrm{WNS}=+0{,}045$\,ns,
+ngân sách I/O $2{,}5/0{,}5$\,ns; ước lượng tại $10$\,ns đạt $129{,}0$\,MHz) cùng \texttt{0 DSP} trên Artix-7, đặt trong đối chứng trực tiếp với IP \texttt{Floating-Point FP32} của AMD/Xilinx
 \cite{amd_pg060_fp,amd_ug906_timing}; và (iv) xây dựng mô hình số nguyên lớn đối
 chiếu độc lập với \texttt{SoftPosit} kèm đánh giá ứng dụng thực tế và độ phủ cuối cùng.
 

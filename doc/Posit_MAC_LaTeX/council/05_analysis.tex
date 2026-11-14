@@ -149,17 +149,36 @@ thuật tách tải:
 Giải pháp nhân bản bốn nhánh cân bằng tải tại khối chuẩn bị S1 (giữ nguyên toàn
 bộ datapath, số FF và độ trễ chu kỳ) đã dịch chuyển đường găng nội bộ sang nhánh
 căn chỉnh thanh ghi cộng với tỷ lệ trễ cân đối hơn (38,78\% logic / 61,22\% định
-tuyến), nâng WNS \textit{reg-to-reg} của \textbf{MAC-F} lên \textbf{$+3{,}524$\,ns}
-($F_{\max,\mathrm{R2R}} = 154{,}42$\,MHz, tăng $+16{,}15$\,MHz) và WNS toàn thiết
-kế đạt $+2{,}247$\,ns (tương ứng $F_{\max}$ toàn thiết kế $= 129{,}0$\,MHz trên
-đường tổ hợp ra \texttt{in\_ready}). Trên cùng khối S1 dùng chung, \texttt{MAC-NF}
-đạt WNS toàn thiết kế $+0{,}669$\,ns ($107{,}2$\,MHz) và WNS nội bộ $+2{,}639$\,ns
-($135{,}85$\,MHz, giảm nhẹ $0{,}304$\,ns so với trước tách S1 do dao động đặt--định
-tuyến ngẫu nhiên của một lần chạy P\&R đơn lẻ khi đường găng chuyển về nhánh tích
-đến \texttt{u\_product\_pack} chứ không phải nghẽn tại S1; ngược lại, mức cải thiện
-$+0{,}756$\,ns của \texttt{MAC-F} gắn trực tiếp với việc giải tỏa đường găng S1).
-Như vậy, \textbf{MAC-F} vượt trội đồng thời ở tần số nội bộ ($+18{,}57$\,MHz),
-tần số toàn thiết kế ($+21{,}8$\,MHz), độ trễ xử lý ($-3$ chu kỳ/MAC) và tài nguyên LUT/FF.
+tuyến ở mức $10$\,ns), nâng WNS \textit{reg-to-reg} tại $10$\,ns của \textbf{MAC-F}
+lên \textbf{$+3{,}524$\,ns} (ước lượng tuyến tính $F_{\max,\mathrm{R2R}} = 154{,}42$\,MHz,
+tăng $+16{,}15$\,MHz) và WNS toàn thiết kế đạt $+2{,}247$\,ns (ước lượng tuyến tính
+$F_{\max}$ toàn thiết kế $= 129{,}0$\,MHz trên đường tổ hợp ra \texttt{in\_ready}). Qua phép
+quét chu kỳ ràng buộc thực tế sau định tuyến, \textbf{MAC-F} đóng toàn thiết kế ở
+$T_{\mathrm{clk}}=7{,}000$\,ns ($\mathrm{WNS}=+0{,}045$\,ns, ngân sách I/O $2{,}5/0{,}5$\,ns,
+tức \textbf{$F_{\max}$ toàn thiết kế $\ge 142{,}9$\,MHz}) và đóng định thời \textit{reg-to-reg} tại
+$T_{\mathrm{clk}}=6{,}500$\,ns ($\mathrm{WNS}_{\mathrm{R2R}}=+0{,}632$\,ns,
+$\mathrm{WHS}_{\mathrm{R2R}}=+0{,}043$\,ns, $1.225$ LUT), xác nhận
+$F_{\max,\mathrm{R2R}} \ge 153{,}8$\,MHz ($153{,}85$\,MHz); khi bỏ ràng buộc I/O ngoại
+vi cố định mức $100$\,MHz tại $6{,}500$\,ns, thiết kế cũng đóng toàn khối với
+$\mathrm{WNS}=+0{,}182$\,ns. Trên cùng khối S1 dùng chung, \texttt{MAC-NF} đạt WNS toàn
+thiết kế tại $10$\,ns là $+0{,}669$\,ns (ước lượng $107{,}2$\,MHz; chưa đạt ở $8{,}0$\,ns với
+$\mathrm{WNS}=-0{,}074$\,ns) và đóng thực tế \textit{reg-to-reg} ở $T_{\mathrm{clk}}=7{,}400$\,ns
+($\mathrm{WNS}_{\mathrm{R2R}}=+0{,}209$\,ns, $\mathrm{WHS}_{\mathrm{R2R}}=+0{,}046$\,ns,
+$1.599$ LUT), xác nhận $F_{\max,\mathrm{R2R}} \ge 135{,}1$\,MHz ($135{,}14$\,MHz). Mức giảm
+nhẹ $0{,}304$\,ns của \texttt{MAC-NF} tại $10$\,ns \texttt{Default} sau tách S1
+($+2{,}639$\,ns, ước lượng $135{,}85$\,MHz) nằm gọn trong biên độ dao động đặt--định
+tuyến qua ba chiến lược (\texttt{Default}, \texttt{Explore}, \texttt{ExtraTimingOpt}):
+$\mathrm{WNS}_{\mathrm{R2R}}$ của \texttt{MAC-NF} trải trong $[+2{,}639; +2{,}994]$\,ns
+(ước lượng $135{,}85\text{--}142{,}73$\,MHz) khi đường găng chuyển về nhánh tích đến
+\texttt{u\_product\_pack} chứ không phải nghẽn tại S1; tương ứng trên ba chiến lược đó,
+\texttt{MAC-F} đạt $[+3{,}184; +3{,}524]$\,ns (ước lượng $146{,}71\text{--}154{,}42$\,MHz).
+Ngay cả ở chiến lược kém nhất, $\mathrm{WNS}_{\mathrm{R2R}}$ của \texttt{MAC-F} sau
+tách S1 ($+3{,}184$\,ns) vẫn cao hơn lượt \texttt{Default} trước tách ($+2{,}768$\,ns,
+chỉ có một lượt trước tách) là $+0{,}416$\,ns, lớn hơn biên độ dao động giữa các
+chiến lược ($\approx 0{,}34$\,ns). Như vậy, \textbf{MAC-F} vượt trội đồng thời ở tần
+số nội bộ kiểm chứng ($+18{,}71$\,MHz, hay $+18{,}57$\,MHz theo ước lượng tuyến tính $10$\,ns),
+tần số toàn thiết kế kiểm chứng ($\ge 142{,}9$ so với $100$\,MHz, ước lượng $10$\,ns
+chênh $+21{,}8$\,MHz), độ trễ xử lý ($-3$ chu kỳ/MAC) và tài nguyên LUT/FF.
 
 \section{Phân tích kết quả triển khai MAC-Quire}
 

@@ -1,6 +1,6 @@
 # TIẾN ĐỘ ĐỒ ÁN — LÕI IP POSIT MAC XẤP XỈ VÀ LẶP
 
-**Ngày cập nhật:** 13/11/2026 (giờ Việt Nam)
+**Ngày cập nhật:** 14/11/2026 (giờ Việt Nam)
 **Sinh viên:** Đan Huy — HK261, HCMUT  
 **Đề tài:** Thiết kế và kiểm chứng lõi IP Posit MAC trên FPGA, có mở rộng ASIC.  
 **Tài liệu chi tiết:** [SPEC v1.29](../SPEC_Posit_MAC_IP.md), [PLAN L1](../l1/PLAN.md), [README L1](../l1/README.md), [Optimization](../../doc/Optimization.md).
@@ -13,24 +13,21 @@ File này theo dõi **mốc lớn**: hiện trạng ở mục1, việc còn lạ
 
 ## 0. Tóm tắt chốt tiến độ nộp ngày 14/11/2026
 
-Tài liệu đối chiếu nhanh phục vụ báo cáo tiến độ ngày 14/11/2026 (đồng bộ với [Báo cáo tiến độ PDF](../../doc/Posit_MAC_LaTeX/Bao_cao_tien_do_Posit_MAC_20261114.pdf) và [Hồ sơ bằng chứng `.docx`](Ho_so_Bang_chung_Thuc_nghiem_Posit_MAC.docx)):
+Tài liệu tóm tắt nhanh phục vụ báo cáo tiến độ ngày 14/11/2026 (khớp với [Báo cáo tiến độ PDF](../../doc/Bao_cao_tien_do_Posit_MAC_20261114.pdf) và [Bản thảo hội đồng](../../doc/Ban_thao_hoi_dong_Posit_MAC_20261114_final.pdf); các bảng số liệu đầy đủ được lưu trong bản thảo hội đồng):
 
-### Bảng các công việc đã hoàn thành
-
-| Hạng mục công việc | Kết quả định lượng đạt được | Bằng chứng xác nhận |
-| --- | --- | --- |
-| **1. Thiết kế RTL 5 tầng & tối ưu tách tải S1** | Hoàn thiện `MAC-F`, `MAC-NF` và `MAC-Quire` dùng chung bộ nhân lặp 12 bit `FULL_TERM26/Q24` + bộ cộng 5 tầng `S1--S5` đủ 26 bit. Tách fanout 4 nhánh `choose_a` ở tầng S1 (`posit_add_prepare_comb.sv`) giữ `bit-exact` (`201.764` kiểm tra) và nâng $F_{\max,\mathrm{R2R}}$ của `MAC-F` lên `154,42 MHz`. | [Hồ sơ bằng chứng](Ho_so_Bang_chung_Thuc_nghiem_Posit_MAC.docx), `rtl/` |
-| **2. Kiểm chứng chức năng & độ phủ RTL cuối** | `0` sai lệch qua `1,634` triệu giao dịch bộ nhân (`n=0..12`), `377.032` bộ ghép cặp, `48` chuỗi dài (`16.320` MAC/lõi) và `110.000`/lõi hồi quy hỗn hợp. `Verilator 5.032` trên RTL cuối đạt `98,03%` / `96,30%` line, `100%` branch và `2,6` triệu tx/lõi đóng `100%` bin (`517/517` NF, `516/516` F). | [coverage_summary.json](../results/nf_f_coverage_final/coverage_summary.json) |
-| **3. Đánh giá sai số & ứng dụng thực tế** | `OPS1/n12` đạt $P_{95} = 0{,}0297\%$ trước Packer. Trên FIR `32` hệ số (`8.224` MAC), `MAC-F` đạt `SNR = 72,5 dB` (`3,74 us`/mẫu); trên dải động `DynScale` (`10^-45..10^43`) xử lý `200/200` vectơ `0` lỗi khi `IEEE-754 FP32` tràn/dưới biên toàn bộ. | [app_benchmarks/summary.json](../results/app_benchmarks/summary.json) |
-| **4. Triển khai FPGA, công suất & đối chiếu `FP32`** | Route OOC `100 MHz` trên `xc7a35tcpg236-1` (`Vivado v.2026.1`): `MAC-F` tốn `1.221 LUT`, `781 FF`, `0 DSP`, thông lượng `8,56 M MAC/s`, $P_{\mathrm{dyn}} = 4\text{ mW}$ (giảm `48,6%` FF và `5,5x` công suất động so với `Xilinx FP32 0-DSP`). Đã đối chiếu thêm với `PACoGen`, `FloPoCo` và `PERCIVAL`. | [fpga_power_and_fp32](../results/fpga_power_and_fp32/run_xilinx_fp32.tcl) |
-| **5. Hồ sơ báo cáo hội đồng & tiến độ 14/11** | Hoàn thiện bản thảo hội đồng `87` trang (`14` hình datapath RTL, `21` tài liệu tham khảo), bản báo cáo tiến độ nộp `14/11/2026` và hồ sơ bằng chứng `.docx/.md` kèm mã SHA-256. | [Bao_cao_tien_do_Posit_MAC_20261114.pdf](../../doc/Posit_MAC_LaTeX/Bao_cao_tien_do_Posit_MAC_20261114.pdf) |
+### Các hạng mục đã thực hiện và mốc chính
+- **Kiến trúc RTL `Posit(32,3)` (`0 DSP`) và tách tải tầng `S1`:** Hoàn thiện lõi trọng tâm `MAC-F` (hợp nhất tích nội bộ 26 bit vào bộ cộng 5 tầng `S1--S5` giữ trọn 26 bit ở nhánh `C`, bỏ đóng gói trung gian), cùng các biến thể đối chứng `MAC-NF`, `MAC-Quire` (lưới 972 bit theo từ 36 bit) và 3 cấu hình `Xilinx FP32` trên `xc7a35tcpg236-1`. Tách 4 nhánh `choose_a` ở `posit_add_prepare_comb.sv` giữ tương đương `bit-exact` (`201.764` kiểm tra), tiết kiệm `23,3% LUT`, `14,7% FF` và rút `3` chu kỳ/MAC so với `MAC-NF`.
+- **Kiểm chứng chức năng và độ phủ RTL cuối:** Mô hình vàng khớp `0` sai lệch với `SoftPosit` (`100.867` bộ / `403.468` phép `es=2`) và số liệu công bố của Norris--Kim (`12/12` ô `< 0,94` pp). Phần cứng đạt `0` sai lệch qua `1.634.048` phép nhân (`n=0..12`), `377.032` bộ ghép cặp `(A,B,C)`, `110.000` vectơ/lõi hồi quy hỗn hợp trước/sau tách `S1`, `1.500` trace `ModelSim` (độ trễ quan sát `12--23` chu kỳ cho `MAC-F` và `15--26` cho `MAC-NF` theo quy ước đếm giữa `accept` và `out_valid`) và `48` chuỗi `MAC-Quire` (`16.320` MAC). Đo `Verilator 5.032` trên RTL cuối đạt `96,30%` (`MAC-F`) / `98,03%` (`MAC-NF`) dòng sau rà soát (`90,91%` / `91,98%` thô), `100%` nhánh, đóng `100%` `functional bin` (`2,6` triệu tx/lõi) và `100%` nhánh khối co giãn trên bài thử $II=1$.
+- **Sai số số học và ứng dụng thực tế:** Tại `OPS1/n12`, bộ nhân đạt `P95 = 0,0297%`. Trên bộ lọc FIR `32` hệ số, `MAC-F` đạt `SNR = 72,5 dB` (`3,75 us`/mẫu, vượt `FP16` `+10,3 dB` và `BF16` `+28,4 dB`); trên `NN` `128` chiều đạt `P95 = 5,66e-4`; đạt `0/200` lỗi ở các kịch bản dựng có chủ đích nằm ngoài dải `FP32` (`DynScale` `10^-45..10^43` và `Cancel`); và chạy chuỗi `1.024` MAC nhanh hơn `1,33x` (`MAC-NF`) và `3,57x` (`MAC-Quire`) tại $F_{\max,\mathrm{R2R}}$.
+- **Triển khai FPGA, công suất và đánh đổi với `Xilinx FP32`:** Sau định tuyến OOC `100 MHz` và siết chu kỳ ràng buộc thực tế, `MAC-F` dùng `1.221 LUT`, `781 FF`, `0 DSP`, đóng sau route đạt $F_{\max,\mathrm{R2R}} \ge 153,8\text{ MHz}$ (`153,85 MHz` @ `6,5 ns`; ước lượng `10 ns` là `154,42 MHz`) và $F_{\max}$ toàn thiết kế $\ge 142,9\text{ MHz}$ (`142,86 MHz` @ `7,0 ns`, `WNS = +0,045 ns`, ngân sách I/O `2,5/0,5 ns`; ước lượng `10 ns` là `129,0 MHz`), thông lượng trung bình `8,53 M MAC/s`, `Pdyn = 4 mW` (`0,721 nJ/MAC`, độ phân giải `±0,5 mW`). So với `Xilinx FP32` (`180--195 MHz` suy ra tuyến tính từ lượt `10 ns`), `MAC-F` dùng nhiều LUT hơn (`1.221` vs `765--993`), năng lượng/MAC cao hơn ~`3x`, SNR FIR thấp hơn (`72,5` vs `138,9 dB`) và thua luồng độc lập $II=1$, nhưng bù lại dùng `0 DSP`, ít hơn `48,6% FF` so với `0-DSP`, giảm `5--7x` công suất động, dải động $2^{\pm 240}$ và bám sát tốc độ `FP32 0-DSP` trên một chuỗi phụ thuộc đơn lẻ (`8,53` vs `8,88 M MAC/s`).
+- **Hồ sơ báo cáo hội đồng:** Đã rà soát hoàn chỉnh bản thảo hội đồng trước phản biện (`Ban_thao_hoi_dong_Posit_MAC_20261114_final.pdf`), đồng bộ số liệu đóng timing sau route, câu cân bằng đánh đổi và định nghĩa đo kiểm.
 
 ### Các công việc chưa hoàn thành (còn mở cho giai đoạn tiếp theo)
 
-- **Đóng timing `100 MHz` cho `MAC-Quire`:** Biến thể đối chứng `MAC-Quire` còn `WNS = -0,187 ns` ($F_{\max} = 98,16\text{ MHz}$) sau route OOC; cần chèn thêm `1` tầng thanh ghi giữa khối chuẩn bị tham số và mảng tích lũy từ `36` bit.
-- **Chạy thực nghiệm trên bo mạch Artix-7 thật:** Chưa nạp bitstream lên phần cứng Basys3/Arty (`xc7a35t`) để đưa vectơ qua UART, đối chiếu kết quả thực tế và đo công suất trực tiếp trên board.
-- **Tích hợp bus hệ thống & STA sơ đồ chân vật lý:** Các số liệu timing hiện chạy ở chế độ OOC với ngân sách I/O giả định; cần bọc giao diện hệ thống (AXI4-Stream/Lite) và chạy STA theo `pinout` chân I/O thật.
-- **Mở rộng hồi quy dài hạn:** Chưa chạy ma trận `AC-01` (`52 x 10` triệu giao dịch), `AC-03` đủ cả `13` mức `n` và bộ kiểm thử `stall` ngẫu nhiên chuyên sâu cho từng từ `36` bit của `MAC-Quire`.
+- **Tích hợp bus hệ thống & kiểm thử trên bo mạch Artix-7 thật:** Đăng ký hóa ngõ ra sẵn sàng khi bọc `AXI4-Stream` để đưa đường găng về nội bộ `reg-to-reg` ($\ge 153,8\text{ MHz}$) và nạp bitstream lên bo mạch thật qua UART.
+- **Mở rộng đa giao dịch & quét multi-seed P&R:** Hỗ trợ kiến trúc `multi-outstanding` / nhân lặp phân tầng cho các bài toán luồng độc lập và chạy quét nhiều hạt giống P&R kèm `phys_opt_design`.
+- **Đóng timing `100 MHz` cho `MAC-Quire`:** Chèn thêm `1` tầng thanh ghi trung gian ngắt đường tổ hợp tới ngân hàng `q_words` để khép kín slack âm `-0,187 ns` (`98,16 MHz`).
+- **Mở rộng hồi quy dài hạn:** Chạy bổ sung đối chiếu ghép cặp đủ mọi mức `n` (`0..12`) và các chiến dịch stress dài hạn (`AC-01`, `AC-03`).
 
 ---
 

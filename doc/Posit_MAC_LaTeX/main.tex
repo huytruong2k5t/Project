@@ -1,0 +1,103 @@
+\input{preamble}
+\begin{document}
+\hypersetup{pageanchor=false}
+\input{cover}
+\pagenumbering{arabic}
+\hypersetup{pageanchor=true}
+
+\chapter*{Báo cáo tóm tắt tiến độ thực hiện}
+
+Tính đến ngày \textbf{14/11/2026}, đồ án thiết kế, kiểm chứng và triển khai FPGA
+cho lõi IP nhân--tích lũy (MAC) chuẩn \texttt{Posit(32,3)} ($es=3$, không dùng
+\texttt{DSP48E1}, dải động $2^{\pm 240}$) đã hoàn thành toàn bộ khối RTL cốt lõi,
+quy trình kiểm chứng và đo đạc thực nghiệm, đồng thời hoàn chỉnh bản thảo báo
+cáo hội đồng (\texttt{Ban\_thao\_hoi\_dong\_Posit\_MAC\_20261114\_final.pdf}).
+Tài liệu này tóm tắt ngắn gọn các nội dung đã thực hiện và hướng phát triển tiếp
+theo; toàn bộ số liệu chi tiết và bảng đối chứng được lưu trong bản thảo hội đồng.
+
+\section*{1. Kiến trúc RTL và tối ưu đã hoàn thiện}
+\begin{itemize}
+  \item \textbf{Lõi trọng tâm \texttt{MAC-F} và các biến thể đối chứng:} Xây dựng
+        kiến trúc hợp nhất \textbf{MAC-F} nối thẳng tích nội bộ $26$ bit từ bộ
+        nhân lặp dịch--cộng xấp xỉ \texttt{FULL\_TERM26/Q24} (cắt \textit{fraction}
+        $A, B$ về $12$ bit) vào bộ cộng đường ống $5$ tầng (\texttt{S1--S5}) giữ
+        trọn $26$ bit ở nhánh cộng $C$, bỏ qua đóng gói trung gian (tiết kiệm
+        $23{,}3\%$ LUT, $14{,}7\%$ FF và rút $3$ chu kỳ/MAC so với lõi không
+        hợp nhất \textbf{MAC-NF}). Triển khai song hành \textbf{MAC-NF}, bộ tích
+        lũy chính xác $972$ bit theo từ $36$ bit \textbf{MAC-Quire} và ba cấu
+        hình đối chứng \texttt{Xilinx Floating-Point v7.1 FP32} trên cùng
+        FPGA Artix-7 \texttt{xc7a35tcpg236-1}.
+  \item \textbf{Tối ưu cân bằng tải tầng \texttt{S1}:} Tách bốn nhánh điều khiển
+        \texttt{choose\_a} trong tệp \texttt{posit\_add\_\-prepare\_comb.sv} giúp giảm
+        nghẽn định tuyến cục bộ mà vẫn giữ nguyên \textit{datapath}, số FF và
+        độ trễ chu kỳ ($201.764$ phép kiểm tương đương \textit{bit-exact}).
+\end{itemize}
+
+\section*{2. Tóm tắt các hạng mục kiểm chứng và kết quả chính}
+\begin{itemize}
+  \item \textbf{Kiểm chứng chức năng và độ phủ RTL cuối:} Mô hình vàng khớp $0$
+        sai lệch với \texttt{SoftPosit} ($100.867$ bộ / $403.468$ phép $es=2$) và
+        số liệu công bố của Norris--Kim ($12/12$ ô dưới $0{,}94$\,pp). Phần cứng đạt
+        $0$ sai lệch trên bộ nhân ($1.634.048$ phép, $n=0\dots 12$), ghép cặp
+        $(A,B,C)$ ($377.032$ bộ), hồi quy hỗn hợp trước/sau tách \texttt{S1}
+        ($110.000$ vectơ/lõi), $1.500$ trace giao thức \texttt{ModelSim} (độ trễ
+        quan sát $12\text{--}23$ chu kỳ ở \texttt{MAC-F}, $15\text{--}26$ ở
+        \texttt{MAC-NF} theo quy ước đếm giữa cạnh \textit{accept} và
+        \texttt{out\_valid}) và $48$ chuỗi hồi tiếp \texttt{MAC-Quire} ($16.320$
+        MAC). Đo bằng \texttt{Verilator 5.032} trên RTL cuối đạt độ phủ thô
+        $90{,}91\%$ / $91{,}98\%$ dòng lệnh và sau rà soát đạt $96{,}30\%$
+        (\texttt{MAC-F}) / $98{,}03\%$ (\texttt{MAC-NF}) dòng, $100\%$ nhánh,
+        khép kín $100\%$ \textit{functional bin} ($2{,}6$ triệu giao dịch/lõi) và
+        $100\%$ nhánh khối co giãn ở bài thử $II=1$.
+  \item \textbf{Độ chính xác số học và bài toán ứng dụng:} Bộ nhân tại
+        \texttt{OPS1/n12} đạt $\mathrm{P95}=0{,}0297\%$. Trên bộ lọc FIR $32$ hệ
+        số, \texttt{MAC-F} đạt $\mathrm{SNR}=72{,}5$\,dB ($3{,}75\,\mu\text{s}$/mẫu,
+        vượt \texttt{FP16} $+10{,}3$\,dB và \texttt{BF16} $+28{,}4$\,dB); trên tích
+        vô hướng \texttt{NN} $128$ chiều đạt $\mathrm{P95}=5{,}66{\times}10^{-4}$;
+        vượt qua $200/200$ vectơ ở các kịch bản dựng có chủ đích nằm ngoài dải
+        \texttt{FP32} (\texttt{DynScale} $10^{-45}\text{--}10^{43}$ và \texttt{Cancel});
+        và thực thi chuỗi $1.024$ MAC nhanh hơn $1{,}33\times$ so với
+        \texttt{MAC-NF} và $3{,}57\times$ so với \texttt{MAC-Quire} tại
+        $F_{\max,\mathrm{R2R}}$.
+  \item \textbf{Triển khai FPGA, công suất và đánh đổi với \texttt{Xilinx FP32}:}
+        Sau định tuyến OOC $100$\,MHz (\texttt{xc7a35t}) và siết chu kỳ ràng buộc
+        thực tế, \textbf{MAC-F} sử dụng $1.221$ LUT, $781$ FF, $0$ DSP, đạt
+        $F_{\max,\mathrm{R2R}} \ge 153{,}8$\,MHz (đóng tại $6{,}5$\,ns; ước lượng
+        tuyến tính $10$\,ns là $154{,}42$\,MHz) và $F_{\max}$ toàn thiết kế
+        $\ge 142{,}9$\,MHz (đóng tại $7{,}0$\,ns với $\mathrm{WNS}=+0{,}045$\,ns dưới
+        ngân sách I/O $2{,}5/0{,}5$\,ns; ước lượng $10$\,ns là $129{,}0$\,MHz), cao
+        hơn mức $\ge 135{,}1$\,MHz R2R / $100$\,MHz toàn thiết kế của \texttt{MAC-NF}
+        và $98{,}16$\,MHz của \texttt{MAC-Quire}. Thông lượng trung bình đạt
+        $8{,}53$\,M\,MAC/s với $P_{\mathrm{dyn}}=4$\,mW ($0{,}721$\,nJ/MAC tại
+        $100$\,MHz, độ phân giải \textit{vectorless} $\pm 0{,}5$\,mW). Đối chiếu
+        với \texttt{Xilinx FP32} ($180\text{--}195$\,MHz suy ra từ lượt $10$\,ns,
+        $765\text{--}993$ LUT, $1.285\text{--}1.520$ FF, $21\text{--}25$\,mW):
+        \texttt{MAC-F} tốn nhiều LUT hơn, năng lượng/MAC cao hơn $\approx 3\times$,
+        SNR FIR thấp hơn ($72{,}5$ so với $138{,}9$\,dB) và thua trên luồng độc
+        lập $II=1$, nhưng bù lại dùng $0$ DSP, giảm $48{,}6\%$ FF so với
+        \texttt{0-DSP}, công suất động nhỏ hơn khoảng $5\text{--}7\times$ và đạt
+        tốc độ gần ngang ngửa \texttt{FP32 0-DSP} trên một chuỗi phụ thuộc đơn lẻ
+        ($8{,}53$ so với $8{,}88$\,M\,MAC/s).
+  \item \textbf{Hồ sơ báo cáo hội đồng trước phản biện:} Đã rà soát toàn bộ phản
+        hồi kỹ thuật, hiệu chỉnh thống nhất số liệu thực đo sau route, câu cân bằng
+        đánh đổi, phạm vi kịch bản tổng hợp và xuất bản thảo hoàn chỉnh phục vụ hội đồng.
+\end{itemize}
+
+\section*{3. Các công việc còn mở cho giai đoạn tiếp theo}
+\begin{itemize}
+  \item \textbf{Tích hợp bus hệ thống và kiểm thử trên bo mạch thật:} Đăng ký hóa
+        ngõ ra sẵn sàng khi bọc giao tiếp AXI4-Stream để đưa đường găng về miền
+        \textit{reg-to-reg} ($\ge 153{,}8$\,MHz) và nạp bitstream qua cầu UART lên
+        bo mạch Artix-7 thực tế.
+  \item \textbf{Mở rộng đa giao dịch và đánh giá độ ổn định P\&R:} Hỗ trợ kiến
+        trúc \textit{multi-outstanding} hoặc nhân lặp phân tầng cho các bài toán
+        luồng độc lập, kèm quét nhiều hạt giống P\&R kết hợp \texttt{phys\_opt\_design}.
+  \item \textbf{Đóng \textit{timing} $\ge 100$\,MHz cho \texttt{MAC-Quire}:} Chèn
+        thêm một tầng thanh ghi trung gian ngắt đường tổ hợp tới ngân hàng từ
+        \texttt{q\_words} nhằm khép kín phần slack âm $-0{,}187$\,ns.
+  \item \textbf{Mở rộng kiểm chứng dài hạn:} Bổ sung đối chiếu ghép cặp đủ mọi
+        mức $n \in [0, 12]$ và các chiến dịch hồi quy stress dài hạn quy mô hàng
+        chục đến trăm triệu vectơ (\texttt{AC-01}, \texttt{AC-03}).
+\end{itemize}
+
+\end{document}

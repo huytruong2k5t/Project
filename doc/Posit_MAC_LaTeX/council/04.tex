@@ -84,7 +84,10 @@ tra bit-exact cho khối \texttt{posit\_add\_prepare\_comb}), môi trường ki�
 còn hoàn tất kiểm thử tập con giao thức tập trung 1.500 vector (1.491 giao dịch
 hoàn tất, 9 giao dịch bị hủy do \textit{reset}, 5.438 chu kỳ \textit{stall} và
 929 chuỗi hồi tiếp với độ dài tối đa 68, đạt độ trễ quan sát 15--26 chu kỳ ở
-\texttt{MAC-NF} và 12--23 chu kỳ ở \texttt{MAC-F}, $0$ sai lệch).
+\texttt{MAC-NF} và 12--23 chu kỳ ở \texttt{MAC-F} (testbench đếm số chu kỳ
+\textit{giữa} cạnh \textit{accept} và cạnh \texttt{out\_valid}, không tính cạnh
+\textit{accept}, nên nhỏ hơn đúng 1 chu kỳ so với quy ước $16\text{--}27$ và
+$13\text{--}24$ của Mục~\ref{subsec:single-outstanding} và Hình~\ref{fig:ft05-wave}), $0$ sai lệch).
 
 Để loại bỏ độ lệch giữa phiên bản RTL cũ và thiết kế cuối cùng sau tối ưu tách tải
 tầng S1, phép đo độ phủ mã nguồn được chạy trực tiếp lại bằng \texttt{Verilator 5.032}

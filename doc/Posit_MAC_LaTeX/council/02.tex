@@ -68,7 +68,8 @@ kỹ thuật trực tiếp sau:
 Một câu hỏi kiến trúc tự nhiên là: bộ nhân \texttt{FULL\_TERM26/Q24} giới hạn độ
 rộng fraction ở $12$ bit, khiến sai số tương đối đơn phép nhân ở mức
 $\mathrm{P95}\approx 0{,}0297\%$ ($\approx 2^{-11{,}7}$, tương đương độ chính xác
-phần định trị của \texttt{FP16} 10 bit hoặc \texttt{BFloat16} 7 bit); vậy tại sao
+phần định trị của \texttt{FP16} (10 bit); \texttt{BFloat16} (7 bit, $\approx 2^{-8}$)
+còn kém hơn); vậy tại sao
 hệ thống sử dụng từ mã 32 bit \texttt{Posit(32,3)} thay vì một định dạng 16 bit?
 Lựa chọn bất đối xứng này dựa trên ba cơ sở định lượng cho phép nhân--tích lũy
 ($S_i = S_{i-1} + A_i B_i$):

@@ -1,0 +1,30 @@
+{
+  "group": "P1",
+  "run_id": "f_7p000_A_Default",
+  "core": "f",
+  "period_ns": "7.000",
+  "io_mode": "A",
+  "directive": "Default",
+  "command": [
+    "C:\\AMDDesignTools\\2026.1\\Vivado\\bin\\vivado.bat",
+    "-mode",
+    "batch",
+    "-notrace",
+    "-nojournal",
+    "-log",
+    "vivado.log",
+    "-source",
+    "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\syn\\route_mac_fmax.tcl",
+    "-tclargs",
+    "f",
+    "7.000",
+    "A",
+    "Default"
+  ],
+  "cwd": "C:\\HCMUT\\HK261\\Do an 2\\Posit_MAC\\results\\fmax_route_sweep_20261114\\f_7p000_A_Default",
+  "exit_code": 0,
+  "elapsed_seconds": 132.56,
+  "vivado_version": "Vivado v2026.1 (64-bit)",
+  "source_index_sha256": "0d3f612d88c1ba14ee514dc025bd170e551230ed2bbd668a6738afd9038562f6",
+  "completion_marker_found": true
+}

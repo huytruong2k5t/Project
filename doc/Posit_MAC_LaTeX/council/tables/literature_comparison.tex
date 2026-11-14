@@ -3,18 +3,18 @@
   \caption{Đối chiếu định lượng và kiến trúc với IP Xilinx \texttt{FP32} (trên cùng \texttt{xc7a35t}) và các nghiên cứu Posit 32 bit đã công bố.}
   \label{tab:literature-comparison}
   \footnotesize
-  \setlength{\tabcolsep}{3pt}
-  \renewcommand{\arraystretch}{1.12}
-  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{31mm} >{\raggedright\arraybackslash}p{25mm} r r r r Y@{}}
+  \setlength{\tabcolsep}{2.8pt}
+  \renewcommand{\arraystretch}{1.04}
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{29mm} >{\raggedright\arraybackslash}p{24mm} r r r r Y@{}}
     \toprule
     \textbf{Thiết kế / Công trình} & \textbf{Phép toán / Chuẩn} & \textbf{Nền tảng} & \textbf{LUT} & \textbf{FF} & \textbf{DSP} & \textbf{Tần số \& Đặc điểm chính} \\
     \midrule
-    \textbf{Đồ án: MAC-F} & Fused MAC \texttt{Posit(32,3)} & Artix-7 A35T & 1.221 & 781 & 0 & 154\,MHz (R2R) / 129\,MHz (TK); 14--25 cyc; $P_{\mathrm{dyn}}=4$\,mW. \\
-    \textbf{Đồ án: MAC-NF} & Non-fused \texttt{Posit(32,3)} & Artix-7 A35T & 1.591 & 916 & 0 & 136\,MHz (R2R) / 107\,MHz (TK); 17--28 cyc; $P_{\mathrm{dyn}}=12$\,mW. \\
+    \textbf{Đồ án: MAC-F} & Fused MAC \texttt{Posit(32,3)} & Artix-7 A35T & 1.221 & 781 & 0 & $\ge 153{,}8$\,MHz (R2R) / $\ge 142{,}9$\,MHz (TK, route 7,0\,ns; ước lượng 10\,ns: 129,0\,MHz); 14--25 cyc; $P_{\mathrm{dyn}}=4$\,mW. \\
+    \textbf{Đồ án: MAC-NF} & Non-fused \texttt{Posit(32,3)} & Artix-7 A35T & 1.591 & 916 & 0 & $\ge 135{,}1$\,MHz (R2R) / 100\,MHz (TK, ước lượng 10\,ns: 107,2\,MHz; lỗi 8,0\,ns); 17--28 cyc; $P_{\mathrm{dyn}}=12$\,mW. \\
     \textbf{Đồ án: MAC-Quire} & Quire MAC \texttt{Posit(32,3)} & Artix-7 A35T & 2.873 & 2.636 & 0 & 98,2\,MHz; lưới 972 bit theo từ 36 bit; $P_{\mathrm{dyn}}=29$\,mW. \\
     \midrule
-    Xilinx FP32 FMA Med~\cite{amd_pg060_fp} & Fused FMA \texttt{FP32} & Artix-7 A35T & 777 & 1.285 & 2 & 191\,MHz; đường ống $II=1$, Lat=17; $P_{\mathrm{dyn}}=21$\,mW. \\
-    Xilinx FP32 0-DSP~\cite{amd_pg060_fp} & Mul+Add \texttt{FP32} & Artix-7 A35T & 993 & 1.520 & 0 & 195\,MHz; đường ống $II=1$, Lat=22; $P_{\mathrm{dyn}}=22$\,mW. \\
+    Xilinx FP32 FMA Med~\cite{amd_pg060_fp} & Fused FMA \texttt{FP32} & Artix-7 A35T & 777 & 1.285 & 2 & 191\,MHz (ước lượng từ 10\,ns); đường ống $II=1$, Lat=17; $P_{\mathrm{dyn}}=21$\,mW. \\
+    Xilinx FP32 0-DSP~\cite{amd_pg060_fp} & Mul+Add \texttt{FP32} & Artix-7 A35T & 993 & 1.520 & 0 & 195\,MHz (ước lượng từ 10\,ns); đường ống $II=1$, Lat=22; $P_{\mathrm{dyn}}=22$\,mW. \\
     \midrule
     Jaiswal \& So (PACoGen)~\cite{jaiswal2019pacogen} & Mul / Add \texttt{Posit(32,es)} & Virtex-7 & 854 / 946 & --- & 1 / 0 & 227 / 244\,MHz; đường ống tách rời Mul ($4$ cyc) và Add ($5$ cyc), $II=1$. \\
     Murillo et al. (FloPoCo)~\cite{murillo2020flopoco,murillo2022energy} & Gen Posit \texttt{Posit(32,es)} & Virtex-7 / 7-s & 572--682 & --- & 4 & Nhân chính xác dùng 4 DSP (mốc tham chiếu tổng hợp bởi~\cite{murillo2021plam}). \\

@@ -15,16 +15,24 @@ quả chính đạt được gồm:
         đồng thời rút ngắn đúng 3 chu kỳ mỗi phép MAC ($14\text{--}25$ chu kỳ so
         với $17\text{--}28$ chu kỳ). Sau tách bốn nhánh tải ở tầng S1, \textbf{MAC-F}
         đạt \textbf{1.221 LUT}, \textbf{781 FF}, \textbf{0 DSP}, WNS toàn thiết
-        kế \textbf{$+2{,}247$\,ns} ($129{,}0$\,MHz trên cổng \texttt{in\_ready}),
-        WNS nội bộ \textit{reg-to-reg} \textbf{$+3{,}524$\,ns} ($F_{\max,\mathrm{R2R}}
-        = 154{,}42$\,MHz), thông lượng $6{,}18\text{--}11{,}0$\,M\,MAC/s (trung bình
-        $8{,}56$\,M\,MAC/s) và công suất động \textbf{4\,mW} (tổng $72$\,mW, năng
+        kế tại $10$\,ns là \textbf{$+2{,}247$\,ns} (ước lượng $129{,}0$\,MHz trên cổng \texttt{in\_ready};
+        đóng toàn thiết kế sau route thực ở $7{,}0$\,ns đạt \textbf{$\ge 142{,}9$\,MHz} với
+        $\mathrm{WNS}=+0{,}045$\,ns dưới ngân sách I/O $2{,}5/0{,}5$\,ns),
+        WNS nội bộ \textit{reg-to-reg} tại $10$\,ns là \textbf{$+3{,}524$\,ns} (ước lượng
+        tuyến tính $154{,}42$\,MHz; kiểm chứng siết ràng buộc clock sau định tuyến đóng tại $6{,}5$\,ns với
+        \textbf{$F_{\max,\mathrm{R2R}} \ge 153{,}8$\,MHz} hay $153{,}85$\,MHz), thông lượng
+        $6{,}15\text{--}11{,}0$\,M\,MAC/s (trung bình $8{,}53$\,M\,MAC/s) và công suất động
+        \textbf{4\,mW} (tổng $72$\,mW tại $100$\,MHz, năng
         lượng động $0{,}721$\,nJ/MAC tại 100\,MHz, độ phân giải \textit{vectorless}
-        $\pm 0{,}5$\,mW). Dù kém lõi đường ống $II=1$ \texttt{Xilinx FP32}
-        ($180\text{--}195$\,M\,MAC/s, $0{,}210\text{--}0{,}250$\,nJ/MAC) trên
-        luồng độc lập, \texttt{MAC-F} bám sát thông lượng tích lũy hồi tiếp của
-        \texttt{Xilinx FP32 0-DSP} ($8{,}56$ so với $8{,}88$\,M\,MAC/s) trong khi
-        giảm 48,6\% FF và giữ \texttt{0 DSP}.
+        $\pm 0{,}5$\,mW). Dù dùng nhiều LUT hơn các biến thể \texttt{Xilinx FP32} ($1.221$
+        so với $765\text{--}993$), tốn năng lượng động/MAC gấp khoảng $3\times$ ($0{,}721$ so với
+        $0{,}210\text{--}0{,}250$\,nJ), đạt SNR FIR thấp hơn \texttt{FP32} ($72{,}5$ so với
+        $138{,}9$\,dB) và kém hơn trên luồng độc lập $II=1$ ($180\text{--}195$\,M\,MAC/s ước lượng
+        từ lượt $10$\,ns), \texttt{MAC-F} bù lại bằng \texttt{0 DSP}, ít hơn $48{,}6\%$ FF so với
+        \texttt{FP32 0-DSP}, dải động $2^{\pm 240}$ và bám sát thông lượng của
+        \texttt{Xilinx FP32 0-DSP} khi chạy một chuỗi tích lũy phụ thuộc đơn lẻ
+        ($8{,}53$ so với $8{,}88$\,M\,MAC/s; nếu xen kẽ nhiều chuỗi độc lập như nhiều
+        đầu ra FIR thì Xilinx lấy lại $II=1$).
   \item \textbf{Về kiểm chứng chức năng và độ phủ:} Mô hình vàng được xác nhận
         khớp bit-exact với \texttt{SoftPosit} ($100.867$ ca / $403.468$ phép $es=2$,
         $0$ sai lệch) và Norris--Kim ($12/12$ ô $<0{,}94$\,pp). Hai lõi
@@ -44,14 +52,15 @@ quả chính đạt được gồm:
   \item \textbf{Về độ chính xác số học và bài toán ứng dụng:} Tại \texttt{OPS1/n12},
         bộ nhân đạt $\mathrm{P95} = 0{,}0297\%$ (tương ứng $\approx 11\text{--}12$
         bit hữu hiệu) trong bộ lọc FIR 32 hệ số ($\mathrm{SNR}=72{,}5$\,dB,
-        $3{,}74\,\mu$s/mẫu --- cao hơn $+10{,}3$\,dB so với \texttt{FP16} và
+        $3{,}75\,\mu$s/mẫu --- cao hơn $+10{,}3$\,dB so với \texttt{FP16} và
         $+28{,}4$\,dB so với \texttt{BF16}) và tích vô hướng \texttt{NN} 128 chiều
         ($\mathrm{P95}=5{,}66{\times}10^{-4}$). Nhờ dải động $2^{\pm 240}$, các
         lõi \texttt{Posit(32,3)} xử lý thành công $200/200$ vectơ \texttt{DynScale}
-        ($10^{-45}\text{--}10^{43}$) nơi \texttt{FP32} ($100/200$ \texttt{Inf}),
+        ($10^{-45}\text{--}10^{43}$, kịch bản dựng có chủ đích nằm ngoài dải \texttt{FP32}
+        ngay từ đầu vào) nơi \texttt{FP32} ($100/200$ \texttt{Inf}),
         \texttt{FP16} và \texttt{BF16} ($200/200$) thất bại. Theo thời gian thực
         tại $F_{\max,\mathrm{R2R}}$, \texttt{MAC-F} chạy chuỗi $1.024$ MAC nhanh
-        hơn \textbf{3,55--3,64 lần} so với \texttt{MAC-Quire}, còn \texttt{MAC-Quire}
+        hơn \textbf{3,57 lần} so với \texttt{MAC-Quire}, còn \texttt{MAC-Quire}
         giữ ưu thế sai số bậc $10^{-8}$ trên chuỗi triệt tiêu dài.
 \end{itemize}
 
@@ -70,13 +79,13 @@ quả chính đạt được gồm:
     Kiểm chứng \texttt{MAC-F/NF} & $110.000$ hỗn hợp + $201.764$ S1 + $100.867$ \texttt{SoftPosit} + $20.000$ $II=1$ + $2{,}6$\,M bin/lõi. &
       100\% bin; thô $90{,}9\%\text{--}92{,}0\%$ dòng / sau rà soát $96{,}3\%\text{--}98{,}0\%$ dòng, 100\% nhánh. \\
     Sai số ghép cặp & $377.032$ bộ $(A,B,C)$ tại \texttt{OPS1/n12}; tách $4.272$ mẫu $r=0$, đo \texttt{code-distance} và $|err|/|P|$. &
-      \texttt{MAC-F} thắng $\approx 2\times$ số ca thua và tránh sai lệch kẹp ngưỡng ở nhánh $R(-P)$. \\
+      \texttt{MAC-F} thắng $\approx 2\times$ số ca thua và tránh sai lệch kẹp ngưỡng ở ca biên trên nhánh $R(-P)$. \\
     Bài toán ứng dụng & FIR 32 hệ số ($72{,}5$\,dB so với $62{,}2$\,dB \texttt{FP16}, $44{,}1$\,dB \texttt{BF16}) và 3 kịch bản 128 chiều. &
-      0/200 lỗi \texttt{DynScale} (\texttt{FP32} 100 \texttt{Inf}; \texttt{FP16/BF16} 200 lỗi); Quire $7{,}73{\times}10^{-4}$ khi triệt tiêu. \\
-    Triển khai \textbf{MAC-F} & 1.221 LUT, 781 FF, 0 DSP; $F_{\max}$ $154{,}4$ (R2R) / $129{,}0$\,MHz (TK); $8{,}56$\,M\,MAC/s TB; $P_{\mathrm{dyn}}=4$\,mW. &
-      Giảm $3\times$ $P_{\mathrm{dyn}}$ và 23,3\% LUT so với \texttt{MAC-NF}; giảm $48{,}6\%$ FF so với Xilinx FP32 0-DSP. \\
+      0/200 lỗi \texttt{DynScale} (kịch bản dựng ngoài dải \texttt{FP32}; \texttt{FP32} 100 \texttt{Inf}, \texttt{FP16/BF16} 200 lỗi); Quire $7{,}73{\times}10^{-4}$ khi triệt tiêu. \\
+    Triển khai \textbf{MAC-F} & 1.221 LUT, 781 FF, 0 DSP; $F_{\max}$ $\ge 153{,}8$ (R2R) / $\ge 142{,}9$\,MHz (TK; ước lượng 10\,ns: $129{,}0$\,MHz); $8{,}53$\,M\,MAC/s TB; $P_{\mathrm{dyn}}=4$\,mW. &
+      Giảm $3\times$ $P_{\mathrm{dyn}}$ và 23,3\% LUT so với \texttt{MAC-NF}; giảm $48{,}6\%$ FF so với Xilinx FP32 0-DSP nhưng tốn nhiều LUT hơn ($1.221$ vs $765\text{--}993$). \\
     Đối chứng \texttt{MAC-Quire} & 2.873 LUT, 2.636 FF; WNS R2R $-0{,}187$\,ns ($98{,}2$\,MHz); $P_{\mathrm{dyn}}=29$\,mW; 48 chuỗi 0 sai lệch. &
-      Chậm hơn $3{,}55\text{--}3{,}64\times$ về thời gian thực tại $1.024$ MAC; đạt $1{,}73{\times}10^{-8}$ khi gần triệt tiêu. \\
+      Chậm hơn $\approx 3{,}57\times$ về thời gian thực tại $1.024$ MAC; đạt $1{,}73{\times}10^{-8}$ khi gần triệt tiêu. \\
     \bottomrule
   \end{tabularx}
 \end{table}

@@ -7,7 +7,7 @@ Từ nền tảng lõi IP \texttt{MAC-F} đã triển khai và kiểm chứng hi
         Khi ghép nối lõi \texttt{MAC-F} vào bus AXI4-Stream hoặc triển khai trên
         bo mạch Artix-7 thực tế (như Basys3 hay Arty A7), cần đăng ký hóa ngõ ra
         bắt tay sẵn sàng để đưa toàn bộ đường găng về miền nội bộ \textit{reg-to-reg}
-        ($>154$\,MHz), đồng thời xây dựng cầu UART truyền/nhận vectơ đối chiếu
+        ($\ge 153{,}8$\,MHz), đồng thời xây dựng cầu UART truyền/nhận vectơ đối chiếu
         trực tiếp trên phần cứng thật.
   \item \textbf{Hỗ trợ pipeline \textit{multi-outstanding} và tối ưu \textit{multi-seed} P\&R:}
         Đối với các bài toán nạp luồng vectơ độc lập liên tiếp không mang phụ thuộc
@@ -15,7 +15,7 @@ Từ nền tảng lõi IP \texttt{MAC-F} đã triển khai và kiểm chứng hi
         lặp phân tầng nhằm nâng hệ số khai thác các tầng đường ống co giãn hiện
         hữu của bộ giải mã, bộ cộng và bộ đóng gói; đồng thời áp dụng quét nhiều
         hạt giống P\&R kết hợp \texttt{phys\_opt\_design} trong Vivado để đánh
-        giá độ ổn định định thời quanh mốc $154$\,MHz.
+        giá độ ổn định định thời quanh mốc $153{,}8$\,MHz.
   \item \textbf{Cải tiến pipeline cho biến thể \texttt{MAC-Quire}:} Chèn một
         tầng thanh ghi trung gian để ngắt đường tổ hợp dài từ khối giải mã độ
         lệch từ đến tín hiệu cho phép của ngân hàng thanh ghi \texttt{q\_words}

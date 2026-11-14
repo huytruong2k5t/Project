@@ -12,17 +12,20 @@
     MAC-NF (trước tách S1) & Synth & 1.582 & 916 & $+1{,}843$ & $+3{,}435$ & 152,32 & $-0{,}055$ (8) \\
     MAC-NF (trước tách S1) & Route & 1.558 & 916 & $+0{,}665$ & $+2{,}943$ & 141,70 & $+0{,}043$ (0) \\
     MAC-NF (tách S1) & Synth & 1.616 & 916 & $+1{,}843$ & $+3{,}435$ & 152,32 & $-0{,}055$ (8) \\
-    MAC-NF (tách S1) & Route & 1.591 & 916 & $+0{,}669$ & $+2{,}639$ & 135,85 & $+0{,}041$ (0) \\
+    MAC-NF (tách S1) & Route (10\,ns) & 1.591 & 916 & $+0{,}669$ & $+2{,}639$ & 135,85 & $+0{,}041$ (0) \\
+    MAC-NF (tách S1) & Route (7,4\,ns) & 1.599 & 916 & $-0{,}513$ & $+0{,}209$ & \textbf{135,14*} & $+0{,}046$ (0) \\
     \midrule
     MAC-F (trước tách S1) & Synth & 1.235 & 781 & $+2{,}689$ & $+4{,}319$ & 176,03 & $-0{,}055$ (7) \\
-    MAC-F (trước tách S1) & Route & 1.211 & 781 & $+2{,}142$ & $+2{,}768$ & 138,27 & $+0{,}043$ (0) \\
+    MAC-F (trước tách S1) & Route (10\,ns) & 1.211 & 781 & $+2{,}142$ & $+2{,}768$ & 138,27 & $+0{,}043$ (0) \\
     \textbf{MAC-F (tách S1, hoàn thiện)} & \textbf{Synth} & \textbf{1.244} & \textbf{781} & \textbf{$+2{,}689$} & \textbf{$+4{,}319$} & \textbf{176,03} & \textbf{$-0{,}055$ (7)} \\
-    \textbf{MAC-F (tách S1, hoàn thiện)} & \textbf{Route} & \textbf{1.221} & \textbf{781} & \textbf{$+2{,}247$} & \textbf{$+3{,}524$} & \textbf{154,42} & \textbf{$+0{,}043$ (0)} \\
+    \textbf{MAC-F (tách S1, hoàn thiện)} & \textbf{Route (10\,ns)} & \textbf{1.221} & \textbf{781} & \textbf{$+2{,}247$} & \textbf{$+3{,}524$} & 154,42\textsuperscript{\dag} & \textbf{$+0{,}043$ (0)} \\
+    \textbf{MAC-F (tách S1, hoàn thiện)} & \textbf{Route (7,0\,ns)} & \textbf{1.225} & \textbf{781} & \textbf{$+0{,}045$} & \textbf{$+0{,}281$} & 142,86* & \textbf{$+0{,}042$ (0)} \\
+    \textbf{MAC-F (tách S1, hoàn thiện)} & \textbf{Route (6,5\,ns)} & \textbf{1.225} & \textbf{781} & \textbf{$-0{,}513$} & \textbf{$+0{,}632$} & \textbf{153,85*} & \textbf{$+0{,}043$ (0)} \\
     \midrule
     MAC-Quire & Synth & 2.888 & 2.636 & $+0{,}170$ & $+0{,}170$ & 101,73 & $-0{,}055$ (7) \\
-    MAC-Quire & Route & 2.873 & 2.636 & $-0{,}187$ & $-0{,}187$ & 98,16 & $+0{,}040$ (0) \\
+    MAC-Quire & Route (10\,ns) & 2.873 & 2.636 & $-0{,}187$ & $-0{,}187$ & 98,16 & $+0{,}040$ (0) \\
     \bottomrule
   \end{tabularx}
   \vspace{2pt}
-  {\footnotesize Ghi chú: Cả ba cấu hình có $\mathrm{DSP}=0$, $\mathrm{BRAM}=0$ ở cả hai pha; riêng MAC-Quire dùng thêm 174 F7~Mux và 1 F8~Mux. Các cấu hình NF/F đều đạt $\mathrm{TNS}=0{,}000$\,ns và 0 lỗi định tuyến ở pha Route; cấu hình \texttt{tách S1} giữ nguyên hoàn toàn datapath, số FF và độ trễ chu kỳ, chỉ tách 4 nhánh cho \texttt{choose\_a} trong \texttt{posit\_add\_prepare\_comb}. Đối với MAC-Quire, tổng hợp đạt $\mathrm{TNS}=0{,}000$\,ns nhưng sau định tuyến còn $\mathrm{TNS}=-19{,}336$\,ns với 280/5.271 điểm cuối intra-\texttt{clk} vi phạm (giá trị WHS trước route là ước lượng chưa đặt mạch, đều đóng về dương sau route). $F_{\max,\mathrm{R2R}} = 1000 / (10{,}000 - \mathrm{WNS}_{\mathrm{R2R}})$.}
+  {\footnotesize Ghi chú: Cả ba cấu hình có $\mathrm{DSP}=0$, $\mathrm{BRAM}=0$ ở mọi lần chạy; riêng MAC-Quire dùng thêm 174 F7~Mux và 1 F8~Mux. Cấu hình \texttt{tách S1} giữ nguyên hoàn toàn datapath, số FF và độ trễ chu kỳ, chỉ tách 4 nhánh cho \texttt{choose\_a} trong \texttt{posit\_add\_prepare\_comb}. Ở pha Route $10$\,ns, các cấu hình NF/F đều đạt $\mathrm{TNS}=0{,}000$\,ns và 0 lỗi định tuyến (MAC-Quire có $\mathrm{TNS}=-19{,}336$\,ns với 280/5.271 điểm cuối intra-\texttt{clk} vi phạm). Tại $10$\,ns, cột $F_{\max,\mathrm{R2R}}$ gắn dấu \dag\ là ước lượng tuyến tính $1000/(10{,}000-\mathrm{WNS}_{\mathrm{R2R}})$; qua 3 chiến lược P\&R (\texttt{Default}, \texttt{Explore}, \texttt{ExtraTimingOpt}), $\mathrm{WNS}_{\mathrm{R2R}}$ nằm trong $[+3{,}184; +3{,}524]$\,ns đối với MAC-F và $[+2{,}639; +2{,}994]$\,ns đối với MAC-NF. Giá trị gắn dấu * là tần số kiểm chứng đóng định thời thực tế $1000/T_{\mathrm{clk}}$ sau định tuyến ($\mathrm{TNS}_{\mathrm{R2R}}=0{,}000$\,ns, $\mathrm{WHS}_{\mathrm{R2R}}>0$): riêng \texttt{MAC-F} tại $7{,}0$\,ns đóng cả toàn thiết kế ($\ge 142{,}86$\,MHz, trong khi \texttt{MAC-NF} chưa đóng toàn thiết kế ở $8{,}0$\,ns với $\mathrm{WNS}=-0{,}074$\,ns); $\mathrm{WNS}=-0{,}513$\,ns toàn thiết kế khi siết $T_{\mathrm{clk}}=6{,}5$/$7{,}4$\,ns chỉ xuất phát từ ràng buộc I/O ngoại vi cố định mức $100$\,MHz trên cổng \texttt{in\_ready} (khi bỏ I/O delay ở $6{,}5$\,ns, MAC-F đóng toàn thiết kế với $\mathrm{WNS}=\mathrm{WNS}_{\mathrm{R2R}}=+0{,}182$\,ns, $\mathrm{WHS}=+0{,}035$\,ns tại 1.229 LUT / 781 FF).}
 \end{table}
